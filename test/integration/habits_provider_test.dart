@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_fe/features/habits/models/habit_model.dart';
 import 'package:habitus_fe/features/habits/providers/habits_provider.dart';
 import '../helpers/test_providers.dart';

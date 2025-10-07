@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
 import 'services/bible_db_service.dart';
@@ -166,7 +167,9 @@ class _BiblePageLauncherState extends State<BiblePageLauncher> {
 // ----- MAIN -----
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     const ProviderScope(
       child: MyApp(),
