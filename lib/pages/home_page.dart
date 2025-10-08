@@ -2,108 +2,73 @@ import 'package:flutter/material.dart';
 import 'habits_page.dart';
 import 'statistics_page.dart';
 import 'settings_page.dart';
-import 'bible_reader_page.dart';
-import '../services/bible_db_service.dart';
-import '../models/bible_version.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-  late List<BibleVersion> bibleVersions;
-  bool _bibleLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _initBibleVersions();
-  }
-
-  Future<void> _initBibleVersions() async {
-    bibleVersions = [
-      BibleVersion(
-        name: 'RVR1960 Reina Valera 1960',
-        assetPath: 'assets/biblia/RVR1960.SQLite3',
-        dbFileName: 'RVR1960.SQLite3',
-      ),
-      BibleVersion(
-        name: 'NTV Nueva Traducción Viviente',
-        assetPath: 'assets/biblia/NTV.SQLite3',
-        dbFileName: 'NTV.SQLite3',
-      ),
-      BibleVersion(
-        name: 'Biblia Peshitta Nuevo Testamento',
-        assetPath: 'assets/biblia/Pesh-es.SQLite3',
-        dbFileName: 'Pesh-es.SQLite3',
-      ),
-      BibleVersion(
-        name: 'TLA Traducción en Lenguaje Actual',
-        assetPath: 'assets/biblia/TLA.SQLite3',
-        dbFileName: 'TLA.SQLite3',
-      ),
-    ];
-
-    for (var v in bibleVersions) {
-      v.service = BibleDbService();
-      await v.service!.initDb(v.assetPath, v.dbFileName);
-    }
-
-    setState(() {
-      _bibleLoading = false;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [
-      const HabitsPage(),
-      _bibleLoading
-          ? const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            )
-          : BibleReaderPage(versions: bibleVersions),
-      const StatisticsPage(),
-      const SettingsPage(),
-    ];
-
     return Scaffold(
-      body: pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_box),
-            label: 'Hábitos',
+      appBar: AppBar(
+        title: const Text('Habitus Fe'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircleAvatar(
+                radius: 48,
+                backgroundColor: Colors.white,
+                child: Icon(Icons.check_box, size: 64, color: Colors.blue),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                '¡Bienvenido a Habitus Fe!',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[800],
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Haz de la fe tu mejor hábito diario.\nEmpieza a registrar tus hábitos espirituales ahora.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const HabitsPage()));
+                },
+                child: const Text('Mis hábitos'),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const StatisticsPage()));
+                },
+                child: const Text('Estadísticas'),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const SettingsPage()));
+                },
+                child: const Text('Ajustes'),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Biblia',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Progreso',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Ajustes',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
-        onTap: _onItemTapped,
+        ),
       ),
     );
   }
 }
-
