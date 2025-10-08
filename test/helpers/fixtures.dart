@@ -1,8 +1,8 @@
-import 'package:habitus_faith/features/habits/models/habit_model.dart';
+import 'package:habitus_faith/features/habits/domain/habit.dart';
 
 class TestFixtures {
-  static HabitModel habitOracion() {
-    return HabitModel.create(
+  static Habit habitOracion() {
+    return Habit.create(
       id: 'test-habit-1',
       userId: 'test-user',
       name: 'Oración',
@@ -11,8 +11,8 @@ class TestFixtures {
     );
   }
 
-  static HabitModel habitLectura() {
-    return HabitModel.create(
+  static Habit habitLectura() {
+    return Habit.create(
       id: 'test-habit-2',
       userId: 'test-user',
       name: 'Lectura Bíblica',
@@ -21,8 +21,8 @@ class TestFixtures {
     );
   }
 
-  static HabitModel habitConRacha(int days) {
-    final habit = HabitModel.create(
+  static Habit habitConRacha(int days) {
+    final habit = Habit.create(
       id: 'test-habit-streak',
       userId: 'test-user',
       name: 'Hábito con racha',
@@ -46,10 +46,10 @@ class TestFixtures {
     return updatedHabit;
   }
 
-  static List<HabitModel> listaHabitos(int cantidad) {
+  static List<Habit> listaHabitos(int cantidad) {
     return List.generate(
       cantidad,
-      (index) => HabitModel.create(
+      (index) => Habit.create(
         id: 'test-habit-$index',
         userId: 'test-user',
         name: 'Hábito ${index + 1}',

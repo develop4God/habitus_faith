@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../features/habits/models/habit_model.dart';
-import '../features/habits/providers/habits_provider.dart';
+import '../features/habits/domain/habit.dart';
+import '../features/habits/domain/failures.dart';
+import '../features/habits/presentation/habits_providers.dart';
 
 class HabitsPage extends ConsumerWidget {
   const HabitsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final habitsAsync = ref.watch(habitsProvider);
+    final habitsAsync = ref.watch(habitsStreamProvider);
+    final notifierState = ref.watch(habitsNotifierProvider);
+
+    // Listen for errors
+    ref.listen<AsyncValue<void>>(habitsNotifierProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, stack) {
+          if (error is HabitFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(error.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -36,12 +54,16 @@ class HabitsPage extends ConsumerWidget {
                   leading: Checkbox(
                     key: Key('habit_checkbox_${habit.id}'),
                     value: habit.completedToday,
-                    onChanged: (value) async {
-                      if (value == true) {
-                        final actions = ref.read(habitsActionsProvider);
-                        await actions.completeHabit(habit);
-                      }
-                    },
+                    // Prevent unchecking - can only mark complete
+                    onChanged: habit.completedToday
+                        ? null
+                        : (value) async {
+                            if (value == true) {
+                              await ref
+                                  .read(habitsNotifierProvider.notifier)
+                                  .completeHabit(habit.id);
+                            }
+                          },
                   ),
                   title: Text(habit.name),
                   subtitle: Column(
@@ -92,23 +114,24 @@ class HabitsPage extends ConsumerWidget {
   }
 
   void _showDeleteConfirmation(
-      BuildContext context, WidgetRef ref, HabitModel habit) {
+      BuildContext context, WidgetRef ref, Habit habit) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Eliminar hábito'),
         content: Text('¿Estás seguro de eliminar "${habit.name}"?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
             onPressed: () async {
-              final actions = ref.read(habitsActionsProvider);
-              await actions.deleteHabit(habit.id);
-              if (context.mounted) {
-                Navigator.pop(context);
+              await ref
+                  .read(habitsNotifierProvider.notifier)
+                  .deleteHabit(habit.id);
+              if (dialogContext.mounted) {
+                Navigator.pop(dialogContext);
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -125,7 +148,7 @@ class HabitsPage extends ConsumerWidget {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Agregar hábito'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -144,20 +167,21 @@ class HabitsPage extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(dialogContext);
+            },
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
             key: const Key('confirm_add_habit_button'),
             onPressed: () async {
               if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
-                final actions = ref.read(habitsActionsProvider);
-                await actions.addHabit(
-                  name: nameCtrl.text,
-                  description: descCtrl.text,
-                );
-                if (context.mounted) {
-                  Navigator.pop(context);
+                await ref.read(habitsNotifierProvider.notifier).addHabit(
+                      name: nameCtrl.text,
+                      description: descCtrl.text,
+                    );
+                if (dialogContext.mounted) {
+                  Navigator.pop(dialogContext);
                 }
               }
             },
@@ -165,6 +189,10 @@ class HabitsPage extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ).then((_) {
+      // Dispose controllers after dialog is closed
+      nameCtrl.dispose();
+      descCtrl.dispose();
+    });
   }
 }
