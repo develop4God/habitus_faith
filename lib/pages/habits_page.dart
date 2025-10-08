@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../features/habits/domain/habit.dart';
+import 'package:habitus_faith/features/habits/domain/habit.dart';
+import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import '../features/habits/domain/failures.dart';
-import '../features/habits/presentation/habits_providers.dart';
+
 
 class HabitsPage extends ConsumerWidget {
   const HabitsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // ✅ AGREGAR ESTO (escuchar errores del notifier)
+
     final habitsAsync = ref.watch(habitsStreamProvider);
 
     // Listen for errors
@@ -53,16 +56,14 @@ class HabitsPage extends ConsumerWidget {
                   leading: Checkbox(
                     key: Key('habit_checkbox_${habit.id}'),
                     value: habit.completedToday,
-                    // Prevent unchecking - can only mark complete
                     onChanged: habit.completedToday
-                        ? null
+                        ? null  // Deshabilita si ya está completado
                         : (value) async {
-                            if (value == true) {
-                              await ref
-                                  .read(habitsNotifierProvider.notifier)
-                                  .completeHabit(habit.id);
-                            }
-                          },
+                      if (value == true) {
+                        final notifier = ref.read(habitsNotifierProvider.notifier);
+                        await notifier.completeHabit(habit.id);
+                      }
+                    },
                   ),
                   title: Text(habit.name),
                   subtitle: Column(
@@ -116,21 +117,20 @@ class HabitsPage extends ConsumerWidget {
       BuildContext context, WidgetRef ref, Habit habit) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: const Text('Eliminar hábito'),
         content: Text('¿Estás seguro de eliminar "${habit.name}"?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
             onPressed: () async {
-              await ref
-                  .read(habitsNotifierProvider.notifier)
-                  .deleteHabit(habit.id);
-              if (dialogContext.mounted) {
-                Navigator.pop(dialogContext);
+              final notifier = ref.read(habitsNotifierProvider.notifier);
+              await notifier.deleteHabit(habit.id);
+              if (context.mounted) {
+                Navigator.pop(context);
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -140,14 +140,13 @@ class HabitsPage extends ConsumerWidget {
       ),
     );
   }
-
   void _showAddHabitDialog(BuildContext context, WidgetRef ref) {
     final nameCtrl = TextEditingController();
     final descCtrl = TextEditingController();
 
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: const Text('Agregar hábito'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -167,7 +166,7 @@ class HabitsPage extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(dialogContext);
+              Navigator.pop(context);
             },
             child: const Text('Cancelar'),
           ),
@@ -175,12 +174,13 @@ class HabitsPage extends ConsumerWidget {
             key: const Key('confirm_add_habit_button'),
             onPressed: () async {
               if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
-                await ref.read(habitsNotifierProvider.notifier).addHabit(
-                      name: nameCtrl.text,
-                      description: descCtrl.text,
-                    );
-                if (dialogContext.mounted) {
-                  Navigator.pop(dialogContext);
+                final notifier = ref.read(habitsNotifierProvider.notifier);
+                await notifier.addHabit(
+                  name: nameCtrl.text,
+                  description: descCtrl.text,
+                );
+                if (context.mounted) {
+                  Navigator.pop(context);
                 }
               }
             },
@@ -188,8 +188,8 @@ class HabitsPage extends ConsumerWidget {
           ),
         ],
       ),
-    ).then((_) {
-      // Dispose controllers after dialog is closed
+    ).whenComplete(() {
+      // ✅ AGREGAR ESTO - Liberar recursos
       nameCtrl.dispose();
       descCtrl.dispose();
     });
