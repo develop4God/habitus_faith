@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "512385927943",
+    "project_id": "habitus-faith-app",
+    "storage_bucket": "habitus-faith-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512385927943:android:c2daf83604d445feca53a2",
+        "android_client_info": {
+          "package_name": "com.develop4God.habitus_faith"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1iKq2eI-0zKxFP5N-VJJxn2YxSmK_g0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

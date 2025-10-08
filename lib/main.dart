@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
-import 'services/habit_service.dart';
 import 'services/bible_db_service.dart';
 import 'models/bible_version.dart';
+import 'core/providers/auth_provider.dart';
 
 // ----- MODELO DE VERSIÓN DE BIBLIA -----
 //moved to  bible_version.dart
@@ -163,23 +165,38 @@ class _BiblePageLauncherState extends State<BiblePageLauncher> {
 }
 
 // ----- MAIN -----
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => HabitService(),
-      child: const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authInit = ref.watch(authInitProvider);
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LandingPage(),
+      home: authInit.when(
+        data: (_) => const LandingPage(),
+        loading: () => const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+        error: (error, stack) => Scaffold(
+          body: Center(
+            child: Text('Error: $error'),
+          ),
+        ),
+      ),
     );
   }
 }
