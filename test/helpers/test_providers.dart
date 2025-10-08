@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +9,13 @@ ProviderContainer createTestContainer({
   MockFirebaseAuth? auth,
 }) {
   final testFirestore = firestore ?? FakeFirebaseFirestore();
-  final testAuth = auth ?? MockFirebaseAuth(signedIn: true);
+  final testAuth = auth ?? MockFirebaseAuth(
+    signedIn: true,
+    mockUser: MockUser(
+      uid: 'test-user',
+      email: 'test@example.com',
+    ),
+  );
 
   return ProviderContainer(
     overrides: [

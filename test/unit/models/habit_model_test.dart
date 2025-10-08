@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_fe/features/habits/models/habit_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
 void main() {
   group('HabitModel - Lógica de rachas', () {
@@ -166,7 +165,6 @@ void main() {
 
     test('fromFirestore() round-trip funciona', () {
       // Arrange
-      final fakeFirestore = FakeFirebaseFirestore();
       final now = DateTime.now();
       final habit = HabitModel(
         id: 'test-7',
@@ -185,9 +183,6 @@ void main() {
 
       // Act - save to fake firestore and read back
       final firestoreData = habit.toFirestore();
-      
-      // Create a fake document snapshot
-      final docRef = fakeFirestore.collection('habits').doc('test-7');
       
       // Manually verify the serialization/deserialization
       expect(firestoreData['name'], habit.name);
