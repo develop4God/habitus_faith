@@ -7,7 +7,11 @@ plugins {
 }
 
 android {
+
     namespace = "com.develop4God.habitus_faith"
+  
+
+
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
