@@ -7,7 +7,7 @@ plugins {
 
 android {
     ndkVersion = "27.0.12077973"
-    namespace = "com.example.habitus_fe"
+    namespace = "com.develop4God.habitus_faith"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,10 +21,11 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.habitus_fe"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+
+        applicationId = "com.develop4God.habitus_faith"
+
+
+
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
