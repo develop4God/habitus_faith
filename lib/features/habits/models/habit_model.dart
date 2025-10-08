@@ -106,9 +106,8 @@ class HabitModel {
       'longestStreak': longestStreak,
       'lastCompletedAt':
           lastCompletedAt != null ? Timestamp.fromDate(lastCompletedAt!) : null,
-      'completionHistory': completionHistory
-          .map((date) => Timestamp.fromDate(date))
-          .toList(),
+      'completionHistory':
+          completionHistory.map((date) => Timestamp.fromDate(date)).toList(),
       'createdAt': Timestamp.fromDate(createdAt),
       'isArchived': isArchived,
     };
@@ -152,7 +151,8 @@ class HabitModel {
     }
 
     // Update longest streak if necessary
-    final newLongestStreak = newStreak > longestStreak ? newStreak : longestStreak;
+    final newLongestStreak =
+        newStreak > longestStreak ? newStreak : longestStreak;
 
     // Add to completion history
     final newHistory = [...completionHistory, now];

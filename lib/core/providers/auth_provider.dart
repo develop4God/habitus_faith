@@ -9,12 +9,12 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
 // Provider that initializes anonymous auth if needed
 final authInitProvider = FutureProvider<User?>((ref) async {
   final auth = ref.watch(firebaseAuthProvider);
-  
+
   // Check if user is already signed in
   if (auth.currentUser != null) {
     return auth.currentUser;
   }
-  
+
   // Sign in anonymously
   final userCredential = await auth.signInAnonymously();
   return userCredential.user;

@@ -51,7 +51,8 @@ class HabitsPage extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.local_fire_department, size: 16, color: Colors.orange),
+                          const Icon(Icons.local_fire_department,
+                              size: 16, color: Colors.orange),
                           const SizedBox(width: 4),
                           Text(
                             'Racha: ${habit.currentStreak} días | Mejor: ${habit.longestStreak}',
@@ -90,7 +91,8 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, WidgetRef ref, HabitModel habit) {
+  void _showDeleteConfirmation(
+      BuildContext context, WidgetRef ref, HabitModel habit) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -120,7 +122,7 @@ class HabitsPage extends ConsumerWidget {
   void _showAddHabitDialog(BuildContext context, WidgetRef ref) {
     final nameCtrl = TextEditingController();
     final descCtrl = TextEditingController();
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -166,4 +168,3 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 }
-

@@ -54,15 +54,12 @@ class HabitsActions {
       category: category,
     );
 
-    await firestore
-        .collection('habits')
-        .doc(habit.id)
-        .set(habit.toFirestore());
+    await firestore.collection('habits').doc(habit.id).set(habit.toFirestore());
   }
 
   Future<void> completeHabit(HabitModel habit) async {
     final updatedHabit = habit.completeToday();
-    
+
     await firestore
         .collection('habits')
         .doc(habit.id)
