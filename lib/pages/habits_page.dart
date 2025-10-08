@@ -10,7 +10,6 @@ class HabitsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
-    final notifierState = ref.watch(habitsNotifierProvider);
 
     // Listen for errors
     ref.listen<AsyncValue<void>>(habitsNotifierProvider, (previous, next) {

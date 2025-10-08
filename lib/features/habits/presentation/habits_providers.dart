@@ -4,7 +4,6 @@ import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/firestore_provider.dart';
 import '../domain/habit.dart';
 import '../domain/habits_repository.dart';
-import '../domain/failures.dart';
 import '../data/firestore_habits_repository.dart';
 
 /// Repository provider with injectable ID generator
