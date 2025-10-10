@@ -1,0 +1,23 @@
+{
+  "app_name": "Habitus Fe",
+  "bible_reader": "Lector Bíblico",
+  "search": "Buscar",
+  "share": "Compartir",
+  "copy": "Copiar",
+  "copied": "Copiado al portapapeles",
+  "shared": "Compartido exitosamente",
+  "version_changed": "Versión cambiada a {version}",
+  "select_version": "Seleccionar Versión",
+  "book": "Libro",
+  "chapter": "Capítulo",
+  "verse": "Versículo",
+  "no_verses": "No hay versículos",
+  "loading": "Cargando...",
+  "new_feature": "Nuevo",
+  "copyright": "Derechos de autor",
+  "home": "Inicio",
+  "bible": "Biblia",
+  "plans": "Planes",
+  "discover": "Descubre",
+  "more": "Más"
+}
