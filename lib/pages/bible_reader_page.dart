@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../services/bible_db_service.dart';
 import '../models/bible_version.dart';
+import '../widgets/app_bar_constants.dart';
+import '../utils/theme_constants.dart';
+import '../utils/copyright_utils.dart';
+import '../utils/bubble_constants.dart';
+import '../providers/devocional_provider.dart';
 
 class BibleReaderPage extends StatefulWidget {
   final List<BibleVersion> versions;
@@ -21,17 +29,50 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
   final Set<String> _selectedVerses = {}; // formato: "book|chapter|verse"
   final double _fontSize = 20;
   bool _bottomSheetOpen = false;
+  bool _showNavigationBubble = false;
+  String _currentLanguage = 'es';
 
   List<Map<String, dynamic>> get _filteredBooks {
-    // Implementa tu lógica de filtrado si tienes buscador
     return _books;
   }
 
   @override
   void initState() {
     super.initState();
-    _selectedVersion = widget.versions.first;
-    _initVersion();
+    _initializeProvider();
+  }
+
+  Future<void> _initializeProvider() async {
+    final provider = Provider.of<DevocionalProvider>(context, listen: false);
+    _currentLanguage = provider.selectedLanguage;
+
+    // Load last position or use default
+    final lastPosition = await provider.getLastPosition();
+    if (lastPosition != null) {
+      final versionCode = lastPosition['version'];
+      _selectedVersion = widget.versions.firstWhere(
+        (v) => v.versionCode == versionCode,
+        orElse: () => widget.versions.first,
+      );
+    } else {
+      _selectedVersion = widget.versions.first;
+    }
+
+    // Check if navigation bubble should be shown
+    _showNavigationBubble = await BubbleUtils.shouldShowBubble(
+        BubbleConstants.bibleNavigationBubble);
+
+    await _initVersion();
+
+    // Load last position if available
+    if (lastPosition != null) {
+      setState(() {
+        _selectedBookNumber = lastPosition['bookNumber'];
+        _selectedChapter = lastPosition['chapter'];
+      });
+      await _loadMaxChapter();
+      await _loadVerses();
+    }
   }
 
   Future<void> _initVersion() async {
@@ -47,14 +88,22 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
     final books = await _selectedVersion.service!.getAllBooks();
     setState(() {
       _books = books;
-      if (books.isNotEmpty) {
+      if (books.isNotEmpty && _selectedBookNumber == null) {
         _selectedBookName = books[0]['short_name'];
         _selectedBookNumber = books[0]['book_number'];
         _selectedChapter = 1;
+      } else if (_selectedBookNumber != null) {
+        final book = books.firstWhere(
+          (b) => b['book_number'] == _selectedBookNumber,
+          orElse: () => books[0],
+        );
+        _selectedBookName = book['short_name'];
       }
     });
-    await _loadMaxChapter();
-    await _loadVerses();
+    if (_selectedBookNumber != null) {
+      await _loadMaxChapter();
+      await _loadVerses();
+    }
   }
 
   Future<void> _loadMaxChapter() async {
@@ -75,6 +124,15 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
     setState(() {
       _verses = verses;
     });
+
+    // Save last position
+    if (!mounted) return;
+    final provider = Provider.of<DevocionalProvider>(context, listen: false);
+    await provider.saveLastPosition(
+      _selectedVersion.versionCode,
+      _selectedBookNumber!,
+      _selectedChapter!,
+    );
   }
 
   void _onVerseTap(int verseNumber) {
@@ -94,8 +152,49 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
     }
   }
 
+  void _onSharePressed() async {
+    final text = _getSelectedVersesText();
+    await Share.share(text);
+    if (!mounted) return;
+    _showSnackBar(context, 'Compartido exitosamente');
+  }
+
+  void _onCopyPressed() async {
+    final text = _getSelectedVersesText();
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!mounted) return;
+    _showSnackBar(context, 'Copiado al portapapeles');
+  }
+
+  String _getSelectedVersesText() {
+    final List<String> versesText = [];
+    for (var key in _selectedVerses) {
+      final parts = key.split('|');
+      final chapter = parts[1];
+      final verseNum = parts[2];
+      final verse = _verses.firstWhere(
+        (v) => v['verse'].toString() == verseNum,
+        orElse: () => {'text': ''},
+      );
+      versesText.add(
+          '$_selectedBookName $chapter:$verseNum - ${_cleanVerseText(verse['text'])}');
+    }
+    return versesText.join('\n\n');
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: ThemeConstants.getSnackBarBackground(context),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   void _showBottomSheet() {
     _bottomSheetOpen = true;
+    final scaffoldContext = context;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -112,11 +211,10 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
           builder: (context, scrollController) {
             return StatefulBuilder(
               builder: (context, setModalState) {
-                // Si se deseleccionan todos, cerrar el sheet
                 if (_selectedVerses.isEmpty) {
-                  Future.delayed(Duration.zero, () {
-                    if (Navigator.of(context).canPop()) {
-                      Navigator.of(context).pop();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (Navigator.of(scaffoldContext).canPop()) {
+                      Navigator.of(scaffoldContext).pop();
                     }
                   });
                 }
@@ -151,86 +249,21 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // Colores de subrayado
-                        ...[
-                          Colors.yellow[200],
-                          Colors.green[200],
-                          Colors.blue[200],
-                          Colors.purple[100],
-                        ].map((color) => GestureDetector(
-                              onTap: () {
-                                // Aquí puedes guardar el color para los versículos seleccionados
-                              },
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                width: 32,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  color: color,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.grey[200]!),
-                                ),
-                              ),
-                            )),
-                        // Favorito
                         IconButton(
-                          icon: const Icon(Icons.bookmark_border,
+                          icon: const Icon(Icons.content_copy,
                               color: Colors.black54),
-                          onPressed: () {
-                            // Lógica para guardar como favorito
-                          },
-                          tooltip: 'Favorito',
+                          onPressed: _onCopyPressed,
+                          tooltip: 'Copiar',
                         ),
-                        // Nota
-                        IconButton(
-                          icon: const Icon(Icons.sticky_note_2_outlined,
-                              color: Colors.black54),
-                          onPressed: () {
-                            // Lógica para agregar nota
-                          },
-                          tooltip: 'Nota',
-                        ),
-                        // Compartir
                         IconButton(
                           icon: const Icon(Icons.share_outlined,
                               color: Colors.black54),
-                          onPressed: () {
-                            // Lógica para compartir
-                          },
+                          onPressed: _onSharePressed,
                           tooltip: 'Compartir',
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.keyboard_arrow_up,
-                            color: Colors.grey, size: 20),
-                        const SizedBox(width: 4),
-                        Text(
-                          "Desliza hacia arriba para ver más",
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 13),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: ListView(
-                        controller: scrollController,
-                        children: const [
-                          SizedBox(height: 24),
-                          Center(
-                            child: Text(
-                              "Próximamente nuevas opciones",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 15),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 );
               },
@@ -247,10 +280,7 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
   }
 
   String _getCompactReference() {
-    // Agrupa y compacta las referencias seleccionadas
-    // Formato: Libro Capítulo:vers,vers-rango; OtroLibro Capítulo:vers
     if (_selectedVerses.isEmpty) return '';
-    // Parsear y agrupar
     final Map<String, Map<int, List<int>>> grouped = {};
     for (var key in _selectedVerses) {
       final parts = key.split('|');
@@ -297,37 +327,41 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
     return refs.join("; ");
   }
 
-  // >>> FUNCIÓN PARA LIMPIAR EL TEXTO DEL VERSÍCULO ACTUALIZADA AQUÍ <<<
   String _cleanVerseText(String text) {
-    // Elimina <pb/>
     String cleanedText = text.replaceAll('<pb/>', '');
-    // Elimina cualquier contenido entre corchetes (incluyendo los corchetes)
     cleanedText = cleanedText.replaceAll(RegExp(r'\[.*?\]'), '');
-    // Elimina la etiqueta <f></f> (y su contenido)
     cleanedText = cleanedText.replaceAll(RegExp(r'<f>.*?</f>'), '');
-    return cleanedText.trim(); // Elimina espacios al inicio o final
+    return cleanedText.trim();
+  }
+
+  Future<void> _onNavigationTap() async {
+    if (_showNavigationBubble) {
+      await BubbleUtils.markAsShown(BubbleConstants.bibleNavigationBubble);
+      setState(() {
+        _showNavigationBubble = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_selectedBookName ?? ''),
+      appBar: CustomAppBar(
+        title: _selectedBookName ?? 'Biblia',
+        subtitle: _selectedVersion.name,
         actions: [
-          // >>> SELECTOR DE VERSIONES MEJORADO AQUÍ <<<
-          // Siempre muestra el DropdownButton, incluso si solo hay una versión,
-          // para asegurar que el componente siempre esté presente si lo necesitas.
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: DropdownButton<BibleVersion>(
               value: _selectedVersion,
-              icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-              underline: Container(), // Para remover la línea por defecto
+              icon: const Icon(Icons.arrow_drop_down,
+                  color: ThemeConstants.onPrimaryColor),
+              underline: Container(),
+              dropdownColor: Colors.white,
               onChanged: (BibleVersion? newVersion) async {
                 if (newVersion != null && newVersion != _selectedVersion) {
                   setState(() {
                     _selectedVersion = newVersion;
-                    // Reiniciar el estado del libro/capítulo para la nueva versión
                     _selectedBookName = null;
                     _selectedBookNumber = null;
                     _selectedChapter = null;
@@ -335,7 +369,12 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
                     _verses = [];
                     _selectedVerses.clear();
                   });
-                  await _initVersion(); // Re-inicializa la base de datos y carga datos para la nueva versión
+                  await _initVersion();
+                  if (!mounted) return;
+                  _showSnackBar(
+                    context,
+                    'Versión cambiada a ${newVersion.name}',
+                  );
                 }
               },
               items: widget.versions.map((version) {
@@ -349,24 +388,27 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
               }).toList(),
             ),
           ),
-          // Botón de búsqueda (lo implementaremos después de confirmar esto)
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              // Lógica para abrir el buscador de versículos o palabras
-            },
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.search,
+                    color: ThemeConstants.onPrimaryColor),
+                onPressed: () {
+                  // TODO: Implement search
+                },
+              ),
+            ],
           ),
         ],
       ),
       body: _books.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-              child: Column(
-                children: [
-                  // Selector de libro y capítulo
-                  Row(
+          : Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                  child: Row(
                     children: [
                       Expanded(
                         child: DropdownButton<String>(
@@ -377,6 +419,7 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
                                   ? _filteredBooks[0]['short_name']
                                   : null),
                           icon: const Icon(Icons.arrow_drop_down),
+                          isExpanded: true,
                           items: _filteredBooks
                               .map((b) => DropdownMenuItem<String>(
                                     value: b['short_name'],
@@ -399,101 +442,117 @@ class _BibleReaderPageState extends State<BibleReaderPage> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      DropdownButton<int>(
-                        value: _selectedChapter,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        items: List.generate(_maxChapter, (i) => i + 1)
-                            .map((ch) => DropdownMenuItem<int>(
-                                  value: ch,
-                                  child: Text(ch.toString()),
-                                ))
-                            .toList(),
-                        onChanged: (val) async {
-                          if (val == null) return;
-                          setState(() {
-                            _selectedChapter = val;
-                            _selectedVerses.clear();
-                          });
-                          await _loadVerses();
-                        },
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          DropdownButton<int>(
+                            value: _selectedChapter,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            items: List.generate(_maxChapter, (i) => i + 1)
+                                .map((ch) => DropdownMenuItem<int>(
+                                      value: ch,
+                                      child: Text(ch.toString()),
+                                    ))
+                                .toList(),
+                            onChanged: (val) async {
+                              if (val == null) return;
+                              await _onNavigationTap();
+                              setState(() {
+                                _selectedChapter = val;
+                                _selectedVerses.clear();
+                              });
+                              await _loadVerses();
+                            },
+                          ),
+                          if (_showNavigationBubble)
+                            Positioned(
+                              top: -8,
+                              right: -8,
+                              child: BubbleConstants.buildBadge(
+                                text: 'Nuevo',
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: _verses.isEmpty
-                        ? const Center(child: Text("No hay versículos"))
-                        : ListView.builder(
-                            itemCount: _verses.length,
-                            itemBuilder: (context, idx) {
-                              final verse = _verses[idx];
-                              final verseNumber = verse['verse'];
-                              final key =
-                                  "$_selectedBookName|$_selectedChapter|$verseNumber";
-                              final isSelected = _selectedVerses.contains(key);
-                              return GestureDetector(
-                                onTap: () => _onVerseTap(verseNumber),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 2),
-                                  decoration: isSelected
-                                      ? const BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: Colors.grey,
-                                              width: 2,
-                                              style: BorderStyle.solid,
-                                            ),
-                                          ),
-                                        )
-                                      : null,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: TextStyle(
-                                        fontSize: _fontSize,
-                                        color: Colors.black,
-                                        fontFamily: 'Serif',
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: "${verse['verse']} ",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: _cleanVerseText(verse['text']),
-                                        ),
-                                      ],
-                                    ),
+                ),
+                Expanded(
+                  child: _verses.isEmpty
+                      ? const Center(child: Text("No hay versículos"))
+                      : ListView.builder(
+                          padding: const EdgeInsets.only(bottom: 80),
+                          itemCount: _verses.length + 1,
+                          itemBuilder: (context, idx) {
+                            if (idx == _verses.length) {
+                              // Copyright disclaimer at the bottom
+                              return Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  CopyrightUtils.getCopyright(
+                                    _selectedVersion.versionCode,
+                                    _currentLanguage,
                                   ),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               );
-                            },
-                          ),
-                  ),
-                ],
-              ),
+                            }
+
+                            final verse = _verses[idx];
+                            final verseNumber = verse['verse'];
+                            final key =
+                                "$_selectedBookName|$_selectedChapter|$verseNumber";
+                            final isSelected = _selectedVerses.contains(key);
+                            return GestureDetector(
+                              onTap: () => _onVerseTap(verseNumber),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 6, horizontal: 12),
+                                decoration: isSelected
+                                    ? const BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.grey,
+                                            width: 2,
+                                            style: BorderStyle.solid,
+                                          ),
+                                        ),
+                                      )
+                                    : null,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: _fontSize,
+                                      color: Colors.black,
+                                      fontFamily: 'Serif',
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: "${verse['verse']} ",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: _cleanVerseText(verse['text']),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: "Inicio"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_outlined), label: "Biblia"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.check_box_outlined), label: "Planes"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Descubre"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Más"),
-        ],
-        currentIndex: 1,
-        onTap: (idx) {
-          // Navegación entre secciones
-        },
-        type: BottomNavigationBarType.fixed,
-      ),
     );
   }
 }

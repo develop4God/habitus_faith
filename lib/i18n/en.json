@@ -1,0 +1,23 @@
+{
+  "app_name": "Habitus Faith",
+  "bible_reader": "Bible Reader",
+  "search": "Search",
+  "share": "Share",
+  "copy": "Copy",
+  "copied": "Copied to clipboard",
+  "shared": "Shared successfully",
+  "version_changed": "Version changed to {version}",
+  "select_version": "Select Version",
+  "book": "Book",
+  "chapter": "Chapter",
+  "verse": "Verse",
+  "no_verses": "No verses found",
+  "loading": "Loading...",
+  "new_feature": "New",
+  "copyright": "Copyright",
+  "home": "Home",
+  "bible": "Bible",
+  "plans": "Plans",
+  "discover": "Discover",
+  "more": "More"
+}

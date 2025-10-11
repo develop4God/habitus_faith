@@ -6,6 +6,9 @@ import 'pages/bible_reader_page.dart';
 import 'services/habit_service.dart';
 import 'services/bible_db_service.dart';
 import 'models/bible_version.dart';
+import 'utils/bible_version_registry.dart';
+import 'providers/devocional_provider.dart';
+import 'utils/theme_constants.dart';
 
 // ----- MODELO DE VERSIÓN DE BIBLIA -----
 //moved to  bible_version.dart
@@ -46,7 +49,7 @@ class LandingPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 elevation: 6,
-                shadowColor: Colors.blueAccent.withOpacity(0.15),
+                shadowColor: Colors.blueAccent.withValues(alpha: 0.15),
               ),
               onPressed: () {
                 Navigator.push(
@@ -115,29 +118,7 @@ class _BiblePageLauncherState extends State<BiblePageLauncher> {
   @override
   void initState() {
     super.initState();
-    bibleVersions = [
-      BibleVersion(
-        name: 'RVR1960 Reina Valera 1960',
-        assetPath: 'assets/biblia/RVR1960.SQLite3',
-        dbFileName: 'RVR1960.SQLite3',
-      ),
-      BibleVersion(
-        name: 'NTV Nueva Traducción Viviente',
-        assetPath: 'assets/biblia/NTV.SQLite3',
-        dbFileName: 'NTV.SQLite3',
-      ),
-      BibleVersion(
-        name: 'Biblia Peshitta Nuevo Testamento',
-        assetPath: 'assets/biblia/Pesh-es.SQLite3',
-        dbFileName: 'Pesh-es.SQLite3',
-      ),
-      BibleVersion(
-        name: 'TLA Traducción en Lenguaje Actual',
-        assetPath: 'assets/biblia/TLA.SQLite3',
-        dbFileName: 'TLA.SQLite3',
-      ),
-      // Agrega más versiones aquí si tienes más archivos
-    ];
+    bibleVersions = BibleVersionRegistry.getAllVersions();
     _initAll();
   }
 
@@ -165,8 +146,11 @@ class _BiblePageLauncherState extends State<BiblePageLauncher> {
 // ----- MAIN -----
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => HabitService(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HabitService()),
+        ChangeNotifierProvider(create: (_) => DevocionalProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -177,9 +161,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LandingPage(),
+      theme: ThemeConstants.lightTheme,
+      home: const LandingPage(),
     );
   }
 }

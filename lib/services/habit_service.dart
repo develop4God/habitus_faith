@@ -4,8 +4,11 @@ import '../models/habit.dart';
 class HabitService with ChangeNotifier {
   final List<Habit> _habits = [
     Habit(name: "Oración", description: "Dedica tiempo a la oración diaria."),
-    Habit(name: "Lectura Bíblica", description: "Lee un capítulo de la Biblia."),
-    Habit(name: "Gratitud", description: "Escribe algo por lo que agradeces hoy."),
+    Habit(
+        name: "Lectura Bíblica", description: "Lee un capítulo de la Biblia."),
+    Habit(
+        name: "Gratitud",
+        description: "Escribe algo por lo que agradeces hoy."),
   ];
 
   List<Habit> get habits => _habits;
