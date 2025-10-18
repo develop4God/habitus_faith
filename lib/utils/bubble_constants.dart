@@ -1,5 +1,5 @@
 // bubble_constants.dart
-import 'package:devocional_nuevo/extensions/string_extensions.dart';
+import '../extensions/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

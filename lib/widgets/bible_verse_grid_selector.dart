@@ -94,7 +94,7 @@ class BibleVerseGridSelector extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Text(
-                'bible.total_verses'.tr({'count': totalVerses.toString()}),
+                'Total verses ${totalVerses.toString()}',
                 style: textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
