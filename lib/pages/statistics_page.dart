@@ -1,42 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../services/habit_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../features/habits/presentation/habits_providers.dart';
 
-class StatisticsPage extends StatelessWidget {
+class StatisticsPage extends ConsumerWidget {
   const StatisticsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final habits = Provider.of<HabitService>(context).habits;
-    final total = habits.length;
-    final completed = habits.where((h) => h.completed).length;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final habitsAsync = ref.watch(habitsStreamProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Estadísticas'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Hábitos completados:',
-              style: TextStyle(fontSize: 22, color: Colors.blue[800]),
+      body: habitsAsync.when(
+        data: (habits) {
+          final total = habits.length;
+          final completed = habits.where((h) => h.completedToday).length;
+
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Hábitos completados:',
+                  style: TextStyle(fontSize: 22, color: Colors.blue[800]),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  '$completed de $total',
+                  style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green),
+                ),
+                const SizedBox(height: 24),
+                LinearProgressIndicator(
+                  value: total == 0 ? 0 : completed / total,
+                  minHeight: 12,
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              '$completed de $total',
-              style: const TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green),
-            ),
-            const SizedBox(height: 24),
-            LinearProgressIndicator(
-              value: total == 0 ? 0 : completed / total,
-              minHeight: 12,
-            ),
-          ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text('Error: $error'),
         ),
       ),
     );
