@@ -152,7 +152,19 @@ Advanced widgets are available but not yet integrated:
 final bibleReaderProvider = StateNotifierProvider<
   BibleReaderNotifier, 
   BibleReaderState
->((ref) => ...);
+>((ref) {
+  final versions = ref.watch(bibleVersionsProvider);
+  final readerService = ref.watch(bibleReaderServiceProvider);
+  final preferencesService = ref.watch(biblePreferencesServiceProvider);
+  
+  final controller = BibleReaderController(
+    allVersions: versions,
+    readerService: readerService,
+    preferencesService: preferencesService,
+  );
+  
+  return BibleReaderNotifier(controller);
+});
 
 // UI consumes state
 final state = ref.watch(bibleReaderProvider);
@@ -181,7 +193,7 @@ final notifier = ref.read(bibleReaderProvider.notifier);
 ## 📈 Migration Statistics
 
 - **Total Files Migrated:** 25
-- **Lines of Code Added:** ~4,000+
+- **Lines of Code Added:** ~4,200 (production code)
 - **Bible Versions Supported:** 5
 - **Compilation:** ✅ Passes
 - **Analysis:** ✅ Clean (0 errors)
