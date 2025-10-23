@@ -50,13 +50,19 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
       }
     }
 
-    // Select initial version
-    final selectedVersion = availableVersions.isNotEmpty
-        ? availableVersions.first
-        : allVersions.first;
+    // Select initial version - prefer saved current version if available
+    final currentVersion = ref.read(currentBibleVersionProvider);
+    final selectedVersion = currentVersion != null && availableVersions.contains(currentVersion)
+        ? currentVersion
+        : (availableVersions.isNotEmpty ? availableVersions.first : allVersions.first);
 
     // Initialize version's database service
     await _initializeVersionService(selectedVersion);
+
+    // Update current version provider if needed
+    if (currentVersion != selectedVersion) {
+      await ref.read(currentBibleVersionProvider.notifier).setVersion(selectedVersion);
+    }
 
     // Load preferences
     final fontSize = await preferencesService.getFontSize();
@@ -224,6 +230,9 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     final dbService = await _getDbServiceForVersion(newVersion);
     final books = await dbService.getAllBooks();
+
+    // Update the current version provider
+    await ref.read(currentBibleVersionProvider.notifier).setVersion(newVersion);
 
     state = state.copyWith(
         selectedVersion: newVersion,

@@ -62,6 +62,46 @@ final bibleDbServiceProvider = FutureProvider.family<BibleDbService, String>((re
   return service;
 });
 
+/// StateNotifier for managing current Bible version
+class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
+  final Ref ref;
+
+  CurrentBibleVersionNotifier(this.ref) : super(null) {
+    _loadInitialVersion();
+  }
+
+  Future<void> _loadInitialVersion() async {
+    final prefs = await ref.read(sharedPreferencesProvider.future);
+    final versionName = prefs.getString('current_bible_version');
+    
+    final available = ref.read(bibleVersionsProvider);
+    if (versionName != null) {
+      try {
+        final saved = available.firstWhere((v) => v.name == versionName);
+        state = saved;
+        return;
+      } catch (_) {
+        // Saved version not found, fall through to default
+      }
+    }
+    
+    // Default to first available version
+    state = available.isNotEmpty ? available.first : null;
+  }
+
+  Future<void> setVersion(BibleVersion version) async {
+    state = version;
+    // Save to preferences
+    final prefs = await ref.read(sharedPreferencesProvider.future);
+    await prefs.setString('current_bible_version', version.name);
+  }
+}
+
+/// Provider for current Bible version
+final currentBibleVersionProvider = StateNotifierProvider<CurrentBibleVersionNotifier, BibleVersion?>((ref) {
+  return CurrentBibleVersionNotifier(ref);
+});
+
 /// Provider for Bible preferences service
 final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((ref) {
   return BiblePreferencesService();
