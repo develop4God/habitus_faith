@@ -158,8 +158,9 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   }
 
   Future<void> _initializeVersionService(BibleVersion version) async {
-    // Initialize the database service through the provider
-    final dbServiceAsync = await ref.read(bibleDbServiceProvider(version.id).future);
+    // Initialize the database service for this version through the provider
+    // This ensures the service is cached and ready for use
+    await ref.read(bibleDbServiceProvider(version.id).future);
     
     // Also initialize readerService.dbService with the same DB for business logic
     await readerService.dbService.initDb(version.assetPath, version.dbFileName);

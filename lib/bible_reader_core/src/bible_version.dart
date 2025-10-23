@@ -1,5 +1,3 @@
-import 'bible_db_service.dart';
-
 class BibleVersion {
   final String id;
   final String name;
