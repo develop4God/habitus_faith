@@ -67,92 +67,16 @@ final bibleReaderServiceProvider = Provider<BibleReaderService>((ref) {
   );
 });
 
-/// StateNotifier for Bible reader state management
-class BibleReaderNotifier extends StateNotifier<BibleReaderState> {
-  final BibleReaderController _controller;
-
-  BibleReaderNotifier(this._controller) : super(const BibleReaderState()) {
-    _controller.stateStream.listen((newState) {
-      state = newState;
-    });
-  }
-
-  Future<void> initialize(String deviceLanguage) async {
-    await _controller.initialize(deviceLanguage);
-  }
-
-  Future<void> changeVersion(BibleVersion version) async {
-    await _controller.switchVersion(version);
-  }
-
-  Future<void> selectBook(int bookNumber, String bookName) async {
-    // Find the book in the state
-    final book = state.books.firstWhere(
-      (b) => b['book_number'] == bookNumber,
-      orElse: () => {'book_number': bookNumber, 'short_name': bookName},
-    );
-    await _controller.selectBook(book);
-  }
-
-  Future<void> selectChapter(int chapter) async {
-    await _controller.selectChapter(chapter);
-  }
-
-  void selectVerse(int verse) {
-    _controller.selectVerse(verse);
-  }
-
-  void toggleVerseSelection(String verseKey) {
-    _controller.toggleVerseSelection(verseKey);
-  }
-
-  void clearSelection() {
-    _controller.clearSelectedVerses();
-  }
-
-  Future<void> saveSelectedVerses() async {
-    // Save each selected verse
-    for (final verseKey in state.selectedVerses) {
-      await _controller.togglePersistentMark(verseKey);
-    }
-  }
-
-  Future<void> deleteMarkedVerse(String verseKey) async {
-    await _controller.togglePersistentMark(verseKey);
-  }
-
-  Future<void> searchText(String query) async {
-    await _controller.performSearch(query);
-  }
-
-  void setFontSize(double size) {
-    // Update state directly since controller doesn't have this method
-    state = state.copyWith(fontSize: size);
-  }
-
-  void toggleFontControls() {
-    // This is a UI-only state
-    state = state.copyWith(showFontControls: !state.showFontControls);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-}
-
 /// Provider for Bible reader state
-final bibleReaderProvider = StateNotifierProvider<BibleReaderNotifier, BibleReaderState>((ref) {
+/// Now using the controller directly as it extends StateNotifier
+final bibleReaderProvider = StateNotifierProvider<BibleReaderController, BibleReaderState>((ref) {
   final versions = ref.watch(bibleVersionsProvider);
   final readerService = ref.watch(bibleReaderServiceProvider);
   final preferencesService = ref.watch(biblePreferencesServiceProvider);
 
-  final controller = BibleReaderController(
+  return BibleReaderController(
     allVersions: versions,
     readerService: readerService,
     preferencesService: preferencesService,
   );
-
-  return BibleReaderNotifier(controller);
 });

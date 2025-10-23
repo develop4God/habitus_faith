@@ -153,10 +153,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               final book = state.books.firstWhere(
                                 (b) => b['book_number'] == bookNumber,
                               );
-                              notifier.selectBook(
-                                bookNumber,
-                                book['short_name'] as String,
-                              );
+                              notifier.selectBook(book);
                             }
                           },
                         ),

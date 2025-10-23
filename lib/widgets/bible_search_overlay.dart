@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 /// A modern search overlay for Bible search functionality
 /// Shows as a modal overlay that can be dismissed via back button, close button, or tap outside
+/// 
+/// TODO: Refactor to use ConsumerWidget and remove controller dependency
+/// This widget currently requires refactoring to work with the new Riverpod-native controller
 class BibleSearchOverlay extends StatefulWidget {
   final BibleReaderController controller;
   final Function(int verseNumber) onScrollToVerse;
@@ -189,11 +192,11 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
                       // Search results
                       Expanded(
                         child: StreamBuilder<BibleReaderState>(
-                          stream: widget.controller.stateStream,
-                          initialData: widget.controller.state,
+                          stream: Stream<BibleReaderState>.empty(),
+                          initialData: const BibleReaderState(),
                           builder: (context, snapshot) {
                             final state =
-                                snapshot.data ?? widget.controller.state;
+                                snapshot.data ?? const BibleReaderState();
 
                             if (!state.isSearching) {
                               return Center(
