@@ -48,6 +48,20 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
   ];
 });
 
+/// Family provider for BibleDbService instances
+/// Each version gets its own initialized database service
+final bibleDbServiceProvider = FutureProvider.family<BibleDbService, String>((ref, versionId) async {
+  final versions = ref.watch(bibleVersionsProvider);
+  final version = versions.firstWhere(
+    (v) => v.id == versionId,
+    orElse: () => throw Exception('Version $versionId not found'),
+  );
+  
+  final service = BibleDbService();
+  await service.initDb(version.assetPath, version.dbFileName);
+  return service;
+});
+
 /// Provider for Bible preferences service
 final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((ref) {
   return BiblePreferencesService();
@@ -75,6 +89,7 @@ final bibleReaderProvider = StateNotifierProvider<BibleReaderController, BibleRe
   final preferencesService = ref.watch(biblePreferencesServiceProvider);
 
   return BibleReaderController(
+    ref: ref,
     allVersions: versions,
     readerService: readerService,
     preferencesService: preferencesService,

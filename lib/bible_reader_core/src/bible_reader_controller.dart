@@ -15,13 +15,16 @@ import 'bible_preferences_service.dart';
 import 'bible_reader_service.dart';
 import 'bible_reader_state.dart';
 import 'bible_version.dart';
+import '../../providers/bible_providers.dart';
 
 class BibleReaderController extends StateNotifier<BibleReaderState> {
+  final Ref ref;
   final List<BibleVersion> allVersions;
   final BibleReaderService readerService;
   final BiblePreferencesService preferencesService;
 
   BibleReaderController({
+    required this.ref,
     required this.allVersions,
     required this.readerService,
     required this.preferencesService,
@@ -104,7 +107,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     await _initializeVersionService(savedVersion);
 
     // Load books
-    final books = await savedVersion.service!.getAllBooks();
+    final dbService = await _getDbServiceForVersion(savedVersion);
+    final books = await dbService.getAllBooks();
 
     // Restore position
     final position = await readerService.restorePosition(
@@ -131,7 +135,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   }
 
   Future<void> _loadFirstBook() async {
-    final books = await state.selectedVersion!.service!.getAllBooks();
+    final dbService = await _getDbService();
+    final books = await dbService.getAllBooks();
 
     if (books.isNotEmpty) {
       state = state.copyWith(
@@ -147,10 +152,24 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   }
 
   Future<void> _initializeVersionService(BibleVersion version) async {
-    version.service ??= BibleDbService();
-    await version.service!.initDb(version.assetPath, version.dbFileName);
+    // Initialize the database service through the provider
+    final dbServiceAsync = await ref.read(bibleDbServiceProvider(version.id).future);
+    
     // Also initialize readerService.dbService with the same DB for business logic
     await readerService.dbService.initDb(version.assetPath, version.dbFileName);
+  }
+
+  /// Get the database service for the currently selected version
+  Future<BibleDbService> _getDbService() async {
+    if (state.selectedVersion == null) {
+      throw Exception('No version selected');
+    }
+    return await ref.read(bibleDbServiceProvider(state.selectedVersion!.id).future);
+  }
+
+  /// Get the database service for a specific version
+  Future<BibleDbService> _getDbServiceForVersion(BibleVersion version) async {
+    return await ref.read(bibleDbServiceProvider(version.id).future);
   }
 
   Future<void> _loadChapterData() async {
@@ -158,11 +177,12 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
       return;
     }
 
-    final maxChapter = await state.selectedVersion!.service!.getMaxChapter(
+    final dbService = await _getDbService();
+    final maxChapter = await dbService.getMaxChapter(
       state.selectedBookNumber!,
     );
 
-    final verses = await state.selectedVersion!.service!.getChapterVerses(
+    final verses = await dbService.getChapterVerses(
       state.selectedBookNumber!,
       state.selectedChapter!,
     );
@@ -202,7 +222,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     await _initializeVersionService(newVersion);
 
-    final books = await newVersion.service!.getAllBooks();
+    final dbService = await _getDbServiceForVersion(newVersion);
+    final books = await dbService.getAllBooks();
 
     state = state.copyWith(
         selectedVersion: newVersion,
@@ -273,7 +294,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     if (result['bookName'] != null) {
       // Book changed, need to reload max chapter
-      final maxChapter = await state.selectedVersion!.service!.getMaxChapter(
+      final dbService = await _getDbService();
+      final maxChapter = await dbService.getMaxChapter(
         result['bookNumber'],
       );
       state = state.copyWith(maxChapter: maxChapter);
@@ -306,7 +328,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     if (result['bookName'] != null) {
       // Book changed, need to reload max chapter
-      final maxChapter = await state.selectedVersion!.service!.getMaxChapter(
+      final dbService = await _getDbService();
+      final maxChapter = await dbService.getMaxChapter(
         result['bookNumber'],
       );
       state = state.copyWith(maxChapter: maxChapter);
