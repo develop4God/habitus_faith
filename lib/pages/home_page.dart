@@ -2,72 +2,58 @@ import 'package:flutter/material.dart';
 import 'habits_page.dart';
 import 'statistics_page.dart';
 import 'settings_page.dart';
+import 'bible_reader_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      const HabitsPage(),
+      const BibleReaderPage(),
+      const StatisticsPage(),
+      const SettingsPage(),
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Habitus Fe'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircleAvatar(
-                radius: 48,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.check_box, size: 64, color: Colors.blue),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '¡Bienvenido a Habitus Fe!',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue[800],
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Haz de la fe tu mejor hábito diario.\nEmpieza a registrar tus hábitos espirituales ahora.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const HabitsPage()));
-                },
-                child: const Text('Mis hábitos'),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const StatisticsPage()));
-                },
-                child: const Text('Estadísticas'),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const SettingsPage()));
-                },
-                child: const Text('Ajustes'),
-              ),
-            ],
+      body: pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check_box),
+            label: 'Hábitos',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Biblia',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Progreso',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Ajustes',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue[800],
+        onTap: _onItemTapped,
       ),
     );
   }
