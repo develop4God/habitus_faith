@@ -1,4 +1,3 @@
-import '../bible_reader_core/bible_reader_core.dart';
 import '../extensions/string_extensions.dart';
 import '../providers/bible_providers.dart';
 import 'package:flutter/material.dart';
