@@ -1,29 +1,27 @@
 import '../bible_reader_core/bible_reader_core.dart';
 import '../extensions/string_extensions.dart';
+import '../providers/bible_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// A modern search overlay for Bible search functionality
 /// Shows as a modal overlay that can be dismissed via back button, close button, or tap outside
-/// 
-/// TODO: Refactor to use ConsumerWidget and remove controller dependency
-/// This widget currently requires refactoring to work with the new Riverpod-native controller
-class BibleSearchOverlay extends StatefulWidget {
-  final BibleReaderController controller;
+/// Refactored to use Riverpod ConsumerStatefulWidget
+class BibleSearchOverlay extends ConsumerStatefulWidget {
   final Function(int verseNumber) onScrollToVerse;
   final String Function(dynamic text) cleanVerseText;
 
   const BibleSearchOverlay({
     super.key,
-    required this.controller,
     required this.onScrollToVerse,
     required this.cleanVerseText,
   });
 
   @override
-  State<BibleSearchOverlay> createState() => _BibleSearchOverlayState();
+  ConsumerState<BibleSearchOverlay> createState() => _BibleSearchOverlayState();
 }
 
-class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
+class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
 
@@ -45,7 +43,7 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
 
   void _handleClose() {
     // Clear search and unfocus before closing
-    widget.controller.clearSearch();
+    ref.read(bibleReaderProvider.notifier).clearSearch();
     _searchController.clear();
     _searchFocusNode.unfocus();
     Navigator.of(context).pop();
@@ -55,7 +53,7 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
     // Capture FocusScope BEFORE async operation
     final focusScope = FocusScope.of(context);
 
-    await widget.controller.jumpToSearchResult(result);
+    await ref.read(bibleReaderProvider.notifier).jumpToSearchResult(result);
     _searchController.clear();
     if (!mounted) return;
 
@@ -87,7 +85,7 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
         if (FocusScope.of(context).hasFocus) {
           FocusScope.of(context).unfocus();
         }
-        widget.controller.clearSearch();
+        ref.read(bibleReaderProvider.notifier).clearSearch();
         _searchController.clear();
       },
       child: GestureDetector(
@@ -165,7 +163,7 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
                                     icon: const Icon(Icons.clear),
                                     onPressed: () {
                                       _searchController.clear();
-                                      widget.controller.clearSearch();
+                                      ref.read(bibleReaderProvider.notifier).clearSearch();
                                       setState(() {});
                                     },
                                   )
@@ -182,7 +180,7 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
                             ),
                           ),
                           onSubmitted: (query) async {
-                            await widget.controller.performSearch(query);
+                            await ref.read(bibleReaderProvider.notifier).performSearch(query);
                           },
                           onChanged: (value) {
                             setState(() {});
@@ -191,12 +189,9 @@ class _BibleSearchOverlayState extends State<BibleSearchOverlay> {
                       ),
                       // Search results
                       Expanded(
-                        child: StreamBuilder<BibleReaderState>(
-                          stream: Stream<BibleReaderState>.empty(),
-                          initialData: const BibleReaderState(),
-                          builder: (context, snapshot) {
-                            final state =
-                                snapshot.data ?? const BibleReaderState();
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final state = ref.watch(bibleReaderProvider);
 
                             if (!state.isSearching) {
                               return Center(
