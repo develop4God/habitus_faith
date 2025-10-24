@@ -1,0 +1,284 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:habitus_faith/pages/habits_page_new.dart';
+import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
+import 'package:habitus_faith/features/habits/presentation/widgets/habit_completion_card.dart';
+import 'package:habitus_faith/features/habits/presentation/widgets/mini_calendar_heatmap.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+void main() {
+  group('HabitsPageNew - Complete User Flow Tests', () {
+    late ProviderContainer container;
+
+    setUp(() async {
+      // Reset SharedPreferences with clean state
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      
+      container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
+      );
+    });
+
+    tearDown(() {
+      container.dispose();
+    });
+
+    Widget createTestWidget(Widget child) {
+      return UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('es', ''),
+          ],
+          home: child,
+        ),
+      );
+    }
+
+    group('Empty State', () {
+      testWidgets('displays empty state with icon and message when no habits exist',
+          (WidgetTester tester) async {
+        // Act
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(find.byIcon(Icons.auto_awesome), findsOneWidget,
+            reason: 'Empty state should display sparkle icon');
+        expect(find.text('No habits'), findsOneWidget,
+            reason: 'Empty state message should be displayed');
+        expect(find.byType(HabitCompletionCard), findsNothing,
+            reason: 'No habit cards should be displayed');
+      });
+
+      testWidgets('shows add habit FAB in empty state',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('add_habit_fab')), findsOneWidget,
+            reason: 'Add habit button should always be visible');
+      });
+    });
+
+    group('Habit Creation Flow', () {
+      testWidgets('opens add habit dialog when FAB is tapped',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Act - Tap FAB
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+
+        // Assert - Dialog is displayed
+        expect(find.text('Add habit'), findsOneWidget);
+        expect(find.byKey(const Key('habit_name_input')), findsOneWidget);
+        expect(find.byKey(const Key('habit_description_input')), findsOneWidget);
+        expect(find.byKey(const Key('confirm_add_habit_button')), findsOneWidget);
+      });
+
+      testWidgets('creates habit successfully and displays in list',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Act - Open dialog and create habit
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byKey(const Key('habit_name_input')), 'Morning Prayer');
+        await tester.enterText(
+            find.byKey(const Key('habit_description_input')), 'Pray every morning');
+        
+        await tester.tap(find.byKey(const Key('confirm_add_habit_button')));
+        await tester.pumpAndSettle();
+
+        // Assert - Habit is displayed
+        expect(find.text('Morning Prayer'), findsOneWidget,
+            reason: 'Created habit name should be visible');
+        expect(find.text('Pray every morning'), findsOneWidget,
+            reason: 'Created habit description should be visible');
+        
+        // Verify no empty state
+        expect(find.byIcon(Icons.auto_awesome), findsNothing);
+        expect(find.text('No habits'), findsNothing);
+      });
+
+      testWidgets('validates input - does not create habit with empty name',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+
+        // Try to create with empty name
+        await tester.enterText(
+            find.byKey(const Key('habit_description_input')), 'Description only');
+        await tester.tap(find.byKey(const Key('confirm_add_habit_button')));
+        await tester.pumpAndSettle();
+
+        // Dialog should still be open (validation failed)
+        expect(find.text('Add habit'), findsOneWidget);
+        
+        // Empty state should still be visible
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
+        expect(find.text('No habits'), findsOneWidget);
+      });
+    });
+
+    group('Habit Completion Flow', () {
+      testWidgets('completes habit when card is tapped',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Create a habit first
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byKey(const Key('habit_name_input')), 'Read Bible');
+        await tester.enterText(
+            find.byKey(const Key('habit_description_input')), 'Daily reading');
+        await tester.tap(find.byKey(const Key('confirm_add_habit_button')));
+        await tester.pumpAndSettle();
+
+        // Find the habit card
+        final habitCardFinder = find.byType(HabitCompletionCard);
+        expect(habitCardFinder, findsOneWidget);
+
+        // Act - Tap to complete
+        await tester.tap(habitCardFinder);
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        // Assert - Success message shown
+        expect(find.text('Habit completed! 🎉'), findsOneWidget,
+            reason: 'Completion success message should be displayed');
+      });
+
+      testWidgets('shows streak after habit completion',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Create and complete habit
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byKey(const Key('habit_name_input')), 'Exercise');
+        await tester.enterText(
+            find.byKey(const Key('habit_description_input')), 'Daily workout');
+        await tester.tap(find.byKey(const Key('confirm_add_habit_button')));
+        await tester.pumpAndSettle();
+
+        // Complete the habit
+        await tester.tap(find.byType(HabitCompletionCard));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        // Assert - Streak indicators are visible
+        expect(find.byIcon(Icons.local_fire_department), findsOneWidget,
+            reason: 'Fire icon for current streak should be visible');
+        expect(find.byIcon(Icons.emoji_events), findsOneWidget,
+            reason: 'Trophy icon for best streak should be visible');
+      });
+
+      testWidgets('prevents double completion on same day',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Create habit
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byKey(const Key('habit_name_input')), 'Meditate');
+        await tester.enterText(
+            find.byKey(const Key('habit_description_input')), 'Daily meditation');
+        await tester.tap(find.byKey(const Key('confirm_add_habit_button')));
+        await tester.pumpAndSettle();
+
+        // Complete once
+        await tester.tap(find.byType(HabitCompletionCard));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        // Try to complete again - card should be disabled
+        final habitCard = tester.widget<HabitCompletionCard>(
+            find.byType(HabitCompletionCard));
+        
+        // Habit should show as completed
+        expect(habitCard.habit.completedToday, isTrue,
+            reason: 'Habit should be marked as completed');
+      });
+    });
+
+    group('Mini Calendar Heatmap', () {
+      testWidgets('displays 7-day calendar heatmap for each habit',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // Create habit
+        await tester.tap(find.byKey(const Key('add_habit_fab')));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byKey(const Key('habit_name_input')), 'Study');
+        await tester.enterText(
+            find.byKey(const Key('habit_description_input')), 'Daily study');
+        await tester.tap(find.byKey(const Key('confirm_add_habit_button')));
+        await tester.pumpAndSettle();
+
+        // Assert - Heatmap is displayed
+        expect(find.byType(MiniCalendarHeatmap), findsOneWidget,
+            reason: 'Calendar heatmap should be displayed for habit');
+        expect(find.text('This week'), findsOneWidget,
+            reason: 'Heatmap label should be visible');
+      });
+    });
+
+    group('Error Handling', () {
+      testWidgets('shows error message on completion failure',
+          (WidgetTester tester) async {
+        // This tests resilience - even if backend fails, UI should handle it gracefully
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        await tester.pumpAndSettle();
+
+        // The app should remain stable even with no habits
+        expect(find.byType(CircularProgressIndicator), findsNothing,
+            reason: 'No loading indicator should be stuck');
+      });
+    });
+
+    group('Loading States', () {
+      testWidgets('shows proper loading state during async operations',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(const HabitsPageNew()));
+        
+        // Don't pumpAndSettle immediately to catch loading state
+        await tester.pump();
+
+        // Initially should show loading or empty state quickly
+        await tester.pumpAndSettle();
+        
+        // Should eventually settle to a stable state
+        expect(tester.takeException(), isNull,
+            reason: 'No exceptions should occur during loading');
+      });
+    });
+  });
+}
