@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'habits_page.dart';
+import 'habits_page_new.dart';
 import 'statistics_page.dart';
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
+import '../l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,8 +23,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     final List<Widget> pages = [
-      const HabitsPage(),
+      const HabitsPageNew(),
       const BibleReaderPage(),
       const StatisticsPage(),
       const SettingsPage(),
@@ -33,20 +36,20 @@ class _HomePageState extends State<HomePage> {
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.check_box),
-            label: 'Hábitos',
+            icon: const Icon(Icons.check_box),
+            label: l10n.myHabits,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Biblia',
+            icon: const Icon(Icons.book),
+            label: l10n.readBible,
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),
             label: 'Progreso',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Ajustes',
           ),
