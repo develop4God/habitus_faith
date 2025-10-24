@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/pages/habits_page_new.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
-import 'package:habitus_faith/features/habits/presentation/widgets/habit_completion_card.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -24,17 +23,17 @@ void main() {
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
         ],
-        child: MaterialApp(
-          localizationsDelegates: const [
+        child: const MaterialApp(
+          localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
+          supportedLocales: [
             Locale('en', ''),
           ],
-          home: const HabitsPageNew(),
+          home: HabitsPageNew(),
         ),
       );
     }
@@ -194,15 +193,15 @@ void main() {
             overrides: [
               sharedPreferencesProvider.overrideWithValue(prefs),
             ],
-            child: MaterialApp(
-              locale: const Locale('en', ''),
-              localizationsDelegates: const [
+            child: const MaterialApp(
+              locale: Locale('en', ''),
+              localizationsDelegates: [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
-              supportedLocales: const [Locale('en', '')],
-              home: const HabitsPageNew(),
+              supportedLocales: [Locale('en', '')],
+              home: HabitsPageNew(),
             ),
           ),
         );

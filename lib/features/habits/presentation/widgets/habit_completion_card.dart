@@ -69,7 +69,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: widget.habit.completedToday
-            ? BorderSide(color: const Color(0xff10b981), width: 2)
+            ? const BorderSide(color: Color(0xff10b981), width: 2)
             : BorderSide.none,
       ),
       child: Stack(

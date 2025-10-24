@@ -22,17 +22,17 @@ void main() {
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
         ],
-        child: MaterialApp(
-          localizationsDelegates: const [
+        child: const MaterialApp(
+          localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
+          supportedLocales: [
             Locale('en', ''),
           ],
-          home: const OnboardingPage(),
+          home: OnboardingPage(),
         ),
       );
     }
@@ -169,15 +169,15 @@ void main() {
             overrides: [
               sharedPreferencesProvider.overrideWithValue(prefs),
             ],
-            child: MaterialApp(
-              locale: const Locale('en', ''),
-              localizationsDelegates: const [
+            child: const MaterialApp(
+              locale: Locale('en', ''),
+              localizationsDelegates: [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
-              supportedLocales: const [Locale('en', '')],
-              home: const OnboardingPage(),
+              supportedLocales: [Locale('en', '')],
+              home: OnboardingPage(),
             ),
           ),
         );
