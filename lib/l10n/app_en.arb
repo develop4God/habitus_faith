@@ -1,0 +1,229 @@
+{
+  "@@locale": "en",
+  "appTitle": "Habitus Faith",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "start": "Start",
+  "@start": {
+    "description": "Start button text"
+  },
+  "readBible": "Read Bible",
+  "@readBible": {
+    "description": "Read Bible button text"
+  },
+  "myHabits": "My Habits",
+  "@myHabits": {
+    "description": "Title for habits page"
+  },
+  "noHabits": "No habits yet",
+  "@noHabits": {
+    "description": "Empty state message when user has no habits"
+  },
+  "streak": "Streak",
+  "@streak": {
+    "description": "Streak label"
+  },
+  "days": "days",
+  "@days": {
+    "description": "Days unit"
+  },
+  "best": "Best",
+  "@best": {
+    "description": "Best streak label"
+  },
+  "addHabit": "Add Habit",
+  "@addHabit": {
+    "description": "Add habit button text"
+  },
+  "deleteHabit": "Delete Habit",
+  "@deleteHabit": {
+    "description": "Delete habit dialog title"
+  },
+  "deleteHabitConfirm": "Are you sure you want to delete \"{habitName}\"?",
+  "@deleteHabitConfirm": {
+    "description": "Delete habit confirmation message",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name field label"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description field label"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Add button text"
+  },
+  "welcomeToHabitusFaith": "Welcome to Habitus Faith",
+  "@welcomeToHabitusFaith": {
+    "description": "Onboarding welcome title"
+  },
+  "selectUpToThreeHabits": "Select up to 3 habits to start your journey",
+  "@selectUpToThreeHabits": {
+    "description": "Onboarding instruction"
+  },
+  "continueButton": "Continue",
+  "@continueButton": {
+    "description": "Continue button text"
+  },
+  "selectAtLeastOne": "Please select at least one habit",
+  "@selectAtLeastOne": {
+    "description": "Error message when no habits selected"
+  },
+  "maxThreeHabits": "You can select up to 3 habits",
+  "@maxThreeHabits": {
+    "description": "Error message when trying to select more than 3"
+  },
+  "spiritual": "Spiritual",
+  "@spiritual": {
+    "description": "Spiritual category"
+  },
+  "physical": "Physical",
+  "@physical": {
+    "description": "Physical category"
+  },
+  "mental": "Mental",
+  "@mental": {
+    "description": "Mental category"
+  },
+  "relational": "Relational",
+  "@relational": {
+    "description": "Relational category"
+  },
+  "habitCompleted": "Habit completed! 🎉",
+  "@habitCompleted": {
+    "description": "Success message when habit is completed"
+  },
+  "tapToComplete": "Tap to complete",
+  "@tapToComplete": {
+    "description": "Instruction to tap to complete habit"
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Completed status"
+  },
+  "currentStreak": "Current Streak",
+  "@currentStreak": {
+    "description": "Current streak label"
+  },
+  "longestStreak": "Longest Streak",
+  "@longestStreak": {
+    "description": "Longest streak label"
+  },
+  "thisWeek": "This Week",
+  "@thisWeek": {
+    "description": "This week label for calendar"
+  },
+  "predefinedHabit_morningPrayer_name": "Morning Prayer",
+  "@predefinedHabit_morningPrayer_name": {
+    "description": "Name of morning prayer habit"
+  },
+  "predefinedHabit_morningPrayer_description": "Start your day with prayer and thanksgiving",
+  "@predefinedHabit_morningPrayer_description": {
+    "description": "Description of morning prayer habit"
+  },
+  "predefinedHabit_bibleReading_name": "Bible Reading",
+  "@predefinedHabit_bibleReading_name": {
+    "description": "Name of bible reading habit"
+  },
+  "predefinedHabit_bibleReading_description": "Read and meditate on God's Word daily",
+  "@predefinedHabit_bibleReading_description": {
+    "description": "Description of bible reading habit"
+  },
+  "predefinedHabit_worship_name": "Worship",
+  "@predefinedHabit_worship_name": {
+    "description": "Name of worship habit"
+  },
+  "predefinedHabit_worship_description": "Spend time in worship and praise",
+  "@predefinedHabit_worship_description": {
+    "description": "Description of worship habit"
+  },
+  "predefinedHabit_gratitude_name": "Gratitude Journal",
+  "@predefinedHabit_gratitude_name": {
+    "description": "Name of gratitude habit"
+  },
+  "predefinedHabit_gratitude_description": "Write down what you're thankful for",
+  "@predefinedHabit_gratitude_description": {
+    "description": "Description of gratitude habit"
+  },
+  "predefinedHabit_exercise_name": "Exercise",
+  "@predefinedHabit_exercise_name": {
+    "description": "Name of exercise habit"
+  },
+  "predefinedHabit_exercise_description": "Take care of your body, God's temple",
+  "@predefinedHabit_exercise_description": {
+    "description": "Description of exercise habit"
+  },
+  "predefinedHabit_healthyEating_name": "Healthy Eating",
+  "@predefinedHabit_healthyEating_name": {
+    "description": "Name of healthy eating habit"
+  },
+  "predefinedHabit_healthyEating_description": "Nourish your body with wholesome food",
+  "@predefinedHabit_healthyEating_description": {
+    "description": "Description of healthy eating habit"
+  },
+  "predefinedHabit_sleep_name": "Quality Sleep",
+  "@predefinedHabit_sleep_name": {
+    "description": "Name of sleep habit"
+  },
+  "predefinedHabit_sleep_description": "Get restful sleep to recharge",
+  "@predefinedHabit_sleep_description": {
+    "description": "Description of sleep habit"
+  },
+  "predefinedHabit_meditation_name": "Meditation",
+  "@predefinedHabit_meditation_name": {
+    "description": "Name of meditation habit"
+  },
+  "predefinedHabit_meditation_description": "Practice mindfulness and reflection",
+  "@predefinedHabit_meditation_description": {
+    "description": "Description of meditation habit"
+  },
+  "predefinedHabit_learning_name": "Learning",
+  "@predefinedHabit_learning_name": {
+    "description": "Name of learning habit"
+  },
+  "predefinedHabit_learning_description": "Grow in knowledge and wisdom",
+  "@predefinedHabit_learning_description": {
+    "description": "Description of learning habit"
+  },
+  "predefinedHabit_creativity_name": "Creative Time",
+  "@predefinedHabit_creativity_name": {
+    "description": "Name of creativity habit"
+  },
+  "predefinedHabit_creativity_description": "Express yourself through creative activities",
+  "@predefinedHabit_creativity_description": {
+    "description": "Description of creativity habit"
+  },
+  "predefinedHabit_familyTime_name": "Family Time",
+  "@predefinedHabit_familyTime_name": {
+    "description": "Name of family time habit"
+  },
+  "predefinedHabit_familyTime_description": "Spend quality time with loved ones",
+  "@predefinedHabit_familyTime_description": {
+    "description": "Description of family time habit"
+  },
+  "predefinedHabit_service_name": "Acts of Service",
+  "@predefinedHabit_service_name": {
+    "description": "Name of service habit"
+  },
+  "predefinedHabit_service_description": "Serve others with love and compassion",
+  "@predefinedHabit_service_description": {
+    "description": "Description of service habit"
+  }
+}
