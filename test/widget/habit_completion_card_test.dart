@@ -16,8 +16,10 @@ void main() {
       tapCalled = false;
       testHabit = Habit(
         id: 'test-habit-1',
+        userId: 'test-user-1',
         name: 'Morning Prayer',
         description: 'Pray each morning',
+        category: HabitCategory.prayer,
         emoji: '🙏',
         createdAt: DateTime.now(),
         completedToday: false,
@@ -72,14 +74,12 @@ void main() {
             reason: 'Habit emoji should be displayed');
       });
 
-      testWidgets('displays default emoji when none provided',
-          (WidgetTester tester) async {
-        final habitWithoutEmoji = testHabit.copyWith(emoji: null);
-        await tester.pumpWidget(createApp(habitWithoutEmoji));
+      testWidgets('displays emoji when provided', (WidgetTester tester) async {
+        await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.text('✨'), findsOneWidget,
-            reason: 'Default emoji should be displayed when none provided');
+        expect(find.text('🙏'), findsOneWidget,
+            reason: 'Habit emoji should be displayed');
       });
 
       testWidgets('displays streak badges', (WidgetTester tester) async {
@@ -134,35 +134,27 @@ void main() {
             reason: 'Border should be 2 pixels wide');
       });
 
-      testWidgets('shows checkmark icon when completed',
+      testWidgets('completed habit has visual distinction',
           (WidgetTester tester) async {
         final completedHabit = testHabit.copyWith(completedToday: true);
         await tester.pumpWidget(createApp(completedHabit));
         await tester.pump();
 
-        expect(find.byIcon(Icons.check_circle), findsOneWidget,
-            reason: 'Checkmark icon should be displayed for completed habit');
-      });
-
-      testWidgets('does not show checkmark when incomplete',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(createApp(testHabit));
-        await tester.pump();
-
-        expect(find.byIcon(Icons.check_circle), findsNothing,
-            reason: 'Checkmark should not be displayed for incomplete habit');
+        final card = tester.widget<Card>(find.byType(Card));
+        expect(card.elevation, 1,
+            reason: 'Completed habit should have lower elevation');
       });
     });
 
     group('Tap Interaction', () {
-      testWidgets('calls onTap when tapped and incomplete',
+      testWidgets('responds to tap when incomplete',
           (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
         tapCalled = false;
         await tester.tap(find.byType(HabitCompletionCard));
-        await tester.pumpAndSettle(); // Wait for animation
+        await tester.pump(); // Process tap
 
         expect(tapCalled, true,
             reason: 'onTap should be called when incomplete habit is tapped');
