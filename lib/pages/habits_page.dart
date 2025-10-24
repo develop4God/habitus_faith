@@ -3,15 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import '../features/habits/domain/failures.dart';
+import '../l10n/app_localizations.dart';
 
-
+/// DEPRECATED: Use HabitsPageNew instead
+/// This page is kept for backward compatibility but will be removed
+@Deprecated('Use HabitsPageNew from habits_page_new.dart instead')
 class HabitsPage extends ConsumerWidget {
   const HabitsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ✅ AGREGAR ESTO (escuchar errores del notifier)
-
+    final l10n = AppLocalizations.of(context)!;
     final habitsAsync = ref.watch(habitsStreamProvider);
 
     // Listen for errors
@@ -32,15 +34,15 @@ class HabitsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mis hábitos'),
+        title: Text(l10n.myHabits),
       ),
       body: habitsAsync.when(
         data: (habits) {
           if (habits.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'No tienes hábitos',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                l10n.noHabits,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
             );
           }

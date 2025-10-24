@@ -212,7 +212,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                           ? Colors.yellow.withValues(alpha: 0.2)
                                           : null,
                                   border: isSelected
-                                      ? Border(
+                                      ? const Border(
                                           left: BorderSide(
                                             color: Colors.blue,
                                             width: 3,

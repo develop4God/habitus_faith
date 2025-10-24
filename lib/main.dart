@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
 import 'core/providers/auth_provider.dart';
+import 'features/habits/presentation/onboarding/onboarding_page.dart';
+import 'features/habits/data/storage/storage_providers.dart';
+import 'l10n/app_localizations.dart';
 
 // ----- MODELO DE VERSIÓN DE BIBLIA -----
 //moved to  bible_version.dart
@@ -16,6 +21,8 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       body: Center(
@@ -27,9 +34,9 @@ class LandingPage extends StatelessWidget {
               child: Lottie.asset('assets/lottie/animation.json'),
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Habitus Fe',
-              style: TextStyle(
+            Text(
+              l10n.appTitle,
+              style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2,
@@ -38,6 +45,7 @@ class LandingPage extends StatelessWidget {
             ),
             const SizedBox(height: 48),
             ElevatedButton(
+              key: const Key('start_button'),
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
@@ -54,9 +62,9 @@ class LandingPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
-              child: const Text(
-                'Comenzar',
-                style: TextStyle(
+              child: Text(
+                l10n.start,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -67,6 +75,7 @@ class LandingPage extends StatelessWidget {
             const SizedBox(height: 20),
             // Botón para ir al lector de Biblia
             ElevatedButton(
+              key: const Key('read_bible_button'),
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
@@ -83,9 +92,9 @@ class LandingPage extends StatelessWidget {
                       builder: (context) => const BibleReaderPage()),
                 );
               },
-              child: const Text(
-                'Leer Biblia',
-                style: TextStyle(
+              child: Text(
+                l10n.readBible,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
@@ -106,9 +115,16 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MyApp(),
     ),
   );
 }
@@ -119,11 +135,29 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authInit = ref.watch(authInitProvider);
+    final onboardingComplete = ref.watch(onboardingCompleteProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), // English
+        Locale('es', ''), // Spanish
+        Locale('fr', ''), // French
+        Locale('pt', ''), // Portuguese
+        Locale('zh', ''), // Chinese
+      ],
+      routes: {
+        '/home': (context) => const HomePage(),
+        '/onboarding': (context) => const OnboardingPage(),
+      },
       home: authInit.when(
-        data: (_) => const LandingPage(),
+        data: (_) => onboardingComplete ? const LandingPage() : const OnboardingPage(),
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),

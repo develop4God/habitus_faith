@@ -33,7 +33,7 @@ void main() {
 
   group('BibleReaderController', () {
     test('initialize sets correct initial state', () async {
-      final controller = container.read(bibleReaderProvider.notifier);
+      container.read(bibleReaderProvider.notifier);
       
       expect(container.read(bibleReaderProvider).isLoading, isFalse);
       
@@ -72,7 +72,7 @@ void main() {
       
       // Set to near maximum
       await controller.setFontSize(32.0);
-      final beforeState = container.read(bibleReaderProvider);
+      container.read(bibleReaderProvider);
       
       // Try to increase beyond maximum
       await controller.increaseFontSize();
@@ -99,7 +99,7 @@ void main() {
 
     test('toggleVerseSelection adds and removes correctly', () {
       final controller = container.read(bibleReaderProvider.notifier);
-      final verseKey = 'Genesis|1|1';
+      const verseKey = 'Genesis|1|1';
       
       // Add verse
       controller.toggleVerseSelection(verseKey);

@@ -1,3 +1,5 @@
+import 'models/verse_reference.dart';
+
 enum HabitCategory {
   prayer,
   bibleReading,
@@ -28,6 +30,10 @@ class Habit {
   final String name;
   final String description;
   final HabitCategory category;
+  final String? emoji;
+  final VerseReference? verse;
+  final String? reminderTime;
+  final String? predefinedId;
   final bool completedToday;
   final int currentStreak;
   final int longestStreak;
@@ -42,6 +48,10 @@ class Habit {
     required this.name,
     required this.description,
     required this.category,
+    this.emoji,
+    this.verse,
+    this.reminderTime,
+    this.predefinedId,
     this.completedToday = false,
     this.currentStreak = 0,
     this.longestStreak = 0,
@@ -57,6 +67,10 @@ class Habit {
     required String name,
     required String description,
     HabitCategory category = HabitCategory.other,
+    String? emoji,
+    VerseReference? verse,
+    String? reminderTime,
+    String? predefinedId,
   }) {
     return Habit(
       id: id,
@@ -64,6 +78,10 @@ class Habit {
       name: name,
       description: description,
       category: category,
+      emoji: emoji,
+      verse: verse,
+      reminderTime: reminderTime,
+      predefinedId: predefinedId,
       createdAt: DateTime.now(),
     );
   }
@@ -128,6 +146,10 @@ class Habit {
     String? name,
     String? description,
     HabitCategory? category,
+    String? emoji,
+    VerseReference? verse,
+    String? reminderTime,
+    String? predefinedId,
     bool? completedToday,
     int? currentStreak,
     int? longestStreak,
@@ -142,6 +164,10 @@ class Habit {
       name: name ?? this.name,
       description: description ?? this.description,
       category: category ?? this.category,
+      emoji: emoji ?? this.emoji,
+      verse: verse ?? this.verse,
+      reminderTime: reminderTime ?? this.reminderTime,
+      predefinedId: predefinedId ?? this.predefinedId,
       completedToday: completedToday ?? this.completedToday,
       currentStreak: currentStreak ?? this.currentStreak,
       longestStreak: longestStreak ?? this.longestStreak,
