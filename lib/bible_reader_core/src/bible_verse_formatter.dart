@@ -30,12 +30,12 @@ class BibleVerseFormatter {
 
       final longBookName = books.firstWhere(
         (b) => b['short_name'] == bookAbbrev,
-        orElse: () => {'long_name': bookAbbrev},
+        orElse: () => <String, dynamic>{'long_name': bookAbbrev},
       )['long_name'];
 
       final verse = verses.firstWhere(
         (v) => v['verse'] == verseNum,
-        orElse: () => {},
+        orElse: () => <String, dynamic>{},
       );
 
       if (verse.isNotEmpty) {
