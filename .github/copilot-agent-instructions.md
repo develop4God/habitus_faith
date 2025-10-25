@@ -14,4 +14,6 @@ b. include edge cases.
 c. Tests must be dependency injection.
 d. Tests should validate real user/business functionality and remain robust to code changes. Avoid fragile tests that break due to minor implementation changes.
 
-6. Before finishing this session, compile the project with `flutter run` and wait for the APK to be generated.
+**test important note: Never delete or ignore a test that fails due to a real implementation error in the code. Instead, create an incident documenting all necessary details for identification and future correction, and @mention the requesting user of the session
+
+7. Before finishing this session, compile the project with `flutter run` and wait for the APK to be generated.
