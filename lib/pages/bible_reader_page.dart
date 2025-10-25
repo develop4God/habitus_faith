@@ -197,7 +197,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .onSurface
-                                                  .withOpacity(0.7),
+                                                  .withValues(alpha: 0.7),
                                             ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -227,10 +227,10 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                     ),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? Colors.blue.withOpacity(0.1)
+                                          ? Colors.blue.withValues(alpha: 0.1)
                                           : isMarked
                                               ? Colors.yellow
-                                                  .withOpacity(0.2)
+                                                  .withValues(alpha: 0.2)
                                               : null,
                                       border: isSelected
                                           ? const Border(
@@ -299,7 +299,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, -2),
                   ),
