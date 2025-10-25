@@ -22,7 +22,7 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       body: Center(
@@ -54,7 +54,7 @@ class LandingPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 elevation: 6,
-                shadowColor: Colors.blueAccent.withValues(alpha:0.15),
+                shadowColor: Colors.blueAccent.withValues(alpha: 0.15),
               ),
               onPressed: () {
                 Navigator.push(
@@ -157,7 +157,8 @@ class MyApp extends ConsumerWidget {
         '/onboarding': (context) => const OnboardingPage(),
       },
       home: authInit.when(
-        data: (_) => onboardingComplete ? const LandingPage() : const OnboardingPage(),
+        data: (_) =>
+            onboardingComplete ? const LandingPage() : const OnboardingPage(),
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),

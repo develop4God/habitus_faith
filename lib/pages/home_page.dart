@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final List<Widget> pages = [
       const HabitsPageNew(),
       const BibleReaderPage(),
