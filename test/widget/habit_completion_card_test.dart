@@ -153,7 +153,11 @@ void main() {
 
         tapCalled = false;
         await tester.tap(find.byType(HabitCompletionCard));
-        await tester.pump(); // Process tap
+        await tester.pump(); // Start animation
+        await tester.pump(const Duration(
+            milliseconds: 1600)); // Wait for animation to complete
+        await tester
+            .pump(const Duration(milliseconds: 600)); // Wait for callback delay
 
         expect(tapCalled, true,
             reason: 'onTap should be called when incomplete habit is tapped');
