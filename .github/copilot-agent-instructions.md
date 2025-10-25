@@ -1,12 +1,11 @@
-
 Must on each session.
 
-1. Run flutter test before taskes. All tests must pass. Refactor/fix failing tests. if failing tests are not validating real user logic, delete it and change the approach. 
+1. Run `flutter test` before starting any tasks. All tests must pass. Refactor or fix failing tests. If a failing test does not validate real user logic, delete it and update your approach accordingly.
 
-2. Use dart format . and dart analyze frequently. Resolve all warnings/errors.
+2. Use `dart format .` and `dart analyze` frequently. Resolve all warnings and errors.
 
-3. Only change production code for requested features or fixes. Justify all major changes in commits/docs.
+3. Only modify production code for requested features or bug fixes. Justify all major changes in commit messages and documentation.
 
-4. Use Riverpod for all state/business logic. Infection and ID for easy testing 
+4. Use Riverpod for all state and business logic. Use dependency injection and unique identifiers (IDs) for specific robo tests to facilitate easy testing.
 
-before complete each session compile with Flutter run. And wait to generate apk.
+Before completing each session, compile the project with `flutter run` and wait for the APK to be generated.
