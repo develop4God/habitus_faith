@@ -1,70 +1,11 @@
-# Copilot Agent Instructions for Flutter/Dart
+Must on each session.
 
-> **Copilot Agent: Confirm you have read this file at the start of every session.**
+1. Run `flutter test` before starting any tasks. All tests must pass. Refactor or fix failing tests. If a failing test does not validate real user logic, delete it and update your approach accordingly.
 
-## Standards
+2. Use `dart format .` and `dart analyze` frequently. Resolve all warnings and errors.
 
-- **Validate after each change:**  
-  Run `flutter run` (or similar) and fix all compile errors before committing.
+3. Only modify production code for requested features or bug fixes. Justify all major changes in commit messages and documentation.
 
-- **Test-driven development:**  
-  Run `flutter test` before and during work. All tests must pass. Refactor/fix failing tests.
+4. Use Riverpod for all state and business logic. Use dependency injection and unique identifiers (IDs) for specific robo tests to facilitate easy testing.
 
-- **Formatting & analysis:**  
-  Use `dart format .` and `dart analyze` frequently. Resolve all warnings/errors.
-
-- **Production code:**  
-  Only change production code for requested features or fixes. Justify all major changes in commits/docs.
-
-## Architecture & Structure
-
-- **State management:**  
-  Use Riverpod for all state/business logic.
-
-- **Folder tree:**  
-  Organize by feature. Group related UI, providers, logic, and models:
-  ```
-  lib/
-    features/
-      auth/
-        ui/
-        providers/
-        models/
-      profile/
-        ui/
-        providers/
-        models/
-    shared/
-      widgets/
-      utils/
-  ```
-  Keep business logic out of UI. Refactor folder tree for clarity as needed.
-
-## Testing Best Practices
-
-- Write tests that validate real business logic and key flows—avoid trivial/meaningless tests.
-- Design robust tests that aren't fragile to minor code changes.
-- Use dependency injection for all external/services logic for testability.
-- Assign unique `Key`s (like `ValueKey('loginButton')`) to interactive widgets for reliable UI/integration tests.
-- Prefer meaningful widget/integration tests that simulate real user actions and verify outcomes.
-- Use descriptive test names and clear structure (setup, action, assertions).
-- Remove or refactor low-value/brittle tests.
-
-## Workflow
-
-1. Install: `flutter pub get`
-2. Compile: `flutter run`
-3. Test: `flutter test`
-4. Format: `dart format .`
-5. Analyze: `dart analyze`
-
-## General
-
-- Preserve and improve folder structure.
-- Write unit tests for new logic or fixes.
-- Document public APIs and complex logic.
-- Update docs if usage or structure changes.
-
----
-
-**Always follow these instructions for code quality and consistency. Confirm reading this file at each session start.**
+Before completing each session, compile the project with `flutter run` and wait for the APK to be generated.
