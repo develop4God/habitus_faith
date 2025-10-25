@@ -1,6 +1,6 @@
 Must on each session.
 
-1. Run `flutter test` before starting any tasks. All tests must pass. Refactor or fix failing tests. If a failing test does not validate real user logic, delete it and update your approach accordingly.
+1. Run `flutter test` before starting any tasks. All tests must pass. Refactor or fix failing tests. If a failing test does not validate real user logic, delete it and update your approach accordingly. Focus on Quality over quantity.
 
 2. Use `dart format .` and `dart analyze` frequently. Resolve all warnings and errors.
 
