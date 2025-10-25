@@ -17,7 +17,7 @@ void main() {
 
     Future<Widget> createApp() async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       return ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
@@ -54,7 +54,8 @@ void main() {
             reason: 'Welcome title should be displayed');
       });
 
-      testWidgets('shows selection instruction text', (WidgetTester tester) async {
+      testWidgets('shows selection instruction text',
+          (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
@@ -62,7 +63,8 @@ void main() {
             reason: 'Instruction text should guide user');
       });
 
-      testWidgets('shows habit counter starting at 0/3', (WidgetTester tester) async {
+      testWidgets('shows habit counter starting at 0/3',
+          (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
@@ -70,7 +72,8 @@ void main() {
             reason: 'Counter should start at 0/3');
       });
 
-      testWidgets('displays predefined habits grid', (WidgetTester tester) async {
+      testWidgets('displays predefined habits grid',
+          (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
@@ -84,7 +87,8 @@ void main() {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
-        expect(find.byKey(const Key('continue_onboarding_button')), findsOneWidget,
+        expect(
+            find.byKey(const Key('continue_onboarding_button')), findsOneWidget,
             reason: 'Continue button should be present');
         expect(find.widgetWithText(ElevatedButton, 'Continue'), findsOneWidget,
             reason: 'Continue button should have correct text');
@@ -92,27 +96,30 @@ void main() {
     });
 
     group('Habit Selection', () {
-      testWidgets('counter updates when habits are selected', (WidgetTester tester) async {
+      testWidgets('counter updates when habits are selected',
+          (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
         // Initially should show 0/3
         expect(find.textContaining('0/3'), findsOneWidget,
             reason: 'Counter should start at 0/3');
-        
+
         // This test verifies the counter is present and functional
         // Actual selection testing requires valid habit IDs from predefinedHabits
       });
 
-      testWidgets('continue button enabled state reflects selection', (WidgetTester tester) async {
+      testWidgets('continue button enabled state reflects selection',
+          (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
         final continueButton = tester.widget<ElevatedButton>(
             find.byKey(const Key('continue_onboarding_button')));
-        
+
         expect(continueButton.enabled, false,
-            reason: 'Continue button should be disabled when no habits selected');
+            reason:
+                'Continue button should be disabled when no habits selected');
       });
     });
 
@@ -123,7 +130,8 @@ void main() {
 
         // Verify GridView is using proper delegate
         final gridView = tester.widget<GridView>(find.byType(GridView));
-        expect(gridView.gridDelegate, isA<SliverGridDelegateWithFixedCrossAxisCount>(),
+        expect(gridView.gridDelegate,
+            isA<SliverGridDelegateWithFixedCrossAxisCount>(),
             reason: 'GridView should use fixed cross axis count delegate');
       });
     });
@@ -136,7 +144,7 @@ void main() {
 
         final continueButton = tester.widget<ElevatedButton>(
             find.byKey(const Key('continue_onboarding_button')));
-        
+
         expect(continueButton.enabled, false,
             reason: 'Continue button should be disabled with no selection');
       });
@@ -148,7 +156,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final gridView = find.byType(GridView);
-        
+
         // Scroll down
         await tester.drag(gridView, const Offset(0, -200));
         await tester.pumpAndSettle();
@@ -160,10 +168,11 @@ void main() {
     });
 
     group('Localization', () {
-      testWidgets('displays English text correctly', (WidgetTester tester) async {
+      testWidgets('displays English text correctly',
+          (WidgetTester tester) async {
         SharedPreferences.setMockInitialValues({});
         final prefs = await SharedPreferences.getInstance();
-        
+
         await tester.pumpWidget(
           ProviderScope(
             overrides: [

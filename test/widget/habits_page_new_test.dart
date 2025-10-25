@@ -18,7 +18,7 @@ void main() {
 
     Future<Widget> createApp() async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       return ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
@@ -75,7 +75,7 @@ void main() {
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
-        
+
         // Core UI elements should be present regardless of habit count
         expect(find.byType(AppBar), findsOneWidget,
             reason: 'App bar should always be present');
@@ -92,7 +92,8 @@ void main() {
 
         await tester.tap(find.byKey(const Key('add_habit_fab')));
         await tester.pump(); // Start animation
-        await tester.pump(const Duration(milliseconds: 300)); // Complete animation
+        await tester
+            .pump(const Duration(milliseconds: 300)); // Complete animation
 
         expect(find.text('Add Habit'), findsOneWidget,
             reason: 'Dialog title should be visible');
@@ -125,7 +126,8 @@ void main() {
 
         expect(find.text('Cancel'), findsOneWidget,
             reason: 'Cancel button should be visible');
-        expect(find.byKey(const Key('confirm_add_habit_button')), findsOneWidget,
+        expect(
+            find.byKey(const Key('confirm_add_habit_button')), findsOneWidget,
             reason: 'Confirm button should be present');
         expect(find.text('Add'), findsOneWidget,
             reason: 'Add button text should be visible');
@@ -143,7 +145,8 @@ void main() {
         // Cancel dialog
         await tester.tap(find.text('Cancel'));
         await tester.pump(); // Start closing animation
-        await tester.pump(const Duration(milliseconds: 300)); // Complete animation
+        await tester
+            .pump(const Duration(milliseconds: 300)); // Complete animation
 
         expect(find.byType(AlertDialog), findsNothing,
             reason: 'Dialog should be closed');
@@ -164,7 +167,8 @@ void main() {
             reason: 'Name input field should be present');
         expect(find.byKey(const Key('habit_description_input')), findsOneWidget,
             reason: 'Description input field should be present');
-        expect(find.byKey(const Key('confirm_add_habit_button')), findsOneWidget,
+        expect(
+            find.byKey(const Key('confirm_add_habit_button')), findsOneWidget,
             reason: 'Confirm button should be present');
       });
     });
@@ -187,7 +191,7 @@ void main() {
       testWidgets('displays English text', (WidgetTester tester) async {
         SharedPreferences.setMockInitialValues({});
         final prefs = await SharedPreferences.getInstance();
-        
+
         await tester.pumpWidget(
           ProviderScope(
             overrides: [

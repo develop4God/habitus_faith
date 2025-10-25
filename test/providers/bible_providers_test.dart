@@ -19,7 +19,7 @@ void main() {
   group('bibleVersionsProvider', () {
     test('provides list of Bible versions', () {
       final versions = container.read(bibleVersionsProvider);
-      
+
       expect(versions, isNotEmpty);
       expect(versions.length, greaterThan(0));
       expect(versions.first.name, isNotNull);
@@ -28,7 +28,7 @@ void main() {
 
     test('all versions have required properties', () {
       final versions = container.read(bibleVersionsProvider);
-      
+
       for (final version in versions) {
         expect(version.id, isNotEmpty);
         expect(version.name, isNotEmpty);
@@ -42,7 +42,7 @@ void main() {
     test('versions have unique IDs', () {
       final versions = container.read(bibleVersionsProvider);
       final ids = versions.map((v) => v.id).toSet();
-      
+
       expect(ids.length, equals(versions.length));
     });
   });
@@ -51,13 +51,13 @@ void main() {
     test('loads initial version', () async {
       // Give more time for async initialization and use addPostFrameCallback pattern
       await container.read(sharedPreferencesProvider.future);
-      
+
       // Trigger provider read which starts initialization
-      final notifier = container.read(currentBibleVersionProvider.notifier);
-      
+      final _ = container.read(currentBibleVersionProvider.notifier);
+
       // Wait for initialization to complete
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
       final currentVersion = container.read(currentBibleVersionProvider);
       expect(currentVersion, isNotNull);
     });
@@ -66,13 +66,13 @@ void main() {
       await container.read(sharedPreferencesProvider.future);
       final notifier = container.read(currentBibleVersionProvider.notifier);
       final versions = container.read(bibleVersionsProvider);
-      
+
       // Wait for initial load
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
       // Set to specific version
       await notifier.setVersion(versions[1]);
-      
+
       final currentVersion = container.read(currentBibleVersionProvider);
       expect(currentVersion?.id, equals(versions[1].id));
       expect(currentVersion?.name, equals(versions[1].name));
@@ -83,9 +83,9 @@ void main() {
       final notifier = container.read(currentBibleVersionProvider.notifier);
       final versions = container.read(bibleVersionsProvider);
       final testVersion = versions.first;
-      
+
       await notifier.setVersion(testVersion);
-      
+
       final prefs = await SharedPreferences.getInstance();
       final savedName = prefs.getString('current_bible_version');
       expect(savedName, equals(testVersion.name));
@@ -94,23 +94,23 @@ void main() {
     test('loads saved version from SharedPreferences', () async {
       final versions = container.read(bibleVersionsProvider);
       final savedVersion = versions[1];
-      
+
       // Save version to preferences first
       SharedPreferences.setMockInitialValues({
         'current_bible_version': savedVersion.name,
       });
-      
+
       // Create new container to trigger reload
       final newContainer = ProviderContainer();
       await newContainer.read(sharedPreferencesProvider.future);
-      
+
       // Trigger initialization
       newContainer.read(currentBibleVersionProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
       final loaded = newContainer.read(currentBibleVersionProvider);
       expect(loaded?.name, equals(savedVersion.name));
-      
+
       newContainer.dispose();
     });
 
@@ -118,20 +118,20 @@ void main() {
       SharedPreferences.setMockInitialValues({
         'current_bible_version': 'NonExistentVersion',
       });
-      
+
       final newContainer = ProviderContainer();
       await newContainer.read(sharedPreferencesProvider.future);
-      
+
       // Trigger initialization
       newContainer.read(currentBibleVersionProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
       final loaded = newContainer.read(currentBibleVersionProvider);
       final versions = newContainer.read(bibleVersionsProvider);
-      
+
       expect(loaded, isNotNull);
       expect(loaded?.id, equals(versions.first.id));
-      
+
       newContainer.dispose();
     });
   });
@@ -140,7 +140,7 @@ void main() {
     test('creates service for valid version ID', () async {
       final versions = container.read(bibleVersionsProvider);
       final versionId = versions.first.id;
-      
+
       // Note: This will attempt initialization but may fail without actual database file
       // The provider itself should not throw when created
       final provider = bibleDbServiceProvider(versionId);
@@ -150,7 +150,7 @@ void main() {
     test('provider throws for invalid version ID during resolution', () async {
       // The provider itself doesn't throw until we try to read it
       final provider = bibleDbServiceProvider('invalid_id');
-      
+
       // Attempting to read should eventually throw
       expect(
         () async => await container.read(provider.future),
@@ -160,10 +160,10 @@ void main() {
 
     test('each version ID gets its own provider family instance', () {
       final versions = container.read(bibleVersionsProvider);
-      
+
       final provider1 = bibleDbServiceProvider(versions[0].id);
       final provider2 = bibleDbServiceProvider(versions[1].id);
-      
+
       // Different version IDs = different provider families
       expect(identical(provider1, provider2), isFalse);
     });

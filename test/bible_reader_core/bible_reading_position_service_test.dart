@@ -88,7 +88,8 @@ void main() {
         expect(position!['verse'], equals(0));
       });
 
-      test('saves position with very large chapter number (150 - Psalms)', () async {
+      test('saves position with very large chapter number (150 - Psalms)',
+          () async {
         await service.savePosition(
           bookName: 'Psalms',
           bookNumber: 19,
@@ -102,7 +103,8 @@ void main() {
         expect(position!['chapter'], equals(150));
       });
 
-      test('saves position with very large verse number (176 - Psalm 119)', () async {
+      test('saves position with very large verse number (176 - Psalm 119)',
+          () async {
         await service.savePosition(
           bookName: 'Psalms',
           bookNumber: 19,
@@ -116,7 +118,8 @@ void main() {
         expect(position!['verse'], equals(176));
       });
 
-      test('saves position with book number 66 (Revelation - last book)', () async {
+      test('saves position with book number 66 (Revelation - last book)',
+          () async {
         await service.savePosition(
           bookName: 'Revelation',
           bookNumber: 66,

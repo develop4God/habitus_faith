@@ -51,7 +51,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
 
   String _getSelectedVersesText(BibleReaderState state) {
     if (state.selectedVerses.isEmpty) return '';
-    
+
     final buffer = StringBuffer();
     for (final verseKey in state.selectedVerses) {
       final parts = verseKey.split('|');
@@ -63,7 +63,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
             orElse: () => {},
           );
           if (verse.isNotEmpty) {
-            buffer.writeln('${verse['verse']} ${_cleanVerseText(verse['text'])}');
+            buffer
+                .writeln('${verse['verse']} ${_cleanVerseText(verse['text'])}');
           }
         }
       }
@@ -176,7 +177,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               itemScrollController: _itemScrollController,
                               itemPositionsListener: _itemPositionsListener,
                               padding: const EdgeInsets.all(16),
-                              itemCount: state.verses.length + 1, // +1 for copyright footer
+                              itemCount: state.verses.length +
+                                  1, // +1 for copyright footer
                               itemBuilder: (context, index) {
                                 // Copyright footer at the end
                                 if (index == state.verses.length) {
@@ -275,11 +277,13 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               FloatingFontControlButtons(
                                 currentFontSize: state.fontSize,
                                 onIncrease: () {
-                                  final newSize = (state.fontSize + 2).clamp(12.0, 28.0);
+                                  final newSize =
+                                      (state.fontSize + 2).clamp(12.0, 28.0);
                                   notifier.setFontSize(newSize);
                                 },
                                 onDecrease: () {
-                                  final newSize = (state.fontSize - 2).clamp(12.0, 28.0);
+                                  final newSize =
+                                      (state.fontSize - 2).clamp(12.0, 28.0);
                                   notifier.setFontSize(newSize);
                                 },
                                 onClose: () {
@@ -330,7 +334,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               ClipboardData(text: '$reference\n\n$text'),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Copied to clipboard')),
+                              const SnackBar(
+                                  content: Text('Copied to clipboard')),
                             );
                             notifier.clearSelection();
                           },

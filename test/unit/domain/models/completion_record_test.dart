@@ -40,12 +40,12 @@ void main() {
     test('dateKey ignores time component', () {
       final morning = DateTime(2024, 10, 24, 8, 0);
       final evening = DateTime(2024, 10, 24, 20, 0);
-      
+
       final record1 = CompletionRecord(
         habitId: 'habit123',
         completedAt: morning,
       );
-      
+
       final record2 = CompletionRecord(
         habitId: 'habit123',
         completedAt: evening,

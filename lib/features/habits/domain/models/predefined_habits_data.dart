@@ -48,7 +48,8 @@ final List<PredefinedHabit> predefinedHabits = [
     nameKey: 'predefinedHabit_exercise_name',
     descriptionKey: 'predefinedHabit_exercise_description',
     category: PredefinedHabitCategory.physical,
-    verse: VerseReference(book: '1 Corinthians', chapter: 6, verse: 19, endVerse: '20'),
+    verse: VerseReference(
+        book: '1 Corinthians', chapter: 6, verse: 19, endVerse: '20'),
     suggestedTime: 'morning',
   ),
   const PredefinedHabit(
@@ -95,7 +96,8 @@ final List<PredefinedHabit> predefinedHabits = [
     nameKey: 'predefinedHabit_creativity_name',
     descriptionKey: 'predefinedHabit_creativity_description',
     category: PredefinedHabitCategory.mental,
-    verse: VerseReference(book: 'Exodus', chapter: 35, verse: 31, endVerse: '32'),
+    verse:
+        VerseReference(book: 'Exodus', chapter: 35, verse: 31, endVerse: '32'),
     suggestedTime: 'anytime',
   ),
 
@@ -106,7 +108,8 @@ final List<PredefinedHabit> predefinedHabits = [
     nameKey: 'predefinedHabit_familyTime_name',
     descriptionKey: 'predefinedHabit_familyTime_description',
     category: PredefinedHabitCategory.relational,
-    verse: VerseReference(book: 'Ephesians', chapter: 6, verse: 2, endVerse: '3'),
+    verse:
+        VerseReference(book: 'Ephesians', chapter: 6, verse: 2, endVerse: '3'),
     suggestedTime: 'evening',
   ),
   const PredefinedHabit(

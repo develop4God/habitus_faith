@@ -110,7 +110,8 @@ void main() {
 
     group('Edge cases - Special characters', () {
       test('preserves accented characters', () {
-        final result = BibleTextNormalizer.clean('<pb/>En el principio[1] creó');
+        final result =
+            BibleTextNormalizer.clean('<pb/>En el principio[1] creó');
         expect(result, equals('En el principio creó'));
       });
 
@@ -137,34 +138,40 @@ void main() {
         final result = BibleTextNormalizer.clean(
           '<pb/>In the beginning[a] God[b] created<f id="1"/> the heavens[1] and the earth[2].',
         );
-        expect(result, equals(
-          'In the beginning God created the heavens and the earth.',
-        ));
+        expect(
+            result,
+            equals(
+              'In the beginning God created the heavens and the earth.',
+            ));
       });
 
       test('cleans John 3:16 with references', () {
         final result = BibleTextNormalizer.clean(
           'For God<f ref="note1"/> so loved[a] the world[b], that he gave[1] his only begotten Son[2]',
         );
-        expect(result, equals(
-          'For God so loved the world, that he gave his only begotten Son',
-        ));
+        expect(
+            result,
+            equals(
+              'For God so loved the world, that he gave his only begotten Son',
+            ));
       });
 
       test('cleans Psalm with multiple annotations', () {
         final result = BibleTextNormalizer.clean(
           '<pb/><title>Psalm 23<title/>\nThe LORD[a] is my shepherd[1]; I shall not want[b].',
         );
-        expect(result, equals(
-          'Psalm 23\nThe LORD is my shepherd; I shall not want.',
-        ));
+        expect(
+            result,
+            equals(
+              'Psalm 23\nThe LORD is my shepherd; I shall not want.',
+            ));
       });
     });
 
     group('Performance - Large text', () {
       test('handles very long verses efficiently', () {
         // Psalm 119:176 - longest verse
-        final longText = '<pb/>' + ('word[a] ' * 100) + '<f>end</f>';
+        final longText = '<pb/>${'word[a] ' * 100}<f>end</f>';
         final result = BibleTextNormalizer.clean(longText);
         expect(result.contains('['), isFalse);
         expect(result.contains('<'), isFalse);
@@ -173,7 +180,7 @@ void main() {
       });
 
       test('handles text with many sequential tags', () {
-        final manyTags = '<pb/><f><note><title>' + 'text' + '</title></note></f>';
+        const manyTags = '<pb/><f><note><title>text</title></note></f>';
         final result = BibleTextNormalizer.clean(manyTags);
         expect(result, equals('text'));
       });

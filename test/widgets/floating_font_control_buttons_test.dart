@@ -5,9 +5,9 @@ import 'package:habitus_faith/widgets/floating_font_control_buttons.dart';
 void main() {
   group('FloatingFontControlButtons', () {
     testWidgets('renders all control buttons', (WidgetTester tester) async {
-      var increaseCalled = false;
-      var decreaseCalled = false;
-      var closeCalled = false;
+      var increaseCalled = false; // Callback tracker
+      var decreaseCalled = false; // Callback tracker
+      var closeCalled = false; // Callback tracker
 
       await tester.pumpWidget(
         MaterialApp(
@@ -24,10 +24,10 @@ void main() {
 
       // Verify close button exists
       expect(find.byIcon(Icons.close_outlined), findsOneWidget);
-      
+
       // Verify A+ text exists (increase button)
       expect(find.text('A+'), findsOneWidget);
-      
+
       // Verify A- text exists (decrease button)
       expect(find.text('A-'), findsOneWidget);
     });

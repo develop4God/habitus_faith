@@ -11,17 +11,17 @@ extension StringExtensions on String {
     } else {
       result = this;
     }
-    
+
     // Replace parameters if provided
     if (params != null) {
       params.forEach((key, value) {
         result = result.replaceAll('{$key}', value.toString());
       });
     }
-    
+
     return result;
   }
-  
+
   /// Capitalize first letter
   String capitalize() {
     if (isEmpty) return this;

@@ -371,7 +371,7 @@ void main() {
       });
 
       test('handles very long version name', () {
-        final longName = 'VeryLongVersionNameThatExceedsNormalLengthForTesting';
+        const longName = 'VeryLongVersionNameThatExceedsNormalLengthForTesting';
         final version = BibleVersion(
           name: longName,
           language: 'Test',

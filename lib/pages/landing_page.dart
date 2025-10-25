@@ -36,7 +36,7 @@ class LandingPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 elevation: 6,
-                shadowColor: Colors.blueAccent.withOpacity(0.15),
+                shadowColor: Colors.blueAccent.withValues(alpha: 0.15),
               ),
               onPressed: () {
                 // Aquí puedes navegar a otra pantalla o lógica

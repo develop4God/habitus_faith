@@ -7,8 +7,8 @@ void main() {
   group('BibleChapterGridSelector Integration Tests', () {
     testWidgets('displays all chapters in grid layout',
         (WidgetTester tester) async {
-      var selectedChapter = 0;
-      
+      var selectedChapter = 0; // Will be updated by callback
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -27,14 +27,14 @@ void main() {
       // Should display chapter numbers in grid
       expect(find.text('1'), findsOneWidget);
       expect(find.text('25'), findsOneWidget);
-      
+
       // Scroll to see chapter 50
       await tester.dragUntilVisible(
         find.text('50'),
         find.byType(GridView),
         const Offset(0, -100),
       );
-      
+
       expect(find.text('50'), findsOneWidget);
     });
 
@@ -63,7 +63,7 @@ void main() {
     testWidgets('calls onChapterSelected when chapter is tapped',
         (WidgetTester tester) async {
       var selectedChapter = 0;
-      
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -109,8 +109,7 @@ void main() {
       expect(totalChaptersText, findsOneWidget);
     });
 
-    testWidgets('displays book name in header',
-        (WidgetTester tester) async {
+    testWidgets('displays book name in header', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -129,8 +128,7 @@ void main() {
       expect(find.text('Genesis'), findsOneWidget);
     });
 
-    testWidgets('close button dismisses dialog',
-        (WidgetTester tester) async {
+    testWidgets('close button dismisses dialog', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -225,8 +223,8 @@ void main() {
   group('BibleVerseGridSelector Integration Tests', () {
     testWidgets('displays all verses in grid layout',
         (WidgetTester tester) async {
-      var selectedVerse = 0;
-      
+      var selectedVerse = 0; // Will be updated by callback
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -275,7 +273,7 @@ void main() {
     testWidgets('calls onVerseSelected when verse is tapped',
         (WidgetTester tester) async {
       var selectedVerse = 0;
-      
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -299,8 +297,7 @@ void main() {
       expect(selectedVerse, equals(20));
     });
 
-    testWidgets('displays translated verse count',
-        (WidgetTester tester) async {
+    testWidgets('displays translated verse count', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

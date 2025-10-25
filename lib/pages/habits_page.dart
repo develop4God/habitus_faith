@@ -59,13 +59,14 @@ class HabitsPage extends ConsumerWidget {
                     key: Key('habit_checkbox_${habit.id}'),
                     value: habit.completedToday,
                     onChanged: habit.completedToday
-                        ? null  // Deshabilita si ya está completado
+                        ? null // Deshabilita si ya está completado
                         : (value) async {
-                      if (value == true) {
-                        final notifier = ref.read(habitsNotifierProvider.notifier);
-                        await notifier.completeHabit(habit.id);
-                      }
-                    },
+                            if (value == true) {
+                              final notifier =
+                                  ref.read(habitsNotifierProvider.notifier);
+                              await notifier.completeHabit(habit.id);
+                            }
+                          },
                   ),
                   title: Text(habit.name),
                   subtitle: Column(
@@ -142,6 +143,7 @@ class HabitsPage extends ConsumerWidget {
       ),
     );
   }
+
   void _showAddHabitDialog(BuildContext context, WidgetRef ref) {
     final nameCtrl = TextEditingController();
     final descCtrl = TextEditingController();

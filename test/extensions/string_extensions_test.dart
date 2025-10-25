@@ -20,7 +20,8 @@ void main() {
     });
 
     test('replaces multiple parameters correctly', () {
-      final result = 'test.message_{name}_age_{age}'.tr({'name': 'John', 'age': '25'});
+      final result =
+          'test.message_{name}_age_{age}'.tr({'name': 'John', 'age': '25'});
       expect(result, contains('John'));
       expect(result, contains('25'));
     });

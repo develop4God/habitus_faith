@@ -15,7 +15,7 @@ void main() {
 
     Future<void> pumpOnboardingPage(WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -35,7 +35,7 @@ void main() {
           ),
         ),
       );
-      
+
       await tester.pumpAndSettle();
     }
 
@@ -45,23 +45,23 @@ void main() {
 
       // Should show welcome text
       expect(find.textContaining('Welcome'), findsOneWidget);
-      
+
       // Should show selection counter (0/3)
       expect(find.textContaining('0/3'), findsOneWidget);
-      
+
       // Should show habit grid
       expect(find.byType(GridView), findsOneWidget);
-      
+
       // Continue button should be disabled when no habits selected
-      final continueButton = find.byKey(const Key('continue_onboarding_button'));
+      final continueButton =
+          find.byKey(const Key('continue_onboarding_button'));
       expect(continueButton, findsOneWidget);
-      
+
       final button = tester.widget<ElevatedButton>(continueButton);
       expect(button.onPressed, isNull); // Disabled
     });
 
-    testWidgets('selects one habit successfully',
-        (WidgetTester tester) async {
+    testWidgets('selects one habit successfully', (WidgetTester tester) async {
       await pumpOnboardingPage(tester);
 
       // Find first habit card
@@ -74,15 +74,15 @@ void main() {
 
       // Counter should update to 1/3
       expect(find.textContaining('1/3'), findsOneWidget);
-      
+
       // Continue button should be enabled
-      final continueButton = find.byKey(const Key('continue_onboarding_button'));
+      final continueButton =
+          find.byKey(const Key('continue_onboarding_button'));
       final button = tester.widget<ElevatedButton>(continueButton);
       expect(button.onPressed, isNotNull); // Enabled
     });
 
-    testWidgets('selects two habits successfully',
-        (WidgetTester tester) async {
+    testWidgets('selects two habits successfully', (WidgetTester tester) async {
       await pumpOnboardingPage(tester);
 
       // Select first habit
@@ -104,10 +104,10 @@ void main() {
       // Select three habits
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
       await tester.pumpAndSettle();
-      
+
       await tester.tap(find.byKey(const Key('habit_card_bible_reading')));
       await tester.pumpAndSettle();
-      
+
       await tester.tap(find.byKey(const Key('habit_card_worship')));
       await tester.pumpAndSettle();
 
@@ -122,15 +122,25 @@ void main() {
       // Select three habits
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
       await tester.pumpAndSettle();
-      
+
       await tester.tap(find.byKey(const Key('habit_card_bible_reading')));
       await tester.pumpAndSettle();
-      
+
       await tester.tap(find.byKey(const Key('habit_card_worship')));
       await tester.pumpAndSettle();
 
-      // Try to select fourth habit
-      await tester.tap(find.byKey(const Key('habit_card_gratitude')));
+      // Counter should be 3/3
+      expect(find.textContaining('3/3'), findsOneWidget);
+
+      // Try to select fourth habit (need to scroll to it if not visible)
+      final gratitudeCard = find.byKey(const Key('habit_card_gratitude'));
+      if (gratitudeCard.evaluate().isEmpty) {
+        // Scroll to make it visible
+        await tester.drag(find.byType(GridView), const Offset(0, -100));
+        await tester.pumpAndSettle();
+      }
+
+      await tester.tap(gratitudeCard);
       await tester.pumpAndSettle();
 
       // Should still be 3/3
@@ -145,7 +155,7 @@ void main() {
       final habitCard = find.byKey(const Key('habit_card_morning_prayer'));
       await tester.tap(habitCard);
       await tester.pumpAndSettle();
-      
+
       expect(find.textContaining('1/3'), findsOneWidget);
 
       // Tap again to deselect
@@ -156,10 +166,33 @@ void main() {
       expect(find.textContaining('0/3'), findsOneWidget);
     });
 
-    testWidgets('responsive grid displays correctly on small screen',
+    testWidgets('responsive grid on small Android phone',
         (WidgetTester tester) async {
-      // Set small screen size (iPhone SE)
-      tester.view.physicalSize = const Size(320, 568);
+      // Set small Android screen size (Pixel 4a) with realistic height
+      tester.view.physicalSize = const Size(360, 800);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await pumpOnboardingPage(tester);
+
+      // Grid should be visible and scrollable
+      expect(find.byType(GridView), findsOneWidget);
+
+      // Should be able to scroll
+      await tester.drag(find.byType(GridView), const Offset(0, -100));
+      await tester.pumpAndSettle();
+
+      // No exceptions during scroll
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('responsive grid on Android tablet',
+        (WidgetTester tester) async {
+      // Set Android tablet screen size (Nexus 7) with realistic height
+      tester.view.physicalSize = const Size(600, 1024);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() {
         tester.view.resetPhysicalSize();
@@ -168,11 +201,15 @@ void main() {
 
       await pumpOnboardingPage(tester);
 
-      // Should render without overflow
-      expect(tester.takeException(), isNull);
-      
-      // Grid should be visible
+      // Grid should be visible and scrollable
       expect(find.byType(GridView), findsOneWidget);
+
+      // Should be able to scroll
+      await tester.drag(find.byType(GridView), const Offset(0, -100));
+      await tester.pumpAndSettle();
+
+      // No exceptions during scroll
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('responsive grid displays correctly on tablet',
@@ -189,13 +226,12 @@ void main() {
 
       // Should render without overflow
       expect(tester.takeException(), isNull);
-      
+
       // Grid should be visible
       expect(find.byType(GridView), findsOneWidget);
     });
 
-    testWidgets('grid scrolls to show all habits',
-        (WidgetTester tester) async {
+    testWidgets('grid scrolls to show all habits', (WidgetTester tester) async {
       await pumpOnboardingPage(tester);
 
       // Find grid view
@@ -219,7 +255,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify continue button is enabled now
-      final continueButton = find.byKey(const Key('continue_onboarding_button'));
+      final continueButton =
+          find.byKey(const Key('continue_onboarding_button'));
       final button = tester.widget<ElevatedButton>(continueButton);
       expect(button.onPressed, isNotNull);
     });
@@ -228,11 +265,36 @@ void main() {
         (WidgetTester tester) async {
       await pumpOnboardingPage(tester);
 
-      // Check for habit cards exist (at least the visible ones)
-      expect(find.byKey(const Key('habit_card_morning_prayer')), findsOneWidget);
-      expect(find.byKey(const Key('habit_card_bible_reading')), findsOneWidget);
-      expect(find.byKey(const Key('habit_card_worship')), findsOneWidget);
-      expect(find.byKey(const Key('habit_card_gratitude')), findsOneWidget);
+      // Scroll through the grid and verify we can find each habit
+      final habitKeys = [
+        'morning_prayer',
+        'bible_reading',
+        'worship',
+        'gratitude',
+        'exercise',
+        'healthy_eating',
+        'sleep',
+        'meditation',
+        'learning',
+        'creativity',
+        'family_time',
+        'service',
+      ];
+
+      int foundCount = 0;
+      for (final habitId in habitKeys) {
+        final habitCard = find.byKey(Key('habit_card_$habitId'));
+        // Scroll until we find it (or it's already visible)
+        await tester.ensureVisible(habitCard);
+        await tester.pumpAndSettle();
+
+        if (habitCard.evaluate().isNotEmpty) {
+          foundCount++;
+        }
+      }
+
+      // Should have found all 12 habits
+      expect(foundCount, equals(12));
     });
   });
 }

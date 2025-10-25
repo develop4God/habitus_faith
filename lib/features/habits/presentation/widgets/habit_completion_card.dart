@@ -89,8 +89,8 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         height: 56,
                         decoration: BoxDecoration(
                           color: widget.habit.completedToday
-                              ? const Color(0xff10b981).withValues(alpha:0.1)
-                              : const Color(0xff6366f1).withValues(alpha:0.1),
+                              ? const Color(0xff10b981).withValues(alpha: 0.1)
+                              : const Color(0xff6366f1).withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -169,7 +169,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xff6366f1).withValues(alpha:0.1),
+                        color: const Color(0xff6366f1).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -201,7 +201,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha:0.95),
+                  color: Colors.white.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
@@ -221,7 +221,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha:0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Center(
