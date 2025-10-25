@@ -2,12 +2,24 @@
 extension StringExtensions on String {
   /// Simple translation placeholder - returns key as-is for now
   /// TODO: Integrate with proper i18n system
-  String tr() {
+  /// Supports parameters: 'key'.tr({'param': 'value'})
+  String tr([Map<String, dynamic>? params]) {
     // For now, return a simplified version without the prefix
+    String result;
     if (contains('.')) {
-      return split('.').last.replaceAll('_', ' ').capitalize();
+      result = split('.').last.replaceAll('_', ' ').capitalize();
+    } else {
+      result = this;
     }
-    return this;
+    
+    // Replace parameters if provided
+    if (params != null) {
+      params.forEach((key, value) {
+        result = result.replaceAll('{$key}', value.toString());
+      });
+    }
+    
+    return result;
   }
   
   /// Capitalize first letter
