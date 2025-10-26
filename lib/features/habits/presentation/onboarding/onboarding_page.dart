@@ -31,8 +31,9 @@ class OnboardingPage extends ConsumerWidget {
                 label: l10n.retry,
                 textColor: Colors.white,
                 onPressed: () async {
-                  final success =
-                      await ref.read(onboardingNotifierProvider.notifier).retry();
+                  final success = await ref
+                      .read(onboardingNotifierProvider.notifier)
+                      .retry();
                   if (success && context.mounted) {
                     Navigator.of(context).pushReplacementNamed('/home');
                   }
@@ -281,102 +282,106 @@ class _HabitCard extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
-            width: isSelected ? 3 : 1,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color:
+                  isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
+              width: isSelected ? 3 : 1,
+            ),
+            boxShadow: [
+              if (isSelected)
+                BoxShadow(
+                  color: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                )
+              else
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+            ],
           ),
-          boxShadow: [
-            if (isSelected)
-              BoxShadow(
-                color: const Color(0xff6366f1).withValues(alpha: 0.2),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              )
-            else
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Responsive emoji size based on card size
-              final emojiSize = (constraints.maxWidth * 0.35).clamp(32.0, 56.0);
-              final titleSize = (constraints.maxWidth * 0.12).clamp(12.0, 16.0);
-              final descSize = (constraints.maxWidth * 0.09).clamp(10.0, 12.0);
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Responsive emoji size based on card size
+                final emojiSize =
+                    (constraints.maxWidth * 0.35).clamp(32.0, 56.0);
+                final titleSize =
+                    (constraints.maxWidth * 0.12).clamp(12.0, 16.0);
+                final descSize =
+                    (constraints.maxWidth * 0.09).clamp(10.0, 12.0);
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isSelected)
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: const BoxDecoration(
-                          color: Color(0xff6366f1),
-                          shape: BoxShape.circle,
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isSelected)
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Color(0xff6366f1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.check,
+                            size: 14,
+                            color: Colors.white,
+                          ),
                         ),
-                        child: const Icon(
-                          Icons.check,
-                          size: 14,
-                          color: Colors.white,
+                      )
+                    else
+                      const SizedBox(height: 20),
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          habit.emoji,
+                          style: TextStyle(fontSize: emojiSize),
                         ),
                       ),
-                    )
-                  else
-                    const SizedBox(height: 20),
-                  Flexible(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
+                    ),
+                    const SizedBox(height: 8),
+                    Flexible(
                       child: Text(
-                        habit.emoji,
-                        style: TextStyle(fontSize: emojiSize),
+                        getName(habit.nameKey),
+                        style: TextStyle(
+                          fontSize: titleSize,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xff1a202c),
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Flexible(
-                    child: Text(
-                      getName(habit.nameKey),
-                      style: TextStyle(
-                        fontSize: titleSize,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xff1a202c),
+                    const SizedBox(height: 4),
+                    Flexible(
+                      child: Text(
+                        getDescription(habit.descriptionKey),
+                        style: TextStyle(
+                          fontSize: descSize,
+                          color: Colors.grey.shade600,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Flexible(
-                    child: Text(
-                      getDescription(habit.descriptionKey),
-                      style: TextStyle(
-                        fontSize: descSize,
-                        color: Colors.grey.shade600,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }
