@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -433,6 +433,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Serve others with love and compassion'**
   String get predefinedHabit_service_description;
+
+  /// Error message shown when onboarding fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save habits. Please try again.'**
+  String get onboardingErrorMessage;
+
+  /// Button label for retrying an operation
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Accessibility label indicating an item is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
 }
 
 class _AppLocalizationsDelegate
@@ -468,9 +486,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

@@ -12,7 +12,38 @@ class OnboardingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final selectedHabits = ref.watch(selectedHabitsProvider);
-    final isLoading = ref.watch(onboardingNotifierProvider).isLoading;
+    final onboardingState = ref.watch(onboardingNotifierProvider);
+    final isLoading = onboardingState.isLoading;
+    final hasError = onboardingState.hasError;
+
+    // Show error message if onboarding failed
+    if (hasError) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n.onboardingErrorMessage,
+                semanticsLabel: l10n.onboardingErrorMessage,
+              ),
+              backgroundColor: Colors.red.shade600,
+              action: SnackBarAction(
+                label: l10n.retry,
+                textColor: Colors.white,
+                onPressed: () async {
+                  final success =
+                      await ref.read(onboardingNotifierProvider.notifier).retry();
+                  if (success && context.mounted) {
+                    Navigator.of(context).pushReplacementNamed('/home');
+                  }
+                },
+              ),
+              duration: const Duration(seconds: 6),
+            ),
+          );
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -234,11 +265,22 @@ class _HabitCard extends StatelessWidget {
       }
     }
 
-    return GestureDetector(
+    final habitName = getName(habit.nameKey);
+    final habitDescription = getDescription(habit.descriptionKey);
+    final semanticLabel = isSelected
+        ? '$habitName ${l10n.selected}. $habitDescription'
+        : '$habitName. $habitDescription';
+
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      selected: isSelected,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -334,6 +376,7 @@ class _HabitCard extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }
