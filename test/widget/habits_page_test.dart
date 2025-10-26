@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:habitus_faith/pages/habits_page_new.dart';
+import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-/// High-quality widget tests for HabitsPageNew
+/// High-quality widget tests for HabitsPage
 /// Focus: Real user flows, edge cases, and resilient validation
 void main() {
-  group('HabitsPageNew Widget Tests', () {
+  group('HabitsPage Widget Tests', () {
     setUp(() async {
       // Clean slate for each test
       SharedPreferences.setMockInitialValues({});
@@ -33,7 +33,7 @@ void main() {
           supportedLocales: [
             Locale('en', ''),
           ],
-          home: HabitsPageNew(),
+          home: HabitsPage(),
         ),
       );
     }
@@ -44,8 +44,8 @@ void main() {
         // Use pump with duration instead of pumpAndSettle to avoid timeout
         await tester.pump(const Duration(seconds: 2));
 
-        expect(find.byType(HabitsPageNew), findsOneWidget,
-            reason: 'HabitsPageNew should render');
+        expect(find.byType(HabitsPage), findsOneWidget,
+            reason: 'HabitsPage should render');
       });
 
       testWidgets('shows app bar with title', (WidgetTester tester) async {
@@ -187,7 +187,7 @@ void main() {
         await tester.pump(const Duration(seconds: 2));
 
         // Page should be set up to display habits (has body, can scroll, etc.)
-        expect(find.byType(HabitsPageNew), findsOneWidget,
+        expect(find.byType(HabitsPage), findsOneWidget,
             reason: 'Habits page should be present');
         expect(find.byType(Scaffold), findsOneWidget,
             reason: 'Should have scaffold structure');
@@ -212,7 +212,7 @@ void main() {
                 GlobalWidgetsLocalizations.delegate,
               ],
               supportedLocales: [Locale('en', '')],
-              home: HabitsPageNew(),
+              home: HabitsPage(),
             ),
           ),
         );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'habits_page_new.dart';
+import 'habits_page.dart';
 import 'statistics_page.dart';
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     final l10n = AppLocalizations.of(context)!;
 
     final List<Widget> pages = [
-      const HabitsPageNew(),
+      const HabitsPage(),
       const BibleReaderPage(),
       const StatisticsPage(),
       const SettingsPage(),

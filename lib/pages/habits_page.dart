@@ -1,23 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitus_faith/features/habits/domain/habit.dart';
-import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
+import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/failures.dart';
+import '../features/habits/data/storage/storage_providers.dart';
+import '../features/habits/presentation/widgets/habit_completion_card.dart';
+import '../features/habits/presentation/widgets/mini_calendar_heatmap.dart';
 import '../l10n/app_localizations.dart';
 
-/// DEPRECATED: Use HabitsPageNew instead
-/// This page is kept for backward compatibility but will be removed
-@Deprecated('Use HabitsPageNew from habits_page_new.dart instead')
+// New providers for JSON-based habits
+final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
+  final repository = ref.watch(jsonHabitsRepositoryProvider);
+  return repository.watchHabits();
+});
+
+class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
+  final Ref ref;
+
+  JsonHabitsNotifier(this.ref) : super(const AsyncValue.data(null));
+
+  Future<void> completeHabit(String habitId) async {
+    state = const AsyncLoading();
+
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final result = await repository.completeHabit(habitId);
+
+    result.fold(
+      (failure) {
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> deleteHabit(String habitId) async {
+    state = const AsyncLoading();
+
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final result = await repository.deleteHabit(habitId);
+
+    result.fold(
+      (failure) {
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (_) {
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> addHabit({
+    required String name,
+    required String description,
+    HabitCategory category = HabitCategory.other,
+  }) async {
+    state = const AsyncLoading();
+
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final result = await repository.createHabit(
+      name: name,
+      description: description,
+      category: category,
+    );
+
+    result.fold(
+      (failure) {
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        state = const AsyncData(null);
+      },
+    );
+  }
+}
+
+final jsonHabitsNotifierProvider =
+    StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
+  return JsonHabitsNotifier(ref);
+});
+
 class HabitsPage extends ConsumerWidget {
   const HabitsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final habitsAsync = ref.watch(habitsStreamProvider);
+    final habitsAsync = ref.watch(jsonHabitsStreamProvider);
 
     // Listen for errors
-    ref.listen<AsyncValue<void>>(habitsNotifierProvider, (previous, next) {
+    ref.listen<AsyncValue<void>>(jsonHabitsNotifierProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stack) {
           if (error is HabitFailure) {
@@ -33,137 +105,116 @@ class HabitsPage extends ConsumerWidget {
     });
 
     return Scaffold(
+      backgroundColor: const Color(0xfff8fafc),
       appBar: AppBar(
         title: Text(l10n.myHabits),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: const Color(0xff1a202c),
       ),
       body: habitsAsync.when(
         data: (habits) {
           if (habits.isEmpty) {
             return Center(
-              child: Text(
-                l10n.noHabits,
-                style: const TextStyle(fontSize: 18, color: Colors.grey),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.auto_awesome,
+                    size: 80,
+                    color: Colors.grey.shade300,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.noHabits,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
             );
           }
 
           return ListView.builder(
+            padding: const EdgeInsets.all(16),
             itemCount: habits.length,
             itemBuilder: (context, index) {
               final habit = habits[index];
-              return Card(
-                key: Key('habit_card_${habit.id}'),
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ListTile(
-                  leading: Checkbox(
-                    key: Key('habit_checkbox_${habit.id}'),
-                    value: habit.completedToday,
-                    onChanged: habit.completedToday
-                        ? null // Deshabilita si ya está completado
-                        : (value) async {
-                            if (value == true) {
-                              final notifier =
-                                  ref.read(habitsNotifierProvider.notifier);
-                              await notifier.completeHabit(habit.id);
-                            }
-                          },
-                  ),
-                  title: Text(habit.name),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(habit.description),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.local_fire_department,
-                              size: 16, color: Colors.orange),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Racha: ${habit.currentStreak} días | Mejor: ${habit.longestStreak}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  isThreeLine: true,
-                  trailing: IconButton(
-                    key: Key('habit_delete_${habit.id}'),
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      _showDeleteConfirmation(context, ref, habit);
+              final notifier = ref.watch(jsonHabitsNotifierProvider);
+              final isCompleting = notifier.isLoading;
+
+              return Column(
+                children: [
+                  HabitCompletionCard(
+                    habit: habit,
+                    isCompleting: isCompleting,
+                    onTap: () async {
+                      await ref
+                          .read(jsonHabitsNotifierProvider.notifier)
+                          .completeHabit(habit.id);
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.habitCompleted)),
+                        );
+                      }
                     },
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  MiniCalendarHeatmap(
+                    completionDates: habit.completionHistory,
+                  ),
+                  const SizedBox(height: 16),
+                ],
               );
             },
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
-          child: Text('Error: $error'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              Text('Error: $error'),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         key: const Key('add_habit_fab'),
         onPressed: () {
-          _showAddHabitDialog(context, ref);
+          _showAddHabitDialog(context, ref, l10n);
         },
-        tooltip: 'Agregar nuevo hábito',
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xff6366f1),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  void _showDeleteConfirmation(
-      BuildContext context, WidgetRef ref, Habit habit) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Eliminar hábito'),
-        content: Text('¿Estás seguro de eliminar "${habit.name}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final notifier = ref.read(habitsNotifierProvider.notifier);
-              await notifier.deleteHabit(habit.id);
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Eliminar'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showAddHabitDialog(BuildContext context, WidgetRef ref) {
+  void _showAddHabitDialog(
+      BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     final nameCtrl = TextEditingController();
     final descCtrl = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Agregar hábito'),
+        title: Text(l10n.addHabit),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               key: const Key('habit_name_input'),
               controller: nameCtrl,
-              decoration: const InputDecoration(labelText: 'Nombre'),
+              decoration: InputDecoration(labelText: l10n.name),
             ),
             TextField(
               key: const Key('habit_description_input'),
               controller: descCtrl,
-              decoration: const InputDecoration(labelText: 'Descripción'),
+              decoration: InputDecoration(labelText: l10n.description),
             ),
           ],
         ),
@@ -172,28 +223,26 @@ class HabitsPage extends ConsumerWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancelar'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             key: const Key('confirm_add_habit_button'),
             onPressed: () async {
               if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
-                final notifier = ref.read(habitsNotifierProvider.notifier);
-                await notifier.addHabit(
-                  name: nameCtrl.text,
-                  description: descCtrl.text,
-                );
+                await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+                      name: nameCtrl.text,
+                      description: descCtrl.text,
+                    );
                 if (context.mounted) {
                   Navigator.pop(context);
                 }
               }
             },
-            child: const Text('Agregar'),
+            child: Text(l10n.add),
           ),
         ],
       ),
     ).whenComplete(() {
-      // ✅ AGREGAR ESTO - Liberar recursos
       nameCtrl.dispose();
       descCtrl.dispose();
     });
