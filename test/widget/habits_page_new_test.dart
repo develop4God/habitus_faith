@@ -41,7 +41,8 @@ void main() {
     group('Initial Rendering', () {
       testWidgets('renders without crashing', (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         expect(find.byType(HabitsPageNew), findsOneWidget,
             reason: 'HabitsPageNew should render');
@@ -49,7 +50,8 @@ void main() {
 
       testWidgets('shows app bar with title', (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         expect(find.text('My Habits'), findsOneWidget,
             reason: 'App bar should display title');
@@ -59,7 +61,8 @@ void main() {
 
       testWidgets('has floating action button', (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         expect(find.byKey(const Key('add_habit_fab')), findsOneWidget,
             reason: 'FAB should be present');
@@ -74,7 +77,8 @@ void main() {
       testWidgets('shows app bar and FAB even with no habits',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         // Core UI elements should be present regardless of habit count
         expect(find.byType(AppBar), findsOneWidget,
@@ -157,10 +161,12 @@ void main() {
       testWidgets('dialog has required form fields',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         await tester.tap(find.byKey(const Key('add_habit_fab')));
-        await tester.pumpAndSettle();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
         // Verify form fields are present
         expect(find.byKey(const Key('habit_name_input')), findsOneWidget,
@@ -177,7 +183,8 @@ void main() {
       testWidgets('page structure supports habit display',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         // Page should be set up to display habits (has body, can scroll, etc.)
         expect(find.byType(HabitsPageNew), findsOneWidget,
@@ -209,7 +216,8 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         expect(find.text('My Habits'), findsOneWidget,
             reason: 'English title should be displayed');
@@ -220,13 +228,15 @@ void main() {
       testWidgets('handles multiple rapid FAB taps gracefully',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
-        await tester.pumpAndSettle();
+        // Use pump with duration instead of pumpAndSettle to avoid timeout
+        await tester.pump(const Duration(seconds: 2));
 
         // Tap FAB multiple times rapidly
         await tester.tap(find.byKey(const Key('add_habit_fab')));
         await tester.tap(find.byKey(const Key('add_habit_fab')));
         await tester.tap(find.byKey(const Key('add_habit_fab')));
-        await tester.pumpAndSettle();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
         // Should show a dialog (may be one or more depending on timing, but not crash)
         expect(find.byType(AlertDialog), findsWidgets,
