@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import '../../domain/habit.dart';
 import '../../domain/habits_repository.dart';
 import '../../domain/failures.dart';
@@ -28,23 +29,29 @@ class JsonHabitsRepository implements HabitsRepository {
     _habitsController = StreamController<List<Habit>>.broadcast();
     // Load habits synchronously and emit immediately
     final initialHabits = _loadHabits();
+    debugPrint('JsonHabitsRepository: emitting initial habits: ${initialHabits.length}');
     _habitsController.add(initialHabits);
   }
 
   void _emitHabits() {
     final habits = _loadHabits();
+    debugPrint('JsonHabitsRepository._emitHabits: emitting ${habits.length} habits');
     _habitsController.add(habits);
   }
 
   List<Habit> _loadHabits() {
     final jsonList = _storage.getJsonList(_habitsKey);
+    debugPrint('JsonHabitsRepository._loadHabits: loaded jsonList with ${jsonList.length} items');
     final habits = jsonList
         .map((json) => HabitModel.fromJson(json))
         .where((habit) => habit.userId == _userId && !habit.isArchived)
         .toList();
 
+    debugPrint('JsonHabitsRepository._loadHabits: filtered habits for user "$_userId": ${habits.length}');
     // Load completion history for each habit
-    return habits.map((habit) => _loadHabitWithCompletions(habit)).toList();
+    final loadedHabits = habits.map((habit) => _loadHabitWithCompletions(habit)).toList();
+    debugPrint('JsonHabitsRepository._loadHabits: loadedHabits (with completions): ${loadedHabits.length}');
+    return loadedHabits;
   }
 
   Habit _loadHabitWithCompletions(Habit habit) {
@@ -87,19 +94,25 @@ class JsonHabitsRepository implements HabitsRepository {
     final completionsData = _storage.getJson(_completionsKey) ?? {};
     final habitCompletions = completionsData[habitId] as Map<String, dynamic>?;
 
-    if (habitCompletions == null) return [];
+    if (habitCompletions == null) {
+      debugPrint('JsonHabitsRepository._loadCompletionsForHabit: No completions for habit "$habitId"');
+      return [];
+    }
 
-    return habitCompletions.entries
+    final completions = habitCompletions.entries
         .map((entry) {
-          try {
-            return CompletionRecord.fromJson(
-                entry.value as Map<String, dynamic>);
-          } catch (e) {
-            return null;
-          }
-        })
+      try {
+        return CompletionRecord.fromJson(
+            entry.value as Map<String, dynamic>);
+      } catch (e) {
+        debugPrint('JsonHabitsRepository._loadCompletionsForHabit: Error parsing completion for habit "$habitId": $e');
+        return null;
+      }
+    })
         .whereType<CompletionRecord>()
         .toList();
+    debugPrint('JsonHabitsRepository._loadCompletionsForHabit: Loaded ${completions.length} completions for habit "$habitId"');
+    return completions;
   }
 
   int _calculateCurrentStreak(List<DateTime> completionDates) {
@@ -164,12 +177,14 @@ class JsonHabitsRepository implements HabitsRepository {
 
   Future<void> _saveHabits(List<Habit> habits) async {
     final jsonList = habits.map((h) => HabitModel.toJson(h)).toList();
+    debugPrint('JsonHabitsRepository._saveHabits: Saving ${habits.length} habits');
     await _storage.saveJsonList(_habitsKey, jsonList);
     _emitHabits();
   }
 
   @override
   Stream<List<Habit>> watchHabits() {
+    debugPrint('JsonHabitsRepository.watchHabits: returning habitsController.stream');
     return _habitsController.stream;
   }
 
@@ -190,10 +205,12 @@ class JsonHabitsRepository implements HabitsRepository {
       );
 
       habits.add(newHabit);
+      debugPrint('JsonHabitsRepository.createHabit: Added new habit "${newHabit.id}"');
       await _saveHabits(habits);
 
       return Success(newHabit);
     } catch (e) {
+      debugPrint('JsonHabitsRepository.createHabit: Failure: $e');
       return Failure(
         HabitFailure.persistence('Failed to create habit: $e'),
       );
@@ -207,6 +224,7 @@ class JsonHabitsRepository implements HabitsRepository {
       final index = habits.indexWhere((h) => h.id == habitId);
 
       if (index == -1) {
+        debugPrint('JsonHabitsRepository.completeHabit: Habit not found "$habitId"');
         return Failure(
           HabitFailure.notFound('Habit not found: $habitId'),
         );
@@ -217,6 +235,7 @@ class JsonHabitsRepository implements HabitsRepository {
       // Check if already completed today
       final habit = habits[index];
       if (habit.completedToday) {
+        debugPrint('JsonHabitsRepository.completeHabit: Habit "$habitId" already completed today');
         // Already completed, return as-is
         return Success(habit);
       }
@@ -235,10 +254,12 @@ class JsonHabitsRepository implements HabitsRepository {
 
       // Update habit in the list
       habits[index] = updatedHabit;
+      debugPrint('JsonHabitsRepository.completeHabit: Completed habit "$habitId"');
       await _saveHabits(habits);
 
       return Success(updatedHabit);
     } catch (e) {
+      debugPrint('JsonHabitsRepository.completeHabit: Failure: $e');
       return Failure(
         HabitFailure.persistence('Failed to complete habit: $e'),
       );
@@ -257,6 +278,7 @@ class JsonHabitsRepository implements HabitsRepository {
 
     // Update completions data
     completionsData[record.habitId] = habitCompletions;
+    debugPrint('JsonHabitsRepository._saveCompletionRecord: Saved completion for habit "${record.habitId}" on "${record.dateKey}"');
 
     // Save back to storage
     await _storage.saveJson(_completionsKey, completionsData);
@@ -267,10 +289,12 @@ class JsonHabitsRepository implements HabitsRepository {
     try {
       final habits = _loadHabits();
       habits.removeWhere((h) => h.id == habitId);
+      debugPrint('JsonHabitsRepository.deleteHabit: Deleted habit "$habitId"');
       await _saveHabits(habits);
 
       return const Success(null);
     } catch (e) {
+      debugPrint('JsonHabitsRepository.deleteHabit: Failure: $e');
       return Failure(
         HabitFailure.persistence('Failed to delete habit: $e'),
       );
@@ -279,5 +303,6 @@ class JsonHabitsRepository implements HabitsRepository {
 
   void dispose() {
     _habitsController.close();
+    debugPrint('JsonHabitsRepository.dispose: habitsController closed');
   }
 }
