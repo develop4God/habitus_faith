@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../features/habits/presentation/habits_providers.dart';
+import 'habits_page.dart';
 
 class StatisticsPage extends ConsumerWidget {
   const StatisticsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final habitsAsync = ref.watch(habitsStreamProvider);
+    final habitsAsync = ref.watch(jsonHabitsStreamProvider);
 
     return Scaffold(
       appBar: AppBar(
