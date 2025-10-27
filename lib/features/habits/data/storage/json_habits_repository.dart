@@ -28,7 +28,10 @@ class JsonHabitsRepository implements HabitsRepository {
     _habitsController = StreamController<List<Habit>>.broadcast();
     final initialHabits = _loadHabits();
     debugPrint('JsonHabitsRepository: emitting initial habits: ${initialHabits.length}');
-    Future.microtask(() => _habitsController.add(initialHabits));
+    Future.delayed(const Duration(milliseconds: 10), () {
+      _habitsController.add(initialHabits);
+      debugPrint('JsonHabitsRepository: initial emission sent (delayed)');
+    });
   }
 
   void _emitHabits() {
