@@ -23,6 +23,23 @@ enum HabitCategory {
   }
 }
 
+enum HabitDifficulty {
+  easy,
+  medium,
+  hard;
+
+  String get displayName {
+    switch (this) {
+      case HabitDifficulty.easy:
+        return 'Fácil';
+      case HabitDifficulty.medium:
+        return 'Medio';
+      case HabitDifficulty.hard:
+        return 'Difícil';
+    }
+  }
+}
+
 /// Pure domain entity - no Firestore dependencies
 class Habit {
   final String id;
@@ -41,6 +58,8 @@ class Habit {
   final List<DateTime> completionHistory;
   final DateTime createdAt;
   final bool isArchived;
+  final int? colorValue; // Store color as int (Color.value)
+  final HabitDifficulty difficulty;
 
   Habit({
     required this.id,
@@ -59,6 +78,8 @@ class Habit {
     this.completionHistory = const [],
     required this.createdAt,
     this.isArchived = false,
+    this.colorValue,
+    this.difficulty = HabitDifficulty.medium,
   });
 
   factory Habit.create({
@@ -71,6 +92,8 @@ class Habit {
     VerseReference? verse,
     String? reminderTime,
     String? predefinedId,
+    int? colorValue,
+    HabitDifficulty difficulty = HabitDifficulty.medium,
   }) {
     return Habit(
       id: id,
@@ -83,6 +106,8 @@ class Habit {
       reminderTime: reminderTime,
       predefinedId: predefinedId,
       createdAt: DateTime.now(),
+      colorValue: colorValue,
+      difficulty: difficulty,
     );
   }
 
@@ -157,6 +182,8 @@ class Habit {
     List<DateTime>? completionHistory,
     DateTime? createdAt,
     bool? isArchived,
+    int? colorValue,
+    HabitDifficulty? difficulty,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -175,6 +202,8 @@ class Habit {
       completionHistory: completionHistory ?? this.completionHistory,
       createdAt: createdAt ?? this.createdAt,
       isArchived: isArchived ?? this.isArchived,
+      colorValue: colorValue ?? this.colorValue,
+      difficulty: difficulty ?? this.difficulty,
     );
   }
 }

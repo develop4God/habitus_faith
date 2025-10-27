@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../../domain/habit.dart';
+import '../constants/habit_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class HabitCompletionCard extends StatefulWidget {
@@ -62,6 +63,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final emoji = widget.habit.emoji ?? '✨';
+    final habitColor = HabitColors.getHabitColor(widget.habit);
 
     return Card(
       key: Key('habit_completion_card_${widget.habit.id}'),
@@ -69,7 +71,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: widget.habit.completedToday
-            ? const BorderSide(color: Color(0xff10b981), width: 2)
+            ? BorderSide(color: habitColor, width: 2)
             : BorderSide.none,
       ),
       child: Stack(
@@ -89,8 +91,8 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         height: 56,
                         decoration: BoxDecoration(
                           color: widget.habit.completedToday
-                              ? const Color(0xff10b981).withValues(alpha: 0.1)
-                              : const Color(0xff6366f1).withValues(alpha: 0.1),
+                              ? habitColor.withValues(alpha: 0.2)
+                              : habitColor.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -105,15 +107,30 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.habit.name,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff1a202c),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    widget.habit.name,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff1a202c),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                // Difficulty indicator
+                                ...List.generate(
+                                  HabitDifficultyHelper.getDifficultyStars(widget.habit.difficulty),
+                                  (index) => Icon(
+                                    Icons.star,
+                                    size: 14,
+                                    color: HabitDifficultyHelper.getDifficultyColor(widget.habit.difficulty),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -131,8 +148,8 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                       if (widget.habit.completedToday)
                         Container(
                           padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                            color: Color(0xff10b981),
+                          decoration: BoxDecoration(
+                            color: habitColor,
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -157,7 +174,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         icon: Icons.emoji_events,
                         label: l10n.best,
                         value: widget.habit.longestStreak.toString(),
-                        color: const Color(0xff6366f1),
+                        color: habitColor,
                       ),
                     ],
                   ),
@@ -169,24 +186,24 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xff6366f1).withValues(alpha: 0.1),
+                        color: habitColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.touch_app,
                             size: 16,
-                            color: Color(0xff6366f1),
+                            color: habitColor,
                           ),
                           const SizedBox(width: 6),
                           Text(
                             l10n.tapToComplete,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xff6366f1),
+                              color: habitColor,
                             ),
                           ),
                         ],

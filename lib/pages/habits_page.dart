@@ -5,6 +5,7 @@ import '../features/habits/domain/failures.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/presentation/widgets/habit_completion_card.dart';
 import '../features/habits/presentation/widgets/mini_calendar_heatmap.dart';
+import '../features/habits/presentation/constants/habit_colors.dart';
 import '../l10n/app_localizations.dart';
 
 // New providers for JSON-based habits
@@ -67,6 +68,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     required String name,
     required String description,
     HabitCategory category = HabitCategory.other,
+    int? colorValue,
+    HabitDifficulty difficulty = HabitDifficulty.medium,
   }) async {
     debugPrint('JsonHabitsNotifier.addHabit: start -> name:$name desc:$description');
     state = const AsyncLoading();
@@ -76,6 +79,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
       name: name,
       description: description,
       category: category,
+      colorValue: colorValue,
+      difficulty: difficulty,
     );
 
     result.fold(
@@ -157,41 +162,26 @@ class HabitsPage extends ConsumerWidget {
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: habits.length,
-            itemBuilder: (context, index) {
-              final habit = habits[index];
-              final notifier = ref.watch(jsonHabitsNotifierProvider);
-              final isCompleting = notifier.isLoading;
-              debugPrint('HabitsPage.itemBuilder: habit ${habit.id}, isCompleting: $isCompleting');
+          // Group habits by category
+          final habitsByCategory = <HabitCategory, List<Habit>>{};
+          for (final habit in habits) {
+            habitsByCategory.putIfAbsent(habit.category, () => []).add(habit);
+          }
 
-              return Column(
-                children: [
-                  HabitCompletionCard(
-                    habit: habit,
-                    isCompleting: isCompleting,
-                    onTap: () async {
-                      debugPrint('HabitsPage.onTap: completing habit -> ${habit.id}');
-                      await ref
-                          .read(jsonHabitsNotifierProvider.notifier)
-                          .completeHabit(habit.id);
-                      debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.habitCompleted)),
-                        );
-                      }
-                    },
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // Build sections for each category
+              for (final category in HabitCategory.values)
+                if (habitsByCategory.containsKey(category))
+                  _buildCategorySection(
+                    context,
+                    ref,
+                    l10n,
+                    category,
+                    habitsByCategory[category]!,
                   ),
-                  const SizedBox(height: 12),
-                  MiniCalendarHeatmap(
-                    completionDates: habit.completionHistory,
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              );
-            },
+            ],
           );
         },
         loading: () {
@@ -224,63 +214,347 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 
+  Widget _buildCategorySection(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    HabitCategory category,
+    List<Habit> habits,
+  ) {
+    final categoryColor = HabitColors.categoryColors[category]!;
+    final categoryIcon = HabitColors.getCategoryIcon(category);
+    final categoryName = HabitColors.getCategoryDisplayName(category);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Category header
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                categoryColor.withValues(alpha: 0.1),
+                categoryColor.withValues(alpha: 0.05),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: categoryColor.withValues(alpha: 0.2),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: categoryColor.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  categoryIcon,
+                  color: categoryColor,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  categoryName,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: categoryColor,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: categoryColor.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '${habits.length}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: categoryColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Habits in this category
+        ...habits.map((habit) {
+          final notifier = ref.watch(jsonHabitsNotifierProvider);
+          final isCompleting = notifier.isLoading;
+
+          return Column(
+            children: [
+              HabitCompletionCard(
+                habit: habit,
+                isCompleting: isCompleting,
+                onTap: () async {
+                  debugPrint('HabitsPage.onTap: completing habit -> ${habit.id}');
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .completeHabit(habit.id);
+                  debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.habitCompleted)),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              MiniCalendarHeatmap(
+                completionDates: habit.completionHistory,
+              ),
+              const SizedBox(height: 16),
+            ],
+          );
+        }),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
   void _showAddHabitDialog(
       BuildContext context, WidgetRef ref, AppLocalizations l10n) {
-    final nameCtrl = TextEditingController();
-    final descCtrl = TextEditingController();
-
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.addHabit),
-        content: Column(
+      builder: (context) => _AddHabitDialog(l10n: l10n),
+    );
+  }
+}
+
+class _AddHabitDialog extends ConsumerStatefulWidget {
+  final AppLocalizations l10n;
+
+  const _AddHabitDialog({required this.l10n});
+
+  @override
+  ConsumerState<_AddHabitDialog> createState() => _AddHabitDialogState();
+}
+
+class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
+  final nameCtrl = TextEditingController();
+  final descCtrl = TextEditingController();
+  HabitCategory selectedCategory = HabitCategory.other;
+  HabitDifficulty selectedDifficulty = HabitDifficulty.medium;
+  Color? selectedColor;
+
+  @override
+  void dispose() {
+    nameCtrl.dispose();
+    descCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.l10n.addHabit),
+      content: SingleChildScrollView(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               key: const Key('habit_name_input'),
               controller: nameCtrl,
-              decoration: InputDecoration(labelText: l10n.name),
+              decoration: InputDecoration(
+                labelText: widget.l10n.name,
+                border: const OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
               key: const Key('habit_description_input'),
               controller: descCtrl,
-              decoration: InputDecoration(labelText: l10n.description),
+              decoration: InputDecoration(
+                labelText: widget.l10n.description,
+                border: const OutlineInputBorder(),
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+            // Category selector
+            Text(
+              'Categoría',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<HabitCategory>(
+              value: selectedCategory,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              items: HabitCategory.values.map((category) {
+                return DropdownMenuItem(
+                  value: category,
+                  child: Row(
+                    children: [
+                      Icon(
+                        HabitColors.getCategoryIcon(category),
+                        size: 20,
+                        color: HabitColors.categoryColors[category],
+                      ),
+                      const SizedBox(width: 8),
+                      Text(HabitColors.getCategoryDisplayName(category)),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    selectedCategory = value;
+                    // Reset custom color when category changes
+                    selectedColor = null;
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            // Difficulty selector
+            Text(
+              'Dificultad',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            SegmentedButton<HabitDifficulty>(
+              segments: HabitDifficulty.values.map((difficulty) {
+                return ButtonSegment(
+                  value: difficulty,
+                  label: Text(difficulty.displayName),
+                  icon: Icon(
+                    HabitDifficultyHelper.getDifficultyIcon(difficulty),
+                    size: 16,
+                  ),
+                );
+              }).toList(),
+              selected: {selectedDifficulty},
+              onSelectionChanged: (Set<HabitDifficulty> selected) {
+                setState(() {
+                  selectedDifficulty = selected.first;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            // Color picker
+            Text(
+              'Color (opcional)',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                // Default category color
+                _buildColorOption(
+                  null,
+                  HabitColors.categoryColors[selectedCategory]!,
+                  'Por defecto',
+                ),
+                // Available custom colors
+                ...HabitColors.availableColors.map(
+                  (color) => _buildColorOption(color, color, null),
+                ),
+              ],
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              debugPrint('AddHabitDialog: cancel pressed');
-              Navigator.pop(context);
-            },
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            key: const Key('confirm_add_habit_button'),
-            onPressed: () async {
-              if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
-                debugPrint('AddHabitDialog: adding habit -> name:${nameCtrl.text} desc:${descCtrl.text}');
-                await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-                  name: nameCtrl.text,
-                  description: descCtrl.text,
-                );
-                debugPrint('AddHabitDialog: addHabit awaited');
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              } else {
-                debugPrint('AddHabitDialog: missing name or description');
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            debugPrint('AddHabitDialog: cancel pressed');
+            Navigator.pop(context);
+          },
+          child: Text(widget.l10n.cancel),
+        ),
+        ElevatedButton(
+          key: const Key('confirm_add_habit_button'),
+          onPressed: () async {
+            if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
+              debugPrint('AddHabitDialog: adding habit -> name:${nameCtrl.text} desc:${descCtrl.text}');
+              await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+                    name: nameCtrl.text,
+                    description: descCtrl.text,
+                    category: selectedCategory,
+                    colorValue: selectedColor?.toARGB32(),
+                    difficulty: selectedDifficulty,
+                  );
+              debugPrint('AddHabitDialog: addHabit awaited');
+              if (context.mounted) {
+                Navigator.pop(context);
               }
-            },
-            child: Text(l10n.add),
+            } else {
+              debugPrint('AddHabitDialog: missing name or description');
+            }
+          },
+          child: Text(widget.l10n.add),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorOption(Color? colorValue, Color displayColor, String? label) {
+    final isSelected = selectedColor == colorValue;
+    
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedColor = colorValue;
+        });
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: displayColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isSelected ? Colors.black : Colors.transparent,
+                width: 3,
+              ),
+            ),
+            child: isSelected
+                ? const Icon(Icons.check, color: Colors.white, size: 24)
+                : null,
           ),
+          if (label != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
         ],
       ),
-    ).whenComplete(() {
-      nameCtrl.dispose();
-      descCtrl.dispose();
-      debugPrint('AddHabitDialog: disposed controllers');
-    });
+    );
   }
 }
