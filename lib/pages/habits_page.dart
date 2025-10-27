@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
@@ -132,9 +133,9 @@ class HabitsPage extends ConsumerWidget {
       ),
       body: habitsAsync.when(
         data: (habits) {
-          debugPrint('HabitsPage.when.data: received ${habits.length} habits');
+          debugPrint('HabitsPage: data received -> ${habits.length} habits');
           if (habits.isEmpty) {
-            debugPrint('HabitsPage.when.data: habits list is empty');
+            debugPrint('HabitsPage: no habits -> showing empty state');
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
