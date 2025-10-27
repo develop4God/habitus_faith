@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
+
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
@@ -113,13 +113,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Initialize SharedPreferences
   final prefs = await SharedPreferences.getInstance();
   final storageService = JsonStorageService(prefs);
   const userId = 'local_user';
   final habitsRepository = JsonHabitsRepository(
     storage: storageService,
     userId: userId,
-    idGenerator: () => const Uuid().v4(),
+    idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
   );
 
   runApp(
@@ -127,7 +128,6 @@ void main() async {
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
         jsonStorageServiceProvider.overrideWithValue(storageService),
-        // override with persistent repository instance!
         jsonHabitsRepositoryProvider.overrideWithValue(habitsRepository),
       ],
       child: const MyApp(),
