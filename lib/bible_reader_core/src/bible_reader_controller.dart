@@ -36,15 +36,13 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     state = state.copyWith(isLoading: true, deviceLanguage: deviceLanguage);
 
     // Filter versions by device language
-    List<BibleVersion> availableVersions = allVersions
-        .where((v) => v.languageCode == deviceLanguage)
-        .toList();
+    List<BibleVersion> availableVersions =
+        allVersions.where((v) => v.languageCode == deviceLanguage).toList();
 
     // Fallback to Spanish or all versions if no match
     if (availableVersions.isEmpty) {
-      availableVersions = allVersions
-          .where((v) => v.languageCode == 'es')
-          .toList();
+      availableVersions =
+          allVersions.where((v) => v.languageCode == 'es').toList();
       if (availableVersions.isEmpty) {
         availableVersions = allVersions;
       }
@@ -52,16 +50,21 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     // Select initial version - prefer saved current version if available
     final currentVersion = ref.read(currentBibleVersionProvider);
-    final selectedVersion = currentVersion != null && availableVersions.contains(currentVersion)
-        ? currentVersion
-        : (availableVersions.isNotEmpty ? availableVersions.first : allVersions.first);
+    final selectedVersion =
+        currentVersion != null && availableVersions.contains(currentVersion)
+            ? currentVersion
+            : (availableVersions.isNotEmpty
+                ? availableVersions.first
+                : allVersions.first);
 
     // Initialize version's database service
     await _initializeVersionService(selectedVersion);
 
     // Update current version provider if needed
     if (currentVersion != selectedVersion) {
-      await ref.read(currentBibleVersionProvider.notifier).setVersion(selectedVersion);
+      await ref
+          .read(currentBibleVersionProvider.notifier)
+          .setVersion(selectedVersion);
     }
 
     // Load preferences
@@ -69,11 +72,11 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     final markedVerses = await preferencesService.getMarkedVerses();
 
     state = state.copyWith(
-        availableVersions: availableVersions,
-        selectedVersion: selectedVersion,
-        fontSize: fontSize,
-        persistentlyMarkedVerses: markedVerses,
-      );
+      availableVersions: availableVersions,
+      selectedVersion: selectedVersion,
+      fontSize: fontSize,
+      persistentlyMarkedVerses: markedVerses,
+    );
 
     // Try to restore last position
     final lastPosition = await readerService.getLastPosition();
@@ -124,13 +127,13 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     if (position != null) {
       state = state.copyWith(
-          selectedVersion: savedVersion,
-          books: books,
-          selectedBookName: position['bookName'],
-          selectedBookNumber: position['bookNumber'],
-          selectedChapter: position['chapter'],
-          selectedVerse: position['verse'],
-        );
+        selectedVersion: savedVersion,
+        books: books,
+        selectedBookName: position['bookName'],
+        selectedBookNumber: position['bookNumber'],
+        selectedChapter: position['chapter'],
+        selectedVerse: position['verse'],
+      );
 
       // Load chapter data
       await _loadChapterData();
@@ -146,12 +149,12 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
     if (books.isNotEmpty) {
       state = state.copyWith(
-          books: books,
-          selectedBookName: books[0]['short_name'],
-          selectedBookNumber: books[0]['book_number'],
-          selectedChapter: 1,
-          selectedVerse: 1,
-        );
+        books: books,
+        selectedBookName: books[0]['short_name'],
+        selectedBookNumber: books[0]['book_number'],
+        selectedChapter: 1,
+        selectedVerse: 1,
+      );
 
       await _loadChapterData();
     }
@@ -161,7 +164,7 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     // Initialize the database service for this version through the provider
     // This ensures the service is cached and ready for use
     await ref.read(bibleDbServiceProvider(version.id).future);
-    
+
     // Also initialize readerService.dbService with the same DB for business logic
     await readerService.dbService.initDb(version.assetPath, version.dbFileName);
   }
@@ -171,7 +174,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     if (state.selectedVersion == null) {
       throw Exception('No version selected');
     }
-    return await ref.read(bibleDbServiceProvider(state.selectedVersion!.id).future);
+    return await ref
+        .read(bibleDbServiceProvider(state.selectedVersion!.id).future);
   }
 
   /// Get the database service for a specific version
@@ -194,20 +198,18 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
       state.selectedChapter!,
     );
 
-    final maxVerse = verses.isNotEmpty
-        ? (verses.last['verse'] as int? ?? 1)
-        : 1;
+    final maxVerse =
+        verses.isNotEmpty ? (verses.last['verse'] as int? ?? 1) : 1;
     final selectedVerse = state.selectedVerse;
-    final validatedVerse = (selectedVerse == null || selectedVerse > maxVerse)
-        ? 1
-        : selectedVerse;
+    final validatedVerse =
+        (selectedVerse == null || selectedVerse > maxVerse) ? 1 : selectedVerse;
 
     state = state.copyWith(
-        maxChapter: maxChapter,
-        verses: verses,
-        maxVerse: maxVerse,
-        selectedVerse: validatedVerse,
-      );
+      maxChapter: maxChapter,
+      verses: verses,
+      maxVerse: maxVerse,
+      selectedVerse: validatedVerse,
+    );
 
     // Save reading position
     if (state.selectedBookName != null) {
@@ -236,14 +238,14 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     await ref.read(currentBibleVersionProvider.notifier).setVersion(newVersion);
 
     state = state.copyWith(
-        selectedVersion: newVersion,
-        books: books,
-        selectedBookName: books.isNotEmpty ? books[0]['short_name'] : null,
-        selectedBookNumber: books.isNotEmpty ? books[0]['book_number'] : null,
-        selectedChapter: 1,
-        selectedVerse: 1,
-        selectedVerses: {},
-      );
+      selectedVersion: newVersion,
+      books: books,
+      selectedBookName: books.isNotEmpty ? books[0]['short_name'] : null,
+      selectedBookNumber: books.isNotEmpty ? books[0]['book_number'] : null,
+      selectedChapter: 1,
+      selectedVerse: 1,
+      selectedVerses: {},
+    );
 
     await _loadChapterData();
 
@@ -253,12 +255,12 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   /// Select a book and optionally a chapter
   Future<void> selectBook(Map<String, dynamic> book, {int? chapter}) async {
     state = state.copyWith(
-        selectedBookName: book['short_name'],
-        selectedBookNumber: book['book_number'],
-        selectedChapter: chapter ?? 1,
-        selectedVerse: 1,
-        selectedVerses: {},
-      );
+      selectedBookName: book['short_name'],
+      selectedBookNumber: book['book_number'],
+      selectedChapter: chapter ?? 1,
+      selectedVerse: 1,
+      selectedVerses: {},
+    );
 
     await _loadChapterData();
   }
@@ -266,11 +268,11 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   /// Select a specific chapter
   Future<void> selectChapter(int chapter) async {
     state = state.copyWith(
-        selectedChapter: chapter,
-        selectedVerse: 1,
-        selectedVerses: {},
-        verses: [], // Ensure verses list is reset before loading new
-      );
+      selectedChapter: chapter,
+      selectedVerse: 1,
+      selectedVerses: {},
+      verses: [], // Ensure verses list is reset before loading new
+    );
 
     await _loadChapterData();
   }
@@ -295,12 +297,12 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     if (result == null) return; // At end of Bible
 
     state = state.copyWith(
-        selectedBookNumber: result['bookNumber'],
-        selectedBookName: result['bookName'] ?? state.selectedBookName,
-        selectedChapter: result['chapter'],
-        selectedVerse: 1,
-        selectedVerses: {},
-      );
+      selectedBookNumber: result['bookNumber'],
+      selectedBookName: result['bookName'] ?? state.selectedBookName,
+      selectedChapter: result['chapter'],
+      selectedVerse: 1,
+      selectedVerses: {},
+    );
 
     if (result['bookName'] != null) {
       // Book changed, need to reload max chapter
@@ -329,12 +331,12 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     if (result == null) return; // At start of Bible
 
     state = state.copyWith(
-        selectedBookNumber: result['bookNumber'],
-        selectedBookName: result['bookName'] ?? state.selectedBookName,
-        selectedChapter: result['chapter'],
-        selectedVerse: 1,
-        selectedVerses: {},
-      );
+      selectedBookNumber: result['bookNumber'],
+      selectedBookName: result['bookName'] ?? state.selectedBookName,
+      selectedChapter: result['chapter'],
+      selectedVerse: 1,
+      selectedVerses: {},
+    );
 
     if (result['bookName'] != null) {
       // Book changed, need to reload max chapter
@@ -351,7 +353,8 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   /// Perform search with automatic Bible reference detection
   Future<void> performSearch(String query) async {
     if (query.trim().isEmpty) {
-      state = state.copyWith(isSearching: false, searchResults: [], searchQuery: '');
+      state = state.copyWith(
+          isSearching: false, searchResults: [], searchQuery: '');
       return;
     }
 
@@ -364,25 +367,25 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
       final target = result['navigationTarget'] as Map<String, dynamic>;
 
       state = state.copyWith(
-          selectedBookName: target['bookName'],
-          selectedBookNumber: target['bookNumber'],
-          selectedChapter: target['chapter'],
-          selectedVerse: target['verse'] ?? 1,
-          isSearching: false,
-          searchResults: [],
-          searchQuery: '',
-          isLoading: false,
-        );
+        selectedBookName: target['bookName'],
+        selectedBookNumber: target['bookNumber'],
+        selectedChapter: target['chapter'],
+        selectedVerse: target['verse'] ?? 1,
+        isSearching: false,
+        searchResults: [],
+        searchQuery: '',
+        isLoading: false,
+      );
 
       await _loadChapterData();
     } else {
       // Text search results
       state = state.copyWith(
-          searchResults: result['searchResults'] as List<Map<String, dynamic>>,
-          searchQuery: query,
-          isSearching: true,
-          isLoading: false,
-        );
+        searchResults: result['searchResults'] as List<Map<String, dynamic>>,
+        searchQuery: query,
+        isSearching: true,
+        isLoading: false,
+      );
     }
   }
 
@@ -399,21 +402,22 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     );
 
     state = state.copyWith(
-        selectedBookName: book['short_name'],
-        selectedBookNumber: bookNumber,
-        selectedChapter: chapter,
-        selectedVerse: verse,
-        isSearching: false,
-        searchResults: [],
-        searchQuery: '',
-      );
+      selectedBookName: book['short_name'],
+      selectedBookNumber: bookNumber,
+      selectedChapter: chapter,
+      selectedVerse: verse,
+      isSearching: false,
+      searchResults: [],
+      searchQuery: '',
+    );
 
     await _loadChapterData();
   }
 
   /// Clear search results and exit search mode
   void clearSearch() {
-    state = state.copyWith(isSearching: false, searchResults: [], searchQuery: '');
+    state =
+        state.copyWith(isSearching: false, searchResults: [], searchQuery: '');
   }
 
   /// Toggle verse selection for copy/share
@@ -450,7 +454,7 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     }
   }
 
-    /// Decrease font size
+  /// Decrease font size
   Future<void> decreaseFontSize() async {
     if (state.fontSize > 12) {
       final newSize = state.fontSize - 2;

@@ -126,12 +126,11 @@ void main() {
         final card = tester.widget<Card>(find.byType(Card));
         expect(card.elevation, 1,
             reason: 'Completed habit should have elevation of 1');
-        
+
         final shape = card.shape as RoundedRectangleBorder;
         expect(shape.side.color, const Color(0xff10b981),
             reason: 'Completed habit should have green border');
-        expect(shape.side.width, 2,
-            reason: 'Border should be 2 pixels wide');
+        expect(shape.side.width, 2, reason: 'Border should be 2 pixels wide');
       });
 
       testWidgets('completed habit has visual distinction',
@@ -154,7 +153,11 @@ void main() {
 
         tapCalled = false;
         await tester.tap(find.byType(HabitCompletionCard));
-        await tester.pump(); // Process tap
+        await tester.pump(); // Start animation
+        await tester.pump(const Duration(
+            milliseconds: 1600)); // Wait for animation to complete
+        await tester
+            .pump(const Duration(milliseconds: 600)); // Wait for callback delay
 
         expect(tapCalled, true,
             reason: 'onTap should be called when incomplete habit is tapped');
@@ -236,7 +239,8 @@ void main() {
 
       testWidgets('handles very long habit names', (WidgetTester tester) async {
         final longNameHabit = testHabit.copyWith(
-          name: 'This is a very long habit name that should wrap to multiple lines',
+          name:
+              'This is a very long habit name that should wrap to multiple lines',
         );
         await tester.pumpWidget(createApp(longNameHabit));
         await tester.pump();

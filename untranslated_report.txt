@@ -1,0 +1,25 @@
+{
+  "es": [
+    "onboardingErrorMessage",
+    "retry",
+    "selected"
+  ],
+
+  "fr": [
+    "onboardingErrorMessage",
+    "retry",
+    "selected"
+  ],
+
+  "pt": [
+    "onboardingErrorMessage",
+    "retry",
+    "selected"
+  ],
+
+  "zh": [
+    "onboardingErrorMessage",
+    "retry",
+    "selected"
+  ]
+}

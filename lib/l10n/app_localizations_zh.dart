@@ -174,4 +174,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get predefinedHabit_service_description => '以爱和同情服务他人';
+
+  @override
+  String get onboardingErrorMessage =>
+      'Failed to save habits. Please try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get selected => 'Selected';
 }

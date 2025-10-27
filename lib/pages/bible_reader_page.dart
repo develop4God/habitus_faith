@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../providers/bible_providers.dart';
 import '../bible_reader_core/bible_reader_core.dart';
+import '../utils/copyright_utils.dart';
+import '../widgets/floating_font_control_buttons.dart';
 
 /// Main Bible Reader Page using Riverpod for state management
 class BibleReaderPage extends ConsumerStatefulWidget {
@@ -14,6 +17,10 @@ class BibleReaderPage extends ConsumerStatefulWidget {
 }
 
 class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
+  final ItemScrollController _itemScrollController = ItemScrollController();
+  final ItemPositionsListener _itemPositionsListener =
+      ItemPositionsListener.create();
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +28,11 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(bibleReaderProvider.notifier).initialize('es');
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   String _cleanVerseText(String text) {
@@ -39,7 +51,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
 
   String _getSelectedVersesText(BibleReaderState state) {
     if (state.selectedVerses.isEmpty) return '';
-    
+
     final buffer = StringBuffer();
     for (final verseKey in state.selectedVerses) {
       final parts = verseKey.split('|');
@@ -51,7 +63,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
             orElse: () => {},
           );
           if (verse.isNotEmpty) {
-            buffer.writeln('${verse['verse']} ${_cleanVerseText(verse['text'])}');
+            buffer
+                .writeln('${verse['verse']} ${_cleanVerseText(verse['text'])}');
           }
         }
       }
@@ -103,30 +116,6 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           ? const Center(child: Text('Loading books...'))
           : Column(
               children: [
-                // Font size control strip
-                if (state.showFontControls)
-                  Container(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      children: [
-                        const Text('Font Size:'),
-                        Expanded(
-                          child: Slider(
-                            value: state.fontSize,
-                            min: 12.0,
-                            max: 32.0,
-                            divisions: 20,
-                            label: state.fontSize.round().toString(),
-                            onChanged: (value) {
-                              notifier.setFontSize(value);
-                            },
-                          ),
-                        ),
-                        Text('${state.fontSize.round()}'),
-                      ],
-                    ),
-                  ),
                 // Book and Chapter selector
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -182,71 +171,126 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                 Expanded(
                   child: state.verses.isEmpty
                       ? const Center(child: Text('Select a book and chapter'))
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: state.verses.length,
-                          itemBuilder: (context, index) {
-                            final verse = state.verses[index];
-                            final verseNumber = verse['verse'] as int;
-                            final verseText = verse['text'] as String;
-                            final verseKey =
-                                '${state.selectedBookName}|${state.selectedChapter}|$verseNumber';
-                            final isSelected =
-                                state.selectedVerses.contains(verseKey);
-                            final isMarked = state.persistentlyMarkedVerses
-                                .contains(verseKey);
-
-                            return GestureDetector(
-                              onTap: () {
-                                notifier.toggleVerseSelection(verseKey);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Colors.blue.withValues(alpha: 0.1)
-                                      : isMarked
-                                          ? Colors.yellow.withValues(alpha: 0.2)
-                                          : null,
-                                  border: isSelected
-                                      ? const Border(
-                                          left: BorderSide(
-                                            color: Colors.blue,
-                                            width: 3,
-                                          ),
-                                        )
-                                      : null,
-                                ),
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      fontSize: state.fontSize,
-                                      color: Theme.of(context).brightness == Brightness.dark
-                                          ? Colors.white
-                                          : Colors.black,
-                                      height: 1.5,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: '$verseNumber ',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[600],
-                                          fontSize: state.fontSize * 0.8,
+                      : Stack(
+                          children: [
+                            ScrollablePositionedList.builder(
+                              itemScrollController: _itemScrollController,
+                              itemPositionsListener: _itemPositionsListener,
+                              padding: const EdgeInsets.all(16),
+                              itemCount: state.verses.length +
+                                  1, // +1 for copyright footer
+                              itemBuilder: (context, index) {
+                                // Copyright footer at the end
+                                if (index == state.verses.length) {
+                                  if (state.selectedVersion != null) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 16),
+                                      child: Text(
+                                        CopyrightUtils.getCopyrightText(
+                                          state.selectedVersion!.languageCode,
+                                          state.selectedVersion!.name,
                                         ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              fontSize: 12,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withValues(alpha: 0.7),
+                                            ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      TextSpan(
-                                        text: _cleanVerseText(verseText),
+                                    );
+                                  }
+                                  return const SizedBox.shrink();
+                                }
+
+                                final verse = state.verses[index];
+                                final verseNumber = verse['verse'] as int;
+                                final verseText = verse['text'] as String;
+                                final verseKey =
+                                    '${state.selectedBookName}|${state.selectedChapter}|$verseNumber';
+                                final isSelected =
+                                    state.selectedVerses.contains(verseKey);
+                                final isMarked = state.persistentlyMarkedVerses
+                                    .contains(verseKey);
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    notifier.toggleVerseSelection(verseKey);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? Colors.blue.withValues(alpha: 0.1)
+                                          : isMarked
+                                              ? Colors.yellow
+                                                  .withValues(alpha: 0.2)
+                                              : null,
+                                      border: isSelected
+                                          ? const Border(
+                                              left: BorderSide(
+                                                color: Colors.blue,
+                                                width: 3,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(
+                                          fontSize: state.fontSize,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black,
+                                          height: 1.5,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: '$verseNumber ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey[600],
+                                              fontSize: state.fontSize * 0.8,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: _cleanVerseText(verseText),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                );
+                              },
+                            ),
+                            // Show floating font controls when toggled
+                            if (state.showFontControls)
+                              FloatingFontControlButtons(
+                                currentFontSize: state.fontSize,
+                                onIncrease: () {
+                                  final newSize =
+                                      (state.fontSize + 2).clamp(12.0, 28.0);
+                                  notifier.setFontSize(newSize);
+                                },
+                                onDecrease: () {
+                                  final newSize =
+                                      (state.fontSize - 2).clamp(12.0, 28.0);
+                                  notifier.setFontSize(newSize);
+                                },
+                                onClose: () {
+                                  notifier.toggleFontControls();
+                                },
                               ),
-                            );
-                          },
+                          ],
                         ),
                 ),
               ],
@@ -290,7 +334,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               ClipboardData(text: '$reference\n\n$text'),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Copied to clipboard')),
+                              const SnackBar(
+                                  content: Text('Copied to clipboard')),
                             );
                             notifier.clearSelection();
                           },

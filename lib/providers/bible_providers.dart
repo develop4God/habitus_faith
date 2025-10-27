@@ -3,7 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bible_reader_core/bible_reader_core.dart';
 
 /// Provider for SharedPreferences
-final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) async {
+final sharedPreferencesProvider =
+    FutureProvider<SharedPreferences>((ref) async {
   return await SharedPreferences.getInstance();
 });
 
@@ -50,13 +51,14 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
 
 /// Family provider for BibleDbService instances
 /// Each version gets its own initialized database service
-final bibleDbServiceProvider = FutureProvider.family<BibleDbService, String>((ref, versionId) async {
+final bibleDbServiceProvider =
+    FutureProvider.family<BibleDbService, String>((ref, versionId) async {
   final versions = ref.watch(bibleVersionsProvider);
   final version = versions.firstWhere(
     (v) => v.id == versionId,
     orElse: () => throw Exception('Version $versionId not found'),
   );
-  
+
   final service = BibleDbService();
   await service.initDb(version.assetPath, version.dbFileName);
   return service;
@@ -73,7 +75,7 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
   Future<void> _loadInitialVersion() async {
     final prefs = await ref.read(sharedPreferencesProvider.future);
     final versionName = prefs.getString('current_bible_version');
-    
+
     final available = ref.read(bibleVersionsProvider);
     if (versionName != null) {
       try {
@@ -84,7 +86,7 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
         // Saved version not found, fall through to default
       }
     }
-    
+
     // Default to first available version
     state = available.isNotEmpty ? available.first : null;
   }
@@ -98,17 +100,20 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
 }
 
 /// Provider for current Bible version
-final currentBibleVersionProvider = StateNotifierProvider<CurrentBibleVersionNotifier, BibleVersion?>((ref) {
+final currentBibleVersionProvider =
+    StateNotifierProvider<CurrentBibleVersionNotifier, BibleVersion?>((ref) {
   return CurrentBibleVersionNotifier(ref);
 });
 
 /// Provider for Bible preferences service
-final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((ref) {
+final biblePreferencesServiceProvider =
+    Provider<BiblePreferencesService>((ref) {
   return BiblePreferencesService();
 });
 
 /// Provider for Bible reading position service
-final bibleReadingPositionServiceProvider = Provider<BibleReadingPositionService>((ref) {
+final bibleReadingPositionServiceProvider =
+    Provider<BibleReadingPositionService>((ref) {
   return BibleReadingPositionService();
 });
 
@@ -123,7 +128,8 @@ final bibleReaderServiceProvider = Provider<BibleReaderService>((ref) {
 
 /// Provider for Bible reader state
 /// Now using the controller directly as it extends StateNotifier
-final bibleReaderProvider = StateNotifierProvider<BibleReaderController, BibleReaderState>((ref) {
+final bibleReaderProvider =
+    StateNotifierProvider<BibleReaderController, BibleReaderState>((ref) {
   final versions = ref.watch(bibleVersionsProvider);
   final readerService = ref.watch(bibleReaderServiceProvider);
   final preferencesService = ref.watch(biblePreferencesServiceProvider);

@@ -79,7 +79,7 @@ void main() {
       testWidgets('shows completed days in green', (WidgetTester tester) async {
         final today = DateTime.now();
         final yesterday = today.subtract(const Duration(days: 1));
-        
+
         await tester.pumpWidget(createApp([today, yesterday]));
         await tester.pump();
 
@@ -146,8 +146,9 @@ void main() {
 
         expect(todayCircle.length, 1,
             reason: 'Exactly one day (today) should have border');
-        
-        final border = (todayCircle.first.decoration as BoxDecoration).border as Border;
+
+        final border =
+            (todayCircle.first.decoration as BoxDecoration).border as Border;
         expect(border.top.color, const Color(0xff6366f1),
             reason: 'Today border should be purple/indigo');
       });
@@ -170,8 +171,9 @@ void main() {
         // Completion dates with different times on same day
         final today = DateTime.now();
         final todayMorning = DateTime(today.year, today.month, today.day, 8, 0);
-        final todayEvening = DateTime(today.year, today.month, today.day, 20, 0);
-        
+        final todayEvening =
+            DateTime(today.year, today.month, today.day, 20, 0);
+
         await tester.pumpWidget(createApp([todayMorning, todayEvening]));
         await tester.pump();
 
@@ -201,18 +203,19 @@ void main() {
         await tester.pump();
 
         // Should display 7 day numbers
-        final dayNumbers = tester.widgetList<Text>(
+        final dayNumbers = tester
+            .widgetList<Text>(
           find.descendant(
             of: find.byType(MiniCalendarHeatmap),
             matching: find.byType(Text),
           ),
-        ).where((text) {
+        )
+            .where((text) {
           final data = text.data;
           return data != null && RegExp(r'^\d+$').hasMatch(data);
         }).toList();
 
-        expect(dayNumbers.length, 7,
-            reason: 'Should display 7 day numbers');
+        expect(dayNumbers.length, 7, reason: 'Should display 7 day numbers');
       });
     });
 
@@ -329,12 +332,14 @@ void main() {
         await tester.pumpWidget(createApp([]));
         await tester.pump();
 
-        final containers = tester.widgetList<Container>(
+        final containers = tester
+            .widgetList<Container>(
           find.descendant(
             of: find.byType(MiniCalendarHeatmap),
             matching: find.byType(Container),
           ),
-        ).where((container) {
+        )
+            .where((container) {
           return container.decoration is BoxDecoration &&
               (container.decoration as BoxDecoration).shape == BoxShape.circle;
         }).toList();

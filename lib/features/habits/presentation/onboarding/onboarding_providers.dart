@@ -25,13 +25,14 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
         current.where((id) => id != habitId).toList();
   }
 
-  Future<bool> completeOnboarding() async {
+  Future<bool> completeOnboarding({int retryCount = 0}) async {
     state = const AsyncValue.loading();
 
     try {
       final selectedIds = ref.read(selectedHabitsProvider);
       if (selectedIds.isEmpty) {
-        state = AsyncValue.error('No habits selected', StackTrace.current);
+        state = AsyncValue.error(
+            'onboarding_error_no_habits_selected', StackTrace.current);
         return false;
       }
 
@@ -57,13 +58,23 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
       state = const AsyncValue.data(null);
       return true;
     } catch (e, stack) {
+      // Allow retry up to 2 times
+      if (retryCount < 2) {
+        await Future.delayed(Duration(seconds: 1 + retryCount));
+        return completeOnboarding(retryCount: retryCount + 1);
+      }
+
       state = AsyncValue.error(e, stack);
       return false;
     }
   }
 
-  HabitCategory _mapCategory(
-      predefinedHabitCategory) {
+  /// Retry last failed operation
+  Future<bool> retry() async {
+    return completeOnboarding();
+  }
+
+  HabitCategory _mapCategory(predefinedHabitCategory) {
     switch (predefinedHabitCategory.toString()) {
       case 'PredefinedHabitCategory.spiritual':
         return HabitCategory.prayer;

@@ -187,4 +187,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get predefinedHabit_service_description =>
       'Serve others with love and compassion';
+
+  @override
+  String get onboardingErrorMessage =>
+      'Failed to save habits. Please try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get selected => 'Selected';
 }

@@ -162,7 +162,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                                     icon: const Icon(Icons.clear),
                                     onPressed: () {
                                       _searchController.clear();
-                                      ref.read(bibleReaderProvider.notifier).clearSearch();
+                                      ref
+                                          .read(bibleReaderProvider.notifier)
+                                          .clearSearch();
                                       setState(() {});
                                     },
                                   )
@@ -179,7 +181,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                             ),
                           ),
                           onSubmitted: (query) async {
-                            await ref.read(bibleReaderProvider.notifier).performSearch(query);
+                            await ref
+                                .read(bibleReaderProvider.notifier)
+                                .performSearch(query);
                           },
                           onChanged: (value) {
                             setState(() {});

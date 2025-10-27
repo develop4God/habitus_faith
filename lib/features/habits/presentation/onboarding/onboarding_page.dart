@@ -12,7 +12,39 @@ class OnboardingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final selectedHabits = ref.watch(selectedHabitsProvider);
-    final isLoading = ref.watch(onboardingNotifierProvider).isLoading;
+    final onboardingState = ref.watch(onboardingNotifierProvider);
+    final isLoading = onboardingState.isLoading;
+    final hasError = onboardingState.hasError;
+
+    // Show error message if onboarding failed
+    if (hasError) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n.onboardingErrorMessage,
+                semanticsLabel: l10n.onboardingErrorMessage,
+              ),
+              backgroundColor: Colors.red.shade600,
+              action: SnackBarAction(
+                label: l10n.retry,
+                textColor: Colors.white,
+                onPressed: () async {
+                  final success = await ref
+                      .read(onboardingNotifierProvider.notifier)
+                      .retry();
+                  if (success && context.mounted) {
+                    Navigator.of(context).pushReplacementNamed('/home');
+                  }
+                },
+              ),
+              duration: const Duration(seconds: 6),
+            ),
+          );
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -52,36 +84,53 @@ class OnboardingPage extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemCount: predefinedHabits.length,
-                  itemBuilder: (context, index) {
-                    final habit = predefinedHabits[index];
-                    final isSelected = selectedHabits.contains(habit.id);
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate responsive grid parameters based on screen width
+                    final width = constraints.maxWidth;
+                    final crossAxisCount = width > 600 ? 3 : 2;
+                    final spacing = width > 600 ? 20.0 : 16.0;
+                    // Adjust aspect ratio based on available height
+                    final itemHeight = constraints.maxHeight /
+                        (predefinedHabits.length / crossAxisCount).ceil();
+                    final itemWidth =
+                        (width - (spacing * (crossAxisCount + 1))) /
+                            crossAxisCount;
+                    final aspectRatio =
+                        (itemWidth / itemHeight).clamp(0.7, 1.2);
 
-                    return _HabitCard(
-                      key: Key('habit_card_${habit.id}'),
-                      habit: habit,
-                      isSelected: isSelected,
-                      onTap: () {
-                        if (isSelected) {
-                          ref
-                              .read(onboardingNotifierProvider.notifier)
-                              .deselectHabit(habit.id);
-                        } else if (selectedHabits.length < 3) {
-                          ref
-                              .read(onboardingNotifierProvider.notifier)
-                              .selectHabit(habit.id);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.maxThreeHabits)),
-                          );
-                        }
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: spacing,
+                        mainAxisSpacing: spacing,
+                        childAspectRatio: aspectRatio,
+                      ),
+                      itemCount: predefinedHabits.length,
+                      itemBuilder: (context, index) {
+                        final habit = predefinedHabits[index];
+                        final isSelected = selectedHabits.contains(habit.id);
+
+                        return _HabitCard(
+                          key: Key('habit_card_${habit.id}'),
+                          habit: habit,
+                          isSelected: isSelected,
+                          onTap: () {
+                            if (isSelected) {
+                              ref
+                                  .read(onboardingNotifierProvider.notifier)
+                                  .deselectHabit(habit.id);
+                            } else if (selectedHabits.length < 3) {
+                              ref
+                                  .read(onboardingNotifierProvider.notifier)
+                                  .selectHabit(habit.id);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(l10n.maxThreeHabits)),
+                              );
+                            }
+                          },
+                        );
                       },
                     );
                   },
@@ -217,82 +266,119 @@ class _HabitCard extends StatelessWidget {
       }
     }
 
-    return GestureDetector(
+    final habitName = getName(habit.nameKey);
+    final habitDescription = getDescription(habit.descriptionKey);
+    final semanticLabel = isSelected
+        ? '$habitName ${l10n.selected}. $habitDescription'
+        : '$habitName. $habitDescription';
+
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      selected: isSelected,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
-            width: isSelected ? 3 : 1,
-          ),
-          boxShadow: [
-            if (isSelected)
-              BoxShadow(
-                color: const Color(0xff6366f1).withValues(alpha:0.2),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              )
-            else
-              BoxShadow(
-                color: Colors.black.withValues(alpha:0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color:
+                  isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
+              width: isSelected ? 3 : 1,
+            ),
+            boxShadow: [
               if (isSelected)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: const BoxDecoration(
-                      color: Color(0xff6366f1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.check,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ),
+                BoxShadow(
+                  color: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                )
+              else
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-              const Spacer(),
-              Text(
-                habit.emoji,
-                style: const TextStyle(fontSize: 48),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                getName(habit.nameKey),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xff1a202c),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                getDescription(habit.descriptionKey),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const Spacer(),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Responsive emoji size based on card size
+                final emojiSize =
+                    (constraints.maxWidth * 0.35).clamp(32.0, 56.0);
+                final titleSize =
+                    (constraints.maxWidth * 0.12).clamp(12.0, 16.0);
+                final descSize =
+                    (constraints.maxWidth * 0.09).clamp(10.0, 12.0);
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isSelected)
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Color(0xff6366f1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.check,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox(height: 20),
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          habit.emoji,
+                          style: TextStyle(fontSize: emojiSize),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Flexible(
+                      child: Text(
+                        getName(habit.nameKey),
+                        style: TextStyle(
+                          fontSize: titleSize,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xff1a202c),
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Flexible(
+                      child: Text(
+                        getDescription(habit.descriptionKey),
+                        style: TextStyle(
+                          fontSize: descSize,
+                          color: Colors.grey.shade600,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

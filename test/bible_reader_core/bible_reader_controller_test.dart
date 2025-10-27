@@ -11,7 +11,7 @@ void main() {
   setUp(() async {
     // Initialize SharedPreferences for testing
     SharedPreferences.setMockInitialValues({});
-    
+
     testVersion = BibleVersion(
       name: 'TestVersion',
       language: 'English',
@@ -34,9 +34,9 @@ void main() {
   group('BibleReaderController', () {
     test('initialize sets correct initial state', () async {
       container.read(bibleReaderProvider.notifier);
-      
+
       expect(container.read(bibleReaderProvider).isLoading, isFalse);
-      
+
       // Note: Full initialization requires actual database files
       // In a real test environment, you would mock the database service
     });
@@ -44,24 +44,24 @@ void main() {
     test('fontSize increases within bounds', () async {
       final controller = container.read(bibleReaderProvider.notifier);
       final initialState = container.read(bibleReaderProvider);
-      
+
       // Increase font size
       await controller.increaseFontSize();
-      
+
       final newState = container.read(bibleReaderProvider);
       expect(newState.fontSize, greaterThan(initialState.fontSize));
     });
 
     test('fontSize decreases respects minimum bound', () async {
       final controller = container.read(bibleReaderProvider.notifier);
-      
+
       // Set to minimum
       await controller.setFontSize(12.0);
       final beforeState = container.read(bibleReaderProvider);
-      
+
       // Try to decrease below minimum
       await controller.decreaseFontSize();
-      
+
       final afterState = container.read(bibleReaderProvider);
       expect(afterState.fontSize, equals(beforeState.fontSize));
       expect(afterState.fontSize, greaterThanOrEqualTo(12.0));
@@ -69,79 +69,90 @@ void main() {
 
     test('fontSize increases respects maximum bound', () async {
       final controller = container.read(bibleReaderProvider.notifier);
-      
+
       // Set to near maximum
       await controller.setFontSize(32.0);
       container.read(bibleReaderProvider);
-      
+
       // Try to increase beyond maximum
       await controller.increaseFontSize();
-      
+
       final afterState = container.read(bibleReaderProvider);
       expect(afterState.fontSize, lessThanOrEqualTo(32.0));
     });
 
     test('setFontSize respects bounds (12-32)', () async {
       final controller = container.read(bibleReaderProvider.notifier);
-      
+
       // Test setting within bounds
       await controller.setFontSize(20.0);
       expect(container.read(bibleReaderProvider).fontSize, equals(20.0));
-      
+
       // Test setting below minimum (should be ignored or clamped)
       await controller.setFontSize(8.0);
-      expect(container.read(bibleReaderProvider).fontSize, greaterThanOrEqualTo(12.0));
-      
+      expect(container.read(bibleReaderProvider).fontSize,
+          greaterThanOrEqualTo(12.0));
+
       // Test setting above maximum (should be ignored or clamped)
       await controller.setFontSize(40.0);
-      expect(container.read(bibleReaderProvider).fontSize, lessThanOrEqualTo(32.0));
+      expect(container.read(bibleReaderProvider).fontSize,
+          lessThanOrEqualTo(32.0));
     });
 
     test('toggleVerseSelection adds and removes correctly', () {
       final controller = container.read(bibleReaderProvider.notifier);
       const verseKey = 'Genesis|1|1';
-      
+
       // Add verse
       controller.toggleVerseSelection(verseKey);
-      expect(container.read(bibleReaderProvider).selectedVerses.contains(verseKey), isTrue);
-      
+      expect(
+          container.read(bibleReaderProvider).selectedVerses.contains(verseKey),
+          isTrue);
+
       // Remove verse
       controller.toggleVerseSelection(verseKey);
-      expect(container.read(bibleReaderProvider).selectedVerses.contains(verseKey), isFalse);
+      expect(
+          container.read(bibleReaderProvider).selectedVerses.contains(verseKey),
+          isFalse);
     });
 
     test('clearSelection removes all selected verses', () {
       final controller = container.read(bibleReaderProvider.notifier);
-      
+
       // Add multiple verses
       controller.toggleVerseSelection('Genesis|1|1');
       controller.toggleVerseSelection('Genesis|1|2');
       controller.toggleVerseSelection('Genesis|1|3');
-      
-      expect(container.read(bibleReaderProvider).selectedVerses.length, equals(3));
-      
+
+      expect(
+          container.read(bibleReaderProvider).selectedVerses.length, equals(3));
+
       // Clear selection
       controller.clearSelection();
-      
-      expect(container.read(bibleReaderProvider).selectedVerses.isEmpty, isTrue);
+
+      expect(
+          container.read(bibleReaderProvider).selectedVerses.isEmpty, isTrue);
     });
 
     test('toggleFontControls changes visibility', () {
       final controller = container.read(bibleReaderProvider.notifier);
-      final initialVisible = container.read(bibleReaderProvider).showFontControls;
-      
+      final initialVisible =
+          container.read(bibleReaderProvider).showFontControls;
+
       controller.toggleFontControls();
-      expect(container.read(bibleReaderProvider).showFontControls, equals(!initialVisible));
-      
+      expect(container.read(bibleReaderProvider).showFontControls,
+          equals(!initialVisible));
+
       controller.toggleFontControls();
-      expect(container.read(bibleReaderProvider).showFontControls, equals(initialVisible));
+      expect(container.read(bibleReaderProvider).showFontControls,
+          equals(initialVisible));
     });
   });
 
   group('BibleReaderController - Navigation', () {
     // Note: These tests require mocked database service
     // as they depend on actual Bible data structure
-    
+
     test('goToNextChapter updates chapter number', () {
       // Would test chapter navigation
       // Requires mocking the database to have predictable data
@@ -168,7 +179,8 @@ void main() {
       // Requires mocked BibleReferenceParser
     });
 
-    test('performSearch falls back to text search on invalid reference', () async {
+    test('performSearch falls back to text search on invalid reference',
+        () async {
       // Test that invalid references trigger text search
     });
   });

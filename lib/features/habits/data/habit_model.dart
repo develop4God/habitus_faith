@@ -107,8 +107,9 @@ class HabitModel {
       'currentStreak': habit.currentStreak,
       'longestStreak': habit.longestStreak,
       'lastCompletedAt': habit.lastCompletedAt?.toIso8601String(),
-      'completionHistory':
-          habit.completionHistory.map((date) => date.toIso8601String()).toList(),
+      'completionHistory': habit.completionHistory
+          .map((date) => date.toIso8601String())
+          .toList(),
       'createdAt': habit.createdAt.toIso8601String(),
       'isArchived': habit.isArchived,
     };
