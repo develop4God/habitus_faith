@@ -132,9 +132,9 @@ class HabitsPage extends ConsumerWidget {
       ),
       body: habitsAsync.when(
         data: (habits) {
-          debugPrint('HabitsPage: data received -> ${habits.length} habits');
+          debugPrint('HabitsPage.when.data: received ${habits.length} habits');
           if (habits.isEmpty) {
-            debugPrint('HabitsPage: no habits -> showing empty state');
+            debugPrint('HabitsPage.when.data: habits list is empty');
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
