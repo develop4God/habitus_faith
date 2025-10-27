@@ -15,8 +15,7 @@ class JsonHabitsRepository implements HabitsRepository {
   static const String _habitsKey = 'habits';
   static const String _completionsKey = 'completions';
 
-  final StreamController<List<Habit>> _habitsController =
-      StreamController<List<Habit>>.broadcast();
+  late final StreamController<List<Habit>> _habitsController;
 
   JsonHabitsRepository({
     required JsonStorageService storage,
@@ -25,8 +24,11 @@ class JsonHabitsRepository implements HabitsRepository {
   })  : _storage = storage,
         _userId = userId,
         _idGenerator = idGenerator {
-    // Emit initial data
-    _emitHabits();
+    // Create stream controller and emit initial data immediately
+    _habitsController = StreamController<List<Habit>>.broadcast();
+    // Load habits synchronously and emit immediately
+    final initialHabits = _loadHabits();
+    _habitsController.add(initialHabits);
   }
 
   void _emitHabits() {
