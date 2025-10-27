@@ -27,10 +27,13 @@ class JsonHabitsRepository implements HabitsRepository {
         _idGenerator = idGenerator {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
-        // Emit initial state immediately when first listener subscribes
         debugPrint('JsonHabitsRepository: first listener - emitting initial habits');
-        final initialHabits = _loadHabits();
-        _habitsController.add(initialHabits);
+        Future.microtask(() {
+          if (!_habitsController.isClosed) {
+            final habits = _loadHabits();
+            _habitsController.add(habits);
+          }
+        });
       },
     );
   }
