@@ -237,5 +237,61 @@
   "selected": "Selected",
   "@selected": {
     "description": "Accessibility label indicating an item is selected"
+  },
+  "notificationSettings": "Notification Settings",
+  "@notificationSettings": {
+    "description": "Title for notification settings page"
+  },
+  "enableNotifications": "Enable Notifications",
+  "@enableNotifications": {
+    "description": "Label for enabling notifications"
+  },
+  "notificationsEnabled": "Notifications enabled",
+  "@notificationsEnabled": {
+    "description": "Message when notifications are turned on"
+  },
+  "notificationsDisabled": "Notifications disabled",
+  "@notificationsDisabled": {
+    "description": "Message when notifications are turned off"
+  },
+  "notificationsOn": "Notifications On",
+  "@notificationsOn": {
+    "description": "Label when notifications are enabled"
+  },
+  "notificationsOff": "Notifications Off",
+  "@notificationsOff": {
+    "description": "Label when notifications are disabled"
+  },
+  "receiveReminderNotifications": "Receive daily reminders for your habits",
+  "@receiveReminderNotifications": {
+    "description": "Description for notification toggle"
+  },
+  "notificationTime": "Notification Time",
+  "@notificationTime": {
+    "description": "Label for notification time setting"
+  },
+  "selectNotificationTime": "Select your preferred notification time",
+  "@selectNotificationTime": {
+    "description": "Instruction for selecting notification time"
+  },
+  "currentTime": "Current time",
+  "@currentTime": {
+    "description": "Label for current notification time"
+  },
+  "notificationTimeUpdated": "Notification time updated to",
+  "@notificationTimeUpdated": {
+    "description": "Message when notification time is updated"
+  },
+  "notificationInfo": "Notifications will help you stay on track with your daily habits. You'll receive reminders at your chosen time.",
+  "@notificationInfo": {
+    "description": "Information about notifications"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications menu item"
   }
 }

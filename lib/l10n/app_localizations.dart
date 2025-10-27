@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -451,6 +451,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Selected'**
   String get selected;
+
+  /// Title for notification settings page
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettings;
+
+  /// Label for enabling notifications
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enableNotifications;
+
+  /// Message when notifications are turned on
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications enabled'**
+  String get notificationsEnabled;
+
+  /// Message when notifications are turned off
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications disabled'**
+  String get notificationsDisabled;
+
+  /// Label when notifications are enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications On'**
+  String get notificationsOn;
+
+  /// Label when notifications are disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications Off'**
+  String get notificationsOff;
+
+  /// Description for notification toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Receive daily reminders for your habits'**
+  String get receiveReminderNotifications;
+
+  /// Label for notification time setting
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Time'**
+  String get notificationTime;
+
+  /// Instruction for selecting notification time
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred notification time'**
+  String get selectNotificationTime;
+
+  /// Label for current notification time
+  ///
+  /// In en, this message translates to:
+  /// **'Current time'**
+  String get currentTime;
+
+  /// Message when notification time is updated
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time updated to'**
+  String get notificationTimeUpdated;
+
+  /// Information about notifications
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications will help you stay on track with your daily habits. You\'ll receive reminders at your chosen time.'**
+  String get notificationInfo;
+
+  /// Settings page title
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// Notifications menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
 }
 
 class _AppLocalizationsDelegate
@@ -486,9 +570,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
