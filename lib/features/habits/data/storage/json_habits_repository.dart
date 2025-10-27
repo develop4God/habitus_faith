@@ -25,13 +25,14 @@ class JsonHabitsRepository implements HabitsRepository {
   })  : _storage = storage,
         _userId = userId,
         _idGenerator = idGenerator {
-    _habitsController = StreamController<List<Habit>>.broadcast();
-    final initialHabits = _loadHabits();
-    debugPrint('JsonHabitsRepository: emitting initial habits: ${initialHabits.length}');
-    Future.delayed(const Duration(milliseconds: 10), () {
-      _habitsController.add(initialHabits);
-      debugPrint('JsonHabitsRepository: initial emission sent (delayed)');
-    });
+    _habitsController = StreamController<List<Habit>>.broadcast(
+      onListen: () {
+        // Emit initial state immediately when first listener subscribes
+        debugPrint('JsonHabitsRepository: first listener - emitting initial habits');
+        final initialHabits = _loadHabits();
+        _habitsController.add(initialHabits);
+      },
+    );
   }
 
   void _emitHabits() {
@@ -49,7 +50,6 @@ class JsonHabitsRepository implements HabitsRepository {
         .toList();
 
     debugPrint('JsonHabitsRepository._loadHabits: filtered habits for user "$_userId": ${habits.length}');
-    // Load completion history for each habit
     final loadedHabits = habits.map((habit) => _loadHabitWithCompletions(habit)).toList();
     debugPrint('JsonHabitsRepository._loadHabits: loadedHabits (with completions): ${loadedHabits.length}');
     return loadedHabits;
@@ -59,23 +59,16 @@ class JsonHabitsRepository implements HabitsRepository {
     final completions = _loadCompletionsForHabit(habit.id);
     final completionDates = completions.map((c) => c.completedAt).toList();
 
-    // Calculate streaks from completion history
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    // Check if completed today
     final completedToday = completionDates.any((date) {
       final dateOnly = DateTime(date.year, date.month, date.day);
       return dateOnly == today;
     });
 
-    // Calculate current streak
     final currentStreak = _calculateCurrentStreak(completionDates);
-
-    // Calculate longest streak
     final longestStreak = _calculateLongestStreak(completionDates);
-
-    // Get last completion date
     final lastCompletedAt = completionDates.isNotEmpty
         ? completionDates.reduce((a, b) => a.isAfter(b) ? a : b)
         : null;
@@ -122,14 +115,12 @@ class JsonHabitsRepository implements HabitsRepository {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    // Sort dates in descending order
     final sortedDates = completionDates
         .map((date) => DateTime(date.year, date.month, date.day))
         .toSet()
         .toList()
       ..sort((a, b) => b.compareTo(a));
 
-    // Check if today is completed
     if (sortedDates.first != today) return 0;
 
     int streak = 1;
@@ -150,7 +141,6 @@ class JsonHabitsRepository implements HabitsRepository {
   int _calculateLongestStreak(List<DateTime> completionDates) {
     if (completionDates.isEmpty) return 0;
 
-    // Get unique dates only
     final sortedDates = completionDates
         .map((date) => DateTime(date.year, date.month, date.day))
         .toSet()
@@ -232,28 +222,19 @@ class JsonHabitsRepository implements HabitsRepository {
       }
 
       final now = DateTime.now();
-
-      // Check if already completed today
       final habit = habits[index];
       if (habit.completedToday) {
         debugPrint('JsonHabitsRepository.completeHabit: Habit "$habitId" already completed today');
-        // Already completed, return as-is
         return Success(habit);
       }
 
-      // Create completion record
       final completionRecord = CompletionRecord(
         habitId: habitId,
         completedAt: now,
       );
 
-      // Save completion record
       await _saveCompletionRecord(completionRecord);
-
-      // Reload habit with updated completion data
       final updatedHabit = _loadHabitWithCompletions(habit);
-
-      // Update habit in the list
       habits[index] = updatedHabit;
       debugPrint('JsonHabitsRepository.completeHabit: Completed habit "$habitId"');
       await _saveHabits(habits);
@@ -269,19 +250,11 @@ class JsonHabitsRepository implements HabitsRepository {
 
   Future<void> _saveCompletionRecord(CompletionRecord record) async {
     final completionsData = _storage.getJson(_completionsKey) ?? {};
-
-    // Get or create habit completions map
     final habitCompletions =
         completionsData[record.habitId] as Map<String, dynamic>? ?? {};
-
-    // Add completion with date key
     habitCompletions[record.dateKey] = record.toJson();
-
-    // Update completions data
     completionsData[record.habitId] = habitCompletions;
     debugPrint('JsonHabitsRepository._saveCompletionRecord: Saved completion for habit "${record.habitId}" on "${record.dateKey}"');
-
-    // Save back to storage
     await _storage.saveJson(_completionsKey, completionsData);
   }
 
