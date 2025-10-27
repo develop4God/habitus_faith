@@ -25,12 +25,10 @@ class JsonHabitsRepository implements HabitsRepository {
   })  : _storage = storage,
         _userId = userId,
         _idGenerator = idGenerator {
-    // Create stream controller and emit initial data immediately
     _habitsController = StreamController<List<Habit>>.broadcast();
-    // Load habits synchronously and emit immediately
     final initialHabits = _loadHabits();
     debugPrint('JsonHabitsRepository: emitting initial habits: ${initialHabits.length}');
-    _habitsController.add(initialHabits);
+    Future.microtask(() => _habitsController.add(initialHabits));
   }
 
   void _emitHabits() {
