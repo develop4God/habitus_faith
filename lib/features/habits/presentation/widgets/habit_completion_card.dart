@@ -64,6 +64,9 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
     final l10n = AppLocalizations.of(context)!;
     final emoji = widget.habit.emoji ?? '✨';
     final habitColor = HabitColors.getHabitColor(widget.habit);
+    
+    // Calculate weekly progress for gamification
+    final weeklyProgress = _calculateWeeklyProgress();
 
     return Card(
       key: Key('habit_completion_card_${widget.habit.id}'),
@@ -80,15 +83,15 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             onTap: _handleTap,
             borderRadius: BorderRadius.circular(20),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(24.0), // Increased padding for better tap target
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
                       Container(
-                        width: 56,
-                        height: 56,
+                        width: 64, // Larger icon container
+                        height: 64,
                         decoration: BoxDecoration(
                           color: widget.habit.completedToday
                               ? habitColor.withValues(alpha: 0.2)
@@ -98,7 +101,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         child: Center(
                           child: Text(
                             emoji,
-                            style: const TextStyle(fontSize: 28),
+                            style: const TextStyle(fontSize: 32), // Larger emoji
                           ),
                         ),
                       ),
@@ -113,7 +116,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                   child: Text(
                                     widget.habit.name,
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 19, // Slightly larger
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xff1a202c),
                                     ),
@@ -121,18 +124,19 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
+                                const SizedBox(width: 4),
                                 // Difficulty indicator
                                 ...List.generate(
                                   HabitDifficultyHelper.getDifficultyStars(widget.habit.difficulty),
                                   (index) => Icon(
                                     Icons.star,
-                                    size: 14,
+                                    size: 16,
                                     color: HabitDifficultyHelper.getDifficultyColor(widget.habit.difficulty),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 6),
                             Text(
                               widget.habit.description,
                               style: TextStyle(
@@ -147,7 +151,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                       ),
                       if (widget.habit.completedToday)
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(10), // Larger tap target
                           decoration: BoxDecoration(
                             color: habitColor,
                             shape: BoxShape.circle,
@@ -155,9 +159,47 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                           child: const Icon(
                             Icons.check,
                             color: Colors.white,
-                            size: 20,
+                            size: 24,
                           ),
                         ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Weekly progress bar (preparation for gamification)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Progreso semanal',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            '${(weeklyProgress * 100).toInt()}%',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: habitColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: weeklyProgress,
+                          backgroundColor: habitColor.withValues(alpha: 0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                          minHeight: 6,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -179,29 +221,30 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                     ],
                   ),
                   if (!widget.habit.completedToday) ...[
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     Container(
+                      width: double.infinity, // Full width for better tap target
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
+                        horizontal: 16,
+                        vertical: 12,
                       ),
                       decoration: BoxDecoration(
                         color: habitColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.touch_app,
-                            size: 16,
+                            size: 18,
                             color: habitColor,
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 8),
                           Text(
                             l10n.tapToComplete,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: habitColor,
                             ),
@@ -249,6 +292,24 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
         ],
       ),
     );
+  }
+
+  // Calculate weekly completion rate (7 days)
+  double _calculateWeeklyProgress() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    int completedDays = 0;
+
+    for (int i = 0; i < 7; i++) {
+      final day = today.subtract(Duration(days: i));
+      final isCompleted = widget.habit.completionHistory.any((date) {
+        final completionDay = DateTime(date.year, date.month, date.day);
+        return completionDay == day;
+      });
+      if (isCompleted) completedDays++;
+    }
+
+    return completedDays / 7.0;
   }
 }
 
