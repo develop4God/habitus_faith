@@ -186,47 +186,44 @@ class AppLocalizationsZh extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => 'Notification Settings';
+  String get notificationSettings => '通知设置';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => '启用通知';
 
   @override
-  String get notificationsEnabled => 'Notifications enabled';
+  String get notificationsEnabled => '通知已启用';
 
   @override
-  String get notificationsDisabled => 'Notifications disabled';
+  String get notificationsDisabled => '通知已禁用';
 
   @override
-  String get notificationsOn => 'Notifications On';
+  String get notificationsOn => '通知开启';
 
   @override
-  String get notificationsOff => 'Notifications Off';
+  String get notificationsOff => '通知关闭';
 
   @override
-  String get receiveReminderNotifications =>
-      'Receive daily reminders for your habits';
+  String get receiveReminderNotifications => '接收每日习惯提醒';
 
   @override
-  String get notificationTime => 'Notification Time';
+  String get notificationTime => '通知时间';
 
   @override
-  String get selectNotificationTime =>
-      'Select your preferred notification time';
+  String get selectNotificationTime => '选择您喜欢的通知时间';
 
   @override
-  String get currentTime => 'Current time';
+  String get currentTime => '当前时间';
 
   @override
-  String get notificationTimeUpdated => 'Notification time updated to';
+  String get notificationTimeUpdated => '通知时间已更新为';
 
   @override
-  String get notificationInfo =>
-      'Notifications will help you stay on track with your daily habits. You\'ll receive reminders at your chosen time.';
+  String get notificationInfo => '通知将帮助您坚持每日习惯。您将在选择的时间收到提醒。';
 
   @override
-  String get settings => 'Settings';
+  String get settings => '设置';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => '通知';
 }

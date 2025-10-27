@@ -199,46 +199,46 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => 'Notification Settings';
+  String get notificationSettings => 'Paramètres de Notification';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => 'Activer les Notifications';
 
   @override
-  String get notificationsEnabled => 'Notifications enabled';
+  String get notificationsEnabled => 'Notifications activées';
 
   @override
-  String get notificationsDisabled => 'Notifications disabled';
+  String get notificationsDisabled => 'Notifications désactivées';
 
   @override
-  String get notificationsOn => 'Notifications On';
+  String get notificationsOn => 'Notifications Activées';
 
   @override
-  String get notificationsOff => 'Notifications Off';
+  String get notificationsOff => 'Notifications Désactivées';
 
   @override
   String get receiveReminderNotifications =>
-      'Receive daily reminders for your habits';
+      'Recevoir des rappels quotidiens pour vos habitudes';
 
   @override
-  String get notificationTime => 'Notification Time';
+  String get notificationTime => 'Heure de Notification';
 
   @override
   String get selectNotificationTime =>
-      'Select your preferred notification time';
+      'Sélectionnez votre heure de notification préférée';
 
   @override
-  String get currentTime => 'Current time';
+  String get currentTime => 'Heure actuelle';
 
   @override
-  String get notificationTimeUpdated => 'Notification time updated to';
+  String get notificationTimeUpdated => 'Heure de notification mise à jour à';
 
   @override
   String get notificationInfo =>
-      'Notifications will help you stay on track with your daily habits. You\'ll receive reminders at your chosen time.';
+      'Les notifications vous aideront à maintenir vos habitudes quotidiennes. Vous recevrez des rappels à l\'heure que vous choisissez.';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Paramètres';
 
   @override
   String get notifications => 'Notifications';

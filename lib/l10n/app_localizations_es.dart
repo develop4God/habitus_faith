@@ -199,47 +199,47 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => 'Notification Settings';
+  String get notificationSettings => 'Configuración de Notificaciones';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => 'Habilitar Notificaciones';
 
   @override
-  String get notificationsEnabled => 'Notifications enabled';
+  String get notificationsEnabled => 'Notificaciones habilitadas';
 
   @override
-  String get notificationsDisabled => 'Notifications disabled';
+  String get notificationsDisabled => 'Notificaciones deshabilitadas';
 
   @override
-  String get notificationsOn => 'Notifications On';
+  String get notificationsOn => 'Notificaciones Activadas';
 
   @override
-  String get notificationsOff => 'Notifications Off';
+  String get notificationsOff => 'Notificaciones Desactivadas';
 
   @override
   String get receiveReminderNotifications =>
-      'Receive daily reminders for your habits';
+      'Recibir recordatorios diarios para tus hábitos';
 
   @override
-  String get notificationTime => 'Notification Time';
+  String get notificationTime => 'Hora de Notificación';
 
   @override
   String get selectNotificationTime =>
-      'Select your preferred notification time';
+      'Selecciona tu hora preferida de notificación';
 
   @override
-  String get currentTime => 'Current time';
+  String get currentTime => 'Hora actual';
 
   @override
-  String get notificationTimeUpdated => 'Notification time updated to';
+  String get notificationTimeUpdated => 'Hora de notificación actualizada a';
 
   @override
   String get notificationInfo =>
-      'Notifications will help you stay on track with your daily habits. You\'ll receive reminders at your chosen time.';
+      'Las notificaciones te ayudarán a mantener tus hábitos diarios. Recibirás recordatorios a la hora que elijas.';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Ajustes';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Notificaciones';
 }

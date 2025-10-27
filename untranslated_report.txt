@@ -2,80 +2,24 @@
   "es": [
     "onboardingErrorMessage",
     "retry",
-    "selected",
-    "notificationSettings",
-    "enableNotifications",
-    "notificationsEnabled",
-    "notificationsDisabled",
-    "notificationsOn",
-    "notificationsOff",
-    "receiveReminderNotifications",
-    "notificationTime",
-    "selectNotificationTime",
-    "currentTime",
-    "notificationTimeUpdated",
-    "notificationInfo",
-    "settings",
-    "notifications"
+    "selected"
   ],
 
   "fr": [
     "onboardingErrorMessage",
     "retry",
-    "selected",
-    "notificationSettings",
-    "enableNotifications",
-    "notificationsEnabled",
-    "notificationsDisabled",
-    "notificationsOn",
-    "notificationsOff",
-    "receiveReminderNotifications",
-    "notificationTime",
-    "selectNotificationTime",
-    "currentTime",
-    "notificationTimeUpdated",
-    "notificationInfo",
-    "settings",
-    "notifications"
+    "selected"
   ],
 
   "pt": [
     "onboardingErrorMessage",
     "retry",
-    "selected",
-    "notificationSettings",
-    "enableNotifications",
-    "notificationsEnabled",
-    "notificationsDisabled",
-    "notificationsOn",
-    "notificationsOff",
-    "receiveReminderNotifications",
-    "notificationTime",
-    "selectNotificationTime",
-    "currentTime",
-    "notificationTimeUpdated",
-    "notificationInfo",
-    "settings",
-    "notifications"
+    "selected"
   ],
 
   "zh": [
     "onboardingErrorMessage",
     "retry",
-    "selected",
-    "notificationSettings",
-    "enableNotifications",
-    "notificationsEnabled",
-    "notificationsDisabled",
-    "notificationsOn",
-    "notificationsOff",
-    "receiveReminderNotifications",
-    "notificationTime",
-    "selectNotificationTime",
-    "currentTime",
-    "notificationTimeUpdated",
-    "notificationInfo",
-    "settings",
-    "notifications"
+    "selected"
   ]
 }
