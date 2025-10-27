@@ -10,7 +10,14 @@ import '../l10n/app_localizations.dart';
 // New providers for JSON-based habits
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   final repository = ref.watch(jsonHabitsRepositoryProvider);
-  return repository.watchHabits();
+  debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
+  final stream = repository.watchHabits().map((list) {
+    debugPrint('jsonHabitsStreamProvider: stream emitted ${list.length} habits');
+    return list;
+  }).handleError((e, st) {
+    debugPrint('jsonHabitsStreamProvider: stream error -> $e');
+  });
+  return stream;
 });
 
 class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
@@ -19,32 +26,38 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
   JsonHabitsNotifier(this.ref) : super(const AsyncValue.data(null));
 
   Future<void> completeHabit(String habitId) async {
+    debugPrint('JsonHabitsNotifier.completeHabit: start -> $habitId');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
     final result = await repository.completeHabit(habitId);
 
     result.fold(
-      (failure) {
+          (failure) {
+        debugPrint('JsonHabitsNotifier.completeHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-      (habit) {
+          (habit) {
+        debugPrint('JsonHabitsNotifier.completeHabit: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );
   }
 
   Future<void> deleteHabit(String habitId) async {
+    debugPrint('JsonHabitsNotifier.deleteHabit: start -> $habitId');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
     final result = await repository.deleteHabit(habitId);
 
     result.fold(
-      (failure) {
+          (failure) {
+        debugPrint('JsonHabitsNotifier.deleteHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-      (_) {
+          (_) {
+        debugPrint('JsonHabitsNotifier.deleteHabit: success -> $habitId');
         state = const AsyncData(null);
       },
     );
@@ -55,6 +68,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     required String description,
     HabitCategory category = HabitCategory.other,
   }) async {
+    debugPrint('JsonHabitsNotifier.addHabit: start -> name:$name desc:$description');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -65,10 +79,12 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     );
 
     result.fold(
-      (failure) {
+          (failure) {
+        debugPrint('JsonHabitsNotifier.addHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-      (habit) {
+          (habit) {
+        debugPrint('JsonHabitsNotifier.addHabit: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );
@@ -76,7 +92,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final jsonHabitsNotifierProvider =
-    StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
+StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
   return JsonHabitsNotifier(ref);
 });
 
@@ -86,12 +102,14 @@ class HabitsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    debugPrint('HabitsPage.build: started');
     final habitsAsync = ref.watch(jsonHabitsStreamProvider);
 
     // Listen for errors
     ref.listen<AsyncValue<void>>(jsonHabitsNotifierProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stack) {
+          debugPrint('HabitsPage: notifier error -> $error');
           if (error is HabitFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -114,7 +132,9 @@ class HabitsPage extends ConsumerWidget {
       ),
       body: habitsAsync.when(
         data: (habits) {
+          debugPrint('HabitsPage: data received -> ${habits.length} habits');
           if (habits.isEmpty) {
+            debugPrint('HabitsPage: no habits -> showing empty state');
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -144,6 +164,7 @@ class HabitsPage extends ConsumerWidget {
               final habit = habits[index];
               final notifier = ref.watch(jsonHabitsNotifierProvider);
               final isCompleting = notifier.isLoading;
+              debugPrint('HabitsPage.itemBuilder: habit ${habit.id}, isCompleting: $isCompleting');
 
               return Column(
                 children: [
@@ -151,9 +172,11 @@ class HabitsPage extends ConsumerWidget {
                     habit: habit,
                     isCompleting: isCompleting,
                     onTap: () async {
+                      debugPrint('HabitsPage.onTap: completing habit -> ${habit.id}');
                       await ref
                           .read(jsonHabitsNotifierProvider.notifier)
                           .completeHabit(habit.id);
+                      debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(l10n.habitCompleted)),
@@ -171,21 +194,28 @@ class HabitsPage extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Text('Error: $error'),
-            ],
-          ),
-        ),
+        loading: () {
+          debugPrint('HabitsPage: loading state -> showing spinner');
+          return const Center(child: CircularProgressIndicator());
+        },
+        error: (error, stack) {
+          debugPrint('HabitsPage: error state -> $error');
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                const SizedBox(height: 16),
+                Text('Error: $error'),
+              ],
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         key: const Key('add_habit_fab'),
         onPressed: () {
+          debugPrint('HabitsPage: FAB pressed -> showing add habit dialog');
           _showAddHabitDialog(context, ref, l10n);
         },
         backgroundColor: const Color(0xff6366f1),
@@ -221,6 +251,7 @@ class HabitsPage extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () {
+              debugPrint('AddHabitDialog: cancel pressed');
               Navigator.pop(context);
             },
             child: Text(l10n.cancel),
@@ -229,13 +260,17 @@ class HabitsPage extends ConsumerWidget {
             key: const Key('confirm_add_habit_button'),
             onPressed: () async {
               if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
+                debugPrint('AddHabitDialog: adding habit -> name:${nameCtrl.text} desc:${descCtrl.text}');
                 await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-                      name: nameCtrl.text,
-                      description: descCtrl.text,
-                    );
+                  name: nameCtrl.text,
+                  description: descCtrl.text,
+                );
+                debugPrint('AddHabitDialog: addHabit awaited');
                 if (context.mounted) {
                   Navigator.pop(context);
                 }
+              } else {
+                debugPrint('AddHabitDialog: missing name or description');
               }
             },
             child: Text(l10n.add),
@@ -245,6 +280,7 @@ class HabitsPage extends ConsumerWidget {
     ).whenComplete(() {
       nameCtrl.dispose();
       descCtrl.dispose();
+      debugPrint('AddHabitDialog: disposed controllers');
     });
   }
 }
