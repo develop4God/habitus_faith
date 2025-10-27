@@ -4,15 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
 import 'core/providers/auth_provider.dart';
 import 'features/habits/presentation/onboarding/onboarding_page.dart';
+import 'features/habits/data/storage/json_storage_service.dart';
+import 'features/habits/data/storage/json_habits_repository.dart';
 import 'features/habits/data/storage/storage_providers.dart';
 import 'l10n/app_localizations.dart';
 
-// ----- LANDING PAGE (la de siempre) -----
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
@@ -70,7 +72,6 @@ class LandingPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Botón para ir al lector de Biblia
             ElevatedButton(
               key: const Key('read_bible_button'),
               style: ElevatedButton.styleFrom(
@@ -106,20 +107,28 @@ class LandingPage extends StatelessWidget {
   }
 }
 
-// ----- MAIN -----
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Initialize SharedPreferences
   final prefs = await SharedPreferences.getInstance();
+  final storageService = JsonStorageService(prefs);
+  const userId = 'local_user';
+  final habitsRepository = JsonHabitsRepository(
+    storage: storageService,
+    userId: userId,
+    idGenerator: () => const Uuid().v4(),
+  );
 
   runApp(
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
+        jsonStorageServiceProvider.overrideWithValue(storageService),
+        // override with persistent repository instance!
+        jsonHabitsRepositoryProvider.overrideWithValue(habitsRepository),
       ],
       child: const MyApp(),
     ),
@@ -131,7 +140,6 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint('MyApp.build: started');
     final authInit = ref.watch(authInitProvider);
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
 
@@ -144,35 +152,27 @@ class MyApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en', ''), // English
-        Locale('es', ''), // Spanish
-        Locale('fr', ''), // French
-        Locale('pt', ''), // Portuguese
-        Locale('zh', ''), // Chinese
+        Locale('en', ''),
+        Locale('es', ''),
+        Locale('fr', ''),
+        Locale('pt', ''),
+        Locale('zh', ''),
       ],
       routes: {
         '/home': (context) => const HomePage(),
         '/onboarding': (context) => const OnboardingPage(),
       },
       home: authInit.when(
-        data: (_) {
-          debugPrint('MyApp.home: authInit data, onboardingComplete=$onboardingComplete');
-          return onboardingComplete ? const LandingPage() : const OnboardingPage();
-        },
-        loading: () {
-          debugPrint('MyApp.home: loading');
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        },
-        error: (error, stack) {
-          debugPrint('MyApp.home: error -> $error');
-          return Scaffold(
-            body: Center(
-              child: Text('Error: $error'),
-            ),
-          );
-        },
+        data: (_) =>
+        onboardingComplete ? const LandingPage() : const OnboardingPage(),
+        loading: () => const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+        error: (error, stack) => Scaffold(
+          body: Center(
+            child: Text('Error: $error'),
+          ),
+        ),
       ),
     );
   }
