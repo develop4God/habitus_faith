@@ -184,4 +184,46 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selected => 'Selected';
+
+  @override
+  String get notificationSettings => '通知设置';
+
+  @override
+  String get enableNotifications => '启用通知';
+
+  @override
+  String get notificationsEnabled => '通知已启用';
+
+  @override
+  String get notificationsDisabled => '通知已禁用';
+
+  @override
+  String get notificationsOn => '通知开启';
+
+  @override
+  String get notificationsOff => '通知关闭';
+
+  @override
+  String get receiveReminderNotifications => '接收每日习惯提醒';
+
+  @override
+  String get notificationTime => '通知时间';
+
+  @override
+  String get selectNotificationTime => '选择您喜欢的通知时间';
+
+  @override
+  String get currentTime => '当前时间';
+
+  @override
+  String get notificationTimeUpdated => '通知时间已更新为';
+
+  @override
+  String get notificationInfo => '通知将帮助您坚持每日习惯。您将在选择的时间收到提醒。';
+
+  @override
+  String get settings => '设置';
+
+  @override
+  String get notifications => '通知';
 }

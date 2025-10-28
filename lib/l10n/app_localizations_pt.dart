@@ -196,4 +196,49 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get selected => 'Selected';
+
+  @override
+  String get notificationSettings => 'Configurações de Notificação';
+
+  @override
+  String get enableNotifications => 'Ativar Notificações';
+
+  @override
+  String get notificationsEnabled => 'Notificações ativadas';
+
+  @override
+  String get notificationsDisabled => 'Notificações desativadas';
+
+  @override
+  String get notificationsOn => 'Notificações Ativadas';
+
+  @override
+  String get notificationsOff => 'Notificações Desativadas';
+
+  @override
+  String get receiveReminderNotifications =>
+      'Receber lembretes diários para seus hábitos';
+
+  @override
+  String get notificationTime => 'Hora de Notificação';
+
+  @override
+  String get selectNotificationTime =>
+      'Selecione sua hora preferida de notificação';
+
+  @override
+  String get currentTime => 'Hora atual';
+
+  @override
+  String get notificationTimeUpdated => 'Hora de notificação atualizada para';
+
+  @override
+  String get notificationInfo =>
+      'As notificações o ajudarão a manter seus hábitos diários. Você receberá lembretes no horário escolhido.';
+
+  @override
+  String get settings => 'Configurações';
+
+  @override
+  String get notifications => 'Notificações';
 }
