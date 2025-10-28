@@ -197,4 +197,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get selected => 'Selected';
+
+  @override
+  String get category => 'Categoría';
+
+  @override
+  String get difficulty => 'Dificultad';
+
+  @override
+  String get emoji => 'Emoji';
+
+  @override
+  String get color => 'Color';
+
+  @override
+  String get optional => 'opcional';
+
+  @override
+  String get edit => 'Editar';
+
+  @override
+  String get uncheck => 'Desmarcar';
+
+  @override
+  String get save => 'Guardar';
+
+  @override
+  String get editHabit => 'Editar Hábito';
+
+  @override
+  String get defaultColor => 'Por defecto';
 }

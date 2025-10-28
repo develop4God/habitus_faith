@@ -54,5 +54,15 @@
   "predefinedHabit_familyTime_name": "家庭时光",
   "predefinedHabit_familyTime_description": "与亲人共度美好时光",
   "predefinedHabit_service_name": "服务行动",
-  "predefinedHabit_service_description": "以爱和同情服务他人"
+  "predefinedHabit_service_description": "以爱和同情服务他人",
+  "category": "类别",
+  "difficulty": "难度",
+  "emoji": "表情符号",
+  "color": "颜色",
+  "optional": "可选",
+  "edit": "编辑",
+  "uncheck": "取消勾选",
+  "save": "保存",
+  "editHabit": "编辑习惯",
+  "defaultColor": "默认"
 }

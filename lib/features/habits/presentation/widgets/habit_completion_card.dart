@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../../domain/habit.dart';
 import '../constants/habit_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HabitCompletionCard extends StatefulWidget {
   final Habit habit;
   final VoidCallback onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onUncheck;
+  final VoidCallback? onDelete;
   final bool isCompleting;
 
   const HabitCompletionCard({
     super.key,
     required this.habit,
     required this.onTap,
+    this.onEdit,
+    this.onUncheck,
+    this.onDelete,
     this.isCompleting = false,
   });
 
@@ -128,18 +135,33 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.habit.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: widget.habit.completedToday
-                                ? Colors.grey.shade600
-                                : const Color(0xff1a202c),
-                            decoration: widget.habit.completedToday
-                                ? TextDecoration.lineThrough
-                                : null,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.habit.name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: widget.habit.completedToday
+                                      ? Colors.grey.shade600
+                                      : const Color(0xff1a202c),
+                                  decoration: widget.habit.completedToday
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            // Emoji on the right if available
+                            if (widget.habit.emoji != null &&
+                                widget.habit.emoji!.isNotEmpty) ...[
+                              const SizedBox(width: 8),
+                              Text(
+                                widget.habit.emoji!,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ],
                         ),
                         if (widget.habit.description.isNotEmpty) ...[
                           const SizedBox(height: 4),
@@ -180,17 +202,81 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                   ),
                   // Difficulty stars
                   if (widget.habit.difficulty != HabitDifficulty.medium)
-                    Row(
-                      children: List.generate(
-                        HabitDifficultyHelper.getDifficultyStars(
-                            widget.habit.difficulty),
-                        (index) => Icon(
-                          Icons.star,
-                          size: 14,
-                          color: habitColor.withValues(alpha: 0.6),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Row(
+                        children: List.generate(
+                          HabitDifficultyHelper.getDifficultyStars(
+                              widget.habit.difficulty),
+                          (index) => Icon(
+                            Icons.star,
+                            size: 14,
+                            color: habitColor.withValues(alpha: 0.6),
+                          ),
                         ),
                       ),
                     ),
+                  // 3-dot menu
+                  PopupMenuButton<String>(
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.grey.shade600,
+                      size: 20,
+                    ),
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'edit':
+                          widget.onEdit?.call();
+                          break;
+                        case 'uncheck':
+                          widget.onUncheck?.call();
+                          break;
+                        case 'delete':
+                          widget.onDelete?.call();
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) {
+                      final l10n = AppLocalizations.of(context)!;
+                      return [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit,
+                                  size: 18, color: Colors.grey.shade700),
+                              const SizedBox(width: 12),
+                              Text(l10n.edit),
+                            ],
+                          ),
+                        ),
+                        if (widget.habit.completedToday)
+                          PopupMenuItem(
+                            value: 'uncheck',
+                            child: Row(
+                              children: [
+                                Icon(Icons.check_box_outline_blank,
+                                    size: 18, color: Colors.grey.shade700),
+                                const SizedBox(width: 12),
+                                Text(l10n.uncheck),
+                              ],
+                            ),
+                          ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.delete,
+                                  size: 18, color: Colors.red),
+                              const SizedBox(width: 12),
+                              Text(l10n.delete,
+                                  style: const TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ),
+                      ];
+                    },
+                  ),
                 ],
               ),
             ),

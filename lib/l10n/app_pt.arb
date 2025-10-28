@@ -54,5 +54,15 @@
   "predefinedHabit_familyTime_name": "Tempo em Família",
   "predefinedHabit_familyTime_description": "Passe tempo de qualidade com seus entes queridos",
   "predefinedHabit_service_name": "Atos de Serviço",
-  "predefinedHabit_service_description": "Sirva aos outros com amor e compaixão"
+  "predefinedHabit_service_description": "Sirva aos outros com amor e compaixão",
+  "category": "Categoria",
+  "difficulty": "Dificuldade",
+  "emoji": "Emoji",
+  "color": "Cor",
+  "optional": "opcional",
+  "edit": "Editar",
+  "uncheck": "Desmarcar",
+  "save": "Salvar",
+  "editHabit": "Editar Hábito",
+  "defaultColor": "Padrão"
 }

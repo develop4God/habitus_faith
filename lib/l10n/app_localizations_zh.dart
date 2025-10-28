@@ -184,4 +184,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selected => 'Selected';
+
+  @override
+  String get category => '类别';
+
+  @override
+  String get difficulty => '难度';
+
+  @override
+  String get emoji => '表情符号';
+
+  @override
+  String get color => '颜色';
+
+  @override
+  String get optional => '可选';
+
+  @override
+  String get edit => '编辑';
+
+  @override
+  String get uncheck => '取消勾选';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get editHabit => '编辑习惯';
+
+  @override
+  String get defaultColor => '默认';
 }

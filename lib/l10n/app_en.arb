@@ -237,5 +237,45 @@
   "selected": "Selected",
   "@selected": {
     "description": "Accessibility label indicating an item is selected"
+  },
+  "category": "Category",
+  "@category": {
+    "description": "Category label"
+  },
+  "difficulty": "Difficulty",
+  "@difficulty": {
+    "description": "Difficulty label"
+  },
+  "emoji": "Emoji",
+  "@emoji": {
+    "description": "Emoji label"
+  },
+  "color": "Color",
+  "@color": {
+    "description": "Color label"
+  },
+  "optional": "optional",
+  "@optional": {
+    "description": "Optional label"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "uncheck": "Uncheck",
+  "@uncheck": {
+    "description": "Uncheck button text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "editHabit": "Edit Habit",
+  "@editHabit": {
+    "description": "Edit habit dialog title"
+  },
+  "defaultColor": "Default",
+  "@defaultColor": {
+    "description": "Default color option label"
   }
 }
