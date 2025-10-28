@@ -162,26 +162,39 @@ class HabitsPage extends ConsumerWidget {
             );
           }
 
-          // Group habits by category
-          final habitsByCategory = <HabitCategory, List<Habit>>{};
-          for (final habit in habits) {
-            habitsByCategory.putIfAbsent(habit.category, () => []).add(habit);
-          }
-
-          return ListView(
+          return ListView.builder(
             padding: const EdgeInsets.all(16),
-            children: [
-              // Build sections for each category
-              for (final category in HabitCategory.values)
-                if (habitsByCategory.containsKey(category))
-                  _buildCategorySection(
-                    context,
-                    ref,
-                    l10n,
-                    category,
-                    habitsByCategory[category]!,
+            itemCount: habits.length,
+            itemBuilder: (context, index) {
+              final habit = habits[index];
+              final notifier = ref.watch(jsonHabitsNotifierProvider);
+              final isCompleting = notifier.isLoading;
+
+              return Column(
+                children: [
+                  HabitCompletionCard(
+                    habit: habit,
+                    isCompleting: isCompleting,
+                    onTap: () async {
+                      debugPrint('HabitsPage.onTap: completing habit -> ${habit.id}');
+                      await ref
+                          .read(jsonHabitsNotifierProvider.notifier)
+                          .completeHabit(habit.id);
+                      debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.habitCompleted)),
+                        );
+                      }
+                    },
                   ),
-            ],
+                  MiniCalendarHeatmap(
+                    completionDates: habit.completionHistory,
+                  ),
+                  const SizedBox(height: 4),
+                ],
+              );
+            },
           );
         },
         loading: () {
@@ -211,118 +224,6 @@ class HabitsPage extends ConsumerWidget {
         backgroundColor: const Color(0xff6366f1),
         child: const Icon(Icons.add, color: Colors.white),
       ),
-    );
-  }
-
-  Widget _buildCategorySection(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-    HabitCategory category,
-    List<Habit> habits,
-  ) {
-    final categoryColor = HabitColors.categoryColors[category]!;
-    final categoryIcon = HabitColors.getCategoryIcon(category);
-    final categoryName = HabitColors.getCategoryDisplayName(category);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Category header
-        Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                categoryColor.withValues(alpha: 0.1),
-                categoryColor.withValues(alpha: 0.05),
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: categoryColor.withValues(alpha: 0.2),
-              width: 1,
-            ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: categoryColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  categoryIcon,
-                  color: categoryColor,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  categoryName,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: categoryColor,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: categoryColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${habits.length}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: categoryColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Habits in this category
-        ...habits.map((habit) {
-          final notifier = ref.watch(jsonHabitsNotifierProvider);
-          final isCompleting = notifier.isLoading;
-
-          return Column(
-            children: [
-              HabitCompletionCard(
-                habit: habit,
-                isCompleting: isCompleting,
-                onTap: () async {
-                  debugPrint('HabitsPage.onTap: completing habit -> ${habit.id}');
-                  await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
-                      .completeHabit(habit.id);
-                  debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.habitCompleted)),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              MiniCalendarHeatmap(
-                completionDates: habit.completionHistory,
-              ),
-              const SizedBox(height: 16),
-            ],
-          );
-        }),
-        const SizedBox(height: 8),
-      ],
     );
   }
 
@@ -437,24 +338,61 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                 color: Colors.grey.shade700,
               ),
             ),
-            const SizedBox(height: 8),
-            SegmentedButton<HabitDifficulty>(
-              segments: HabitDifficulty.values.map((difficulty) {
-                return ButtonSegment(
-                  value: difficulty,
-                  label: Text(difficulty.displayName),
-                  icon: Icon(
-                    HabitDifficultyHelper.getDifficultyIcon(difficulty),
-                    size: 16,
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: HabitDifficulty.values.map((difficulty) {
+                final isSelected = selectedDifficulty == difficulty;
+                final color = HabitColors.categoryColors[selectedCategory]!;
+                
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDifficulty = difficulty;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? color.withValues(alpha: 0.1)
+                          : Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isSelected ? color : Colors.grey.shade300,
+                        width: 2,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            HabitDifficultyHelper.getDifficultyStars(difficulty),
+                            (index) => Icon(
+                              Icons.star,
+                              size: 18,
+                              color: isSelected ? color : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          difficulty.displayName,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                            color: isSelected ? color : Colors.grey.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
-              selected: {selectedDifficulty},
-              onSelectionChanged: (Set<HabitDifficulty> selected) {
-                setState(() {
-                  selectedDifficulty = selected.first;
-                });
-              },
             ),
             const SizedBox(height: 16),
             // Color picker
