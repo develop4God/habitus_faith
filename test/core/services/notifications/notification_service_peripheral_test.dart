@@ -19,10 +19,12 @@ void main() {
     });
 
     group('Notification State Management', () {
-      test('should default to enabled state when no preference is set', () async {
+      test('should default to enabled state when no preference is set',
+          () async {
         // Simulate default behavior
         final enabled = prefs.getBool('notifications_enabled') ?? true;
-        expect(enabled, isTrue, reason: 'Notifications should be enabled by default');
+        expect(enabled, isTrue,
+            reason: 'Notifications should be enabled by default');
       });
 
       test('should persist enabled state change', () async {
@@ -62,29 +64,33 @@ void main() {
         for (final time in testTimes) {
           await prefs.setString('notification_time', time);
           final savedTime = prefs.getString('notification_time');
-          expect(savedTime, equals(time), reason: 'Time $time should be persisted');
+          expect(savedTime, equals(time),
+              reason: 'Time $time should be persisted');
         }
       });
 
       test('should validate time format consistency', () async {
         // Test various time formats
         final validTimes = ['00:00', '09:00', '12:30', '23:59'];
-        
+
         for (final time in validTimes) {
           await prefs.setString('notification_time', time);
           final saved = prefs.getString('notification_time');
-          
+
           // Validate format: HH:mm
           final parts = saved!.split(':');
-          expect(parts.length, equals(2), reason: 'Time should have HH:mm format');
-          
+          expect(parts.length, equals(2),
+              reason: 'Time should have HH:mm format');
+
           final hour = int.tryParse(parts[0]);
           final minute = int.tryParse(parts[1]);
-          
+
           expect(hour, isNotNull);
           expect(minute, isNotNull);
-          expect(hour! >= 0 && hour <= 23, isTrue, reason: 'Hour should be 0-23');
-          expect(minute! >= 0 && minute <= 59, isTrue, reason: 'Minute should be 0-59');
+          expect(hour! >= 0 && hour <= 23, isTrue,
+              reason: 'Hour should be 0-23');
+          expect(minute! >= 0 && minute <= 59, isTrue,
+              reason: 'Minute should be 0-59');
         }
       });
     });
@@ -93,7 +99,7 @@ void main() {
       test('should store FCM token locally', () async {
         const mockToken = 'mock_fcm_token_12345';
         await prefs.setString('fcm_token', mockToken);
-        
+
         final savedToken = prefs.getString('fcm_token');
         expect(savedToken, equals(mockToken));
       });
@@ -143,7 +149,7 @@ void main() {
     group('Edge Cases and Error Handling', () {
       test('should handle empty preferences gracefully', () async {
         await prefs.clear();
-        
+
         // Verify defaults are used
         final enabled = prefs.getBool('notifications_enabled') ?? true;
         final time = prefs.getString('notification_time') ?? '09:00';
@@ -155,11 +161,11 @@ void main() {
       test('should handle invalid time formats', () async {
         // These would be caught by UI validation, but test defensive behavior
         final invalidTimes = ['25:00', '12:70', 'invalid', ''];
-        
+
         for (final invalidTime in invalidTimes) {
           await prefs.setString('notification_time', invalidTime);
           final saved = prefs.getString('notification_time');
-          
+
           // Service should still store it (validation happens at UI level)
           expect(saved, equals(invalidTime));
         }
@@ -173,7 +179,8 @@ void main() {
 
         // Final state should be consistent
         final finalState = prefs.getBool('notifications_enabled');
-        expect(finalState, isFalse); // Last toggle was to false (9 % 2 == 1, but we inverted)
+        expect(finalState,
+            isFalse); // Last toggle was to false (9 % 2 == 1, but we inverted)
       });
     });
 
@@ -279,7 +286,9 @@ void main() {
     });
   });
 
-  group('NotificationService Peripheral Tests - Firestore Integration Simulation', () {
+  group(
+      'NotificationService Peripheral Tests - Firestore Integration Simulation',
+      () {
     test('should simulate successful Firestore write', () async {
       // Simulate preparing data for Firestore
       final mockUserData = {
@@ -303,7 +312,8 @@ void main() {
       Map<String, dynamic>? firestoreData;
 
       // Apply defaults
-      final notificationsEnabled = firestoreData?['notificationsEnabled'] ?? true;
+      final notificationsEnabled =
+          firestoreData?['notificationsEnabled'] ?? true;
       final notificationTime = firestoreData?['notificationTime'] ?? '09:00';
       final userTimezone = firestoreData?['userTimezone'] ?? 'UTC';
 

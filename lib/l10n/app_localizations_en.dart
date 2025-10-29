@@ -227,4 +227,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultColor => 'Default';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get notificationSettings => 'Notification Settings';
+
+  @override
+  String get languageSettings => 'Language Settings';
+
+  @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get languageInfo =>
+      'The app will use your selected language for all text and interface elements.';
+
+  @override
+  String get notificationsEnabled => 'Notifications enabled';
+
+  @override
+  String get notificationsDisabled => 'Notifications disabled';
+
+  @override
+  String get notificationTimeUpdated => 'Notification time updated to';
+
+  @override
+  String get enableNotifications => 'Enable Notifications';
+
+  @override
+  String get notificationsOn => 'Notifications On';
+
+  @override
+  String get notificationsOff => 'Notifications Off';
+
+  @override
+  String get receiveReminderNotifications =>
+      'Receive daily reminder notifications';
+
+  @override
+  String get notificationTime => 'Notification Time';
+
+  @override
+  String get selectNotificationTime => 'Select notification time';
+
+  @override
+  String get currentTime => 'Current time';
+
+  @override
+  String get notificationInfo =>
+      'You will receive a daily reminder at your selected time to complete your habits.';
 }

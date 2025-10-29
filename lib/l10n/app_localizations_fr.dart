@@ -227,4 +227,61 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get defaultColor => 'Par défaut';
+
+  @override
+  String get settings => 'Paramètres';
+
+  @override
+  String get language => 'Langue';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get notificationSettings => 'Paramètres de Notification';
+
+  @override
+  String get languageSettings => 'Paramètres de Langue';
+
+  @override
+  String get selectLanguage => 'Sélectionner la Langue';
+
+  @override
+  String get languageInfo =>
+      'L\'application utilisera la langue sélectionnée pour tous les textes et éléments d\'interface.';
+
+  @override
+  String get notificationsEnabled => 'Notifications activées';
+
+  @override
+  String get notificationsDisabled => 'Notifications désactivées';
+
+  @override
+  String get notificationTimeUpdated => 'Heure de notification mise à jour à';
+
+  @override
+  String get enableNotifications => 'Activer les Notifications';
+
+  @override
+  String get notificationsOn => 'Notifications Activées';
+
+  @override
+  String get notificationsOff => 'Notifications Désactivées';
+
+  @override
+  String get receiveReminderNotifications =>
+      'Recevoir des notifications de rappel quotidien';
+
+  @override
+  String get notificationTime => 'Heure de Notification';
+
+  @override
+  String get selectNotificationTime => 'Sélectionner l\'heure de notification';
+
+  @override
+  String get currentTime => 'Heure actuelle';
+
+  @override
+  String get notificationInfo =>
+      'Vous recevrez un rappel quotidien à l\'heure sélectionnée pour compléter vos habitudes.';
 }

@@ -65,7 +65,7 @@ void main() {
     test('should default to Spanish locale', () async {
       final notifier = container.read(appLanguageProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 100)); // Wait for load
-      
+
       expect(notifier.state.languageCode, equals('es'));
     });
 
@@ -73,54 +73,54 @@ void main() {
       SharedPreferences.setMockInitialValues({'locale': 'en'});
       final newContainer = ProviderContainer();
       addTearDown(newContainer.dispose);
-      
+
       final notifier = newContainer.read(appLanguageProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 100)); // Wait for load
-      
+
       expect(notifier.state.languageCode, equals('en'));
     });
 
     test('setLanguage should update state', () async {
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       await notifier.setLanguage('en');
       expect(notifier.state.languageCode, equals('en'));
-      
+
       await notifier.setLanguage('fr');
       expect(notifier.state.languageCode, equals('fr'));
     });
 
     test('setLanguage should persist to SharedPreferences', () async {
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       await notifier.setLanguage('zh');
-      
+
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getString('locale'), equals('zh'));
     });
 
     test('currentLanguageCode should return current language code', () async {
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       await notifier.setLanguage('pt');
       expect(notifier.currentLanguageCode, equals('pt'));
     });
 
     test('currentLanguage should return correct AppLanguage', () async {
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       await notifier.setLanguage('en');
       expect(notifier.currentLanguage, equals(AppLanguage.english));
-      
+
       await notifier.setLanguage('es');
       expect(notifier.currentLanguage, equals(AppLanguage.spanish));
-      
+
       await notifier.setLanguage('fr');
       expect(notifier.currentLanguage, equals(AppLanguage.french));
-      
+
       await notifier.setLanguage('pt');
       expect(notifier.currentLanguage, equals(AppLanguage.portuguese));
-      
+
       await notifier.setLanguage('zh');
       expect(notifier.currentLanguage, equals(AppLanguage.chinese));
     });
@@ -131,16 +131,16 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       // Rapidly change languages
       await notifier.setLanguage('en');
       await notifier.setLanguage('es');
       await notifier.setLanguage('fr');
       await notifier.setLanguage('pt');
       await notifier.setLanguage('zh');
-      
+
       // Final state should be Chinese
       expect(notifier.state.languageCode, equals('zh'));
     });
@@ -149,15 +149,15 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
       await notifier.setLanguage('fr');
-      
+
       // Read provider multiple times
       final locale1 = container.read(appLanguageProvider);
       final locale2 = container.read(appLanguageProvider);
       final locale3 = container.read(appLanguageProvider);
-      
+
       expect(locale1.languageCode, equals('fr'));
       expect(locale2.languageCode, equals('fr'));
       expect(locale3.languageCode, equals('fr'));
@@ -167,9 +167,9 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       final locales = <String>[];
       container.listen<Locale>(
         appLanguageProvider,
@@ -177,11 +177,11 @@ void main() {
           locales.add(next.languageCode);
         },
       );
-      
+
       await notifier.setLanguage('en');
       await notifier.setLanguage('es');
       await notifier.setLanguage('fr');
-      
+
       expect(locales, contains('en'));
       expect(locales, contains('es'));
       expect(locales, contains('fr'));
@@ -193,10 +193,10 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 100));
-      
+
       // Should default to Spanish
       expect(notifier.state.languageCode, equals('es'));
     });
@@ -205,10 +205,10 @@ void main() {
       SharedPreferences.setMockInitialValues({'locale': 'invalid'});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 100));
-      
+
       // Should load the invalid code but fromCode will default to Spanish
       expect(notifier.state.languageCode, equals('invalid'));
       expect(notifier.currentLanguage, equals(AppLanguage.spanish));
@@ -218,9 +218,9 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       for (final language in AppLanguage.values) {
         await notifier.setLanguage(language.code);
         expect(notifier.state.languageCode, equals(language.code));
@@ -228,21 +228,22 @@ void main() {
       }
     });
 
-    test('should preserve language across provider container dispose', () async {
+    test('should preserve language across provider container dispose',
+        () async {
       SharedPreferences.setMockInitialValues({});
-      
+
       // First container
       final container1 = ProviderContainer();
       final notifier1 = container1.read(appLanguageProvider.notifier);
       await notifier1.setLanguage('zh');
       container1.dispose();
-      
+
       // Second container should load saved language
       final container2 = ProviderContainer();
       addTearDown(container2.dispose);
       final notifier2 = container2.read(appLanguageProvider.notifier);
       await Future.delayed(const Duration(milliseconds: 100));
-      
+
       expect(notifier2.state.languageCode, equals('zh'));
     });
 
@@ -250,15 +251,15 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       await notifier.setLanguage('en');
       await notifier.setLanguage('en');
       await notifier.setLanguage('en');
-      
+
       expect(notifier.state.languageCode, equals('en'));
-      
+
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getString('locale'), equals('en'));
     });
@@ -269,17 +270,17 @@ void main() {
       for (final language in AppLanguage.values) {
         SharedPreferences.setMockInitialValues({});
         final container = ProviderContainer();
-        
+
         final notifier = container.read(appLanguageProvider.notifier);
         await notifier.setLanguage(language.code);
-        
+
         final prefs = await SharedPreferences.getInstance();
         expect(
           prefs.getString('locale'),
           equals(language.code),
           reason: 'Language ${language.name} should persist correctly',
         );
-        
+
         container.dispose();
       }
     });
@@ -288,16 +289,16 @@ void main() {
       for (final language in AppLanguage.values) {
         SharedPreferences.setMockInitialValues({'locale': language.code});
         final container = ProviderContainer();
-        
+
         final notifier = container.read(appLanguageProvider.notifier);
         await Future.delayed(const Duration(milliseconds: 100));
-        
+
         expect(
           notifier.state.languageCode,
           equals(language.code),
           reason: 'Should load ${language.name} correctly',
         );
-        
+
         container.dispose();
       }
     });
@@ -308,13 +309,13 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      
+
       final notifier = container.read(appLanguageProvider.notifier);
-      
+
       for (final language in AppLanguage.values) {
         await notifier.setLanguage(language.code);
         final locale = notifier.state;
-        
+
         expect(locale.languageCode, equals(language.code));
         expect(locale.countryCode, isEmpty);
       }

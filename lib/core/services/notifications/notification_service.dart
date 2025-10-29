@@ -289,7 +289,7 @@ class NotificationService {
       // Save token locally
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_fcmTokenKey, token);
-      
+
       // Update lastLogin separately using dedicated method
       await updateLastLogin();
     } catch (e) {
@@ -300,6 +300,7 @@ class NotificationService {
       );
     }
   }
+
   // Unified method to save ALL notification settings
   Future<void> _saveNotificationSettingsToFirestore(
     String userId,

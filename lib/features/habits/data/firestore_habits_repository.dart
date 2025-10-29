@@ -175,7 +175,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
             .toSet()
             .toList()
           ..sort((a, b) => b.compareTo(a));
-        
+
         final yesterday = today.subtract(const Duration(days: 1));
         if (sortedDates.first == yesterday) {
           newCurrentStreak = 1;

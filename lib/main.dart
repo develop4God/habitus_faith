@@ -49,13 +49,13 @@ class LandingPage extends StatelessWidget {
               key: const Key('start_button'),
               style: ElevatedButton.styleFrom(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                 backgroundColor: const Color(0xff6366f1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 elevation: 6,
-                shadowColor: Colors.blueAccent.withValues(alpha:0.15),
+                shadowColor: Colors.blueAccent.withValues(alpha: 0.15),
               ),
               onPressed: () {
                 Navigator.push(
@@ -78,7 +78,7 @@ class LandingPage extends StatelessWidget {
               key: const Key('read_bible_button'),
               style: ElevatedButton.styleFrom(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 backgroundColor: const Color(0xffa5b4fc),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -145,7 +145,7 @@ class MyApp extends ConsumerWidget {
     final authInit = ref.watch(authInitProvider);
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
     final currentLocale = ref.watch(appLanguageProvider);
-    
+
     // Initialize notification service
     ref.watch(notificationInitProvider);
 
@@ -171,7 +171,7 @@ class MyApp extends ConsumerWidget {
       },
       home: authInit.when(
         data: (_) =>
-        onboardingComplete ? const LandingPage() : const OnboardingPage(),
+            onboardingComplete ? const LandingPage() : const OnboardingPage(),
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),

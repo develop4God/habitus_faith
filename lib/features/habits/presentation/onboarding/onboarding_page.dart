@@ -152,14 +152,18 @@ class OnboardingPage extends ConsumerWidget {
                   onPressed: selectedHabits.isEmpty || isLoading
                       ? null
                       : () async {
-                    debugPrint('OnboardingPage: continue pressed - creating habits');
-                    await ref.read(onboardingNotifierProvider.notifier).completeOnboarding();
-                    debugPrint('OnboardingPage: completeOnboarding finished');
-                    if (context.mounted) {
-                      debugPrint('OnboardingPage: navigating to /home');
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    }
-                  },
+                          debugPrint(
+                              'OnboardingPage: continue pressed - creating habits');
+                          await ref
+                              .read(onboardingNotifierProvider.notifier)
+                              .completeOnboarding();
+                          debugPrint(
+                              'OnboardingPage: completeOnboarding finished');
+                          if (context.mounted) {
+                            debugPrint('OnboardingPage: navigating to /home');
+                            Navigator.of(context).pushReplacementNamed('/home');
+                          }
+                        },
                   child: isLoading
                       ? const SizedBox(
                           height: 24,

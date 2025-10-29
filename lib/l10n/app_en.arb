@@ -277,5 +277,77 @@
   "defaultColor": "Default",
   "@defaultColor": {
     "description": "Default color option label"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language settings option"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications settings option"
+  },
+  "notificationSettings": "Notification Settings",
+  "@notificationSettings": {
+    "description": "Notification settings title"
+  },
+  "languageSettings": "Language Settings",
+  "@languageSettings": {
+    "description": "Language settings title"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Select language instruction"
+  },
+  "languageInfo": "The app will use your selected language for all text and interface elements.",
+  "@languageInfo": {
+    "description": "Language information text"
+  },
+  "notificationsEnabled": "Notifications enabled",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  "notificationsDisabled": "Notifications disabled",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  "notificationTimeUpdated": "Notification time updated to",
+  "@notificationTimeUpdated": {
+    "description": "Notification time updated message"
+  },
+  "enableNotifications": "Enable Notifications",
+  "@enableNotifications": {
+    "description": "Enable notifications option"
+  },
+  "notificationsOn": "Notifications On",
+  "@notificationsOn": {
+    "description": "Notifications on label"
+  },
+  "notificationsOff": "Notifications Off",
+  "@notificationsOff": {
+    "description": "Notifications off label"
+  },
+  "receiveReminderNotifications": "Receive daily reminder notifications",
+  "@receiveReminderNotifications": {
+    "description": "Receive reminder notifications description"
+  },
+  "notificationTime": "Notification Time",
+  "@notificationTime": {
+    "description": "Notification time label"
+  },
+  "selectNotificationTime": "Select notification time",
+  "@selectNotificationTime": {
+    "description": "Select notification time instruction"
+  },
+  "currentTime": "Current time",
+  "@currentTime": {
+    "description": "Current time label"
+  },
+  "notificationInfo": "You will receive a daily reminder at your selected time to complete your habits.",
+  "@notificationInfo": {
+    "description": "Notification information text"
   }
 }

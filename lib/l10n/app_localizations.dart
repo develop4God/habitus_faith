@@ -511,6 +511,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default'**
   String get defaultColor;
+
+  /// Settings page title
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// Language settings option
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// Notifications settings option
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// Notification settings title
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettings;
+
+  /// Language settings title
+  ///
+  /// In en, this message translates to:
+  /// **'Language Settings'**
+  String get languageSettings;
+
+  /// Select language instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
+
+  /// Language information text
+  ///
+  /// In en, this message translates to:
+  /// **'The app will use your selected language for all text and interface elements.'**
+  String get languageInfo;
+
+  /// Notifications enabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications enabled'**
+  String get notificationsEnabled;
+
+  /// Notifications disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications disabled'**
+  String get notificationsDisabled;
+
+  /// Notification time updated message
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time updated to'**
+  String get notificationTimeUpdated;
+
+  /// Enable notifications option
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enableNotifications;
+
+  /// Notifications on label
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications On'**
+  String get notificationsOn;
+
+  /// Notifications off label
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications Off'**
+  String get notificationsOff;
+
+  /// Receive reminder notifications description
+  ///
+  /// In en, this message translates to:
+  /// **'Receive daily reminder notifications'**
+  String get receiveReminderNotifications;
+
+  /// Notification time label
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Time'**
+  String get notificationTime;
+
+  /// Select notification time instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Select notification time'**
+  String get selectNotificationTime;
+
+  /// Current time label
+  ///
+  /// In en, this message translates to:
+  /// **'Current time'**
+  String get currentTime;
+
+  /// Notification information text
+  ///
+  /// In en, this message translates to:
+  /// **'You will receive a daily reminder at your selected time to complete your habits.'**
+  String get notificationInfo;
 }
 
 class _AppLocalizationsDelegate

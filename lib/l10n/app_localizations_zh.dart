@@ -214,4 +214,58 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get defaultColor => '默认';
+
+  @override
+  String get settings => '设置';
+
+  @override
+  String get language => '语言';
+
+  @override
+  String get notifications => '通知';
+
+  @override
+  String get notificationSettings => '通知设置';
+
+  @override
+  String get languageSettings => '语言设置';
+
+  @override
+  String get selectLanguage => '选择语言';
+
+  @override
+  String get languageInfo => '应用程序将使用所选语言显示所有文本和界面元素。';
+
+  @override
+  String get notificationsEnabled => '通知已启用';
+
+  @override
+  String get notificationsDisabled => '通知已禁用';
+
+  @override
+  String get notificationTimeUpdated => '通知时间已更新为';
+
+  @override
+  String get enableNotifications => '启用通知';
+
+  @override
+  String get notificationsOn => '通知已开启';
+
+  @override
+  String get notificationsOff => '通知已关闭';
+
+  @override
+  String get receiveReminderNotifications => '接收每日提醒通知';
+
+  @override
+  String get notificationTime => '通知时间';
+
+  @override
+  String get selectNotificationTime => '选择通知时间';
+
+  @override
+  String get currentTime => '当前时间';
+
+  @override
+  String get notificationInfo => '您将在所选时间收到每日提醒以完成您的习惯。';
 }

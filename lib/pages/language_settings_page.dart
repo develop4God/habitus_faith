@@ -7,7 +7,8 @@ class LanguageSettingsPage extends ConsumerStatefulWidget {
   const LanguageSettingsPage({super.key});
 
   @override
-  ConsumerState<LanguageSettingsPage> createState() => _LanguageSettingsPageState();
+  ConsumerState<LanguageSettingsPage> createState() =>
+      _LanguageSettingsPageState();
 }
 
 class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
@@ -22,9 +23,9 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
 
     try {
       await ref.read(appLanguageProvider.notifier).setLanguage(language.code);
-      
+
       if (!mounted) return;
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -46,7 +47,8 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLanguage = ref.watch(appLanguageProvider.notifier).currentLanguage;
+    final currentLanguage =
+        ref.watch(appLanguageProvider.notifier).currentLanguage;
 
     return Scaffold(
       appBar: AppBar(
@@ -81,16 +83,20 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
                         title: Text(
                           language.name,
                           style: TextStyle(
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         trailing: isSelected
-                            ? const Icon(Icons.check_circle, color: Colors.green)
+                            ? const Icon(Icons.check_circle,
+                                color: Colors.green)
                             : _isChangingLanguage
                                 ? const SizedBox(
                                     width: 20,
                                     height: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2),
                                   )
                                 : const Icon(Icons.circle_outlined),
                         onTap: _isChangingLanguage || isSelected
