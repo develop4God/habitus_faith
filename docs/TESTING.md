@@ -148,7 +148,7 @@ Agregar a tu pipeline CI/CD:
 Seguir el patrón AAA:
 
 ```dart
-test('descripción', () {
+//test('descripción', () {
   // Arrange - Configurar datos de prueba
   final habit = TestFixtures.habitOracion();
   
@@ -156,14 +156,14 @@ test('descripción', () {
   final result = habit.completeToday();
   
   // Assert - Verificar el resultado
-  expect(result.currentStreak, 1);
-});
+  //expect(result.currentStreak, 1);
+//});
 ```
 
 Usar claves de prueba para widget tests:
 
 ```dart
-await tester.tap(find.byKey(const Key('add_habit_fab')));
+//await tester.tap(find.byKey(const Key('add_habit_fab')));
 ```
 
 ## Análisis de Código

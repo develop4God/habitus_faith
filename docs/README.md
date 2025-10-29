@@ -63,8 +63,8 @@ dart format . && flutter analyze
 
 | Documento | Descripción |
 |-----------|-------------|
-| **[MIGRATION_COMPLETE.md](./MIGRATION_COMPLETE.md)** | Detalles completos de la migración |
-| **[TESTING.md](./TESTING.md)** | Guía de testing |
+| **[MIGRATION_COMPLETE.md](MIGRATION_COMPLETE.md)** | Detalles completos de la migración |
+| **[TESTING.md](TESTING.md)** | Guía de testing |
 
 ---
 
@@ -135,7 +135,7 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
-Ver **[TESTING.md](./TESTING.md)** para guía detallada de testing.
+Ver **[TESTING.md](TESTING.md)** para guía detallada de testing.
 
 ---
 
