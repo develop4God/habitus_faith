@@ -92,8 +92,8 @@ void main() {
 
         expect(find.byIcon(Icons.local_fire_department), findsOneWidget,
             reason: 'Fire icon for current streak should be displayed');
-        expect(find.text('5'), findsOneWidget,
-            reason: 'Current streak number should be displayed');
+        expect(find.textContaining('5 día'), findsOneWidget,
+            reason: 'Current streak text should be displayed');
       });
 
       testWidgets('has unique key with habit ID', (WidgetTester tester) async {
@@ -107,30 +107,18 @@ void main() {
     });
 
     group('Visual States', () {
-      testWidgets('incomplete habit has elevated appearance',
+      testWidgets('incomplete habit has flat card with border',
           (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
         final card = tester.widget<Card>(find.byType(Card));
-        expect(card.elevation, 3,
-            reason: 'Incomplete habit should have elevation of 3');
-      });
-
-      testWidgets('completed habit has border and lower elevation',
-          (WidgetTester tester) async {
-        final completedHabit = testHabit.copyWith(completedToday: true);
-        await tester.pumpWidget(createApp(completedHabit));
-        await tester.pump();
-
-        final card = tester.widget<Card>(find.byType(Card));
-        expect(card.elevation, 1,
-            reason: 'Completed habit should have elevation of 1');
-
+        expect(card.elevation, 0,
+            reason: 'Card should have flat elevation');
+        
         final shape = card.shape as RoundedRectangleBorder;
-        expect(shape.side.color, const Color(0xff10b981),
-            reason: 'Completed habit should have green border');
-        expect(shape.side.width, 2, reason: 'Border should be 2 pixels wide');
+        expect(shape.side.width, 1, 
+            reason: 'Should have a border');
       });
 
       testWidgets('completed habit has visual distinction',
@@ -140,8 +128,26 @@ void main() {
         await tester.pump();
 
         final card = tester.widget<Card>(find.byType(Card));
-        expect(card.elevation, 1,
-            reason: 'Completed habit should have lower elevation');
+        expect(card.elevation, 0,
+            reason: 'Card should have flat elevation');
+
+        // Check for checkbox icon indicating completion
+        expect(find.byIcon(Icons.check), findsOneWidget,
+            reason: 'Completed habit should show check icon');
+      });
+
+      testWidgets('habit text has strikethrough when completed',
+          (WidgetTester tester) async {
+        final completedHabit = testHabit.copyWith(completedToday: true);
+        await tester.pumpWidget(createApp(completedHabit));
+        await tester.pump();
+
+        final textFinder = find.text('Morning Prayer');
+        expect(textFinder, findsOneWidget);
+        
+        final text = tester.widget<Text>(textFinder);
+        expect(text.style?.decoration, TextDecoration.lineThrough,
+            reason: 'Completed habit text should have strikethrough');
       });
     });
 
@@ -192,7 +198,7 @@ void main() {
     });
 
     group('Streak Display', () {
-      testWidgets('shows both current and longest streaks',
+      testWidgets('shows current streak with fire icon',
           (WidgetTester tester) async {
         final habitWithStreaks = testHabit.copyWith(
           currentStreak: 7,
@@ -201,22 +207,18 @@ void main() {
         await tester.pumpWidget(createApp(habitWithStreaks));
         await tester.pump();
 
-        expect(find.text('7'), findsOneWidget,
-            reason: 'Current streak should be displayed');
-        expect(find.text('15'), findsOneWidget,
-            reason: 'Longest streak should be displayed');
+        expect(find.textContaining('7 día'), findsOneWidget,
+            reason: 'Current streak should be displayed with text');
         expect(find.byIcon(Icons.local_fire_department), findsOneWidget,
             reason: 'Fire icon for current streak');
-        expect(find.byIcon(Icons.emoji_events), findsOneWidget,
-            reason: 'Trophy icon for longest streak');
       });
 
-      testWidgets('shows zero streaks correctly', (WidgetTester tester) async {
+      testWidgets('hides streak when zero', (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.text('0'), findsNWidgets(2),
-            reason: 'Both streaks should show 0 initially');
+        expect(find.byIcon(Icons.local_fire_department), findsNothing,
+            reason: 'Should not show fire icon when streak is 0');
       });
     });
 
@@ -258,10 +260,8 @@ void main() {
         await tester.pumpWidget(createApp(largeStreakHabit));
         await tester.pump();
 
-        expect(find.text('999'), findsOneWidget,
+        expect(find.textContaining('999'), findsOneWidget,
             reason: 'Large current streak number should be displayed');
-        expect(find.text('1234'), findsOneWidget,
-            reason: 'Large longest streak number should be displayed');
       });
     });
 
