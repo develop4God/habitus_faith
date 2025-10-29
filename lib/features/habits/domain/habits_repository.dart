@@ -40,6 +40,8 @@ abstract class HabitsRepository {
     required String name,
     required String description,
     HabitCategory category = HabitCategory.other,
+    int? colorValue,
+    HabitDifficulty difficulty = HabitDifficulty.medium,
   });
 
   /// Complete a habit for today

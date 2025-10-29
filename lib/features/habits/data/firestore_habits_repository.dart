@@ -37,6 +37,8 @@ class FirestoreHabitsRepository implements HabitsRepository {
     required String name,
     required String description,
     HabitCategory category = HabitCategory.other,
+    int? colorValue,
+    HabitDifficulty difficulty = HabitDifficulty.medium,
   }) async {
     try {
       if (userId == null) {
@@ -49,6 +51,8 @@ class FirestoreHabitsRepository implements HabitsRepository {
         name: name,
         description: description,
         category: category,
+        colorValue: colorValue,
+        difficulty: difficulty,
       );
 
       await firestore

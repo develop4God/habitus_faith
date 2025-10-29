@@ -187,6 +187,8 @@ class JsonHabitsRepository implements HabitsRepository {
     required String name,
     required String description,
     HabitCategory category = HabitCategory.other,
+    int? colorValue,
+    HabitDifficulty difficulty = HabitDifficulty.medium,
   }) async {
     try {
       final habits = _loadHabits();
@@ -196,6 +198,8 @@ class JsonHabitsRepository implements HabitsRepository {
         name: name,
         description: description,
         category: category,
+        colorValue: colorValue,
+        difficulty: difficulty,
       );
 
       habits.add(newHabit);

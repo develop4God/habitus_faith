@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Allow read/write for authenticated users to their own user document
+    // This rule applies to the user document itself (e.g., /users/USER_UID)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Rule for FCM tokens
+      match /fcmTokens/{tokenId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // NEW RULE: Allow read/write for authenticated users to their own 'settings' subcollection
+      // This rule applies to documents within the 'settings' subcollection (e.g., /users/USER_UID/settings/notifications)
+      match /settings/{settingId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Optional: If you have a 'devotionals' collection that should be publicly readable
+    // This is an example, adjust based on your actual data structure
+    // match /devotionals/{devotionalId} {
+    //   allow read: if true; // Publicly readable
+    //   allow write: if request.auth != null; // Only authenticated users can write
+    // }
+
+    // Add any other collections and their rules here as needed
+  }
+}
+

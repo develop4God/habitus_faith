@@ -33,6 +33,13 @@ class HabitModel {
           [],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       isArchived: data['isArchived'] as bool? ?? false,
+      colorValue: data['colorValue'] as int?,
+      difficulty: data['difficulty'] != null
+          ? HabitDifficulty.values.firstWhere(
+              (e) => e.name == data['difficulty'],
+              orElse: () => HabitDifficulty.medium,
+            )
+          : HabitDifficulty.medium,
     );
   }
 
@@ -57,6 +64,8 @@ class HabitModel {
           .toList(),
       'createdAt': Timestamp.fromDate(habit.createdAt),
       'isArchived': habit.isArchived,
+      'colorValue': habit.colorValue,
+      'difficulty': habit.difficulty.name,
     };
   }
 
@@ -89,6 +98,13 @@ class HabitModel {
           [],
       createdAt: DateTime.parse(json['createdAt'] as String),
       isArchived: json['isArchived'] as bool? ?? false,
+      colorValue: json['colorValue'] as int?,
+      difficulty: json['difficulty'] != null
+          ? HabitDifficulty.values.firstWhere(
+              (e) => e.name == json['difficulty'],
+              orElse: () => HabitDifficulty.medium,
+            )
+          : HabitDifficulty.medium,
     );
   }
 
@@ -112,6 +128,8 @@ class HabitModel {
           .toList(),
       'createdAt': habit.createdAt.toIso8601String(),
       'isArchived': habit.isArchived,
+      'colorValue': habit.colorValue,
+      'difficulty': habit.difficulty.name,
     };
   }
 }

@@ -9,6 +9,8 @@ import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
 import 'core/providers/auth_provider.dart';
+import 'core/providers/language_provider.dart';
+import 'core/providers/notification_provider.dart';
 import 'features/habits/presentation/onboarding/onboarding_page.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
 import 'features/habits/data/storage/json_habits_repository.dart';
@@ -142,9 +144,14 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authInit = ref.watch(authInitProvider);
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
+    final currentLocale = ref.watch(appLanguageProvider);
+    
+    // Initialize notification service
+    ref.watch(notificationInitProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: currentLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
