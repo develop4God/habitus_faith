@@ -68,5 +68,9 @@
   "notificationTimeUpdated": "Hora de notificación actualizada a",
   "notificationInfo": "Las notificaciones te ayudarán a mantener tus hábitos diarios. Recibirás recordatorios a la hora que elijas.",
   "settings": "Ajustes",
-  "notifications": "Notificaciones"
+  "notifications": "Notificaciones",
+  "language": "Idioma",
+  "languageSettings": "Configuración de Idioma",
+  "selectLanguage": "Seleccionar Idioma",
+  "languageInfo": "Elige tu idioma preferido para la aplicación. El cambio se aplicará inmediatamente."
 }

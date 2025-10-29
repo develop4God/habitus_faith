@@ -293,5 +293,21 @@
   "notifications": "Notifications",
   "@notifications": {
     "description": "Notifications menu item"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language menu item"
+  },
+  "languageSettings": "Language Settings",
+  "@languageSettings": {
+    "description": "Title for language settings page"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Label for language selection"
+  },
+  "languageInfo": "Choose your preferred language for the app. The change will take effect immediately.",
+  "@languageInfo": {
+    "description": "Information about language selection"
   }
 }

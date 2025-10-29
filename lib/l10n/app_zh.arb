@@ -68,5 +68,9 @@
   "notificationTimeUpdated": "通知时间已更新为",
   "notificationInfo": "通知将帮助您坚持每日习惯。您将在选择的时间收到提醒。",
   "settings": "设置",
-  "notifications": "通知"
+  "notifications": "通知",
+  "language": "语言",
+  "languageSettings": "语言设置",
+  "selectLanguage": "选择语言",
+  "languageInfo": "选择您喜欢的应用语言。更改将立即生效。"
 }

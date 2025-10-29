@@ -242,4 +242,17 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get notifications => 'Notificaciones';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get languageSettings => 'Configuración de Idioma';
+
+  @override
+  String get selectLanguage => 'Seleccionar Idioma';
+
+  @override
+  String get languageInfo =>
+      'Elige tu idioma preferido para la aplicación. El cambio se aplicará inmediatamente.';
 }
