@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -119,10 +120,12 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final storageService = JsonStorageService(prefs);
   const userId = 'local_user';
+  final firestore = FirebaseFirestore.instance;
   final habitsRepository = JsonHabitsRepository(
     storage: storageService,
     userId: userId,
     idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
+    firestore: firestore,
   );
 
   runApp(
