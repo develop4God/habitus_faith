@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:habitus_faith/features/habits/data/storage/json_habits_repository.dart';
+import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_page.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_providers.dart';
 import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/pages/home_page.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';

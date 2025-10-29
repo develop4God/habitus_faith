@@ -242,9 +242,9 @@ Todos los criterios cumplidos:
 
 ## 📚 Recursos
 
-- **[MIGRATION_COMPLETE.md](./MIGRATION_COMPLETE.md)** - Detalles completos de migración
-- **[TESTING.md](./TESTING.md)** - Guía de testing
-- **[README.md](./README.md)** - Overview del proyecto
+- **[MIGRATION_COMPLETE.md](MIGRATION_COMPLETE.md)** - Detalles completos de migración
+- **[TESTING.md](TESTING.md)** - Guía de testing
+- **[README.md](README.md)** - Overview del proyecto
 
 ---
 

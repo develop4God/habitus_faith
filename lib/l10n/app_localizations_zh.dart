@@ -186,49 +186,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => '通知设置';
+  String get category => '类别';
 
   @override
-  String get enableNotifications => '启用通知';
+  String get difficulty => '难度';
 
   @override
-  String get notificationsEnabled => '通知已启用';
+  String get emoji => '表情符号';
 
   @override
-  String get notificationsDisabled => '通知已禁用';
+  String get color => '颜色';
 
   @override
-  String get notificationsOn => '通知开启';
+  String get optional => '可选';
 
   @override
-  String get notificationsOff => '通知关闭';
+  String get edit => '编辑';
 
   @override
-  String get receiveReminderNotifications => '接收每日习惯提醒';
+  String get uncheck => '取消勾选';
 
   @override
-  String get notificationTime => '通知时间';
+  String get save => '保存';
 
   @override
-  String get selectNotificationTime => '选择您喜欢的通知时间';
+  String get editHabit => '编辑习惯';
 
   @override
-  String get currentTime => '当前时间';
+  String get defaultColor => '默认';
 
   @override
-  String get notificationTimeUpdated => '通知时间已更新为';
-
-  @override
-  String get notificationInfo => '通知将帮助您坚持每日习惯。您将在选择的时间收到提醒。';
+  String get statistics => '统计';
 
   @override
   String get settings => '设置';
 
   @override
+  String get language => '语言';
+
+  @override
   String get notifications => '通知';
 
   @override
-  String get language => '语言';
+  String get notificationSettings => '通知设置';
 
   @override
   String get languageSettings => '语言设置';
@@ -237,7 +237,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get selectLanguage => '选择语言';
 
   @override
-  String get languageInfo => '选择您喜欢的应用语言。更改将立即生效。';
+  String get languageInfo => '应用程序将使用所选语言显示所有文本和界面元素。';
+
+  @override
+  String get notificationsEnabled => '通知已启用';
+
+  @override
+  String get notificationsDisabled => '通知已禁用';
+
+  @override
+  String get notificationTimeUpdated => '通知时间已更新为';
+
+  @override
+  String get enableNotifications => '启用通知';
+
+  @override
+  String get notificationsOn => '通知已开启';
+
+  @override
+  String get notificationsOff => '通知已关闭';
+
+  @override
+  String get receiveReminderNotifications => '接收每日提醒通知';
+
+  @override
+  String get notificationTime => '通知时间';
+
+  @override
+  String get selectNotificationTime => '选择通知时间';
+
+  @override
+  String get currentTime => '当前时间';
+
+  @override
+  String get notificationInfo => '您将在所选时间收到每日提醒以完成您的习惯。';
 
   @override
   String get highRiskWarning => '今天有高风险放弃这个习惯！';

@@ -33,7 +33,8 @@ class HabitColors {
     if (habit.colorValue != null) {
       return Color(habit.colorValue!);
     }
-    return categoryColors[habit.category] ?? categoryColors[HabitCategory.other]!;
+    return categoryColors[habit.category] ??
+        categoryColors[HabitCategory.other]!;
   }
 
   /// Get category name for display (localized)

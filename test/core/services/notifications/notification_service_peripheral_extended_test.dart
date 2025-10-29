@@ -39,17 +39,17 @@ void main() {
     });
 
     test('should simulate lastLogin update on explicit updateLastLogin call',
-            () async {
-          const userId = 'test_user_456';
-          await prefs.setString('current_user_id', userId);
+        () async {
+      const userId = 'test_user_456';
+      await prefs.setString('current_user_id', userId);
 
-          // Simulate explicit lastLogin update (app foreground)
-          final timestamp = DateTime.now().toUtc().toIso8601String();
-          await prefs.setString('last_login_$userId', timestamp);
+      // Simulate explicit lastLogin update (app foreground)
+      final timestamp = DateTime.now().toUtc().toIso8601String();
+      await prefs.setString('last_login_$userId', timestamp);
 
-          final saved = prefs.getString('last_login_$userId');
-          expect(saved, equals(timestamp));
-        });
+      final saved = prefs.getString('last_login_$userId');
+      expect(saved, equals(timestamp));
+    });
 
     test('should validate lastLogin timestamp format', () async {
       const userId = 'test_user_789';
@@ -63,7 +63,8 @@ void main() {
       expect(DateTime.tryParse(saved), isNotNull);
     });
 
-    test('should not update lastLogin when user is not authenticated', () async {
+    test('should not update lastLogin when user is not authenticated',
+        () async {
       // No user authenticated
       expect(prefs.getString('current_user_id'), isNull);
 
@@ -207,7 +208,7 @@ void main() {
       final nextNotification = scheduledTime.isAfter(now)
           ? scheduledTime
           : DateTime(now.year, now.month, now.day + 1, scheduledTime.hour,
-          scheduledTime.minute);
+              scheduledTime.minute);
 
       expect(nextNotification.month, equals(11)); // November
       expect(nextNotification.day, equals(1)); // November 1st
@@ -220,7 +221,7 @@ void main() {
       final nextNotification = scheduledTime.isAfter(now)
           ? scheduledTime
           : DateTime(now.year, now.month, now.day + 1, scheduledTime.hour,
-          scheduledTime.minute);
+              scheduledTime.minute);
 
       expect(nextNotification.year, equals(2026));
       expect(nextNotification.month, equals(1)); // January
@@ -327,17 +328,17 @@ void main() {
     });
 
     test('should maintain timezone consistency across settings updates',
-            () async {
-          const initialTimezone = 'America/Panama';
-          await prefs.setString('user_timezone', initialTimezone);
+        () async {
+      const initialTimezone = 'America/Panama';
+      await prefs.setString('user_timezone', initialTimezone);
 
-          // Update other settings
-          await prefs.setBool('notifications_enabled', false);
-          await prefs.setString('notification_time', '15:00');
+      // Update other settings
+      await prefs.setBool('notifications_enabled', false);
+      await prefs.setString('notification_time', '15:00');
 
-          // Timezone should remain unchanged
-          expect(prefs.getString('user_timezone'), equals(initialTimezone));
-        });
+      // Timezone should remain unchanged
+      expect(prefs.getString('user_timezone'), equals(initialTimezone));
+    });
   });
 
   group('NotificationService Extended Tests - Auth State Lifecycle', () {
@@ -365,27 +366,27 @@ void main() {
     });
 
     test('should simulate transition from unauthenticated to authenticated',
-            () async {
-          // Initial state: no user
-          expect(prefs.getString('current_user_id'), isNull);
+        () async {
+      // Initial state: no user
+      expect(prefs.getString('current_user_id'), isNull);
 
-          // User logs in
-          const userId = 'new_user_456';
-          await prefs.setString('current_user_id', userId);
-          await prefs.setBool('is_authenticated', true);
+      // User logs in
+      const userId = 'new_user_456';
+      await prefs.setString('current_user_id', userId);
+      await prefs.setBool('is_authenticated', true);
 
-          // FCM initialization should happen
-          const fcmToken = 'fcm_token_xyz';
-          await prefs.setString('fcm_token', fcmToken);
+      // FCM initialization should happen
+      const fcmToken = 'fcm_token_xyz';
+      await prefs.setString('fcm_token', fcmToken);
 
-          // Settings should be initialized
-          await prefs.setBool('notifications_enabled', true);
-          await prefs.setString('notification_time', '09:00');
+      // Settings should be initialized
+      await prefs.setBool('notifications_enabled', true);
+      await prefs.setString('notification_time', '09:00');
 
-          expect(prefs.getBool('is_authenticated'), isTrue);
-          expect(prefs.getString('fcm_token'), equals(fcmToken));
-          expect(prefs.getBool('notifications_enabled'), isTrue);
-        });
+      expect(prefs.getBool('is_authenticated'), isTrue);
+      expect(prefs.getString('fcm_token'), equals(fcmToken));
+      expect(prefs.getBool('notifications_enabled'), isTrue);
+    });
 
     test('should simulate user logout and cleanup', () async {
       // User is authenticated
@@ -423,95 +424,96 @@ void main() {
   });
 
   group('NotificationService Extended Tests - Firestore Document Structure',
-          () {
-        test('should validate users collection document structure', () {
-          final userDoc = {
-            'email': 'user@example.com',
-            'displayName': 'Test User',
-            'createdAt': DateTime.now().toIso8601String(),
-            'lastLogin': DateTime.now().toIso8601String(),
-          };
+      () {
+    test('should validate users collection document structure', () {
+      final userDoc = {
+        'email': 'user@example.com',
+        'displayName': 'Test User',
+        'createdAt': DateTime.now().toIso8601String(),
+        'lastLogin': DateTime.now().toIso8601String(),
+      };
 
-          expect(userDoc['email'], isA<String>());
-          expect(userDoc['displayName'], isA<String>());
-          expect(userDoc['createdAt'], isA<String>());
-          expect(userDoc['lastLogin'], isA<String>());
-        });
+      expect(userDoc['email'], isA<String>());
+      expect(userDoc['displayName'], isA<String>());
+      expect(userDoc['createdAt'], isA<String>());
+      expect(userDoc['lastLogin'], isA<String>());
+    });
 
-        test('should validate fcmTokens subcollection structure', () {
-          final tokenDoc = {
-            'token': 'fcm_token_abc123',
-            'createdAt': DateTime.now().toIso8601String(),
-            'platform': 'android',
-          };
+    test('should validate fcmTokens subcollection structure', () {
+      final tokenDoc = {
+        'token': 'fcm_token_abc123',
+        'createdAt': DateTime.now().toIso8601String(),
+        'platform': 'android',
+      };
 
-          expect(tokenDoc['token'], isA<String>());
-          expect(tokenDoc['createdAt'], isA<String>());
-          expect(tokenDoc['platform'], isIn(['android', 'ios', 'web']));
-        });
+      expect(tokenDoc['token'], isA<String>());
+      expect(tokenDoc['createdAt'], isA<String>());
+      expect(tokenDoc['platform'], isIn(['android', 'ios', 'web']));
+    });
 
-        test('should validate settings/notifications document structure', () {
-          final notificationSettings = {
-            'notificationsEnabled': true,
-            'notificationTime': '09:00',
-            'userTimezone': 'America/Panama',
-            'preferredLanguage': 'es',
-            'lastUpdated': DateTime.now().toIso8601String(),
-          };
+    test('should validate settings/notifications document structure', () {
+      final notificationSettings = {
+        'notificationsEnabled': true,
+        'notificationTime': '09:00',
+        'userTimezone': 'America/Panama',
+        'preferredLanguage': 'es',
+        'lastUpdated': DateTime.now().toIso8601String(),
+      };
 
-          expect(notificationSettings['notificationsEnabled'], isA<bool>());
-          expect(notificationSettings['notificationTime'], isA<String>());
-          expect(notificationSettings['notificationTime'], matches(RegExp(r'^\d{2}:\d{2}$')));
-          expect(notificationSettings['userTimezone'], isA<String>());
-          expect(notificationSettings['preferredLanguage'], isA<String>());
-          expect(notificationSettings['lastUpdated'], isA<String>());
-        });
+      expect(notificationSettings['notificationsEnabled'], isA<bool>());
+      expect(notificationSettings['notificationTime'], isA<String>());
+      expect(notificationSettings['notificationTime'],
+          matches(RegExp(r'^\d{2}:\d{2}$')));
+      expect(notificationSettings['userTimezone'], isA<String>());
+      expect(notificationSettings['preferredLanguage'], isA<String>());
+      expect(notificationSettings['lastUpdated'], isA<String>());
+    });
 
-        test('should validate SetOptions merge behavior simulation', () async {
-          final prefs = await SharedPreferences.getInstance();
+    test('should validate SetOptions merge behavior simulation', () async {
+      final prefs = await SharedPreferences.getInstance();
 
-          // Initial document
-          await prefs.setString('doc_field1', 'value1');
-          await prefs.setString('doc_field2', 'value2');
+      // Initial document
+      await prefs.setString('doc_field1', 'value1');
+      await prefs.setString('doc_field2', 'value2');
 
-          // Merge update (only update field2)
-          await prefs.setString('doc_field2', 'updated_value2');
+      // Merge update (only update field2)
+      await prefs.setString('doc_field2', 'updated_value2');
 
-          // Field1 should remain unchanged (merge behavior)
-          expect(prefs.getString('doc_field1'), equals('value1'));
-          expect(prefs.getString('doc_field2'), equals('updated_value2'));
-        });
+      // Field1 should remain unchanged (merge behavior)
+      expect(prefs.getString('doc_field1'), equals('value1'));
+      expect(prefs.getString('doc_field2'), equals('updated_value2'));
+    });
 
-        test('should validate required vs optional fields', () {
-          final settings = {
-            // Required fields
-            'notificationsEnabled': true,
-            'notificationTime': '09:00',
-            'userTimezone': 'UTC',
+    test('should validate required vs optional fields', () {
+      final settings = {
+        // Required fields
+        'notificationsEnabled': true,
+        'notificationTime': '09:00',
+        'userTimezone': 'UTC',
 
-            // Optional fields (can be null)
-            'preferredLanguage': null,
-          };
+        // Optional fields (can be null)
+        'preferredLanguage': null,
+      };
 
-          // Required fields must not be null
-          expect(settings['notificationsEnabled'], isNotNull);
-          expect(settings['notificationTime'], isNotNull);
-          expect(settings['userTimezone'], isNotNull);
+      // Required fields must not be null
+      expect(settings['notificationsEnabled'], isNotNull);
+      expect(settings['notificationTime'], isNotNull);
+      expect(settings['userTimezone'], isNotNull);
 
-          // Optional fields can be null
-          expect(settings['preferredLanguage'], isNull);
-        });
+      // Optional fields can be null
+      expect(settings['preferredLanguage'], isNull);
+    });
 
-        test('should simulate FieldValue.serverTimestamp behavior', () {
-          // In tests, we simulate with DateTime.now().toIso8601String()
-          final serverTimestamp = DateTime.now().toUtc().toIso8601String();
+    test('should simulate FieldValue.serverTimestamp behavior', () {
+      // In tests, we simulate with DateTime.now().toIso8601String()
+      final serverTimestamp = DateTime.now().toUtc().toIso8601String();
 
-          expect(serverTimestamp, isA<String>());
-          expect(DateTime.tryParse(serverTimestamp), isNotNull);
-          expect(serverTimestamp, contains('T'));
-          expect(serverTimestamp, endsWith('Z'));
-        });
-      });
+      expect(serverTimestamp, isA<String>());
+      expect(DateTime.tryParse(serverTimestamp), isNotNull);
+      expect(serverTimestamp, contains('T'));
+      expect(serverTimestamp, endsWith('Z'));
+    });
+  });
 
   group('NotificationService Extended Tests - FCM Message Handling', () {
     test('should simulate FCM message with notification payload', () {

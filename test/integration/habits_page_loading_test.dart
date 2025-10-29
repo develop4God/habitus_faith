@@ -66,9 +66,8 @@ void main() {
             reason: 'Should show FAB, indicating page loaded correctly');
 
         // Verify either empty state OR habit card is shown (not spinner)
-        final hasContent = tester.any(
-          find.byType(Card).or(find.text('Añade hábitos para empezar')),
-        );
+        final hasContent = find.byType(Card).evaluate().isNotEmpty ||
+            find.text('Añade hábitos para empezar').evaluate().isNotEmpty;
         expect(hasContent, true,
             reason:
                 'Should show either habit cards or empty state message, not blank spinner');
@@ -96,7 +95,8 @@ void main() {
 
         // CRITICAL: Verify page loads immediately without long spinner state
         await tester.pump(); // Initial frame
-        await tester.pump(const Duration(milliseconds: 100)); // Allow async init
+        await tester
+            .pump(const Duration(milliseconds: 100)); // Allow async init
 
         // Page should start showing content quickly
         expect(find.text('Mis Hábitos'), findsOneWidget,
@@ -114,9 +114,8 @@ void main() {
             reason: 'FAB should be visible');
 
         // Verify either empty state OR habit content is shown
-        final hasContent = tester.any(
-          find.byType(Card).or(find.text('Añade hábitos para empezar')),
-        );
+        final hasContent = find.byType(Card).evaluate().isNotEmpty ||
+            find.text('Añade hábitos para empezar').evaluate().isNotEmpty;
         expect(hasContent, true,
             reason: 'Should show content or empty state, not blank page');
 
@@ -147,9 +146,9 @@ void main() {
 
         // Verify we don't get stuck in loading state
         // The page should show SOMETHING (loading, content, or empty state)
-        final pageHasVisibleContent = tester.any(
-          find.byType(AppBar).or(find.byType(FloatingActionButton)),
-        );
+        final pageHasVisibleContent =
+            find.byType(AppBar).evaluate().isNotEmpty ||
+                find.byType(FloatingActionButton).evaluate().isNotEmpty;
         expect(pageHasVisibleContent, true,
             reason: 'Page should render UI elements immediately, not blank');
 
@@ -161,9 +160,8 @@ void main() {
         expect(find.byType(FloatingActionButton), findsOneWidget);
 
         // Should show either habits or empty state message
-        final hasContent = tester.any(
-          find.byType(Card).or(find.text('Añade hábitos para empezar')),
-        );
+        final hasContent = find.byType(Card).evaluate().isNotEmpty ||
+            find.text('Añade hábitos para empezar').evaluate().isNotEmpty;
         expect(hasContent, true);
       },
     );

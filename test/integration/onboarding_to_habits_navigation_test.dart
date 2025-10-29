@@ -110,8 +110,7 @@ void main() {
       final prefs = await SharedPreferences.getInstance();
 
       // Simulate user already completed onboarding (has habits)
-      await prefs.setString(
-          'habits',
+      await prefs.setString('habits',
           '[{"id":"1","name":"Morning Prayer","emoji":"🙏","description":"Start day with prayer","color":4294198070,"createdAt":"2024-01-01T00:00:00.000"}]');
 
       // Build app starting directly at HomePage

@@ -40,12 +40,27 @@ abstract class HabitsRepository {
     required String name,
     required String description,
     HabitCategory category = HabitCategory.other,
+    String? emoji,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
   });
 
   /// Complete a habit for today
   Future<Result<Habit, HabitFailure>> completeHabit(String habitId);
+
+  /// Update an existing habit
+  Future<Result<Habit, HabitFailure>> updateHabit({
+    required String habitId,
+    String? name,
+    String? description,
+    HabitCategory? category,
+    String? emoji,
+    int? colorValue,
+    HabitDifficulty? difficulty,
+  });
+
+  /// Uncheck a habit (reset today's completion)
+  Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId);
 
   /// Delete a habit
   Future<Result<void, HabitFailure>> deleteHabit(String habitId);

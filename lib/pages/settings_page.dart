@@ -11,7 +11,8 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLanguage = ref.watch(appLanguageProvider.notifier).currentLanguage;
+    final currentLanguage =
+        ref.watch(appLanguageProvider.notifier).currentLanguage;
 
     return Scaffold(
       appBar: AppBar(

@@ -15,7 +15,8 @@ void main() {
     });
 
     test('notificationsEnabledProvider should be a FutureProvider<bool>', () {
-      expect(notificationsEnabledProvider.toString(), contains('FutureProvider'));
+      expect(
+          notificationsEnabledProvider.toString(), contains('FutureProvider'));
     });
 
     test('notificationTimeProvider should be a FutureProvider<String>', () {
@@ -32,8 +33,7 @@ void main() {
       ];
 
       for (final provider in providers) {
-        expect(provider, isNotNull,
-            reason: 'All providers should be non-null');
+        expect(provider, isNotNull, reason: 'All providers should be non-null');
       }
     });
   });

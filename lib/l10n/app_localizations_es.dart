@@ -199,52 +199,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => 'Configuración de Notificaciones';
+  String get category => 'Categoría';
 
   @override
-  String get enableNotifications => 'Habilitar Notificaciones';
+  String get difficulty => 'Dificultad';
 
   @override
-  String get notificationsEnabled => 'Notificaciones habilitadas';
+  String get emoji => 'Emoji';
 
   @override
-  String get notificationsDisabled => 'Notificaciones deshabilitadas';
+  String get color => 'Color';
 
   @override
-  String get notificationsOn => 'Notificaciones Activadas';
+  String get optional => 'opcional';
 
   @override
-  String get notificationsOff => 'Notificaciones Desactivadas';
+  String get edit => 'Editar';
 
   @override
-  String get receiveReminderNotifications =>
-      'Recibir recordatorios diarios para tus hábitos';
+  String get uncheck => 'Desmarcar';
 
   @override
-  String get notificationTime => 'Hora de Notificación';
+  String get save => 'Guardar';
 
   @override
-  String get selectNotificationTime =>
-      'Selecciona tu hora preferida de notificación';
+  String get editHabit => 'Editar Hábito';
 
   @override
-  String get currentTime => 'Hora actual';
+  String get defaultColor => 'Por defecto';
 
   @override
-  String get notificationTimeUpdated => 'Hora de notificación actualizada a';
+  String get statistics => 'Progreso';
 
   @override
-  String get notificationInfo =>
-      'Las notificaciones te ayudarán a mantener tus hábitos diarios. Recibirás recordatorios a la hora que elijas.';
+  String get settings => 'Configuración';
 
   @override
-  String get settings => 'Ajustes';
+  String get language => 'Idioma';
 
   @override
   String get notifications => 'Notificaciones';
 
   @override
-  String get language => 'Idioma';
+  String get notificationSettings => 'Configuración de Notificaciones';
 
   @override
   String get languageSettings => 'Configuración de Idioma';
@@ -254,7 +251,42 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageInfo =>
-      'Elige tu idioma preferido para la aplicación. El cambio se aplicará inmediatamente.';
+      'La aplicación usará el idioma seleccionado para todo el texto y elementos de la interfaz.';
+
+  @override
+  String get notificationsEnabled => 'Notificaciones activadas';
+
+  @override
+  String get notificationsDisabled => 'Notificaciones desactivadas';
+
+  @override
+  String get notificationTimeUpdated => 'Hora de notificación actualizada a';
+
+  @override
+  String get enableNotifications => 'Activar Notificaciones';
+
+  @override
+  String get notificationsOn => 'Notificaciones Activadas';
+
+  @override
+  String get notificationsOff => 'Notificaciones Desactivadas';
+
+  @override
+  String get receiveReminderNotifications =>
+      'Recibir notificaciones de recordatorio diario';
+
+  @override
+  String get notificationTime => 'Hora de Notificación';
+
+  @override
+  String get selectNotificationTime => 'Seleccionar hora de notificación';
+
+  @override
+  String get currentTime => 'Hora actual';
+
+  @override
+  String get notificationInfo =>
+      'Recibirás un recordatorio diario a la hora seleccionada para completar tus hábitos.';
 
   @override
   String get highRiskWarning => '¡Alto riesgo de abandonar este hábito hoy!';

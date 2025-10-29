@@ -14,7 +14,8 @@ final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   final repository = ref.watch(jsonHabitsRepositoryProvider);
   debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
   final stream = repository.watchHabits().map((list) {
-    debugPrint('jsonHabitsStreamProvider: stream emitted ${list.length} habits');
+    debugPrint(
+        'jsonHabitsStreamProvider: stream emitted ${list.length} habits');
     return list;
   }).handleError((e, st) {
     debugPrint('jsonHabitsStreamProvider: stream error -> $e');
@@ -35,11 +36,11 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     final result = await repository.completeHabit(habitId);
 
     result.fold(
-          (failure) {
+      (failure) {
         debugPrint('JsonHabitsNotifier.completeHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-          (habit) {
+      (habit) {
         debugPrint('JsonHabitsNotifier.completeHabit: success -> ${habit.id}');
         state = const AsyncData(null);
       },
@@ -54,11 +55,11 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     final result = await repository.deleteHabit(habitId);
 
     result.fold(
-          (failure) {
+      (failure) {
         debugPrint('JsonHabitsNotifier.deleteHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-          (_) {
+      (_) {
         debugPrint('JsonHabitsNotifier.deleteHabit: success -> $habitId');
         state = const AsyncData(null);
       },
@@ -71,8 +72,10 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     HabitCategory category = HabitCategory.other,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
+    String? emoji,
   }) async {
-    debugPrint('JsonHabitsNotifier.addHabit: start -> name:$name desc:$description');
+    debugPrint(
+        'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -85,12 +88,66 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     );
 
     result.fold(
-          (failure) {
+      (failure) {
         debugPrint('JsonHabitsNotifier.addHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-          (habit) {
+      (habit) {
         debugPrint('JsonHabitsNotifier.addHabit: success -> ${habit.id}');
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> updateHabit({
+    required String habitId,
+    String? name,
+    String? description,
+    HabitCategory? category,
+    String? emoji,
+    int? colorValue,
+    HabitDifficulty? difficulty,
+  }) async {
+    debugPrint('JsonHabitsNotifier.updateHabit: start -> $habitId');
+    state = const AsyncLoading();
+
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final result = await repository.updateHabit(
+      habitId: habitId,
+      name: name,
+      description: description,
+      category: category,
+      emoji: emoji,
+      colorValue: colorValue,
+      difficulty: difficulty,
+    );
+
+    result.fold(
+      (failure) {
+        debugPrint('JsonHabitsNotifier.updateHabit: failure -> $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint('JsonHabitsNotifier.updateHabit: success -> ${habit.id}');
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> uncheckHabit(String habitId) async {
+    debugPrint('JsonHabitsNotifier.uncheckHabit: start -> $habitId');
+    state = const AsyncLoading();
+
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final result = await repository.uncheckHabit(habitId);
+
+    result.fold(
+      (failure) {
+        debugPrint('JsonHabitsNotifier.uncheckHabit: failure -> $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint('JsonHabitsNotifier.uncheckHabit: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );
@@ -98,7 +155,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final jsonHabitsNotifierProvider =
-StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
+    StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
   return JsonHabitsNotifier(ref);
 });
 
@@ -274,7 +331,8 @@ class HabitsPage extends ConsumerWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: categoryColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -302,17 +360,19 @@ class HabitsPage extends ConsumerWidget {
                 habit: habit,
                 isCompleting: isCompleting,
                 onTap: () async {
-                  debugPrint('HabitsPage.onTap: completing habit -> ${habit.id}');
+                  debugPrint(
+                      'HabitsPage.onTap: completing habit -> ${habit.id}');
                   await ref
                       .read(jsonHabitsNotifierProvider.notifier)
                       .completeHabit(habit.id);
-                  
+
                   // Record ML data after completion
                   await ref
                       .read(jsonHabitsRepositoryProvider)
                       .recordCompletionForML(habit.id, true);
-                  
-                  debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
+
+                  debugPrint(
+                      'HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(l10n.habitCompleted)),
@@ -324,11 +384,11 @@ class HabitsPage extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, child) {
                   final riskAsync = ref.watch(habitRiskProvider(habit.id));
-                  
+
                   return riskAsync.when(
                     data: (risk) {
                       if (risk < 0.7) return const SizedBox.shrink();
-                      
+
                       return Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: Card(
@@ -372,6 +432,39 @@ class HabitsPage extends ConsumerWidget {
                     error: (_, __) => const SizedBox.shrink(),
                   );
                 },
+                onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                onUncheck: () async {
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .uncheckHabit(habit.id);
+                },
+                onDelete: () async {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(l10n.deleteHabit),
+                      content: Text(l10n.deleteHabitConfirm(habit.name)),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(l10n.cancel),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          child: Text(l10n.delete),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (confirmed == true) {
+                    await ref
+                        .read(jsonHabitsNotifierProvider.notifier)
+                        .deleteHabit(habit.id);
+                  }
+                },
               ),
               const SizedBox(height: 12),
               MiniCalendarHeatmap(
@@ -386,11 +479,300 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 
+  void _showEditHabitDialog(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    Habit habit,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => _EditHabitDialog(l10n: l10n, habit: habit),
+    );
+  }
+
   void _showAddHabitDialog(
       BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) => _AddHabitDialog(l10n: l10n),
+    );
+  }
+}
+
+class _EditHabitDialog extends ConsumerStatefulWidget {
+  final AppLocalizations l10n;
+  final Habit habit;
+
+  const _EditHabitDialog({required this.l10n, required this.habit});
+
+  @override
+  ConsumerState<_EditHabitDialog> createState() => _EditHabitDialogState();
+}
+
+class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
+  late TextEditingController nameCtrl;
+  late TextEditingController descCtrl;
+  late TextEditingController emojiCtrl;
+  late HabitCategory selectedCategory;
+  late HabitDifficulty selectedDifficulty;
+  Color? selectedColor;
+
+  @override
+  void initState() {
+    super.initState();
+    nameCtrl = TextEditingController(text: widget.habit.name);
+    descCtrl = TextEditingController(text: widget.habit.description);
+    emojiCtrl = TextEditingController(text: widget.habit.emoji ?? '');
+    selectedCategory = widget.habit.category;
+    selectedDifficulty = widget.habit.difficulty;
+    selectedColor = widget.habit.colorValue != null
+        ? Color(widget.habit.colorValue!)
+        : null;
+  }
+
+  @override
+  void dispose() {
+    nameCtrl.dispose();
+    descCtrl.dispose();
+    emojiCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.l10n.editHabit),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: nameCtrl,
+              decoration: InputDecoration(
+                labelText: widget.l10n.name,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: descCtrl,
+              decoration: InputDecoration(
+                labelText: widget.l10n.description,
+                border: const OutlineInputBorder(),
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: emojiCtrl,
+              decoration: InputDecoration(
+                labelText: widget.l10n.emoji,
+                border: const OutlineInputBorder(),
+                hintText: '🙏',
+              ),
+              maxLength: 2,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              widget.l10n.category,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<HabitCategory>(
+              value: selectedCategory,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              items: HabitCategory.values.map((category) {
+                return DropdownMenuItem(
+                  value: category,
+                  child: Row(
+                    children: [
+                      Icon(
+                        HabitColors.getCategoryIcon(category),
+                        size: 20,
+                        color: HabitColors.categoryColors[category],
+                      ),
+                      const SizedBox(width: 8),
+                      Text(HabitColors.getCategoryDisplayName(category)),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    selectedCategory = value;
+                    selectedColor = null;
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            Text(
+              widget.l10n.difficulty,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: HabitDifficulty.values.map((difficulty) {
+                final isSelected = selectedDifficulty == difficulty;
+                final color = HabitColors.categoryColors[selectedCategory]!;
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDifficulty = difficulty;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? color.withValues(alpha: 0.1)
+                          : Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isSelected ? color : Colors.grey.shade300,
+                        width: 2,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            HabitDifficultyHelper.getDifficultyStars(
+                                difficulty),
+                            (index) => Icon(
+                              Icons.star,
+                              size: 18,
+                              color: isSelected ? color : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          difficulty.displayName,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                            color: isSelected ? color : Colors.grey.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '${widget.l10n.color} (${widget.l10n.optional})',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildColorOption(
+                  null,
+                  HabitColors.categoryColors[selectedCategory]!,
+                  widget.l10n.defaultColor,
+                ),
+                ...HabitColors.availableColors.map(
+                  (color) => _buildColorOption(color, color, null),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(widget.l10n.cancel),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
+              await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
+                    habitId: widget.habit.id,
+                    name: nameCtrl.text,
+                    description: descCtrl.text,
+                    category: selectedCategory,
+                    emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
+                    colorValue: selectedColor?.toARGB32(),
+                    difficulty: selectedDifficulty,
+                  );
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            }
+          },
+          child: Text(widget.l10n.save),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorOption(
+      Color? colorValue, Color displayColor, String? label) {
+    final isSelected = selectedColor == colorValue;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedColor = colorValue;
+        });
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: displayColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isSelected ? Colors.black : Colors.transparent,
+                width: 3,
+              ),
+            ),
+            child: isSelected
+                ? const Icon(Icons.check, color: Colors.white, size: 24)
+                : null,
+          ),
+          if (label != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -407,6 +789,7 @@ class _AddHabitDialog extends ConsumerStatefulWidget {
 class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
   final nameCtrl = TextEditingController();
   final descCtrl = TextEditingController();
+  final emojiCtrl = TextEditingController();
   HabitCategory selectedCategory = HabitCategory.other;
   HabitDifficulty selectedDifficulty = HabitDifficulty.medium;
   Color? selectedColor;
@@ -415,6 +798,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
   void dispose() {
     nameCtrl.dispose();
     descCtrl.dispose();
+    emojiCtrl.dispose();
     super.dispose();
   }
 
@@ -446,9 +830,18 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
               maxLines: 2,
             ),
             const SizedBox(height: 16),
+            TextField(
+              controller: emojiCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Emoji',
+                border: OutlineInputBorder(),
+                hintText: '🙏',
+              ),
+              maxLength: 2,
+            ),
             // Category selector
             Text(
-              'Categoría',
+              widget.l10n.category,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -490,36 +883,76 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
             const SizedBox(height: 16),
             // Difficulty selector
             Text(
-              'Dificultad',
+              widget.l10n.difficulty,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: Colors.grey.shade700,
               ),
             ),
-            const SizedBox(height: 8),
-            SegmentedButton<HabitDifficulty>(
-              segments: HabitDifficulty.values.map((difficulty) {
-                return ButtonSegment(
-                  value: difficulty,
-                  label: Text(difficulty.displayName),
-                  icon: Icon(
-                    HabitDifficultyHelper.getDifficultyIcon(difficulty),
-                    size: 16,
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: HabitDifficulty.values.map((difficulty) {
+                final isSelected = selectedDifficulty == difficulty;
+                final color = HabitColors.categoryColors[selectedCategory]!;
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDifficulty = difficulty;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? color.withValues(alpha: 0.1)
+                          : Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isSelected ? color : Colors.grey.shade300,
+                        width: 2,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            HabitDifficultyHelper.getDifficultyStars(
+                                difficulty),
+                            (index) => Icon(
+                              Icons.star,
+                              size: 18,
+                              color: isSelected ? color : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          difficulty.displayName,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                            color: isSelected ? color : Colors.grey.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
-              selected: {selectedDifficulty},
-              onSelectionChanged: (Set<HabitDifficulty> selected) {
-                setState(() {
-                  selectedDifficulty = selected.first;
-                });
-              },
             ),
             const SizedBox(height: 16),
             // Color picker
             Text(
-              'Color (opcional)',
+              '${widget.l10n.color} (${widget.l10n.optional})',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -535,7 +968,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                 _buildColorOption(
                   null,
                   HabitColors.categoryColors[selectedCategory]!,
-                  'Por defecto',
+                  widget.l10n.defaultColor,
                 ),
                 // Available custom colors
                 ...HabitColors.availableColors.map(
@@ -558,11 +991,13 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
           key: const Key('confirm_add_habit_button'),
           onPressed: () async {
             if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
-              debugPrint('AddHabitDialog: adding habit -> name:${nameCtrl.text} desc:${descCtrl.text}');
+              debugPrint(
+                  'AddHabitDialog: adding habit -> name:${nameCtrl.text} desc:${descCtrl.text}');
               await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
                     name: nameCtrl.text,
                     description: descCtrl.text,
                     category: selectedCategory,
+                    emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
                     colorValue: selectedColor?.toARGB32(),
                     difficulty: selectedDifficulty,
                   );
@@ -580,9 +1015,10 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
     );
   }
 
-  Widget _buildColorOption(Color? colorValue, Color displayColor, String? label) {
+  Widget _buildColorOption(
+      Color? colorValue, Color displayColor, String? label) {
     final isSelected = selectedColor == colorValue;
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {

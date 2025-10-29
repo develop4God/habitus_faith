@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/predefined_habit.dart';
 import '../../domain/models/predefined_habits_data.dart';
+import '../../domain/habit.dart';
 import 'onboarding_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -152,14 +153,36 @@ class OnboardingPage extends ConsumerWidget {
                   onPressed: selectedHabits.isEmpty || isLoading
                       ? null
                       : () async {
-                    debugPrint('OnboardingPage: continue pressed - creating habits');
-                    await ref.read(onboardingNotifierProvider.notifier).completeOnboarding();
-                    debugPrint('OnboardingPage: completeOnboarding finished');
-                    if (context.mounted) {
-                      debugPrint('OnboardingPage: navigating to /home');
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    }
-                  },
+                          debugPrint(
+                              'OnboardingPage: continue pressed - creating habits');
+
+                          // Prepare translated habits
+                          final translatedHabits =
+                              selectedHabits.map((habitId) {
+                            final predefinedHabit = predefinedHabits
+                                .firstWhere((h) => h.id == habitId);
+                            return TranslatedHabit(
+                              id: habitId,
+                              name: _getTranslatedName(
+                                  l10n, predefinedHabit.nameKey),
+                              description: _getTranslatedDescription(
+                                  l10n, predefinedHabit.descriptionKey),
+                              category: _mapPredefinedCategory(
+                                  predefinedHabit.category),
+                            );
+                          }).toList();
+
+                          await ref
+                              .read(onboardingNotifierProvider.notifier)
+                              .completeOnboarding(
+                                  translatedHabits: translatedHabits);
+                          debugPrint(
+                              'OnboardingPage: completeOnboarding finished');
+                          if (context.mounted) {
+                            debugPrint('OnboardingPage: navigating to /home');
+                            Navigator.of(context).pushReplacementNamed('/home');
+                          }
+                        },
                   child: isLoading
                       ? const SizedBox(
                           height: 24,
@@ -185,6 +208,84 @@ class OnboardingPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+// Helper function to translate predefined habit names
+String _getTranslatedName(AppLocalizations l10n, String key) {
+  switch (key) {
+    case 'predefinedHabit_morningPrayer_name':
+      return l10n.predefinedHabit_morningPrayer_name;
+    case 'predefinedHabit_bibleReading_name':
+      return l10n.predefinedHabit_bibleReading_name;
+    case 'predefinedHabit_worship_name':
+      return l10n.predefinedHabit_worship_name;
+    case 'predefinedHabit_gratitude_name':
+      return l10n.predefinedHabit_gratitude_name;
+    case 'predefinedHabit_exercise_name':
+      return l10n.predefinedHabit_exercise_name;
+    case 'predefinedHabit_healthyEating_name':
+      return l10n.predefinedHabit_healthyEating_name;
+    case 'predefinedHabit_sleep_name':
+      return l10n.predefinedHabit_sleep_name;
+    case 'predefinedHabit_meditation_name':
+      return l10n.predefinedHabit_meditation_name;
+    case 'predefinedHabit_learning_name':
+      return l10n.predefinedHabit_learning_name;
+    case 'predefinedHabit_creativity_name':
+      return l10n.predefinedHabit_creativity_name;
+    case 'predefinedHabit_familyTime_name':
+      return l10n.predefinedHabit_familyTime_name;
+    case 'predefinedHabit_service_name':
+      return l10n.predefinedHabit_service_name;
+    default:
+      return key;
+  }
+}
+
+// Helper function to translate predefined habit descriptions
+String _getTranslatedDescription(AppLocalizations l10n, String key) {
+  switch (key) {
+    case 'predefinedHabit_morningPrayer_description':
+      return l10n.predefinedHabit_morningPrayer_description;
+    case 'predefinedHabit_bibleReading_description':
+      return l10n.predefinedHabit_bibleReading_description;
+    case 'predefinedHabit_worship_description':
+      return l10n.predefinedHabit_worship_description;
+    case 'predefinedHabit_gratitude_description':
+      return l10n.predefinedHabit_gratitude_description;
+    case 'predefinedHabit_exercise_description':
+      return l10n.predefinedHabit_exercise_description;
+    case 'predefinedHabit_healthyEating_description':
+      return l10n.predefinedHabit_healthyEating_description;
+    case 'predefinedHabit_sleep_description':
+      return l10n.predefinedHabit_sleep_description;
+    case 'predefinedHabit_meditation_description':
+      return l10n.predefinedHabit_meditation_description;
+    case 'predefinedHabit_learning_description':
+      return l10n.predefinedHabit_learning_description;
+    case 'predefinedHabit_creativity_description':
+      return l10n.predefinedHabit_creativity_description;
+    case 'predefinedHabit_familyTime_description':
+      return l10n.predefinedHabit_familyTime_description;
+    case 'predefinedHabit_service_description':
+      return l10n.predefinedHabit_service_description;
+    default:
+      return key;
+  }
+}
+
+// Helper function to map predefined category to HabitCategory
+HabitCategory _mapPredefinedCategory(PredefinedHabitCategory category) {
+  switch (category) {
+    case PredefinedHabitCategory.spiritual:
+      return HabitCategory.prayer;
+    case PredefinedHabitCategory.physical:
+      return HabitCategory.other;
+    case PredefinedHabitCategory.mental:
+      return HabitCategory.other;
+    case PredefinedHabitCategory.relational:
+      return HabitCategory.service;
   }
 }
 

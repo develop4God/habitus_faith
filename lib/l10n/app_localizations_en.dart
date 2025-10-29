@@ -199,52 +199,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => 'Notification Settings';
+  String get category => 'Category';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get difficulty => 'Difficulty';
 
   @override
-  String get notificationsEnabled => 'Notifications enabled';
+  String get emoji => 'Emoji';
 
   @override
-  String get notificationsDisabled => 'Notifications disabled';
+  String get color => 'Color';
 
   @override
-  String get notificationsOn => 'Notifications On';
+  String get optional => 'optional';
 
   @override
-  String get notificationsOff => 'Notifications Off';
+  String get edit => 'Edit';
 
   @override
-  String get receiveReminderNotifications =>
-      'Receive daily reminders for your habits';
+  String get uncheck => 'Uncheck';
 
   @override
-  String get notificationTime => 'Notification Time';
+  String get save => 'Save';
 
   @override
-  String get selectNotificationTime =>
-      'Select your preferred notification time';
+  String get editHabit => 'Edit Habit';
 
   @override
-  String get currentTime => 'Current time';
+  String get defaultColor => 'Default';
 
   @override
-  String get notificationTimeUpdated => 'Notification time updated to';
-
-  @override
-  String get notificationInfo =>
-      'Notifications will help you stay on track with your daily habits. You\'ll receive reminders at your chosen time.';
+  String get statistics => 'Statistics';
 
   @override
   String get settings => 'Settings';
 
   @override
+  String get language => 'Language';
+
+  @override
   String get notifications => 'Notifications';
 
   @override
-  String get language => 'Language';
+  String get notificationSettings => 'Notification Settings';
 
   @override
   String get languageSettings => 'Language Settings';
@@ -254,7 +251,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageInfo =>
-      'Choose your preferred language for the app. The change will take effect immediately.';
+      'The app will use your selected language for all text and interface elements.';
+
+  @override
+  String get notificationsEnabled => 'Notifications enabled';
+
+  @override
+  String get notificationsDisabled => 'Notifications disabled';
+
+  @override
+  String get notificationTimeUpdated => 'Notification time updated to';
+
+  @override
+  String get enableNotifications => 'Enable Notifications';
+
+  @override
+  String get notificationsOn => 'Notifications On';
+
+  @override
+  String get notificationsOff => 'Notifications Off';
+
+  @override
+  String get receiveReminderNotifications =>
+      'Receive daily reminder notifications';
+
+  @override
+  String get notificationTime => 'Notification Time';
+
+  @override
+  String get selectNotificationTime => 'Select notification time';
+
+  @override
+  String get currentTime => 'Current time';
+
+  @override
+  String get notificationInfo =>
+      'You will receive a daily reminder at your selected time to complete your habits.';
 
   @override
   String get highRiskWarning => 'High risk of abandoning this habit today!';
