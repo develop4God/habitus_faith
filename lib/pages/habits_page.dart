@@ -379,6 +379,39 @@ class HabitsPage extends ConsumerWidget {
                     );
                   }
                 },
+                onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                onUncheck: () async {
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .uncheckHabit(habit.id);
+                },
+                onDelete: () async {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(l10n.deleteHabit),
+                      content: Text(l10n.deleteHabitConfirm(habit.name)),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(l10n.cancel),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          child: Text(l10n.delete),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (confirmed == true) {
+                    await ref
+                        .read(jsonHabitsNotifierProvider.notifier)
+                        .deleteHabit(habit.id);
+                  }
+                },
               ),
               // ML-based risk warning
               Consumer(
@@ -431,39 +464,6 @@ class HabitsPage extends ConsumerWidget {
                     loading: () => const SizedBox.shrink(),
                     error: (_, __) => const SizedBox.shrink(),
                   );
-                },
-                onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
-                onUncheck: () async {
-                  await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
-                      .uncheckHabit(habit.id);
-                },
-                onDelete: () async {
-                  final confirmed = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(l10n.deleteHabit),
-                      content: Text(l10n.deleteHabitConfirm(habit.name)),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(l10n.cancel),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          child: Text(l10n.delete),
-                        ),
-                      ],
-                    ),
-                  );
-                  if (confirmed == true) {
-                    await ref
-                        .read(jsonHabitsNotifierProvider.notifier)
-                        .deleteHabit(habit.id);
-                  }
                 },
               ),
               const SizedBox(height: 12),
@@ -585,7 +585,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              value: selectedCategory,
+              initialValue: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -850,7 +850,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              value: selectedCategory,
+              initialValue: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
