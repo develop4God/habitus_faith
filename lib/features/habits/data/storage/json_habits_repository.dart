@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/habit.dart';
 import '../../domain/habits_repository.dart';
 import '../../domain/failures.dart';
@@ -7,13 +8,13 @@ import '../../domain/models/completion_record.dart';
 import '../../domain/ml_features_calculator.dart';
 import '../habit_model.dart';
 import 'json_storage_service.dart';
-import '../../../../core/services/ml/github_ml_storage.dart';
 
 /// Repository implementation using JSON storage (SharedPreferences)
 class JsonHabitsRepository implements HabitsRepository {
   final JsonStorageService _storage;
   final String _userId;
   final String Function() _idGenerator;
+  final FirebaseFirestore? _firestore;
 
   static const String _habitsKey = 'habits';
   static const String _completionsKey = 'completions';
@@ -24,10 +25,11 @@ class JsonHabitsRepository implements HabitsRepository {
     required JsonStorageService storage,
     required String userId,
     required String Function() idGenerator,
-    dynamic firestore, // Keep for backwards compatibility but unused
+    FirebaseFirestore? firestore,
   })  : _storage = storage,
         _userId = userId,
-        _idGenerator = idGenerator {
+        _idGenerator = idGenerator,
+        _firestore = firestore {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
         debugPrint('JsonHabitsRepository: first listener - emitting initial habits');
@@ -268,7 +270,7 @@ class JsonHabitsRepository implements HabitsRepository {
     await _storage.saveJson(_completionsKey, completionsData);
   }
 
-  /// Record completion/abandonment data to GitHub Issues for ML training
+  /// Record completion/abandonment data to Firestore for ML training
   /// This method enriches completion records with ML features for the training pipeline
   @override
   Future<void> recordCompletionForML(String habitId, bool completed) async {
@@ -294,9 +296,21 @@ class JsonHabitsRepository implements HabitsRepository {
       completed: completed,
     );
 
-    // Save to GitHub Issues for ML pipeline
-    final storage = GitHubMLStorage();
-    await storage.saveRecord(record);
+    // Save to Firestore for ML pipeline
+    if (_firestore != null) {
+      try {
+        await _firestore!
+            .collection('ml_training_data')
+            .doc('${habit.userId}_${habitId}_${now.millisecondsSinceEpoch}')
+            .set(record.toJson());
+        debugPrint('JsonHabitsRepository.recordCompletionForML: Saved ML data for habit "$habitId"');
+      } catch (e) {
+        // Non-critical: log but don't block user flow
+        debugPrint('JsonHabitsRepository.recordCompletionForML: ML data save failed: $e');
+      }
+    } else {
+      debugPrint('JsonHabitsRepository.recordCompletionForML: Firestore not available, skipping ML data save');
+    }
   }
 
   @override
