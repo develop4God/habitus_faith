@@ -199,60 +199,32 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selected => 'Selected';
 
   @override
-  String get notificationSettings => 'Configuración de Notificaciones';
+  String get category => 'Categoría';
 
   @override
-  String get enableNotifications => 'Habilitar Notificaciones';
+  String get difficulty => 'Dificultad';
 
   @override
-  String get notificationsEnabled => 'Notificaciones habilitadas';
+  String get emoji => 'Emoji';
 
   @override
-  String get notificationsDisabled => 'Notificaciones deshabilitadas';
+  String get color => 'Color';
 
   @override
-  String get notificationsOn => 'Notificaciones Activadas';
+  String get optional => 'opcional';
 
   @override
-  String get notificationsOff => 'Notificaciones Desactivadas';
+  String get edit => 'Editar';
 
   @override
-  String get receiveReminderNotifications =>
-      'Recibir recordatorios diarios para tus hábitos';
+  String get uncheck => 'Desmarcar';
 
   @override
-  String get notificationTime => 'Hora de Notificación';
+  String get save => 'Guardar';
 
   @override
-  String get selectNotificationTime =>
-      'Selecciona tu hora preferida de notificación';
+  String get editHabit => 'Editar Hábito';
 
   @override
-  String get currentTime => 'Hora actual';
-
-  @override
-  String get notificationTimeUpdated => 'Hora de notificación actualizada a';
-
-  @override
-  String get notificationInfo =>
-      'Las notificaciones te ayudarán a mantener tus hábitos diarios. Recibirás recordatorios a la hora que elijas.';
-
-  @override
-  String get settings => 'Ajustes';
-
-  @override
-  String get notifications => 'Notificaciones';
-
-  @override
-  String get language => 'Idioma';
-
-  @override
-  String get languageSettings => 'Configuración de Idioma';
-
-  @override
-  String get selectLanguage => 'Seleccionar Idioma';
-
-  @override
-  String get languageInfo =>
-      'Elige tu idioma preferido para la aplicación. El cambio se aplicará inmediatamente.';
+  String get defaultColor => 'Por defecto';
 }

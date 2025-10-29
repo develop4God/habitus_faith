@@ -452,113 +452,65 @@ abstract class AppLocalizations {
   /// **'Selected'**
   String get selected;
 
-  /// Title for notification settings page
+  /// Category label
   ///
   /// In en, this message translates to:
-  /// **'Notification Settings'**
-  String get notificationSettings;
+  /// **'Category'**
+  String get category;
 
-  /// Label for enabling notifications
+  /// Difficulty label
   ///
   /// In en, this message translates to:
-  /// **'Enable Notifications'**
-  String get enableNotifications;
+  /// **'Difficulty'**
+  String get difficulty;
 
-  /// Message when notifications are turned on
+  /// Emoji label
   ///
   /// In en, this message translates to:
-  /// **'Notifications enabled'**
-  String get notificationsEnabled;
+  /// **'Emoji'**
+  String get emoji;
 
-  /// Message when notifications are turned off
+  /// Color label
   ///
   /// In en, this message translates to:
-  /// **'Notifications disabled'**
-  String get notificationsDisabled;
+  /// **'Color'**
+  String get color;
 
-  /// Label when notifications are enabled
+  /// Optional label
   ///
   /// In en, this message translates to:
-  /// **'Notifications On'**
-  String get notificationsOn;
+  /// **'optional'**
+  String get optional;
 
-  /// Label when notifications are disabled
+  /// Edit button text
   ///
   /// In en, this message translates to:
-  /// **'Notifications Off'**
-  String get notificationsOff;
+  /// **'Edit'**
+  String get edit;
 
-  /// Description for notification toggle
+  /// Uncheck button text
   ///
   /// In en, this message translates to:
-  /// **'Receive daily reminders for your habits'**
-  String get receiveReminderNotifications;
+  /// **'Uncheck'**
+  String get uncheck;
 
-  /// Label for notification time setting
+  /// Save button text
   ///
   /// In en, this message translates to:
-  /// **'Notification Time'**
-  String get notificationTime;
+  /// **'Save'**
+  String get save;
 
-  /// Instruction for selecting notification time
+  /// Edit habit dialog title
   ///
   /// In en, this message translates to:
-  /// **'Select your preferred notification time'**
-  String get selectNotificationTime;
+  /// **'Edit Habit'**
+  String get editHabit;
 
-  /// Label for current notification time
+  /// Default color option label
   ///
   /// In en, this message translates to:
-  /// **'Current time'**
-  String get currentTime;
-
-  /// Message when notification time is updated
-  ///
-  /// In en, this message translates to:
-  /// **'Notification time updated to'**
-  String get notificationTimeUpdated;
-
-  /// Information about notifications
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications will help you stay on track with your daily habits. You\'ll receive reminders at your chosen time.'**
-  String get notificationInfo;
-
-  /// Settings page title
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
-
-  /// Notifications menu item
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get notifications;
-
-  /// Language menu item
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
-
-  /// Title for language settings page
-  ///
-  /// In en, this message translates to:
-  /// **'Language Settings'**
-  String get languageSettings;
-
-  /// Label for language selection
-  ///
-  /// In en, this message translates to:
-  /// **'Select Language'**
-  String get selectLanguage;
-
-  /// Information about language selection
-  ///
-  /// In en, this message translates to:
-  /// **'Choose your preferred language for the app. The change will take effect immediately.'**
-  String get languageInfo;
+  /// **'Default'**
+  String get defaultColor;
 }
 
 class _AppLocalizationsDelegate

@@ -238,76 +238,44 @@
   "@selected": {
     "description": "Accessibility label indicating an item is selected"
   },
-  "notificationSettings": "Notification Settings",
-  "@notificationSettings": {
-    "description": "Title for notification settings page"
+  "category": "Category",
+  "@category": {
+    "description": "Category label"
   },
-  "enableNotifications": "Enable Notifications",
-  "@enableNotifications": {
-    "description": "Label for enabling notifications"
+  "difficulty": "Difficulty",
+  "@difficulty": {
+    "description": "Difficulty label"
   },
-  "notificationsEnabled": "Notifications enabled",
-  "@notificationsEnabled": {
-    "description": "Message when notifications are turned on"
+  "emoji": "Emoji",
+  "@emoji": {
+    "description": "Emoji label"
   },
-  "notificationsDisabled": "Notifications disabled",
-  "@notificationsDisabled": {
-    "description": "Message when notifications are turned off"
+  "color": "Color",
+  "@color": {
+    "description": "Color label"
   },
-  "notificationsOn": "Notifications On",
-  "@notificationsOn": {
-    "description": "Label when notifications are enabled"
+  "optional": "optional",
+  "@optional": {
+    "description": "Optional label"
   },
-  "notificationsOff": "Notifications Off",
-  "@notificationsOff": {
-    "description": "Label when notifications are disabled"
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
   },
-  "receiveReminderNotifications": "Receive daily reminders for your habits",
-  "@receiveReminderNotifications": {
-    "description": "Description for notification toggle"
+  "uncheck": "Uncheck",
+  "@uncheck": {
+    "description": "Uncheck button text"
   },
-  "notificationTime": "Notification Time",
-  "@notificationTime": {
-    "description": "Label for notification time setting"
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
   },
-  "selectNotificationTime": "Select your preferred notification time",
-  "@selectNotificationTime": {
-    "description": "Instruction for selecting notification time"
+  "editHabit": "Edit Habit",
+  "@editHabit": {
+    "description": "Edit habit dialog title"
   },
-  "currentTime": "Current time",
-  "@currentTime": {
-    "description": "Label for current notification time"
-  },
-  "notificationTimeUpdated": "Notification time updated to",
-  "@notificationTimeUpdated": {
-    "description": "Message when notification time is updated"
-  },
-  "notificationInfo": "Notifications will help you stay on track with your daily habits. You'll receive reminders at your chosen time.",
-  "@notificationInfo": {
-    "description": "Information about notifications"
-  },
-  "settings": "Settings",
-  "@settings": {
-    "description": "Settings page title"
-  },
-  "notifications": "Notifications",
-  "@notifications": {
-    "description": "Notifications menu item"
-  },
-  "language": "Language",
-  "@language": {
-    "description": "Language menu item"
-  },
-  "languageSettings": "Language Settings",
-  "@languageSettings": {
-    "description": "Title for language settings page"
-  },
-  "selectLanguage": "Select Language",
-  "@selectLanguage": {
-    "description": "Label for language selection"
-  },
-  "languageInfo": "Choose your preferred language for the app. The change will take effect immediately.",
-  "@languageInfo": {
-    "description": "Information about language selection"
+  "defaultColor": "Default",
+  "@defaultColor": {
+    "description": "Default color option label"
   }
 }
