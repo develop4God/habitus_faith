@@ -58,7 +58,7 @@ void main() {
       final now = DateTime.now();
       final createdAt = now.subtract(const Duration(days: 30));
       
-      // Only 2 completions in the last 10 days
+      // Very few recent completions (only 2 in the last 15 days, none in last 7)
       final completions = [
         now.subtract(const Duration(days: 10)),
         now.subtract(const Duration(days: 15)),

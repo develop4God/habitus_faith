@@ -144,7 +144,7 @@ The system operates transparently:
 
 ## Files Created/Modified
 
-### New Files (20)
+### New Files (13 core + localization files)
 ```
 lib/features/habits/domain/ml_features_calculator.dart
 lib/core/services/ml/abandonment_predictor.dart
@@ -158,9 +158,11 @@ assets/ml_models/predictor.tflite
 assets/ml_models/scaler_params.json
 test/unit/domain/ml_features_calculator_test.dart
 test/integration/ml/ml_prediction_flow_test.dart
+ML_IMPLEMENTATION.md
 ```
+Plus 5 localization files updated (app_en.arb, app_es.arb, app_fr.arb, app_pt.arb, app_zh.arb)
 
-### Modified Files (11)
+### Modified Files (7)
 ```
 lib/features/habits/domain/models/completion_record.dart
 lib/features/habits/domain/models/completion_record.freezed.dart
@@ -168,7 +170,6 @@ lib/features/habits/domain/models/completion_record.g.dart
 lib/features/habits/data/storage/json_habits_repository.dart
 lib/pages/habits_page.dart
 lib/main.dart
-lib/l10n/app_en.arb (+ es, fr, pt, zh)
 pubspec.yaml
 .gitignore
 ```
