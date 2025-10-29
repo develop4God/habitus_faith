@@ -512,6 +512,12 @@ abstract class AppLocalizations {
   /// **'Default'**
   String get defaultColor;
 
+  /// Statistics/Progress page title
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statistics;
+
   /// Settings page title
   ///
   /// In en, this message translates to:

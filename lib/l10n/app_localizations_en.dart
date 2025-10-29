@@ -229,6 +229,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get defaultColor => 'Default';
 
   @override
+  String get statistics => 'Statistics';
+
+  @override
   String get settings => 'Settings';
 
   @override

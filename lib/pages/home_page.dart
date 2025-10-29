@@ -45,13 +45,13 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.book),
             label: l10n.readBible,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Progreso',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.bar_chart),
+            label: l10n.statistics,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Ajustes',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.settings),
+            label: l10n.settings,
           ),
         ],
         currentIndex: _selectedIndex,

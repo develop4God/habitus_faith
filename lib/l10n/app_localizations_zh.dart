@@ -216,6 +216,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get defaultColor => '默认';
 
   @override
+  String get statistics => '统计';
+
+  @override
   String get settings => '设置';
 
   @override

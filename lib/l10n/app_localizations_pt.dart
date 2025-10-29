@@ -228,6 +228,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get defaultColor => 'Padrão';
 
   @override
+  String get statistics => 'Estatísticas';
+
+  @override
   String get settings => 'Configurações';
 
   @override

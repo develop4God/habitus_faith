@@ -6,6 +6,21 @@ import '../../domain/habit.dart';
 /// Provider for selected habit IDs
 final selectedHabitsProvider = StateProvider<List<String>>((ref) => []);
 
+/// Data class for translated habit
+class TranslatedHabit {
+  final String id;
+  final String name;
+  final String description;
+  final HabitCategory category;
+
+  const TranslatedHabit({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.category,
+  });
+}
+
 /// Notifier for onboarding state
 class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
   final Ref ref;
@@ -25,7 +40,10 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
         current.where((id) => id != habitId).toList();
   }
 
-  Future<bool> completeOnboarding({int retryCount = 0}) async {
+  Future<bool> completeOnboarding({
+    int retryCount = 0,
+    List<TranslatedHabit> translatedHabits = const [],
+  }) async {
     state = const AsyncValue.loading();
 
     try {
@@ -40,16 +58,27 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
       final repository = ref.read(jsonHabitsRepositoryProvider);
       final storage = ref.read(jsonStorageServiceProvider);
 
-      for (final habitId in selectedIds) {
-        final predefinedHabit =
-            predefinedHabits.firstWhere((h) => h.id == habitId);
+      // Use translated habits if provided, otherwise fall back to keys
+      if (translatedHabits.isNotEmpty) {
+        for (final translatedHabit in translatedHabits) {
+          await repository.createHabit(
+            name: translatedHabit.name,
+            description: translatedHabit.description,
+            category: translatedHabit.category,
+          );
+        }
+      } else {
+        // Fallback: use translation keys (for backward compatibility)
+        for (final habitId in selectedIds) {
+          final predefinedHabit =
+              predefinedHabits.firstWhere((h) => h.id == habitId);
 
-        // Create habit from predefined template
-        await repository.createHabit(
-          name: predefinedHabit.nameKey,
-          description: predefinedHabit.descriptionKey,
-          category: _mapCategory(predefinedHabit.category),
-        );
+          await repository.createHabit(
+            name: predefinedHabit.nameKey,
+            description: predefinedHabit.descriptionKey,
+            category: _mapCategory(predefinedHabit.category),
+          );
+        }
       }
 
       // Mark onboarding as complete
@@ -61,7 +90,10 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
       // Allow retry up to 2 times
       if (retryCount < 2) {
         await Future.delayed(Duration(seconds: 1 + retryCount));
-        return completeOnboarding(retryCount: retryCount + 1);
+        return completeOnboarding(
+          retryCount: retryCount + 1,
+          translatedHabits: translatedHabits,
+        );
       }
 
       state = AsyncValue.error(e, stack);

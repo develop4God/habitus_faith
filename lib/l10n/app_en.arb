@@ -278,6 +278,10 @@
   "@defaultColor": {
     "description": "Default color option label"
   },
+  "statistics": "Statistics",
+  "@statistics": {
+    "description": "Statistics/Progress page title"
+  },
   "settings": "Settings",
   "@settings": {
     "description": "Settings page title"
