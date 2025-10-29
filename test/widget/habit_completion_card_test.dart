@@ -113,12 +113,10 @@ void main() {
         await tester.pump();
 
         final card = tester.widget<Card>(find.byType(Card));
-        expect(card.elevation, 0,
-            reason: 'Card should have flat elevation');
-        
+        expect(card.elevation, 0, reason: 'Card should have flat elevation');
+
         final shape = card.shape as RoundedRectangleBorder;
-        expect(shape.side.width, 1, 
-            reason: 'Should have a border');
+        expect(shape.side.width, 1, reason: 'Should have a border');
       });
 
       testWidgets('completed habit has visual distinction',
@@ -128,8 +126,7 @@ void main() {
         await tester.pump();
 
         final card = tester.widget<Card>(find.byType(Card));
-        expect(card.elevation, 0,
-            reason: 'Card should have flat elevation');
+        expect(card.elevation, 0, reason: 'Card should have flat elevation');
 
         // Check for checkbox icon indicating completion
         expect(find.byIcon(Icons.check), findsOneWidget,
@@ -144,7 +141,7 @@ void main() {
 
         final textFinder = find.text('Morning Prayer');
         expect(textFinder, findsOneWidget);
-        
+
         final text = tester.widget<Text>(textFinder);
         expect(text.style?.decoration, TextDecoration.lineThrough,
             reason: 'Completed habit text should have strikethrough');
