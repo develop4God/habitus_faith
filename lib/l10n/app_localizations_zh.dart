@@ -238,4 +238,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get languageInfo => '选择您喜欢的应用语言。更改将立即生效。';
+
+  @override
+  String get highRiskWarning => '今天有高风险放弃这个习惯！';
+
+  @override
+  String riskPercentage(int percent) {
+    return '$percent% 放弃的概率';
+  }
+
+  @override
+  String get completeNow => '立即完成';
 }

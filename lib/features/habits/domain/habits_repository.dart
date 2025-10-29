@@ -49,4 +49,7 @@ abstract class HabitsRepository {
 
   /// Delete a habit
   Future<Result<void, HabitFailure>> deleteHabit(String habitId);
+  
+  /// Record completion/abandonment data for ML training
+  Future<void> recordCompletionForML(String habitId, bool completed);
 }

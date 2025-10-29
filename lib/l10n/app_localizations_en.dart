@@ -255,4 +255,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get languageInfo =>
       'Choose your preferred language for the app. The change will take effect immediately.';
+
+  @override
+  String get highRiskWarning => 'High risk of abandoning this habit today!';
+
+  @override
+  String riskPercentage(int percent) {
+    return '$percent% probability of abandonment';
+  }
+
+  @override
+  String get completeNow => 'Complete Now';
 }
