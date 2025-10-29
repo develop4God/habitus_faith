@@ -626,41 +626,16 @@ abstract class AppLocalizations {
   /// **'You will receive a daily reminder at your selected time to complete your habits.'**
   String get notificationInfo;
 
-  /// Settings page title
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
 
-  /// Notifications menu item
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get notifications;
 
-  /// Language menu item
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
 
-  /// Title for language settings page
-  ///
-  /// In en, this message translates to:
-  /// **'Language Settings'**
-  String get languageSettings;
 
-  /// Label for language selection
-  ///
-  /// In en, this message translates to:
-  /// **'Select Language'**
-  String get selectLanguage;
 
-  /// Information about language selection
-  ///
-  /// In en, this message translates to:
-  /// **'Choose your preferred language for the app. The change will take effect immediately.'**
-  String get languageInfo;
+
+
+
+
+
 
   /// Warning message for high abandonment risk
   ///
