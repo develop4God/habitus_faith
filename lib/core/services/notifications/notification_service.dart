@@ -268,14 +268,19 @@ class NotificationService {
         return;
       }
 
+      // Esperar propagación del token de auth
+      await Future.delayed(const Duration(milliseconds: 500));
+
       final userDocRef = _firestore.collection('users').doc(user.uid);
+
+      // 1. PRIMERO actualizar lastLogin
       await userDocRef.set(
         {'lastLogin': FieldValue.serverTimestamp()},
         SetOptions(merge: true),
       );
 
+      // 2. LUEGO guardar token
       final tokenRef = userDocRef.collection('fcmTokens').doc(token);
-
       await tokenRef.set({
         'token': token,
         'createdAt': FieldValue.serverTimestamp(),
@@ -283,16 +288,12 @@ class NotificationService {
       }, SetOptions(merge: true));
 
       developer.log(
-        'NotificationService: FCM token and lastLogin saved to Firestore for user ${user.uid}',
+        'NotificationService: FCM token saved to Firestore for user ${user.uid}',
         name: 'NotificationService',
       );
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_fcmTokenKey, token);
-      developer.log(
-        'NotificationService: FCM token saved to SharedPreferences.',
-        name: 'NotificationService',
-      );
     } catch (e) {
       developer.log(
         'ERROR in _saveFcmToken: $e',
@@ -301,7 +302,6 @@ class NotificationService {
       );
     }
   }
-
   // Unified method to save ALL notification settings
   Future<void> _saveNotificationSettingsToFirestore(
     String userId,

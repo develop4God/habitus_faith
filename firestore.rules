@@ -1,18 +1,32 @@
-rules_version='2'
-
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2025, 11, 27);
+
+    // Allow read/write for authenticated users to their own user document
+    // This rule applies to the user document itself (e.g., /users/USER_UID)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Rule for FCM tokens
+      match /fcmTokens/{tokenId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // NEW RULE: Allow read/write for authenticated users to their own 'settings' subcollection
+      // This rule applies to documents within the 'settings' subcollection (e.g., /users/USER_UID/settings/notifications)
+      match /settings/{settingId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
+
+    // Optional: If you have a 'devotionals' collection that should be publicly readable
+    // This is an example, adjust based on your actual data structure
+    // match /devotionals/{devotionalId} {
+    //   allow read: if true; // Publicly readable
+    //   allow write: if request.auth != null; // Only authenticated users can write
+    // }
+
+    // Add any other collections and their rules here as needed
   }
 }
+
