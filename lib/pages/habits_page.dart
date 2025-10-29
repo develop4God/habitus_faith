@@ -6,6 +6,7 @@ import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/presentation/widgets/habit_completion_card.dart';
 import '../features/habits/presentation/widgets/mini_calendar_heatmap.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
+import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 
 // New providers for JSON-based habits
@@ -311,6 +312,59 @@ class HabitsPage extends ConsumerWidget {
                       SnackBar(content: Text(l10n.habitCompleted)),
                     );
                   }
+                },
+              ),
+              // ML-based risk warning
+              Consumer(
+                builder: (context, ref, child) {
+                  final riskAsync = ref.watch(habitRiskProvider(habit.id));
+                  
+                  return riskAsync.when(
+                    data: (risk) {
+                      if (risk < 0.7) return const SizedBox.shrink();
+                      
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Card(
+                          color: Theme.of(context).colorScheme.errorContainer,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.warning_amber,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                            title: Text(
+                              l10n.highRiskWarning,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onErrorContainer,
+                              ),
+                            ),
+                            subtitle: Text(
+                              l10n.riskPercentage((risk * 100).toInt()),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onErrorContainer,
+                              ),
+                            ),
+                            trailing: FilledButton(
+                              onPressed: () async {
+                                await ref
+                                    .read(jsonHabitsNotifierProvider.notifier)
+                                    .completeHabit(habit.id);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(l10n.habitCompleted)),
+                                  );
+                                }
+                              },
+                              child: Text(l10n.completeNow),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  );
                 },
               ),
               const SizedBox(height: 12),

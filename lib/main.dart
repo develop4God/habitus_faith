@@ -12,6 +12,7 @@ import 'pages/bible_reader_page.dart';
 import 'core/providers/auth_provider.dart';
 import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
+import 'core/services/ml/model_updater.dart';
 import 'features/habits/presentation/onboarding/onboarding_page.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
 import 'features/habits/data/storage/json_habits_repository.dart';
@@ -127,6 +128,9 @@ void main() async {
     idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
     firestore: firestore,
   );
+
+  // Non-blocking ML model update check
+  ModelUpdater().checkAndUpdateModel();
 
   runApp(
     ProviderScope(
