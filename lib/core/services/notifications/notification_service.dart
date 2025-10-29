@@ -273,13 +273,7 @@ class NotificationService {
 
       final userDocRef = _firestore.collection('users').doc(user.uid);
 
-      // 1. PRIMERO actualizar lastLogin
-      await userDocRef.set(
-        {'lastLogin': FieldValue.serverTimestamp()},
-        SetOptions(merge: true),
-      );
-
-      // 2. LUEGO guardar token
+      // Save FCM token to Firestore
       final tokenRef = userDocRef.collection('fcmTokens').doc(token);
       await tokenRef.set({
         'token': token,
@@ -292,8 +286,12 @@ class NotificationService {
         name: 'NotificationService',
       );
 
+      // Save token locally
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_fcmTokenKey, token);
+      
+      // Update lastLogin separately using dedicated method
+      await updateLastLogin();
     } catch (e) {
       developer.log(
         'ERROR in _saveFcmToken: $e',
