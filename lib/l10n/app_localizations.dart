@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -559,24 +559,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your preferred language for the app. The change will take effect immediately.'**
   String get languageInfo;
-
-  /// Warning message for high abandonment risk
-  ///
-  /// In en, this message translates to:
-  /// **'High risk of abandoning this habit today!'**
-  String get highRiskWarning;
-
-  /// Display abandonment risk percentage
-  ///
-  /// In en, this message translates to:
-  /// **'{percent}% probability of abandonment'**
-  String riskPercentage(int percent);
-
-  /// Button text to complete habit immediately
-  ///
-  /// In en, this message translates to:
-  /// **'Complete Now'**
-  String get completeNow;
 }
 
 class _AppLocalizationsDelegate
@@ -612,9 +594,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

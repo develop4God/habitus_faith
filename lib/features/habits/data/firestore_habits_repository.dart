@@ -112,11 +112,4 @@ class FirestoreHabitsRepository implements HabitsRepository {
       return Failure(UnknownFailure(e.toString()));
     }
   }
-  
-  @override
-  Future<void> recordCompletionForML(String habitId, bool completed) async {
-    // Firestore implementation - not currently used but required by interface
-    // Data collection happens via GitHubMLStorage in JsonHabitsRepository
-    return;
-  }
 }

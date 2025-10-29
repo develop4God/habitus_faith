@@ -254,15 +254,4 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get languageInfo =>
       'Escolha seu idioma preferido para o aplicativo. A mudança será aplicada imediatamente.';
-
-  @override
-  String get highRiskWarning => 'Alto risco de abandonar este hábito hoje!';
-
-  @override
-  String riskPercentage(int percent) {
-    return '$percent% de probabilidade de abandono';
-  }
-
-  @override
-  String get completeNow => 'Completar Agora';
 }

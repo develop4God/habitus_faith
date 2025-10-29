@@ -72,8 +72,5 @@
   "language": "Langue",
   "languageSettings": "Paramètres de Langue",
   "selectLanguage": "Sélectionner la Langue",
-  "languageInfo": "Choisissez votre langue préférée pour l'application. Le changement prendra effet immédiatement.",
-  "highRiskWarning": "Risque élevé d'abandonner cette habitude aujourd'hui !",
-  "riskPercentage": "{percent}% de probabilité d'abandon",
-  "completeNow": "Terminer Maintenant"
+  "languageInfo": "Choisissez votre langue préférée pour l'application. Le changement prendra effet immédiatement."
 }

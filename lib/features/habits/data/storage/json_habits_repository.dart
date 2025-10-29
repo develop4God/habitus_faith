@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/habit.dart';
 import '../../domain/habits_repository.dart';
 import '../../domain/failures.dart';
 import '../../domain/models/completion_record.dart';
-import '../../domain/ml_features_calculator.dart';
 import '../habit_model.dart';
 import 'json_storage_service.dart';
 
@@ -14,7 +12,6 @@ class JsonHabitsRepository implements HabitsRepository {
   final JsonStorageService _storage;
   final String _userId;
   final String Function() _idGenerator;
-  final FirebaseFirestore? _firestore;
 
   static const String _habitsKey = 'habits';
   static const String _completionsKey = 'completions';
@@ -25,11 +22,9 @@ class JsonHabitsRepository implements HabitsRepository {
     required JsonStorageService storage,
     required String userId,
     required String Function() idGenerator,
-    FirebaseFirestore? firestore,
   })  : _storage = storage,
         _userId = userId,
-        _idGenerator = idGenerator,
-        _firestore = firestore {
+        _idGenerator = idGenerator {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
         debugPrint('JsonHabitsRepository: first listener - emitting initial habits');
@@ -268,49 +263,6 @@ class JsonHabitsRepository implements HabitsRepository {
     completionsData[record.habitId] = habitCompletions;
     debugPrint('JsonHabitsRepository._saveCompletionRecord: Saved completion for habit "${record.habitId}" on "${record.dateKey}"');
     await _storage.saveJson(_completionsKey, completionsData);
-  }
-
-  /// Record completion/abandonment data to Firestore for ML training
-  /// This method enriches completion records with ML features for the training pipeline
-  @override
-  Future<void> recordCompletionForML(String habitId, bool completed) async {
-    final habits = _loadHabits();
-    final habit = habits.where((h) => h.id == habitId).firstOrNull;
-    
-    if (habit == null) {
-      debugPrint('JsonHabitsRepository.recordCompletionForML: Habit not found "$habitId"');
-      return;
-    }
-
-    final now = DateTime.now();
-
-    final record = CompletionRecord(
-      habitId: habitId,
-      completedAt: now,
-      notes: null,
-      hourOfDay: now.hour,
-      dayOfWeek: now.weekday,
-      streakAtTime: habit.currentStreak,
-      failuresLast7Days: MLFeaturesCalculator.countRecentFailures(habit, 7),
-      hoursFromReminder: MLFeaturesCalculator.calculateHoursFromReminder(habit, now),
-      completed: completed,
-    );
-
-    // Save to Firestore for ML pipeline
-    if (_firestore != null) {
-      try {
-        await _firestore!
-            .collection('ml_training_data')
-            .doc('${habit.userId}_${habitId}_${now.millisecondsSinceEpoch}')
-            .set(record.toJson());
-        debugPrint('JsonHabitsRepository.recordCompletionForML: Saved ML data for habit "$habitId"');
-      } catch (e) {
-        // Non-critical: log but don't block user flow
-        debugPrint('JsonHabitsRepository.recordCompletionForML: ML data save failed: $e');
-      }
-    } else {
-      debugPrint('JsonHabitsRepository.recordCompletionForML: Firestore not available, skipping ML data save');
-    }
   }
 
   @override

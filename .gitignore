@@ -43,12 +43,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# Python ML Pipeline
-ml_pipeline/__pycache__/
-ml_pipeline/*.pyc
-ml_pipeline/.env
-ml_pipeline/serviceAccountKey.json
-ml_pipeline/data/*.csv
-ml_pipeline/venv/
-ml_pipeline/.venv/

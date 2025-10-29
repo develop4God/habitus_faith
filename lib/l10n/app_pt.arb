@@ -72,8 +72,5 @@
   "language": "Idioma",
   "languageSettings": "Configurações de Idioma",
   "selectLanguage": "Selecionar Idioma",
-  "languageInfo": "Escolha seu idioma preferido para o aplicativo. A mudança será aplicada imediatamente.",
-  "highRiskWarning": "Alto risco de abandonar este hábito hoje!",
-  "riskPercentage": "{percent}% de probabilidade de abandono",
-  "completeNow": "Completar Agora"
+  "languageInfo": "Escolha seu idioma preferido para o aplicativo. A mudança será aplicada imediatamente."
 }

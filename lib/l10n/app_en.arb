@@ -309,23 +309,5 @@
   "languageInfo": "Choose your preferred language for the app. The change will take effect immediately.",
   "@languageInfo": {
     "description": "Information about language selection"
-  },
-  "highRiskWarning": "High risk of abandoning this habit today!",
-  "@highRiskWarning": {
-    "description": "Warning message for high abandonment risk"
-  },
-  "riskPercentage": "{percent}% probability of abandonment",
-  "@riskPercentage": {
-    "description": "Display abandonment risk percentage",
-    "placeholders": {
-      "percent": {
-        "type": "int",
-        "example": "85"
-      }
-    }
-  },
-  "completeNow": "Complete Now",
-  "@completeNow": {
-    "description": "Button text to complete habit immediately"
   }
 }

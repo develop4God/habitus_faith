@@ -72,8 +72,5 @@
   "language": "语言",
   "languageSettings": "语言设置",
   "selectLanguage": "选择语言",
-  "languageInfo": "选择您喜欢的应用语言。更改将立即生效。",
-  "highRiskWarning": "今天有高风险放弃这个习惯！",
-  "riskPercentage": "{percent}% 放弃的概率",
-  "completeNow": "立即完成"
+  "languageInfo": "选择您喜欢的应用语言。更改将立即生效。"
 }
