@@ -306,6 +306,12 @@ class HabitsPage extends ConsumerWidget {
                   await ref
                       .read(jsonHabitsNotifierProvider.notifier)
                       .completeHabit(habit.id);
+                  
+                  // Record ML data after completion
+                  await ref
+                      .read(jsonHabitsRepositoryProvider)
+                      .recordCompletionForML(habit.id, true);
+                  
                   debugPrint('HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(

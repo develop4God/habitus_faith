@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -130,7 +131,7 @@ void main() async {
   );
 
   // Non-blocking ML model update check
-  ModelUpdater().checkAndUpdateModel();
+  unawaited(ModelUpdater().checkAndUpdateModel());
 
   runApp(
     ProviderScope(
