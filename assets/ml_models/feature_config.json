@@ -1,0 +1,9 @@
+{
+  "features": [
+    "hourOfDay",
+    "dayOfWeek",
+    "streakAtTime",
+    "failuresLast7Days",
+    "hoursFromReminder"
+  ]
+}
