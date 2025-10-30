@@ -1,90 +1,375 @@
 {
   "@@locale": "es",
   "appTitle": "Habitus Fe",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
   "start": "Comenzar",
+  "@start": {
+    "description": "Start button text"
+  },
   "readBible": "Leer Biblia",
+  "@readBible": {
+    "description": "Read Bible button text"
+  },
   "myHabits": "Mis Hábitos",
+  "@myHabits": {
+    "description": "Title for habits page"
+  },
   "noHabits": "Aún no tienes hábitos",
+  "@noHabits": {
+    "description": "Empty state message when user has no habits"
+  },
   "streak": "Racha",
+  "@streak": {
+    "description": "Streak label"
+  },
   "days": "días",
+  "@days": {
+    "description": "Days unit"
+  },
   "best": "Mejor",
+  "@best": {
+    "description": "Best streak label"
+  },
   "addHabit": "Agregar Hábito",
+  "@addHabit": {
+    "description": "Add habit button text"
+  },
   "deleteHabit": "Eliminar Hábito",
+  "@deleteHabit": {
+    "description": "Delete habit dialog title"
+  },
   "deleteHabitConfirm": "¿Estás seguro de eliminar \"{habitName}\"?",
+  "@deleteHabitConfirm": {
+    "description": "Delete habit confirmation message",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
+  },
   "cancel": "Cancelar",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
   "delete": "Eliminar",
+  "@delete": {
+    "description": "Delete button text"
+  },
   "name": "Nombre",
+  "@name": {
+    "description": "Name field label"
+  },
   "description": "Descripción",
+  "@description": {
+    "description": "Description field label"
+  },
   "add": "Agregar",
+  "@add": {
+    "description": "Add button text"
+  },
   "welcomeToHabitusFaith": "Bienvenido a Habitus Fe",
+  "@welcomeToHabitusFaith": {
+    "description": "Onboarding welcome title"
+  },
   "selectUpToThreeHabits": "Selecciona hasta 3 hábitos para comenzar tu jornada",
+  "@selectUpToThreeHabits": {
+    "description": "Onboarding instruction"
+  },
   "continueButton": "Continuar",
+  "@continueButton": {
+    "description": "Continue button text"
+  },
   "selectAtLeastOne": "Por favor selecciona al menos un hábito",
+  "@selectAtLeastOne": {
+    "description": "Error message when no habits selected"
+  },
   "maxThreeHabits": "Puedes seleccionar hasta 3 hábitos",
+  "@maxThreeHabits": {
+    "description": "Error message when trying to select more than 3"
+  },
   "spiritual": "Espiritual",
+  "@spiritual": {
+    "description": "Spiritual category"
+  },
   "physical": "Físico",
+  "@physical": {
+    "description": "Physical category"
+  },
   "mental": "Mental",
+  "@mental": {
+    "description": "Mental category"
+  },
   "relational": "Relacional",
+  "@relational": {
+    "description": "Relational category"
+  },
   "habitCompleted": "¡Hábito completado! 🎉",
+  "@habitCompleted": {
+    "description": "Success message when habit is completed"
+  },
   "tapToComplete": "Toca para completar",
+  "@tapToComplete": {
+    "description": "Instruction to tap to complete habit"
+  },
   "completed": "Completado",
+  "@completed": {
+    "description": "Completed status"
+  },
   "currentStreak": "Racha Actual",
+  "@currentStreak": {
+    "description": "Current streak label"
+  },
   "longestStreak": "Mejor Racha",
+  "@longestStreak": {
+    "description": "Longest streak label"
+  },
   "thisWeek": "Esta Semana",
+  "@thisWeek": {
+    "description": "This week label for calendar"
+  },
   "predefinedHabit_morningPrayer_name": "Oración Matutina",
+  "@predefinedHabit_morningPrayer_name": {
+    "description": "Name of morning prayer habit"
+  },
   "predefinedHabit_morningPrayer_description": "Comienza tu día con oración y gratitud",
+  "@predefinedHabit_morningPrayer_description": {
+    "description": "Description of morning prayer habit"
+  },
   "predefinedHabit_bibleReading_name": "Lectura Bíblica",
+  "@predefinedHabit_bibleReading_name": {
+    "description": "Name of bible reading habit"
+  },
   "predefinedHabit_bibleReading_description": "Lee y medita en la Palabra de Dios diariamente",
+  "@predefinedHabit_bibleReading_description": {
+    "description": "Description of bible reading habit"
+  },
   "predefinedHabit_worship_name": "Adoración",
+  "@predefinedHabit_worship_name": {
+    "description": "Name of worship habit"
+  },
   "predefinedHabit_worship_description": "Dedica tiempo a la adoración y alabanza",
+  "@predefinedHabit_worship_description": {
+    "description": "Description of worship habit"
+  },
   "predefinedHabit_gratitude_name": "Diario de Gratitud",
+  "@predefinedHabit_gratitude_name": {
+    "description": "Name of gratitude habit"
+  },
   "predefinedHabit_gratitude_description": "Escribe por lo que estás agradecido",
+  "@predefinedHabit_gratitude_description": {
+    "description": "Description of gratitude habit"
+  },
   "predefinedHabit_exercise_name": "Ejercicio",
+  "@predefinedHabit_exercise_name": {
+    "description": "Name of exercise habit"
+  },
   "predefinedHabit_exercise_description": "Cuida tu cuerpo, templo de Dios",
+  "@predefinedHabit_exercise_description": {
+    "description": "Description of exercise habit"
+  },
   "predefinedHabit_healthyEating_name": "Alimentación Saludable",
+  "@predefinedHabit_healthyEating_name": {
+    "description": "Name of healthy eating habit"
+  },
   "predefinedHabit_healthyEating_description": "Nutre tu cuerpo con alimentos sanos",
+  "@predefinedHabit_healthyEating_description": {
+    "description": "Description of healthy eating habit"
+  },
   "predefinedHabit_sleep_name": "Sueño de Calidad",
+  "@predefinedHabit_sleep_name": {
+    "description": "Name of sleep habit"
+  },
   "predefinedHabit_sleep_description": "Descansa bien para recargar energías",
+  "@predefinedHabit_sleep_description": {
+    "description": "Description of sleep habit"
+  },
   "predefinedHabit_meditation_name": "Meditación",
+  "@predefinedHabit_meditation_name": {
+    "description": "Name of meditation habit"
+  },
   "predefinedHabit_meditation_description": "Practica atención plena y reflexión",
+  "@predefinedHabit_meditation_description": {
+    "description": "Description of meditation habit"
+  },
   "predefinedHabit_learning_name": "Aprendizaje",
+  "@predefinedHabit_learning_name": {
+    "description": "Name of learning habit"
+  },
   "predefinedHabit_learning_description": "Crece en conocimiento y sabiduría",
+  "@predefinedHabit_learning_description": {
+    "description": "Description of learning habit"
+  },
   "predefinedHabit_creativity_name": "Tiempo Creativo",
+  "@predefinedHabit_creativity_name": {
+    "description": "Name of creativity habit"
+  },
   "predefinedHabit_creativity_description": "Exprésate a través de actividades creativas",
+  "@predefinedHabit_creativity_description": {
+    "description": "Description of creativity habit"
+  },
   "predefinedHabit_familyTime_name": "Tiempo en Familia",
+  "@predefinedHabit_familyTime_name": {
+    "description": "Name of family time habit"
+  },
   "predefinedHabit_familyTime_description": "Pasa tiempo de calidad con tus seres queridos",
+  "@predefinedHabit_familyTime_description": {
+    "description": "Description of family time habit"
+  },
   "predefinedHabit_service_name": "Actos de Servicio",
+  "@predefinedHabit_service_name": {
+    "description": "Name of service habit"
+  },
   "predefinedHabit_service_description": "Sirve a otros con amor y compasión",
+  "@predefinedHabit_service_description": {
+    "description": "Description of service habit"
+  },
+  "onboardingErrorMessage": "Failed to save habits. Please try again.",
+  "@onboardingErrorMessage": {
+    "description": "Error message shown when onboarding fails"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Button label for retrying an operation"
+  },
+  "selected": "Selected",
+  "@selected": {
+    "description": "Accessibility label indicating an item is selected"
+  },
   "category": "Categoría",
+  "@category": {
+    "description": "Category label"
+  },
   "difficulty": "Dificultad",
+  "@difficulty": {
+    "description": "Difficulty label"
+  },
   "emoji": "Emoji",
+  "@emoji": {
+    "description": "Emoji label"
+  },
   "color": "Color",
+  "@color": {
+    "description": "Color label"
+  },
   "optional": "opcional",
+  "@optional": {
+    "description": "Optional label"
+  },
   "edit": "Editar",
+  "@edit": {
+    "description": "Edit button text"
+  },
   "uncheck": "Desmarcar",
+  "@uncheck": {
+    "description": "Uncheck button text"
+  },
   "save": "Guardar",
+  "@save": {
+    "description": "Save button text"
+  },
   "editHabit": "Editar Hábito",
+  "@editHabit": {
+    "description": "Edit habit dialog title"
+  },
   "defaultColor": "Por defecto",
+  "@defaultColor": {
+    "description": "Default color option label"
+  },
   "statistics": "Progreso",
+  "@statistics": {
+    "description": "Statistics/Progress page title"
+  },
   "settings": "Configuración",
+  "@settings": {
+    "description": "Settings page title"
+  },
   "language": "Idioma",
+  "@language": {
+    "description": "Language settings option"
+  },
   "notifications": "Notificaciones",
+  "@notifications": {
+    "description": "Notifications settings option"
+  },
   "notificationSettings": "Configuración de Notificaciones",
+  "@notificationSettings": {
+    "description": "Notification settings title"
+  },
   "languageSettings": "Configuración de Idioma",
+  "@languageSettings": {
+    "description": "Language settings title"
+  },
   "selectLanguage": "Seleccionar Idioma",
+  "@selectLanguage": {
+    "description": "Select language instruction"
+  },
   "languageInfo": "La aplicación usará el idioma seleccionado para todo el texto y elementos de la interfaz.",
+  "@languageInfo": {
+    "description": "Language information text"
+  },
   "notificationsEnabled": "Notificaciones activadas",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
   "notificationsDisabled": "Notificaciones desactivadas",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
   "notificationTimeUpdated": "Hora de notificación actualizada a",
+  "@notificationTimeUpdated": {
+    "description": "Notification time updated message"
+  },
   "enableNotifications": "Activar Notificaciones",
+  "@enableNotifications": {
+    "description": "Enable notifications option"
+  },
   "notificationsOn": "Notificaciones Activadas",
+  "@notificationsOn": {
+    "description": "Notifications on label"
+  },
   "notificationsOff": "Notificaciones Desactivadas",
+  "@notificationsOff": {
+    "description": "Notifications off label"
+  },
   "receiveReminderNotifications": "Recibir notificaciones de recordatorio diario",
+  "@receiveReminderNotifications": {
+    "description": "Receive reminder notifications description"
+  },
   "notificationTime": "Hora de Notificación",
+  "@notificationTime": {
+    "description": "Notification time label"
+  },
   "selectNotificationTime": "Seleccionar hora de notificación",
+  "@selectNotificationTime": {
+    "description": "Select notification time instruction"
+  },
   "currentTime": "Hora actual",
+  "@currentTime": {
+    "description": "Current time label"
+  },
   "notificationInfo": "Recibirás un recordatorio diario a la hora seleccionada para completar tus hábitos.",
+  "@notificationInfo": {
+    "description": "Notification information text"
+  },
   "highRiskWarning": "¡Alto riesgo de abandonar este hábito hoy!",
+  "@highRiskWarning": {
+    "description": "Warning message for high abandonment risk"
+  },
   "riskPercentage": "{percent}% probabilidad de abandono",
-  "completeNow": "Completar Ahora"
+  "@riskPercentage": {
+    "description": "Display abandonment risk percentage",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  "completeNow": "Completar Ahora",
+  "@completeNow": {
+    "description": "Button text to complete habit immediately"
+  }
 }
