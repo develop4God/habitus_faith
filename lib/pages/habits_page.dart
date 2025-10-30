@@ -281,7 +281,7 @@ class HabitsPage extends ConsumerWidget {
   ) {
     final categoryColor = HabitColors.categoryColors[category]!;
     final categoryIcon = HabitColors.getCategoryIcon(category);
-    final categoryName = HabitColors.getCategoryDisplayName(category);
+    final categoryName = HabitColors.getCategoryDisplayName(category, l10n);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -605,7 +605,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                         color: HabitColors.categoryColors[category],
                       ),
                       const SizedBox(width: 8),
-                      Text(HabitColors.getCategoryDisplayName(category)),
+                      Text(HabitColors.getCategoryDisplayName(category, l10n)),
                     ],
                   ),
                 );
@@ -870,7 +870,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                         color: HabitColors.categoryColors[category],
                       ),
                       const SizedBox(width: 8),
-                      Text(HabitColors.getCategoryDisplayName(category)),
+                      Text(HabitColors.getCategoryDisplayName(category, l10n)),
                     ],
                   ),
                 );

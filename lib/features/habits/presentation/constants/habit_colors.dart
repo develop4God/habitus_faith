@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../../domain/habit.dart';
 
 /// Color palette for habit categories and custom colors
@@ -37,8 +38,17 @@ class HabitColors {
   }
 
   /// Get category name for display (localized)
-  static String getCategoryDisplayName(HabitCategory category) {
-    return category.displayName; // Use the displayName from the enum
+  static String getCategoryDisplayName(HabitCategory category, AppLocalizations l10n) {
+    switch (category) {
+      case HabitCategory.spiritual:
+        return l10n.spiritual;
+      case HabitCategory.physical:
+        return l10n.physical;
+      case HabitCategory.mental:
+        return l10n.mental;
+      case HabitCategory.relational:
+        return l10n.relational;
+    }
   }
 
   /// Get icon for category
