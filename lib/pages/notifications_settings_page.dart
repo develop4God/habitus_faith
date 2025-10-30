@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/notification_provider.dart';
+import 'package:habitus_faith/core/services/background_task_service.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 
 class NotificationsSettingsPage extends ConsumerStatefulWidget {
@@ -15,6 +16,7 @@ class _NotificationsSettingsPageState
     extends ConsumerState<NotificationsSettingsPage> {
   bool _notificationsEnabled = true;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 9, minute: 0);
+  bool _mlPredictionsEnabled = true;
   bool _isLoading = true;
 
   @override
@@ -32,9 +34,14 @@ class _NotificationsSettingsPageState
       final hour = int.parse(parts[0]);
       final minute = int.parse(parts[1]);
 
+      // Load ML predictions setting
+      final backgroundTaskService = BackgroundTaskService();
+      final mlEnabled = await backgroundTaskService.arePredictionsEnabled();
+
       setState(() {
         _notificationsEnabled = enabled;
         _selectedTime = TimeOfDay(hour: hour, minute: minute);
+        _mlPredictionsEnabled = mlEnabled;
         _isLoading = false;
       });
     } catch (e) {
@@ -91,6 +98,27 @@ class _NotificationsSettingsPageState
         ),
       );
     }
+  }
+
+  Future<void> _toggleMLPredictions(bool value) async {
+    setState(() {
+      _mlPredictionsEnabled = value;
+    });
+
+    final backgroundTaskService = BackgroundTaskService();
+    await backgroundTaskService.setPredictionsEnabled(value);
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          value
+              ? 'ML predictions enabled. You will receive smart nudges to help maintain your habits.'
+              : 'ML predictions disabled. Smart nudges will not be shown.',
+        ),
+      ),
+    );
   }
 
   @override
@@ -169,6 +197,45 @@ class _NotificationsSettingsPageState
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: _notificationsEnabled ? _selectTime : null,
                     enabled: _notificationsEnabled,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Smart Predictions',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SwitchListTile(
+                    value: _mlPredictionsEnabled,
+                    onChanged: _toggleMLPredictions,
+                    title: Text(
+                      _mlPredictionsEnabled
+                          ? 'Predictions Enabled'
+                          : 'Predictions Disabled',
+                    ),
+                    subtitle: const Text(
+                      'Receive smart nudges to help maintain your habits based on ML predictions',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      'Daily at 6:00 AM, we analyze your habits and send helpful suggestions if we detect abandonment risk.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
                   ),
                 ],
               ),
