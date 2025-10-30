@@ -15,7 +15,7 @@ void main() {
 
       // Assert
       expect(habit.difficultyLevel, 3);
-      expect(habit.targetMinutes, 15);
+      expect(habit.targetMinutes, 20); // Default for level 3
       expect(habit.successRate7d, 0.0);
       expect(habit.optimalDays, isEmpty);
       expect(habit.optimalTime, isNull);

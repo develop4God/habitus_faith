@@ -4,16 +4,30 @@ import '../../../features/habits/domain/habit.dart';
 /// Behavioral Engine - Applies TCC (Task Control Components) and Nudge Theory
 /// to analyze habit completion patterns and provide adaptive intelligence
 class BehavioralEngine {
+  // TCC (Task Control Components) thresholds
+  static const double tccIncreaseThreshold = 0.85;
+  static const double tccDecreaseThreshold = 0.50;
+  static const int maxDifficultyLevel = 5;
+  static const int minDifficultyLevel = 1;
+  
+  // Nudge Theory minimums for pattern detection
+  static const int minCompletionsForOptimalTime = 3;
+  static const int minCompletionsForOptimalDays = 5;
+  static const int minConsecutiveFailuresForPattern = 3;
+  static const int topOptimalDaysCount = 3;
+
   /// Calculate next difficulty level based on success rate
   /// TCC: Increase challenge when succeeding, reduce when struggling
   int calculateNextDifficulty(Habit habit) {
-    // If successRate7d >= 0.85 and difficultyLevel < 5: increase challenge
-    if (habit.successRate7d >= 0.85 && habit.difficultyLevel < 5) {
+    // If successRate7d >= threshold and not at max: increase challenge
+    if (habit.successRate7d >= tccIncreaseThreshold && 
+        habit.difficultyLevel < maxDifficultyLevel) {
       return habit.difficultyLevel + 1;
     }
     
-    // If successRate7d < 0.50 and difficultyLevel > 1: reduce to maintain engagement
-    if (habit.successRate7d < 0.50 && habit.difficultyLevel > 1) {
+    // If successRate7d < threshold and not at min: reduce to maintain engagement
+    if (habit.successRate7d < tccDecreaseThreshold && 
+        habit.difficultyLevel > minDifficultyLevel) {
       return habit.difficultyLevel - 1;
     }
     
@@ -24,8 +38,8 @@ class BehavioralEngine {
   /// Find the optimal time of day for habit completion
   /// Returns the most frequent hour when habit was successfully completed
   TimeOfDay? findOptimalTime(Habit habit) {
-    // Need at least 3 completions for meaningful data
-    if (habit.completionHistory.length < 3) {
+    // Need minimum completions for meaningful data
+    if (habit.completionHistory.length < minCompletionsForOptimalTime) {
       return null;
     }
 
@@ -45,8 +59,8 @@ class BehavioralEngine {
   /// Find the optimal days of the week for habit completion
   /// Returns top 3 most frequent days (1=Monday, 7=Sunday)
   List<int> findOptimalDays(Habit habit) {
-    // Need at least 5 completions for meaningful pattern
-    if (habit.completionHistory.length < 5) {
+    // Need minimum completions for meaningful pattern
+    if (habit.completionHistory.length < minCompletionsForOptimalDays) {
       return [];
     }
 
@@ -59,18 +73,18 @@ class BehavioralEngine {
       dayFrequency[day] = (dayFrequency[day] ?? 0) + 1;
     }
     
-    // Sort by frequency (descending) and return top 3
+    // Sort by frequency (descending) and return top count
     final sortedDays = dayFrequency.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     
-    return sortedDays.take(3).map((e) => e.key).toList();
+    return sortedDays.take(topOptimalDaysCount).map((e) => e.key).toList();
   }
 
   /// Detect failure patterns in habit completion
   /// Returns specific pattern or null if no clear pattern
   FailurePattern? detectFailurePattern(Habit habit) {
-    // Need at least 3 consecutive failures to detect pattern
-    if (habit.consecutiveFailures < 3) {
+    // Need minimum consecutive failures to detect pattern
+    if (habit.consecutiveFailures < minConsecutiveFailuresForPattern) {
       return null;
     }
     

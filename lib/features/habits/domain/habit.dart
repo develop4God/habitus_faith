@@ -46,6 +46,15 @@ enum HabitDifficulty {
 
 /// Pure domain entity - no Firestore dependencies
 class Habit {
+  /// Maps difficulty level (1-5) to recommended target minutes
+  static const Map<int, int> targetMinutesByLevel = {
+    1: 5,
+    2: 10,
+    3: 20,
+    4: 30,
+    5: 45,
+  };
+
   final String id;
   final String userId;
   final String name;
@@ -96,7 +105,7 @@ class Habit {
     this.colorValue,
     this.difficulty = HabitDifficulty.medium,
     this.difficultyLevel = 3,
-    this.targetMinutes = 15,
+    this.targetMinutes = 20,  // Default matches difficultyLevel 3
     this.successRate7d = 0.0,
     this.optimalDays = const [],
     this.optimalTime,
@@ -118,6 +127,8 @@ class Habit {
     String? predefinedId,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
+    int difficultyLevel = 3,
+    int? targetMinutes,
   }) {
     return Habit(
       id: id,
@@ -132,6 +143,8 @@ class Habit {
       createdAt: DateTime.now(),
       colorValue: colorValue,
       difficulty: difficulty,
+      difficultyLevel: difficultyLevel,
+      targetMinutes: targetMinutes ?? targetMinutesByLevel[difficultyLevel]!,
     );
   }
 

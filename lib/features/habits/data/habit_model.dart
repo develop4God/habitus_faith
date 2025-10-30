@@ -52,7 +52,7 @@ class HabitModel {
           : HabitDifficulty.medium,
       // TCC/Nudge fields with backward-compatible defaults
       difficultyLevel: data['difficultyLevel'] as int? ?? 3,
-      targetMinutes: data['targetMinutes'] as int? ?? 15,
+      targetMinutes: data['targetMinutes'] as int? ?? 20, // Matches level 3
       successRate7d: (data['successRate7d'] as num?)?.toDouble() ?? 0.0,
       optimalDays: (data['optimalDays'] as List<dynamic>?)
               ?.map((e) => e as int)
@@ -156,7 +156,7 @@ class HabitModel {
           : HabitDifficulty.medium,
       // TCC/Nudge fields with backward-compatible defaults
       difficultyLevel: json['difficultyLevel'] as int? ?? 3,
-      targetMinutes: json['targetMinutes'] as int? ?? 15,
+      targetMinutes: json['targetMinutes'] as int? ?? 20, // Matches level 3
       successRate7d: (json['successRate7d'] as num?)?.toDouble() ?? 0.0,
       optimalDays: (json['optimalDays'] as List<dynamic>?)
               ?.map((e) => e as int)
