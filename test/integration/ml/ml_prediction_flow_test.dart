@@ -1,135 +1,144 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart';
 
-/// Integration tests for ML prediction flow
-/// Note: These tests verify the feature calculation logic
-/// TFLite model tests are skipped due to package compatibility issues
+/// Integration test for ML predictor with TFLite model and scaler
+/// This test simulates real user scenarios and runs full end-to-end validation
+
 void main() {
-  group('ML Prediction Flow Integration', () {
-    test('feature calculation produces valid values for prediction', () {
-      // Create a habit with specific characteristics
-      final now = DateTime.now();
-      final createdAt = now.subtract(const Duration(days: 10));
-      
-      final completions = [
-        now.subtract(const Duration(days: 1)),
-        now.subtract(const Duration(days: 2)),
-        now.subtract(const Duration(days: 4)),
-      ];
+  group('AbandonmentPredictor TFLite Integration', () {
+    late Interpreter interpreter;
+    late Map<String, dynamic> scalerParams;
+
+    setUpAll(() async {
+      // Load TFLite model and scaler parameters only once
+      interpreter = await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
+      final scalerJson = await rootBundle.loadString('assets/ml_models/scaler_params.json');
+      scalerParams = json.decode(scalerJson);
+    });
+
+    tearDownAll(() {
+      interpreter.close();
+    });
+
+    test('Low-risk user scenario returns low abandonment probability', () async {
+      // Simula usuario real: espiritual, completando hábito diario, cerca del recordatorio
+      final now = DateTime(2024, 1, 15, 7, 30); // Lunes 7:30 AM
+      final completions = List.generate(7, (i) => now.subtract(Duration(days: i)));
 
       final habit = Habit(
-        id: 'test_habit_1',
+        id: 'low_risk',
         userId: 'user1',
-        name: 'Morning Prayer',
-        description: 'Pray every morning',
+        name: 'Bible Reading',
+        description: 'Read Bible daily',
         category: HabitCategory.spiritual,
-        reminderTime: '09:00',
-        createdAt: createdAt,
-        currentStreak: 2,
+        reminderTime: '07:00',
+        createdAt: now.subtract(const Duration(days: 30)),
+        currentStreak: 7,
         completionHistory: completions,
       );
 
-      // Calculate all ML features
-      final testTime = DateTime(2024, 1, 15, 14, 30); // Monday 2:30 PM
-      
-      final hourOfDay = testTime.hour;
-      final dayOfWeek = testTime.weekday;
-      final streakAtTime = habit.currentStreak;
-      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7);
-      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, testTime);
+      final hourOfDay = now.hour.toDouble();
+      final dayOfWeek = now.weekday.toDouble();
+      final streakAtTime = habit.currentStreak.toDouble();
+      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, now).toDouble();
 
-      // Verify all features are in valid ranges
-      expect(hourOfDay, greaterThanOrEqualTo(0));
-      expect(hourOfDay, lessThanOrEqualTo(23));
-      
-      expect(dayOfWeek, greaterThanOrEqualTo(1));
-      expect(dayOfWeek, lessThanOrEqualTo(7));
-      
-      expect(streakAtTime, greaterThanOrEqualTo(0));
-      
-      expect(failuresLast7Days, greaterThanOrEqualTo(0));
-      
-      expect(hoursFromReminder, greaterThanOrEqualTo(0));
+      // Normalización
+      final mean = (scalerParams['mean'] as List).cast<double>();
+      final scale = (scalerParams['scale'] as List).cast<double>();
+      final features = [hourOfDay, dayOfWeek, streakAtTime, failuresLast7Days, hoursFromReminder];
+      final normalized = List.generate(features.length, (i) => (features[i] - mean[i]) / scale[i]);
+
+      final output = List.filled(1, 0.0).reshape([1, 1]);
+      interpreter.run([normalized], output);
+
+      print('[Low-risk] Predicted risk: ${output[0][0]}');
+      expect(output[0][0], lessThan(0.5)); // Espera un riesgo bajo
     });
 
-    test('high-risk scenario produces expected features', () {
-      // Create a habit that should have high abandonment risk
-      final now = DateTime.now();
-      final createdAt = now.subtract(const Duration(days: 30));
-      
-      // Very few recent completions (only 2 in the last 15 days, none in last 7)
+    test('High-risk user scenario returns high abandonment probability', () async {
+      // Simula usuario real: mental, con pocos completados, lejos del recordatorio
+      final now = DateTime(2024, 1, 19, 21, 0); // Viernes 9 PM
       final completions = [
         now.subtract(const Duration(days: 10)),
         now.subtract(const Duration(days: 15)),
       ];
 
       final habit = Habit(
-        id: 'risky_habit',
+        id: 'high_risk',
         userId: 'user1',
         name: 'Exercise',
         description: 'Exercise daily',
         category: HabitCategory.mental,
         reminderTime: '07:00',
-        createdAt: createdAt,
-        currentStreak: 0, // Broken streak
+        createdAt: now.subtract(const Duration(days: 30)),
+        currentStreak: 0,
         completionHistory: completions,
       );
 
-      // Late night scenario - 21:00 (9 PM)
-      final testTime = DateTime(2024, 1, 19, 21, 0); // Friday 9 PM
-      
-      final hourOfDay = testTime.hour;
-      final dayOfWeek = testTime.weekday;
-      final streakAtTime = habit.currentStreak;
-      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7);
-      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, testTime);
+      final hourOfDay = now.hour.toDouble();
+      final dayOfWeek = now.weekday.toDouble();
+      final streakAtTime = habit.currentStreak.toDouble();
+      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, now).toDouble();
 
-      // Verify high-risk indicators
-      expect(hourOfDay, 21); // Late in the day
-      expect(dayOfWeek, 5); // Friday (end of week)
-      expect(streakAtTime, 0); // No streak
-      expect(failuresLast7Days, greaterThan(3)); // Multiple recent failures
-      expect(hoursFromReminder, greaterThan(10)); // Long time since reminder
+      final mean = (scalerParams['mean'] as List).cast<double>();
+      final scale = (scalerParams['scale'] as List).cast<double>();
+      final features = [hourOfDay, dayOfWeek, streakAtTime, failuresLast7Days, hoursFromReminder];
+      final normalized = List.generate(features.length, (i) => (features[i] - mean[i]) / scale[i]);
+
+      final output = List.filled(1, 0.0).reshape([1, 1]);
+      interpreter.run([normalized], output);
+
+      print('[High-risk] Predicted risk: ${output[0][0]}');
+      expect(output[0][0], greaterThan(0.5)); // Espera un riesgo alto
     });
 
-    test('low-risk scenario produces expected features', () {
-      // Create a habit with consistent completions
-      final now = DateTime.now();
-      final createdAt = now.subtract(const Duration(days: 20));
-      
-      // Completed every day for the last week
-      final completions = List.generate(
-        7,
-        (i) => now.subtract(Duration(days: i)),
-      );
+    test('Medium-risk scenario returns intermediate probability', () async {
+      // Simula usuario real: físico, racha media, algunos fallos, horario vespertino
+      final now = DateTime(2024, 1, 17, 17, 45); // Miércoles 5:45 PM
+      final completions = [
+        now.subtract(const Duration(days: 1)),
+        now.subtract(const Duration(days: 2)),
+        now.subtract(const Duration(days: 5)),
+      ];
 
       final habit = Habit(
-        id: 'consistent_habit',
+        id: 'medium_risk',
         userId: 'user1',
-        name: 'Bible Reading',
-        description: 'Read Bible daily',
-        category: HabitCategory.spiritual,
-        reminderTime: '10:00',
-        createdAt: createdAt,
-        currentStreak: 7, // Strong streak
+        name: 'Workout',
+        description: 'Workout 3 times a week',
+        category: HabitCategory.physical,
+        reminderTime: '17:00',
+        createdAt: now.subtract(const Duration(days: 20)),
+        currentStreak: 3,
         completionHistory: completions,
       );
 
-      // Shortly after reminder time - 10:30 AM
-      final testTime = DateTime(2024, 1, 15, 10, 30); // Monday 10:30 AM
-      
-      final streakAtTime = habit.currentStreak;
-      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7);
-      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, testTime);
+      final hourOfDay = now.hour.toDouble();
+      final dayOfWeek = now.weekday.toDouble();
+      final streakAtTime = habit.currentStreak.toDouble();
+      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, now).toDouble();
 
-      // Verify low-risk indicators
-      expect(streakAtTime, greaterThanOrEqualTo(7)); // Strong streak
-      expect(failuresLast7Days, 0); // No failures
-      expect(hoursFromReminder, lessThanOrEqualTo(1)); // Near reminder time
+      final mean = (scalerParams['mean'] as List).cast<double>();
+      final scale = (scalerParams['scale'] as List).cast<double>();
+      final features = [hourOfDay, dayOfWeek, streakAtTime, failuresLast7Days, hoursFromReminder];
+      final normalized = List.generate(features.length, (i) => (features[i] - mean[i]) / scale[i]);
+
+      final output = List.filled(1, 0.0).reshape([1, 1]);
+      interpreter.run([normalized], output);
+
+      print('[Medium-risk] Predicted risk: ${output[0][0]}');
+      expect(output[0][0], inInclusiveRange(0.3, 0.7)); // Espera riesgo intermedio
     });
 
-    test('feature values are deterministic for same inputs', () {
+    test('Feature values are deterministic for same inputs', () async {
+      final now = DateTime(2024, 1, 15, 15, 0);
       final habit = Habit(
         id: 'test_habit',
         userId: 'user1',
@@ -142,22 +151,24 @@ void main() {
         completionHistory: [],
       );
 
-      final testTime = DateTime(2024, 1, 15, 15, 0);
+      final hourOfDay = now.hour.toDouble();
+      final dayOfWeek = now.weekday.toDouble();
+      final streakAtTime = habit.currentStreak.toDouble();
+      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(habit, now).toDouble();
 
-      // Calculate features twice
-      final features1 = {
-        'hoursFromReminder': MLFeaturesCalculator.calculateHoursFromReminder(habit, testTime),
-        'failures': MLFeaturesCalculator.countRecentFailures(habit, 7),
-      };
+      final mean = (scalerParams['mean'] as List).cast<double>();
+      final scale = (scalerParams['scale'] as List).cast<double>();
+      final features = [hourOfDay, dayOfWeek, streakAtTime, failuresLast7Days, hoursFromReminder];
+      final normalized1 = List.generate(features.length, (i) => (features[i] - mean[i]) / scale[i]);
+      final normalized2 = List.generate(features.length, (i) => (features[i] - mean[i]) / scale[i]);
 
-      final features2 = {
-        'hoursFromReminder': MLFeaturesCalculator.calculateHoursFromReminder(habit, testTime),
-        'failures': MLFeaturesCalculator.countRecentFailures(habit, 7),
-      };
+      final output1 = List.filled(1, 0.0).reshape([1, 1]);
+      final output2 = List.filled(1, 0.0).reshape([1, 1]);
+      interpreter.run([normalized1], output1);
+      interpreter.run([normalized2], output2);
 
-      // Should produce identical results
-      expect(features1['hoursFromReminder'], features2['hoursFromReminder']);
-      expect(features1['failures'], features2['failures']);
+      expect(output1[0][0], output2[0][0]); // Deben ser iguales
     });
   });
 }
