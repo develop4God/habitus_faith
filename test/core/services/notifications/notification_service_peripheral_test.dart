@@ -53,7 +53,7 @@ void main() {
 
     group('Notification Time Configuration', () {
       test('should default to 09:00 when no time is set', () async {
-        final defaultTime = '09:00';
+        const defaultTime = '09:00';
         final time = prefs.getString('notification_time') ?? defaultTime;
         expect(time, equals('09:00'));
       });

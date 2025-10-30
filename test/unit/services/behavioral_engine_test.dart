@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ai/behavioral_engine.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';

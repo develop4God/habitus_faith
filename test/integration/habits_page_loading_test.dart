@@ -83,12 +83,12 @@ void main() {
       (WidgetTester tester) async {
         // Build HomePage directly (simulating direct navigation or app restart)
         await tester.pumpWidget(
-          ProviderScope(
+          const ProviderScope(
             child: MaterialApp(
-              locale: const Locale('en'),
+              locale: Locale('en'),
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: const HomePage(),
+              home: HomePage(),
             ),
           ),
         );
@@ -131,12 +131,12 @@ void main() {
       (WidgetTester tester) async {
         // This test verifies the stream provider doesn't cause blank state
         await tester.pumpWidget(
-          ProviderScope(
+          const ProviderScope(
             child: MaterialApp(
-              locale: const Locale('en'),
+              locale: Locale('en'),
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: const HabitsPage(),
+              home: HabitsPage(),
             ),
           ),
         );
@@ -223,12 +223,12 @@ void main() {
       (WidgetTester tester) async {
         // Build habits page when no habits exist
         await tester.pumpWidget(
-          ProviderScope(
+          const ProviderScope(
             child: MaterialApp(
-              locale: const Locale('en'),
+              locale: Locale('en'),
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: const HabitsPage(),
+              home: HabitsPage(),
             ),
           ),
         );

@@ -41,12 +41,12 @@ void main() {
             reason: 'uncheck should not be empty for $locale');
 
         // Test parameterized translations
-        final habitName = 'Test Habit';
+        const habitName = 'Test Habit';
         final deleteConfirm = l10n.deleteHabitConfirm(habitName);
         expect(deleteConfirm, contains(habitName),
             reason: 'deleteHabitConfirm should contain habit name for $locale');
 
-        final riskPercent = 85;
+        const riskPercent = 85;
         final riskMsg = l10n.riskPercentage(riskPercent);
         expect(riskMsg, contains('85'),
             reason: 'riskPercentage should contain percentage for $locale');
