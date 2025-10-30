@@ -36,7 +36,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
     required String description,
-    HabitCategory category = HabitCategory.other,
+    HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,

@@ -34,7 +34,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
   Future<void> addHabit({
     required String name,
     required String description,
-    HabitCategory category = HabitCategory.other,
+    HabitCategory category = HabitCategory.mental,
   }) async {
     state = const AsyncLoading();
 

@@ -1,9 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import '../domain/habit.dart';
 import '../domain/models/verse_reference.dart';
 
 /// Data model for Firestore serialization
 class HabitModel {
+  /// Migrates old category values to new holistic category model
+  static HabitCategory _migrateCategory(String? value) {
+    const migration = {
+      'prayer': HabitCategory.spiritual,
+      'bibleReading': HabitCategory.spiritual,
+      'service': HabitCategory.relational,
+      'gratitude': HabitCategory.spiritual,
+      'other': HabitCategory.mental,
+    };
+    return migration[value] ?? HabitCategory.spiritual;
+  }
+
   static Habit fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Habit(
@@ -11,10 +24,7 @@ class HabitModel {
       userId: data['userId'] as String,
       name: data['name'] as String,
       description: data['description'] as String,
-      category: HabitCategory.values.firstWhere(
-        (e) => e.name == data['category'],
-        orElse: () => HabitCategory.other,
-      ),
+      category: _migrateCategory(data['category']),
       emoji: data['emoji'] as String?,
       verse: data['verse'] != null
           ? VerseReference.fromJson(data['verse'] as Map<String, dynamic>)
@@ -40,6 +50,31 @@ class HabitModel {
               orElse: () => HabitDifficulty.medium,
             )
           : HabitDifficulty.medium,
+      // TCC/Nudge fields with backward-compatible defaults
+      difficultyLevel: data['difficultyLevel'] as int? ?? 3,
+      targetMinutes: data['targetMinutes'] as int? ?? 20, // Matches level 3
+      successRate7d: (data['successRate7d'] as num?)?.toDouble() ?? 0.0,
+      optimalDays: (data['optimalDays'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
+      optimalTime: data['optimalTime'] != null
+          ? TimeOfDay(
+              hour: data['optimalTime']['hour'] as int,
+              minute: data['optimalTime']['minute'] as int,
+            )
+          : null,
+      consecutiveFailures: data['consecutiveFailures'] as int? ?? 0,
+      failurePattern: data['failurePattern'] != null
+          ? FailurePattern.values.firstWhere(
+              (e) => e.name == data['failurePattern'],
+              orElse: () => FailurePattern.inconsistent,
+            )
+          : null,
+      abandonmentRisk: (data['abandonmentRisk'] as num?)?.toDouble() ?? 0.0,
+      lastAdjustedAt: data['lastAdjustedAt'] != null
+          ? (data['lastAdjustedAt'] as Timestamp).toDate()
+          : null,
     );
   }
 
@@ -66,6 +101,23 @@ class HabitModel {
       'isArchived': habit.isArchived,
       'colorValue': habit.colorValue,
       'difficulty': habit.difficulty.name,
+      // TCC/Nudge fields
+      'difficultyLevel': habit.difficultyLevel,
+      'targetMinutes': habit.targetMinutes,
+      'successRate7d': habit.successRate7d,
+      'optimalDays': habit.optimalDays,
+      'optimalTime': habit.optimalTime != null
+          ? {
+              'hour': habit.optimalTime!.hour,
+              'minute': habit.optimalTime!.minute,
+            }
+          : null,
+      'consecutiveFailures': habit.consecutiveFailures,
+      'failurePattern': habit.failurePattern?.name,
+      'abandonmentRisk': habit.abandonmentRisk,
+      'lastAdjustedAt': habit.lastAdjustedAt != null
+          ? Timestamp.fromDate(habit.lastAdjustedAt!)
+          : null,
     };
   }
 
@@ -76,10 +128,7 @@ class HabitModel {
       userId: json['userId'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
-      category: HabitCategory.values.firstWhere(
-        (e) => e.name == json['category'],
-        orElse: () => HabitCategory.other,
-      ),
+      category: _migrateCategory(json['category']),
       emoji: json['emoji'] as String?,
       verse: json['verse'] != null
           ? VerseReference.fromJson(json['verse'] as Map<String, dynamic>)
@@ -105,6 +154,31 @@ class HabitModel {
               orElse: () => HabitDifficulty.medium,
             )
           : HabitDifficulty.medium,
+      // TCC/Nudge fields with backward-compatible defaults
+      difficultyLevel: json['difficultyLevel'] as int? ?? 3,
+      targetMinutes: json['targetMinutes'] as int? ?? 20, // Matches level 3
+      successRate7d: (json['successRate7d'] as num?)?.toDouble() ?? 0.0,
+      optimalDays: (json['optimalDays'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
+      optimalTime: json['optimalTime'] != null
+          ? TimeOfDay(
+              hour: json['optimalTime']['hour'] as int,
+              minute: json['optimalTime']['minute'] as int,
+            )
+          : null,
+      consecutiveFailures: json['consecutiveFailures'] as int? ?? 0,
+      failurePattern: json['failurePattern'] != null
+          ? FailurePattern.values.firstWhere(
+              (e) => e.name == json['failurePattern'],
+              orElse: () => FailurePattern.inconsistent,
+            )
+          : null,
+      abandonmentRisk: (json['abandonmentRisk'] as num?)?.toDouble() ?? 0.0,
+      lastAdjustedAt: json['lastAdjustedAt'] != null
+          ? DateTime.parse(json['lastAdjustedAt'] as String)
+          : null,
     );
   }
 
@@ -130,6 +204,21 @@ class HabitModel {
       'isArchived': habit.isArchived,
       'colorValue': habit.colorValue,
       'difficulty': habit.difficulty.name,
+      // TCC/Nudge fields
+      'difficultyLevel': habit.difficultyLevel,
+      'targetMinutes': habit.targetMinutes,
+      'successRate7d': habit.successRate7d,
+      'optimalDays': habit.optimalDays,
+      'optimalTime': habit.optimalTime != null
+          ? {
+              'hour': habit.optimalTime!.hour,
+              'minute': habit.optimalTime!.minute,
+            }
+          : null,
+      'consecutiveFailures': habit.consecutiveFailures,
+      'failurePattern': habit.failurePattern?.name,
+      'abandonmentRisk': habit.abandonmentRisk,
+      'lastAdjustedAt': habit.lastAdjustedAt?.toIso8601String(),
     };
   }
 }

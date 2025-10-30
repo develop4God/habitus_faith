@@ -11,7 +11,7 @@ void main() {
         userId: 'user-1',
         name: 'Morning Prayer',
         description: 'Start the day with prayer',
-        category: HabitCategory.prayer,
+        category: HabitCategory.spiritual,
         colorValue: 0xFF9333EA,
         difficulty: HabitDifficulty.medium,
       );
@@ -22,7 +22,7 @@ void main() {
       // Assert
       expect(json['colorValue'], 0xFF9333EA);
       expect(json['difficulty'], 'medium');
-      expect(json['category'], 'prayer');
+      expect(json['category'], 'spiritual');
     });
 
     test('fromJson correctly deserializes color and difficulty', () {
@@ -54,7 +54,7 @@ void main() {
       // Assert
       expect(habit.colorValue, 0xFF9333EA);
       expect(habit.difficulty, HabitDifficulty.hard);
-      expect(habit.category, HabitCategory.prayer);
+      expect(habit.category, HabitCategory.spiritual);
     });
 
     test('fromJson with missing new fields uses defaults', () {
@@ -88,7 +88,7 @@ void main() {
         userId: 'user-1',
         name: 'Bible Reading',
         description: 'Read one chapter',
-        category: HabitCategory.bibleReading,
+        category: HabitCategory.spiritual,
         colorValue: 0xFF2563EB,
         difficulty: HabitDifficulty.easy,
       );

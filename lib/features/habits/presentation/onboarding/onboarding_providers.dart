@@ -109,15 +109,15 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
   HabitCategory _mapCategory(predefinedHabitCategory) {
     switch (predefinedHabitCategory.toString()) {
       case 'PredefinedHabitCategory.spiritual':
-        return HabitCategory.prayer;
+        return HabitCategory.spiritual;
       case 'PredefinedHabitCategory.physical':
-        return HabitCategory.other;
+        return HabitCategory.mental;
       case 'PredefinedHabitCategory.mental':
-        return HabitCategory.other;
+        return HabitCategory.mental;
       case 'PredefinedHabitCategory.relational':
-        return HabitCategory.service;
+        return HabitCategory.relational;
       default:
-        return HabitCategory.other;
+        return HabitCategory.mental;
     }
   }
 }

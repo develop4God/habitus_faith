@@ -5,11 +5,10 @@ import '../../domain/habit.dart';
 class HabitColors {
   // Category-based default colors
   static const Map<HabitCategory, Color> categoryColors = {
-    HabitCategory.prayer: Color(0xFF9333EA), // Purple - Spiritual
-    HabitCategory.bibleReading: Color(0xFF2563EB), // Blue - Knowledge
-    HabitCategory.service: Color(0xFFEF4444), // Red - Love/Service
-    HabitCategory.gratitude: Color(0xFFF59E0B), // Amber - Gratitude/Joy
-    HabitCategory.other: Color(0xFF6366F1), // Indigo - Default
+    HabitCategory.spiritual: Color(0xFF9333EA), // Purple - Spiritual
+    HabitCategory.physical: Color(0xFF10B981), // Green - Physical health
+    HabitCategory.mental: Color(0xFF2563EB), // Blue - Mental growth
+    HabitCategory.relational: Color(0xFFEF4444), // Red - Relationships/Love
   };
 
   // Predefined color palette for user selection
@@ -34,38 +33,25 @@ class HabitColors {
       return Color(habit.colorValue!);
     }
     return categoryColors[habit.category] ??
-        categoryColors[HabitCategory.other]!;
+        categoryColors[HabitCategory.spiritual]!;
   }
 
   /// Get category name for display (localized)
   static String getCategoryDisplayName(HabitCategory category) {
-    switch (category) {
-      case HabitCategory.prayer:
-        return 'Espiritual';
-      case HabitCategory.bibleReading:
-        return 'Lectura';
-      case HabitCategory.service:
-        return 'Servicio';
-      case HabitCategory.gratitude:
-        return 'Gratitud';
-      case HabitCategory.other:
-        return 'Otros';
-    }
+    return category.displayName; // Use the displayName from the enum
   }
 
   /// Get icon for category
   static IconData getCategoryIcon(HabitCategory category) {
     switch (category) {
-      case HabitCategory.prayer:
+      case HabitCategory.spiritual:
         return Icons.favorite;
-      case HabitCategory.bibleReading:
-        return Icons.menu_book;
-      case HabitCategory.service:
+      case HabitCategory.physical:
+        return Icons.fitness_center;
+      case HabitCategory.mental:
+        return Icons.psychology;
+      case HabitCategory.relational:
         return Icons.volunteer_activism;
-      case HabitCategory.gratitude:
-        return Icons.wb_sunny;
-      case HabitCategory.other:
-        return Icons.auto_awesome;
     }
   }
 }
