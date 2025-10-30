@@ -273,15 +273,18 @@ class HabitsPage extends ConsumerWidget {
   }
 
   Widget _buildCategorySection(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-    HabitCategory category,
-    List<Habit> habits,
-  ) {
+      BuildContext context,
+      WidgetRef ref,
+      AppLocalizations l10n,
+      HabitCategory category,
+      List<Habit> habits,
+      ) {
     final categoryColor = HabitColors.categoryColors[category]!;
     final categoryIcon = HabitColors.getCategoryIcon(category);
     final categoryName = HabitColors.getCategoryDisplayName(category, l10n);
+
+    // Gather all completion dates for this group
+    final groupCompletionDates = habits.expand((h) => h.completionHistory).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,8 +334,7 @@ class HabitsPage extends ConsumerWidget {
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: categoryColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -349,6 +351,11 @@ class HabitsPage extends ConsumerWidget {
             ],
           ),
         ),
+        // Calendar for this group
+        MiniCalendarHeatmap(
+          completionDates: groupCompletionDates,
+        ),
+        const SizedBox(height: 8),
         // Habits in this category
         ...habits.map((habit) {
           final notifier = ref.watch(jsonHabitsNotifierProvider);
@@ -360,19 +367,14 @@ class HabitsPage extends ConsumerWidget {
                 habit: habit,
                 isCompleting: isCompleting,
                 onTap: () async {
-                  debugPrint(
-                      'HabitsPage.onTap: completing habit -> ${habit.id}');
                   await ref
                       .read(jsonHabitsNotifierProvider.notifier)
                       .completeHabit(habit.id);
 
-                  // Record ML data after completion
                   await ref
                       .read(jsonHabitsRepositoryProvider)
                       .recordCompletionForML(habit.id, true);
 
-                  debugPrint(
-                      'HabitsPage.onTap: completeHabit awaited -> ${habit.id}');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(l10n.habitCompleted)),
@@ -470,10 +472,6 @@ class HabitsPage extends ConsumerWidget {
                     error: (_, __) => const SizedBox.shrink(),
                   );
                 },
-              ),
-              const SizedBox(height: 12),
-              MiniCalendarHeatmap(
-                completionDates: habit.completionHistory,
               ),
               const SizedBox(height: 16),
             ],
