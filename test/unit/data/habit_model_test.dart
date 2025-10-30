@@ -20,7 +20,7 @@ void main() {
         userId: 'user-1',
         name: 'Test',
         description: 'Test desc',
-        category: HabitCategory.prayer,
+        category: HabitCategory.spiritual,
         completedToday: true,
         currentStreak: 3,
         longestStreak: 5,
@@ -37,7 +37,7 @@ void main() {
       expect(firestoreData['userId'], 'user-1');
       expect(firestoreData['name'], 'Test');
       expect(firestoreData['description'], 'Test desc');
-      expect(firestoreData['category'], 'prayer');
+      expect(firestoreData['category'], 'spiritual');
       expect(firestoreData['completedToday'], true);
       expect(firestoreData['currentStreak'], 3);
       expect(firestoreData['longestStreak'], 5);
@@ -55,7 +55,7 @@ void main() {
         userId: 'user-1',
         name: 'Round Trip Test',
         description: 'Testing serialization',
-        category: HabitCategory.bibleReading,
+        category: HabitCategory.spiritual,
         completedToday: true,
         currentStreak: 7,
         longestStreak: 10,
@@ -88,6 +88,45 @@ void main() {
       expect(restoredHabit.completionHistory.length,
           originalHabit.completionHistory.length);
       expect(restoredHabit.isArchived, originalHabit.isArchived);
+    });
+
+    test('migrates old category values to new holistic categories', () async {
+      // Test all old category mappings
+      final testCases = {
+        'prayer': HabitCategory.spiritual,
+        'bibleReading': HabitCategory.spiritual,
+        'service': HabitCategory.relational,
+        'gratitude': HabitCategory.spiritual,
+        'other': HabitCategory.mental,
+      };
+
+      for (final entry in testCases.entries) {
+        final oldCategory = entry.key;
+        final expectedCategory = entry.value;
+
+        // Arrange - Create Firestore document with old category
+        final docId = 'test-migration-$oldCategory';
+        await firestore.collection('habits').doc(docId).set({
+          'userId': 'user-1',
+          'name': 'Test Habit',
+          'description': 'Test',
+          'category': oldCategory,
+          'completedToday': false,
+          'currentStreak': 0,
+          'longestStreak': 0,
+          'completionHistory': [],
+          'createdAt': Timestamp.now(),
+          'isArchived': false,
+        });
+
+        // Act - Read back from Firestore
+        final doc = await firestore.collection('habits').doc(docId).get();
+        final habit = HabitModel.fromFirestore(doc);
+
+        // Assert - Verify migration
+        expect(habit.category, expectedCategory,
+            reason: 'Category "$oldCategory" should migrate to ${expectedCategory.name}');
+      }
     });
   });
 }

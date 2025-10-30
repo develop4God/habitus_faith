@@ -33,7 +33,7 @@ void main() {
         userId: 'user-1',
         name: 'Bible Reading',
         description: 'Read 1 chapter',
-        category: HabitCategory.bibleReading,
+        category: HabitCategory.spiritual,
         createdAt: now,
         difficultyLevel: 4,
         targetMinutes: 30,

@@ -26,7 +26,7 @@ void main() {
       final result = await repository.createHabit(
         name: 'Test Habit',
         description: 'Test Description',
-        category: HabitCategory.prayer,
+        category: HabitCategory.spiritual,
       );
 
       expect(result.isSuccess(), isTrue);

@@ -279,13 +279,13 @@ String _getTranslatedDescription(AppLocalizations l10n, String key) {
 HabitCategory _mapPredefinedCategory(PredefinedHabitCategory category) {
   switch (category) {
     case PredefinedHabitCategory.spiritual:
-      return HabitCategory.prayer;
+      return HabitCategory.spiritual;
     case PredefinedHabitCategory.physical:
-      return HabitCategory.other;
+      return HabitCategory.mental;
     case PredefinedHabitCategory.mental:
-      return HabitCategory.other;
+      return HabitCategory.mental;
     case PredefinedHabitCategory.relational:
-      return HabitCategory.service;
+      return HabitCategory.relational;
   }
 }
 

@@ -5,6 +5,18 @@ import '../domain/models/verse_reference.dart';
 
 /// Data model for Firestore serialization
 class HabitModel {
+  /// Migrates old category values to new holistic category model
+  static HabitCategory _migrateCategory(String? value) {
+    const migration = {
+      'prayer': HabitCategory.spiritual,
+      'bibleReading': HabitCategory.spiritual,
+      'service': HabitCategory.relational,
+      'gratitude': HabitCategory.spiritual,
+      'other': HabitCategory.mental,
+    };
+    return migration[value] ?? HabitCategory.spiritual;
+  }
+
   static Habit fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Habit(
@@ -12,10 +24,7 @@ class HabitModel {
       userId: data['userId'] as String,
       name: data['name'] as String,
       description: data['description'] as String,
-      category: HabitCategory.values.firstWhere(
-        (e) => e.name == data['category'],
-        orElse: () => HabitCategory.other,
-      ),
+      category: _migrateCategory(data['category']),
       emoji: data['emoji'] as String?,
       verse: data['verse'] != null
           ? VerseReference.fromJson(data['verse'] as Map<String, dynamic>)
@@ -119,10 +128,7 @@ class HabitModel {
       userId: json['userId'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
-      category: HabitCategory.values.firstWhere(
-        (e) => e.name == json['category'],
-        orElse: () => HabitCategory.other,
-      ),
+      category: _migrateCategory(json['category']),
       emoji: json['emoji'] as String?,
       verse: json['verse'] != null
           ? VerseReference.fromJson(json['verse'] as Map<String, dynamic>)

@@ -11,7 +11,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           reminderTime: null,
           createdAt: DateTime.now(),
         );
@@ -30,7 +30,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           reminderTime: '',
           createdAt: DateTime.now(),
         );
@@ -49,7 +49,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           reminderTime: 'invalid',
           createdAt: DateTime.now(),
         );
@@ -68,7 +68,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           reminderTime: '09:00',
           createdAt: DateTime.now(),
         );
@@ -90,7 +90,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           reminderTime: '14:00',
           createdAt: DateTime.now(),
         );
@@ -112,7 +112,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           reminderTime: '10:00',
           createdAt: DateTime.now(),
         );
@@ -136,7 +136,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           createdAt: now,
           completionHistory: [],
         );
@@ -163,7 +163,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           createdAt: createdAt,
           completionHistory: completions,
         );
@@ -189,7 +189,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           createdAt: createdAt,
           completionHistory: completions,
         );
@@ -218,7 +218,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           createdAt: createdAt,
           completionHistory: completions,
         );
@@ -244,7 +244,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           createdAt: createdAt,
           completionHistory: completions,
         );
@@ -264,7 +264,7 @@ void main() {
           userId: 'user1',
           name: 'Test Habit',
           description: 'Test',
-          category: HabitCategory.prayer,
+          category: HabitCategory.spiritual,
           createdAt: createdAt,
           completionHistory: [],
         );

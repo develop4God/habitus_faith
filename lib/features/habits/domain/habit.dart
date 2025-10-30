@@ -8,24 +8,21 @@ enum FailurePattern {
 }
 
 enum HabitCategory {
-  prayer,
-  bibleReading,
-  service,
-  gratitude,
-  other;
+  spiritual,   // prayer, bible reading, worship, fasting
+  physical,    // exercise, sleep, nutrition, health
+  mental,      // learning, meditation, reading, creativity
+  relational;  // family time, friendships, community, service
 
   String get displayName {
     switch (this) {
-      case HabitCategory.prayer:
-        return 'Oración';
-      case HabitCategory.bibleReading:
-        return 'Lectura Bíblica';
-      case HabitCategory.service:
-        return 'Servicio';
-      case HabitCategory.gratitude:
-        return 'Gratitud';
-      case HabitCategory.other:
-        return 'Otro';
+      case HabitCategory.spiritual:
+        return 'Espiritual';
+      case HabitCategory.physical:
+        return 'Físico';
+      case HabitCategory.mental:
+        return 'Mental';
+      case HabitCategory.relational:
+        return 'Relacional';
     }
   }
 }
@@ -114,7 +111,7 @@ class Habit {
     required String userId,
     required String name,
     required String description,
-    HabitCategory category = HabitCategory.other,
+    HabitCategory category = HabitCategory.spiritual,
     String? emoji,
     VerseReference? verse,
     String? reminderTime,

@@ -7,7 +7,7 @@ class TestFixtures {
       userId: 'test-user',
       name: 'Oración',
       description: 'Dedica tiempo a la oración diaria.',
-      category: HabitCategory.prayer,
+      category: HabitCategory.spiritual,
     );
   }
 
@@ -17,7 +17,7 @@ class TestFixtures {
       userId: 'test-user',
       name: 'Lectura Bíblica',
       description: 'Lee un capítulo de la Biblia.',
-      category: HabitCategory.bibleReading,
+      category: HabitCategory.spiritual,
     );
   }
 

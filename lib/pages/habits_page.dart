@@ -69,7 +69,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
   Future<void> addHabit({
     required String name,
     required String description,
-    HabitCategory category = HabitCategory.other,
+    HabitCategory category = HabitCategory.mental,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
     String? emoji,
@@ -790,7 +790,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
   final nameCtrl = TextEditingController();
   final descCtrl = TextEditingController();
   final emojiCtrl = TextEditingController();
-  HabitCategory selectedCategory = HabitCategory.other;
+  HabitCategory selectedCategory = HabitCategory.mental;
   HabitDifficulty selectedDifficulty = HabitDifficulty.medium;
   Color? selectedColor;
 
