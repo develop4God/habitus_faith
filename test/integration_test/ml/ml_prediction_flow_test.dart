@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'dart:convert';
+import 'package:integration_test/integration_test.dart';
 import 'package:flutter/services.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart';
@@ -9,7 +10,8 @@ import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart
 /// This test simulates real user scenarios and runs full end-to-end validation
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized(); // ← cambiar primer línea
+
   group('AbandonmentPredictor TFLite Integration', () {
     late Interpreter interpreter;
     late Map<String, dynamic> scalerParams;
