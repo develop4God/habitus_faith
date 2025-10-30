@@ -8,10 +8,10 @@ enum FailurePattern {
 }
 
 enum HabitCategory {
-  spiritual,   // prayer, bible reading, worship, fasting
-  physical,    // exercise, sleep, nutrition, health
-  mental,      // learning, meditation, reading, creativity
-  relational;  // family time, friendships, community, service
+  spiritual, // prayer, bible reading, worship, fasting
+  physical, // exercise, sleep, nutrition, health
+  mental, // learning, meditation, reading, creativity
+  relational; // family time, friendships, community, service
 
   String get displayName {
     switch (this) {
@@ -73,12 +73,13 @@ class Habit {
   final bool isArchived;
   final int? colorValue; // Store color as int (Color.value)
   final HabitDifficulty difficulty;
-  
+
   // TCC/Nudge adaptive intelligence fields
   final int difficultyLevel; // 1-5 scale for TCC adjustment
   final int targetMinutes; // expected duration
   final double successRate7d; // calculated weekly success percentage
-  final List<int> optimalDays; // List<int> where 1=Monday, learned from completion patterns
+  final List<int>
+      optimalDays; // List<int> where 1=Monday, learned from completion patterns
   final TimeOfDay? optimalTime; // when user most succeeds
   final int consecutiveFailures; // triggers intervention
   final FailurePattern? failurePattern;
@@ -105,7 +106,7 @@ class Habit {
     this.colorValue,
     this.difficulty = HabitDifficulty.medium,
     this.difficultyLevel = 3,
-    this.targetMinutes = 20,  // Default matches difficultyLevel 3
+    this.targetMinutes = 20, // Default matches difficultyLevel 3
     this.successRate7d = 0.0,
     this.optimalDays = const [],
     this.optimalTime,
@@ -192,13 +193,16 @@ class Habit {
 
     // Add to completion history
     final newHistory = [...completionHistory, now];
-    
+
     // Calculate successRate7d based on last 7 days
-    final sevenDaysAgo = today.subtract(const Duration(days: 6)); // including today makes 7 days
+    final sevenDaysAgo =
+        today.subtract(const Duration(days: 6)); // including today makes 7 days
     int completionsLast7Days = 0;
     for (final completion in newHistory) {
-      final completionDate = DateTime(completion.year, completion.month, completion.day);
-      if (completionDate.isAfter(sevenDaysAgo.subtract(const Duration(days: 1))) && 
+      final completionDate =
+          DateTime(completion.year, completion.month, completion.day);
+      if (completionDate
+              .isAfter(sevenDaysAgo.subtract(const Duration(days: 1))) &&
           completionDate.isBefore(today.add(const Duration(days: 1)))) {
         completionsLast7Days++;
       }
@@ -212,7 +216,8 @@ class Habit {
       lastCompletedAt: now,
       completionHistory: newHistory,
       successRate7d: newSuccessRate7d,
-      consecutiveFailures: 0, // Reset consecutive failures on successful completion
+      consecutiveFailures:
+          0, // Reset consecutive failures on successful completion
     );
   }
 
