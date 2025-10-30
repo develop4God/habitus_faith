@@ -11,7 +11,8 @@ enum HabitCategory {
   spiritual, // prayer, bible reading, worship, fasting
   physical, // exercise, sleep, nutrition, health
   mental, // learning, meditation, reading, creativity
-  relational; // family time, friendships, community, service
+  relational, // family time, friendships, community, service
+  other; // user-defined or uncategorized
 
   String get displayName {
     switch (this) {
@@ -23,6 +24,8 @@ enum HabitCategory {
         return 'Mental';
       case HabitCategory.relational:
         return 'Relacional';
+      case HabitCategory.other:
+        return 'Otros';
     }
   }
 }
