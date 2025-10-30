@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ml/abandonment_predictor.dart';
-import '../../features/habits/domain/ml_features_calculator.dart';
 import '../../pages/habits_page.dart';
 
 /// Provider for AbandonmentPredictor singleton
@@ -48,18 +47,9 @@ final habitRiskProvider =
       // Get predictor
       final predictor = ref.read(abandonmentPredictorProvider);
 
-      // Calculate features for current moment
-      final now = DateTime.now();
-
       try {
-        final risk = await predictor.predictAbandonmentRisk(
-          hourOfDay: now.hour,
-          dayOfWeek: now.weekday,
-          currentStreak: habit.currentStreak,
-          recentFailures: MLFeaturesCalculator.countRecentFailures(habit, 7),
-          hoursSinceReminder:
-              MLFeaturesCalculator.calculateHoursFromReminder(habit, now),
-        );
+        // Use new predictRisk interface that takes a Habit directly
+        final risk = await predictor.predictRisk(habit);
 
         return risk;
       } catch (e) {
