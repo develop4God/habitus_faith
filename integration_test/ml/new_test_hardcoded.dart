@@ -93,7 +93,7 @@ void main() {
           final dayOfWeek = now.weekday.toDouble();
           final streakAtTime = habit.currentStreak.toDouble();
           final failuresLast7Days =
-          MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+          MLFeaturesCalculator.countRecentFailures(habit, 7, now: now);
           final hoursFromReminder =
           MLFeaturesCalculator.calculateHoursFromReminder(habit, now)
               .toDouble();
@@ -150,7 +150,7 @@ void main() {
           final dayOfWeek = now.weekday.toDouble();
           final streakAtTime = habit.currentStreak.toDouble();
           final failuresLast7Days =
-          MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+          MLFeaturesCalculator.countRecentFailures(habit, 7, now: now);
           final hoursFromReminder =
           MLFeaturesCalculator.calculateHoursFromReminder(habit, now)
               .toDouble();
@@ -206,7 +206,7 @@ void main() {
       final dayOfWeek = now.weekday.toDouble();
       final streakAtTime = habit.currentStreak.toDouble();
       final failuresLast7Days =
-      MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+      MLFeaturesCalculator.countRecentFailures(habit, 7, now: now);
       final hoursFromReminder =
       MLFeaturesCalculator.calculateHoursFromReminder(habit, now)
           .toDouble();
@@ -254,7 +254,7 @@ void main() {
       final dayOfWeek = now.weekday.toDouble();
       final streakAtTime = habit.currentStreak.toDouble();
       final failuresLast7Days =
-      MLFeaturesCalculator.countRecentFailures(habit, 7).toDouble();
+      MLFeaturesCalculator.countRecentFailures(habit, 7, now: now);
       final hoursFromReminder =
       MLFeaturesCalculator.calculateHoursFromReminder(habit, now)
           .toDouble();
