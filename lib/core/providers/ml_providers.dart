@@ -48,7 +48,8 @@ final habitRiskProvider =
       final predictor = ref.read(abandonmentPredictorProvider);
 
       try {
-        // Use new predictRisk interface that takes a Habit directly
+        // Use new predictRisk interface that encapsulates feature extraction
+        // and ensures consistent ordering of features for ML model
         final risk = await predictor.predictRisk(habit);
 
         return risk;
