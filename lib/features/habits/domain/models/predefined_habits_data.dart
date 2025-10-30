@@ -1,7 +1,9 @@
+import '../habit.dart';
 import 'predefined_habit.dart';
 import 'verse_reference.dart';
 
-/// 12 predefined habits: 4 spiritual, 3 physical, 3 mental, 2 relational
+/// Centralized list of all predefined habits.
+/// To add a new habit, simply append to this list.
 final List<PredefinedHabit> predefinedHabits = [
   // ===== SPIRITUAL (4) =====
   const PredefinedHabit(
@@ -97,7 +99,7 @@ final List<PredefinedHabit> predefinedHabits = [
     descriptionKey: 'predefinedHabit_creativity_description',
     category: PredefinedHabitCategory.mental,
     verse:
-        VerseReference(book: 'Exodus', chapter: 35, verse: 31, endVerse: '32'),
+    VerseReference(book: 'Exodus', chapter: 35, verse: 31, endVerse: '32'),
     suggestedTime: 'anytime',
   ),
 
@@ -109,7 +111,7 @@ final List<PredefinedHabit> predefinedHabits = [
     descriptionKey: 'predefinedHabit_familyTime_description',
     category: PredefinedHabitCategory.relational,
     verse:
-        VerseReference(book: 'Ephesians', chapter: 6, verse: 2, endVerse: '3'),
+    VerseReference(book: 'Ephesians', chapter: 6, verse: 2, endVerse: '3'),
     suggestedTime: 'evening',
   ),
   const PredefinedHabit(
@@ -122,3 +124,17 @@ final List<PredefinedHabit> predefinedHabits = [
     suggestedTime: 'anytime',
   ),
 ];
+extension PredefinedHabitCategoryX on PredefinedHabitCategory {
+  HabitCategory toDomainCategory() {
+    switch (this) {
+      case PredefinedHabitCategory.spiritual:
+        return HabitCategory.spiritual;
+      case PredefinedHabitCategory.physical:
+        return HabitCategory.physical;
+      case PredefinedHabitCategory.mental:
+        return HabitCategory.mental;
+      case PredefinedHabitCategory.relational:
+        return HabitCategory.relational;
+    }
+  }
+}

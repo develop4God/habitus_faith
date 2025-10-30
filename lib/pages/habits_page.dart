@@ -605,7 +605,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                         color: HabitColors.categoryColors[category],
                       ),
                       const SizedBox(width: 8),
-                      Text(HabitColors.getCategoryDisplayName(category, l10n)),
+                      Text(HabitColors.getCategoryDisplayName(category, widget.l10n))
                     ],
                   ),
                 );
@@ -870,7 +870,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                         color: HabitColors.categoryColors[category],
                       ),
                       const SizedBox(width: 8),
-                      Text(HabitColors.getCategoryDisplayName(category, l10n)),
+                      Text(HabitColors.getCategoryDisplayName(category, widget.l10n))
                     ],
                   ),
                 );
