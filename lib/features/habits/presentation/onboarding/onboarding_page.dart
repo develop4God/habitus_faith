@@ -158,7 +158,7 @@ class OnboardingPage extends ConsumerWidget {
 
                           // Prepare translated habits
                           final translatedHabits =
-                              selectedHabits.map((habitId) {
+                          selectedHabits.map((habitId) {
                             final predefinedHabit = predefinedHabits
                                 .firstWhere((h) => h.id == habitId);
                             return TranslatedHabit(
@@ -167,8 +167,7 @@ class OnboardingPage extends ConsumerWidget {
                                   l10n, predefinedHabit.nameKey),
                               description: _getTranslatedDescription(
                                   l10n, predefinedHabit.descriptionKey),
-                              category: _mapPredefinedCategory(
-                                  predefinedHabit.category),
+                              category: PredefinedHabitCategoryX(predefinedHabit.category).toDomainCategory(),
                             );
                           }).toList();
 
@@ -276,16 +275,18 @@ String _getTranslatedDescription(AppLocalizations l10n, String key) {
 }
 
 // Helper function to map predefined category to HabitCategory
-HabitCategory _mapPredefinedCategory(PredefinedHabitCategory category) {
-  switch (category) {
-    case PredefinedHabitCategory.spiritual:
-      return HabitCategory.spiritual;
-    case PredefinedHabitCategory.physical:
-      return HabitCategory.mental;
-    case PredefinedHabitCategory.mental:
-      return HabitCategory.mental;
-    case PredefinedHabitCategory.relational:
-      return HabitCategory.relational;
+extension PredefinedHabitCategoryX on PredefinedHabitCategory {
+  HabitCategory toDomainCategory() {
+    switch (this) {
+      case PredefinedHabitCategory.spiritual:
+        return HabitCategory.spiritual;
+      case PredefinedHabitCategory.physical:
+        return HabitCategory.physical;
+      case PredefinedHabitCategory.mental:
+        return HabitCategory.mental;
+      case PredefinedHabitCategory.relational:
+        return HabitCategory.relational;
+    }
   }
 }
 
