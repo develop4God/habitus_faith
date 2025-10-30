@@ -309,30 +309,24 @@ class HabitsPage extends ConsumerWidget {
             ),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: categoryColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  categoryIcon,
-                  color: categoryColor,
-                  size: 20,
-                ),
+              Icon(
+                categoryIcon,
+                color: categoryColor,
+                size: 20,
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  categoryName,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: categoryColor,
-                  ),
+              Text(
+                categoryName,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: categoryColor,
                 ),
+                textAlign: TextAlign.center,
               ),
+              const SizedBox(width: 12),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
@@ -346,6 +340,7 @@ class HabitsPage extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                     color: categoryColor,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],
