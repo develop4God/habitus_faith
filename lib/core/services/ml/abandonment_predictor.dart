@@ -14,7 +14,29 @@ import '../../../features/habits/domain/ml_features_calculator.dart';
 class AbandonmentPredictor {
   Interpreter? _interpreter;
   Map<String, dynamic>? _scalerParams;
+  Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
+  
+  // Telemetry tracking
+  int _predictionCount = 0;
+  int _errorCount = 0;
+  DateTime? _lastPredictionTime;
+
+  /// Get model version
+  String? get modelVersion => _modelMetadata?['version'];
+  
+  /// Get model metadata
+  Map<String, dynamic>? get metadata => _modelMetadata;
+  
+  /// Get prediction statistics
+  Map<String, dynamic> get telemetry => {
+    'prediction_count': _predictionCount,
+    'error_count': _errorCount,
+    'last_prediction': _lastPredictionTime?.toIso8601String(),
+    'success_rate': _predictionCount > 0 
+        ? ((_predictionCount - _errorCount) / _predictionCount) 
+        : 0.0,
+  };
 
   /// Initialize the predictor by loading model and scaler params
   Future<void> initialize() async {
@@ -24,6 +46,13 @@ class AbandonmentPredictor {
     }
 
     try {
+      // Load model metadata
+      debugPrint('AbandonmentPredictor: Loading model metadata...');
+      final metadataJson =
+          await rootBundle.loadString('assets/ml_models/model_metadata.json');
+      _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
+      debugPrint('AbandonmentPredictor: Model version ${_modelMetadata!['version']} loaded');
+      
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor: Loading TFLite model...');
       _interpreter =
@@ -39,6 +68,7 @@ class AbandonmentPredictor {
 
       _initialized = true;
       debugPrint('AbandonmentPredictor: Initialization complete');
+      debugPrint('AbandonmentPredictor: Model metadata - Training samples: ${_modelMetadata!['training_samples']}, Accuracy: ${_modelMetadata!['accuracy']}');
     } catch (e) {
       debugPrint('AbandonmentPredictor: Initialization failed: $e');
       // Non-critical failure - predictor will return 0.0 for predictions
@@ -91,10 +121,15 @@ class AbandonmentPredictor {
   Future<double> predictRisk(Habit habit) async {
     if (!_initialized || _interpreter == null) {
       debugPrint('AbandonmentPredictor: Not initialized, returning 0.0');
+      _errorCount++;
       return 0.0;
     }
 
     try {
+      // Track prediction attempt
+      _predictionCount++;
+      _lastPredictionTime = DateTime.now();
+      
       // ⚠️ CRITICAL: Handle first-time habits (no history) → return 0.5 default risk
       if (habit.completionHistory.isEmpty && habit.currentStreak == 0) {
         debugPrint('AbandonmentPredictor: First-time habit detected, returning default risk 0.5');
@@ -139,11 +174,13 @@ class AbandonmentPredictor {
       final probability = output[0][0];
 
       debugPrint(
-          'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}%');
+          'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}% '
+          '(model v${_modelMetadata?['version']})');
 
       return probability.clamp(0.0, 1.0);
     } catch (e) {
       debugPrint('AbandonmentPredictor: Prediction failed: $e');
+      _errorCount++;
       return 0.0; // Graceful degradation
     }
   }

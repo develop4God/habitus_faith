@@ -63,3 +63,4 @@ flutter:
     - assets/biblia/
     - assets/ml_models/predictor.tflite
     - assets/ml_models/scaler_params.json
+    - assets/ml_models/model_metadata.json

@@ -298,4 +298,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get completeNow => 'Completar Agora';
+
+  @override
+  String abandonmentNudgeTitle(String habitName) {
+    return 'Reduzir hábito \"$habitName\"?';
+  }
+
+  @override
+  String abandonmentNudgeBody(int minutes) {
+    return 'Reduzir para ${minutes}min? Notamos que você pode abandonar este hábito';
+  }
 }

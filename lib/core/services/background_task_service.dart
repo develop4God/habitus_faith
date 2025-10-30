@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../providers/habit_predictor_provider.dart';
 
 /// Service for managing background tasks using WorkManager
 /// Handles daily cron jobs for ML predictions and other background operations
@@ -199,13 +202,7 @@ void callbackDispatcher() {
     try {
       switch (task) {
         case BackgroundTaskService._dailyPredictionTask:
-          // Task execution is delegated to HabitPredictorProvider
-          // which will be triggered by the provider system
-          developer.log(
-            'BackgroundTaskService: Daily prediction task triggered',
-            name: 'BackgroundTaskService',
-          );
-          return true;
+          return await _executeDailyPrediction();
 
         default:
           developer.log(
@@ -223,4 +220,76 @@ void callbackDispatcher() {
       return false;
     }
   });
+}
+
+/// Execute daily prediction task in background isolate
+/// Returns true if successful, false otherwise
+Future<bool> _executeDailyPrediction() async {
+  developer.log(
+    'BackgroundTaskService: Starting daily prediction execution',
+    name: 'BackgroundTaskService',
+  );
+
+  ProviderContainer? container;
+  
+  try {
+    // Check if predictions are enabled (re-check in isolate)
+    final prefs = await SharedPreferences.getInstance();
+    final enabled = prefs.getBool('ml_predictions_enabled') ?? true;
+    
+    if (!enabled) {
+      developer.log(
+        'BackgroundTaskService: ML predictions disabled, skipping',
+        name: 'BackgroundTaskService',
+      );
+      return true; // Not an error, just disabled
+    }
+
+    // Initialize ProviderContainer in isolate
+    container = ProviderContainer(
+      overrides: [
+        // Use JSON storage provider for background task
+        // (Firestore may not be available in isolate)
+      ],
+    );
+
+    // Get the predictor service and run predictions
+    final predictor = container.read(habitPredictorProvider);
+    
+    // Run predictions with timeout protection (max 5 minutes)
+    await predictor.runDailyPredictions().timeout(
+      const Duration(minutes: 5),
+      onTimeout: () {
+        developer.log(
+          'BackgroundTaskService: Prediction task timed out after 5 minutes',
+          name: 'BackgroundTaskService',
+        );
+        throw TimeoutException('Daily prediction task exceeded 5 minutes');
+      },
+    );
+
+    developer.log(
+      'BackgroundTaskService: Daily prediction task completed successfully',
+      name: 'BackgroundTaskService',
+    );
+    
+    return true;
+  } on TimeoutException catch (e) {
+    developer.log(
+      'BackgroundTaskService: Prediction timeout: $e',
+      name: 'BackgroundTaskService',
+      error: e,
+    );
+    return false;
+  } catch (e) {
+    developer.log(
+      'BackgroundTaskService: Prediction execution error: $e',
+      name: 'BackgroundTaskService',
+      error: e,
+    );
+    return false;
+  } finally {
+    // Clean up container
+    container?.dispose();
+  }
 }

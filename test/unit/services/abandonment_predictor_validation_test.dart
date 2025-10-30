@@ -46,5 +46,27 @@ void main() {
       expect(normalized.every((v) => v.isFinite), isTrue);
       expect(normalized[0], closeTo(-0.096, 0.01)); // (12-12.5)/5.2
     });
+
+    test('model_metadata.json exists and is valid', () async {
+      final json = await rootBundle.loadString('assets/ml_models/model_metadata.json');
+      final metadata = jsonDecode(json);
+      
+      expect(metadata['version'], isNotNull);
+      expect(metadata['features'], isNotNull);
+      expect(metadata['features'], hasLength(5));
+      expect(metadata['trained_at'], isNotNull);
+      expect(metadata['training_samples'], isA<num>());
+      expect(metadata['accuracy'], isA<num>());
+      expect(metadata['accuracy'], greaterThan(0));
+      expect(metadata['accuracy'], lessThanOrEqualTo(1));
+      
+      // Verify feature order matches expected
+      final features = metadata['features'] as List;
+      expect(features[0], 'hourOfDay');
+      expect(features[1], 'dayOfWeek');
+      expect(features[2], 'currentStreak');
+      expect(features[3], 'failuresLast7Days');
+      expect(features[4], 'categoryIndex');
+    });
   });
 }

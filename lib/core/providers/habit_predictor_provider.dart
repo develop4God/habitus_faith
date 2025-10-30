@@ -1,11 +1,14 @@
 import 'dart:developer' as developer;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/habits/domain/habit.dart';
 import '../../features/habits/data/storage/storage_providers.dart';
 import '../services/ml/abandonment_predictor.dart';
 import '../services/ai/behavioral_engine.dart';
 import '../services/notifications/notification_service.dart';
 import '../providers/ml_providers.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Provider for managing daily habit predictions and interventions
 /// Runs predictions daily at 6am via background task
@@ -171,17 +174,29 @@ class HabitPredictorService {
     required String habitId,
   }) async {
     try {
+      // Get locale from SharedPreferences (since we're in background/isolate)
+      final prefs = await SharedPreferences.getInstance();
+      final localeCode = prefs.getString('locale') ?? 'es';
+      
+      // Load localized strings without BuildContext
+      final locale = Locale(localeCode);
+      final localizations = lookupAppLocalizations(locale);
+      
+      // Get localized title and body using parameterized methods
+      final title = localizations.abandonmentNudgeTitle(habitName);
+      final body = localizations.abandonmentNudgeBody(suggestedMinutes);
+      
       final notificationService = NotificationService();
       
       await notificationService.showImmediateNotification(
-        '¿Reducimos tu hábito "$habitName"?',
-        '¿Reducimos a ${suggestedMinutes}min? Notamos que podrías abandonar',
+        title,
+        body,
         payload: 'habit_nudge:$habitId:$suggestedMinutes',
         id: habitId.hashCode,
       );
 
       developer.log(
-        'HabitPredictorService: Nudge notification sent for habit "$habitName"',
+        'HabitPredictorService: Nudge notification sent for habit "$habitName" (locale: $localeCode)',
         name: 'HabitPredictorService',
       );
     } catch (e) {

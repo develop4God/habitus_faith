@@ -371,5 +371,25 @@
   "completeNow": "Terminer Maintenant",
   "@completeNow": {
     "description": "Button text to complete habit immediately"
+  },
+  "abandonmentNudgeTitle": "Réduire l'habitude \"{habitName}\"?",
+  "@abandonmentNudgeTitle": {
+    "description": "Title for abandonment prediction nudge notification",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Prière du Matin"
+      }
+    }
+  },
+  "abandonmentNudgeBody": "Réduire à {minutes}min? Nous avons remarqué que vous pourriez abandonner cette habitude",
+  "@abandonmentNudgeBody": {
+    "description": "Body text for abandonment prediction nudge notification",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
+    }
   }
 }
