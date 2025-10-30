@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/habit_predictor_provider.dart';
+import '../../features/habits/data/storage/storage_providers.dart';
 
 /// Service for managing background tasks using WorkManager
 /// Handles daily cron jobs for ML predictions and other background operations
@@ -248,8 +249,9 @@ Future<bool> _executeDailyPrediction() async {
     // Initialize ProviderContainer in isolate
     container = ProviderContainer(
       overrides: [
-        // Use JSON storage provider for background task
-        // (Firestore may not be available in isolate)
+        // Force JSON storage in isolate (Firestore not available in background isolate)
+        // SharedPreferences must be initialized separately in isolate
+        sharedPreferencesProvider.overrideWithValue(prefs),
       ],
     );
 

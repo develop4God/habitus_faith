@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import '../../../features/habits/domain/habit.dart';
 import '../../../features/habits/domain/ml_features_calculator.dart';
@@ -17,10 +18,17 @@ class AbandonmentPredictor {
   Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
   
-  // Telemetry tracking
+  // Telemetry tracking (persisted across sessions)
   int _predictionCount = 0;
   int _errorCount = 0;
   DateTime? _lastPredictionTime;
+  DateTime? _lastTelemetryReset;
+
+  // Telemetry persistence keys
+  static const String _telemetryPredictionCountKey = 'ml_prediction_count';
+  static const String _telemetryErrorCountKey = 'ml_error_count';
+  static const String _telemetryLastPredictionKey = 'ml_last_prediction';
+  static const String _telemetryLastResetKey = 'ml_last_reset';
 
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
@@ -33,6 +41,7 @@ class AbandonmentPredictor {
     'prediction_count': _predictionCount,
     'error_count': _errorCount,
     'last_prediction': _lastPredictionTime?.toIso8601String(),
+    'last_reset': _lastTelemetryReset?.toIso8601String(),
     'success_rate': _predictionCount > 0 
         ? ((_predictionCount - _errorCount) / _predictionCount) 
         : 0.0,
@@ -66,9 +75,13 @@ class AbandonmentPredictor {
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
+      // Load persisted telemetry
+      await _loadTelemetry();
+
       _initialized = true;
       debugPrint('AbandonmentPredictor: Initialization complete');
       debugPrint('AbandonmentPredictor: Model metadata - Training samples: ${_modelMetadata!['training_samples']}, Accuracy: ${_modelMetadata!['accuracy']}');
+      debugPrint('AbandonmentPredictor: Telemetry - Predictions: $_predictionCount, Errors: $_errorCount');
     } catch (e) {
       debugPrint('AbandonmentPredictor: Initialization failed: $e');
       // Non-critical failure - predictor will return 0.0 for predictions
@@ -177,10 +190,15 @@ class AbandonmentPredictor {
           'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}% '
           '(model v${_modelMetadata?['version']})');
 
+      // Save telemetry after successful prediction
+      await _saveTelemetry();
+
       return probability.clamp(0.0, 1.0);
     } catch (e) {
       debugPrint('AbandonmentPredictor: Prediction failed: $e');
       _errorCount++;
+      // Save telemetry even on error
+      await _saveTelemetry();
       return 0.0; // Graceful degradation
     }
   }
@@ -251,5 +269,84 @@ class AbandonmentPredictor {
     _scalerParams = null;
     _initialized = false;
     debugPrint('AbandonmentPredictor: Disposed');
+  }
+
+  /// Load persisted telemetry from SharedPreferences
+  Future<void> _loadTelemetry() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      _predictionCount = prefs.getInt(_telemetryPredictionCountKey) ?? 0;
+      _errorCount = prefs.getInt(_telemetryErrorCountKey) ?? 0;
+      
+      final lastPredictionStr = prefs.getString(_telemetryLastPredictionKey);
+      if (lastPredictionStr != null) {
+        _lastPredictionTime = DateTime.parse(lastPredictionStr);
+      }
+      
+      final lastResetStr = prefs.getString(_telemetryLastResetKey);
+      if (lastResetStr != null) {
+        _lastTelemetryReset = DateTime.parse(lastResetStr);
+        
+        // Reset telemetry weekly (every 7 days)
+        if (DateTime.now().difference(_lastTelemetryReset!).inDays > 7) {
+          debugPrint('AbandonmentPredictor: Weekly telemetry reset triggered');
+          await _resetTelemetry();
+        }
+      } else {
+        // First time - initialize reset timestamp
+        _lastTelemetryReset = DateTime.now();
+        await prefs.setString(_telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
+      }
+      
+      debugPrint('AbandonmentPredictor: Telemetry loaded - Predictions: $_predictionCount, Errors: $_errorCount');
+    } catch (e) {
+      debugPrint('AbandonmentPredictor: Failed to load telemetry: $e');
+      // Continue with default values
+    }
+  }
+
+  /// Save telemetry to SharedPreferences
+  Future<void> _saveTelemetry() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      await prefs.setInt(_telemetryPredictionCountKey, _predictionCount);
+      await prefs.setInt(_telemetryErrorCountKey, _errorCount);
+      
+      if (_lastPredictionTime != null) {
+        await prefs.setString(_telemetryLastPredictionKey, _lastPredictionTime!.toIso8601String());
+      }
+    } catch (e) {
+      debugPrint('AbandonmentPredictor: Failed to save telemetry: $e');
+      // Non-critical - continue execution
+    }
+  }
+
+  /// Reset telemetry counters (called weekly)
+  Future<void> _resetTelemetry() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      // Log final stats before reset
+      debugPrint(
+        'AbandonmentPredictor: Resetting telemetry - '
+        'Final stats: $_predictionCount predictions, $_errorCount errors, '
+        'success rate: ${telemetry['success_rate']}'
+      );
+      
+      // Reset counters
+      _predictionCount = 0;
+      _errorCount = 0;
+      _lastTelemetryReset = DateTime.now();
+      
+      await prefs.setInt(_telemetryPredictionCountKey, 0);
+      await prefs.setInt(_telemetryErrorCountKey, 0);
+      await prefs.setString(_telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
+      
+      debugPrint('AbandonmentPredictor: Telemetry reset complete');
+    } catch (e) {
+      debugPrint('AbandonmentPredictor: Failed to reset telemetry: $e');
+    }
   }
 }
