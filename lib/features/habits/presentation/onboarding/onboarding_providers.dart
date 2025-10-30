@@ -71,12 +71,12 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
         // Fallback: use translation keys (for backward compatibility)
         for (final habitId in selectedIds) {
           final predefinedHabit =
-              predefinedHabits.firstWhere((h) => h.id == habitId);
+          predefinedHabits.firstWhere((h) => h.id == habitId);
 
           await repository.createHabit(
             name: predefinedHabit.nameKey,
             description: predefinedHabit.descriptionKey,
-            category: _mapCategory(predefinedHabit.category),
+            category: predefinedHabit.category.toDomainCategory(),
           );
         }
       }
@@ -105,24 +105,9 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
   Future<bool> retry() async {
     return completeOnboarding();
   }
-
-  HabitCategory _mapCategory(predefinedHabitCategory) {
-    switch (predefinedHabitCategory.toString()) {
-      case 'PredefinedHabitCategory.spiritual':
-        return HabitCategory.spiritual;
-      case 'PredefinedHabitCategory.physical':
-        return HabitCategory.mental;
-      case 'PredefinedHabitCategory.mental':
-        return HabitCategory.mental;
-      case 'PredefinedHabitCategory.relational':
-        return HabitCategory.relational;
-      default:
-        return HabitCategory.mental;
-    }
-  }
 }
 
 final onboardingNotifierProvider =
-    StateNotifierProvider<OnboardingNotifier, AsyncValue<void>>((ref) {
+StateNotifierProvider<OnboardingNotifier, AsyncValue<void>>((ref) {
   return OnboardingNotifier(ref);
 });
