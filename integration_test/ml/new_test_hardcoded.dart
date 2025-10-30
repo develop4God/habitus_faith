@@ -87,6 +87,8 @@ void main() {
             completionHistory: completions,
           );
 
+          debugPrint('\n[Low-risk] Completions: $completions');
+
           final hourOfDay = now.hour.toDouble();
           final dayOfWeek = now.weekday.toDouble();
           final streakAtTime = habit.currentStreak.toDouble();
@@ -142,6 +144,8 @@ void main() {
             completionHistory: completions,
           );
 
+          debugPrint('\n[High-risk] Completions: $completions');
+
           final hourOfDay = now.hour.toDouble();
           final dayOfWeek = now.weekday.toDouble();
           final streakAtTime = habit.currentStreak.toDouble();
@@ -195,6 +199,8 @@ void main() {
         currentStreak: 3,
         completionHistory: completions,
       );
+
+      debugPrint('\n[Medium-risk] Completions: $completions');
 
       final hourOfDay = now.hour.toDouble();
       final dayOfWeek = now.weekday.toDouble();
