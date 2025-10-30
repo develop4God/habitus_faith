@@ -125,7 +125,8 @@ void main() {
 
         // Assert - Verify migration
         expect(habit.category, expectedCategory,
-            reason: 'Category "$oldCategory" should migrate to ${expectedCategory.name}');
+            reason:
+                'Category "$oldCategory" should migrate to ${expectedCategory.name}');
       }
     });
   });

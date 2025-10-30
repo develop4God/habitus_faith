@@ -294,9 +294,10 @@ class JsonHabitsRepository implements HabitsRepository {
   Future<void> recordCompletionForML(String habitId, bool completed) async {
     final habits = _loadHabits();
     final habit = habits.where((h) => h.id == habitId).firstOrNull;
-    
+
     if (habit == null) {
-      debugPrint('JsonHabitsRepository.recordCompletionForML: Habit not found "$habitId"');
+      debugPrint(
+          'JsonHabitsRepository.recordCompletionForML: Habit not found "$habitId"');
       return;
     }
 
@@ -310,7 +311,8 @@ class JsonHabitsRepository implements HabitsRepository {
       dayOfWeek: now.weekday,
       streakAtTime: habit.currentStreak,
       failuresLast7Days: MLFeaturesCalculator.countRecentFailures(habit, 7),
-      hoursFromReminder: MLFeaturesCalculator.calculateHoursFromReminder(habit, now),
+      hoursFromReminder:
+          MLFeaturesCalculator.calculateHoursFromReminder(habit, now),
       completed: completed,
     );
 
@@ -321,13 +323,16 @@ class JsonHabitsRepository implements HabitsRepository {
             .collection('ml_training_data')
             .doc('${habit.userId}_${habitId}_${now.millisecondsSinceEpoch}')
             .set(record.toJson());
-        debugPrint('JsonHabitsRepository.recordCompletionForML: Saved ML data for habit "$habitId"');
+        debugPrint(
+            'JsonHabitsRepository.recordCompletionForML: Saved ML data for habit "$habitId"');
       } catch (e) {
         // Non-critical: log but don't block user flow
-        debugPrint('JsonHabitsRepository.recordCompletionForML: ML data save failed: $e');
+        debugPrint(
+            'JsonHabitsRepository.recordCompletionForML: ML data save failed: $e');
       }
     } else {
-      debugPrint('JsonHabitsRepository.recordCompletionForML: Firestore not available, skipping ML data save');
+      debugPrint(
+          'JsonHabitsRepository.recordCompletionForML: Firestore not available, skipping ML data save');
     }
   }
 

@@ -20,12 +20,14 @@ class AbandonmentPredictor {
     try {
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor: Loading TFLite model...');
-      _interpreter = await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
+      _interpreter =
+          await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
       debugPrint('AbandonmentPredictor: TFLite model loaded successfully');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
-      final scalerJson = await rootBundle.loadString('assets/ml_models/scaler_params.json');
+      final scalerJson =
+          await rootBundle.loadString('assets/ml_models/scaler_params.json');
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
@@ -42,7 +44,8 @@ class AbandonmentPredictor {
   /// Applies: (feature - mean) / scale element-wise
   List<double> _normalizeFeatures(List<double> features) {
     if (_scalerParams == null) {
-      debugPrint('AbandonmentPredictor: Scaler params not loaded, returning raw features');
+      debugPrint(
+          'AbandonmentPredictor: Scaler params not loaded, returning raw features');
       return features;
     }
 
@@ -50,7 +53,8 @@ class AbandonmentPredictor {
     final scale = (_scalerParams!['scale'] as List).cast<double>();
 
     if (mean.length != features.length || scale.length != features.length) {
-      debugPrint('AbandonmentPredictor: Feature length mismatch, returning raw features');
+      debugPrint(
+          'AbandonmentPredictor: Feature length mismatch, returning raw features');
       return features;
     }
 
@@ -63,14 +67,14 @@ class AbandonmentPredictor {
   }
 
   /// Predict abandonment risk for a habit
-  /// 
+  ///
   /// Parameters:
   /// - [hourOfDay]: Current hour (0-23)
   /// - [dayOfWeek]: Current day of week (1-7, Monday=1)
   /// - [currentStreak]: User's current streak
   /// - [recentFailures]: Count of failures in last 7 days
   /// - [hoursSinceReminder]: Hours elapsed since scheduled reminder
-  /// 
+  ///
   /// Returns: Probability of abandonment (0.0-1.0)
   ///   - 0.0 = very low risk (likely to complete)
   ///   - 1.0 = very high risk (likely to abandon)
@@ -112,7 +116,8 @@ class AbandonmentPredictor {
       // Extract probability (value between 0 and 1)
       final probability = output[0][0];
 
-      debugPrint('AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}%');
+      debugPrint(
+          'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}%');
 
       return probability.clamp(0.0, 1.0);
     } catch (e) {

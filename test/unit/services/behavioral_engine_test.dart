@@ -146,7 +146,9 @@ void main() {
       expect(optimalTime, isNull);
     });
 
-    test('Returns hour of single completion when exactly 3 completions at same hour', () {
+    test(
+        'Returns hour of single completion when exactly 3 completions at same hour',
+        () {
       // Arrange
       final now = DateTime.now();
       final sevenAM = DateTime(now.year, now.month, now.day, 7, 0);
@@ -172,7 +174,9 @@ void main() {
       expect(optimalTime.minute, 0);
     });
 
-    test('Returns most frequent hour with mixed times (7am wins: 5 vs 9am: 4 vs 8am: 1)', () {
+    test(
+        'Returns most frequent hour with mixed times (7am wins: 5 vs 9am: 4 vs 8am: 1)',
+        () {
       // Arrange
       final now = DateTime.now();
       final baseDate = DateTime(now.year, now.month, now.day);
@@ -183,15 +187,33 @@ void main() {
         description: 'Various completion times',
       ).copyWith(
         completionHistory: [
-          baseDate.subtract(const Duration(days: 9)).add(const Duration(hours: 7)),
-          baseDate.subtract(const Duration(days: 8)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 7)).add(const Duration(hours: 7)),
-          baseDate.subtract(const Duration(days: 6)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 5)).add(const Duration(hours: 7)),
-          baseDate.subtract(const Duration(days: 4)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 3)).add(const Duration(hours: 7)),
-          baseDate.subtract(const Duration(days: 2)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 1)).add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 9))
+              .add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 8))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 7))
+              .add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 6))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 5))
+              .add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 4))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 3))
+              .add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 2))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 1))
+              .add(const Duration(hours: 7)),
           baseDate.add(const Duration(hours: 8)),
         ],
       );
@@ -201,11 +223,14 @@ void main() {
 
       // Assert
       expect(optimalTime, isNotNull);
-      expect(optimalTime!.hour, 7, reason: '7am appears 5 times, most frequent');
+      expect(optimalTime!.hour, 7,
+          reason: '7am appears 5 times, most frequent');
       expect(optimalTime.minute, 0);
     });
 
-    test('Returns most frequent hour for tie-breaking (first encountered in frequency map)', () {
+    test(
+        'Returns most frequent hour for tie-breaking (first encountered in frequency map)',
+        () {
       // Arrange
       final now = DateTime.now();
       final baseDate = DateTime(now.year, now.month, now.day);
@@ -216,11 +241,21 @@ void main() {
         description: 'Equal frequency',
       ).copyWith(
         completionHistory: [
-          baseDate.subtract(const Duration(days: 5)).add(const Duration(hours: 7)),
-          baseDate.subtract(const Duration(days: 4)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 3)).add(const Duration(hours: 7)),
-          baseDate.subtract(const Duration(days: 2)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 1)).add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 5))
+              .add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 4))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 3))
+              .add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 2))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 1))
+              .add(const Duration(hours: 7)),
           baseDate.add(const Duration(hours: 9)),
         ],
       );
@@ -264,7 +299,7 @@ void main() {
       final now = DateTime.now();
       // Find a Monday to start from
       final monday = now.subtract(Duration(days: now.weekday - 1));
-      
+
       final habit = Habit.create(
         id: 'test-12',
         userId: 'user-1',
@@ -275,9 +310,9 @@ void main() {
           monday.subtract(const Duration(days: 14)), // Mon, 2 weeks ago
           monday.subtract(const Duration(days: 12)), // Wed
           monday.subtract(const Duration(days: 10)), // Fri
-          monday.subtract(const Duration(days: 7)),  // Mon, last week
-          monday.subtract(const Duration(days: 5)),  // Wed
-          monday.subtract(const Duration(days: 3)),  // Fri
+          monday.subtract(const Duration(days: 7)), // Mon, last week
+          monday.subtract(const Duration(days: 5)), // Wed
+          monday.subtract(const Duration(days: 3)), // Fri
           monday, // Mon, this week
         ],
       );
@@ -288,7 +323,8 @@ void main() {
       // Assert - Should return [1, 3, 5] representing Monday, Wednesday, Friday
       expect(optimalDays.length, 3);
       expect(optimalDays.contains(1), isTrue, reason: 'Should include Monday');
-      expect(optimalDays.contains(3), isTrue, reason: 'Should include Wednesday');
+      expect(optimalDays.contains(3), isTrue,
+          reason: 'Should include Wednesday');
       expect(optimalDays.contains(5), isTrue, reason: 'Should include Friday');
     });
 
@@ -296,7 +332,7 @@ void main() {
       // Arrange
       final now = DateTime.now();
       final monday = now.subtract(Duration(days: now.weekday - 1));
-      
+
       final habit = Habit.create(
         id: 'test-13',
         userId: 'user-1',
@@ -324,16 +360,19 @@ void main() {
 
       // Assert - Should return top 3: [1 (Mon-4), 3 (Wed-3), 2 (Tue-2)]
       expect(optimalDays.length, 3);
-      expect(optimalDays[0], 1, reason: 'Monday should be first (4 occurrences)');
-      expect(optimalDays[1], 3, reason: 'Wednesday should be second (3 occurrences)');
-      expect(optimalDays[2], 2, reason: 'Tuesday should be third (2 occurrences)');
+      expect(optimalDays[0], 1,
+          reason: 'Monday should be first (4 occurrences)');
+      expect(optimalDays[1], 3,
+          reason: 'Wednesday should be second (3 occurrences)');
+      expect(optimalDays[2], 2,
+          reason: 'Tuesday should be third (2 occurrences)');
     });
 
     test('Returns fewer than 3 days if only 1-2 unique days completed', () {
       // Arrange
       final now = DateTime.now();
       final monday = now.subtract(Duration(days: now.weekday - 1));
-      
+
       final habit = Habit.create(
         id: 'test-14',
         userId: 'user-1',
@@ -381,7 +420,7 @@ void main() {
       // Arrange
       final now = DateTime.now();
       final monday = now.subtract(Duration(days: now.weekday - 1));
-      
+
       final habit = Habit.create(
         id: 'test-16',
         userId: 'user-1',
@@ -391,11 +430,11 @@ void main() {
         consecutiveFailures: 3,
         completionHistory: [
           // Only weekdays: Mon, Tue, Wed, Thu, Fri from last 7 days
-          monday.subtract(const Duration(days: 7)),  // Mon
-          monday.subtract(const Duration(days: 6)),  // Tue
-          monday.subtract(const Duration(days: 5)),  // Wed
-          monday.subtract(const Duration(days: 4)),  // Thu
-          monday.subtract(const Duration(days: 3)),  // Fri
+          monday.subtract(const Duration(days: 7)), // Mon
+          monday.subtract(const Duration(days: 6)), // Tue
+          monday.subtract(const Duration(days: 5)), // Wed
+          monday.subtract(const Duration(days: 4)), // Thu
+          monday.subtract(const Duration(days: 3)), // Fri
           // No Saturday or Sunday completions
         ],
       );
@@ -411,7 +450,7 @@ void main() {
       // Arrange
       final now = DateTime.now();
       final baseDate = DateTime(now.year, now.month, now.day);
-      
+
       final habit = Habit.create(
         id: 'test-17',
         userId: 'user-1',
@@ -420,9 +459,15 @@ void main() {
       ).copyWith(
         consecutiveFailures: 3,
         completionHistory: [
-          baseDate.subtract(const Duration(days: 6)).add(const Duration(hours: 8)),
-          baseDate.subtract(const Duration(days: 5)).add(const Duration(hours: 9)),
-          baseDate.subtract(const Duration(days: 4)).add(const Duration(hours: 7)),
+          baseDate
+              .subtract(const Duration(days: 6))
+              .add(const Duration(hours: 8)),
+          baseDate
+              .subtract(const Duration(days: 5))
+              .add(const Duration(hours: 9)),
+          baseDate
+              .subtract(const Duration(days: 4))
+              .add(const Duration(hours: 7)),
           // All before 6pm (18:00), none after
         ],
       );
@@ -438,7 +483,7 @@ void main() {
       // Arrange
       final now = DateTime.now();
       final baseDate = DateTime(now.year, now.month, now.day);
-      
+
       final habit = Habit.create(
         id: 'test-18',
         userId: 'user-1',
@@ -448,10 +493,18 @@ void main() {
         consecutiveFailures: 3,
         completionHistory: [
           // Mixed days and times
-          baseDate.subtract(const Duration(days: 6)).add(const Duration(hours: 8)),  // Mon morning
-          baseDate.subtract(const Duration(days: 5)).add(const Duration(hours: 20)), // Tue evening
-          baseDate.subtract(const Duration(days: 3)).add(const Duration(hours: 14)), // Thu afternoon
-          baseDate.subtract(const Duration(days: 1)).add(const Duration(hours: 19)), // Sat evening
+          baseDate
+              .subtract(const Duration(days: 6))
+              .add(const Duration(hours: 8)), // Mon morning
+          baseDate
+              .subtract(const Duration(days: 5))
+              .add(const Duration(hours: 20)), // Tue evening
+          baseDate
+              .subtract(const Duration(days: 3))
+              .add(const Duration(hours: 14)), // Thu afternoon
+          baseDate
+              .subtract(const Duration(days: 1))
+              .add(const Duration(hours: 19)), // Sat evening
         ],
       );
 
@@ -462,7 +515,8 @@ void main() {
       expect(pattern, FailurePattern.inconsistent);
     });
 
-    test('Returns null for empty completion history with consecutive failures', () {
+    test('Returns null for empty completion history with consecutive failures',
+        () {
       // Arrange
       final habit = Habit.create(
         id: 'test-19',

@@ -435,13 +435,17 @@ class HabitsPage extends ConsumerWidget {
                               l10n.highRiskWarning,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.onErrorContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onErrorContainer,
                               ),
                             ),
                             subtitle: Text(
                               l10n.riskPercentage((risk * 100).toInt()),
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onErrorContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onErrorContainer,
                               ),
                             ),
                             trailing: FilledButton(
@@ -451,7 +455,8 @@ class HabitsPage extends ConsumerWidget {
                                     .completeHabit(habit.id);
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(l10n.habitCompleted)),
+                                    SnackBar(
+                                        content: Text(l10n.habitCompleted)),
                                   );
                                 }
                               },

@@ -100,7 +100,7 @@ void main() {
         now.subtract(const Duration(days: 2)),
         now.subtract(const Duration(days: 1)),
       ];
-      
+
       final habit = Habit.create(
         id: 'test-4',
         userId: 'user-1',
@@ -116,7 +116,7 @@ void main() {
       final completed = habit.completeToday();
 
       // Assert - 6 completions (5 old + 1 today) over 7 days = 6/7 ≈ 0.857
-      expect(completed.successRate7d, closeTo(6/7, 0.01));
+      expect(completed.successRate7d, closeTo(6 / 7, 0.01));
     });
 
     test('completeToday() calculates successRate7d with 7/7 completions', () {
@@ -130,7 +130,7 @@ void main() {
         now.subtract(const Duration(days: 2)),
         now.subtract(const Duration(days: 1)),
       ];
-      
+
       final habit = Habit.create(
         id: 'test-5',
         userId: 'user-1',
@@ -149,7 +149,9 @@ void main() {
       expect(completed.successRate7d, 1.0);
     });
 
-    test('completeToday() calculates successRate7d with 1/7 completion (first completion)', () {
+    test(
+        'completeToday() calculates successRate7d with 1/7 completion (first completion)',
+        () {
       // Arrange
       final habit = Habit.create(
         id: 'test-6',
@@ -162,7 +164,7 @@ void main() {
       final completed = habit.completeToday();
 
       // Assert - 1 completion over 7 days = 1/7 ≈ 0.143
-      expect(completed.successRate7d, closeTo(1/7, 0.01));
+      expect(completed.successRate7d, closeTo(1 / 7, 0.01));
     });
 
     test('completeToday() resets consecutiveFailures to 0', () {
