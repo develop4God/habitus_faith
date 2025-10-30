@@ -1,4 +1,11 @@
+import 'package:flutter/material.dart';
 import 'models/verse_reference.dart';
+
+enum FailurePattern {
+  weekendGap,
+  eveningSlump,
+  inconsistent,
+}
 
 enum HabitCategory {
   prayer,
@@ -60,6 +67,17 @@ class Habit {
   final bool isArchived;
   final int? colorValue; // Store color as int (Color.value)
   final HabitDifficulty difficulty;
+  
+  // TCC/Nudge adaptive intelligence fields
+  final int difficultyLevel; // 1-5 scale for TCC adjustment
+  final int targetMinutes; // expected duration
+  final double successRate7d; // calculated weekly success percentage
+  final List<int> optimalDays; // List<int> where 1=Monday, learned from completion patterns
+  final TimeOfDay? optimalTime; // when user most succeeds
+  final int consecutiveFailures; // triggers intervention
+  final FailurePattern? failurePattern;
+  final double abandonmentRisk; // 0.0-1.0 from ML predictor
+  final DateTime? lastAdjustedAt; // for tracking auto-adjustments
 
   Habit({
     required this.id,
@@ -80,6 +98,15 @@ class Habit {
     this.isArchived = false,
     this.colorValue,
     this.difficulty = HabitDifficulty.medium,
+    this.difficultyLevel = 3,
+    this.targetMinutes = 15,
+    this.successRate7d = 0.0,
+    this.optimalDays = const [],
+    this.optimalTime,
+    this.consecutiveFailures = 0,
+    this.failurePattern,
+    this.abandonmentRisk = 0.0,
+    this.lastAdjustedAt,
   });
 
   factory Habit.create({
@@ -155,6 +182,18 @@ class Habit {
 
     // Add to completion history
     final newHistory = [...completionHistory, now];
+    
+    // Calculate successRate7d based on last 7 days
+    final sevenDaysAgo = today.subtract(const Duration(days: 6)); // including today makes 7 days
+    int completionsLast7Days = 0;
+    for (final completion in newHistory) {
+      final completionDate = DateTime(completion.year, completion.month, completion.day);
+      if (completionDate.isAfter(sevenDaysAgo.subtract(const Duration(days: 1))) && 
+          completionDate.isBefore(today.add(const Duration(days: 1)))) {
+        completionsLast7Days++;
+      }
+    }
+    final newSuccessRate7d = completionsLast7Days / 7.0;
 
     return copyWith(
       completedToday: true,
@@ -162,6 +201,8 @@ class Habit {
       longestStreak: newLongestStreak,
       lastCompletedAt: now,
       completionHistory: newHistory,
+      successRate7d: newSuccessRate7d,
+      consecutiveFailures: 0, // Reset consecutive failures on successful completion
     );
   }
 
@@ -184,6 +225,15 @@ class Habit {
     bool? isArchived,
     int? colorValue,
     HabitDifficulty? difficulty,
+    int? difficultyLevel,
+    int? targetMinutes,
+    double? successRate7d,
+    List<int>? optimalDays,
+    TimeOfDay? optimalTime,
+    int? consecutiveFailures,
+    FailurePattern? failurePattern,
+    double? abandonmentRisk,
+    DateTime? lastAdjustedAt,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -204,6 +254,15 @@ class Habit {
       isArchived: isArchived ?? this.isArchived,
       colorValue: colorValue ?? this.colorValue,
       difficulty: difficulty ?? this.difficulty,
+      difficultyLevel: difficultyLevel ?? this.difficultyLevel,
+      targetMinutes: targetMinutes ?? this.targetMinutes,
+      successRate7d: successRate7d ?? this.successRate7d,
+      optimalDays: optimalDays ?? this.optimalDays,
+      optimalTime: optimalTime ?? this.optimalTime,
+      consecutiveFailures: consecutiveFailures ?? this.consecutiveFailures,
+      failurePattern: failurePattern ?? this.failurePattern,
+      abandonmentRisk: abandonmentRisk ?? this.abandonmentRisk,
+      lastAdjustedAt: lastAdjustedAt ?? this.lastAdjustedAt,
     );
   }
 }
