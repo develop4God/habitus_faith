@@ -7,14 +7,18 @@ import '../domain/models/verse_reference.dart';
 class HabitModel {
   /// Migrates old category values to new holistic category model
   static HabitCategory _migrateCategory(String? value) {
-    const migration = {
-      'prayer': HabitCategory.spiritual,
-      'bibleReading': HabitCategory.spiritual,
-      'service': HabitCategory.relational,
-      'gratitude': HabitCategory.spiritual,
-      'other': HabitCategory.mental,
-    };
-    return migration[value] ?? HabitCategory.spiritual;
+    switch (value) {
+      case 'spiritual':
+        return HabitCategory.spiritual;
+      case 'physical':
+        return HabitCategory.physical;
+      case 'mental':
+        return HabitCategory.mental;
+      case 'relational':
+        return HabitCategory.relational;
+      default:
+        return HabitCategory.spiritual;
+    }
   }
 
   static Habit fromFirestore(DocumentSnapshot doc) {
