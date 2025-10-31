@@ -22,6 +22,12 @@ class GeminiService implements IGeminiService {
   final ICacheService _cache;
   final IRateLimitService _rateLimit;
 
+  /// Default timeout for API requests
+  static const Duration defaultTimeout = Duration(seconds: 30);
+
+  /// Expected number of habits per generation request
+  static const int expectedHabitsCount = 3;
+
   GeminiService({
     required String apiKey,
     required String modelName,
@@ -55,8 +61,8 @@ class GeminiService implements IGeminiService {
 
     // 4. Call Gemini API with timeout
     try {
-      final response = await _model.generateContent(
-          [Content.text(prompt)]).timeout(const Duration(seconds: 30));
+      final response = await _model
+          .generateContent([Content.text(prompt)]).timeout(defaultTimeout);
 
       // 5. Parse JSON response
       final habits = _parseResponse(response.text, request.languageCode);
@@ -70,7 +76,7 @@ class GeminiService implements IGeminiService {
       return habits;
     } on TimeoutException {
       throw GeminiException(
-        'Request timed out after 30 seconds. Please try again.',
+        'Request timed out after ${defaultTimeout.inSeconds} seconds. Please try again.',
       );
     } catch (e) {
       if (e is GeminiException) rethrow;
@@ -93,7 +99,7 @@ Falla típicamente: ${request.failurePattern ?? 'desconocido'}
 Fe: ${request.faithContext}
 Idioma respuesta: $lang
 
-Genera EXACTAMENTE 3 micro-hábitos cristianos. Cada hábito debe:
+Genera EXACTAMENTE $expectedHabitsCount micro-hábitos cristianos. Cada hábito debe:
 1. Ser completable en 5 minutos o menos
 2. Incluir acción específica y medible
 3. Incluir versículo bíblico relevante (referencia + texto completo)
@@ -132,9 +138,9 @@ Requisitos estrictos:
 
       final List<dynamic> json = jsonDecode(cleaned);
 
-      if (json.length != 3) {
+      if (json.length != expectedHabitsCount) {
         throw GeminiParseException(
-          'Expected 3 habits, got ${json.length}',
+          'Expected $expectedHabitsCount habits, got ${json.length}',
           responseText,
         );
       }

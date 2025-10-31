@@ -27,8 +27,10 @@ void main() {
       mockCache = MockCacheService();
       mockRateLimit = MockRateLimitService();
 
-      // Note: We can't easily test the actual API calls without mocking GenerativeModel
-      // which is final and difficult to mock. These tests focus on the logic flow.
+      // Note: GenerativeModel is final and difficult to mock without additional
+      // wrapper patterns. These tests focus on the service's business logic
+      // (caching, rate limiting, delegation).
+      // Integration tests should be used to verify actual API interactions.
       service = GeminiService(
         apiKey: 'test_api_key',
         modelName: 'gemini-1.5-flash',
@@ -107,7 +109,8 @@ void main() {
       expect(request1.toCacheKey(), equals(request2.toCacheKey()));
     });
 
-    test('GenerationRequest toCacheKey generates different keys for different requests',
+    test(
+        'GenerationRequest toCacheKey generates different keys for different requests',
         () {
       const request1 = GenerationRequest(userGoal: 'Orar más');
       const request2 = GenerationRequest(userGoal: 'Leer la Biblia');
