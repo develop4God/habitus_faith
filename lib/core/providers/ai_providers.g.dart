@@ -6,6 +6,27 @@ part of 'ai_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$bibleDbServiceHash() => r'0af91e65f6b1f537e7da93b2c1f05b5b61a4d328';
+
+/// Provider for Bible database service (for verse enrichment)
+/// Uses default Spanish RVR1960 version
+///
+/// Copied from [bibleDbService].
+@ProviderFor(bibleDbService)
+final bibleDbServiceProvider =
+    AutoDisposeFutureProvider<BibleDbService?>.internal(
+  bibleDbService,
+  name: r'bibleDbServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$bibleDbServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef BibleDbServiceRef = AutoDisposeFutureProviderRef<BibleDbService?>;
 String _$loggerHash() => r'8b7e11a155f4beb9e222fb7f4bf6f651d0da24d3';
 
 /// Provider for logger instance
@@ -62,13 +83,14 @@ final rateLimitServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef RateLimitServiceRef = AutoDisposeProviderRef<IRateLimitService>;
-String _$geminiServiceHash() => r'bf56a152b4716147a3c8cd9bb668e42f623b84c8';
+String _$geminiServiceHash() => r'3f12640f30e4b008631815b6434c1fc869f32884';
 
 /// Provider for Gemini service with optional Bible enrichment
 ///
 /// Copied from [geminiService].
 @ProviderFor(geminiService)
-final geminiServiceProvider = AutoDisposeProvider<IGeminiService>.internal(
+final geminiServiceProvider =
+    AutoDisposeFutureProvider<IGeminiService>.internal(
   geminiService,
   name: r'geminiServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -80,9 +102,9 @@ final geminiServiceProvider = AutoDisposeProvider<IGeminiService>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GeminiServiceRef = AutoDisposeProviderRef<IGeminiService>;
+typedef GeminiServiceRef = AutoDisposeFutureProviderRef<IGeminiService>;
 String _$microHabitGeneratorHash() =>
-    r'd8bbe9a1fab2818db328b3b35501fcd9f5cd9c9c';
+    r'18f811dfabb0c13a0880bee63caabe36c38a9533';
 
 /// State provider for micro-habit generation
 ///

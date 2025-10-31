@@ -317,26 +317,60 @@ Requisitos estrictos:
     );
   }
 
-  /// Map book name to book number (simplified - extend as needed)
+  /// Map book name to book number (complete 66 books with variations)
   int? _getBookNumber(String bookName) {
+    // Normalize the book name
+    final normalized = bookName
+        .toLowerCase()
+        .replaceAll('1 ', 'primer ')
+        .replaceAll('2 ', 'segundo ')
+        .replaceAll('3 ', 'tercer ')
+        .replaceAll('i ', 'primer ')
+        .replaceAll('ii ', 'segundo ')
+        .replaceAll('iii ', 'tercer ')
+        .trim();
+
     final mapping = {
+      // Old Testament (1-39)
       'génesis': 1,
       'genesis': 1,
+      'gn': 1,
       'éxodo': 2,
       'exodo': 2,
+      'ex': 2,
       'levítico': 3,
       'levitico': 3,
+      'lv': 3,
       'números': 4,
       'numeros': 4,
+      'nm': 4,
       'deuteronomio': 5,
+      'dt': 5,
       'josué': 6,
       'josue': 6,
+      'jos': 6,
       'jueces': 7,
+      'jue': 7,
       'rut': 8,
-      'samuel': 9, // 1 Samuel
-      'reyes': 11, // 1 Reyes
-      'crónicas': 13, // 1 Crónicas
+      'rt': 8,
+      'primer samuel': 9,
+      '1samuel': 9,
+      'samuel': 9, // Default to 1 Samuel
+      'segundo samuel': 10,
+      '2samuel': 10,
+      'primer reyes': 11,
+      '1reyes': 11,
+      'reyes': 11, // Default to 1 Reyes
+      'segundo reyes': 12,
+      '2reyes': 12,
+      'primer crónicas': 13,
+      '1crónicas': 13,
+      '1cronicas': 13,
+      'crónicas': 13, // Default to 1 Crónicas
       'cronicas': 13,
+      'segundo crónicas': 14,
+      '2crónicas': 14,
+      '2cronicas': 14,
       'esdras': 15,
       'nehemías': 16,
       'nehemias': 16,
@@ -344,59 +378,125 @@ Requisitos estrictos:
       'job': 18,
       'salmos': 19,
       'salmo': 19,
+      'sal': 19,
       'proverbios': 20,
+      'pr': 20,
       'eclesiastés': 21,
       'eclesiástes': 21,
+      'ec': 21,
       'cantares': 22,
+      'cnt': 22,
       'isaías': 23,
       'isaias': 23,
+      'is': 23,
       'jeremías': 24,
       'jeremias': 24,
+      'jer': 24,
       'lamentaciones': 25,
+      'lam': 25,
       'ezequiel': 26,
+      'ez': 26,
       'daniel': 27,
+      'dn': 27,
       'oseas': 28,
+      'os': 28,
       'joel': 29,
+      'jl': 29,
       'amós': 30,
       'amos': 30,
+      'am': 30,
       'abdías': 31,
       'abdias': 31,
+      'abd': 31,
       'jonás': 32,
       'jonas': 32,
+      'jon': 32,
       'miqueas': 33,
+      'miq': 33,
       'nahúm': 34,
       'nahum': 34,
+      'nah': 34,
       'habacuc': 35,
+      'hab': 35,
       'sofonías': 36,
       'sofonias': 36,
+      'sof': 36,
       'hageo': 37,
+      'hag': 37,
       'zacarías': 38,
       'zacarias': 38,
+      'zac': 38,
       'malaquías': 39,
       'malaquias': 39,
+      'mal': 39,
+
+      // New Testament (40-66)
       'mateo': 40,
+      'mt': 40,
       'marcos': 41,
+      'mr': 41,
+      'mc': 41,
       'lucas': 42,
+      'lc': 42,
       'juan': 43,
+      'jn': 43,
       'hechos': 44,
+      'hch': 44,
       'romanos': 45,
-      'corintios': 46, // 1 Corintios
+      'ro': 45,
+      'rom': 45,
+      'primer corintios': 46,
+      '1corintios': 46,
+      'corintios': 46, // Default to 1 Corintios
+      'segundo corintios': 47,
+      '2corintios': 47,
       'gálatas': 48,
       'galatas': 48,
+      'ga': 48,
+      'gal': 48,
       'efesios': 49,
+      'ef': 49,
       'filipenses': 50,
+      'fil': 50,
       'colosenses': 51,
-      'tesalonicenses': 52, // 1 Tesalonicenses
-      'timoteo': 54, // 1 Timoteo
+      'col': 51,
+      'primer tesalonicenses': 52,
+      '1tesalonicenses': 52,
+      'tesalonicenses': 52, // Default to 1 Tesalonicenses
+      'segundo tesalonicenses': 53,
+      '2tesalonicenses': 53,
+      'primer timoteo': 54,
+      '1timoteo': 54,
+      'timoteo': 54, // Default to 1 Timoteo
+      'segundo timoteo': 55,
+      '2timoteo': 55,
       'tito': 56,
+      'tit': 56,
       'filemón': 57,
       'filemon': 57,
+      'flm': 57,
       'hebreos': 58,
+      'heb': 58,
       'santiago': 59,
-      'pedro': 60, // 1 Pedro
+      'stg': 59,
+      'primer pedro': 60,
+      '1pedro': 60,
+      'pedro': 60, // Default to 1 Pedro
+      'segundo pedro': 61,
+      '2pedro': 61,
+      'primer juan': 62,
+      '1juan': 62,
+      'segundo juan': 63,
+      '2juan': 63,
+      'tercer juan': 64,
+      '3juan': 64,
+      'judas': 65,
+      'jud': 65,
       'apocalipsis': 66,
+      'ap': 66,
+      'apc': 66,
     };
 
-    return mapping[bookName.toLowerCase()];
+    return mapping[normalized];
   }
 }

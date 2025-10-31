@@ -8,8 +8,26 @@ import '../services/ai/gemini_service.dart';
 import '../../features/habits/domain/models/micro_habit.dart';
 import '../../features/habits/domain/models/generation_request.dart';
 import '../../features/habits/data/storage/storage_providers.dart';
+import '../../bible_reader_core/src/bible_db_service.dart';
 
 part 'ai_providers.g.dart';
+
+/// Provider for Bible database service (for verse enrichment)
+/// Uses default Spanish RVR1960 version
+@riverpod
+Future<BibleDbService?> bibleDbService(BibleDbServiceRef ref) async {
+  try {
+    final service = BibleDbService();
+    await service.initDb(
+      'assets/biblia/RVR1960.SQLite3',
+      'RVR1960.SQLite3',
+    );
+    return service;
+  } catch (e) {
+    // Graceful degradation - continue without verse enrichment
+    return null;
+  }
+}
 
 /// Provider for logger instance
 @riverpod
@@ -42,15 +60,16 @@ IRateLimitService rateLimitService(RateLimitServiceRef ref) {
 
 /// Provider for Gemini service with optional Bible enrichment
 @riverpod
-IGeminiService geminiService(GeminiServiceRef ref) {
+Future<IGeminiService> geminiService(GeminiServiceRef ref) async {
+  final bibleService = await ref.watch(bibleDbServiceProvider.future);
+
   return GeminiService(
     apiKey: EnvConfig.geminiApiKey,
     modelName: EnvConfig.geminiModel,
     cache: ref.watch(cacheServiceProvider),
     rateLimit: ref.watch(rateLimitServiceProvider),
     logger: ref.watch(loggerProvider),
-    // Note: BibleDbService injection would require initialization
-    // For now, it's optional and will be null (no enrichment)
+    bibleService: bibleService, // NOW ACTIVE!
   );
 }
 
@@ -65,7 +84,7 @@ class MicroHabitGenerator extends _$MicroHabitGenerator {
     state = const AsyncValue.loading();
 
     state = await AsyncValue.guard(() async {
-      final service = ref.read(geminiServiceProvider);
+      final service = await ref.read(geminiServiceProvider.future);
       return await service.generateMicroHabits(request);
     });
   }
