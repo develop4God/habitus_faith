@@ -294,106 +294,102 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get generateMicroHabits => 'Generate Micro-Habits';
+  String get generateMicroHabits => '生成微习惯';
 
   @override
-  String get aiGeneratedHabits => 'AI-Generated Habits';
+  String get aiGeneratedHabits => 'AI生成的习惯';
 
   @override
-  String get yourGoal => 'Your Goal';
+  String get yourGoal => '你的目标';
 
   @override
-  String get goalHint =>
-      'What would you like to improve? (e.g., Pray more consistently)';
+  String get goalHint => '你想改进什么？（例如：更持续地祷告）';
 
   @override
-  String get goalRequired => 'Please enter your goal';
+  String get goalRequired => '请输入你的目标';
 
   @override
-  String get goalTooShort => 'Goal must be at least 10 characters';
+  String get goalTooShort => '目标至少需要10个字符';
 
   @override
-  String get goalTooLong => 'Goal cannot exceed 200 characters';
+  String get goalTooLong => '目标不能超过200个字符';
 
   @override
-  String get failurePattern => 'When do you usually fail? (Optional)';
+  String get failurePattern => '你通常什么时候失败？（可选）';
 
   @override
-  String get failurePatternHint => 'e.g., I forget during busy mornings';
+  String get failurePatternHint => '例如：在忙碌的早晨我会忘记';
 
   @override
-  String get generateHabits => 'Generate Habits';
+  String get generateHabits => '生成习惯';
 
   @override
-  String get generating => 'Generating...';
+  String get generating => '生成中...';
 
   @override
-  String get generatingHabits =>
-      'Generating personalized micro-habits for you...';
+  String get generatingHabits => '正在为你生成个性化微习惯...';
 
   @override
-  String get generatedHabitsTitle => 'Your Personalized Micro-Habits';
+  String get generatedHabitsTitle => '你的个性化微习惯';
 
   @override
-  String get selectHabitsToAdd => 'Select habits to add to your tracking:';
+  String get selectHabitsToAdd => '选择要添加到跟踪的习惯：';
 
   @override
-  String get saveSelected => 'Save Selected';
+  String get saveSelected => '保存选中的';
 
   @override
-  String get saving => 'Saving...';
+  String get saving => '保存中...';
 
   @override
   String habitsAdded(int count) {
-    return '$count habit(s) added successfully!';
+    return '成功添加了$count个习惯！';
   }
 
   @override
   String estimatedTime(int minutes) {
-    return '~$minutes min';
+    return '约$minutes分钟';
   }
 
   @override
-  String get bibleVerse => 'Bible Verse';
+  String get bibleVerse => '圣经经文';
 
   @override
-  String get purpose => 'Purpose';
+  String get purpose => '目的';
 
   @override
   String remaining(int count) {
-    return '$count remaining';
+    return '剩余$count次';
   }
 
   @override
   String monthlyLimit(int limit) {
-    return 'Monthly limit: $limit generations';
+    return '每月限制：$limit次生成';
   }
 
   @override
-  String get rateLimitReached => 'Monthly limit reached. Try again next month.';
+  String get rateLimitReached => '已达到每月限制。请下个月再试。';
 
   @override
-  String get generationFailed => 'Failed to generate habits. Please try again.';
+  String get generationFailed => '生成习惯失败。请重试。';
 
   @override
-  String get apiTimeout =>
-      'Request timed out. Please check your connection and try again.';
+  String get apiTimeout => '请求超时。请检查你的连接并重试。';
 
   @override
-  String get invalidInput =>
-      'Invalid input. Please check your goal and try again.';
+  String get invalidInput => '输入无效。请检查你的目标并重试。';
 
   @override
-  String get noHabitsSelected => 'Please select at least one habit to save';
+  String get noHabitsSelected => '请至少选择一个习惯来保存';
 
   @override
-  String get tryAgain => 'Try Again';
+  String get tryAgain => '重试';
 
   @override
   String generationsRemaining(int count) {
-    return '$count generation(s) remaining this month';
+    return '本月剩余$count次生成';
   }
 
   @override
-  String get poweredByGemini => 'Powered by Gemini AI';
+  String get poweredByGemini => '由Gemini AI驱动';
 }

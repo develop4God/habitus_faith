@@ -1,36 +1,6 @@
 {
   "zh": [
     "abandonmentNudgeTitle",
-    "abandonmentNudgeBody",
-    "generateMicroHabits",
-    "aiGeneratedHabits",
-    "yourGoal",
-    "goalHint",
-    "goalRequired",
-    "goalTooShort",
-    "goalTooLong",
-    "failurePattern",
-    "failurePatternHint",
-    "generateHabits",
-    "generating",
-    "generatingHabits",
-    "generatedHabitsTitle",
-    "selectHabitsToAdd",
-    "saveSelected",
-    "saving",
-    "habitsAdded",
-    "estimatedTime",
-    "bibleVerse",
-    "purpose",
-    "remaining",
-    "monthlyLimit",
-    "rateLimitReached",
-    "generationFailed",
-    "apiTimeout",
-    "invalidInput",
-    "noHabitsSelected",
-    "tryAgain",
-    "generationsRemaining",
-    "poweredByGemini"
+    "abandonmentNudgeBody"
   ]
 }
