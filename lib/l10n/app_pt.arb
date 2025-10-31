@@ -226,15 +226,15 @@
   "@predefinedHabit_service_description": {
     "description": "Description of service habit"
   },
-  "onboardingErrorMessage": "Failed to save habits. Please try again.",
+  "onboardingErrorMessage": "Falha ao salvar os hábitos. Por favor, tente novamente.",
   "@onboardingErrorMessage": {
     "description": "Error message shown when onboarding fails"
   },
-  "retry": "Retry",
+  "retry": "Tentar Novamente",
   "@retry": {
     "description": "Button label for retrying an operation"
   },
-  "selected": "Selected",
+  "selected": "Selecionado",
   "@selected": {
     "description": "Accessibility label indicating an item is selected"
   },
@@ -389,6 +389,54 @@
       "minutes": {
         "type": "int",
         "example": "10"
+      }
+    }
+  },
+  "copiedToClipboard": "Copiado para a área de transferência",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "Versículos salvos",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
+  },
+  "loadingBooks": "Carregando livros...",
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "selectBook": "Selecionar Livro",
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "selectBookAndChapter": "Selecione um livro e capítulo",
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "habitsCompleted": "Hábitos concluídos:",
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "habitsCompletedCount": "{completed} de {total}",
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "error": "Erro: {message}",
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Conexão falhou"
       }
     }
   }

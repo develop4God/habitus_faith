@@ -308,4 +308,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String abandonmentNudgeBody(int minutes) {
     return 'Reduce to ${minutes}min? We noticed you might abandon this habit';
   }
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get versesSaved => 'Verses saved';
+
+  @override
+  String get loadingBooks => 'Loading books...';
+
+  @override
+  String get selectBook => 'Select Book';
+
+  @override
+  String get selectBookAndChapter => 'Select a book and chapter';
+
+  @override
+  String get habitsCompleted => 'Habits completed:';
+
+  @override
+  String habitsCompletedCount(int completed, int total) {
+    return '$completed of $total';
+  }
+
+  @override
+  String error(String message) {
+    return 'Error: $message';
+  }
 }

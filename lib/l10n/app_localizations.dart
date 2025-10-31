@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -655,6 +655,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reduce to {minutes}min? We noticed you might abandon this habit'**
   String abandonmentNudgeBody(int minutes);
+
+  /// Message shown when text is copied to clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// Message shown when Bible verses are saved
+  ///
+  /// In en, this message translates to:
+  /// **'Verses saved'**
+  String get versesSaved;
+
+  /// Message shown while loading Bible books
+  ///
+  /// In en, this message translates to:
+  /// **'Loading books...'**
+  String get loadingBooks;
+
+  /// Hint text for book selection dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'Select Book'**
+  String get selectBook;
+
+  /// Message shown when no book and chapter are selected
+  ///
+  /// In en, this message translates to:
+  /// **'Select a book and chapter'**
+  String get selectBookAndChapter;
+
+  /// Label for habits completed statistic
+  ///
+  /// In en, this message translates to:
+  /// **'Habits completed:'**
+  String get habitsCompleted;
+
+  /// Shows number of completed habits out of total
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} of {total}'**
+  String habitsCompletedCount(int completed, int total);
+
+  /// Error message template
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String error(String message);
 }
 
 class _AppLocalizationsDelegate
@@ -690,9 +738,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

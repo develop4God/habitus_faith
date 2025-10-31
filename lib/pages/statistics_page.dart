@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/app_localizations.dart';
 import 'habits_page.dart';
 
 class StatisticsPage extends ConsumerWidget {
@@ -8,10 +9,11 @@ class StatisticsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Estadísticas'),
+        title: Text(l10n.statistics),
       ),
       body: habitsAsync.when(
         data: (habits) {
@@ -23,12 +25,12 @@ class StatisticsPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Hábitos completados:',
+                  l10n.habitsCompleted,
                   style: TextStyle(fontSize: 22, color: Colors.blue[800]),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  '$completed de $total',
+                  l10n.habitsCompletedCount(completed, total),
                   style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
@@ -45,7 +47,7 @@ class StatisticsPage extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
-          child: Text('Error: $error'),
+          child: Text(l10n.error(error.toString())),
         ),
       ),
     );

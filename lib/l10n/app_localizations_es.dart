@@ -190,13 +190,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboardingErrorMessage =>
-      'Failed to save habits. Please try again.';
+      'Error al guardar los hábitos. Por favor, inténtalo de nuevo.';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Reintentar';
 
   @override
-  String get selected => 'Selected';
+  String get selected => 'Seleccionado';
 
   @override
   String get category => 'Categoría';
@@ -307,5 +307,33 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String abandonmentNudgeBody(int minutes) {
     return '¿Reducimos a ${minutes}min? Notamos que podrías abandonar este hábito';
+  }
+
+  @override
+  String get copiedToClipboard => 'Copiado al portapapeles';
+
+  @override
+  String get versesSaved => 'Versículos guardados';
+
+  @override
+  String get loadingBooks => 'Cargando libros...';
+
+  @override
+  String get selectBook => 'Seleccionar Libro';
+
+  @override
+  String get selectBookAndChapter => 'Selecciona un libro y capítulo';
+
+  @override
+  String get habitsCompleted => 'Hábitos completados:';
+
+  @override
+  String habitsCompletedCount(int completed, int total) {
+    return '$completed de $total';
+  }
+
+  @override
+  String error(String message) {
+    return 'Error: $message';
   }
 }

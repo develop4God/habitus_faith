@@ -226,15 +226,15 @@
   "@predefinedHabit_service_description": {
     "description": "Description of service habit"
   },
-  "onboardingErrorMessage": "Failed to save habits. Please try again.",
+  "onboardingErrorMessage": "Échec de la sauvegarde des habitudes. Veuillez réessayer.",
   "@onboardingErrorMessage": {
     "description": "Error message shown when onboarding fails"
   },
-  "retry": "Retry",
+  "retry": "Réessayer",
   "@retry": {
     "description": "Button label for retrying an operation"
   },
-  "selected": "Selected",
+  "selected": "Sélectionné",
   "@selected": {
     "description": "Accessibility label indicating an item is selected"
   },
@@ -389,6 +389,54 @@
       "minutes": {
         "type": "int",
         "example": "10"
+      }
+    }
+  },
+  "copiedToClipboard": "Copié dans le presse-papiers",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "Versets sauvegardés",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
+  },
+  "loadingBooks": "Chargement des livres...",
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "selectBook": "Sélectionner un Livre",
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "selectBookAndChapter": "Sélectionnez un livre et un chapitre",
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "habitsCompleted": "Habitudes complétées:",
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "habitsCompletedCount": "{completed} sur {total}",
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "error": "Erreur: {message}",
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Connexion échouée"
       }
     }
   }

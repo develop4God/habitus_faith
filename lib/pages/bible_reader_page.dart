@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/bible_providers.dart';
 import '../bible_reader_core/bible_reader_core.dart';
 import '../utils/copyright_utils.dart';
@@ -76,6 +77,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(bibleReaderProvider);
     final notifier = ref.read(bibleReaderProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     if (state.isLoading) {
       return const Scaffold(
@@ -113,7 +115,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
         ],
       ),
       body: state.books.isEmpty
-          ? const Center(child: Text('Loading books...'))
+          ? Center(child: Text(l10n.loadingBooks))
           : Column(
               children: [
                 // Book and Chapter selector
@@ -127,7 +129,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         child: DropdownButton<int>(
                           isExpanded: true,
                           value: state.selectedBookNumber,
-                          hint: const Text('Select Book'),
+                          hint: Text(l10n.selectBook),
                           items: state.books.map((book) {
                             return DropdownMenuItem<int>(
                               value: book['book_number'] as int,
@@ -170,7 +172,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                 // Verses display
                 Expanded(
                   child: state.verses.isEmpty
-                      ? const Center(child: Text('Select a book and chapter'))
+                      ? Center(child: Text(l10n.selectBookAndChapter))
                       : Stack(
                           children: [
                             ScrollablePositionedList.builder(
@@ -334,8 +336,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               ClipboardData(text: '$reference\n\n$text'),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Copied to clipboard')),
+                              SnackBar(
+                                  content: Text(l10n.copiedToClipboard)),
                             );
                             notifier.clearSelection();
                           },
@@ -359,7 +361,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                             await notifier.saveSelectedVerses();
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Verses saved')),
+                                SnackBar(content: Text(l10n.versesSaved)),
                               );
                             }
                             notifier.clearSelection();
