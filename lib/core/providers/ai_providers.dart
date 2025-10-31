@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import '../config/env_config.dart';
 import '../services/cache/cache_service.dart';
 import '../services/ai/rate_limit_service.dart';
@@ -9,6 +10,21 @@ import '../../features/habits/domain/models/generation_request.dart';
 import '../../features/habits/data/storage/storage_providers.dart';
 
 part 'ai_providers.g.dart';
+
+/// Provider for logger instance
+@riverpod
+Logger logger(LoggerRef ref) {
+  return Logger(
+    printer: PrettyPrinter(
+      methodCount: 0,
+      errorMethodCount: 5,
+      lineLength: 80,
+      colors: true,
+      printEmojis: true,
+      dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+    ),
+  );
+}
 
 /// Provider for cache service
 @riverpod
@@ -24,7 +40,7 @@ IRateLimitService rateLimitService(RateLimitServiceRef ref) {
   return RateLimitService(prefs);
 }
 
-/// Provider for Gemini service
+/// Provider for Gemini service with optional Bible enrichment
 @riverpod
 IGeminiService geminiService(GeminiServiceRef ref) {
   return GeminiService(
@@ -32,6 +48,9 @@ IGeminiService geminiService(GeminiServiceRef ref) {
     modelName: EnvConfig.geminiModel,
     cache: ref.watch(cacheServiceProvider),
     rateLimit: ref.watch(rateLimitServiceProvider),
+    logger: ref.watch(loggerProvider),
+    // Note: BibleDbService injection would require initialization
+    // For now, it's optional and will be null (no enrichment)
   );
 }
 

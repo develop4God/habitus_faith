@@ -51,7 +51,8 @@ class MLFeaturesCalculator {
   /// If habit was created less than N days ago, only count actual days elapsed
   static int countRecentFailures(Habit habit, int days, {DateTime? now}) {
     final currentTime = now ?? DateTime.now();
-    final today = DateTime(currentTime.year, currentTime.month, currentTime.day);
+    final today =
+        DateTime(currentTime.year, currentTime.month, currentTime.day);
 
     // Calculate habit age in days
     final habitCreated = DateTime(

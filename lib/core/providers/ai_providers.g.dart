@@ -6,7 +6,25 @@ part of 'ai_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$cacheServiceHash() => r'f6a834603c48562a7bdb40c7e576149a167fb10d';
+String _$loggerHash() => r'8b7e11a155f4beb9e222fb7f4bf6f651d0da24d3';
+
+/// Provider for logger instance
+///
+/// Copied from [logger].
+@ProviderFor(logger)
+final loggerProvider = AutoDisposeProvider<Logger>.internal(
+  logger,
+  name: r'loggerProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$loggerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef LoggerRef = AutoDisposeProviderRef<Logger>;
+String _$cacheServiceHash() => r'999391311237c437e6a805774e202f1054c2485a';
 
 /// Provider for cache service
 ///
@@ -24,7 +42,7 @@ final cacheServiceProvider = AutoDisposeProvider<ICacheService>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CacheServiceRef = AutoDisposeProviderRef<ICacheService>;
-String _$rateLimitServiceHash() => r'e4131004ca6c03162ee33c4b5d6cecc63191d9d4';
+String _$rateLimitServiceHash() => r'34461cb97a53e3c5972e36a36412bd794fa594e3';
 
 /// Provider for rate limit service
 ///
@@ -44,9 +62,9 @@ final rateLimitServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef RateLimitServiceRef = AutoDisposeProviderRef<IRateLimitService>;
-String _$geminiServiceHash() => r'44b18986aade21fb0ec0731b5b2f5356a037e3c4';
+String _$geminiServiceHash() => r'bf56a152b4716147a3c8cd9bb668e42f623b84c8';
 
-/// Provider for Gemini service
+/// Provider for Gemini service with optional Bible enrichment
 ///
 /// Copied from [geminiService].
 @ProviderFor(geminiService)

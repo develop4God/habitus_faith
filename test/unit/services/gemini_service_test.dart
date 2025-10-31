@@ -4,6 +4,7 @@ import 'package:habitus_faith/core/services/ai/gemini_service.dart';
 import 'package:habitus_faith/core/services/cache/cache_service.dart';
 import 'package:habitus_faith/core/services/ai/rate_limit_service.dart';
 import 'package:habitus_faith/core/services/ai/gemini_exceptions.dart';
+import 'package:habitus_faith/core/config/ai_config.dart';
 import 'package:habitus_faith/features/habits/domain/models/micro_habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/generation_request.dart';
 
@@ -65,6 +66,7 @@ void main() {
 
       when(() => mockRateLimit.tryConsumeRequest())
           .thenAnswer((_) async => true);
+      when(() => mockRateLimit.getRemainingRequests()).thenReturn(9);
       when(() => mockCache.get<List<MicroHabit>>(any()))
           .thenAnswer((_) async => cachedHabits);
 
@@ -141,8 +143,8 @@ void main() {
     test('sanitizes input by removing special characters', () {
       // This is implicitly tested by the service not throwing on valid input
       // The sanitization happens before the prompt is built
-      expect(GeminiService.maxInputLength, equals(200));
-      expect(GeminiService.blacklistedTerms.length, greaterThan(0));
+      expect(AiConfig.maxInputLength, equals(200));
+      expect(AiConfig.blacklistedTerms.length, greaterThan(0));
     });
   });
 }

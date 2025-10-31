@@ -15,7 +15,7 @@ import '../../l10n/app_localizations.dart';
 final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
   final habitsRepository = ref.watch(jsonHabitsRepositoryProvider);
   final predictor = ref.watch(abandonmentPredictorProvider);
-  
+
   return HabitPredictorService(
     habitsRepository: habitsRepository,
     predictor: predictor,
@@ -26,7 +26,7 @@ final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
 class HabitPredictorService {
   final dynamic habitsRepository; // JsonHabitsRepository
   final AbandonmentPredictor predictor;
-  
+
   HabitPredictorService({
     required this.habitsRepository,
     required this.predictor,
@@ -34,7 +34,7 @@ class HabitPredictorService {
 
   /// Run daily predictions for all habits
   /// Called by background task at 6:00 AM
-  /// 
+  ///
   /// For each habit:
   /// 1. Predict abandonment risk using ML model
   /// 2. Update abandonmentRisk field
@@ -134,11 +134,12 @@ class HabitPredictorService {
       // Calculate new difficulty using Behavioral Engine
       final engine = BehavioralEngine();
       final newDifficultyLevel = engine.calculateNextDifficulty(habit);
-      
+
       // Only suggest reduction if it's actually lower
       if (newDifficultyLevel < habit.difficultyLevel) {
-        final newTargetMinutes = Habit.targetMinutesByLevel[newDifficultyLevel] ?? 
-                                 habit.targetMinutes;
+        final newTargetMinutes =
+            Habit.targetMinutesByLevel[newDifficultyLevel] ??
+                habit.targetMinutes;
 
         // Show nudge notification
         await _showNudgeNotification(
@@ -177,17 +178,17 @@ class HabitPredictorService {
       // Get locale from SharedPreferences (since we're in background/isolate)
       final prefs = await SharedPreferences.getInstance();
       final localeCode = prefs.getString('locale') ?? 'es';
-      
+
       // Load localized strings without BuildContext
       final locale = Locale(localeCode);
       final localizations = lookupAppLocalizations(locale);
-      
+
       // Get localized title and body using parameterized methods
       final title = localizations.abandonmentNudgeTitle(habitName);
       final body = localizations.abandonmentNudgeBody(suggestedMinutes);
-      
+
       final notificationService = NotificationService();
-      
+
       await notificationService.showImmediateNotification(
         title,
         body,
@@ -220,11 +221,11 @@ class HabitPredictorService {
         // User accepted: apply the difficulty reduction
         final habits = await habitsRepository.getAllHabits();
         final habit = habits.firstWhere((h) => h.id == habitId);
-        
+
         // Calculate new difficulty level from suggested minutes
         final newDifficultyLevel = Habit.targetMinutesByLevel.entries
-            .firstWhere((entry) => entry.value == suggestedMinutes, 
-                        orElse: () => const MapEntry(3, 20))
+            .firstWhere((entry) => entry.value == suggestedMinutes,
+                orElse: () => const MapEntry(3, 20))
             .key;
 
         final updatedHabit = habit.copyWith(

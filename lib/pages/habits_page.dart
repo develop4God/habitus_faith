@@ -273,18 +273,19 @@ class HabitsPage extends ConsumerWidget {
   }
 
   Widget _buildCategorySection(
-      BuildContext context,
-      WidgetRef ref,
-      AppLocalizations l10n,
-      HabitCategory category,
-      List<Habit> habits,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    HabitCategory category,
+    List<Habit> habits,
+  ) {
     final categoryColor = HabitColors.categoryColors[category]!;
     final categoryIcon = HabitColors.getCategoryIcon(category);
     final categoryName = HabitColors.getCategoryDisplayName(category, l10n);
 
     // Gather all completion dates for this group
-    final groupCompletionDates = habits.expand((h) => h.completionHistory).toList();
+    final groupCompletionDates =
+        habits.expand((h) => h.completionHistory).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,7 +329,8 @@ class HabitsPage extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: categoryColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -598,7 +600,8 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                         color: HabitColors.categoryColors[category],
                       ),
                       const SizedBox(width: 8),
-                      Text(HabitColors.getCategoryDisplayName(category, widget.l10n))
+                      Text(HabitColors.getCategoryDisplayName(
+                          category, widget.l10n))
                     ],
                   ),
                 );
@@ -863,7 +866,8 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                         color: HabitColors.categoryColors[category],
                       ),
                       const SizedBox(width: 8),
-                      Text(HabitColors.getCategoryDisplayName(category, widget.l10n))
+                      Text(HabitColors.getCategoryDisplayName(
+                          category, widget.l10n))
                     ],
                   ),
                 );

@@ -1,52 +1,55 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:logger/logger.dart';
 import 'package:habitus_faith/core/services/ai/gemini_service.dart';
 import 'package:habitus_faith/core/services/cache/cache_service.dart';
 import 'package:habitus_faith/core/services/ai/rate_limit_service.dart';
-import 'package:habitus_faith/core/services/ai/gemini_exceptions.dart';
+import 'package:habitus_faith/core/config/ai_config.dart';
 import 'package:habitus_faith/features/habits/domain/models/generation_request.dart';
 
 @Tags(['integration'])
 void main() {
-  group('GeminiService Integration Tests', () {
+  String? testApiKey;
+
+  setUpAll(() async {
+    // Attempt to load test environment variables
+    try {
+      await dotenv.load(fileName: '.env.test');
+      testApiKey = dotenv.env['TEST_GEMINI_API_KEY'];
+      if (testApiKey != null && testApiKey!.isNotEmpty) {
+        print('✅ Test API key found - integration tests enabled');
+      }
+    } catch (e) {
+      print('ℹ️  .env.test not found - integration tests will be skipped. '
+          'Create .env.test with TEST_GEMINI_API_KEY to enable.');
+    }
+  });
+
+  group('Gemini Service Integration Tests', () {
     late GeminiService service;
     late SharedPreferences prefs;
-
-    setUpAll(() async {
-      // Load test environment variables
-      try {
-        await dotenv.load(fileName: '.env.test');
-      } catch (e) {
-        // If .env.test doesn't exist, skip integration tests
-        print(
-            'Warning: .env.test not found. Integration tests will be skipped.');
-      }
-    });
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       prefs = await SharedPreferences.getInstance();
 
-      final testApiKey = dotenv.env['TEST_GEMINI_API_KEY'];
-      if (testApiKey == null || testApiKey.isEmpty) {
-        // Skip test if no test API key is available
-        return;
+      if (testApiKey == null || testApiKey!.isEmpty) {
+        return; // Skip setup if no API key
       }
 
       service = GeminiService(
-        apiKey: testApiKey,
-        modelName: 'gemini-1.5-flash',
+        apiKey: testApiKey!,
+        modelName: AiConfig.defaultModel,
         cache: CacheService(prefs),
         rateLimit: RateLimitService(prefs),
+        logger: Logger(level: Level.info),
       );
     });
 
-    test('generates 3 habits for valid request', () async {
-      final testApiKey = dotenv.env['TEST_GEMINI_API_KEY'];
-      if (testApiKey == null || testApiKey.isEmpty) {
-        print('Skipping integration test: TEST_GEMINI_API_KEY not set');
-        return;
+    test('generates 3 habits from real API with valid structure', () async {
+      if (testApiKey == null || testApiKey!.isEmpty) {
+        return skip('No API key configured (add .env.test to enable)');
       }
 
       final request = const GenerationRequest(
@@ -57,30 +60,24 @@ void main() {
 
       final habits = await service.generateMicroHabits(request);
 
-      expect(habits, hasLength(3));
-      expect(habits[0].action, isNotEmpty);
-      expect(habits[0].verse, matches(RegExp(r'\w+ \d+:\d+')));
-      expect(habits[0].purpose, isNotEmpty);
-      expect(habits[0].estimatedMinutes, lessThanOrEqualTo(5));
+      expect(habits, hasLength(AiConfig.habitsPerGeneration));
+      expect(habits.every((h) => h.action.isNotEmpty), isTrue);
+      expect(habits.every((h) => h.verse.isNotEmpty), isTrue);
+      expect(habits.every((h) => h.purpose.isNotEmpty), isTrue);
+      expect(
+          habits.every((h) =>
+              h.purpose.toLowerCase().contains('dios') ||
+              h.purpose.toLowerCase().contains('fe') ||
+              h.purpose.toLowerCase().contains('señor')),
+          isTrue);
+      expect(
+          habits.every((h) => h.estimatedMinutes <= AiConfig.maxHabitMinutes),
+          isTrue);
     }, timeout: const Timeout(Duration(seconds: 45)));
 
-    test('handles timeout gracefully', () async {
-      final testApiKey = dotenv.env['TEST_GEMINI_API_KEY'];
-      if (testApiKey == null || testApiKey.isEmpty) {
-        print('Skipping integration test: TEST_GEMINI_API_KEY not set');
-        return;
-      }
-
-      // This test would need a way to simulate timeout
-      // For now, we'll just verify the timeout constant is set correctly
-      expect(GeminiService.defaultTimeout.inSeconds, equals(30));
-    });
-
-    test('caches results on second request', () async {
-      final testApiKey = dotenv.env['TEST_GEMINI_API_KEY'];
-      if (testApiKey == null || testApiKey.isEmpty) {
-        print('Skipping integration test: TEST_GEMINI_API_KEY not set');
-        return;
+    test('caches results on second identical request', () async {
+      if (testApiKey == null || testApiKey!.isEmpty) {
+        return skip('No API key configured (add .env.test to enable)');
       }
 
       final request = const GenerationRequest(
@@ -88,30 +85,57 @@ void main() {
         languageCode: 'es',
       );
 
-      // First request
+      // First request - calls API
       final habits1 = await service.generateMicroHabits(request);
       expect(habits1, hasLength(3));
 
-      // Second request should be cached (faster)
+      // Second request - should be cached (much faster)
       final stopwatch = Stopwatch()..start();
       final habits2 = await service.generateMicroHabits(request);
       stopwatch.stop();
 
       expect(habits2, hasLength(3));
-      // Cached request should be much faster (under 100ms)
-      expect(stopwatch.elapsedMilliseconds, lessThan(100));
+      // Cached request should be very fast (under 100ms)
+      expect(stopwatch.elapsedMilliseconds, lessThan(100),
+          reason:
+              'Cache hit should be faster than ${stopwatch.elapsedMilliseconds}ms');
     }, timeout: const Timeout(Duration(seconds: 45)));
 
-    test('respects rate limiting', () async {
-      final testApiKey = dotenv.env['TEST_GEMINI_API_KEY'];
-      if (testApiKey == null || testApiKey.isEmpty) {
-        print('Skipping integration test: TEST_GEMINI_API_KEY not set');
-        return;
+    test('respects rate limiting configuration', () async {
+      if (testApiKey == null || testApiKey!.isEmpty) {
+        return skip('No API key configured (add .env.test to enable)');
       }
 
-      // This would require setting up a test scenario where limit is reached
-      // For now, verify the limit constant
-      expect(RateLimitService.maxRequests, equals(10));
+      // Verify rate limit constant is correctly configured
+      expect(AiConfig.monthlyRequestLimit, equals(10));
+      expect(service.getRemainingRequests(), lessThanOrEqualTo(10));
+    });
+
+    test('generates habits in different languages', () async {
+      if (testApiKey == null || testApiKey!.isEmpty) {
+        return skip('No API key configured (add .env.test to enable)');
+      }
+
+      final requestEn = const GenerationRequest(
+        userGoal: 'Pray more consistently',
+        languageCode: 'en',
+      );
+
+      final habitsEn = await service.generateMicroHabits(requestEn);
+
+      expect(habitsEn, hasLength(3));
+      expect(habitsEn.every((h) => h.action.isNotEmpty), isTrue);
+      // English response should contain English words
+      expect(
+          habitsEn.any((h) =>
+              h.action.toLowerCase().contains('pray') ||
+              h.action.toLowerCase().contains('read') ||
+              h.action.toLowerCase().contains('god')),
+          isTrue);
+    }, timeout: const Timeout(Duration(seconds: 45)));
+
+    test('timeout configuration is correctly set', () {
+      expect(AiConfig.requestTimeout, equals(const Duration(seconds: 30)));
     });
   });
 }

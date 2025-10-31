@@ -115,10 +115,10 @@ class LandingPage extends StatelessWidget {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Load environment configuration before Firebase
   await EnvConfig.load();
-  
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

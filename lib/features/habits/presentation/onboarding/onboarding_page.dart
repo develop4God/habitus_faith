@@ -158,7 +158,7 @@ class OnboardingPage extends ConsumerWidget {
 
                           // Prepare translated habits
                           final translatedHabits =
-                          selectedHabits.map((habitId) {
+                              selectedHabits.map((habitId) {
                             final predefinedHabit = predefinedHabits
                                 .firstWhere((h) => h.id == habitId);
                             return TranslatedHabit(
@@ -167,7 +167,9 @@ class OnboardingPage extends ConsumerWidget {
                                   l10n, predefinedHabit.nameKey),
                               description: _getTranslatedDescription(
                                   l10n, predefinedHabit.descriptionKey),
-                              category: PredefinedHabitCategoryX(predefinedHabit.category).toDomainCategory(),
+                              category: PredefinedHabitCategoryX(
+                                      predefinedHabit.category)
+                                  .toDomainCategory(),
                             );
                           }).toList();
 

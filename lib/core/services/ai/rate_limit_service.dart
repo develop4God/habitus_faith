@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
+import '../../config/ai_config.dart';
 
 /// Interface for rate limiting service (state-agnostic)
 abstract class IRateLimitService {
@@ -12,7 +13,6 @@ abstract class IRateLimitService {
 class RateLimitService implements IRateLimitService {
   final SharedPreferences _prefs;
   final _lock = Lock();
-  static const int maxRequests = 10;
   static const _countKey = 'gemini_request_count';
   static const _resetKey = 'gemini_last_reset';
 
@@ -26,7 +26,7 @@ class RateLimitService implements IRateLimitService {
       await _checkMonthlyReset();
       final count = _prefs.getInt(_countKey) ?? 0;
 
-      if (count >= maxRequests) return false;
+      if (count >= AiConfig.monthlyRequestLimit) return false;
 
       await _prefs.setInt(_countKey, count + 1);
       return true;
@@ -36,7 +36,8 @@ class RateLimitService implements IRateLimitService {
   @override
   int getRemainingRequests() {
     final count = _prefs.getInt(_countKey) ?? 0;
-    return (maxRequests - count).clamp(0, maxRequests);
+    return (AiConfig.monthlyRequestLimit - count)
+        .clamp(0, AiConfig.monthlyRequestLimit);
   }
 
   Future<void> _checkMonthlyReset() async {
