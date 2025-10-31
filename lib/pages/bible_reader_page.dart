@@ -335,7 +335,6 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                             Clipboard.setData(
                               ClipboardData(text: '$reference\n\n$text'),
                             );
-                            final l10n = AppLocalizations.of(context)!;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                   content: Text(l10n.copiedToClipboard)),
@@ -361,7 +360,6 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                           onPressed: () async {
                             await notifier.saveSelectedVerses();
                             if (context.mounted) {
-                              final l10n = AppLocalizations.of(context)!;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(l10n.versesSaved)),
                               );
