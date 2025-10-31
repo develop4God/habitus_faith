@@ -88,7 +88,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             top: 0,
             bottom: 0,
             child: Container(
-              width: 4,
+              width: 20,// Left border width before checkbox
               decoration: BoxDecoration(
                 color: habitColor,
                 borderRadius: const BorderRadius.only(
