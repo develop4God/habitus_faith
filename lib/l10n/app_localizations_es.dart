@@ -314,4 +314,26 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get versesSaved => 'Versículos guardados';
+
+  @override
+  String get loadingBooks => 'Cargando libros...';
+
+  @override
+  String get selectBook => 'Seleccionar Libro';
+
+  @override
+  String get selectBookAndChapter => 'Selecciona un libro y capítulo';
+
+  @override
+  String get habitsCompleted => 'Hábitos completados:';
+
+  @override
+  String habitsCompletedCount(int completed, int total) {
+    return '$completed de $total';
+  }
+
+  @override
+  String error(String message) {
+    return 'Error: $message';
+  }
 }

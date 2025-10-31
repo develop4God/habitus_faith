@@ -298,4 +298,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get versesSaved => '经文已保存';
+
+  @override
+  String get loadingBooks => '正在加载书卷...';
+
+  @override
+  String get selectBook => '选择书卷';
+
+  @override
+  String get selectBookAndChapter => '选择书卷和章节';
+
+  @override
+  String get habitsCompleted => '已完成的习惯：';
+
+  @override
+  String habitsCompletedCount(int completed, int total) {
+    return '$completed / $total';
+  }
+
+  @override
+  String error(String message) {
+    return '错误: $message';
+  }
 }

@@ -77,6 +77,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(bibleReaderProvider);
     final notifier = ref.read(bibleReaderProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     if (state.isLoading) {
       return const Scaffold(
@@ -114,7 +115,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
         ],
       ),
       body: state.books.isEmpty
-          ? const Center(child: Text('Loading books...'))
+          ? Center(child: Text(l10n.loadingBooks))
           : Column(
               children: [
                 // Book and Chapter selector
@@ -128,7 +129,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         child: DropdownButton<int>(
                           isExpanded: true,
                           value: state.selectedBookNumber,
-                          hint: const Text('Select Book'),
+                          hint: Text(l10n.selectBook),
                           items: state.books.map((book) {
                             return DropdownMenuItem<int>(
                               value: book['book_number'] as int,
@@ -171,7 +172,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                 // Verses display
                 Expanded(
                   child: state.verses.isEmpty
-                      ? const Center(child: Text('Select a book and chapter'))
+                      ? Center(child: Text(l10n.selectBookAndChapter))
                       : Stack(
                           children: [
                             ScrollablePositionedList.builder(

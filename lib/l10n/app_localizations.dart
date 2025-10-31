@@ -667,6 +667,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verses saved'**
   String get versesSaved;
+
+  /// Message shown while loading Bible books
+  ///
+  /// In en, this message translates to:
+  /// **'Loading books...'**
+  String get loadingBooks;
+
+  /// Hint text for book selection dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'Select Book'**
+  String get selectBook;
+
+  /// Message shown when no book and chapter are selected
+  ///
+  /// In en, this message translates to:
+  /// **'Select a book and chapter'**
+  String get selectBookAndChapter;
+
+  /// Label for habits completed statistic
+  ///
+  /// In en, this message translates to:
+  /// **'Habits completed:'**
+  String get habitsCompleted;
+
+  /// Shows number of completed habits out of total
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} of {total}'**
+  String habitsCompletedCount(int completed, int total);
+
+  /// Error message template
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String error(String message);
 }
 
 class _AppLocalizationsDelegate

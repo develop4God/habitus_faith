@@ -399,5 +399,45 @@
   "versesSaved": "经文已保存",
   "@versesSaved": {
     "description": "Message shown when Bible verses are saved"
+  },
+  "loadingBooks": "正在加载书卷...",
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "selectBook": "选择书卷",
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "selectBookAndChapter": "选择书卷和章节",
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "habitsCompleted": "已完成的习惯：",
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "habitsCompletedCount": "{completed} / {total}",
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "error": "错误: {message}",
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "连接失败"
+      }
+    }
   }
 }

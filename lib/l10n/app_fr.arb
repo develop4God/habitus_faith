@@ -399,5 +399,45 @@
   "versesSaved": "Versets sauvegardés",
   "@versesSaved": {
     "description": "Message shown when Bible verses are saved"
+  },
+  "loadingBooks": "Chargement des livres...",
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "selectBook": "Sélectionner un Livre",
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "selectBookAndChapter": "Sélectionnez un livre et un chapitre",
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "habitsCompleted": "Habitudes complétées:",
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "habitsCompletedCount": "{completed} sur {total}",
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "error": "Erreur: {message}",
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Connexion échouée"
+      }
+    }
   }
 }
