@@ -16,13 +16,19 @@ class EnvConfig {
 
   /// Get Gemini API key from environment
   /// Checks .env file first, then --dart-define override
-  /// Throws ApiKeyMissingException if not configured
+  /// Throws ApiKeyMissingException if not configured or invalid
   static String get geminiApiKey {
     final key = dotenv.env['GEMINI_API_KEY'] ??
-        const String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+        const String.fromEnvironment('GEMINI_API_KEY');
 
     if (key.isEmpty) {
-      throw ApiKeyMissingException();
+      throw ApiKeyMissingException(
+          'GEMINI_API_KEY not found. Add to .env or use --dart-define');
+    }
+
+    // Gemini keys typically start with "AIza"
+    if (!key.startsWith('AIza')) {
+      throw ApiKeyMissingException('Invalid GEMINI_API_KEY format');
     }
 
     return key;

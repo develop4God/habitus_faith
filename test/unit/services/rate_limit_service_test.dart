@@ -14,25 +14,25 @@ void main() {
     });
 
     test('allows requests when under limit', () async {
-      expect(await service.canMakeRequest(), isTrue);
-      expect(service.getRemainingRequests(), equals(10));
+      expect(await service.tryConsumeRequest(), isTrue);
+      expect(service.getRemainingRequests(), equals(9));
     });
 
-    test('tracks request count correctly', () async {
-      await service.incrementCounter();
+    test('tracks request count correctly with atomic operation', () async {
+      await service.tryConsumeRequest();
       expect(service.getRemainingRequests(), equals(9));
 
-      await service.incrementCounter();
+      await service.tryConsumeRequest();
       expect(service.getRemainingRequests(), equals(8));
     });
 
     test('blocks requests when limit reached', () async {
       // Use up all requests
       for (int i = 0; i < 10; i++) {
-        await service.incrementCounter();
+        expect(await service.tryConsumeRequest(), isTrue);
       }
 
-      expect(await service.canMakeRequest(), isFalse);
+      expect(await service.tryConsumeRequest(), isFalse);
       expect(service.getRemainingRequests(), equals(0));
     });
 
@@ -46,8 +46,8 @@ void main() {
       service = RateLimitService(prefs);
 
       // Should allow request (new month = reset)
-      expect(await service.canMakeRequest(), isTrue);
-      expect(service.getRemainingRequests(), equals(10));
+      expect(await service.tryConsumeRequest(), isTrue);
+      expect(service.getRemainingRequests(), equals(9));
     });
 
     test('does not reset counter in same month', () async {
@@ -65,6 +65,21 @@ void main() {
       await prefs.setInt('gemini_request_count', 15);
       service = RateLimitService(prefs);
 
+      expect(service.getRemainingRequests(), equals(0));
+    });
+
+    test('handles concurrent requests atomically', () async {
+      // Test concurrent access doesn't cause race conditions
+      final futures = List.generate(
+        15,
+        (_) => service.tryConsumeRequest(),
+      );
+
+      final results = await Future.wait(futures);
+
+      // Exactly 10 should succeed, 5 should fail
+      final successCount = results.where((r) => r).length;
+      expect(successCount, equals(10));
       expect(service.getRemainingRequests(), equals(0));
     });
   });

@@ -36,3 +36,11 @@ class ApiKeyMissingException extends GeminiException {
   @override
   String toString() => 'ApiKeyMissingException: $message';
 }
+
+/// Exception thrown when user input fails validation
+class InvalidInputException extends GeminiException {
+  InvalidInputException(super.message);
+
+  @override
+  String toString() => 'InvalidInputException: $message';
+}

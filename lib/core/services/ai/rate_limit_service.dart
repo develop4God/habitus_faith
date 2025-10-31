@@ -1,39 +1,42 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:synchronized/synchronized.dart';
 
 /// Interface for rate limiting service (state-agnostic)
 abstract class IRateLimitService {
-  Future<bool> canMakeRequest();
+  Future<bool> tryConsumeRequest();
   int getRemainingRequests();
-  Future<void> incrementCounter();
 }
 
 /// Rate limiting service for Gemini API calls
 /// Tracks monthly requests with automatic reset
 class RateLimitService implements IRateLimitService {
   final SharedPreferences _prefs;
+  final _lock = Lock();
   static const int maxRequests = 10;
   static const _countKey = 'gemini_request_count';
   static const _resetKey = 'gemini_last_reset';
 
   RateLimitService(this._prefs);
 
+  /// Atomically check and consume a request slot
+  /// Returns true if request can proceed, false if limit reached
   @override
-  Future<bool> canMakeRequest() async {
-    await _checkMonthlyReset();
-    final count = _prefs.getInt(_countKey) ?? 0;
-    return count < maxRequests;
+  Future<bool> tryConsumeRequest() async {
+    return await _lock.synchronized(() async {
+      await _checkMonthlyReset();
+      final count = _prefs.getInt(_countKey) ?? 0;
+
+      if (count >= maxRequests) return false;
+
+      await _prefs.setInt(_countKey, count + 1);
+      return true;
+    });
   }
 
   @override
   int getRemainingRequests() {
     final count = _prefs.getInt(_countKey) ?? 0;
     return (maxRequests - count).clamp(0, maxRequests);
-  }
-
-  @override
-  Future<void> incrementCounter() async {
-    final count = _prefs.getInt(_countKey) ?? 0;
-    await _prefs.setInt(_countKey, count + 1);
   }
 
   Future<void> _checkMonthlyReset() async {
