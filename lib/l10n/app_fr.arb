@@ -391,5 +391,155 @@
         "example": "10"
       }
     }
+  },
+  "generateMicroHabits": "Générer des Micro-Habitudes",
+  "@generateMicroHabits": {
+    "description": "Titre de la page de génération de micro-habitudes"
+  },
+  "aiGeneratedHabits": "Habitudes Générées par IA",
+  "@aiGeneratedHabits": {
+    "description": "Titre pour la section des habitudes générées par IA"
+  },
+  "yourGoal": "Votre Objectif",
+  "@yourGoal": {
+    "description": "Étiquette pour le champ de saisie d'objectif de l'utilisateur"
+  },
+  "goalHint": "Que souhaitez-vous améliorer? (ex: Prier plus régulièrement)",
+  "@goalHint": {
+    "description": "Texte d'aide pour le champ d'objectif"
+  },
+  "goalRequired": "Veuillez saisir votre objectif",
+  "@goalRequired": {
+    "description": "Message de validation lorsque l'objectif est vide"
+  },
+  "goalTooShort": "L'objectif doit contenir au moins 10 caractères",
+  "@goalTooShort": {
+    "description": "Message de validation lorsque l'objectif est trop court"
+  },
+  "goalTooLong": "L'objectif ne peut pas dépasser 200 caractères",
+  "@goalTooLong": {
+    "description": "Message de validation lorsque l'objectif est trop long"
+  },
+  "failurePattern": "Quand échouez-vous généralement? (Facultatif)",
+  "@failurePattern": {
+    "description": "Étiquette pour le champ de modèle d'échec"
+  },
+  "failurePatternHint": "ex: J'oublie pendant les matins occupés",
+  "@failurePatternHint": {
+    "description": "Texte d'aide pour le modèle d'échec"
+  },
+  "generateHabits": "Générer des Habitudes",
+  "@generateHabits": {
+    "description": "Texte du bouton pour générer des habitudes"
+  },
+  "generating": "Génération...",
+  "@generating": {
+    "description": "Texte d'état de chargement pendant la génération"
+  },
+  "generatingHabits": "Génération de micro-habitudes personnalisées pour vous...",
+  "@generatingHabits": {
+    "description": "Message de chargement pendant la génération des habitudes"
+  },
+  "generatedHabitsTitle": "Vos Micro-Habitudes Personnalisées",
+  "@generatedHabitsTitle": {
+    "description": "Titre pour la page des résultats des habitudes générées"
+  },
+  "selectHabitsToAdd": "Sélectionnez les habitudes à ajouter à votre suivi:",
+  "@selectHabitsToAdd": {
+    "description": "Instructions pour sélectionner les habitudes"
+  },
+  "saveSelected": "Enregistrer la Sélection",
+  "@saveSelected": {
+    "description": "Bouton pour enregistrer les habitudes sélectionnées"
+  },
+  "saving": "Enregistrement...",
+  "@saving": {
+    "description": "Texte de chargement pendant l'enregistrement des habitudes"
+  },
+  "habitsAdded": "{count} habitude(s) ajoutée(s) avec succès!",
+  "@habitsAdded": {
+    "description": "Message de succès après l'ajout d'habitudes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "estimatedTime": "~{minutes} min",
+  "@estimatedTime": {
+    "description": "Temps estimé pour compléter l'habitude",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "bibleVerse": "Verset Biblique",
+  "@bibleVerse": {
+    "description": "Étiquette pour la section du verset biblique"
+  },
+  "purpose": "Objectif",
+  "@purpose": {
+    "description": "Étiquette pour l'objectif de l'habitude"
+  },
+  "remaining": "{count} restant(s)",
+  "@remaining": {
+    "description": "Nombre de générations restantes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "monthlyLimit": "Limite mensuelle: {limit} générations",
+  "@monthlyLimit": {
+    "description": "Information sur la limite mensuelle de générations",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "rateLimitReached": "Limite mensuelle atteinte. Réessayez le mois prochain.",
+  "@rateLimitReached": {
+    "description": "Message d'erreur lorsque la limite de taux est dépassée"
+  },
+  "generationFailed": "Échec de la génération d'habitudes. Veuillez réessayer.",
+  "@generationFailed": {
+    "description": "Message d'erreur générique pour l'échec de la génération"
+  },
+  "apiTimeout": "Délai d'attente dépassé. Vérifiez votre connexion et réessayez.",
+  "@apiTimeout": {
+    "description": "Message d'erreur pour le délai d'attente de l'API"
+  },
+  "invalidInput": "Entrée invalide. Vérifiez votre objectif et réessayez.",
+  "@invalidInput": {
+    "description": "Message d'erreur pour une entrée invalide"
+  },
+  "noHabitsSelected": "Veuillez sélectionner au moins une habitude à enregistrer",
+  "@noHabitsSelected": {
+    "description": "Erreur lors de la tentative d'enregistrement sans sélectionner d'habitudes"
+  },
+  "tryAgain": "Réessayer",
+  "@tryAgain": {
+    "description": "Bouton pour réessayer après une erreur"
+  },
+  "generationsRemaining": "{count} génération(s) restante(s) ce mois",
+  "@generationsRemaining": {
+    "description": "Affiche combien de générations restent",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "poweredByGemini": "Propulsé par Gemini AI",
+  "@poweredByGemini": {
+    "description": "Attribution pour le service IA"
   }
 }

@@ -292,4 +292,108 @@ class AppLocalizationsZh extends AppLocalizations {
   String abandonmentNudgeBody(int minutes) {
     return 'Reduce to ${minutes}min? We noticed you might abandon this habit';
   }
+
+  @override
+  String get generateMicroHabits => 'Generate Micro-Habits';
+
+  @override
+  String get aiGeneratedHabits => 'AI-Generated Habits';
+
+  @override
+  String get yourGoal => 'Your Goal';
+
+  @override
+  String get goalHint =>
+      'What would you like to improve? (e.g., Pray more consistently)';
+
+  @override
+  String get goalRequired => 'Please enter your goal';
+
+  @override
+  String get goalTooShort => 'Goal must be at least 10 characters';
+
+  @override
+  String get goalTooLong => 'Goal cannot exceed 200 characters';
+
+  @override
+  String get failurePattern => 'When do you usually fail? (Optional)';
+
+  @override
+  String get failurePatternHint => 'e.g., I forget during busy mornings';
+
+  @override
+  String get generateHabits => 'Generate Habits';
+
+  @override
+  String get generating => 'Generating...';
+
+  @override
+  String get generatingHabits =>
+      'Generating personalized micro-habits for you...';
+
+  @override
+  String get generatedHabitsTitle => 'Your Personalized Micro-Habits';
+
+  @override
+  String get selectHabitsToAdd => 'Select habits to add to your tracking:';
+
+  @override
+  String get saveSelected => 'Save Selected';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String habitsAdded(int count) {
+    return '$count habit(s) added successfully!';
+  }
+
+  @override
+  String estimatedTime(int minutes) {
+    return '~$minutes min';
+  }
+
+  @override
+  String get bibleVerse => 'Bible Verse';
+
+  @override
+  String get purpose => 'Purpose';
+
+  @override
+  String remaining(int count) {
+    return '$count remaining';
+  }
+
+  @override
+  String monthlyLimit(int limit) {
+    return 'Monthly limit: $limit generations';
+  }
+
+  @override
+  String get rateLimitReached => 'Monthly limit reached. Try again next month.';
+
+  @override
+  String get generationFailed => 'Failed to generate habits. Please try again.';
+
+  @override
+  String get apiTimeout =>
+      'Request timed out. Please check your connection and try again.';
+
+  @override
+  String get invalidInput =>
+      'Invalid input. Please check your goal and try again.';
+
+  @override
+  String get noHabitsSelected => 'Please select at least one habit to save';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String generationsRemaining(int count) {
+    return '$count generation(s) remaining this month';
+  }
+
+  @override
+  String get poweredByGemini => 'Powered by Gemini AI';
 }

@@ -391,5 +391,155 @@
         "example": "10"
       }
     }
+  },
+  "generateMicroHabits": "Gerar Micro-Hábitos",
+  "@generateMicroHabits": {
+    "description": "Título da página de geração de micro-hábitos"
+  },
+  "aiGeneratedHabits": "Hábitos Gerados por IA",
+  "@aiGeneratedHabits": {
+    "description": "Título para a seção de hábitos gerados por IA"
+  },
+  "yourGoal": "Sua Meta",
+  "@yourGoal": {
+    "description": "Rótulo para o campo de entrada de meta do usuário"
+  },
+  "goalHint": "O que você gostaria de melhorar? (ex: Orar mais consistentemente)",
+  "@goalHint": {
+    "description": "Texto de ajuda para o campo de meta"
+  },
+  "goalRequired": "Por favor insira sua meta",
+  "@goalRequired": {
+    "description": "Mensagem de validação quando a meta está vazia"
+  },
+  "goalTooShort": "A meta deve ter pelo menos 10 caracteres",
+  "@goalTooShort": {
+    "description": "Mensagem de validação quando a meta é muito curta"
+  },
+  "goalTooLong": "A meta não pode exceder 200 caracteres",
+  "@goalTooLong": {
+    "description": "Mensagem de validação quando a meta é muito longa"
+  },
+  "failurePattern": "Quando você costuma falhar? (Opcional)",
+  "@failurePattern": {
+    "description": "Rótulo para o campo de padrão de falha"
+  },
+  "failurePatternHint": "ex: Esqueço nas manhãs ocupadas",
+  "@failurePatternHint": {
+    "description": "Texto de ajuda para o padrão de falha"
+  },
+  "generateHabits": "Gerar Hábitos",
+  "@generateHabits": {
+    "description": "Texto do botão para gerar hábitos"
+  },
+  "generating": "Gerando...",
+  "@generating": {
+    "description": "Texto de estado de carregamento enquanto gera"
+  },
+  "generatingHabits": "Gerando micro-hábitos personalizados para você...",
+  "@generatingHabits": {
+    "description": "Mensagem de carregamento enquanto os hábitos são gerados"
+  },
+  "generatedHabitsTitle": "Seus Micro-Hábitos Personalizados",
+  "@generatedHabitsTitle": {
+    "description": "Título para a página de resultados de hábitos gerados"
+  },
+  "selectHabitsToAdd": "Selecione hábitos para adicionar ao seu rastreamento:",
+  "@selectHabitsToAdd": {
+    "description": "Instruções para selecionar hábitos"
+  },
+  "saveSelected": "Salvar Selecionados",
+  "@saveSelected": {
+    "description": "Botão para salvar hábitos selecionados"
+  },
+  "saving": "Salvando...",
+  "@saving": {
+    "description": "Texto de carregamento enquanto salva hábitos"
+  },
+  "habitsAdded": "{count} hábito(s) adicionado(s) com sucesso!",
+  "@habitsAdded": {
+    "description": "Mensagem de sucesso após adicionar hábitos",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "estimatedTime": "~{minutes} min",
+  "@estimatedTime": {
+    "description": "Tempo estimado para conclusão do hábito",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "bibleVerse": "Versículo Bíblico",
+  "@bibleVerse": {
+    "description": "Rótulo para a seção de versículo bíblico"
+  },
+  "purpose": "Propósito",
+  "@purpose": {
+    "description": "Rótulo para o propósito do hábito"
+  },
+  "remaining": "{count} restante(s)",
+  "@remaining": {
+    "description": "Contagem de gerações restantes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "monthlyLimit": "Limite mensal: {limit} gerações",
+  "@monthlyLimit": {
+    "description": "Informação sobre o limite mensal de gerações",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "rateLimitReached": "Limite mensal atingido. Tente novamente no próximo mês.",
+  "@rateLimitReached": {
+    "description": "Mensagem de erro quando o limite de taxa é excedido"
+  },
+  "generationFailed": "Falha ao gerar hábitos. Por favor tente novamente.",
+  "@generationFailed": {
+    "description": "Mensagem de erro genérica para falha na geração"
+  },
+  "apiTimeout": "Tempo de espera esgotado. Verifique sua conexão e tente novamente.",
+  "@apiTimeout": {
+    "description": "Mensagem de erro para tempo de espera da API"
+  },
+  "invalidInput": "Entrada inválida. Verifique sua meta e tente novamente.",
+  "@invalidInput": {
+    "description": "Mensagem de erro para entrada inválida"
+  },
+  "noHabitsSelected": "Por favor selecione pelo menos um hábito para salvar",
+  "@noHabitsSelected": {
+    "description": "Erro ao tentar salvar sem selecionar hábitos"
+  },
+  "tryAgain": "Tentar Novamente",
+  "@tryAgain": {
+    "description": "Botão para tentar novamente após erro"
+  },
+  "generationsRemaining": "{count} geração(ões) restante(s) este mês",
+  "@generationsRemaining": {
+    "description": "Mostra quantas gerações restam",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "poweredByGemini": "Desenvolvido por Gemini AI",
+  "@poweredByGemini": {
+    "description": "Atribuição para o serviço de IA"
   }
 }

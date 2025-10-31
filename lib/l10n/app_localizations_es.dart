@@ -308,4 +308,112 @@ class AppLocalizationsEs extends AppLocalizations {
   String abandonmentNudgeBody(int minutes) {
     return '¿Reducimos a ${minutes}min? Notamos que podrías abandonar este hábito';
   }
+
+  @override
+  String get generateMicroHabits => 'Generar Micro-Hábitos';
+
+  @override
+  String get aiGeneratedHabits => 'Hábitos Generados por IA';
+
+  @override
+  String get yourGoal => 'Tu Meta';
+
+  @override
+  String get goalHint =>
+      '¿Qué te gustaría mejorar? (ej: Orar más consistentemente)';
+
+  @override
+  String get goalRequired => 'Por favor ingresa tu meta';
+
+  @override
+  String get goalTooShort => 'La meta debe tener al menos 10 caracteres';
+
+  @override
+  String get goalTooLong => 'La meta no puede exceder 200 caracteres';
+
+  @override
+  String get failurePattern => '¿Cuándo sueles fallar? (Opcional)';
+
+  @override
+  String get failurePatternHint => 'ej: Olvido en las mañanas ocupadas';
+
+  @override
+  String get generateHabits => 'Generar Hábitos';
+
+  @override
+  String get generating => 'Generando...';
+
+  @override
+  String get generatingHabits =>
+      'Generando micro-hábitos personalizados para ti...';
+
+  @override
+  String get generatedHabitsTitle => 'Tus Micro-Hábitos Personalizados';
+
+  @override
+  String get selectHabitsToAdd =>
+      'Selecciona hábitos para agregar a tu seguimiento:';
+
+  @override
+  String get saveSelected => 'Guardar Seleccionados';
+
+  @override
+  String get saving => 'Guardando...';
+
+  @override
+  String habitsAdded(int count) {
+    return '¡$count hábito(s) agregado(s) exitosamente!';
+  }
+
+  @override
+  String estimatedTime(int minutes) {
+    return '~$minutes min';
+  }
+
+  @override
+  String get bibleVerse => 'Versículo Bíblico';
+
+  @override
+  String get purpose => 'Propósito';
+
+  @override
+  String remaining(int count) {
+    return '$count restante(s)';
+  }
+
+  @override
+  String monthlyLimit(int limit) {
+    return 'Límite mensual: $limit generaciones';
+  }
+
+  @override
+  String get rateLimitReached =>
+      'Límite mensual alcanzado. Intenta de nuevo el próximo mes.';
+
+  @override
+  String get generationFailed =>
+      'Error al generar hábitos. Por favor intenta de nuevo.';
+
+  @override
+  String get apiTimeout =>
+      'Tiempo de espera agotado. Verifica tu conexión e intenta de nuevo.';
+
+  @override
+  String get invalidInput =>
+      'Entrada inválida. Verifica tu meta e intenta de nuevo.';
+
+  @override
+  String get noHabitsSelected =>
+      'Por favor selecciona al menos un hábito para guardar';
+
+  @override
+  String get tryAgain => 'Intentar de Nuevo';
+
+  @override
+  String generationsRemaining(int count) {
+    return '$count generación(es) restante(s) este mes';
+  }
+
+  @override
+  String get poweredByGemini => 'Desarrollado por Gemini AI';
 }

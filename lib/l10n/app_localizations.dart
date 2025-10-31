@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -655,6 +655,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reduce to {minutes}min? We noticed you might abandon this habit'**
   String abandonmentNudgeBody(int minutes);
+
+  /// Title for micro-habits generator page
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Micro-Habits'**
+  String get generateMicroHabits;
+
+  /// Title for AI-generated habits section
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Generated Habits'**
+  String get aiGeneratedHabits;
+
+  /// Label for user goal input field
+  ///
+  /// In en, this message translates to:
+  /// **'Your Goal'**
+  String get yourGoal;
+
+  /// Hint text for goal input field
+  ///
+  /// In en, this message translates to:
+  /// **'What would you like to improve? (e.g., Pray more consistently)'**
+  String get goalHint;
+
+  /// Validation message when goal is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your goal'**
+  String get goalRequired;
+
+  /// Validation message when goal is too short
+  ///
+  /// In en, this message translates to:
+  /// **'Goal must be at least 10 characters'**
+  String get goalTooShort;
+
+  /// Validation message when goal is too long
+  ///
+  /// In en, this message translates to:
+  /// **'Goal cannot exceed 200 characters'**
+  String get goalTooLong;
+
+  /// Label for failure pattern input field
+  ///
+  /// In en, this message translates to:
+  /// **'When do you usually fail? (Optional)'**
+  String get failurePattern;
+
+  /// Hint text for failure pattern input
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., I forget during busy mornings'**
+  String get failurePatternHint;
+
+  /// Button text to generate habits
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Habits'**
+  String get generateHabits;
+
+  /// Loading state text while generating
+  ///
+  /// In en, this message translates to:
+  /// **'Generating...'**
+  String get generating;
+
+  /// Loading message while habits are being generated
+  ///
+  /// In en, this message translates to:
+  /// **'Generating personalized micro-habits for you...'**
+  String get generatingHabits;
+
+  /// Title for generated habits results page
+  ///
+  /// In en, this message translates to:
+  /// **'Your Personalized Micro-Habits'**
+  String get generatedHabitsTitle;
+
+  /// Instructions for selecting habits
+  ///
+  /// In en, this message translates to:
+  /// **'Select habits to add to your tracking:'**
+  String get selectHabitsToAdd;
+
+  /// Button to save selected habits
+  ///
+  /// In en, this message translates to:
+  /// **'Save Selected'**
+  String get saveSelected;
+
+  /// Loading text while saving habits
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// Success message after adding habits
+  ///
+  /// In en, this message translates to:
+  /// **'{count} habit(s) added successfully!'**
+  String habitsAdded(int count);
+
+  /// Estimated time for habit completion
+  ///
+  /// In en, this message translates to:
+  /// **'~{minutes} min'**
+  String estimatedTime(int minutes);
+
+  /// Label for bible verse section
+  ///
+  /// In en, this message translates to:
+  /// **'Bible Verse'**
+  String get bibleVerse;
+
+  /// Label for habit purpose
+  ///
+  /// In en, this message translates to:
+  /// **'Purpose'**
+  String get purpose;
+
+  /// Remaining generations count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} remaining'**
+  String remaining(int count);
+
+  /// Information about monthly generation limit
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly limit: {limit} generations'**
+  String monthlyLimit(int limit);
+
+  /// Error message when rate limit is exceeded
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly limit reached. Try again next month.'**
+  String get rateLimitReached;
+
+  /// Generic error message for generation failure
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate habits. Please try again.'**
+  String get generationFailed;
+
+  /// Error message for API timeout
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Please check your connection and try again.'**
+  String get apiTimeout;
+
+  /// Error message for invalid input
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid input. Please check your goal and try again.'**
+  String get invalidInput;
+
+  /// Error when trying to save without selecting habits
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one habit to save'**
+  String get noHabitsSelected;
+
+  /// Button to retry after error
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// Shows how many generations are left
+  ///
+  /// In en, this message translates to:
+  /// **'{count} generation(s) remaining this month'**
+  String generationsRemaining(int count);
+
+  /// Attribution for AI service
+  ///
+  /// In en, this message translates to:
+  /// **'Powered by Gemini AI'**
+  String get poweredByGemini;
 }
 
 class _AppLocalizationsDelegate
@@ -690,9 +870,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
