@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/bible_providers.dart';
 import '../bible_reader_core/bible_reader_core.dart';
 import '../utils/copyright_utils.dart';
@@ -333,9 +334,10 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                             Clipboard.setData(
                               ClipboardData(text: '$reference\n\n$text'),
                             );
+                            final l10n = AppLocalizations.of(context)!;
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Copied to clipboard')),
+                              SnackBar(
+                                  content: Text(l10n.copiedToClipboard)),
                             );
                             notifier.clearSelection();
                           },
@@ -358,8 +360,9 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                           onPressed: () async {
                             await notifier.saveSelectedVerses();
                             if (context.mounted) {
+                              final l10n = AppLocalizations.of(context)!;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Verses saved')),
+                                SnackBar(content: Text(l10n.versesSaved)),
                               );
                             }
                             notifier.clearSelection();

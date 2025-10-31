@@ -189,13 +189,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get onboardingErrorMessage =>
-      'Failed to save habits. Please try again.';
+      'Falha ao salvar os hábitos. Por favor, tente novamente.';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Tentar Novamente';
 
   @override
-  String get selected => 'Selected';
+  String get selected => 'Selecionado';
 
   @override
   String get category => 'Categoria';
@@ -308,4 +308,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String abandonmentNudgeBody(int minutes) {
     return 'Reduzir para ${minutes}min? Notamos que você pode abandonar este hábito';
   }
+
+  @override
+  String get copiedToClipboard => 'Copiado para a área de transferência';
+
+  @override
+  String get versesSaved => 'Versículos salvos';
 }

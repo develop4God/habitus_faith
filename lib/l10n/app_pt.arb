@@ -226,15 +226,15 @@
   "@predefinedHabit_service_description": {
     "description": "Description of service habit"
   },
-  "onboardingErrorMessage": "Failed to save habits. Please try again.",
+  "onboardingErrorMessage": "Falha ao salvar os hábitos. Por favor, tente novamente.",
   "@onboardingErrorMessage": {
     "description": "Error message shown when onboarding fails"
   },
-  "retry": "Retry",
+  "retry": "Tentar Novamente",
   "@retry": {
     "description": "Button label for retrying an operation"
   },
-  "selected": "Selected",
+  "selected": "Selecionado",
   "@selected": {
     "description": "Accessibility label indicating an item is selected"
   },
@@ -391,5 +391,13 @@
         "example": "10"
       }
     }
+  },
+  "copiedToClipboard": "Copiado para a área de transferência",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "Versículos salvos",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
   }
 }

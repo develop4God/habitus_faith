@@ -655,6 +655,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reduce to {minutes}min? We noticed you might abandon this habit'**
   String abandonmentNudgeBody(int minutes);
+
+  /// Message shown when text is copied to clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// Message shown when Bible verses are saved
+  ///
+  /// In en, this message translates to:
+  /// **'Verses saved'**
+  String get versesSaved;
 }
 
 class _AppLocalizationsDelegate

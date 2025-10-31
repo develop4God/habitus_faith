@@ -371,5 +371,33 @@
   "completeNow": "立即完成",
   "@completeNow": {
     "description": "Button text to complete habit immediately"
+  },
+  "abandonmentNudgeTitle": "减少习惯\"{habitName}\"?",
+  "@abandonmentNudgeTitle": {
+    "description": "Title for abandonment prediction nudge notification",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "晨祷"
+      }
+    }
+  },
+  "abandonmentNudgeBody": "减少到{minutes}分钟？我们注意到您可能会放弃这个习惯",
+  "@abandonmentNudgeBody": {
+    "description": "Body text for abandonment prediction nudge notification",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "copiedToClipboard": "已复制到剪贴板",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "经文已保存",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
   }
 }

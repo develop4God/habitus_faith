@@ -391,5 +391,13 @@
         "example": "10"
       }
     }
+  },
+  "copiedToClipboard": "Copied to clipboard",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "Verses saved",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
   }
 }

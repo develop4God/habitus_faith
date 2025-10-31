@@ -285,11 +285,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String abandonmentNudgeTitle(String habitName) {
-    return 'Reduce habit \"$habitName\"?';
+    return '减少习惯\"$habitName\"?';
   }
 
   @override
   String abandonmentNudgeBody(int minutes) {
-    return 'Reduce to ${minutes}min? We noticed you might abandon this habit';
+    return '减少到$minutes分钟？我们注意到您可能会放弃这个习惯';
   }
+
+  @override
+  String get copiedToClipboard => '已复制到剪贴板';
+
+  @override
+  String get versesSaved => '经文已保存';
 }

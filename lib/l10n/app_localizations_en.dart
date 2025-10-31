@@ -308,4 +308,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String abandonmentNudgeBody(int minutes) {
     return 'Reduce to ${minutes}min? We noticed you might abandon this habit';
   }
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get versesSaved => 'Verses saved';
 }
