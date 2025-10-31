@@ -17,6 +17,36 @@ class GeneratedHabitsPage extends ConsumerStatefulWidget {
 
 class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
   final Set<String> _selectedHabitIds = {};
+  final Map<String, HabitCategory> _habitCategories = {};
+
+  /// Infers the most appropriate category based on habit action text
+  HabitCategory _inferCategory(String action) {
+    final lower = action.toLowerCase();
+
+    // Physical keywords (Spanish and English)
+    if (RegExp(
+            r'ejercicio|correr|caminar|gym|deporte|dormir|agua|alimenta|exercise|run|walk|sleep|water|eat|stretch')
+        .hasMatch(lower)) {
+      return HabitCategory.physical;
+    }
+
+    // Mental keywords
+    if (RegExp(
+            r'leer|estudiar|aprender|escribir|meditar|reflexionar|read|study|learn|write|journal|think')
+        .hasMatch(lower)) {
+      return HabitCategory.mental;
+    }
+
+    // Relational keywords
+    if (RegExp(
+            r'familia|amigo|comunidad|llamar|visitar|compartir|family|friend|community|call|visit|share')
+        .hasMatch(lower)) {
+      return HabitCategory.relational;
+    }
+
+    // Spiritual (default for most Bible-based habits)
+    return HabitCategory.spiritual;
+  }
 
   Future<void> _saveSelected() async {
     if (_selectedHabitIds.isEmpty) {
@@ -57,29 +87,40 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
       ),
     );
 
-    // Add habits to repository
+    // Add habits to repository with inferred categories
     for (final microHabit in selectedHabits) {
-      await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+      final category =
+          _habitCategories[microHabit.id] ?? HabitCategory.spiritual;
+      final emoji = _getCategoryEmoji(category);
+
+      await ref.read(habitsRepositoryProvider).createHabit(
             name: microHabit.action,
             description: microHabit.verseText != null
                 ? '${microHabit.purpose}\n\n${microHabit.verse}: ${microHabit.verseText}'
                 : '${microHabit.purpose}\n\n${microHabit.verse}',
-            category: HabitCategory.spiritual,
-            difficulty: HabitDifficulty.easy,
-            emoji: '🙏',
+            category: category,
+            emoji: emoji,
           );
     }
 
     if (mounted) {
       Navigator.of(context).pop(); // Close loading dialog
-      Navigator.of(context).pop(); // Return to generator page
+      Navigator.of(context).pop(selectedHabits.length); // Return count to generator page
+    }
+  }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.habitsAdded(selectedHabits.length)),
-          backgroundColor: Colors.green.shade600,
-        ),
-      );
+  String _getCategoryEmoji(HabitCategory cat) {
+    switch (cat) {
+      case HabitCategory.spiritual:
+        return '🙏';
+      case HabitCategory.physical:
+        return '💪';
+      case HabitCategory.mental:
+        return '🧠';
+      case HabitCategory.relational:
+        return '❤️';
+      case HabitCategory.other:
+        return '⭐';
     }
   }
 
@@ -98,6 +139,13 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
       ),
       body: generatorState.when(
         data: (habits) {
+          // Initialize categories on first load
+          if (_habitCategories.isEmpty && habits.isNotEmpty) {
+            for (final habit in habits) {
+              _habitCategories[habit.id] = _inferCategory(habit.action);
+            }
+          }
+
           if (habits.isEmpty) {
             return Center(
               child: Column(
@@ -134,6 +182,8 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                     return _MicroHabitCard(
                       habit: habit,
                       isSelected: isSelected,
+                      initialCategory:
+                          _habitCategories[habit.id] ?? HabitCategory.spiritual,
                       onToggle: () {
                         setState(() {
                           if (isSelected) {
@@ -141,6 +191,11 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                           } else {
                             _selectedHabitIds.add(habit.id);
                           }
+                        });
+                      },
+                      onCategoryChanged: (newCategory) {
+                        setState(() {
+                          _habitCategories[habit.id] = newCategory;
                         });
                       },
                     );
@@ -231,16 +286,63 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
   }
 }
 
-class _MicroHabitCard extends StatelessWidget {
+class _MicroHabitCard extends StatefulWidget {
   final MicroHabit habit;
   final bool isSelected;
   final VoidCallback onToggle;
+  final HabitCategory initialCategory;
+  final ValueChanged<HabitCategory>? onCategoryChanged;
 
   const _MicroHabitCard({
     required this.habit,
     required this.isSelected,
     required this.onToggle,
+    required this.initialCategory,
+    this.onCategoryChanged,
   });
+
+  @override
+  State<_MicroHabitCard> createState() => _MicroHabitCardState();
+}
+
+class _MicroHabitCardState extends State<_MicroHabitCard> {
+  late HabitCategory _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategory = widget.initialCategory;
+  }
+
+  String _getCategoryEmoji(HabitCategory cat) {
+    switch (cat) {
+      case HabitCategory.spiritual:
+        return '🙏';
+      case HabitCategory.physical:
+        return '💪';
+      case HabitCategory.mental:
+        return '🧠';
+      case HabitCategory.relational:
+        return '❤️';
+      case HabitCategory.other:
+        return '⭐';
+    }
+  }
+
+  String _getCategoryName(HabitCategory cat, AppLocalizations l10n) {
+    switch (cat) {
+      case HabitCategory.spiritual:
+        return l10n.spiritual;
+      case HabitCategory.physical:
+        return l10n.physical;
+      case HabitCategory.mental:
+        return l10n.mental;
+      case HabitCategory.relational:
+        return l10n.relational;
+      case HabitCategory.other:
+        return 'Other'; // Fallback category
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,16 +350,18 @@ class _MicroHabitCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      elevation: isSelected ? 4 : 1,
+      elevation: widget.isSelected ? 4 : 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: isSelected ? const Color(0xff10b981) : Colors.grey.shade200,
-          width: isSelected ? 2 : 1,
+          color: widget.isSelected
+              ? const Color(0xff10b981)
+              : Colors.grey.shade200,
+          width: widget.isSelected ? 2 : 1,
         ),
       ),
       child: InkWell(
-        onTap: onToggle,
+        onTap: widget.onToggle,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -269,10 +373,10 @@ class _MicroHabitCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
-                    isSelected
+                    widget.isSelected
                         ? Icons.check_circle
                         : Icons.radio_button_unchecked,
-                    color: isSelected
+                    color: widget.isSelected
                         ? const Color(0xff10b981)
                         : Colors.grey.shade400,
                     size: 24,
@@ -283,7 +387,7 @@ class _MicroHabitCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          habit.action,
+                          widget.habit.action,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -300,7 +404,7 @@ class _MicroHabitCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              l10n.estimatedTime(habit.estimatedMinutes),
+                              l10n.estimatedTime(widget.habit.estimatedMinutes),
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
@@ -343,17 +447,17 @@ class _MicroHabitCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          habit.verse,
+                          widget.habit.verse,
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Color(0xff1a202c),
                           ),
                         ),
-                        if (habit.verseText != null) ...[
+                        if (widget.habit.verseText != null) ...[
                           const SizedBox(height: 4),
                           Text(
-                            habit.verseText!,
+                            widget.habit.verseText!,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey.shade700,
@@ -394,7 +498,7 @@ class _MicroHabitCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          habit.purpose,
+                          widget.habit.purpose,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade700,
@@ -405,6 +509,56 @@ class _MicroHabitCard extends StatelessWidget {
                   ),
                 ],
               ),
+
+              // Category selector (only visible when selected)
+              if (widget.isSelected) ...[
+                const SizedBox(height: 16),
+                const Divider(),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.category_outlined,
+                      size: 20,
+                      color: Colors.blue.shade600,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: DropdownButtonFormField<HabitCategory>(
+                        value: _selectedCategory,
+                        decoration: InputDecoration(
+                          labelText: l10n.category,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                        ),
+                        items: HabitCategory.values.map((cat) {
+                          return DropdownMenuItem(
+                            value: cat,
+                            child: Row(
+                              children: [
+                                Text(_getCategoryEmoji(cat)),
+                                const SizedBox(width: 8),
+                                Text(_getCategoryName(cat, l10n)),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => _selectedCategory = value);
+                            widget.onCategoryChanged?.call(value);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

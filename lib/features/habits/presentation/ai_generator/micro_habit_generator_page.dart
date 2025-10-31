@@ -49,13 +49,23 @@ class _MicroHabitGeneratorPageState
       final state = ref.read(microHabitGeneratorProvider);
 
       state.when(
-        data: (habits) {
+        data: (habits) async {
           if (habits.isNotEmpty && mounted) {
-            Navigator.of(context).push(
+            final addedCount = await Navigator.of(context).push<int>(
               MaterialPageRoute(
                 builder: (context) => const GeneratedHabitsPage(),
               ),
             );
+
+            // Show success message if habits were added
+            if (addedCount != null && addedCount > 0 && mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(l10n.habitsAdded(addedCount)),
+                  backgroundColor: Colors.green.shade600,
+                ),
+              );
+            }
           }
         },
         loading: () {},
