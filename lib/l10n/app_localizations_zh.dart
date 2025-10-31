@@ -282,4 +282,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get completeNow => '立即完成';
+
+  @override
+  String abandonmentNudgeTitle(String habitName) {
+    return 'Reduce habit \"$habitName\"?';
+  }
+
+  @override
+  String abandonmentNudgeBody(int minutes) {
+    return 'Reduce to ${minutes}min? We noticed you might abandon this habit';
+  }
 }
