@@ -99,7 +99,7 @@ final List<PredefinedHabit> predefinedHabits = [
     descriptionKey: 'predefinedHabit_creativity_description',
     category: PredefinedHabitCategory.mental,
     verse:
-    VerseReference(book: 'Exodus', chapter: 35, verse: 31, endVerse: '32'),
+        VerseReference(book: 'Exodus', chapter: 35, verse: 31, endVerse: '32'),
     suggestedTime: 'anytime',
   ),
 
@@ -111,7 +111,7 @@ final List<PredefinedHabit> predefinedHabits = [
     descriptionKey: 'predefinedHabit_familyTime_description',
     category: PredefinedHabitCategory.relational,
     verse:
-    VerseReference(book: 'Ephesians', chapter: 6, verse: 2, endVerse: '3'),
+        VerseReference(book: 'Ephesians', chapter: 6, verse: 2, endVerse: '3'),
     suggestedTime: 'evening',
   ),
   const PredefinedHabit(
@@ -124,6 +124,7 @@ final List<PredefinedHabit> predefinedHabits = [
     suggestedTime: 'anytime',
   ),
 ];
+
 extension PredefinedHabitCategoryX on PredefinedHabitCategory {
   HabitCategory toDomainCategory() {
     switch (this) {

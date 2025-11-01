@@ -372,6 +372,156 @@
   "@completeNow": {
     "description": "Button text to complete habit immediately"
   },
+  "generateMicroHabits": "生成微习惯",
+  "@generateMicroHabits": {
+    "description": "微习惯生成器页面标题"
+  },
+  "aiGeneratedHabits": "AI生成的习惯",
+  "@aiGeneratedHabits": {
+    "description": "AI生成习惯部分的标题"
+  },
+  "yourGoal": "你的目标",
+  "@yourGoal": {
+    "description": "用户目标输入字段的标签"
+  },
+  "goalHint": "你想改进什么？（例如：更持续地祷告）",
+  "@goalHint": {
+    "description": "目标输入字段的提示文本"
+  },
+  "goalRequired": "请输入你的目标",
+  "@goalRequired": {
+    "description": "目标为空时的验证消息"
+  },
+  "goalTooShort": "目标至少需要10个字符",
+  "@goalTooShort": {
+    "description": "目标太短时的验证消息"
+  },
+  "goalTooLong": "目标不能超过200个字符",
+  "@goalTooLong": {
+    "description": "目标太长时的验证消息"
+  },
+  "failurePattern": "你通常什么时候失败？（可选）",
+  "@failurePattern": {
+    "description": "失败模式输入字段的标签"
+  },
+  "failurePatternHint": "例如：在忙碌的早晨我会忘记",
+  "@failurePatternHint": {
+    "description": "失败模式输入的提示文本"
+  },
+  "generateHabits": "生成习惯",
+  "@generateHabits": {
+    "description": "生成习惯的按钮文本"
+  },
+  "generating": "生成中...",
+  "@generating": {
+    "description": "生成时的加载状态文本"
+  },
+  "generatingHabits": "正在为你生成个性化微习惯...",
+  "@generatingHabits": {
+    "description": "生成习惯时的加载消息"
+  },
+  "generatedHabitsTitle": "你的个性化微习惯",
+  "@generatedHabitsTitle": {
+    "description": "生成习惯结果页面的标题"
+  },
+  "selectHabitsToAdd": "选择要添加到跟踪的习惯：",
+  "@selectHabitsToAdd": {
+    "description": "选择习惯的说明"
+  },
+  "saveSelected": "保存选中的",
+  "@saveSelected": {
+    "description": "保存选中习惯的按钮"
+  },
+  "saving": "保存中...",
+  "@saving": {
+    "description": "保存习惯时的加载文本"
+  },
+  "habitsAdded": "成功添加了{count}个习惯！",
+  "@habitsAdded": {
+    "description": "添加习惯后的成功消息",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "estimatedTime": "约{minutes}分钟",
+  "@estimatedTime": {
+    "description": "完成习惯的预估时间",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "bibleVerse": "圣经经文",
+  "@bibleVerse": {
+    "description": "圣经经文部分的标签"
+  },
+  "purpose": "目的",
+  "@purpose": {
+    "description": "习惯目的的标签"
+  },
+  "remaining": "剩余{count}次",
+  "@remaining": {
+    "description": "剩余生成次数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "monthlyLimit": "每月限制：{limit}次生成",
+  "@monthlyLimit": {
+    "description": "关于每月生成限制的信息",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "rateLimitReached": "已达到每月限制。请下个月再试。",
+  "@rateLimitReached": {
+    "description": "超出速率限制时的错误消息"
+  },
+  "generationFailed": "生成习惯失败。请重试。",
+  "@generationFailed": {
+    "description": "生成失败的通用错误消息"
+  },
+  "apiTimeout": "请求超时。请检查你的连接并重试。",
+  "@apiTimeout": {
+    "description": "API超时的错误消息"
+  },
+  "invalidInput": "输入无效。请检查你的目标并重试。",
+  "@invalidInput": {
+    "description": "输入无效的错误消息"
+  },
+  "noHabitsSelected": "请至少选择一个习惯来保存",
+  "@noHabitsSelected": {
+    "description": "尝试保存但未选择习惯时的错误"
+  },
+  "tryAgain": "重试",
+  "@tryAgain": {
+    "description": "错误后重试的按钮"
+  },
+  "generationsRemaining": "本月剩余{count}次生成",
+  "@generationsRemaining": {
+    "description": "显示剩余多少次生成",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "poweredByGemini": "由Gemini AI驱动",
+  "@poweredByGemini": {
+    "description": "AI服务的归属"
+  },
   "abandonmentNudgeTitle": "减少习惯\"{habitName}\"?",
   "@abandonmentNudgeTitle": {
     "description": "Title for abandonment prediction nudge notification",

@@ -439,5 +439,155 @@
         "example": "Connection failed"
       }
     }
+  },
+  "generateMicroHabits": "Generate Micro-Habits",
+  "@generateMicroHabits": {
+    "description": "Title for micro-habits generator page"
+  },
+  "aiGeneratedHabits": "AI-Generated Habits",
+  "@aiGeneratedHabits": {
+    "description": "Title for AI-generated habits section"
+  },
+  "yourGoal": "Your Goal",
+  "@yourGoal": {
+    "description": "Label for user goal input field"
+  },
+  "goalHint": "What would you like to improve? (e.g., Pray more consistently)",
+  "@goalHint": {
+    "description": "Hint text for goal input field"
+  },
+  "goalRequired": "Please enter your goal",
+  "@goalRequired": {
+    "description": "Validation message when goal is empty"
+  },
+  "goalTooShort": "Goal must be at least 10 characters",
+  "@goalTooShort": {
+    "description": "Validation message when goal is too short"
+  },
+  "goalTooLong": "Goal cannot exceed 200 characters",
+  "@goalTooLong": {
+    "description": "Validation message when goal is too long"
+  },
+  "failurePattern": "When do you usually fail? (Optional)",
+  "@failurePattern": {
+    "description": "Label for failure pattern input field"
+  },
+  "failurePatternHint": "e.g., I forget during busy mornings",
+  "@failurePatternHint": {
+    "description": "Hint text for failure pattern input"
+  },
+  "generateHabits": "Generate Habits",
+  "@generateHabits": {
+    "description": "Button text to generate habits"
+  },
+  "generating": "Generating...",
+  "@generating": {
+    "description": "Loading state text while generating"
+  },
+  "generatingHabits": "Generating personalized micro-habits for you...",
+  "@generatingHabits": {
+    "description": "Loading message while habits are being generated"
+  },
+  "generatedHabitsTitle": "Your Personalized Micro-Habits",
+  "@generatedHabitsTitle": {
+    "description": "Title for generated habits results page"
+  },
+  "selectHabitsToAdd": "Select habits to add to your tracking:",
+  "@selectHabitsToAdd": {
+    "description": "Instructions for selecting habits"
+  },
+  "saveSelected": "Save Selected",
+  "@saveSelected": {
+    "description": "Button to save selected habits"
+  },
+  "saving": "Saving...",
+  "@saving": {
+    "description": "Loading text while saving habits"
+  },
+  "habitsAdded": "{count} habit(s) added successfully!",
+  "@habitsAdded": {
+    "description": "Success message after adding habits",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "estimatedTime": "~{minutes} min",
+  "@estimatedTime": {
+    "description": "Estimated time for habit completion",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "bibleVerse": "Bible Verse",
+  "@bibleVerse": {
+    "description": "Label for bible verse section"
+  },
+  "purpose": "Purpose",
+  "@purpose": {
+    "description": "Label for habit purpose"
+  },
+  "remaining": "{count} remaining",
+  "@remaining": {
+    "description": "Remaining generations count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "monthlyLimit": "Monthly limit: {limit} generations",
+  "@monthlyLimit": {
+    "description": "Information about monthly generation limit",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "rateLimitReached": "Monthly limit reached. Try again next month.",
+  "@rateLimitReached": {
+    "description": "Error message when rate limit is exceeded"
+  },
+  "generationFailed": "Failed to generate habits. Please try again.",
+  "@generationFailed": {
+    "description": "Generic error message for generation failure"
+  },
+  "apiTimeout": "Request timed out. Please check your connection and try again.",
+  "@apiTimeout": {
+    "description": "Error message for API timeout"
+  },
+  "invalidInput": "Invalid input. Please check your goal and try again.",
+  "@invalidInput": {
+    "description": "Error message for invalid input"
+  },
+  "noHabitsSelected": "Please select at least one habit to save",
+  "@noHabitsSelected": {
+    "description": "Error when trying to save without selecting habits"
+  },
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Button to retry after error"
+  },
+  "generationsRemaining": "{count} generation(s) remaining this month",
+  "@generationsRemaining": {
+    "description": "Shows how many generations are left",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "poweredByGemini": "Powered by Gemini AI",
+  "@poweredByGemini": {
+    "description": "Attribution for AI service"
   }
 }

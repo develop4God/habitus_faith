@@ -8,7 +8,8 @@ void main() {
 
   group('AbandonmentPredictor Asset Validation', () {
     test('scaler_params.json exists and is valid', () async {
-      final json = await rootBundle.loadString('assets/ml_models/scaler_params.json');
+      final json =
+          await rootBundle.loadString('assets/ml_models/scaler_params.json');
       final params = jsonDecode(json);
       expect(params['mean'], isNotNull);
       expect(params['scale'], isNotNull);
@@ -38,9 +39,7 @@ void main() {
       final features = [12.0, 3.0, 5.0, 2.0, 4.0];
 
       final normalized = List.generate(
-          features.length,
-              (i) => (features[i] - mean[i]) / scale[i]
-      );
+          features.length, (i) => (features[i] - mean[i]) / scale[i]);
 
       expect(normalized, hasLength(5));
       expect(normalized.every((v) => v.isFinite), isTrue);
@@ -48,9 +47,10 @@ void main() {
     });
 
     test('model_metadata.json exists and is valid', () async {
-      final json = await rootBundle.loadString('assets/ml_models/model_metadata.json');
+      final json =
+          await rootBundle.loadString('assets/ml_models/model_metadata.json');
       final metadata = jsonDecode(json);
-      
+
       expect(metadata['version'], isNotNull);
       expect(metadata['features'], isNotNull);
       expect(metadata['features'], hasLength(5));
@@ -59,7 +59,7 @@ void main() {
       expect(metadata['accuracy'], isA<num>());
       expect(metadata['accuracy'], greaterThan(0));
       expect(metadata['accuracy'], lessThanOrEqualTo(1));
-      
+
       // Verify feature order matches expected
       final features = metadata['features'] as List;
       expect(features[0], 'hourOfDay');
@@ -72,10 +72,11 @@ void main() {
     test('telemetry is persisted across sessions', () async {
       // This test verifies that telemetry keys are correctly defined
       // Actual persistence testing requires integration tests with SharedPreferences mock
-      
+
       // Verify telemetry keys are accessible (via reflection would be ideal,
       // but we can at least verify the class compiles with persistence logic)
-      expect(true, isTrue); // Placeholder - real test would verify SharedPreferences integration
+      expect(true,
+          isTrue); // Placeholder - real test would verify SharedPreferences integration
     });
   });
 }

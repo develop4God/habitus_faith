@@ -17,7 +17,7 @@ class AbandonmentPredictor {
   Map<String, dynamic>? _scalerParams;
   Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
-  
+
   // Telemetry tracking (persisted across sessions)
   int _predictionCount = 0;
   int _errorCount = 0;
@@ -32,20 +32,20 @@ class AbandonmentPredictor {
 
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
-  
+
   /// Get model metadata
   Map<String, dynamic>? get metadata => _modelMetadata;
-  
+
   /// Get prediction statistics
   Map<String, dynamic> get telemetry => {
-    'prediction_count': _predictionCount,
-    'error_count': _errorCount,
-    'last_prediction': _lastPredictionTime?.toIso8601String(),
-    'last_reset': _lastTelemetryReset?.toIso8601String(),
-    'success_rate': _predictionCount > 0 
-        ? ((_predictionCount - _errorCount) / _predictionCount) 
-        : 0.0,
-  };
+        'prediction_count': _predictionCount,
+        'error_count': _errorCount,
+        'last_prediction': _lastPredictionTime?.toIso8601String(),
+        'last_reset': _lastTelemetryReset?.toIso8601String(),
+        'success_rate': _predictionCount > 0
+            ? ((_predictionCount - _errorCount) / _predictionCount)
+            : 0.0,
+      };
 
   /// Initialize the predictor by loading model and scaler params
   Future<void> initialize() async {
@@ -60,8 +60,9 @@ class AbandonmentPredictor {
       final metadataJson =
           await rootBundle.loadString('assets/ml_models/model_metadata.json');
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
-      debugPrint('AbandonmentPredictor: Model version ${_modelMetadata!['version']} loaded');
-      
+      debugPrint(
+          'AbandonmentPredictor: Model version ${_modelMetadata!['version']} loaded');
+
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor: Loading TFLite model...');
       _interpreter =
@@ -80,8 +81,10 @@ class AbandonmentPredictor {
 
       _initialized = true;
       debugPrint('AbandonmentPredictor: Initialization complete');
-      debugPrint('AbandonmentPredictor: Model metadata - Training samples: ${_modelMetadata!['training_samples']}, Accuracy: ${_modelMetadata!['accuracy']}');
-      debugPrint('AbandonmentPredictor: Telemetry - Predictions: $_predictionCount, Errors: $_errorCount');
+      debugPrint(
+          'AbandonmentPredictor: Model metadata - Training samples: ${_modelMetadata!['training_samples']}, Accuracy: ${_modelMetadata!['accuracy']}');
+      debugPrint(
+          'AbandonmentPredictor: Telemetry - Predictions: $_predictionCount, Errors: $_errorCount');
     } catch (e) {
       debugPrint('AbandonmentPredictor: Initialization failed: $e');
       // Non-critical failure - predictor will return 0.0 for predictions
@@ -142,10 +145,11 @@ class AbandonmentPredictor {
       // Track prediction attempt
       _predictionCount++;
       _lastPredictionTime = DateTime.now();
-      
+
       // ⚠️ CRITICAL: Handle first-time habits (no history) → return 0.5 default risk
       if (habit.completionHistory.isEmpty && habit.currentStreak == 0) {
-        debugPrint('AbandonmentPredictor: First-time habit detected, returning default risk 0.5');
+        debugPrint(
+            'AbandonmentPredictor: First-time habit detected, returning default risk 0.5');
         return 0.5;
       }
 
@@ -153,10 +157,11 @@ class AbandonmentPredictor {
       final hourOfDay = habit.lastCompletedAt?.hour ?? 12;
       final dayOfWeek = habit.lastCompletedAt?.weekday ?? 1;
       final currentStreak = habit.currentStreak;
-      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(habit, 7);
+      final failuresLast7Days =
+          MLFeaturesCalculator.countRecentFailures(habit, 7);
       final categoryEnumValue = habit.category.index;
 
-      // Prepare input features in exact order: 
+      // Prepare input features in exact order:
       // [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
       final rawFeatures = [
         hourOfDay.toDouble(),
@@ -214,7 +219,8 @@ class AbandonmentPredictor {
   /// - [hoursSinceReminder]: Hours elapsed since scheduled reminder
   ///
   /// Returns: Probability of abandonment (0.0-1.0)
-  @Deprecated('Use predictRisk(Habit) instead. This method will be removed in a future version.')
+  @Deprecated(
+      'Use predictRisk(Habit) instead. This method will be removed in a future version.')
   Future<double> predictAbandonmentRisk({
     required int hourOfDay,
     required int dayOfWeek,
@@ -275,19 +281,19 @@ class AbandonmentPredictor {
   Future<void> _loadTelemetry() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       _predictionCount = prefs.getInt(_telemetryPredictionCountKey) ?? 0;
       _errorCount = prefs.getInt(_telemetryErrorCountKey) ?? 0;
-      
+
       final lastPredictionStr = prefs.getString(_telemetryLastPredictionKey);
       if (lastPredictionStr != null) {
         _lastPredictionTime = DateTime.parse(lastPredictionStr);
       }
-      
+
       final lastResetStr = prefs.getString(_telemetryLastResetKey);
       if (lastResetStr != null) {
         _lastTelemetryReset = DateTime.parse(lastResetStr);
-        
+
         // Reset telemetry weekly (every 7 days)
         if (DateTime.now().difference(_lastTelemetryReset!).inDays > 7) {
           debugPrint('AbandonmentPredictor: Weekly telemetry reset triggered');
@@ -296,10 +302,12 @@ class AbandonmentPredictor {
       } else {
         // First time - initialize reset timestamp
         _lastTelemetryReset = DateTime.now();
-        await prefs.setString(_telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
+        await prefs.setString(
+            _telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
       }
-      
-      debugPrint('AbandonmentPredictor: Telemetry loaded - Predictions: $_predictionCount, Errors: $_errorCount');
+
+      debugPrint(
+          'AbandonmentPredictor: Telemetry loaded - Predictions: $_predictionCount, Errors: $_errorCount');
     } catch (e) {
       debugPrint('AbandonmentPredictor: Failed to load telemetry: $e');
       // Continue with default values
@@ -310,12 +318,13 @@ class AbandonmentPredictor {
   Future<void> _saveTelemetry() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       await prefs.setInt(_telemetryPredictionCountKey, _predictionCount);
       await prefs.setInt(_telemetryErrorCountKey, _errorCount);
-      
+
       if (_lastPredictionTime != null) {
-        await prefs.setString(_telemetryLastPredictionKey, _lastPredictionTime!.toIso8601String());
+        await prefs.setString(_telemetryLastPredictionKey,
+            _lastPredictionTime!.toIso8601String());
       }
     } catch (e) {
       debugPrint('AbandonmentPredictor: Failed to save telemetry: $e');
@@ -327,23 +336,22 @@ class AbandonmentPredictor {
   Future<void> _resetTelemetry() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Log final stats before reset
-      debugPrint(
-        'AbandonmentPredictor: Resetting telemetry - '
-        'Final stats: $_predictionCount predictions, $_errorCount errors, '
-        'success rate: ${telemetry['success_rate']}'
-      );
-      
+      debugPrint('AbandonmentPredictor: Resetting telemetry - '
+          'Final stats: $_predictionCount predictions, $_errorCount errors, '
+          'success rate: ${telemetry['success_rate']}');
+
       // Reset counters
       _predictionCount = 0;
       _errorCount = 0;
       _lastTelemetryReset = DateTime.now();
-      
+
       await prefs.setInt(_telemetryPredictionCountKey, 0);
       await prefs.setInt(_telemetryErrorCountKey, 0);
-      await prefs.setString(_telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
-      
+      await prefs.setString(
+          _telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
+
       debugPrint('AbandonmentPredictor: Telemetry reset complete');
     } catch (e) {
       debugPrint('AbandonmentPredictor: Failed to reset telemetry: $e');

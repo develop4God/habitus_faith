@@ -52,3 +52,6 @@ ml_pipeline/serviceAccountKey.json
 ml_pipeline/data/*.csv
 ml_pipeline/venv/
 ml_pipeline/.venv/
+
+# Environment variables (API keys)
+.env
