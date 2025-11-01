@@ -45,7 +45,7 @@ class _MiniCalendarHeatmapState extends State<MiniCalendarHeatmap> {
 
     // Get last 7 days starting from Monday
     final lastMonday =
-    today.subtract(Duration(days: (today.weekday - DateTime.monday) % 7));
+        today.subtract(Duration(days: (today.weekday - DateTime.monday) % 7));
     final last7Days = List.generate(7, (index) {
       return lastMonday.add(Duration(days: index));
     });
@@ -78,9 +78,9 @@ class _MiniCalendarHeatmapState extends State<MiniCalendarHeatmap> {
                     shape: BoxShape.circle,
                     border: isToday
                         ? Border.all(
-                      color: const Color(0xff6366f1),
-                      width: 2,
-                    )
+                            color: const Color(0xff6366f1),
+                            width: 2,
+                          )
                         : null,
                   ),
                   child: Center(
@@ -90,7 +90,7 @@ class _MiniCalendarHeatmapState extends State<MiniCalendarHeatmap> {
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color:
-                        isCompleted ? Colors.white : Colors.grey.shade600,
+                            isCompleted ? Colors.white : Colors.grey.shade600,
                       ),
                     ),
                   ),
@@ -121,7 +121,6 @@ class _MiniCalendarHeatmapState extends State<MiniCalendarHeatmap> {
                 child: SizedBox(
                   width: 32,
                   height: 32,
-
                   child: Icon(
                     Icons.visibility_off,
                     size: 20,

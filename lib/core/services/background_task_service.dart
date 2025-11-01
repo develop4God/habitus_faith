@@ -14,7 +14,8 @@ class BackgroundTaskService {
   static const String _predictionTaskTag = 'daily_prediction_6am';
   static const String _mlPredictionsEnabledKey = 'ml_predictions_enabled';
 
-  static final BackgroundTaskService _instance = BackgroundTaskService._internal();
+  static final BackgroundTaskService _instance =
+      BackgroundTaskService._internal();
 
   factory BackgroundTaskService() => _instance;
 
@@ -87,7 +88,7 @@ class BackgroundTaskService {
       // initialDelay calculates time until next 6 AM
       final now = DateTime.now();
       var nextRun = DateTime(now.year, now.month, now.day, 6, 0);
-      
+
       // If 6 AM already passed today, schedule for tomorrow
       if (nextRun.isBefore(now)) {
         nextRun = nextRun.add(const Duration(days: 1));
@@ -100,10 +101,10 @@ class BackgroundTaskService {
         _dailyPredictionTask,
         frequency: const Duration(days: 1),
         initialDelay: initialDelay,
-        existingWorkPolicy: ExistingWorkPolicy.replace,
+        existingWorkPolicy: ExistingWorkPolicy.replace, // <--- Este es el parámetro correcto
         constraints: Constraints(
-          networkType: NetworkType.not_required,
-          requiresBatteryNotLow: true, // Respect battery optimization
+          networkType: NetworkType.notRequired, // <--- camelCase para la versión nueva
+          requiresBatteryNotLow: true,
           requiresCharging: false,
           requiresDeviceIdle: false,
           requiresStorageNotLow: false,
@@ -155,7 +156,7 @@ class BackgroundTaskService {
   Future<void> setPredictionsEnabled(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_mlPredictionsEnabledKey, enabled);
-    
+
     developer.log(
       'BackgroundTaskService: ML predictions enabled set to $enabled',
       name: 'BackgroundTaskService',
@@ -232,12 +233,12 @@ Future<bool> _executeDailyPrediction() async {
   );
 
   ProviderContainer? container;
-  
+
   try {
     // Check if predictions are enabled (re-check in isolate)
     final prefs = await SharedPreferences.getInstance();
     final enabled = prefs.getBool('ml_predictions_enabled') ?? true;
-    
+
     if (!enabled) {
       developer.log(
         'BackgroundTaskService: ML predictions disabled, skipping',
@@ -257,7 +258,7 @@ Future<bool> _executeDailyPrediction() async {
 
     // Get the predictor service and run predictions
     final predictor = container.read(habitPredictorProvider);
-    
+
     // Run predictions with timeout protection (max 5 minutes)
     await predictor.runDailyPredictions().timeout(
       const Duration(minutes: 5),
@@ -274,7 +275,7 @@ Future<bool> _executeDailyPrediction() async {
       'BackgroundTaskService: Daily prediction task completed successfully',
       name: 'BackgroundTaskService',
     );
-    
+
     return true;
   } on TimeoutException catch (e) {
     developer.log(

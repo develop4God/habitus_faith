@@ -71,7 +71,7 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
         // Fallback: use translation keys (for backward compatibility)
         for (final habitId in selectedIds) {
           final predefinedHabit =
-          predefinedHabits.firstWhere((h) => h.id == habitId);
+              predefinedHabits.firstWhere((h) => h.id == habitId);
 
           await repository.createHabit(
             name: predefinedHabit.nameKey,
@@ -108,6 +108,6 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final onboardingNotifierProvider =
-StateNotifierProvider<OnboardingNotifier, AsyncValue<void>>((ref) {
+    StateNotifierProvider<OnboardingNotifier, AsyncValue<void>>((ref) {
   return OnboardingNotifier(ref);
 });

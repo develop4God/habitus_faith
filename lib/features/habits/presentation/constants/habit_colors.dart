@@ -39,7 +39,8 @@ class HabitColors {
   }
 
   /// Get category name for display (localized)
-  static String getCategoryDisplayName(HabitCategory category, AppLocalizations l10n) {
+  static String getCategoryDisplayName(
+      HabitCategory category, AppLocalizations l10n) {
     switch (category) {
       case HabitCategory.spiritual:
         return l10n.spiritual;
