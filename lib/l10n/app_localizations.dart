@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application

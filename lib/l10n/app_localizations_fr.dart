@@ -311,6 +311,34 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get copiedToClipboard => 'Copié dans le presse-papiers';
+
+  @override
+  String get versesSaved => 'Versets sauvegardés';
+
+  @override
+  String get loadingBooks => 'Chargement des livres...';
+
+  @override
+  String get selectBook => 'Sélectionner un Livre';
+
+  @override
+  String get selectBookAndChapter => 'Sélectionnez un livre et un chapitre';
+
+  @override
+  String get habitsCompleted => 'Habitudes complétées:';
+
+  @override
+  String habitsCompletedCount(int completed, int total) {
+    return '$completed sur $total';
+  }
+
+  @override
+  String error(String message) {
+    return 'Erreur: $message';
+  }
+
+  @override
   String get generateMicroHabits => 'Générer des Micro-Habitudes';
 
   @override
@@ -417,32 +445,4 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get poweredByGemini => 'Propulsé par Gemini AI';
-
-  @override
-  String get copiedToClipboard => 'Copié dans le presse-papiers';
-
-  @override
-  String get versesSaved => 'Versets sauvegardés';
-
-  @override
-  String get loadingBooks => 'Chargement des livres...';
-
-  @override
-  String get selectBook => 'Sélectionner un Livre';
-
-  @override
-  String get selectBookAndChapter => 'Sélectionnez un livre et un chapitre';
-
-  @override
-  String get habitsCompleted => 'Habitudes complétées:';
-
-  @override
-  String habitsCompletedCount(int completed, int total) {
-    return '$completed sur $total';
-  }
-
-  @override
-  String error(String message) {
-    return 'Erreur: $message';
-  }
 }
