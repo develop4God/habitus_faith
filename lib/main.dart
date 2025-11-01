@@ -1,5 +1,6 @@
 import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/config/ai_config.dart';
+import 'core/providers/ai_providers.dart';
+import 'core/services/ai/gemini_service.dart';
+import 'core/services/ai/rate_limit_service.dart';
+import 'core/services/cache/cache_service.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
@@ -119,11 +125,12 @@ void main() async {
   // Load environment configuration before Firebase
   await EnvConfig.load();
 
+  // Initialize Firebase first
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Initialize SharedPreferences
+  // Initialize SharedPreferences and core services
   final prefs = await SharedPreferences.getInstance();
   final storageService = JsonStorageService(prefs);
   const userId = 'local_user';
@@ -135,6 +142,29 @@ void main() async {
     firestore: firestore,
   );
 
+  // Initialize Gemini with fallback handling
+  GeminiService? geminiService;
+  try {
+    final cacheService = CacheService(prefs);
+    final rateLimitService = RateLimitService(prefs);
+
+    // Use default model from AiConfig if env fails
+    final modelName = EnvConfig.geminiModel.isNotEmpty
+        ? EnvConfig.geminiModel
+        : AiConfig.defaultModel;
+
+    geminiService = GeminiService(
+      apiKey: EnvConfig.geminiApiKey,
+      modelName: modelName,
+      cache: cacheService,
+      rateLimit: rateLimitService,
+      logger: Logger(),
+    );
+    debugPrint('[Main] Gemini service initialized successfully');
+  } catch (e) {
+    debugPrint('[Main] Gemini service initialization skipped: $e');
+  }
+
   // Non-blocking ML model update check
   unawaited(ModelUpdater().checkAndUpdateModel());
 
@@ -144,12 +174,17 @@ void main() async {
         sharedPreferencesProvider.overrideWithValue(prefs),
         jsonStorageServiceProvider.overrideWithValue(storageService),
         jsonHabitsRepositoryProvider.overrideWithValue(habitsRepository),
+        if (geminiService != null)
+          geminiServiceProvider.overrideWithValue(geminiService),
       ],
       child: const MyApp(),
     ),
   );
 }
 
+extension on AutoDisposeFutureProvider<IGeminiService> {
+  overrideWithValue(GeminiService geminiService) {}
+}
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
