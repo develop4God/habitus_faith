@@ -8,6 +8,9 @@ import '../features/habits/presentation/widgets/mini_calendar_heatmap.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
+import '../features/habits/presentation/ai_generator/micro_habit_generator_page.dart';
+
+
 
 // New providers for JSON-based habits
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
@@ -495,7 +498,73 @@ class HabitsPage extends ConsumerWidget {
       BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     showDialog(
       context: context,
-      builder: (context) => _AddHabitDialog(l10n: l10n),
+      builder: (context) => AlertDialog(
+        title: Text(l10n.addHabit),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Opción: Agregar manualmente
+            ListTile(
+              leading: const Icon(Icons.edit, color: Color(0xff6366f1)),
+              title: const Text('Agregar Manualmente'),
+              subtitle: const Text('Crear un hábito personalizado'),
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => _AddHabitDialog(l10n: l10n),
+                );
+              },
+            ),
+            const Divider(),
+            // Opción: Generar con IA
+            ListTile(
+              leading: Icon(Icons.auto_awesome, color: Colors.purple.shade600),
+              title: Row(
+                children: [
+                  const Flexible(
+                    child: Text(
+                      'Generar con IA',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      'AI',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple.shade700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              subtitle: const Text('Hábitos personalizados con IA'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MicroHabitGeneratorPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
     );
   }
 }

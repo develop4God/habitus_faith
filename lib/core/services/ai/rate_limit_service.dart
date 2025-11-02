@@ -1,60 +1,131 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:synchronized/synchronized.dart';
-import '../../config/ai_config.dart';
 
-/// Interface for rate limiting service (state-agnostic)
 abstract class IRateLimitService {
-  Future<bool> tryConsumeRequest();
+  bool canMakeRequest();
+  void recordRequest();
   int getRemainingRequests();
+  DateTime? getNextAvailableTime();
+  Future<void> waitIfNeeded();
 }
 
-/// Rate limiting service for Gemini API calls
-/// Tracks monthly requests with automatic reset
 class RateLimitService implements IRateLimitService {
+  static const int _maxRequests = 10;
+  static const Duration _timeWindow = Duration(days: 30);
+  static const Duration _minDelayBetweenRequests = Duration(seconds: 5);
+  static const String _requestsKey = 'gemini_requests';
+  static const String _timestampsKey = 'gemini_timestamps';
+  static const String _lastRequestKey = 'gemini_last_request';
+
   final SharedPreferences _prefs;
-  final _lock = Lock();
-  static const _countKey = 'gemini_request_count';
-  static const _resetKey = 'gemini_last_reset';
 
   RateLimitService(this._prefs);
 
-  /// Atomically check and consume a request slot
-  /// Returns true if request can proceed, false if limit reached
+  List<int> _getRequestTimestamps() {
+    final timestamps = _prefs.getStringList(_timestampsKey) ?? [];
+    return timestamps.map((s) => int.parse(s)).toList();
+  }
+
+  void _saveRequestTimestamps(List<int> timestamps) {
+    _prefs.setStringList(
+      _timestampsKey,
+      timestamps.map((t) => t.toString()).toList(),
+    );
+  }
+
+  DateTime? _getLastRequestTime() {
+    final timestamp = _prefs.getInt(_lastRequestKey);
+    return timestamp != null
+        ? DateTime.fromMillisecondsSinceEpoch(timestamp)
+        : null;
+  }
+
+  void _saveLastRequestTime(DateTime time) {
+    _prefs.setInt(_lastRequestKey, time.millisecondsSinceEpoch);
+  }
+
+  void _cleanOldTimestamps() {
+    final now = DateTime.now();
+    final cutoff = now.subtract(_timeWindow);
+    var timestamps = _getRequestTimestamps();
+
+    timestamps = timestamps
+        .where((ts) =>
+        DateTime.fromMillisecondsSinceEpoch(ts).isAfter(cutoff))
+        .toList();
+
+    _saveRequestTimestamps(timestamps);
+    _prefs.setInt(_requestsKey, timestamps.length);
+  }
+
   @override
-  Future<bool> tryConsumeRequest() async {
-    return await _lock.synchronized(() async {
-      await _checkMonthlyReset();
-      final count = _prefs.getInt(_countKey) ?? 0;
+  bool canMakeRequest() {
+    _cleanOldTimestamps();
 
-      if (count >= AiConfig.monthlyRequestLimit) return false;
+    final count = _prefs.getInt(_requestsKey) ?? 0;
+    if (count >= _maxRequests) return false;
 
-      await _prefs.setInt(_countKey, count + 1);
-      return true;
-    });
+    final lastRequest = _getLastRequestTime();
+    if (lastRequest != null) {
+      final timeSinceLastRequest = DateTime.now().difference(lastRequest);
+      if (timeSinceLastRequest < _minDelayBetweenRequests) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  void recordRequest() {
+    _cleanOldTimestamps();
+
+    final now = DateTime.now();
+    var timestamps = _getRequestTimestamps();
+    timestamps.add(now.millisecondsSinceEpoch);
+
+    _saveRequestTimestamps(timestamps);
+    _saveLastRequestTime(now);
+    _prefs.setInt(_requestsKey, timestamps.length);
   }
 
   @override
   int getRemainingRequests() {
-    final count = _prefs.getInt(_countKey) ?? 0;
-    return (AiConfig.monthlyRequestLimit - count)
-        .clamp(0, AiConfig.monthlyRequestLimit);
+    _cleanOldTimestamps();
+    final count = _prefs.getInt(_requestsKey) ?? 0;
+    return (_maxRequests - count).clamp(0, _maxRequests);
   }
 
-  Future<void> _checkMonthlyReset() async {
-    final lastResetStr = _prefs.getString(_resetKey);
-    final now = DateTime.now();
+  @override
+  DateTime? getNextAvailableTime() {
+    _cleanOldTimestamps();
 
-    if (lastResetStr == null) {
-      await _prefs.setString(_resetKey, now.toIso8601String());
-      return;
+    final count = _prefs.getInt(_requestsKey) ?? 0;
+    if (count < _maxRequests) {
+      final lastRequest = _getLastRequestTime();
+      if (lastRequest != null) {
+        final nextAvailable =
+        lastRequest.add(_minDelayBetweenRequests);
+        if (DateTime.now().isBefore(nextAvailable)) {
+          return nextAvailable;
+        }
+      }
+      return null;
     }
 
-    final lastReset = DateTime.parse(lastResetStr);
+    final timestamps = _getRequestTimestamps();
+    if (timestamps.isEmpty) return null;
 
-    // Reset if different month/year
-    if (now.month != lastReset.month || now.year != lastReset.year) {
-      await _prefs.setInt(_countKey, 0);
-      await _prefs.setString(_resetKey, now.toIso8601String());
+    final oldestTimestamp =
+    DateTime.fromMillisecondsSinceEpoch(timestamps.first);
+    return oldestTimestamp.add(_timeWindow);
+  }
+
+  @override
+  Future<void> waitIfNeeded() async {
+    final nextAvailable = getNextAvailableTime();
+    if (nextAvailable != null && DateTime.now().isBefore(nextAvailable)) {
+      final waitDuration = nextAvailable.difference(DateTime.now());
+      await Future.delayed(waitDuration);
     }
   }
 }

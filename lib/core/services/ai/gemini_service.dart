@@ -56,14 +56,18 @@ class GeminiService implements IGeminiService {
     _logger?.d(
         'Input sanitized - Goal length: ${sanitizedGoal.length}, Pattern: ${sanitizedPattern != null ? "provided" : "none"}');
 
-    // 2. Check rate limit atomically (10/month)
-    if (!await _rateLimit.tryConsumeRequest()) {
+    // 2. Check rate limit and wait if needed
+    await _rateLimit.waitIfNeeded();
+
+    if (!_rateLimit.canMakeRequest()) {
       _logger?.w('Rate limit exceeded - remaining: 0');
       throw RateLimitExceededException(
         'Monthly limit of ${AiConfig.monthlyRequestLimit} requests reached. '
-        'Limit will reset next month.',
+            'Limit will reset next month.',
       );
     }
+
+    _rateLimit.recordRequest();
 
     final remaining = _rateLimit.getRemainingRequests();
     _logger?.i('Rate limit check passed - remaining: $remaining');
