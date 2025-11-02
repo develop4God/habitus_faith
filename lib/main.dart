@@ -1,6 +1,5 @@
 import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,11 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'core/config/ai_config.dart';
-import 'core/providers/ai_providers.dart';
-import 'core/services/ai/gemini_service.dart';
-import 'core/services/ai/rate_limit_service.dart';
-import 'core/services/cache/cache_service.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/bible_reader_page.dart';
@@ -59,7 +53,7 @@ class LandingPage extends StatelessWidget {
               key: const Key('start_button'),
               style: ElevatedButton.styleFrom(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
+                const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                 backgroundColor: const Color(0xff6366f1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -88,7 +82,7 @@ class LandingPage extends StatelessWidget {
               key: const Key('read_bible_button'),
               style: ElevatedButton.styleFrom(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 backgroundColor: const Color(0xffa5b4fc),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -125,12 +119,12 @@ void main() async {
   // Load environment configuration before Firebase
   await EnvConfig.load();
 
-  // Initialize Firebase first
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Initialize SharedPreferences and core services
+  // Initialize core services for synchronous overrides
   final prefs = await SharedPreferences.getInstance();
   final storageService = JsonStorageService(prefs);
   const userId = 'local_user';
@@ -142,49 +136,23 @@ void main() async {
     firestore: firestore,
   );
 
-  // Initialize Gemini with fallback handling
-  GeminiService? geminiService;
-  try {
-    final cacheService = CacheService(prefs);
-    final rateLimitService = RateLimitService(prefs);
-
-    // Use default model from AiConfig if env fails
-    final modelName = EnvConfig.geminiModel.isNotEmpty
-        ? EnvConfig.geminiModel
-        : AiConfig.defaultModel;
-
-    geminiService = GeminiService(
-      apiKey: EnvConfig.geminiApiKey,
-      modelName: modelName,
-      cache: cacheService,
-      rateLimit: rateLimitService,
-      logger: Logger(),
-    );
-    debugPrint('[Main] Gemini service initialized successfully');
-  } catch (e) {
-    debugPrint('[Main] Gemini service initialization skipped: $e');
-  }
-
   // Non-blocking ML model update check
   unawaited(ModelUpdater().checkAndUpdateModel());
 
   runApp(
     ProviderScope(
       overrides: [
+        // Only override synchronous services
         sharedPreferencesProvider.overrideWithValue(prefs),
         jsonStorageServiceProvider.overrideWithValue(storageService),
         jsonHabitsRepositoryProvider.overrideWithValue(habitsRepository),
-        if (geminiService != null)
-          geminiServiceProvider.overrideWithValue(geminiService),
+        // Async providers (geminiService, bibleDbService) initialize themselves
       ],
       child: const MyApp(),
     ),
   );
 }
 
-extension on AutoDisposeFutureProvider<IGeminiService> {
-  overrideWithValue(GeminiService geminiService) {}
-}
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
@@ -219,7 +187,7 @@ class MyApp extends ConsumerWidget {
       },
       home: authInit.when(
         data: (_) =>
-            onboardingComplete ? const LandingPage() : const OnboardingPage(),
+        onboardingComplete ? const LandingPage() : const OnboardingPage(),
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),
