@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/failures.dart';
+import '../features/habits/domain/models/display_mode.dart';
 import '../features/habits/data/storage/storage_providers.dart';
-import '../features/habits/presentation/widgets/habit_completion_card.dart';
+import '../features/habits/presentation/onboarding/display_mode_provider.dart';
+import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
+import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.dart';
 import '../features/habits/presentation/widgets/mini_calendar_heatmap.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../features/habits/presentation/ai_generator/micro_habit_generator_page.dart';
-
-
 
 // New providers for JSON-based habits
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
@@ -285,6 +286,7 @@ class HabitsPage extends ConsumerWidget {
     final categoryColor = HabitColors.categoryColors[category]!;
     final categoryIcon = HabitColors.getCategoryIcon(category);
     final categoryName = HabitColors.getCategoryDisplayName(category, l10n);
+    final displayMode = ref.watch(displayModeProvider);
 
     // Gather all completion dates for this group
     final groupCompletionDates =
@@ -351,133 +353,168 @@ class HabitsPage extends ConsumerWidget {
             ],
           ),
         ),
-        // Calendar for this group
-        MiniCalendarHeatmap(
-          completionDates: groupCompletionDates,
-        ),
-        const SizedBox(height: 8),
-        // Habits in this category
+        // Calendar for this group - only show in advanced mode
+        if (displayMode == DisplayMode.advanced) ...[
+          MiniCalendarHeatmap(
+            completionDates: groupCompletionDates,
+          ),
+          const SizedBox(height: 8),
+        ],
+        // Habits in this category - use appropriate card based on display mode
         ...habits.map((habit) {
-          final notifier = ref.watch(jsonHabitsNotifierProvider);
-          final isCompleting = notifier.isLoading;
-
-          return Column(
-            children: [
-              HabitCompletionCard(
-                habit: habit,
-                isCompleting: isCompleting,
-                onTap: () async {
-                  await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
-                      .completeHabit(habit.id);
-
-                  await ref
-                      .read(jsonHabitsRepositoryProvider)
-                      .recordCompletionForML(habit.id, true);
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.habitCompleted)),
-                    );
-                  }
-                },
-                onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
-                onUncheck: () async {
-                  await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
-                      .uncheckHabit(habit.id);
-                },
-                onDelete: () async {
-                  final confirmed = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(l10n.deleteHabit),
-                      content: Text(l10n.deleteHabitConfirm(habit.name)),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(l10n.cancel),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          child: Text(l10n.delete),
-                        ),
-                      ],
-                    ),
+          if (displayMode == DisplayMode.compact) {
+            return CompactHabitCard(
+              key: Key('compact_habit_${habit.id}'),
+              habit: habit,
+              onComplete: (habitId) async {
+                await ref
+                    .read(jsonHabitsNotifierProvider.notifier)
+                    .completeHabit(habitId);
+                await ref
+                    .read(jsonHabitsRepositoryProvider)
+                    .recordCompletionForML(habitId, true);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.habitCompleted)),
                   );
-                  if (confirmed == true) {
+                }
+              },
+              onUncheck: (habitId) async {
+                await ref
+                    .read(jsonHabitsNotifierProvider.notifier)
+                    .uncheckHabit(habitId);
+              },
+              onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+              onDelete: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(l10n.deleteHabit),
+                    content: Text(l10n.deleteHabitConfirm(habit.name)),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: Text(l10n.cancel),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        child: Text(l10n.delete),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirmed == true) {
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .deleteHabit(habit.id);
+                }
+              },
+            );
+          } else {
+            return Column(
+              children: [
+                AdvancedHabitCard(
+                  key: Key('advanced_habit_${habit.id}'),
+                  habit: habit,
+                  onComplete: (habitId) async {
                     await ref
                         .read(jsonHabitsNotifierProvider.notifier)
-                        .deleteHabit(habit.id);
-                  }
-                },
-              ),
-              // ML-based risk warning
-              Consumer(
-                builder: (context, ref, child) {
-                  final riskAsync = ref.watch(habitRiskProvider(habit.id));
+                        .completeHabit(habitId);
+                    await ref
+                        .read(jsonHabitsRepositoryProvider)
+                        .recordCompletionForML(habitId, true);
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.habitCompleted)),
+                      );
+                    }
+                  },
+                  onUncheck: (habitId) async {
+                    await ref
+                        .read(jsonHabitsNotifierProvider.notifier)
+                        .uncheckHabit(habitId);
+                  },
+                  onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                  onDelete: () async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(l10n.deleteHabit),
+                        content: Text(l10n.deleteHabitConfirm(habit.name)),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(l10n.cancel),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            child: Text(l10n.delete),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirmed == true) {
+                      await ref
+                          .read(jsonHabitsNotifierProvider.notifier)
+                          .deleteHabit(habit.id);
+                    }
+                  },
+                ),
+                // ML-based risk warning - only in advanced mode
+                Consumer(
+                  builder: (context, ref, child) {
+                    final riskAsync = ref.watch(habitRiskProvider(habit.id));
 
-                  return riskAsync.when(
-                    data: (risk) {
-                      if (risk < 0.7) return const SizedBox.shrink();
+                    return riskAsync.when(
+                      data: (risk) {
+                        if (risk < 0.7) return const SizedBox.shrink();
 
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Card(
-                          color: Theme.of(context).colorScheme.errorContainer,
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.warning_amber,
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                            title: Text(
-                              l10n.highRiskWarning,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onErrorContainer,
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 12, bottom: 12),
+                          child: Card(
+                            color: Theme.of(context).colorScheme.errorContainer,
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.warning_amber,
+                                color: Theme.of(context).colorScheme.error,
                               ),
-                            ),
-                            subtitle: Text(
-                              l10n.riskPercentage((risk * 100).toInt()),
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onErrorContainer,
+                              title: Text(
+                                l10n.highRiskWarning,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onErrorContainer,
+                                ),
                               ),
-                            ),
-                            trailing: FilledButton(
-                              onPressed: () async {
-                                await ref
-                                    .read(jsonHabitsNotifierProvider.notifier)
-                                    .completeHabit(habit.id);
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(l10n.habitCompleted)),
-                                  );
-                                }
-                              },
-                              child: Text(l10n.completeNow),
+                              subtitle: Text(
+                                l10n.riskPercentage((risk * 100).toInt()),
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onErrorContainer,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
-          );
+                        );
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, __) => const SizedBox.shrink(),
+                    );
+                  },
+                ),
+              ],
+            );
+          }
         }),
-        const SizedBox(height: 8),
+        const SizedBox(height: 24),
       ],
     );
   }
@@ -529,7 +566,8 @@ class HabitsPage extends ConsumerWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.purple.shade100,
                       borderRadius: BorderRadius.circular(8),
@@ -654,7 +692,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              initialValue: selectedCategory,
+              value: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -920,7 +958,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              initialValue: selectedCategory,
+              value: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
