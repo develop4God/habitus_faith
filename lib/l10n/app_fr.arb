@@ -603,5 +603,9 @@
   "advancedModeFeature2": "Informations alimentées par l'IA",
   "advancedModeFeature3": "Personnalisation avancée",
   "changeAnytime": "Vous pouvez modifier ce paramètre à tout moment dans les préférences",
-  "selectMode": "Sélectionner le mode"
+  "selectMode": "Sélectionner le mode",
+  "displayMode": "Mode d'affichage",
+  "displayModeUpdated": "Mode d'affichage mis à jour vers {mode}",
+  "compactModeSubtitle": "Liste compacte - appuyez pour les détails",
+  "advancedModeSubtitle": "Suivi complet visible"
 }

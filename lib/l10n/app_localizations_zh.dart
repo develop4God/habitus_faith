@@ -462,4 +462,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selectMode => '选择模式';
+
+  @override
+  String get displayMode => '显示模式';
+
+  @override
+  String displayModeUpdated(String mode) {
+    return '显示模式已更新为 $mode';
+  }
+
+  @override
+  String get compactModeSubtitle => '紧凑列表 - 点击查看详情';
+
+  @override
+  String get advancedModeSubtitle => '完整跟踪可见';
 }

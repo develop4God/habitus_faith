@@ -645,5 +645,27 @@
   "selectMode": "Select Mode",
   "@selectMode": {
     "description": "Button text to confirm mode selection"
+  },
+  "displayMode": "Display Mode",
+  "@displayMode": {
+    "description": "Display mode setting title"
+  },
+  "displayModeUpdated": "Display mode updated to {mode}",
+  "@displayModeUpdated": {
+    "description": "Confirmation message when display mode is changed",
+    "placeholders": {
+      "mode": {
+        "type": "String",
+        "example": "Compact"
+      }
+    }
+  },
+  "compactModeSubtitle": "Compact checklist - tap for details",
+  "@compactModeSubtitle": {
+    "description": "Subtitle for compact mode in settings"
+  },
+  "advancedModeSubtitle": "Full tracking visible",
+  "@advancedModeSubtitle": {
+    "description": "Subtitle for advanced mode in settings"
   }
 }

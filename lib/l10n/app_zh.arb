@@ -603,5 +603,9 @@
   "advancedModeFeature2": "AI驱动的见解",
   "advancedModeFeature3": "高级自定义",
   "changeAnytime": "您可以随时在偏好设置中更改此设置",
-  "selectMode": "选择模式"
+  "selectMode": "选择模式",
+  "displayMode": "显示模式",
+  "displayModeUpdated": "显示模式已更新为 {mode}",
+  "compactModeSubtitle": "紧凑列表 - 点击查看详情",
+  "advancedModeSubtitle": "完整跟踪可见"
 }

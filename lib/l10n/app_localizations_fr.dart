@@ -491,4 +491,18 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get selectMode => 'Sélectionner le mode';
+
+  @override
+  String get displayMode => 'Mode d\'affichage';
+
+  @override
+  String displayModeUpdated(String mode) {
+    return 'Mode d\'affichage mis à jour vers $mode';
+  }
+
+  @override
+  String get compactModeSubtitle => 'Liste compacte - appuyez pour les détails';
+
+  @override
+  String get advancedModeSubtitle => 'Suivi complet visible';
 }
