@@ -3,6 +3,7 @@ import 'habits_page.dart';
 import 'statistics_page.dart';
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
+import 'devotional_discovery_page.dart';
 import '../l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> pages = [
       const HabitsPage(),
       const BibleReaderPage(),
+      const DevotionalDiscoveryPage(),
       const StatisticsPage(),
       const SettingsPage(),
     ];
@@ -44,6 +46,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.book),
             label: l10n.readBible,
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: 'Devotionals',
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.bar_chart),
