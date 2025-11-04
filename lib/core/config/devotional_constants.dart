@@ -1,0 +1,60 @@
+// lib/core/config/devotional_constants.dart
+
+/// Global constants for devotionals
+class DevotionalConstants {
+  /// URL GENERATION FUNCTIONS
+
+  // Original method - DO NOT MODIFY (Backward Compatibility)
+  static String getDevocionalesApiUrl(int year) {
+    return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/Devocional_year_$year.json';
+  }
+
+  // New method for multilingual support
+  static String getDevocionalesApiUrlMultilingual(
+      int year, String languageCode, String versionCode) {
+    // Backward compatibility for Spanish RVR1960
+    if (languageCode == 'es' && versionCode == 'RVR1960') {
+      return getDevocionalesApiUrl(year); // Use original method
+    }
+
+    // New format for other languages/versions
+    return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/Devocional_year_${year}_${languageCode}_$versionCode.json';
+  }
+
+  /// LANGUAGE AND VERSION MAPS
+
+  // Supported languages and their readable names
+  static const Map<String, String> supportedLanguages = {
+    'es': 'Español',
+    'en': 'English',
+    'pt': 'Português',
+    'fr': 'Français',
+  };
+
+  // Available Bible versions by language
+  static const Map<String, List<String>> bibleVersionsByLanguage = {
+    'es': ['RVR1960', 'NVI'],
+    'en': ['KJV', 'NIV'],
+    'pt': ['ARC', 'NVI'],
+    'fr': ['LSG1910', 'TOB'],
+  };
+
+  // Default Bible version by language
+  static const Map<String, String> defaultVersionByLanguage = {
+    'es': 'RVR1960',
+    'en': 'KJV',
+    'pt': 'ARC',
+    'fr': 'LSG1910',
+  };
+
+  /// PREFERENCES (SharedPreferences KEYS)
+  static const String prefSeenIndices = 'seenIndices';
+  static const String prefFavorites = 'favorites';
+  static const String prefDontShowInvitation = 'dontShowInvitation';
+  static const String prefCurrentIndex = 'currentIndex';
+  static const String prefLastNotificationDate = 'lastNotificationDate';
+  static const String prefShowInvitationDialog = 'showInvitationDialog';
+  static const String prefSelectedLanguage = 'selectedLanguage';
+  static const String prefSelectedVersion = 'selectedVersion';
+  static const String prefDevocionalFontSize = 'devocional_font_size';
+}
