@@ -428,19 +428,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get displayModeDescription => '选择您想如何使用 Habitus Faith';
 
   @override
-  String get simpleMode => '简单模式';
+  String get compactMode => '紧凑模式';
 
   @override
-  String get simpleModeDescription => '每日习惯跟踪的基本功能';
+  String get compactModeDescription => '每日习惯跟踪的基本功能';
 
   @override
-  String get simpleModeFeature1 => '简洁的极简界面';
+  String get compactModeFeature1 => '简洁的极简界面';
 
   @override
-  String get simpleModeFeature2 => '快速习惯跟踪';
+  String get compactModeFeature2 => '快速习惯跟踪';
 
   @override
-  String get simpleModeFeature3 => '基础统计';
+  String get compactModeFeature3 => '基础统计';
 
   @override
   String get advancedMode => '高级模式';

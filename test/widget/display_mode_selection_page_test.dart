@@ -68,12 +68,12 @@ void main() {
             reason: 'Description text should guide user');
       });
 
-      testWidgets('displays both Simple and Advanced mode cards',
+      testWidgets('displays both Compact and Advanced mode cards',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
-        expect(find.byKey(const Key('simple_mode_card')), findsOneWidget,
+        expect(find.byKey(const Key('compact_mode_card')), findsOneWidget,
             reason: 'Simple mode card should be displayed');
         expect(find.byKey(const Key('advanced_mode_card')), findsOneWidget,
             reason: 'Advanced mode card should be displayed');
@@ -117,13 +117,13 @@ void main() {
             reason: 'Button should be disabled when no mode selected');
       });
 
-      testWidgets('tapping simple mode card selects simple mode',
+      testWidgets('tapping compact mode card selects compact mode',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
-        // Tap on simple mode card
-        await tester.tap(find.byKey(const Key('simple_mode_card')));
+        // Tap on compact mode card
+        await tester.tap(find.byKey(const Key('compact_mode_card')));
         await tester.pumpAndSettle();
 
         final selectButton = tester.widget<ElevatedButton>(
@@ -162,8 +162,8 @@ void main() {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
-        // First select simple mode
-        await tester.tap(find.byKey(const Key('simple_mode_card')));
+        // First select compact mode
+        await tester.tap(find.byKey(const Key('compact_mode_card')));
         await tester.pumpAndSettle();
 
         // Scroll to make advanced mode card visible
@@ -187,12 +187,12 @@ void main() {
     });
 
     group('Visual Feedback', () {
-      testWidgets('simple mode card shows correct title and description',
+      testWidgets('compact mode card shows correct title and description',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
-        expect(find.text('Simple Mode'), findsOneWidget,
+        expect(find.text('Compact Mode'), findsOneWidget,
             reason: 'Simple mode title should be displayed');
         expect(find.text('Essential features for daily habit tracking'),
             findsOneWidget,
@@ -212,7 +212,7 @@ void main() {
             reason: 'Advanced mode description should be displayed');
       });
 
-      testWidgets('simple mode shows all three features',
+      testWidgets('compact mode shows all three features',
           (WidgetTester tester) async {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
@@ -258,7 +258,7 @@ void main() {
     });
 
     group('State Persistence', () {
-      testWidgets('selecting simple mode persists to SharedPreferences',
+      testWidgets('selecting compact mode persists to SharedPreferences',
           (WidgetTester tester) async {
         SharedPreferences.setMockInitialValues({});
         final prefs = await SharedPreferences.getInstance();
@@ -286,8 +286,8 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // Select simple mode
-        await tester.tap(find.byKey(const Key('simple_mode_card')));
+        // Select compact mode
+        await tester.tap(find.byKey(const Key('compact_mode_card')));
         await tester.pumpAndSettle();
 
         // Tap select button
@@ -296,7 +296,7 @@ void main() {
 
         // Verify that display mode was saved
         final savedMode = prefs.getString('display_mode');
-        expect(savedMode, 'simple',
+        expect(savedMode, 'compact',
             reason: 'Simple mode should be saved to preferences');
       });
 
@@ -357,9 +357,9 @@ void main() {
         await tester.pumpWidget(await createApp());
         await tester.pumpAndSettle();
 
-        // Find semantics for simple mode card
+        // Find semantics for compact mode card
         final simpleModeSemantics =
-            tester.getSemantics(find.byKey(const Key('simple_mode_card')));
+            tester.getSemantics(find.byKey(const Key('compact_mode_card')));
         expect(simpleModeSemantics.label, isNotEmpty,
             reason: 'Simple mode card should have semantic label');
 
@@ -378,7 +378,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Rapidly tap between modes
-        await tester.tap(find.byKey(const Key('simple_mode_card')));
+        await tester.tap(find.byKey(const Key('compact_mode_card')));
         await tester.pump(const Duration(milliseconds: 50));
 
         // Scroll to make advanced mode card visible
@@ -392,15 +392,15 @@ void main() {
         await tester.tap(find.byKey(const Key('advanced_mode_card')));
         await tester.pump(const Duration(milliseconds: 50));
 
-        // Scroll back to simple mode
+        // Scroll back to compact mode
         await tester.dragUntilVisible(
-          find.byKey(const Key('simple_mode_card')),
+          find.byKey(const Key('compact_mode_card')),
           find.byType(SingleChildScrollView),
           const Offset(0, 50),
         );
         await tester.pump(const Duration(milliseconds: 50));
 
-        await tester.tap(find.byKey(const Key('simple_mode_card')));
+        await tester.tap(find.byKey(const Key('compact_mode_card')));
         await tester.pumpAndSettle();
 
         final selectButton = tester.widget<ElevatedButton>(
@@ -451,8 +451,8 @@ void main() {
 
         expect(find.text('Choose Your Experience'), findsOneWidget,
             reason: 'English title should be displayed');
-        expect(find.text('Simple Mode'), findsOneWidget,
-            reason: 'English simple mode text should be displayed');
+        expect(find.text('Compact Mode'), findsOneWidget,
+            reason: 'English compact mode text should be displayed');
         expect(find.text('Advanced Mode'), findsOneWidget,
             reason: 'English advanced mode text should be displayed');
       });

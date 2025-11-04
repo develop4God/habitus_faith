@@ -1,7 +1,7 @@
 /// Enumeration for display modes in the app
 enum DisplayMode {
-  /// Simple mode - shows essential features only
-  simple,
+  /// Compact mode - shows essential features only with minimalist interface
+  compact,
 
   /// Advanced mode - shows all features and advanced options
   advanced;
@@ -15,7 +15,7 @@ enum DisplayMode {
   static DisplayMode fromStorageString(String value) {
     return DisplayMode.values.firstWhere(
       (mode) => mode.name == value,
-      orElse: () => DisplayMode.simple,
+      orElse: () => DisplayMode.compact,
     );
   }
 }

@@ -53,20 +53,20 @@ class _DisplayModeSelectionPageState
                   child: Column(
                     children: [
                       _ModeCard(
-                        key: const Key('simple_mode_card'),
-                        mode: DisplayMode.simple,
-                        title: l10n.simpleMode,
-                        description: l10n.simpleModeDescription,
+                        key: const Key('compact_mode_card'),
+                        mode: DisplayMode.compact,
+                        title: l10n.compactMode,
+                        description: l10n.compactModeDescription,
                         features: [
-                          l10n.simpleModeFeature1,
-                          l10n.simpleModeFeature2,
-                          l10n.simpleModeFeature3,
+                          l10n.compactModeFeature1,
+                          l10n.compactModeFeature2,
+                          l10n.compactModeFeature3,
                         ],
                         icon: Icons.sentiment_satisfied_alt,
-                        isSelected: _selectedMode == DisplayMode.simple,
+                        isSelected: _selectedMode == DisplayMode.compact,
                         onTap: () {
                           setState(() {
-                            _selectedMode = DisplayMode.simple;
+                            _selectedMode = DisplayMode.compact;
                           });
                         },
                       ),

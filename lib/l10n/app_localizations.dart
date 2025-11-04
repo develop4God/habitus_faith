@@ -896,35 +896,35 @@ abstract class AppLocalizations {
   /// **'Select how you want to use Habitus Faith'**
   String get displayModeDescription;
 
-  /// Title for simple display mode
+  /// Title for compact display mode
   ///
   /// In en, this message translates to:
-  /// **'Simple Mode'**
-  String get simpleMode;
+  /// **'Compact Mode'**
+  String get compactMode;
 
-  /// Description of simple display mode
+  /// Description of compact display mode
   ///
   /// In en, this message translates to:
   /// **'Essential features for daily habit tracking'**
-  String get simpleModeDescription;
+  String get compactModeDescription;
 
-  /// First feature of simple mode
+  /// First feature of compact mode
   ///
   /// In en, this message translates to:
   /// **'Clean, minimalist interface'**
-  String get simpleModeFeature1;
+  String get compactModeFeature1;
 
-  /// Second feature of simple mode
+  /// Second feature of compact mode
   ///
   /// In en, this message translates to:
   /// **'Quick habit tracking'**
-  String get simpleModeFeature2;
+  String get compactModeFeature2;
 
-  /// Third feature of simple mode
+  /// Third feature of compact mode
   ///
   /// In en, this message translates to:
   /// **'Basic statistics'**
-  String get simpleModeFeature3;
+  String get compactModeFeature3;
 
   /// Title for advanced display mode
   ///

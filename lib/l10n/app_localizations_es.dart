@@ -453,20 +453,20 @@ class AppLocalizationsEs extends AppLocalizations {
       'Selecciona cómo quieres usar Habitus Faith';
 
   @override
-  String get simpleMode => 'Modo simple';
+  String get compactMode => 'Modo compacto';
 
   @override
-  String get simpleModeDescription =>
+  String get compactModeDescription =>
       'Funciones esenciales para el seguimiento diario de hábitos';
 
   @override
-  String get simpleModeFeature1 => 'Interfaz limpia y minimalista';
+  String get compactModeFeature1 => 'Interfaz limpia y minimalista';
 
   @override
-  String get simpleModeFeature2 => 'Seguimiento rápido de hábitos';
+  String get compactModeFeature2 => 'Seguimiento rápido de hábitos';
 
   @override
-  String get simpleModeFeature3 => 'Estadísticas básicas';
+  String get compactModeFeature3 => 'Estadísticas básicas';
 
   @override
   String get advancedMode => 'Modo avanzado';

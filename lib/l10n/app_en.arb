@@ -598,25 +598,25 @@
   "@displayModeDescription": {
     "description": "Description text for display mode selection"
   },
-  "simpleMode": "Simple Mode",
-  "@simpleMode": {
-    "description": "Title for simple display mode"
+  "compactMode": "Compact Mode",
+  "@compactMode": {
+    "description": "Title for compact display mode"
   },
-  "simpleModeDescription": "Essential features for daily habit tracking",
-  "@simpleModeDescription": {
-    "description": "Description of simple display mode"
+  "compactModeDescription": "Essential features for daily habit tracking",
+  "@compactModeDescription": {
+    "description": "Description of compact display mode"
   },
-  "simpleModeFeature1": "Clean, minimalist interface",
-  "@simpleModeFeature1": {
-    "description": "First feature of simple mode"
+  "compactModeFeature1": "Clean, minimalist interface",
+  "@compactModeFeature1": {
+    "description": "First feature of compact mode"
   },
-  "simpleModeFeature2": "Quick habit tracking",
-  "@simpleModeFeature2": {
-    "description": "Second feature of simple mode"
+  "compactModeFeature2": "Quick habit tracking",
+  "@compactModeFeature2": {
+    "description": "Second feature of compact mode"
   },
-  "simpleModeFeature3": "Basic statistics",
-  "@simpleModeFeature3": {
-    "description": "Third feature of simple mode"
+  "compactModeFeature3": "Basic statistics",
+  "@compactModeFeature3": {
+    "description": "Third feature of compact mode"
   },
   "advancedMode": "Advanced Mode",
   "@advancedMode": {
