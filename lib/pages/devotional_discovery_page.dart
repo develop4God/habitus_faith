@@ -55,6 +55,16 @@ class _DevotionalDiscoveryPageState
             icon: const Icon(Icons.language),
             tooltip: 'Select Language',
             onSelected: (language) {
+              // Check if language is coming soon
+              if (language == 'zh') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Chinese devotionals coming soon! 即将推出中文灵修内容！'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+                return;
+              }
               ref.read(devotionalProvider.notifier).changeLanguage(language);
             },
             itemBuilder: (context) => const [
@@ -62,6 +72,10 @@ class _DevotionalDiscoveryPageState
               PopupMenuItem(value: 'en', child: Text('English')),
               PopupMenuItem(value: 'pt', child: Text('Português')),
               PopupMenuItem(value: 'fr', child: Text('Français')),
+              PopupMenuItem(
+                value: 'zh',
+                child: Text('Chinese (Coming Soon)'),
+              ),
             ],
           ),
           // Favorites filter (future implementation)
