@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/devotional_providers.dart';
 import '../core/models/devocional_model.dart';
-import '../l10n/app_localizations.dart';
 import 'bible_reader_page.dart';
 import 'package:intl/intl.dart';
 
