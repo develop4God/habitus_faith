@@ -16,6 +16,8 @@ import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
 import 'core/services/ml/model_updater.dart';
 import 'features/habits/presentation/onboarding/onboarding_page.dart';
+import 'features/habits/presentation/onboarding/display_mode_selection_page.dart';
+import 'features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
 import 'features/habits/data/storage/json_habits_repository.dart';
 import 'features/habits/data/storage/storage_providers.dart';
@@ -53,7 +55,7 @@ class LandingPage extends StatelessWidget {
               key: const Key('start_button'),
               style: ElevatedButton.styleFrom(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                 backgroundColor: const Color(0xff6366f1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -82,7 +84,7 @@ class LandingPage extends StatelessWidget {
               key: const Key('read_bible_button'),
               style: ElevatedButton.styleFrom(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 backgroundColor: const Color(0xffa5b4fc),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -160,6 +162,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authInit = ref.watch(authInitProvider);
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
+    final displayModeSelected = ref.watch(displayModeSelectedProvider);
     final currentLocale = ref.watch(appLanguageProvider);
 
     // Initialize notification service
@@ -184,10 +187,22 @@ class MyApp extends ConsumerWidget {
       routes: {
         '/home': (context) => const HomePage(),
         '/onboarding': (context) => const OnboardingPage(),
+        '/display-mode-selection': (context) =>
+            const DisplayModeSelectionPage(),
       },
       home: authInit.when(
-        data: (_) =>
-        onboardingComplete ? const LandingPage() : const OnboardingPage(),
+        data: (_) {
+          // If onboarding is complete, show landing page
+          if (onboardingComplete) {
+            return const LandingPage();
+          }
+          // If display mode not selected, show display mode selection first
+          if (!displayModeSelected) {
+            return const DisplayModeSelectionPage();
+          }
+          // Otherwise show habit selection
+          return const OnboardingPage();
+        },
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),

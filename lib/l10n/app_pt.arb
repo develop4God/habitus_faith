@@ -589,5 +589,19 @@
         "example": "Conexão falhou"
       }
     }
-  }
+  },
+  "chooseYourExperience": "Escolha sua experiência",
+  "displayModeDescription": "Selecione como você deseja usar o Habitus Faith",
+  "simpleMode": "Modo simples",
+  "simpleModeDescription": "Recursos essenciais para rastreamento diário de hábitos",
+  "simpleModeFeature1": "Interface limpa e minimalista",
+  "simpleModeFeature2": "Rastreamento rápido de hábitos",
+  "simpleModeFeature3": "Estatísticas básicas",
+  "advancedMode": "Modo avançado",
+  "advancedModeDescription": "Experiência completa com análises e insights",
+  "advancedModeFeature1": "Análises detalhadas de hábitos",
+  "advancedModeFeature2": "Insights alimentados por IA",
+  "advancedModeFeature3": "Personalização avançada",
+  "changeAnytime": "Você pode alterar esta configuração a qualquer momento nas preferências",
+  "selectMode": "Selecionar modo"
 }
