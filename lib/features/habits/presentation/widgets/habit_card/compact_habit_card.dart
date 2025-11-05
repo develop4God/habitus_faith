@@ -54,6 +54,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   // Habit emoji/icon
                   Container(
@@ -157,6 +158,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
 
                   // Stats row
                   Row(
+                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildStatItem(
@@ -183,6 +185,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
 
                   // Action buttons
                   Row(
+                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton.icon(

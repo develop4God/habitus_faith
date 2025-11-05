@@ -41,6 +41,7 @@ class AdvancedHabitCard extends ConsumerWidget {
           children: [
             // Header with emoji, name, and completion button
             Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 // Habit emoji/icon
                 Container(
@@ -106,6 +107,7 @@ class AdvancedHabitCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildStatItem(
@@ -138,6 +140,7 @@ class AdvancedHabitCard extends ConsumerWidget {
 
             // Action buttons
             Row(
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 OutlinedButton.icon(
