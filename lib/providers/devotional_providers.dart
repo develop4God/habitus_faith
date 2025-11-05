@@ -209,8 +209,21 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         }
       }
 
-      // Sort by date (newest first)
-      loadedDevocionales.sort((a, b) => b.date.compareTo(a.date));
+      // Sort by date: Today's devotionals first, then by date (newest first)
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      
+      loadedDevocionales.sort((a, b) {
+        final aDate = DateTime(a.date.year, a.date.month, a.date.day);
+        final bDate = DateTime(b.date.year, b.date.month, b.date.day);
+        
+        // Today's devotionals come first
+        if (aDate == today && bDate != today) return -1;
+        if (bDate == today && aDate != today) return 1;
+        
+        // Otherwise sort by date (newest first)
+        return b.date.compareTo(a.date);
+      });
 
       state = state.copyWith(
         all: loadedDevocionales,
