@@ -420,4 +420,46 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get poweredByGemini => '由Gemini AI驱动';
+
+  @override
+  String get chooseYourExperience => '选择您的体验';
+
+  @override
+  String get displayModeDescription => '选择您想如何使用 Habitus Faith';
+
+  @override
+  String get simpleMode => '简单模式';
+
+  @override
+  String get simpleModeDescription => '每日习惯跟踪的基本功能';
+
+  @override
+  String get simpleModeFeature1 => '简洁的极简界面';
+
+  @override
+  String get simpleModeFeature2 => '快速习惯跟踪';
+
+  @override
+  String get simpleModeFeature3 => '基础统计';
+
+  @override
+  String get advancedMode => '高级模式';
+
+  @override
+  String get advancedModeDescription => '具有见解和分析的完整体验';
+
+  @override
+  String get advancedModeFeature1 => '详细的习惯分析';
+
+  @override
+  String get advancedModeFeature2 => 'AI驱动的见解';
+
+  @override
+  String get advancedModeFeature3 => '高级自定义';
+
+  @override
+  String get changeAnytime => '您可以随时在偏好设置中更改此设置';
+
+  @override
+  String get selectMode => '选择模式';
 }

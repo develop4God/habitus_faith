@@ -589,5 +589,61 @@
   "poweredByGemini": "Powered by Gemini AI",
   "@poweredByGemini": {
     "description": "Attribution for AI service"
+  },
+  "chooseYourExperience": "Choose Your Experience",
+  "@chooseYourExperience": {
+    "description": "Title for display mode selection screen"
+  },
+  "displayModeDescription": "Select how you want to use Habitus Faith",
+  "@displayModeDescription": {
+    "description": "Description text for display mode selection"
+  },
+  "simpleMode": "Simple Mode",
+  "@simpleMode": {
+    "description": "Title for simple display mode"
+  },
+  "simpleModeDescription": "Essential features for daily habit tracking",
+  "@simpleModeDescription": {
+    "description": "Description of simple display mode"
+  },
+  "simpleModeFeature1": "Clean, minimalist interface",
+  "@simpleModeFeature1": {
+    "description": "First feature of simple mode"
+  },
+  "simpleModeFeature2": "Quick habit tracking",
+  "@simpleModeFeature2": {
+    "description": "Second feature of simple mode"
+  },
+  "simpleModeFeature3": "Basic statistics",
+  "@simpleModeFeature3": {
+    "description": "Third feature of simple mode"
+  },
+  "advancedMode": "Advanced Mode",
+  "@advancedMode": {
+    "description": "Title for advanced display mode"
+  },
+  "advancedModeDescription": "Full-featured experience with insights and analytics",
+  "@advancedModeDescription": {
+    "description": "Description of advanced display mode"
+  },
+  "advancedModeFeature1": "Detailed habit analytics",
+  "@advancedModeFeature1": {
+    "description": "First feature of advanced mode"
+  },
+  "advancedModeFeature2": "AI-powered insights",
+  "@advancedModeFeature2": {
+    "description": "Second feature of advanced mode"
+  },
+  "advancedModeFeature3": "Advanced customization",
+  "@advancedModeFeature3": {
+    "description": "Third feature of advanced mode"
+  },
+  "changeAnytime": "You can change this setting anytime in preferences",
+  "@changeAnytime": {
+    "description": "Message informing users they can change mode later"
+  },
+  "selectMode": "Select Mode",
+  "@selectMode": {
+    "description": "Button text to confirm mode selection"
   }
 }

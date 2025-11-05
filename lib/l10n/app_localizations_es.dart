@@ -444,4 +444,50 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get poweredByGemini => 'Desarrollado por Gemini AI';
+
+  @override
+  String get chooseYourExperience => 'Elige tu experiencia';
+
+  @override
+  String get displayModeDescription =>
+      'Selecciona cómo quieres usar Habitus Faith';
+
+  @override
+  String get simpleMode => 'Modo simple';
+
+  @override
+  String get simpleModeDescription =>
+      'Funciones esenciales para el seguimiento diario de hábitos';
+
+  @override
+  String get simpleModeFeature1 => 'Interfaz limpia y minimalista';
+
+  @override
+  String get simpleModeFeature2 => 'Seguimiento rápido de hábitos';
+
+  @override
+  String get simpleModeFeature3 => 'Estadísticas básicas';
+
+  @override
+  String get advancedMode => 'Modo avanzado';
+
+  @override
+  String get advancedModeDescription =>
+      'Experiencia completa con análisis y perspectivas';
+
+  @override
+  String get advancedModeFeature1 => 'Análisis detallados de hábitos';
+
+  @override
+  String get advancedModeFeature2 => 'Información impulsada por IA';
+
+  @override
+  String get advancedModeFeature3 => 'Personalización avanzada';
+
+  @override
+  String get changeAnytime =>
+      'Puedes cambiar esta configuración en cualquier momento en las preferencias';
+
+  @override
+  String get selectMode => 'Seleccionar modo';
 }

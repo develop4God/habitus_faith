@@ -14,7 +14,7 @@ class LandingPage extends StatelessWidget {
           children: [
             SizedBox(
               height: 220,
-              child: Lottie.asset('assets/lottie/animation.json'),
+              child: Lottie.asset('assets/lottie/completing_tasks.json'),
             ),
             const SizedBox(height: 32),
             const Text(

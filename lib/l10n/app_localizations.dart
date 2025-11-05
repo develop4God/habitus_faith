@@ -883,6 +883,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Powered by Gemini AI'**
   String get poweredByGemini;
+
+  /// Title for display mode selection screen
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Your Experience'**
+  String get chooseYourExperience;
+
+  /// Description text for display mode selection
+  ///
+  /// In en, this message translates to:
+  /// **'Select how you want to use Habitus Faith'**
+  String get displayModeDescription;
+
+  /// Title for simple display mode
+  ///
+  /// In en, this message translates to:
+  /// **'Simple Mode'**
+  String get simpleMode;
+
+  /// Description of simple display mode
+  ///
+  /// In en, this message translates to:
+  /// **'Essential features for daily habit tracking'**
+  String get simpleModeDescription;
+
+  /// First feature of simple mode
+  ///
+  /// In en, this message translates to:
+  /// **'Clean, minimalist interface'**
+  String get simpleModeFeature1;
+
+  /// Second feature of simple mode
+  ///
+  /// In en, this message translates to:
+  /// **'Quick habit tracking'**
+  String get simpleModeFeature2;
+
+  /// Third feature of simple mode
+  ///
+  /// In en, this message translates to:
+  /// **'Basic statistics'**
+  String get simpleModeFeature3;
+
+  /// Title for advanced display mode
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Mode'**
+  String get advancedMode;
+
+  /// Description of advanced display mode
+  ///
+  /// In en, this message translates to:
+  /// **'Full-featured experience with insights and analytics'**
+  String get advancedModeDescription;
+
+  /// First feature of advanced mode
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed habit analytics'**
+  String get advancedModeFeature1;
+
+  /// Second feature of advanced mode
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered insights'**
+  String get advancedModeFeature2;
+
+  /// Third feature of advanced mode
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced customization'**
+  String get advancedModeFeature3;
+
+  /// Message informing users they can change mode later
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this setting anytime in preferences'**
+  String get changeAnytime;
+
+  /// Button text to confirm mode selection
+  ///
+  /// In en, this message translates to:
+  /// **'Select Mode'**
+  String get selectMode;
 }
 
 class _AppLocalizationsDelegate
