@@ -29,6 +29,7 @@ class DevotionalConstants {
     'en': 'English',
     'pt': 'Português',
     'fr': 'Français',
+    'zh': 'Chinese (Coming Soon)',
   };
 
   // Available Bible versions by language
@@ -37,6 +38,7 @@ class DevotionalConstants {
     'en': ['KJV', 'NIV'],
     'pt': ['ARC', 'NVI'],
     'fr': ['LSG1910', 'TOB'],
+    'zh': [], // Coming soon
   };
 
   // Default Bible version by language
@@ -45,6 +47,7 @@ class DevotionalConstants {
     'en': 'KJV',
     'pt': 'ARC',
     'fr': 'LSG1910',
+    'zh': 'RVR1960', // Fallback until Chinese content is available
   };
 
   /// PREFERENCES (SharedPreferences KEYS)

@@ -8,6 +8,9 @@ import '../providers/bible_providers.dart';
 import '../bible_reader_core/bible_reader_core.dart';
 import '../utils/copyright_utils.dart';
 import '../widgets/floating_font_control_buttons.dart';
+import '../widgets/bible_book_selector_dialog.dart';
+import '../widgets/bible_chapter_grid_selector.dart';
+import '../widgets/bible_verse_grid_selector.dart';
 
 /// Main Bible Reader Page using Riverpod for state management
 class BibleReaderPage extends ConsumerStatefulWidget {
@@ -34,6 +37,90 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  // Helper methods for grid selectors
+  Future<void> _showBookSelector(BuildContext context) async {
+    final state = ref.read(bibleReaderProvider);
+    final notifier = ref.read(bibleReaderProvider.notifier);
+    
+    await showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return BibleBookSelectorDialog(
+          books: state.books,
+          selectedBookName: state.selectedBookName,
+          onBookSelected: (book) async {
+            await notifier.selectBook(book);
+            if (context.mounted) {
+              Navigator.of(dialogContext).pop();
+            }
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showChapterSelector(BuildContext context) async {
+    final state = ref.read(bibleReaderProvider);
+    final notifier = ref.read(bibleReaderProvider.notifier);
+    
+    if (state.selectedBookName == null) return;
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return BibleChapterGridSelector(
+          totalChapters: state.maxChapter,
+          selectedChapter: state.selectedChapter ?? 1,
+          bookName: state.books.firstWhere(
+            (b) => b['short_name'] == state.selectedBookName,
+            orElse: () => {'long_name': state.selectedBookName ?? ''},
+          )['long_name'] as String,
+          onChapterSelected: (chapter) async {
+            await notifier.selectChapter(chapter);
+            if (context.mounted) {
+              Navigator.of(dialogContext).pop();
+            }
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showVerseSelector(BuildContext context) async {
+    final state = ref.read(bibleReaderProvider);
+    
+    if (state.selectedBookName == null || state.selectedChapter == null || state.verses.isEmpty) {
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return BibleVerseGridSelector(
+          totalVerses: state.verses.length,
+          selectedVerse: state.selectedVerse ?? 1,
+          bookName: state.books.firstWhere(
+            (b) => b['short_name'] == state.selectedBookName,
+            orElse: () => {'long_name': state.selectedBookName ?? ''},
+          )['long_name'] as String,
+          chapterNumber: state.selectedChapter!,
+          onVerseSelected: (verseNumber) {
+            // Scroll to the selected verse
+            final index = state.verses.indexWhere((v) => v['verse'] == verseNumber);
+            if (index != -1 && _itemScrollController.isAttached) {
+              _itemScrollController.scrollTo(
+                index: index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+            Navigator.of(dialogContext).pop();
+          },
+        );
+      },
+    );
   }
 
   String _cleanVerseText(String text) {
@@ -118,53 +205,57 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           ? Center(child: Text(l10n.loadingBooks))
           : Column(
               children: [
-                // Book and Chapter selector
+                // Book, Chapter, and Verse selector
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      // Book selector
+                      // Book selector button
                       Expanded(
-                        flex: 2,
-                        child: DropdownButton<int>(
-                          isExpanded: true,
-                          value: state.selectedBookNumber,
-                          hint: Text(l10n.selectBook),
-                          items: state.books.map((book) {
-                            return DropdownMenuItem<int>(
-                              value: book['book_number'] as int,
-                              child: Text(
-                                book['long_name'] as String,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (bookNumber) {
-                            if (bookNumber != null) {
-                              final book = state.books.firstWhere(
-                                (b) => b['book_number'] == bookNumber,
-                              );
-                              notifier.selectBook(book);
-                            }
-                          },
+                        flex: 3,
+                        child: ElevatedButton.icon(
+                          onPressed: () => _showBookSelector(context),
+                          icon: const Icon(Icons.menu_book, size: 20),
+                          label: Text(
+                            state.selectedBookName != null
+                                ? state.books.firstWhere(
+                                    (b) => b['short_name'] == state.selectedBookName,
+                                    orElse: () => {'long_name': 'Select Book'},
+                                  )['long_name'] as String
+                                : l10n.selectBook,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Chapter selector
-                      DropdownButton<int>(
-                        value: state.selectedChapter,
-                        hint: const Text('Ch'),
-                        items: List.generate(state.maxChapter, (i) => i + 1)
-                            .map((chapter) => DropdownMenuItem<int>(
-                                  value: chapter,
-                                  child: Text('Ch $chapter'),
-                                ))
-                            .toList(),
-                        onChanged: (chapter) {
-                          if (chapter != null) {
-                            notifier.selectChapter(chapter);
-                          }
-                        },
+                      // Chapter selector button
+                      ElevatedButton(
+                        onPressed: state.selectedBookName != null 
+                            ? () => _showChapterSelector(context)
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                        child: Text(
+                          state.selectedChapter != null
+                              ? 'Ch ${state.selectedChapter}'
+                              : 'Ch',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Verse selector button
+                      ElevatedButton(
+                        onPressed: state.selectedChapter != null && state.verses.isNotEmpty
+                            ? () => _showVerseSelector(context)
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                        child: const Icon(Icons.format_list_numbered, size: 20),
                       ),
                     ],
                   ),

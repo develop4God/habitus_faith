@@ -122,7 +122,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
   }
 
   String _getSupportedLanguageWithFallback(String requestedLanguage) {
-    const supportedLanguages = ['es', 'en', 'pt', 'fr'];
+    const supportedLanguages = ['es', 'en', 'pt', 'fr', 'zh'];
     if (supportedLanguages.contains(requestedLanguage)) {
       return requestedLanguage;
     }
@@ -182,14 +182,30 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     try {
       List<Devocional> loadedDevocionales = [];
 
-      if (data['devocionales'] != null) {
-        for (var item in data['devocionales']) {
-          try {
-            final devocional = Devocional.fromJson(item);
-            loadedDevocionales.add(devocional);
-          } catch (e) {
-            debugPrint('Error parsing devotional: $e');
+      // Parse new JSON structure: data -> language -> date -> devotionals[]
+      if (data['data'] != null) {
+        final dataMap = data['data'] as Map<String, dynamic>;
+        
+        // Get devotionals for the selected language
+        if (dataMap[state.selectedLanguage] != null) {
+          final languageData = dataMap[state.selectedLanguage] as Map<String, dynamic>;
+          
+          // Iterate through each date
+          for (var dateEntry in languageData.entries) {
+            final dateDevocionales = dateEntry.value as List<dynamic>;
+            
+            // Parse each devotional for this date
+            for (var item in dateDevocionales) {
+              try {
+                final devocional = Devocional.fromJson(item as Map<String, dynamic>);
+                loadedDevocionales.add(devocional);
+              } catch (e) {
+                debugPrint('Error parsing devotional: $e');
+              }
+            }
           }
+        } else {
+          debugPrint('⚠️ No devotionals found for language: ${state.selectedLanguage}');
         }
       }
 
@@ -202,7 +218,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         isLoading: false,
       );
 
-      debugPrint('✅ Loaded ${loadedDevocionales.length} devotionals');
+      debugPrint('✅ Loaded ${loadedDevocionales.length} devotionals for ${state.selectedLanguage}');
     } catch (e) {
       debugPrint('Error processing devotional data: $e');
       state = state.copyWith(
