@@ -3,8 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/devotional_providers.dart';
+import '../providers/bible_providers.dart';
 import '../core/models/devocional_model.dart';
+import '../bible_reader_core/bible_reader_core.dart';
 import 'bible_reader_page.dart';
+import 'favorites_page.dart';
 import 'package:intl/intl.dart';
 
 /// Devotional Discovery Page
@@ -71,14 +74,19 @@ class _DevotionalDiscoveryPageState
             tooltip: 'Select Language',
             onPressed: () => _showLanguageSelector(context),
           ),
-          // Favorites filter
+          // Favorites page
           IconButton(
             icon: Icon(
-              Icons.favorite_border,
+              Icons.star_border,
               color: isDark ? Colors.white : Colors.black87,
             ),
             onPressed: () {
-              // TODO: Show favorites only
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FavoritesPage(),
+                ),
+              );
             },
             tooltip: 'Favorites',
           ),
@@ -258,9 +266,8 @@ class _DevotionalDiscoveryPageState
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    // Always show "Today" for current devotionals
-    final isToday = _isToday(devocional.date);
-    final displayDate = isToday ? 'Today' : DateFormat('MMM dd').format(devocional.date);
+    // Use the new display date method that shows future dates
+    final displayDate = _getDisplayDate(devocional);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -340,8 +347,8 @@ class _DevotionalDiscoveryPageState
                                   ),
                                   child: IconButton(
                                     icon: Icon(
-                                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                                      color: isFavorite ? Colors.red[300] : Colors.white,
+                                      isFavorite ? Icons.star : Icons.star_border,
+                                      color: isFavorite ? Colors.amber : Colors.white,
                                       size: 22,
                                     ),
                                     onPressed: () {
@@ -467,21 +474,58 @@ class _DevotionalDiscoveryPageState
     );
   }
 
-  // Helper to check if date is today
-  bool _isToday(DateTime date) {
+  // Helper to get display date - converts past dates to future dates
+  String _getDisplayDate(Devocional devocional) {
     final now = DateTime.now();
-    return date.year == now.year && date.month == now.month && date.day == now.day;
+    final today = DateTime(now.year, now.month, now.day);
+    final devDate = DateTime(devocional.date.year, devocional.date.month, devocional.date.day);
+    
+    // If date is today, show "Today"
+    if (devDate == today) {
+      return 'Today';
+    }
+    
+    // If date is in the past, project it to the future
+    // by adding years until it's in the future
+    DateTime displayDate = devDate;
+    while (displayDate.isBefore(today)) {
+      displayDate = DateTime(displayDate.year + 1, displayDate.month, displayDate.day);
+    }
+    
+    // Check if it's tomorrow
+    final tomorrow = today.add(const Duration(days: 1));
+    if (displayDate == tomorrow) {
+      return 'Tomorrow';
+    }
+    
+    // Check if it's within this week
+    final daysUntil = displayDate.difference(today).inDays;
+    if (daysUntil <= 7 && daysUntil > 1) {
+      return DateFormat('EEEE').format(displayDate); // e.g., "Monday"
+    }
+    
+    // Otherwise show the date
+    return DateFormat('MMM dd').format(displayDate);
   }
-
-  // Extract verse reference (e.g., "John 3:16")
+  
+  // Extract verse reference (e.g., "John 3:16" or "Marcos 7:20-23")
   String _extractVerseReference(String versiculo) {
-    // Extract the reference before the colon and version
-    final parts = versiculo.split(':');
+    // The format is typically: "BookName Chapter:Verse Version: 'Text'"
+    // We want to extract "BookName Chapter:Verse"
+    
+    // Split by version indicator (usually the version code followed by colon)
+    final parts = versiculo.split(RegExp(r'\s+[A-Z]{2,}[0-9]*:'));
     if (parts.isNotEmpty) {
-      // Get everything before the version indicator
       final refPart = parts[0].trim();
       return refPart;
     }
+    
+    // Fallback: try to extract everything before the quote
+    final quoteIndex = versiculo.indexOf('"');
+    if (quoteIndex > 0) {
+      return versiculo.substring(0, quoteIndex).trim();
+    }
+    
     return versiculo;
   }
 
@@ -587,20 +631,70 @@ class _DevotionalDiscoveryPageState
     );
   }
 
-  void _navigateToVerse(BuildContext context, Devocional devocional) {
-    // Navigate to Bible reader with the verse
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const BibleReaderPage(),
-      ),
-    );
-    // TODO: Parse verse reference and navigate to specific location
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Opening Bible to: ${devocional.versiculo}'),
-      ),
-    );
+  void _navigateToVerse(BuildContext context, Devocional devocional) async {
+    // Parse the verse reference from the devotional
+    final verseRef = _extractVerseReference(devocional.versiculo);
+    
+    // Try to parse the reference (e.g., "Marcos 7:20-23" -> book, chapter, verse)
+    final parsed = BibleReferenceParser.parse(verseRef);
+    
+    if (parsed != null) {
+      final bookName = parsed['bookName'] as String;
+      final chapter = parsed['chapter'] as int;
+      // final verse = parsed['verse'] as int?; // TODO: Implement scroll to verse
+      
+      // Navigate to Bible reader
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BibleReaderPage(),
+        ),
+      );
+      
+      // Wait a bit for the page to load, then navigate to the specific passage
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      if (context.mounted) {
+        // Use the Bible reader provider to navigate to the specific passage
+        try {
+          final notifier = ref.read(bibleReaderProvider.notifier);
+          
+          // Find the book by name
+          final state = ref.read(bibleReaderProvider);
+          final book = state.books.firstWhere(
+            (b) => (b['long_name'] as String).toLowerCase() == bookName.toLowerCase() ||
+                   (b['short_name'] as String).toLowerCase() == bookName.toLowerCase(),
+            orElse: () => {},
+          );
+          
+          if (book.isNotEmpty) {
+            await notifier.selectBook(book);
+            await notifier.selectChapter(chapter);
+            
+            // If we have a specific verse, we could scroll to it
+            // (would need to implement scrollToVerse method in Bible reader)
+          }
+        } catch (e) {
+          debugPrint('Error navigating to verse: $e');
+        }
+      }
+    } else {
+      // If parsing fails, just open Bible reader
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BibleReaderPage(),
+        ),
+      );
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Opening Bible to: ${devocional.versiculo}'),
+          ),
+        );
+      }
+    }
   }
 
   void _showDevocionalDetail(BuildContext context, Devocional devocional) {
@@ -650,8 +744,8 @@ class _DevotionalDiscoveryPageState
                   final isFav = ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
                   return IconButton(
                     icon: Icon(
-                      isFav ? Icons.favorite : Icons.favorite_border,
-                      color: isFav ? Colors.red : null,
+                      isFav ? Icons.star : Icons.star_border,
+                      color: isFav ? Colors.amber : null,
                     ),
                     onPressed: () {
                       ref

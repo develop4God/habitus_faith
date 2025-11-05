@@ -320,9 +320,16 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
     final filtered = state.all.where((d) {
       final term = searchTerm.toLowerCase();
-      return d.reflexion.toLowerCase().contains(term) ||
-          d.versiculo.toLowerCase().contains(term) ||
-          d.oracion.toLowerCase().contains(term);
+      
+      // Search in reflection, verse, and prayer
+      final inReflection = d.reflexion.toLowerCase().contains(term);
+      final inVerse = d.versiculo.toLowerCase().contains(term);
+      final inPrayer = d.oracion.toLowerCase().contains(term);
+      
+      // Search in tags (in the corresponding language)
+      final inTags = d.tags?.any((tag) => tag.toLowerCase().contains(term)) ?? false;
+      
+      return inReflection || inVerse || inPrayer || inTags;
     }).toList();
 
     state = state.copyWith(filtered: filtered);
