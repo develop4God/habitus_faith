@@ -101,9 +101,11 @@ class BackgroundTaskService {
         _dailyPredictionTask,
         frequency: const Duration(days: 1),
         initialDelay: initialDelay,
-        existingWorkPolicy: ExistingWorkPolicy.replace, // <--- Este es el parámetro correcto
+        existingWorkPolicy:
+            ExistingWorkPolicy.replace, // <--- Este es el parámetro correcto
         constraints: Constraints(
-          networkType: NetworkType.notRequired, // <--- camelCase para la versión nueva
+          networkType:
+              NetworkType.notRequired, // <--- camelCase para la versión nueva
           requiresBatteryNotLow: true,
           requiresCharging: false,
           requiresDeviceIdle: false,

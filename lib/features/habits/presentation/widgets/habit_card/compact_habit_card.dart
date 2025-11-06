@@ -75,7 +75,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
                   // Habit emoji/icon
@@ -151,7 +152,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(habitColor),
                               ),
                             )
                           : Container(
@@ -259,7 +261,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             widget.onEdit();
                           } else if (value == 'delete') {
                             widget.onDelete();
-                          } else if (value == 'uncheck' && widget.habit.completedToday) {
+                          } else if (value == 'uncheck' &&
+                              widget.habit.completedToday) {
                             widget.onUncheck(widget.habit.id);
                           }
                         },
@@ -269,7 +272,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               value: 'uncheck',
                               child: Row(
                                 children: [
-                                  const Icon(Icons.undo, size: 20, color: Colors.orange),
+                                  const Icon(Icons.undo,
+                                      size: 20, color: Colors.orange),
                                   const SizedBox(width: 12),
                                   Text(l10n.uncheck),
                                 ],
@@ -289,7 +293,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             value: 'delete',
                             child: Row(
                               children: [
-                                const Icon(Icons.delete, size: 20, color: Colors.red),
+                                const Icon(Icons.delete,
+                                    size: 20, color: Colors.red),
                                 const SizedBox(width: 12),
                                 Text(
                                   l10n.delete,
@@ -334,4 +339,3 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 }
-

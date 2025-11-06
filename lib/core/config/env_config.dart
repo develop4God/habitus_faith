@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
+
 /// Environment configuration loader for secure API key management
 /// Supports both .env files and --dart-define overrides
 class EnvConfig {
@@ -10,10 +11,13 @@ class EnvConfig {
     try {
       await dotenv.load(fileName: '.env');
       debugPrint('[EnvConfig] .env file loaded successfully');
-      debugPrint('[EnvConfig] GEMINI_API_KEY present: ${dotenv.env['GEMINI_API_KEY']?.isNotEmpty}');
-      debugPrint('[EnvConfig] GEMINI_MODEL: ${dotenv.env['GEMINI_MODEL'] ?? 'using default'}');
+      debugPrint(
+          '[EnvConfig] GEMINI_API_KEY present: ${dotenv.env['GEMINI_API_KEY']?.isNotEmpty}');
+      debugPrint(
+          '[EnvConfig] GEMINI_MODEL: ${dotenv.env['GEMINI_MODEL'] ?? 'using default'}');
     } catch (e) {
-      debugPrint('[EnvConfig] Warning: .env file not found - falling back to dart-define');
+      debugPrint(
+          '[EnvConfig] Warning: .env file not found - falling back to dart-define');
       debugPrint('[EnvConfig] Error details: $e');
     }
   }
