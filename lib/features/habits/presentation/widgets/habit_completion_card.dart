@@ -103,8 +103,9 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             borderRadius: BorderRadius.circular(12),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
+
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                // ⬅️ ELIMINA mainAxisSize: MainAxisSize.min
                 children: [
                   // Checkbox on the left
                   Container(
@@ -135,9 +136,10 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min, // ⬅️ AGREGA mainAxisSize al Column
                       children: [
                         Row(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.min, // ⬅️ Este sí mantiene mainAxisSize
                           children: [
                             Expanded(
                               child: Text(
@@ -181,6 +183,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         if (widget.habit.currentStreak > 0) ...[
                           const SizedBox(height: 6),
                           Row(
+                            mainAxisSize: MainAxisSize.min, // ⬅️ AGREGA mainAxisSize
                             children: [
                               Icon(
                                 Icons.local_fire_department,
@@ -207,6 +210,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                     Padding(
                       padding: const EdgeInsets.only(right: 4),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min, // ⬅️ AGREGA mainAxisSize
                         children: List.generate(
                           HabitDifficultyHelper.getDifficultyStars(
                               widget.habit.difficulty),

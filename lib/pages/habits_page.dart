@@ -292,8 +292,9 @@ class HabitsPage extends ConsumerWidget {
     final groupCompletionDates =
         habits.expand((h) => h.completionHistory).toList();
 
-    return Column(
+return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min, // ⬅️ AGREGADO
       children: [
         // Category header
         Container(
@@ -316,6 +317,7 @@ class HabitsPage extends ConsumerWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min, // ⬅️ AGREGADO
             children: [
               Icon(
                 categoryIcon,
@@ -323,19 +325,21 @@ class HabitsPage extends ConsumerWidget {
                 size: 20,
               ),
               const SizedBox(width: 12),
-              Text(
-                categoryName,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: categoryColor,
+              Flexible( // ⬅️ CAMBIADO de Text directo a Flexible
+                child: Text(
+                  categoryName,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: categoryColor,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis, // ⬅️ AGREGADO
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(width: 12),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: categoryColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -415,6 +419,7 @@ class HabitsPage extends ConsumerWidget {
             );
           } else {
             return Column(
+              mainAxisSize: MainAxisSize.min, // ⬅️ AGREGADO
               children: [
                 AdvancedHabitCard(
                   key: Key('advanced_habit_${habit.id}'),
@@ -516,8 +521,7 @@ class HabitsPage extends ConsumerWidget {
         }),
         const SizedBox(height: 24),
       ],
-    );
-  }
+    );  }
 
   void _showEditHabitDialog(
     BuildContext context,
