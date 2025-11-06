@@ -168,7 +168,7 @@ class OnboardingPage extends ConsumerWidget {
                                 }
                               },
                         child: Text(
-                          l10n.skip,
+                          l10n.cancel,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
