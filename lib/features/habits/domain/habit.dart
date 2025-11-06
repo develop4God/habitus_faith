@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models/verse_reference.dart';
+import '../../../core/services/time/time.dart';
 
 enum FailurePattern {
   weekendGap,
@@ -133,7 +134,9 @@ class Habit {
     HabitDifficulty difficulty = HabitDifficulty.medium,
     int difficultyLevel = 3,
     int? targetMinutes,
+    Clock? clock,
   }) {
+    final effectiveClock = clock ?? const Clock.system();
     return Habit(
       id: id,
       userId: userId,
@@ -144,7 +147,7 @@ class Habit {
       verse: verse,
       reminderTime: reminderTime,
       predefinedId: predefinedId,
-      createdAt: DateTime.now(),
+      createdAt: effectiveClock.now(),
       colorValue: colorValue,
       difficulty: difficulty,
       difficultyLevel: difficultyLevel,
@@ -153,8 +156,9 @@ class Habit {
   }
 
   /// Business logic: Complete habit for today
-  Habit completeToday() {
-    final now = DateTime.now();
+  Habit completeToday({Clock? clock}) {
+    final effectiveClock = clock ?? const Clock.system();
+    final now = effectiveClock.now();
     final today = DateTime(now.year, now.month, now.day);
 
     // Check if already completed today - idempotent operation

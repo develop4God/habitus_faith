@@ -6,7 +6,7 @@ part of 'behavioral_engine_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$behavioralEngineHash() => r'7b512f5e2854520f6b6308106905ac254c8559c8';
+String _$behavioralEngineHash() => r'3c6bc6e3dfd501c3ff7aa78e549af13728dddda9';
 
 /// See also [behavioralEngine].
 @ProviderFor(behavioralEngine)

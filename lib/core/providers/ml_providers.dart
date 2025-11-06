@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ml/abandonment_predictor.dart';
 import '../../pages/habits_page.dart';
+import 'clock_provider.dart';
 
 /// Provider for AbandonmentPredictor singleton
 /// Automatically initializes on first access and disposes when ref is invalidated
 final abandonmentPredictorProvider = Provider<AbandonmentPredictor>((ref) {
-  final predictor = AbandonmentPredictor();
+  final clock = ref.watch(clockProvider);
+  final predictor = AbandonmentPredictor(clock: clock);
 
   // Initialize asynchronously
   predictor.initialize();

@@ -10,16 +10,20 @@ import '../services/ai/behavioral_engine.dart';
 import '../services/notifications/notification_service.dart';
 import '../providers/ml_providers.dart';
 import '../../l10n/app_localizations.dart';
+import '../services/time/time.dart';
+import 'clock_provider.dart';
 
 /// Provider for managing daily habit predictions and interventions
 /// Runs predictions daily at 6am via background task
 final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
   final habitsRepository = ref.watch(jsonHabitsRepositoryProvider);
   final predictor = ref.watch(abandonmentPredictorProvider);
+  final clock = ref.watch(clockProvider);
 
   return HabitPredictorService(
     habitsRepository: habitsRepository,
     predictor: predictor,
+    clock: clock,
   );
 });
 
@@ -27,10 +31,12 @@ final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
 class HabitPredictorService {
   final dynamic habitsRepository; // JsonHabitsRepository
   final AbandonmentPredictor predictor;
+  final Clock clock;
 
   HabitPredictorService({
     required this.habitsRepository,
     required this.predictor,
+    required this.clock,
   });
 
   /// Run daily predictions for all habits
@@ -133,7 +139,7 @@ class HabitPredictorService {
 
     try {
       // Calculate new difficulty using Behavioral Engine
-      final engine = BehavioralEngine();
+      final engine = BehavioralEngine(clock: clock);
       final newDifficultyLevel = engine.calculateNextDifficulty(habit);
 
       // Only suggest reduction if it's actually lower
@@ -232,7 +238,7 @@ class HabitPredictorService {
         final updatedHabit = habit.copyWith(
           difficultyLevel: newDifficultyLevel,
           targetMinutes: suggestedMinutes,
-          lastAdjustedAt: DateTime.now(),
+          lastAdjustedAt: clock.now(),
         );
 
         await habitsRepository.updateHabit(updatedHabit);
