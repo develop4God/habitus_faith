@@ -44,6 +44,53 @@ void main() {
       expect(elapsed.inSeconds, greaterThan(200)); // At least 3+ minutes
       expect(elapsed.inSeconds, lessThan(400)); // Less than 7 minutes
     });
+
+    test('DebugClock rejects negative multiplier', () {
+      expect(
+        () => DebugClock(daySpeedMultiplier: -1),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('DebugClock rejects zero multiplier', () {
+      expect(
+        () => DebugClock(daySpeedMultiplier: 0),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('DebugClock rejects multiplier above maximum', () {
+      expect(
+        () => DebugClock(daySpeedMultiplier: DebugClock.maxSpeedMultiplier + 1),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('DebugClock accepts multiplier at maximum', () {
+      expect(
+        () => DebugClock(daySpeedMultiplier: DebugClock.maxSpeedMultiplier),
+        returnsNormally,
+      );
+    });
+
+    test('DebugClock handles overflow gracefully', () async {
+      // Create clock with high multiplier
+      final clock = DebugClock(daySpeedMultiplier: 1000);
+
+      // Get time multiple times - should not throw
+      final time1 = clock.now();
+      await Future.delayed(const Duration(milliseconds: 100));
+      final time2 = clock.now();
+
+      // Times should progress forward
+      expect(time2.isAfter(time1), isTrue);
+
+      // Should not throw even after extended use
+      for (int i = 0; i < 10; i++) {
+        expect(() => clock.now(), returnsNormally);
+        await Future.delayed(const Duration(milliseconds: 10));
+      }
+    });
   });
 
   group('Clock provider integration', () {

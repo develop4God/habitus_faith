@@ -43,17 +43,43 @@ class DebugClock implements Clock {
   final DateTime _startTime;
   final int daySpeedMultiplier;
 
+  /// Maximum allowed speed multiplier to prevent overflow (1000x = 1 day in ~90 seconds)
+  static const int maxSpeedMultiplier = 1000;
+
   /// Creates a debug clock with time acceleration
   ///
   /// [daySpeedMultiplier]: Speed multiplier for time passage
   ///   - 1 = normal time (default)
   ///   - 288 = 24 hours in 5 minutes (1 week in 35 minutes)
-  DebugClock({this.daySpeedMultiplier = 1}) : _startTime = DateTime.now();
+  ///   - Maximum: 1000 (to prevent overflow)
+  ///
+  /// Throws [ArgumentError] if daySpeedMultiplier is invalid.
+  DebugClock({this.daySpeedMultiplier = 1}) : _startTime = DateTime.now() {
+    if (daySpeedMultiplier < 1) {
+      throw ArgumentError(
+        'daySpeedMultiplier must be at least 1, got $daySpeedMultiplier',
+      );
+    }
+    if (daySpeedMultiplier > maxSpeedMultiplier) {
+      throw ArgumentError(
+        'daySpeedMultiplier must be at most $maxSpeedMultiplier, got $daySpeedMultiplier',
+      );
+    }
+  }
 
   @override
   DateTime now() {
     final elapsed = DateTime.now().difference(_startTime);
-    // Multiply duration by speed multiplier
+
+    // Check for potential overflow before multiplication
+    final maxSafeMicroseconds = (double.maxFinite / daySpeedMultiplier).floor();
+    if (elapsed.inMicroseconds > maxSafeMicroseconds) {
+      // Clamp to maximum safe value to prevent overflow
+      final acceleratedMicroseconds = maxSafeMicroseconds * daySpeedMultiplier;
+      return _startTime.add(Duration(microseconds: acceleratedMicroseconds));
+    }
+
+    // Safe to multiply - no overflow risk
     final acceleratedMicroseconds =
         (elapsed.inMicroseconds * daySpeedMultiplier).toInt();
     return _startTime.add(Duration(microseconds: acceleratedMicroseconds));
