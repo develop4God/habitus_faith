@@ -54,7 +54,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min, // Cambiado para evitar ancho no acotado
                 children: [
                   // Habit emoji/icon
                   Container(
@@ -74,7 +74,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   const SizedBox(width: 16),
 
                   // Habit name and streak
-                  Expanded(
+                  Flexible(
+                    fit: FlexFit.loose, // Cambiado de Expanded para permitir shrink-wrap
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
