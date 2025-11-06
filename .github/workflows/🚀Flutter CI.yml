@@ -31,7 +31,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.event.inputs.target_branch || github.ref_name }}
+          # >>> FIX: use head_ref or ref to avoid merge/PR ref fetch errors
+          ref: ${{ github.event.inputs.target_branch || github.head_ref || github.ref }}
 
       - name: ☕ Setup Java
         uses: actions/setup-java@v4
@@ -63,7 +64,8 @@ jobs:
                 git diff --name-only
                 git add .
                 git commit -m "🎨 Auto-format code with dart format [skip ci]"
-                BRANCH="${{ github.event.inputs.target_branch || github.ref_name }}"
+                # >>> FIX: use head_ref or ref in push
+                BRANCH="${{ github.event.inputs.target_branch || github.head_ref || github.ref }}"
                 git push origin "$BRANCH"
                 echo "✅ Code has been automatically formatted and committed!"
                 echo "🔄 Contributors should pull the latest changes."
@@ -104,7 +106,8 @@ jobs:
             git config --local user.name "GitHub Action [bot]"
             git add .
             git commit -m "🧹 Remove unused imports and auto-fix code [skip ci]"
-            BRANCH="${{ github.event.inputs.target_branch || github.ref_name }}"
+            # >>> FIX: use head_ref or ref in push
+            BRANCH="${{ github.event.inputs.target_branch || github.head_ref || github.ref }}"
             git push origin "$BRANCH"
             echo "✅ Imports limpios y fixes aplicados!"
             echo "## 🧹 Import Cleanup Summary" >> $GITHUB_STEP_SUMMARY
