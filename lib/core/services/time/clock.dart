@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Clock abstraction for testable time-dependent code
 ///
 /// Provides a clean interface for getting the current time,
@@ -65,6 +67,14 @@ class DebugClock implements Clock {
         'daySpeedMultiplier must be at most $maxSpeedMultiplier, got $daySpeedMultiplier',
       );
     }
+
+    // Log initialization in debug mode
+    if (kDebugMode) {
+      debugPrint(
+        'DebugClock initialized: ${daySpeedMultiplier}x speed '
+        '(1 real minute = ${(daySpeedMultiplier / 60).toStringAsFixed(1)} simulated hours)',
+      );
+    }
   }
 
   @override
@@ -75,6 +85,11 @@ class DebugClock implements Clock {
     final maxSafeMicroseconds = (double.maxFinite / daySpeedMultiplier).floor();
     if (elapsed.inMicroseconds > maxSafeMicroseconds) {
       // Clamp to maximum safe value to prevent overflow
+      if (kDebugMode) {
+        debugPrint(
+          'DebugClock: Overflow protection activated - clamping to max safe value',
+        );
+      }
       final acceleratedMicroseconds = maxSafeMicroseconds * daySpeedMultiplier;
       return _startTime.add(Duration(microseconds: acceleratedMicroseconds));
     }
