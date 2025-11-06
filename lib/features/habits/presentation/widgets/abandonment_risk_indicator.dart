@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
-
-/// Risk level thresholds for habit abandonment
-class RiskThresholds {
-  /// Threshold between low and medium risk
-  static const double mediumRiskThreshold = 0.3;
-
-  /// Threshold between medium and high risk
-  static const double highRiskThreshold = 0.65;
-}
+import '../../domain/models/risk_level.dart';
 
 /// Visual indicator showing abandonment risk for a habit
 /// Displays color-coded dot and text based on risk level:
@@ -24,77 +16,77 @@ class AbandonmentRiskIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Low risk - don't show anything intrusive
-    if (risk < RiskThresholds.mediumRiskThreshold) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(
-              color: Colors.green,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ],
-      );
-    }
+    final riskLevel = RiskThresholds.fromValue(risk);
 
-    // Medium risk - show yellow indicator
-    if (risk < RiskThresholds.highRiskThreshold) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: Colors.orange.shade600,
-              shape: BoxShape.circle,
+    switch (riskLevel) {
+      case RiskLevel.low:
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
             ),
-          ),
-          const SizedBox(width: 4),
-          Text(
-            'At risk',
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.orange.shade700,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      );
-    }
+          ],
+        );
 
-    // High risk - show red indicator with warning
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: const BoxDecoration(
-            color: Colors.red,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          'High risk',
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.red.shade700,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(width: 2),
-        Icon(
-          Icons.warning_amber_rounded,
-          size: 14,
-          color: Colors.red.shade700,
-        ),
-      ],
-    );
+      case RiskLevel.medium:
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: Colors.orange.shade600,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              riskLevel.displayName,
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.orange.shade700,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        );
+
+      case RiskLevel.high:
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              riskLevel.displayName,
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.red.shade700,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 2),
+            Icon(
+              Icons.warning_amber_rounded,
+              size: 14,
+              color: Colors.red.shade700,
+            ),
+          ],
+        );
+    }
   }
 }

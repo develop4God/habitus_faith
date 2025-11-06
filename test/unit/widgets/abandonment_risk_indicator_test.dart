@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/features/habits/presentation/widgets/abandonment_risk_indicator.dart';
+import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 
 void main() {
   group('AbandonmentRiskIndicator', () {
@@ -23,9 +24,9 @@ void main() {
       );
       expect(greenDot, findsOneWidget);
 
-      // Should not show text
-      expect(find.text('At risk'), findsNothing);
-      expect(find.text('High risk'), findsNothing);
+      // Should not show text for low risk
+      expect(find.text('At Risk'), findsNothing);
+      expect(find.text('High Risk'), findsNothing);
     });
 
     testWidgets('shows orange indicator with text for medium risk (0.3-0.65)',
@@ -48,8 +49,8 @@ void main() {
       );
       expect(orangeDot, findsOneWidget);
 
-      // Should show "At risk" text
-      expect(find.text('At risk'), findsOneWidget);
+      // Should show "At Risk" text
+      expect(find.text('At Risk'), findsOneWidget);
     });
 
     testWidgets('shows red indicator with warning icon for high risk (> 0.65)',
@@ -71,8 +72,8 @@ void main() {
       );
       expect(redDot, findsOneWidget);
 
-      // Should show "High risk" text
-      expect(find.text('High risk'), findsOneWidget);
+      // Should show "High Risk" text
+      expect(find.text('High Risk'), findsOneWidget);
 
       // Should show warning icon
       expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
@@ -90,7 +91,7 @@ void main() {
       );
 
       // Should show medium risk (orange)
-      expect(find.text('At risk'), findsOneWidget);
+      expect(find.text('At Risk'), findsOneWidget);
     });
 
     testWidgets('handles edge case risk = highRiskThreshold (boundary)',
@@ -105,7 +106,7 @@ void main() {
       );
 
       // Should show high risk (red)
-      expect(find.text('High risk'), findsOneWidget);
+      expect(find.text('High Risk'), findsOneWidget);
     });
 
     testWidgets('handles risk = 0.0', (WidgetTester tester) async {
@@ -137,7 +138,7 @@ void main() {
       );
 
       // Should show high risk (red)
-      expect(find.text('High risk'), findsOneWidget);
+      expect(find.text('High Risk'), findsOneWidget);
     });
   });
 }
