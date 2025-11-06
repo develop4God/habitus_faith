@@ -667,5 +667,29 @@
   "advancedModeSubtitle": "Full tracking visible",
   "@advancedModeSubtitle": {
     "description": "Subtitle for advanced mode in settings"
+  },
+  "addManually": "Add Manually",
+  "@addManually": {
+    "description": "Option to add habit manually"
+  },
+  "createCustomHabit": "Create a custom habit",
+  "@createCustomHabit": {
+    "description": "Description for manual habit creation"
+  },
+  "generateWithAI": "Generate with AI",
+  "@generateWithAI": {
+    "description": "Option to generate habits with AI"
+  },
+  "aiCustomHabits": "Custom habits with AI",
+  "@aiCustomHabits": {
+    "description": "Description for AI-generated habits"
+  },
+  "previewHabitName": "Habit name",
+  "@previewHabitName": {
+    "description": "Placeholder text for habit name in preview"
+  },
+  "previewHabitDescription": "Habit description",
+  "@previewHabitDescription": {
+    "description": "Placeholder text for habit description in preview"
   }
 }

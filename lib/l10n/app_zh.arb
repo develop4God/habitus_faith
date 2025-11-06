@@ -607,5 +607,29 @@
   "displayMode": "显示模式",
   "displayModeUpdated": "显示模式已更新为 {mode}",
   "compactModeSubtitle": "紧凑列表 - 点击查看详情",
-  "advancedModeSubtitle": "完整跟踪可见"
+  "advancedModeSubtitle": "完整跟踪可见",
+  "addManually": "手动添加",
+  "@addManually": {
+    "description": "手动添加习惯的选项"
+  },
+  "createCustomHabit": "创建一个自定义习惯",
+  "@createCustomHabit": {
+    "description": "手动创建习惯的描述"
+  },
+  "generateWithAI": "使用AI生成",
+  "@generateWithAI": {
+    "description": "使用AI生成习惯的选项"
+  },
+  "aiCustomHabits": "使用AI的自定义习惯",
+  "@aiCustomHabits": {
+    "description": "AI生成习惯的描述"
+  },
+  "previewHabitName": "习惯名称",
+  "@previewHabitName": {
+    "description": "预览中习惯名称的占位符文本"
+  },
+  "previewHabitDescription": "习惯描述",
+  "@previewHabitDescription": {
+    "description": "预览中习惯描述的占位符文本"
+  }
 }

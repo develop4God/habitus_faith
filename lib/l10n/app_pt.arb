@@ -607,5 +607,29 @@
   "displayMode": "Modo de exibição",
   "displayModeUpdated": "Modo de exibição atualizado para {mode}",
   "compactModeSubtitle": "Lista compacta - toque para detalhes",
-  "advancedModeSubtitle": "Rastreamento completo visível"
+  "advancedModeSubtitle": "Rastreamento completo visível",
+  "addManually": "Adicionar Manualmente",
+  "@addManually": {
+    "description": "Opção para adicionar hábito manualmente"
+  },
+  "createCustomHabit": "Criar um hábito personalizado",
+  "@createCustomHabit": {
+    "description": "Descrição para criação manual de hábito"
+  },
+  "generateWithAI": "Gerar com IA",
+  "@generateWithAI": {
+    "description": "Opção para gerar hábitos com IA"
+  },
+  "aiCustomHabits": "Hábitos personalizados com IA",
+  "@aiCustomHabits": {
+    "description": "Descrição para hábitos gerados por IA"
+  },
+  "previewHabitName": "Nome do hábito",
+  "@previewHabitName": {
+    "description": "Texto placeholder para nome do hábito na visualização"
+  },
+  "previewHabitDescription": "Descrição do hábito",
+  "@previewHabitDescription": {
+    "description": "Texto placeholder para descrição do hábito na visualização"
+  }
 }

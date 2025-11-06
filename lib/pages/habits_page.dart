@@ -542,8 +542,8 @@ Widget _buildCategorySection(
             // Opción: Agregar manualmente
             ListTile(
               leading: const Icon(Icons.edit, color: Color(0xff6366f1)),
-              title: const Text('Agregar Manualmente'),
-              subtitle: const Text('Crear un hábito personalizado'),
+              title: Text(l10n.addManually),
+              subtitle: Text(l10n.createCustomHabit),
               onTap: () {
                 Navigator.pop(context);
                 showDialog(
@@ -558,9 +558,9 @@ Widget _buildCategorySection(
               leading: Icon(Icons.auto_awesome, color: Colors.purple.shade600),
               title: Row(
                 children: [
-                  const Flexible(
+                  Flexible(
                     child: Text(
-                      'Generar con IA',
+                      l10n.generateWithAI,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -582,7 +582,7 @@ Widget _buildCategorySection(
                   ),
                 ],
               ),
-              subtitle: const Text('Hábitos personalizados con IA'),
+              subtitle: Text(l10n.aiCustomHabits),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -647,6 +647,8 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final habitColor = selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
+
     return AlertDialog(
       title: Text(widget.l10n.editHabit),
       content: SingleChildScrollView(
@@ -654,12 +656,74 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Vista previa del hábito
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: habitColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: habitColor.withValues(alpha: 0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  // Emoji en la vista previa
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: habitColor.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          nameCtrl.text.isNotEmpty ? nameCtrl.text : widget.l10n.previewHabitName,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          descCtrl.text.isNotEmpty ? descCtrl.text : widget.l10n.previewHabitDescription,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+            const SizedBox(height: 16),
             TextField(
               controller: nameCtrl,
               decoration: InputDecoration(
                 labelText: widget.l10n.name,
                 border: const OutlineInputBorder(),
               ),
+              onChanged: (value) => setState(() {}),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -669,6 +733,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                 border: const OutlineInputBorder(),
               ),
               maxLines: 2,
+              onChanged: (value) => setState(() {}),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -679,6 +744,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                 hintText: '🙏',
               ),
               maxLength: 2,
+              onChanged: (value) => setState(() {}),
             ),
             const SizedBox(height: 16),
             Text(
@@ -763,8 +829,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: List.generate(
-                            HabitDifficultyHelper.getDifficultyStars(
-                                difficulty),
+                            HabitDifficultyHelper.getDifficultyStars(difficulty),
                             (index) => Icon(
                               Icons.star,
                               size: 18,

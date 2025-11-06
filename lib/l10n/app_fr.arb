@@ -607,5 +607,29 @@
   "displayMode": "Mode d'affichage",
   "displayModeUpdated": "Mode d'affichage mis à jour vers {mode}",
   "compactModeSubtitle": "Liste compacte - appuyez pour les détails",
-  "advancedModeSubtitle": "Suivi complet visible"
+  "advancedModeSubtitle": "Suivi complet visible",
+  "addManually": "Ajouter Manuellement",
+  "@addManually": {
+    "description": "Option pour ajouter une habitude manuellement"
+  },
+  "createCustomHabit": "Créer une habitude personnalisée",
+  "@createCustomHabit": {
+    "description": "Description pour la création manuelle d'habitude"
+  },
+  "generateWithAI": "Générer avec IA",
+  "@generateWithAI": {
+    "description": "Option pour générer des habitudes avec IA"
+  },
+  "aiCustomHabits": "Habitudes personnalisées avec IA",
+  "@aiCustomHabits": {
+    "description": "Description pour les habitudes générées par IA"
+  },
+  "previewHabitName": "Nom de l'habitude",
+  "@previewHabitName": {
+    "description": "Texte placeholder pour le nom de l'habitude dans l'aperçu"
+  },
+  "previewHabitDescription": "Description de l'habitude",
+  "@previewHabitDescription": {
+    "description": "Texte placeholder pour la description de l'habitude dans l'aperçu"
+  }
 }
