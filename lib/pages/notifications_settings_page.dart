@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/notification_provider.dart';
-import 'package:habitus_faith/core/services/background_task_service.dart';
+import 'package:habitus_faith/core/providers/background_task_service_provider.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 
 class NotificationsSettingsPage extends ConsumerStatefulWidget {
@@ -35,7 +35,7 @@ class _NotificationsSettingsPageState
       final minute = int.parse(parts[1]);
 
       // Load ML predictions setting
-      final backgroundTaskService = BackgroundTaskService();
+      final backgroundTaskService = ref.read(backgroundTaskServiceProvider);
       final mlEnabled = await backgroundTaskService.arePredictionsEnabled();
 
       setState(() {
@@ -105,7 +105,7 @@ class _NotificationsSettingsPageState
       _mlPredictionsEnabled = value;
     });
 
-    final backgroundTaskService = BackgroundTaskService();
+    final backgroundTaskService = ref.read(backgroundTaskServiceProvider);
     await backgroundTaskService.setPredictionsEnabled(value);
 
     if (!mounted) return;

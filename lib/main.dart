@@ -15,7 +15,6 @@ import 'core/providers/auth_provider.dart';
 import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
 import 'core/services/ml/model_updater.dart';
-import 'core/services/background_task_service.dart';
 import 'features/habits/presentation/onboarding/onboarding_page.dart';
 import 'features/habits/presentation/onboarding/display_mode_selection_page.dart';
 import 'features/habits/presentation/onboarding/display_mode_provider.dart';
@@ -138,9 +137,6 @@ void main() async {
     idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
     firestore: firestore,
   );
-
-  // Initialize BackgroundTaskService singleton
-  BackgroundTaskService.initializeService();
 
   // Non-blocking ML model update check
   unawaited(ModelUpdater().checkAndUpdateModel());
