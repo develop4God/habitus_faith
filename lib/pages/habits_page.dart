@@ -850,9 +850,9 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                         ),
                       ],
                     ),
-                  ),
-                );
-              }).toList(),
+                  ));
+                }
+              ).toList(),
             ),
             const SizedBox(height: 16),
             Text(
@@ -1184,9 +1184,9 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                         ),
                       ],
                     ),
-                  ),
-                );
-              }).toList(),
+                  ));
+                }
+              ).toList(),
             ),
             const SizedBox(height: 16),
             // Color picker

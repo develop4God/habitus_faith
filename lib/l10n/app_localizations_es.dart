@@ -504,4 +504,25 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get advancedModeSubtitle => 'Seguimiento completo visible';
+
+  @override
+  String get addManually => 'Agregar Manualmente';
+
+  @override
+  String get createCustomHabit => 'Crear un hábito personalizado';
+
+  @override
+  String get generateWithAI => 'Generar con IA';
+
+  @override
+  String get aiCustomHabits => 'Hábitos personalizados con IA';
+
+  @override
+  String get previewHabitName => 'Nombre del hábito';
+
+  @override
+  String get previewHabitDescription => 'Descripción del hábito';
+
+  @override
+  String get total => 'Total';
 }

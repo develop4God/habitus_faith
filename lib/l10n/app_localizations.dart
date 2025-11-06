@@ -991,6 +991,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Full tracking visible'**
   String get advancedModeSubtitle;
+
+  /// Option to add habit manually
+  ///
+  /// In en, this message translates to:
+  /// **'Add Manually'**
+  String get addManually;
+
+  /// Description for manual habit creation
+  ///
+  /// In en, this message translates to:
+  /// **'Create a custom habit'**
+  String get createCustomHabit;
+
+  /// Option to generate habits with AI
+  ///
+  /// In en, this message translates to:
+  /// **'Generate with AI'**
+  String get generateWithAI;
+
+  /// Description for AI-generated habits
+  ///
+  /// In en, this message translates to:
+  /// **'Custom habits with AI'**
+  String get aiCustomHabits;
+
+  /// Placeholder text for habit name in preview
+  ///
+  /// In en, this message translates to:
+  /// **'Habit name'**
+  String get previewHabitName;
+
+  /// Placeholder text for habit description in preview
+  ///
+  /// In en, this message translates to:
+  /// **'Habit description'**
+  String get previewHabitDescription;
+
+  /// Total label for statistics
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
 }
 
 class _AppLocalizationsDelegate

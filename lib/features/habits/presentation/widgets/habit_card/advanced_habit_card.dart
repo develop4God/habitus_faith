@@ -187,7 +187,7 @@ import 'package:flutter/material.dart';
                               color: Colors.grey[300],
                             ),
                             _buildStatItem(
-                              'Total',
+                              l10n.total,
                               '${widget.habit.completionHistory.length}',
                               Icons.check_circle,
                               Colors.green,

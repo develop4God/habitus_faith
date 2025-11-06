@@ -230,7 +230,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         Colors.orange,
                       ),
                       _buildStatItem(
-                        'Total',
+                        l10n.total,
                         '${widget.habit.completionHistory.length}',
                         Icons.check_circle,
                         Colors.green,
@@ -334,3 +334,4 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 }
+

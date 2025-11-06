@@ -504,4 +504,25 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get advancedModeSubtitle => 'Rastreamento completo visível';
+
+  @override
+  String get addManually => 'Adicionar Manualmente';
+
+  @override
+  String get createCustomHabit => 'Criar um hábito personalizado';
+
+  @override
+  String get generateWithAI => 'Gerar com IA';
+
+  @override
+  String get aiCustomHabits => 'Hábitos personalizados com IA';
+
+  @override
+  String get previewHabitName => 'Nome do hábito';
+
+  @override
+  String get previewHabitDescription => 'Descrição do hábito';
+
+  @override
+  String get total => 'Total';
 }

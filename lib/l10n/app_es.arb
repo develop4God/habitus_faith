@@ -631,5 +631,9 @@
   "previewHabitDescription": "Descripción del hábito",
   "@previewHabitDescription": {
     "description": "Texto placeholder para descripción del hábito en vista previa"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Etiqueta de total para estadísticas"
   }
 }

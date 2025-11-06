@@ -476,4 +476,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get advancedModeSubtitle => '完整跟踪可见';
+
+  @override
+  String get addManually => '手动添加';
+
+  @override
+  String get createCustomHabit => '创建一个自定义习惯';
+
+  @override
+  String get generateWithAI => '使用AI生成';
+
+  @override
+  String get aiCustomHabits => '使用AI的自定义习惯';
+
+  @override
+  String get previewHabitName => '习惯名称';
+
+  @override
+  String get previewHabitDescription => '习惯描述';
+
+  @override
+  String get total => '总计';
 }

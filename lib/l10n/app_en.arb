@@ -691,5 +691,9 @@
   "previewHabitDescription": "Habit description",
   "@previewHabitDescription": {
     "description": "Placeholder text for habit description in preview"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Total label for statistics"
   }
 }

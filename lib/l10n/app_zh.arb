@@ -631,5 +631,9 @@
   "previewHabitDescription": "习惯描述",
   "@previewHabitDescription": {
     "description": "预览中习惯描述的占位符文本"
+  },
+  "total": "总计",
+  "@total": {
+    "description": "统计数据的总计标签"
   }
 }
