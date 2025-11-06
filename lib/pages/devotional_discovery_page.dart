@@ -11,7 +11,7 @@ import 'favorites_page.dart';
 import 'package:intl/intl.dart';
 
 /// Devotional Discovery Page
-/// 
+///
 /// This page allows users to:
 /// 1. Browse devotionals
 /// 2. Select a verse to read first
@@ -265,7 +265,7 @@ class _DevotionalDiscoveryPageState
     final isFavorite =
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     // Use the new display date method that shows future dates
     final displayDate = _getDisplayDate(devocional);
 
@@ -347,8 +347,12 @@ class _DevotionalDiscoveryPageState
                                   ),
                                   child: IconButton(
                                     icon: Icon(
-                                      isFavorite ? Icons.star : Icons.star_border,
-                                      color: isFavorite ? Colors.amber : Colors.white,
+                                      isFavorite
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      color: isFavorite
+                                          ? Colors.amber
+                                          : Colors.white,
                                       size: 22,
                                     ),
                                     onPressed: () {
@@ -377,7 +381,7 @@ class _DevotionalDiscoveryPageState
                     ],
                   ),
                 ),
-                
+
                 // Content section
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -397,9 +401,10 @@ class _DevotionalDiscoveryPageState
                         ),
                       ),
                       const SizedBox(height: 12),
-                      
+
                       // Tags
-                      if (devocional.tags != null && devocional.tags!.isNotEmpty)
+                      if (devocional.tags != null &&
+                          devocional.tags!.isNotEmpty)
                         Wrap(
                           spacing: 6,
                           runSpacing: 6,
@@ -412,7 +417,8 @@ class _DevotionalDiscoveryPageState
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? Colors.grey[800]
-                                    : colorScheme.primaryContainer.withOpacity(0.3),
+                                    : colorScheme.primaryContainer
+                                        .withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -428,14 +434,15 @@ class _DevotionalDiscoveryPageState
                             );
                           }).toList(),
                         ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Read button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => _navigateToVerse(context, devocional),
+                          onPressed: () =>
+                              _navigateToVerse(context, devocional),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isDark
                                 ? Colors.purple[700]
@@ -478,54 +485,56 @@ class _DevotionalDiscoveryPageState
   String _getDisplayDate(Devocional devocional) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final devDate = DateTime(devocional.date.year, devocional.date.month, devocional.date.day);
-    
+    final devDate = DateTime(
+        devocional.date.year, devocional.date.month, devocional.date.day);
+
     // If date is today, show "Today"
     if (devDate == today) {
       return 'Today';
     }
-    
+
     // If date is in the past, project it to the future
     // by adding years until it's in the future
     DateTime displayDate = devDate;
     while (displayDate.isBefore(today)) {
-      displayDate = DateTime(displayDate.year + 1, displayDate.month, displayDate.day);
+      displayDate =
+          DateTime(displayDate.year + 1, displayDate.month, displayDate.day);
     }
-    
+
     // Check if it's tomorrow
     final tomorrow = today.add(const Duration(days: 1));
     if (displayDate == tomorrow) {
       return 'Tomorrow';
     }
-    
+
     // Check if it's within this week
     final daysUntil = displayDate.difference(today).inDays;
     if (daysUntil <= 7 && daysUntil > 1) {
       return DateFormat('EEEE').format(displayDate); // e.g., "Monday"
     }
-    
+
     // Otherwise show the date
     return DateFormat('MMM dd').format(displayDate);
   }
-  
+
   // Extract verse reference (e.g., "John 3:16" or "Marcos 7:20-23")
   String _extractVerseReference(String versiculo) {
     // The format is typically: "BookName Chapter:Verse Version: 'Text'"
     // We want to extract "BookName Chapter:Verse"
-    
+
     // Split by version indicator (usually the version code followed by colon)
     final parts = versiculo.split(RegExp(r'\s+[A-Z]{2,}[0-9]*:'));
     if (parts.isNotEmpty) {
       final refPart = parts[0].trim();
       return refPart;
     }
-    
+
     // Fallback: try to extract everything before the quote
     final quoteIndex = versiculo.indexOf('"');
     if (quoteIndex > 0) {
       return versiculo.substring(0, quoteIndex).trim();
     }
-    
+
     return versiculo;
   }
 
@@ -562,7 +571,7 @@ class _DevotionalDiscoveryPageState
             : [Colors.teal[400]!, Colors.cyan[400]!];
       }
     }
-    
+
     return isDark
         ? [Colors.deepPurple[900]!, Colors.purple[800]!]
         : [Colors.deepPurple[400]!, Colors.purple[400]!];
@@ -594,7 +603,9 @@ class _DevotionalDiscoveryPageState
                 _buildLanguageOption(context, 'en', 'English', '🇺🇸'),
                 _buildLanguageOption(context, 'pt', 'Português', '🇧🇷'),
                 _buildLanguageOption(context, 'fr', 'Français', '🇫🇷'),
-                _buildLanguageOption(context, 'zh', 'Chinese (Coming Soon)', '🇨🇳', disabled: true),
+                _buildLanguageOption(
+                    context, 'zh', 'Chinese (Coming Soon)', '🇨🇳',
+                    disabled: true),
               ],
             ),
           ),
@@ -634,15 +645,15 @@ class _DevotionalDiscoveryPageState
   void _navigateToVerse(BuildContext context, Devocional devocional) async {
     // Parse the verse reference from the devotional
     final verseRef = _extractVerseReference(devocional.versiculo);
-    
+
     // Try to parse the reference (e.g., "Marcos 7:20-23" -> book, chapter, verse)
     final parsed = BibleReferenceParser.parse(verseRef);
-    
+
     if (parsed != null) {
       final bookName = parsed['bookName'] as String;
       final chapter = parsed['chapter'] as int;
       // final verse = parsed['verse'] as int?; // TODO: Implement scroll to verse
-      
+
       // Navigate to Bible reader
       Navigator.push(
         context,
@@ -650,27 +661,30 @@ class _DevotionalDiscoveryPageState
           builder: (context) => const BibleReaderPage(),
         ),
       );
-      
+
       // Wait a bit for the page to load, then navigate to the specific passage
       await Future.delayed(const Duration(milliseconds: 500));
-      
+
       if (context.mounted) {
         // Use the Bible reader provider to navigate to the specific passage
         try {
           final notifier = ref.read(bibleReaderProvider.notifier);
-          
+
           // Find the book by name
           final state = ref.read(bibleReaderProvider);
           final book = state.books.firstWhere(
-            (b) => (b['long_name'] as String).toLowerCase() == bookName.toLowerCase() ||
-                   (b['short_name'] as String).toLowerCase() == bookName.toLowerCase(),
+            (b) =>
+                (b['long_name'] as String).toLowerCase() ==
+                    bookName.toLowerCase() ||
+                (b['short_name'] as String).toLowerCase() ==
+                    bookName.toLowerCase(),
             orElse: () => {},
           );
-          
+
           if (book.isNotEmpty) {
             await notifier.selectBook(book);
             await notifier.selectChapter(chapter);
-            
+
             // If we have a specific verse, we could scroll to it
             // (would need to implement scrollToVerse method in Bible reader)
           }
@@ -686,7 +700,7 @@ class _DevotionalDiscoveryPageState
           builder: (context) => const BibleReaderPage(),
         ),
       );
-      
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -717,8 +731,8 @@ class _DevotionalDiscoveryPageState
     );
   }
 
-  Widget _buildDevocionalDetailContent(
-      BuildContext context, Devocional devocional, ScrollController controller) {
+  Widget _buildDevocionalDetailContent(BuildContext context,
+      Devocional devocional, ScrollController controller) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -741,7 +755,9 @@ class _DevotionalDiscoveryPageState
               ),
               Consumer(
                 builder: (context, ref, child) {
-                  final isFav = ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
+                  final isFav = ref
+                      .read(devotionalProvider.notifier)
+                      .isFavorite(devocional.id);
                   return IconButton(
                     icon: Icon(
                       isFav ? Icons.star : Icons.star_border,
@@ -800,11 +816,10 @@ class _DevotionalDiscoveryPageState
                     children: [
                       Text(
                         punto.cita,
-                        style:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: colorScheme.secondary,
-                                ),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: colorScheme.secondary,
+                            ),
                       ),
                       const SizedBox(height: 4),
                       Text(

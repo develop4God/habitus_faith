@@ -275,7 +275,7 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 
-Widget _buildCategorySection(
+  Widget _buildCategorySection(
     BuildContext context,
     WidgetRef ref,
     AppLocalizations l10n,
@@ -334,7 +334,8 @@ Widget _buildCategorySection(
               ),
               const SizedBox(width: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: categoryColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -518,6 +519,7 @@ Widget _buildCategorySection(
       ],
     );
   }
+
   void _showEditHabitDialog(
     BuildContext context,
     WidgetRef ref,
@@ -647,7 +649,8 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final habitColor = selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
+    final habitColor =
+        selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return AlertDialog(
       title: Text(widget.l10n.editHabit),
@@ -690,7 +693,9 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          nameCtrl.text.isNotEmpty ? nameCtrl.text : widget.l10n.previewHabitName,
+                          nameCtrl.text.isNotEmpty
+                              ? nameCtrl.text
+                              : widget.l10n.previewHabitName,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -700,7 +705,9 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          descCtrl.text.isNotEmpty ? descCtrl.text : widget.l10n.previewHabitDescription,
+                          descCtrl.text.isNotEmpty
+                              ? descCtrl.text
+                              : widget.l10n.previewHabitDescription,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -757,7 +764,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              initialValue: selectedCategory,
+              value: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -804,55 +811,56 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                 final color = HabitColors.categoryColors[selectedCategory]!;
 
                 return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedDifficulty = difficulty;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? color.withValues(alpha: 0.1)
-                          : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isSelected ? color : Colors.grey.shade300,
-                        width: 2,
+                    onTap: () {
+                      setState(() {
+                        selectedDifficulty = difficulty;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            HabitDifficultyHelper.getDifficultyStars(difficulty),
-                            (index) => Icon(
-                              Icons.star,
-                              size: 18,
-                              color: isSelected ? color : Colors.grey.shade500,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? color.withValues(alpha: 0.1)
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? color : Colors.grey.shade300,
+                          width: 2,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(
+                              HabitDifficultyHelper.getDifficultyStars(
+                                  difficulty),
+                              (index) => Icon(
+                                Icons.star,
+                                size: 18,
+                                color:
+                                    isSelected ? color : Colors.grey.shade500,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          difficulty.displayName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: isSelected
-                                ? FontWeight.w600
-                                : FontWeight.normal,
-                            color: isSelected ? color : Colors.grey.shade700,
+                          const SizedBox(height: 4),
+                          Text(
+                            difficulty.displayName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                              color: isSelected ? color : Colors.grey.shade700,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ));
-                }
-              ).toList(),
+                        ],
+                      ),
+                    ));
+              }).toList(),
             ),
             const SizedBox(height: 16),
             Text(
@@ -976,7 +984,8 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final habitColor = selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
+    final habitColor =
+        selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return AlertDialog(
       title: Text(widget.l10n.addHabit),
@@ -1019,7 +1028,9 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          nameCtrl.text.isNotEmpty ? nameCtrl.text : 'Nombre del hábito',
+                          nameCtrl.text.isNotEmpty
+                              ? nameCtrl.text
+                              : 'Nombre del hábito',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -1029,7 +1040,9 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          descCtrl.text.isNotEmpty ? descCtrl.text : 'Descripción del hábito',
+                          descCtrl.text.isNotEmpty
+                              ? descCtrl.text
+                              : 'Descripción del hábito',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -1088,7 +1101,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              initialValue: selectedCategory,
+              value: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -1137,56 +1150,56 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                 final color = HabitColors.categoryColors[selectedCategory]!;
 
                 return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedDifficulty = difficulty;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? color.withValues(alpha: 0.1)
-                          : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isSelected ? color : Colors.grey.shade300,
-                        width: 2,
+                    onTap: () {
+                      setState(() {
+                        selectedDifficulty = difficulty;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            HabitDifficultyHelper.getDifficultyStars(
-                                difficulty),
-                            (index) => Icon(
-                              Icons.star,
-                              size: 18,
-                              color: isSelected ? color : Colors.grey.shade500,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? color.withValues(alpha: 0.1)
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? color : Colors.grey.shade300,
+                          width: 2,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(
+                              HabitDifficultyHelper.getDifficultyStars(
+                                  difficulty),
+                              (index) => Icon(
+                                Icons.star,
+                                size: 18,
+                                color:
+                                    isSelected ? color : Colors.grey.shade500,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          difficulty.displayName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: isSelected
-                                ? FontWeight.w600
-                                : FontWeight.normal,
-                            color: isSelected ? color : Colors.grey.shade700,
+                          const SizedBox(height: 4),
+                          Text(
+                            difficulty.displayName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                              color: isSelected ? color : Colors.grey.shade700,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ));
-                }
-              ).toList(),
+                        ],
+                      ),
+                    ));
+              }).toList(),
             ),
             const SizedBox(height: 16),
             // Color picker

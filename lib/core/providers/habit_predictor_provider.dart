@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/habits/domain/habit.dart';
+import '../../features/habits/domain/models/risk_level.dart';
 import '../../features/habits/data/storage/storage_providers.dart';
 import '../services/ml/abandonment_predictor.dart';
 import '../services/ai/behavioral_engine.dart';
@@ -38,7 +39,7 @@ class HabitPredictorService {
   /// For each habit:
   /// 1. Predict abandonment risk using ML model
   /// 2. Update abandonmentRisk field
-  /// 3. If risk > 0.65: calculate new difficulty and show nudge notification
+  /// 3. If risk >= intervention threshold: calculate new difficulty and show nudge notification
   Future<void> runDailyPredictions() async {
     developer.log(
       'HabitPredictorService: Starting daily predictions',
@@ -112,8 +113,8 @@ class HabitPredictorService {
     // Update abandonmentRisk field
     final updatedHabit = habit.copyWith(abandonmentRisk: risk);
 
-    // If risk > 0.65: apply intervention
-    if (risk > 0.65) {
+    // If risk requires intervention: apply intervention
+    if (RiskThresholds.requiresIntervention(risk)) {
       await _applyIntervention(updatedHabit);
     } else {
       // Just update the risk value

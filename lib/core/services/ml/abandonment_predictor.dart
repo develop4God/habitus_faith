@@ -136,9 +136,10 @@ class AbandonmentPredictor {
   /// 5. Category enum value (habit.category.index)
   Future<double> predictRisk(Habit habit) async {
     if (!_initialized || _interpreter == null) {
-      debugPrint('AbandonmentPredictor: Not initialized, returning 0.0');
+      debugPrint(
+          'AbandonmentPredictor: Not initialized, returning neutral risk 0.5');
       _errorCount++;
-      return 0.0;
+      return 0.5; // Return neutral risk when not initialized
     }
 
     try {
@@ -199,12 +200,15 @@ class AbandonmentPredictor {
       await _saveTelemetry();
 
       return probability.clamp(0.0, 1.0);
-    } catch (e) {
-      debugPrint('AbandonmentPredictor: Prediction failed: $e');
+    } catch (e, stackTrace) {
+      // Log error with stack trace for debugging
+      debugPrint('AbandonmentPredictor: ML prediction failed: $e');
+      debugPrint('Stack trace: $stackTrace');
       _errorCount++;
       // Save telemetry even on error
       await _saveTelemetry();
-      return 0.0; // Graceful degradation
+      // Return neutral risk (0.5) instead of 0.0 to avoid false "no risk" signal
+      return 0.5;
     }
   }
 

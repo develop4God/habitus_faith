@@ -6,19 +6,27 @@ import '../domain/models/verse_reference.dart';
 /// Data model for Firestore serialization
 class HabitModel {
   /// Migrates old category values to new holistic category model
+  /// Handles backwards compatibility with legacy categories:
+  /// prayer, bibleReading -> spiritual
+  /// service -> relational
+  /// gratitude -> mental
   static HabitCategory _migrateCategory(String? value) {
-    switch (value) {
-      case 'spiritual':
-        return HabitCategory.spiritual;
-      case 'physical':
-        return HabitCategory.physical;
-      case 'mental':
-        return HabitCategory.mental;
-      case 'relational':
-        return HabitCategory.relational;
-      default:
-        return HabitCategory.spiritual;
-    }
+    // Migration map for legacy categories
+    const migrationMap = {
+      // Legacy categories
+      'prayer': HabitCategory.spiritual,
+      'bibleReading': HabitCategory.spiritual,
+      'service': HabitCategory.relational,
+      'gratitude': HabitCategory.mental,
+      // New categories (passthrough)
+      'spiritual': HabitCategory.spiritual,
+      'physical': HabitCategory.physical,
+      'mental': HabitCategory.mental,
+      'relational': HabitCategory.relational,
+      'other': HabitCategory.other,
+    };
+
+    return migrationMap[value] ?? HabitCategory.spiritual;
   }
 
   static Habit fromFirestore(DocumentSnapshot doc) {

@@ -105,7 +105,8 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
     if (mounted) {
       Navigator.of(context).pop(); // Close loading dialog
-      Navigator.of(context).pop(selectedHabits.length); // Return count to generator page
+      Navigator.of(context)
+          .pop(selectedHabits.length); // Return count to generator page
     }
   }
 
