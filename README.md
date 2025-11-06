@@ -211,13 +211,39 @@ test/
 **FAST_TIME Mode**: Simulate weeks of habit data in minutes for testing and validation.
 
 ```bash
-# Run with 288x time acceleration (1 week = 35 minutes)
+# Run with 288x time acceleration (1 week = 35 minutes) - DEFAULT
 flutter run --dart-define=FAST_TIME=true
 
 # What this enables:
 # - 1 real minute = 4.8 simulated hours
 # - 5 real minutes = 24 simulated hours (1 day)
 # - 35 real minutes = 7 simulated days (1 week)
+```
+
+**Speed Multiplier Options:**
+
+Different scenarios require different acceleration levels:
+
+| Multiplier | Real Time → Simulated | 1 Week Takes | Use Case |
+|------------|----------------------|--------------|----------|
+| 10x | 1 min → 10 min | ~17 hours | Gentle acceleration for UI testing |
+| 60x | 1 min → 1 hour | ~2.8 hours | Moderate acceleration for integration tests |
+| 288x | 1 min → 4.8 hours | 35 minutes | **Default** - Aggressive for pattern validation |
+| 1000x | 1 min → 16.7 hours | 10 minutes | Maximum - Rapid testing (may feel jarring) |
+
+**Example - Custom Speed in Tests:**
+```dart
+// Gentle acceleration for UI testing
+final clock = DebugClock(daySpeedMultiplier: 10);
+
+// Moderate acceleration for integration testing  
+final clock = DebugClock(daySpeedMultiplier: 60);
+
+// Aggressive acceleration for pattern validation (default)
+final clock = DebugClock(daySpeedMultiplier: 288);
+
+// Maximum acceleration for rapid testing
+final clock = DebugClock(daySpeedMultiplier: 1000);
 ```
 
 **Use Cases:**
@@ -229,9 +255,10 @@ flutter run --dart-define=FAST_TIME=true
 
 **Implementation:**
 - `Clock` abstraction injected throughout services
-- `DebugClock` with configurable speed multiplier
-- Visual indicator shows current "simulated date" in debug mode
+- `DebugClock` with configurable speed multiplier (1-1000x max)
+- Visual FastTimeBanner indicator shows current "simulated date" in debug mode
 - Production mode always uses real system time
+- Overflow protection prevents integer overflow at high multipliers
 
 ```dart
 // In tests: use FixedClock for deterministic testing

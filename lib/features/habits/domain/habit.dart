@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'models/verse_reference.dart';
 import '../../../core/services/time/time.dart';
+import 'ml_features_calculator.dart';
 
 enum FailurePattern {
   weekendGap,
@@ -201,20 +202,9 @@ class Habit {
     // Add to completion history
     final newHistory = [...completionHistory, now];
 
-    // Calculate successRate7d based on last 7 days
-    final sevenDaysAgo =
-        today.subtract(const Duration(days: 6)); // including today makes 7 days
-    int completionsLast7Days = 0;
-    for (final completion in newHistory) {
-      final completionDate =
-          DateTime(completion.year, completion.month, completion.day);
-      if (completionDate
-              .isAfter(sevenDaysAgo.subtract(const Duration(days: 1))) &&
-          completionDate.isBefore(today.add(const Duration(days: 1)))) {
-        completionsLast7Days++;
-      }
-    }
-    final newSuccessRate7d = completionsLast7Days / 7.0;
+    // Calculate successRate7d based on last 7 days using MLFeaturesCalculator
+    final newSuccessRate7d =
+        MLFeaturesCalculator.calculateSuccessRate(newHistory, now, days: 7);
 
     return copyWith(
       completedToday: true,
