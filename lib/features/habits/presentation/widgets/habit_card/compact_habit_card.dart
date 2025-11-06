@@ -249,22 +249,56 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      TextButton.icon(
-                        onPressed: widget.onEdit,
-                        icon: const Icon(Icons.edit, size: 18),
-                        label: Text(l10n.edit),
-                        style: TextButton.styleFrom(
-                          foregroundColor: habitColor,
+                      PopupMenuButton<String>(
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: Colors.grey.shade700,
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton.icon(
-                        onPressed: widget.onDelete,
-                        icon: const Icon(Icons.delete, size: 18),
-                        label: Text(l10n.delete),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.red,
-                        ),
+                        onSelected: (value) {
+                          if (value == 'edit') {
+                            widget.onEdit();
+                          } else if (value == 'delete') {
+                            widget.onDelete();
+                          } else if (value == 'uncheck' && widget.habit.completedToday) {
+                            widget.onUncheck(widget.habit.id);
+                          }
+                        },
+                        itemBuilder: (BuildContext context) => [
+                          if (widget.habit.completedToday)
+                            PopupMenuItem<String>(
+                              value: 'uncheck',
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.undo, size: 20, color: Colors.orange),
+                                  const SizedBox(width: 12),
+                                  Text(l10n.uncheck),
+                                ],
+                              ),
+                            ),
+                          PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                const Icon(Icons.edit, size: 20),
+                                const SizedBox(width: 12),
+                                Text(l10n.edit),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                const Icon(Icons.delete, size: 20, color: Colors.red),
+                                const SizedBox(width: 12),
+                                Text(
+                                  l10n.delete,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

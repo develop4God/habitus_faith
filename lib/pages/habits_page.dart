@@ -911,6 +911,8 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final habitColor = selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
+
     return AlertDialog(
       title: Text(widget.l10n.addHabit),
       content: SingleChildScrollView(
@@ -918,6 +920,67 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Vista previa del hábito
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: habitColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: habitColor.withValues(alpha: 0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  // Emoji en la vista previa
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: habitColor.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          nameCtrl.text.isNotEmpty ? nameCtrl.text : 'Nombre del hábito',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          descCtrl.text.isNotEmpty ? descCtrl.text : 'Descripción del hábito',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+            const SizedBox(height: 16),
             TextField(
               key: const Key('habit_name_input'),
               controller: nameCtrl,
@@ -925,6 +988,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                 labelText: widget.l10n.name,
                 border: const OutlineInputBorder(),
               ),
+              onChanged: (value) => setState(() {}),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -935,6 +999,7 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                 border: const OutlineInputBorder(),
               ),
               maxLines: 2,
+              onChanged: (value) => setState(() {}),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -945,8 +1010,9 @@ class _AddHabitDialogState extends ConsumerState<_AddHabitDialog> {
                 hintText: '🙏',
               ),
               maxLength: 2,
+              onChanged: (value) => setState(() {}),
             ),
-            // Category selector
+            const SizedBox(height: 16),
             Text(
               widget.l10n.category,
               style: TextStyle(
