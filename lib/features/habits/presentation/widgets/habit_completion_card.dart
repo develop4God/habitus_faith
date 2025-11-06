@@ -104,8 +104,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             child: Padding(
               padding: const EdgeInsets.all(16.0),
 
-              child: Row(
-                // ⬅️ ELIMINA mainAxisSize: MainAxisSize.min
+            child: Row(
                 children: [
                   // Checkbox on the left
                   Container(
@@ -136,10 +135,10 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min, // ⬅️ AGREGA mainAxisSize al Column
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
-                          mainAxisSize: MainAxisSize.min, // ⬅️ Este sí mantiene mainAxisSize
+                          // ⬅️ ELIMINA mainAxisSize: MainAxisSize.min AQUÍ
                           children: [
                             Expanded(
                               child: Text(
@@ -183,7 +182,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                         if (widget.habit.currentStreak > 0) ...[
                           const SizedBox(height: 6),
                           Row(
-                            mainAxisSize: MainAxisSize.min, // ⬅️ AGREGA mainAxisSize
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
                                 Icons.local_fire_department,
@@ -210,7 +209,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                     Padding(
                       padding: const EdgeInsets.only(right: 4),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min, // ⬅️ AGREGA mainAxisSize
+                        mainAxisSize: MainAxisSize.min,
                         children: List.generate(
                           HabitDifficultyHelper.getDifficultyStars(
                               widget.habit.difficulty),
