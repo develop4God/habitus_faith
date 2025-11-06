@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/habit.dart';
-import '../habit_completion_card.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
+import '../../constants/habit_colors.dart';
 
 /// Compact habit card with tap-to-expand details
 /// Shows only essential info: name, emoji, streak, completion button
@@ -29,11 +29,34 @@ class CompactHabitCard extends ConsumerStatefulWidget {
 
 class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   bool _isExpanded = false;
+  bool _isCompleting = false;
+
+  Future<void> _handleComplete() async {
+    if (_isCompleting) return;
+
+    setState(() {
+      _isCompleting = true;
+    });
+
+    try {
+      if (widget.habit.completedToday) {
+        await widget.onUncheck(widget.habit.id);
+      } else {
+        await widget.onComplete(widget.habit.id);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCompleting = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final habitColor = Color(widget.habit.colorValue ?? 0xFF6366F1);
+    final habitColor = HabitColors.getHabitColor(widget.habit);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -52,9 +75,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
-                mainAxisSize: MainAxisSize.min, // Cambiado para evitar ancho no acotado
                 children: [
                   // Habit emoji/icon
                   Container(
@@ -71,13 +93,13 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12),
 
                   // Habit name and streak
-                  Flexible(
-                    fit: FlexFit.loose, // Cambiado de Expanded para permitir shrink-wrap
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           widget.habit.name,
@@ -85,9 +107,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
                               Icons.local_fire_department,
@@ -110,13 +135,50 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                     ),
                   ),
 
-                  // Completion button
-                  HabitCompletionCard(
-                    key: Key('habit_completion_${widget.habit.id}'),
-                    habit: widget.habit,
-                    onTap: () => widget.onComplete(widget.habit.id),
-                    onUncheck: () => widget.onUncheck(widget.habit.id),
+                  const SizedBox(width: 8),
+
+                  // Simple completion checkbox button
+                  InkWell(
+                    onTap: _isCompleting ? null : _handleComplete,
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(8),
+                      child: _isCompleting
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: widget.habit.completedToday
+                                    ? habitColor
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: widget.habit.completedToday
+                                      ? habitColor
+                                      : Colors.grey.shade400,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: widget.habit.completedToday
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )
+                                  : null,
+                            ),
+                    ),
                   ),
+
+                  const SizedBox(width: 8),
 
                   // Expand indicator
                   Icon(
@@ -159,7 +221,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
 
                   // Stats row
                   Row(
-                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildStatItem(
@@ -186,7 +247,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
 
                   // Action buttons
                   Row(
-                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton.icon(
