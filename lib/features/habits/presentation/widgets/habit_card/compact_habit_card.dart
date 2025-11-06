@@ -4,6 +4,7 @@ import '../../../domain/habit.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
+import '../abandonment_risk_indicator.dart';
 
 /// Compact habit card with tap-to-expand details
 /// Shows only essential info: name, emoji, streak, completion button
@@ -130,6 +131,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 color: Colors.grey[600],
                               ),
                             ),
+                            if (widget.habit.abandonmentRisk > 0.0) ...[
+                              const SizedBox(width: 12),
+                              AbandonmentRiskIndicator(
+                                risk: widget.habit.abandonmentRisk,
+                              ),
+                            ],
                           ],
                         ),
                       ],

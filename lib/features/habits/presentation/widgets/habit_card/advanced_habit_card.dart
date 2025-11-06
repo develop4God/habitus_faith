@@ -4,6 +4,7 @@ import '../../../domain/habit.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
+import '../abandonment_risk_indicator.dart';
 
 /// Advanced habit card with full tracking info always visible
 /// Shows all details inline: name, description, stats, calendar, actions
@@ -193,6 +194,24 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     Icons.check_circle,
                     Colors.green,
                   ),
+                  if (widget.habit.abandonmentRisk > 0.3) ...[
+                    Container(
+                      width: 1,
+                      height: 40,
+                      color: Colors.grey[300],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AbandonmentRiskIndicator(
+                            risk: widget.habit.abandonmentRisk,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
