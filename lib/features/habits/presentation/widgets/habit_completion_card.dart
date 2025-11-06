@@ -104,6 +104,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Checkbox on the left
                   Container(
@@ -136,6 +137,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Expanded(
                               child: Text(
