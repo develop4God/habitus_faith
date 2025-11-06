@@ -276,7 +276,7 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategorySection(
+Widget _buildCategorySection(
     BuildContext context,
     WidgetRef ref,
     AppLocalizations l10n,
@@ -288,13 +288,9 @@ class HabitsPage extends ConsumerWidget {
     final categoryName = HabitColors.getCategoryDisplayName(category, l10n);
     final displayMode = ref.watch(displayModeProvider);
 
-    // Gather all completion dates for this group
-    final groupCompletionDates =
-        habits.expand((h) => h.completionHistory).toList();
-
-return Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min, // ⬅️ AGREGADO
+      mainAxisSize: MainAxisSize.min,
       children: [
         // Category header
         Container(
@@ -317,7 +313,7 @@ return Column(
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min, // ⬅️ AGREGADO
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 categoryIcon,
@@ -325,7 +321,7 @@ return Column(
                 size: 20,
               ),
               const SizedBox(width: 12),
-              Flexible( // ⬅️ CAMBIADO de Text directo a Flexible
+              Flexible(
                 child: Text(
                   categoryName,
                   style: TextStyle(
@@ -334,7 +330,7 @@ return Column(
                     color: categoryColor,
                   ),
                   textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis, // ⬅️ AGREGADO
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               const SizedBox(width: 12),
@@ -357,13 +353,13 @@ return Column(
             ],
           ),
         ),
-        // Calendar for this group - only show in advanced mode
-        if (displayMode == DisplayMode.advanced) ...[
-          MiniCalendarHeatmap(
-            completionDates: groupCompletionDates,
-          ),
-          const SizedBox(height: 8),
-        ],
+        // ⬇️ ELIMINADO: Calendario grupal que estaba aquí
+        // if (displayMode == DisplayMode.advanced) ...[
+        //   MiniCalendarHeatmap(
+        //     completionDates: groupCompletionDates,
+        //   ),
+        //   const SizedBox(height: 8),
+        // ],
         // Habits in this category - use appropriate card based on display mode
         ...habits.map((habit) {
           if (displayMode == DisplayMode.compact) {
@@ -419,7 +415,7 @@ return Column(
             );
           } else {
             return Column(
-              mainAxisSize: MainAxisSize.min, // ⬅️ AGREGADO
+              mainAxisSize: MainAxisSize.min,
               children: [
                 AdvancedHabitCard(
                   key: Key('advanced_habit_${habit.id}'),
@@ -521,8 +517,8 @@ return Column(
         }),
         const SizedBox(height: 24),
       ],
-    );  }
-
+    );
+  }
   void _showEditHabitDialog(
     BuildContext context,
     WidgetRef ref,
