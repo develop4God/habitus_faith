@@ -9,6 +9,7 @@ void main() {
     late BackgroundTaskService service;
 
     setUp(() {
+      BackgroundTaskService.initializeService(); // Initialize singleton
       service = BackgroundTaskService();
       SharedPreferences.setMockInitialValues({});
     });

@@ -17,20 +17,19 @@ class BackgroundTaskService {
   static const String _predictionTaskTag = 'daily_prediction_6am';
   static const String _mlPredictionsEnabledKey = 'ml_predictions_enabled';
 
-  static final BackgroundTaskService _instance =
-      BackgroundTaskService._internal();
+  static late BackgroundTaskService _instance;
 
-  factory BackgroundTaskService({Clock? clock}) {
-    // Inject clock if provided (mainly for testing)
-    if (clock != null) {
-      return BackgroundTaskService._withClock(clock);
-    }
+  /// Factory that returns singleton with system clock
+  factory BackgroundTaskService() {
     return _instance;
   }
 
-  BackgroundTaskService._internal() : clock = const Clock.system();
+  /// Initialize the singleton instance with optional clock (for testing)
+  static void initializeService({Clock? clock}) {
+    _instance = BackgroundTaskService._internal(clock ?? const Clock.system());
+  }
 
-  BackgroundTaskService._withClock(this.clock);
+  BackgroundTaskService._internal(this.clock);
 
   bool _initialized = false;
 

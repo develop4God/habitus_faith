@@ -14,7 +14,9 @@ abstract class Clock {
   const factory Clock.fixed(DateTime fixedTime) = FixedClock;
 
   /// Factory constructor for debug clock with time acceleration (dogfooding)
-  factory Clock.debug({int daySpeedMultiplier}) = DebugClock;
+  factory Clock.debug({required int daySpeedMultiplier}) {
+    return DebugClock(daySpeedMultiplier: daySpeedMultiplier);
+  }
 }
 
 /// System clock implementation - uses actual system time
@@ -51,6 +53,9 @@ class DebugClock implements Clock {
   @override
   DateTime now() {
     final elapsed = DateTime.now().difference(_startTime);
-    return _startTime.add(elapsed * daySpeedMultiplier);
+    // Multiply duration by speed multiplier
+    final acceleratedMicroseconds =
+        (elapsed.inMicroseconds * daySpeedMultiplier).toInt();
+    return _startTime.add(Duration(microseconds: acceleratedMicroseconds));
   }
 }
