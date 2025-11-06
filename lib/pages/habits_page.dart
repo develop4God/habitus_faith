@@ -7,7 +7,6 @@ import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/presentation/onboarding/display_mode_provider.dart';
 import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
 import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.dart';
-import '../features/habits/presentation/widgets/mini_calendar_heatmap.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
