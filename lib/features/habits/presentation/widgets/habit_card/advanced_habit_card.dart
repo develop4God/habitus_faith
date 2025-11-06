@@ -152,7 +152,7 @@ import 'package:flutter/material.dart';
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: widget.habit.completedToday
-                                          ? Icon(
+                                          ? const Icon(
                                               Icons.check,
                                               color: Colors.white,
                                               size: 20,
