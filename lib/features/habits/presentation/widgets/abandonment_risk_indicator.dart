@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+/// Risk level thresholds for habit abandonment
+class RiskThresholds {
+  /// Threshold between low and medium risk
+  static const double mediumRiskThreshold = 0.3;
+
+  /// Threshold between medium and high risk
+  static const double highRiskThreshold = 0.65;
+}
+
 /// Visual indicator showing abandonment risk for a habit
 /// Displays color-coded dot and text based on risk level:
 /// - Low risk (< 0.3): Green dot, no text
@@ -16,7 +25,7 @@ class AbandonmentRiskIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Low risk - don't show anything intrusive
-    if (risk < 0.3) {
+    if (risk < RiskThresholds.mediumRiskThreshold) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -33,7 +42,7 @@ class AbandonmentRiskIndicator extends StatelessWidget {
     }
 
     // Medium risk - show yellow indicator
-    if (risk < 0.65) {
+    if (risk < RiskThresholds.highRiskThreshold) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [

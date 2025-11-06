@@ -78,12 +78,13 @@ void main() {
       expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
     });
 
-    testWidgets('handles edge case risk = 0.3 (boundary)',
+    testWidgets('handles edge case risk = mediumRiskThreshold (boundary)',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 0.3),
+            body: AbandonmentRiskIndicator(
+                risk: RiskThresholds.mediumRiskThreshold),
           ),
         ),
       );
@@ -92,12 +93,13 @@ void main() {
       expect(find.text('At risk'), findsOneWidget);
     });
 
-    testWidgets('handles edge case risk = 0.65 (boundary)',
+    testWidgets('handles edge case risk = highRiskThreshold (boundary)',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 0.65),
+            body: AbandonmentRiskIndicator(
+                risk: RiskThresholds.highRiskThreshold),
           ),
         ),
       );

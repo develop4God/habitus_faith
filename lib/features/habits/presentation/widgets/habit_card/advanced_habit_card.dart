@@ -194,7 +194,8 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     Icons.check_circle,
                     Colors.green,
                   ),
-                  if (widget.habit.abandonmentRisk > 0.3) ...[
+                  if (widget.habit.abandonmentRisk >=
+                      RiskThresholds.mediumRiskThreshold) ...[
                     Container(
                       width: 1,
                       height: 40,
