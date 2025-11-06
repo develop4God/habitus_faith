@@ -206,6 +206,42 @@ test/
 
 ## 🔧 Development
 
+### Time Acceleration for Dogfooding
+
+**FAST_TIME Mode**: Simulate weeks of habit data in minutes for testing and validation.
+
+```bash
+# Run with 288x time acceleration (1 week = 35 minutes)
+flutter run --dart-define=FAST_TIME=true
+
+# What this enables:
+# - 1 real minute = 4.8 simulated hours
+# - 5 real minutes = 24 simulated hours (1 day)
+# - 35 real minutes = 7 simulated days (1 week)
+```
+
+**Use Cases:**
+- Test 7-day success rate calculations quickly
+- Validate weekend failure pattern detection
+- Verify ML abandonment predictions
+- Debug streak calculations over multiple days
+- Dogfood the app with accelerated time
+
+**Implementation:**
+- `Clock` abstraction injected throughout services
+- `DebugClock` with configurable speed multiplier
+- Visual indicator shows current "simulated date" in debug mode
+- Production mode always uses real system time
+
+```dart
+// In tests: use FixedClock for deterministic testing
+final clock = Clock.fixed(DateTime(2025, 11, 15));
+final habit = habit.completeToday(clock: clock);
+
+// In production: uses SystemClock
+final habit = habit.completeToday(); // Uses real time
+```
+
 ### Analyze Code
 ```bash
 flutter analyze --fatal-infos
