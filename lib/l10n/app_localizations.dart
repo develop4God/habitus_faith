@@ -896,35 +896,35 @@ abstract class AppLocalizations {
   /// **'Select how you want to use Habitus Faith'**
   String get displayModeDescription;
 
-  /// Title for simple display mode
+  /// Title for compact display mode
   ///
   /// In en, this message translates to:
-  /// **'Simple Mode'**
-  String get simpleMode;
+  /// **'Compact Mode'**
+  String get compactMode;
 
-  /// Description of simple display mode
+  /// Description of compact display mode
   ///
   /// In en, this message translates to:
   /// **'Essential features for daily habit tracking'**
-  String get simpleModeDescription;
+  String get compactModeDescription;
 
-  /// First feature of simple mode
+  /// First feature of compact mode
   ///
   /// In en, this message translates to:
   /// **'Clean, minimalist interface'**
-  String get simpleModeFeature1;
+  String get compactModeFeature1;
 
-  /// Second feature of simple mode
+  /// Second feature of compact mode
   ///
   /// In en, this message translates to:
   /// **'Quick habit tracking'**
-  String get simpleModeFeature2;
+  String get compactModeFeature2;
 
-  /// Third feature of simple mode
+  /// Third feature of compact mode
   ///
   /// In en, this message translates to:
   /// **'Basic statistics'**
-  String get simpleModeFeature3;
+  String get compactModeFeature3;
 
   /// Title for advanced display mode
   ///
@@ -967,6 +967,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Mode'**
   String get selectMode;
+
+  /// Display mode setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Display Mode'**
+  String get displayMode;
+
+  /// Confirmation message when display mode is changed
+  ///
+  /// In en, this message translates to:
+  /// **'Display mode updated to {mode}'**
+  String displayModeUpdated(String mode);
+
+  /// Subtitle for compact mode in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Compact checklist - tap for details'**
+  String get compactModeSubtitle;
+
+  /// Subtitle for advanced mode in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Full tracking visible'**
+  String get advancedModeSubtitle;
+
+  /// Option to add habit manually
+  ///
+  /// In en, this message translates to:
+  /// **'Add Manually'**
+  String get addManually;
+
+  /// Description for manual habit creation
+  ///
+  /// In en, this message translates to:
+  /// **'Create a custom habit'**
+  String get createCustomHabit;
+
+  /// Option to generate habits with AI
+  ///
+  /// In en, this message translates to:
+  /// **'Generate with AI'**
+  String get generateWithAI;
+
+  /// Description for AI-generated habits
+  ///
+  /// In en, this message translates to:
+  /// **'Custom habits with AI'**
+  String get aiCustomHabits;
+
+  /// Placeholder text for habit name in preview
+  ///
+  /// In en, this message translates to:
+  /// **'Habit name'**
+  String get previewHabitName;
+
+  /// Placeholder text for habit description in preview
+  ///
+  /// In en, this message translates to:
+  /// **'Habit description'**
+  String get previewHabitDescription;
+
+  /// Total label for statistics
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
 }
 
 class _AppLocalizationsDelegate

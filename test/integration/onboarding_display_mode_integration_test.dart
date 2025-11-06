@@ -49,8 +49,8 @@ void main() {
       expect(find.text('Choose Your Experience'), findsOneWidget,
           reason: 'Display mode selection page should be shown first');
 
-      // Step 2: Select simple mode
-      await tester.tap(find.byKey(const Key('simple_mode_card')));
+      // Step 2: Select compact mode
+      await tester.tap(find.byKey(const Key('compact_mode_card')));
       await tester.pumpAndSettle();
 
       // Step 3: Tap select mode button
@@ -63,7 +63,7 @@ void main() {
 
       // Step 5: Verify display mode was persisted
       final savedMode = prefs.getString('display_mode');
-      expect(savedMode, 'simple', reason: 'Display mode should be saved');
+      expect(savedMode, 'compact', reason: 'Display mode should be saved');
     });
 
     testWidgets('Onboarding flow: Advanced mode selection',
@@ -150,7 +150,7 @@ void main() {
           reason: 'Provider should load persisted advanced mode');
     });
 
-    testWidgets('Display mode provider defaults to simple when not set',
+    testWidgets('Display mode provider defaults to compact when not set',
         (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
@@ -176,14 +176,14 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(loadedMode, DisplayMode.simple,
-          reason: 'Provider should default to simple mode when not set');
+      expect(loadedMode, DisplayMode.compact,
+          reason: 'Provider should default to compact mode when not set');
     });
 
     testWidgets('displayModeSelectedProvider returns true when mode is set',
         (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({
-        'display_mode': 'simple',
+        'display_mode': 'compact',
       });
       final prefs = await SharedPreferences.getInstance();
 
@@ -272,8 +272,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // First select simple mode
-      await tester.tap(find.byKey(const Key('simple_mode_card')));
+      // First select compact mode
+      await tester.tap(find.byKey(const Key('compact_mode_card')));
       await tester.pumpAndSettle();
 
       // Scroll to make advanced mode card visible

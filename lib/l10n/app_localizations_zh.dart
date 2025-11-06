@@ -428,19 +428,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get displayModeDescription => '选择您想如何使用 Habitus Faith';
 
   @override
-  String get simpleMode => '简单模式';
+  String get compactMode => '紧凑模式';
 
   @override
-  String get simpleModeDescription => '每日习惯跟踪的基本功能';
+  String get compactModeDescription => '每日习惯跟踪的基本功能';
 
   @override
-  String get simpleModeFeature1 => '简洁的极简界面';
+  String get compactModeFeature1 => '简洁的极简界面';
 
   @override
-  String get simpleModeFeature2 => '快速习惯跟踪';
+  String get compactModeFeature2 => '快速习惯跟踪';
 
   @override
-  String get simpleModeFeature3 => '基础统计';
+  String get compactModeFeature3 => '基础统计';
 
   @override
   String get advancedMode => '高级模式';
@@ -462,4 +462,39 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selectMode => '选择模式';
+
+  @override
+  String get displayMode => '显示模式';
+
+  @override
+  String displayModeUpdated(String mode) {
+    return '显示模式已更新为 $mode';
+  }
+
+  @override
+  String get compactModeSubtitle => '紧凑列表 - 点击查看详情';
+
+  @override
+  String get advancedModeSubtitle => '完整跟踪可见';
+
+  @override
+  String get addManually => '手动添加';
+
+  @override
+  String get createCustomHabit => '创建一个自定义习惯';
+
+  @override
+  String get generateWithAI => '使用AI生成';
+
+  @override
+  String get aiCustomHabits => '使用AI的自定义习惯';
+
+  @override
+  String get previewHabitName => '习惯名称';
+
+  @override
+  String get previewHabitDescription => '习惯描述';
+
+  @override
+  String get total => '总计';
 }

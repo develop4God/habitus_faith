@@ -592,16 +592,48 @@
   },
   "chooseYourExperience": "Elige tu experiencia",
   "displayModeDescription": "Selecciona cómo quieres usar Habitus Faith",
-  "simpleMode": "Modo simple",
-  "simpleModeDescription": "Funciones esenciales para el seguimiento diario de hábitos",
-  "simpleModeFeature1": "Interfaz limpia y minimalista",
-  "simpleModeFeature2": "Seguimiento rápido de hábitos",
-  "simpleModeFeature3": "Estadísticas básicas",
+  "compactMode": "Modo compacto",
+  "compactModeDescription": "Funciones esenciales para el seguimiento diario de hábitos",
+  "compactModeFeature1": "Interfaz limpia y minimalista",
+  "compactModeFeature2": "Seguimiento rápido de hábitos",
+  "compactModeFeature3": "Estadísticas básicas",
   "advancedMode": "Modo avanzado",
   "advancedModeDescription": "Experiencia completa con análisis y perspectivas",
   "advancedModeFeature1": "Análisis detallados de hábitos",
   "advancedModeFeature2": "Información impulsada por IA",
   "advancedModeFeature3": "Personalización avanzada",
   "changeAnytime": "Puedes cambiar esta configuración en cualquier momento en las preferencias",
-  "selectMode": "Seleccionar modo"
+  "selectMode": "Seleccionar modo",
+  "displayMode": "Modo de visualización",
+  "displayModeUpdated": "Modo de visualización actualizado a {mode}",
+  "compactModeSubtitle": "Lista compacta - toca para ver detalles",
+  "advancedModeSubtitle": "Seguimiento completo visible",
+  "addManually": "Agregar Manualmente",
+  "@addManually": {
+    "description": "Opción para agregar hábito manualmente"
+  },
+  "createCustomHabit": "Crear un hábito personalizado",
+  "@createCustomHabit": {
+    "description": "Descripción para creación manual de hábito"
+  },
+  "generateWithAI": "Generar con IA",
+  "@generateWithAI": {
+    "description": "Opción para generar hábitos con IA"
+  },
+  "aiCustomHabits": "Hábitos personalizados con IA",
+  "@aiCustomHabits": {
+    "description": "Descripción para hábitos generados por IA"
+  },
+  "previewHabitName": "Nombre del hábito",
+  "@previewHabitName": {
+    "description": "Texto placeholder para nombre del hábito en vista previa"
+  },
+  "previewHabitDescription": "Descripción del hábito",
+  "@previewHabitDescription": {
+    "description": "Texto placeholder para descripción del hábito en vista previa"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Etiqueta de total para estadísticas"
+  }
 }

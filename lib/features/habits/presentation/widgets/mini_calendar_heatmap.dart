@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
-class MiniCalendarHeatmap extends StatefulWidget {
+class MiniCalendarHeatmap extends StatelessWidget {
   final List<DateTime> completionDates;
 
   const MiniCalendarHeatmap({
@@ -9,35 +9,6 @@ class MiniCalendarHeatmap extends StatefulWidget {
     required this.completionDates,
   });
 
-  @override
-  State<MiniCalendarHeatmap> createState() => _MiniCalendarHeatmapState();
-}
-
-class _MiniCalendarHeatmapState extends State<MiniCalendarHeatmap> {
-  bool _isVisible = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadVisibilityPreference();
-  }
-
-  Future<void> _loadVisibilityPreference() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isVisible = prefs.getBool('calendar_visible') ?? true;
-    });
-  }
-
-  Future<void> _toggleVisibility() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isVisible = !_isVisible;
-    });
-    await prefs.setBool('calendar_visible', _isVisible);
-  }
-
-  @override
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
@@ -51,86 +22,84 @@ class _MiniCalendarHeatmapState extends State<MiniCalendarHeatmap> {
     });
 
     // Create set of completed dates for quick lookup
-    final completedDates = widget.completionDates.map((date) {
+    final completedDates = completionDates.map((date) {
       return DateTime(date.year, date.month, date.day);
     }).toSet();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_isVisible) ...[
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ...last7Days.map((date) {
-                final isCompleted = completedDates.contains(date);
-                final isToday = date == today;
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: last7Days.map((date) {
+            final isCompleted = completedDates.contains(date);
+            final isToday = date == today;
 
-                return Container(
-                  width: 32,
-                  height: 32,
-                  margin: const EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                    color: isCompleted
-                        ? const Color(0xff10b981)
-                        : Colors.grey.shade200,
-                    shape: BoxShape.circle,
-                    border: isToday
-                        ? Border.all(
-                            color: const Color(0xff6366f1),
-                            width: 2,
-                          )
-                        : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${date.day}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            isCompleted ? Colors.white : Colors.grey.shade600,
+            // Get localized day abbreviation
+            final dayAbbr = DateFormat.E(Localizations.localeOf(context).toString())
+                .format(date)
+                .substring(0, 1)
+                .toUpperCase();
+
+            return Expanded(
+              child: Container(
+                height: 36,
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                decoration: BoxDecoration(
+                  gradient: isCompleted
+                      ? const LinearGradient(
+                          colors: [Color(0xff10b981), Color(0xff059669)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        )
+                      : null,
+                  color: isCompleted ? null : Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(8),
+                  border: isToday
+                      ? Border.all(
+                          color: const Color(0xff6366f1),
+                          width: 2.5,
+                        )
+                      : null,
+                  boxShadow: isCompleted
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xff10b981).withValues(alpha:0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : null,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        dayAbbr,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: isCompleted
+                              ? Colors.white
+                              : Colors.grey.shade600,
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }),
-              // Eye icon as a circle at the end
-              GestureDetector(
-                onTap: _toggleVisibility,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  margin: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Icon(
-                    Icons.visibility,
-                    size: 20,
-                    color: Colors.grey.shade600,
+                      const SizedBox(height: 2),
+                      if (isCompleted)
+                        const Icon(
+                          Icons.check,
+                          size: 12,
+                          color: Colors.white,
+                        ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ] else ...[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: _toggleVisibility,
-                child: SizedBox(
-                  width: 32,
-                  height: 32,
-                  child: Icon(
-                    Icons.visibility_off,
-                    size: 20,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+            );
+          }).toList(),
+        ),
       ],
     );
   }

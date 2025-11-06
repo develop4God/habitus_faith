@@ -19,7 +19,7 @@ final displayModeProvider =
   final savedMode = storage.getString(_displayModeKey);
   final initialMode = savedMode != null
       ? DisplayMode.fromStorageString(savedMode)
-      : DisplayMode.simple;
+      : DisplayMode.compact;
 
   return DisplayModeNotifier(ref, initialMode);
 });
@@ -40,8 +40,8 @@ class DisplayModeNotifier extends StateNotifier<DisplayMode> {
   /// Get the current display mode
   DisplayMode get currentMode => state;
 
-  /// Check if current mode is simple
-  bool get isSimpleMode => state == DisplayMode.simple;
+  /// Check if current mode is compact
+  bool get isCompactMode => state == DisplayMode.compact;
 
   /// Check if current mode is advanced
   bool get isAdvancedMode => state == DisplayMode.advanced;

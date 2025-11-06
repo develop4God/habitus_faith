@@ -453,20 +453,20 @@ class AppLocalizationsPt extends AppLocalizations {
       'Selecione como você deseja usar o Habitus Faith';
 
   @override
-  String get simpleMode => 'Modo simples';
+  String get compactMode => 'Modo compacto';
 
   @override
-  String get simpleModeDescription =>
+  String get compactModeDescription =>
       'Recursos essenciais para rastreamento diário de hábitos';
 
   @override
-  String get simpleModeFeature1 => 'Interface limpa e minimalista';
+  String get compactModeFeature1 => 'Interface limpa e minimalista';
 
   @override
-  String get simpleModeFeature2 => 'Rastreamento rápido de hábitos';
+  String get compactModeFeature2 => 'Rastreamento rápido de hábitos';
 
   @override
-  String get simpleModeFeature3 => 'Estatísticas básicas';
+  String get compactModeFeature3 => 'Estatísticas básicas';
 
   @override
   String get advancedMode => 'Modo avançado';
@@ -490,4 +490,39 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get selectMode => 'Selecionar modo';
+
+  @override
+  String get displayMode => 'Modo de exibição';
+
+  @override
+  String displayModeUpdated(String mode) {
+    return 'Modo de exibição atualizado para $mode';
+  }
+
+  @override
+  String get compactModeSubtitle => 'Lista compacta - toque para detalhes';
+
+  @override
+  String get advancedModeSubtitle => 'Rastreamento completo visível';
+
+  @override
+  String get addManually => 'Adicionar Manualmente';
+
+  @override
+  String get createCustomHabit => 'Criar um hábito personalizado';
+
+  @override
+  String get generateWithAI => 'Gerar com IA';
+
+  @override
+  String get aiCustomHabits => 'Hábitos personalizados com IA';
+
+  @override
+  String get previewHabitName => 'Nome do hábito';
+
+  @override
+  String get previewHabitDescription => 'Descrição do hábito';
+
+  @override
+  String get total => 'Total';
 }

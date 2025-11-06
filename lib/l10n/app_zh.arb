@@ -592,16 +592,48 @@
   },
   "chooseYourExperience": "选择您的体验",
   "displayModeDescription": "选择您想如何使用 Habitus Faith",
-  "simpleMode": "简单模式",
-  "simpleModeDescription": "每日习惯跟踪的基本功能",
-  "simpleModeFeature1": "简洁的极简界面",
-  "simpleModeFeature2": "快速习惯跟踪",
-  "simpleModeFeature3": "基础统计",
+  "compactMode": "紧凑模式",
+  "compactModeDescription": "每日习惯跟踪的基本功能",
+  "compactModeFeature1": "简洁的极简界面",
+  "compactModeFeature2": "快速习惯跟踪",
+  "compactModeFeature3": "基础统计",
   "advancedMode": "高级模式",
   "advancedModeDescription": "具有见解和分析的完整体验",
   "advancedModeFeature1": "详细的习惯分析",
   "advancedModeFeature2": "AI驱动的见解",
   "advancedModeFeature3": "高级自定义",
   "changeAnytime": "您可以随时在偏好设置中更改此设置",
-  "selectMode": "选择模式"
+  "selectMode": "选择模式",
+  "displayMode": "显示模式",
+  "displayModeUpdated": "显示模式已更新为 {mode}",
+  "compactModeSubtitle": "紧凑列表 - 点击查看详情",
+  "advancedModeSubtitle": "完整跟踪可见",
+  "addManually": "手动添加",
+  "@addManually": {
+    "description": "手动添加习惯的选项"
+  },
+  "createCustomHabit": "创建一个自定义习惯",
+  "@createCustomHabit": {
+    "description": "手动创建习惯的描述"
+  },
+  "generateWithAI": "使用AI生成",
+  "@generateWithAI": {
+    "description": "使用AI生成习惯的选项"
+  },
+  "aiCustomHabits": "使用AI的自定义习惯",
+  "@aiCustomHabits": {
+    "description": "AI生成习惯的描述"
+  },
+  "previewHabitName": "习惯名称",
+  "@previewHabitName": {
+    "description": "预览中习惯名称的占位符文本"
+  },
+  "previewHabitDescription": "习惯描述",
+  "@previewHabitDescription": {
+    "description": "预览中习惯描述的占位符文本"
+  },
+  "total": "总计",
+  "@total": {
+    "description": "统计数据的总计标签"
+  }
 }
