@@ -6,6 +6,7 @@ import '../features/habits/domain/models/predefined_habit.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../pages/habits_page.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/predefined_habit_translations.dart';
 
 /// Dialog for adding a new habit with tabs for manual entry and predefined habits
 class AddHabitDialog extends ConsumerStatefulWidget {
@@ -43,68 +44,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   }
 
   // Helper function to translate predefined habit names
-  String _getTranslatedName(String key) {
-    switch (key) {
-      case 'predefinedHabit_morningPrayer_name':
-        return widget.l10n.predefinedHabit_morningPrayer_name;
-      case 'predefinedHabit_bibleReading_name':
-        return widget.l10n.predefinedHabit_bibleReading_name;
-      case 'predefinedHabit_worship_name':
-        return widget.l10n.predefinedHabit_worship_name;
-      case 'predefinedHabit_gratitude_name':
-        return widget.l10n.predefinedHabit_gratitude_name;
-      case 'predefinedHabit_exercise_name':
-        return widget.l10n.predefinedHabit_exercise_name;
-      case 'predefinedHabit_healthyEating_name':
-        return widget.l10n.predefinedHabit_healthyEating_name;
-      case 'predefinedHabit_sleep_name':
-        return widget.l10n.predefinedHabit_sleep_name;
-      case 'predefinedHabit_meditation_name':
-        return widget.l10n.predefinedHabit_meditation_name;
-      case 'predefinedHabit_learning_name':
-        return widget.l10n.predefinedHabit_learning_name;
-      case 'predefinedHabit_creativity_name':
-        return widget.l10n.predefinedHabit_creativity_name;
-      case 'predefinedHabit_familyTime_name':
-        return widget.l10n.predefinedHabit_familyTime_name;
-      case 'predefinedHabit_service_name':
-        return widget.l10n.predefinedHabit_service_name;
-      default:
-        return key;
-    }
-  }
-
-  // Helper function to translate predefined habit descriptions
-  String _getTranslatedDescription(String key) {
-    switch (key) {
-      case 'predefinedHabit_morningPrayer_description':
-        return widget.l10n.predefinedHabit_morningPrayer_description;
-      case 'predefinedHabit_bibleReading_description':
-        return widget.l10n.predefinedHabit_bibleReading_description;
-      case 'predefinedHabit_worship_description':
-        return widget.l10n.predefinedHabit_worship_description;
-      case 'predefinedHabit_gratitude_description':
-        return widget.l10n.predefinedHabit_gratitude_description;
-      case 'predefinedHabit_exercise_description':
-        return widget.l10n.predefinedHabit_exercise_description;
-      case 'predefinedHabit_healthyEating_description':
-        return widget.l10n.predefinedHabit_healthyEating_description;
-      case 'predefinedHabit_sleep_description':
-        return widget.l10n.predefinedHabit_sleep_description;
-      case 'predefinedHabit_meditation_description':
-        return widget.l10n.predefinedHabit_meditation_description;
-      case 'predefinedHabit_learning_description':
-        return widget.l10n.predefinedHabit_learning_description;
-      case 'predefinedHabit_creativity_description':
-        return widget.l10n.predefinedHabit_creativity_description;
-      case 'predefinedHabit_familyTime_description':
-        return widget.l10n.predefinedHabit_familyTime_description;
-      case 'predefinedHabit_service_description':
-        return widget.l10n.predefinedHabit_service_description;
-      default:
-        return key;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -456,8 +395,11 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       itemCount: predefinedHabits.length,
       itemBuilder: (context, index) {
         final habit = predefinedHabits[index];
-        final habitName = _getTranslatedName(habit.nameKey);
-        final habitDescription = _getTranslatedDescription(habit.descriptionKey);
+        final habitName = PredefinedHabitTranslations.getTranslatedName(
+            widget.l10n, habit.nameKey);
+        final habitDescription =
+            PredefinedHabitTranslations.getTranslatedDescription(
+                widget.l10n, habit.descriptionKey);
         final categoryColor = HabitColors.categoryColors[
             PredefinedHabitCategoryX(habit.category).toDomainCategory()]!;
 
