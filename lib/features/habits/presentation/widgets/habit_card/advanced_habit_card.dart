@@ -71,6 +71,16 @@ import 'package:flutter/material.dart';
                       // Header with emoji, name, and completion button
                       Row(
                         children: [
+                          // Color indicator bar
+                          Container(
+                            width: 4,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: habitColor,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
                           // Habit emoji/icon
                           Container(
                             width: 56,
@@ -96,9 +106,13 @@ import 'package:flutter/material.dart';
                               children: [
                                 Text(
                                   widget.habit.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    decoration: widget.habit.completedToday
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
+                                    decorationThickness: 2,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,

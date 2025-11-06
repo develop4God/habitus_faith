@@ -12,12 +12,14 @@ class TranslatedHabit {
   final String name;
   final String description;
   final HabitCategory category;
+  final String? emoji;
 
   const TranslatedHabit({
     required this.id,
     required this.name,
     required this.description,
     required this.category,
+    this.emoji,
   });
 }
 
@@ -65,6 +67,7 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
             name: translatedHabit.name,
             description: translatedHabit.description,
             category: translatedHabit.category,
+            emoji: translatedHabit.emoji,
           );
         }
       } else {
@@ -77,6 +80,7 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
             name: predefinedHabit.nameKey,
             description: predefinedHabit.descriptionKey,
             category: predefinedHabit.category.toDomainCategory(),
+            emoji: predefinedHabit.emoji,
           );
         }
       }

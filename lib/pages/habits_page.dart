@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/models/display_mode.dart';
+import '../features/habits/domain/models/predefined_habits_data.dart';
+import '../features/habits/domain/models/predefined_habit.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/presentation/onboarding/display_mode_provider.dart';
 import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';

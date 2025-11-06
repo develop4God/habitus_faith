@@ -78,6 +78,16 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
+                  // Color indicator bar
+                  Container(
+                    width: 4,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: habitColor,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
                   // Habit emoji/icon
                   Container(
                     width: 48,
@@ -103,9 +113,13 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                       children: [
                         Text(
                           widget.habit.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
+                            decoration: widget.habit.completedToday
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            decorationThickness: 2,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
