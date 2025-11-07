@@ -56,17 +56,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ? '¡Vas bien! Mantén el ritmo.'
                   : '¡Cada día cuenta! Puedes mejorar.';
 
-          // Simulación de datos de progreso semanal
-          final List<FlSpot> weeklyProgress = [
-            FlSpot(0, 1),
-            FlSpot(1, 2),
-            FlSpot(2, 3),
-            FlSpot(3, 2),
-            FlSpot(4, 4),
-            FlSpot(5, 3),
-            FlSpot(6, stats.completedHabits.toDouble()),
-          ];
-
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -113,46 +102,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Text(
-                    'Progreso semanal',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-                  AspectRatio(
-                    aspectRatio: 1.7,
-                    child: LineChart(
-                      LineChartData(
-                        minY: 0,
-                        maxY: stats.totalHabits > 0 ? stats.totalHabits.toDouble() : 1,
-                        titlesData: FlTitlesData(
-                          leftTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: true),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-                                return Text(days[value.toInt() % 7]);
-                              },
-                            ),
-                          ),
-                          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                        ),
-                        borderData: FlBorderData(show: false),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: weeklyProgress,
-                            isCurved: true,
-                            color: Colors.indigo,
-                            barWidth: 4,
-                            dotData: FlDotData(show: true),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 24),
                   Text(
                     'Porcentaje de éxito',
@@ -190,19 +139,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                   const SizedBox(height: 12),
                   AspectRatio(
-                    aspectRatio: 1.3,
+                    aspectRatio: 1.2,
                     child: PieChart(
                       PieChartData(
                         sections: [
                           PieChartSectionData(
-                            value: stats.completedHabits.toDouble(),
+                            value: stats.completedHabits > 0 ? stats.completedHabits.toDouble() : 1,
                             color: Colors.green,
                             title: 'Completados',
                             radius: 50,
                             titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                           PieChartSectionData(
-                            value: (stats.totalHabits - stats.completedHabits).toDouble(),
+                            value: (stats.totalHabits - stats.completedHabits) > 0 ? (stats.totalHabits - stats.completedHabits).toDouble() : 1,
                             color: Colors.redAccent,
                             title: 'Pendientes',
                             radius: 50,
