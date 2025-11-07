@@ -263,7 +263,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                                 widget.l10n, habit.descriptionKey),
                                             category:
                                                 PredefinedHabitCategoryX(habit.category).toDomainCategory(),
-                                            emoji: habit.emoji,
+                                            emoji: habit.emoji, // Asegura que el emoji se guarde
                                           );
                                       if (!context.mounted) return;
                                       Navigator.pop(context);
