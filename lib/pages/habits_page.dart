@@ -11,6 +11,7 @@ import '../features/habits/presentation/constants/habit_colors.dart';
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_habit_dialog.dart';
+import '../widgets/add_habit_discovery_dialog.dart';
 
 // New providers for JSON-based habits
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {

@@ -1063,6 +1063,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default'**
   String get defaultHabit;
+
+  /// Explanatory subtitle for the add habit discovery dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.'**
+  String get addHabitDiscoverySubtitle;
 }
 
 class _AppLocalizationsDelegate

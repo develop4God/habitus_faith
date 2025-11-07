@@ -655,5 +655,9 @@
   "defaultHabit": "Predefinido",
   "@defaultHabit": {
     "description": "Opción de hábito preestablecido (etiqueta corta)"
+  },
+  "addHabitDiscoverySubtitle": "Elige cómo quieres agregar tu nuevo hábito: puedes crear uno personalizado o seleccionar uno predefinido para empezar más rápido.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Subtítulo explicativo para el diálogo de descubrimiento de agregar hábito"
   }
 }

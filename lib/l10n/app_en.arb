@@ -715,5 +715,9 @@
   "defaultHabit": "Default",
   "@defaultHabit": {
     "description": "Default/predefined habit option (short label)"
+  },
+  "addHabitDiscoverySubtitle": "Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Explanatory subtitle for the add habit discovery dialog"
   }
 }

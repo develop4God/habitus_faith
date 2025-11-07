@@ -655,5 +655,9 @@
   "defaultHabit": "Padrão",
   "@defaultHabit": {
     "description": "Opção de hábito predefinido (rótulo curto)"
+  },
+  "addHabitDiscoverySubtitle": "Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Subtítulo explicativo para o diálogo de descoberta de adicionar hábito"
   }
 }

@@ -655,5 +655,9 @@
   "defaultHabit": "预设",
   "@defaultHabit": {
     "description": "预设习惯选项（短标签）"
+  },
+  "addHabitDiscoverySubtitle": "选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。",
+  "@addHabitDiscoverySubtitle": {
+    "description": "添加习惯发现对话框的说明性副标题"
   }
 }
