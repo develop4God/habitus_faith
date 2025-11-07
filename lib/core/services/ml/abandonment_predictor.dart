@@ -55,24 +55,27 @@ class AbandonmentPredictor {
   /// Initialize the predictor by loading model and scaler params
   Future<void> initialize() async {
     if (_initialized) {
-      debugPrint('AbandonmentPredictor: Already initialized');
+      debugPrint('AbandonmentPredictor.initialize: Already initialized');
       return;
     }
 
+    final stopwatch = Stopwatch()..start();
+    debugPrint('AbandonmentPredictor.initialize: Starting initialization...');
+
     try {
       // Load model metadata
-      debugPrint('AbandonmentPredictor: Loading model metadata...');
+      debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
       final metadataJson =
           await rootBundle.loadString('assets/ml_models/model_metadata.json');
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
       debugPrint(
-          'AbandonmentPredictor: Model version ${_modelMetadata!['version']} loaded');
+          'AbandonmentPredictor.initialize: Model version ${_modelMetadata!['version']} loaded');
 
       // Load TFLite model from assets
-      debugPrint('AbandonmentPredictor: Loading TFLite model...');
+      debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
       _interpreter =
           await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
-      debugPrint('AbandonmentPredictor: TFLite model loaded successfully');
+      debugPrint('AbandonmentPredictor.initialize: TFLite model loaded successfully');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
