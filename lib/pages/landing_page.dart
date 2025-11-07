@@ -10,6 +10,16 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 7), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -38,30 +48,26 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ),
           Positioned(
-            bottom: 32,
+            bottom: 64, // Un poco más arriba
             left: 0,
             right: 0,
             child: Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.85),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+              child: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return LinearGradient(
+                    colors: [Color(0xff6366f1), Color(0xffa5b4fc)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
                 child: const Text(
                   'Develop4God',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff6366f1),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: 2,
+                    fontFamily: 'Montserrat', // Fuente moderna y agradable
                   ),
                 ),
               ),
