@@ -37,7 +37,7 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                 height: 40,
                 width: 40,
                 child: Lottie.asset(
-                  'assets/lottie/hand_tap.json',
+                  'assets/lottie/tap_screen.json',
                   repeat: true,
                   fit: BoxFit.contain,
                 ),

@@ -531,4 +531,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get chooseFromPredefined => 'Escolha um hábito predefinido';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get custom => 'Personalizado';
 }

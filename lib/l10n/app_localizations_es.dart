@@ -531,4 +531,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get chooseFromPredefined => 'Elige un hábito predefinido';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get custom => 'Personalizado';
 }

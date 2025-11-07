@@ -503,4 +503,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chooseFromPredefined => '选择一个预设习惯';
+
+  @override
+  String get manual => '手动';
+
+  @override
+  String get custom => '自定义';
 }

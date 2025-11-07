@@ -533,4 +533,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get chooseFromPredefined => 'Choisissez une habitude prédéfinie';
+
+  @override
+  String get manual => 'Manuel';
+
+  @override
+  String get custom => 'Personnalisé';
 }
