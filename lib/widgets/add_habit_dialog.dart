@@ -34,8 +34,8 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: SizedBox(
-                height: 40,
-                width: 40,
+                height: 80,
+                width: 80,
                 child: Lottie.asset(
                   'assets/lottie/tap_screen.json',
                   repeat: true,
