@@ -21,106 +21,123 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       child: Padding(
         padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
           children: [
-            const Icon(Icons.add_circle_outline, size: 56, color: Color(0xff6366f1)),
-            const SizedBox(height: 16),
-            Text(
-              l10n.addHabit,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            // Lottie de mano para indicar tap
-            Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8),
-              child: SizedBox(
-                height: 80,
-                width: 80,
-                child: Lottie.asset(
-                  'assets/lottie/tap_screen.json',
-                  repeat: true,
-                  fit: BoxFit.contain,
-                ),
+            // Botón X más visible arriba completamente a la derecha
+            Positioned(
+              top: -16,
+              right: -16,
+              child: IconButton(
+                icon: const Icon(Icons.close, size: 32, color: Color(0xff1a202c)),
+                splashRadius: 26,
+                tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            Text(
-              l10n.chooseHabitType,
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            Row(
+            // Contenido principal
+            Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xff6366f1),
-                      side: const BorderSide(color: Color(0xff6366f1), width: 2),
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      elevation: 2,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (context) => AddHabitDialog(
-                          l10n: l10n,
-                          initialTab: 0,
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.edit_note, size: 32),
-                        const SizedBox(height: 8),
-                        Text(
-                          l10n.manual,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                        ),
-                      ],
+                const SizedBox(height: 8), // Espacio para la X
+                const Icon(Icons.add_circle_outline, size: 56, color: Color(0xff6366f1)),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.addHabit,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                // Lottie de mano para indicar tap
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: SizedBox(
+                    height: 80,
+                    width: 80,
+                    child: Lottie.asset(
+                      'assets/lottie/tap_screen.json',
+                      repeat: true,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xff6366f1),
-                      side: const BorderSide(color: Color(0xff6366f1), width: 2),
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                Text(
+                  l10n.chooseHabitType,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xff6366f1),
+                          side: const BorderSide(color: Color(0xff6366f1), width: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          elevation: 2,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) => AddHabitDialog(
+                              l10n: l10n,
+                              initialTab: 0,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.edit_note, size: 32),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.manual,
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
                       ),
-                      elevation: 2,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (context) => AddHabitDialog(
-                          l10n: l10n,
-                          initialTab: 1,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xff6366f1),
+                          side: const BorderSide(color: Color(0xff6366f1), width: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          elevation: 2,
                         ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.star, size: 32),
-                        const SizedBox(height: 8),
-                        Text(
-                          l10n.custom,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) => AddHabitDialog(
+                              l10n: l10n,
+                              initialTab: 1,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.star, size: 32),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.custom,
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
