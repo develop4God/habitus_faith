@@ -540,4 +540,8 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get defaultHabit => 'Padrão';
+
+  @override
+  String get addHabitDiscoverySubtitle =>
+      'Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.';
 }

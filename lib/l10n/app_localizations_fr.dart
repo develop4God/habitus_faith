@@ -542,4 +542,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get defaultHabit => 'Prédéfini';
+
+  @override
+  String get addHabitDiscoverySubtitle =>
+      'Choisissez comment ajouter votre nouvelle habitude : créez-en une personnalisée ou sélectionnez une habitude prédéfinie pour commencer plus rapidement.';
 }

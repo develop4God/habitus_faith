@@ -536,4 +536,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultHabit => 'Default';
+
+  @override
+  String get addHabitDiscoverySubtitle =>
+      'Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.';
 }

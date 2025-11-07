@@ -512,4 +512,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get defaultHabit => '预设';
+
+  @override
+  String get addHabitDiscoverySubtitle => '选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。';
 }
