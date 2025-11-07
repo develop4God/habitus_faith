@@ -7,7 +7,6 @@ import '../features/habits/presentation/constants/habit_colors.dart';
 import '../pages/habits_page.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/predefined_habit_translations.dart';
-import '../widgets/add_habit_discovery_dialog.dart';
 
 /// Dialog para agregar hábito, ahora recibe initialTab para abrir la vista correcta
 class AddHabitDialog extends ConsumerStatefulWidget {
@@ -545,8 +544,7 @@ class _OptionTab extends StatelessWidget {
     required this.icon,
     required this.selected,
     this.onTap,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -562,7 +560,7 @@ class _OptionTab extends StatelessWidget {
           boxShadow: selected
               ? [
                   BoxShadow(
-                    color: const Color(0xff6366f1).withOpacity(0.15),
+                    color: const Color(0xff6366f1).withValues(alpha:0.15),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

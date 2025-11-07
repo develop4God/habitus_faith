@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import '../l10n/app_localizations.dart';
 import 'add_habit_dialog.dart';
 
+
 class AddHabitDiscoveryDialog extends StatefulWidget {
   final AppLocalizations l10n;
 
@@ -168,7 +169,8 @@ class _AnimatedBorderButton extends StatelessWidget {
     required this.label,
     required this.textColor,
     required this.onPressed,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
