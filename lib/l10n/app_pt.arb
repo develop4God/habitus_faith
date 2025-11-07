@@ -651,5 +651,9 @@
   "custom": "Personalizado",
   "@custom": {
     "description": "Opção de hábito personalizado (rótulo curto)"
+  },
+  "defaultHabit": "Padrão",
+  "@defaultHabit": {
+    "description": "Opção de hábito predefinido (rótulo curto)"
   }
 }

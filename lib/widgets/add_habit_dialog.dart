@@ -94,8 +94,8 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                             const Icon(Icons.edit_note, size: 32),
                             const SizedBox(height: 8),
                             Text(
-                              l10n.manual,
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                              l10n.custom, // Cambiado de l10n.manual a l10n.custom
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
@@ -130,8 +130,8 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                             const Icon(Icons.star, size: 32),
                             const SizedBox(height: 8),
                             Text(
-                              l10n.custom,
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                              l10n.defaultHabit, // Cambiado de l10n.custom a l10n.defaultHabit
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),

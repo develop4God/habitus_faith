@@ -1057,6 +1057,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom'**
   String get custom;
+
+  /// Default/predefined habit option (short label)
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get defaultHabit;
 }
 
 class _AppLocalizationsDelegate

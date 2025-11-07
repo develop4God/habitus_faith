@@ -539,4 +539,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get custom => 'Personnalisé';
+
+  @override
+  String get defaultHabit => 'Prédéfini';
 }

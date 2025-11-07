@@ -711,5 +711,9 @@
   "custom": "Custom",
   "@custom": {
     "description": "Custom habit option (short label)"
+  },
+  "defaultHabit": "Default",
+  "@defaultHabit": {
+    "description": "Default/predefined habit option (short label)"
   }
 }

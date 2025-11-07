@@ -537,4 +537,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get custom => 'Personalizado';
+
+  @override
+  String get defaultHabit => 'Predefinido';
 }

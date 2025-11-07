@@ -651,5 +651,9 @@
   "custom": "自定义",
   "@custom": {
     "description": "自定义习惯选项（短标签）"
+  },
+  "defaultHabit": "预设",
+  "@defaultHabit": {
+    "description": "预设习惯选项（短标签）"
   }
 }

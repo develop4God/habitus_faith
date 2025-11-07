@@ -651,5 +651,9 @@
   "custom": "Personnalisé",
   "@custom": {
     "description": "Option d'habitude personnalisée (étiquette courte)"
+  },
+  "defaultHabit": "Prédéfini",
+  "@defaultHabit": {
+    "description": "Option d'habitude prédéfinie (étiquette courte)"
   }
 }
