@@ -325,9 +325,9 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.blue.shade100),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Icon(Icons.swipe, color: Color(0xff6366f1)),
                         SizedBox(width: 8),
                         Text(
