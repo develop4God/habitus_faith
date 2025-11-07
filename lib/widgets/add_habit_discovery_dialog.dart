@@ -95,14 +95,14 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
                         child: _AnimatedBorderButton(
                           animation: _controller,
                           borderColors: const [
-                            Color(0xff6366f1), // Indigo
-                            Color(0xffa5b4fc), // Light Indigo
-                            Color(0xff6366f1),
+                            Color(0xff7c3aed), // Purple
+                            Color(0xffc4b5fd), // Light Purple
+                            Color(0xff7c3aed),
                           ],
-                          backgroundColor: const Color(0xffeef2ff),
+                          backgroundColor: const Color(0xfff3e8ff),
                           icon: Icons.edit_note,
                           label: widget.l10n.custom,
-                          textColor: const Color(0xff6366f1),
+                          textColor: const Color(0xff7c3aed),
                           onPressed: () {
                             Navigator.pop(context);
                             showDialog(
@@ -120,14 +120,14 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
                         child: _AnimatedBorderButton(
                           animation: _controller,
                           borderColors: const [
-                            Color(0xfff59e42), // Orange
-                            Color(0xffffe0b2), // Light Orange
-                            Color(0xfff59e42),
+                            Color(0xff06b6d4), // Cyan
+                            Color(0xffa5f3fc), // Light Cyan
+                            Color(0xff06b6d4),
                           ],
-                          backgroundColor: const Color(0xfffff7ed),
+                          backgroundColor: const Color(0xffecfeff),
                           icon: Icons.checklist_outlined,
                           label: widget.l10n.defaultHabit,
-                          textColor: const Color(0xfff59e42),
+                          textColor: const Color(0xff06b6d4),
                           onPressed: () {
                             Navigator.pop(context);
                             showDialog(
