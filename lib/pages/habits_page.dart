@@ -690,7 +690,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<HabitCategory>(
-              value: selectedCategory,
+              initialValue: selectedCategory,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
