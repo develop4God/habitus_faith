@@ -527,4 +527,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get copy => '复制';
+
+  @override
+  String get introMessage => '最大的改变始于坚持...';
 }

@@ -556,4 +556,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get copy => 'Duplicar';
+
+  @override
+  String get introMessage => 'Los mayores cambios, inician en la constancia...';
 }

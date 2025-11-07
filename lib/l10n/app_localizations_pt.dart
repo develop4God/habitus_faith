@@ -556,4 +556,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get copy => 'Duplicar';
+
+  @override
+  String get introMessage => 'As maiores mudanças começam na constância...';
 }

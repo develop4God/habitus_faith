@@ -558,4 +558,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get copy => 'Dupliquer';
+
+  @override
+  String get introMessage =>
+      'Les plus grands changements commencent par la constance...';
 }

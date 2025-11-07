@@ -1093,6 +1093,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Duplicate'**
   String get copy;
+
+  /// Intro message shown on landing page as a motivational quote.
+  ///
+  /// In en, this message translates to:
+  /// **'The greatest changes begin with consistency...'**
+  String get introMessage;
 }
 
 class _AppLocalizationsDelegate

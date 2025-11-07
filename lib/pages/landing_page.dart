@@ -90,28 +90,54 @@ class _LandingPageState extends State<LandingPage> {
             bottom: 64,
             left: 0,
             right: 0,
-            child: Center(
-              child: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return LinearGradient(
-                    colors: [Color(0xffa5b4fc), Color(0xffc7d2fe)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode.srcIn,
-                child: Text(
-                  introMessage,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                    fontFamily: 'DancingScript', // Fuente cursiva y agradable
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 1.2,
+            child: Column(
+              children: [
+                Center(
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [Color(0xffa5b4fc), Color(0xffc7d2fe)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.srcIn,
+                    child: Text(
+                      introMessage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                        fontFamily: 'DancingScript',
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 12),
+                Center(
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [Color(0xffa5b4fc), Color(0xffc7d2fe)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.srcIn,
+                    child: Text(
+                      'Develop4God',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 2,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

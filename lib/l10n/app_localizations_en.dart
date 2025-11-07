@@ -552,4 +552,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copy => 'Duplicate';
+
+  @override
+  String get introMessage => 'The greatest changes begin with consistency...';
 }
