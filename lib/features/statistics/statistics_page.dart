@@ -47,6 +47,26 @@ class _StatisticsPageState extends State<StatisticsPage> {
             return const Center(child: Text('No hay datos de estadísticas.'));
           }
           final stats = snapshot.data!;
+          final double successPercent = stats.totalHabits > 0
+              ? (stats.completedHabits / stats.totalHabits) * 100
+              : 0;
+          final String motivacion = successPercent >= 80
+              ? '¡Excelente constancia! Sigue así.'
+              : successPercent >= 50
+                  ? '¡Vas bien! Mantén el ritmo.'
+                  : '¡Cada día cuenta! Puedes mejorar.';
+
+          // Simulación de datos de progreso semanal
+          final List<FlSpot> weeklyProgress = [
+            FlSpot(0, 1),
+            FlSpot(1, 2),
+            FlSpot(2, 3),
+            FlSpot(3, 2),
+            FlSpot(4, 4),
+            FlSpot(5, 3),
+            FlSpot(6, stats.completedHabits.toDouble()),
+          ];
+
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -56,74 +76,54 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   Lottie.asset('assets/lottie/Congratulation _ Success batch.json', width: 120, repeat: false),
                   const SizedBox(height: 16),
                   Text(
-                    '¡Bienvenido a tus estadísticas!',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                    motivacion,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigoAccent),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    'Aquí puedes ver tu progreso y logros de hábitos.',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 32),
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Column(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _StatTile(
-                                label: 'Hábitos totales',
-                                value: stats.totalHabits.toString(),
-                                icon: Icons.list_alt,
-                                color: Colors.blue,
-                              ),
-                              _StatTile(
-                                label: 'Completados',
-                                value: stats.completedHabits.toString(),
-                                icon: Icons.check_circle,
-                                color: Colors.green,
-                              ),
-                            ],
+                          _StatTile(
+                            label: 'Hábitos activos',
+                            value: stats.totalHabits.toString(),
+                            icon: Icons.list_alt,
+                            color: Colors.blue,
                           ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _StatTile(
-                                label: 'Racha actual',
-                                value: stats.currentStreak.toString(),
-                                icon: Icons.local_fire_department,
-                                color: Colors.orange,
-                              ),
-                              _StatTile(
-                                label: 'Racha máxima',
-                                value: stats.longestStreak.toString(),
-                                icon: Icons.emoji_events,
-                                color: Colors.amber,
-                              ),
-                            ],
+                          _StatTile(
+                            label: 'Completados',
+                            value: stats.completedHabits.toString(),
+                            icon: Icons.check_circle,
+                            color: Colors.green,
+                          ),
+                          _StatTile(
+                            label: 'Racha máxima',
+                            value: stats.longestStreak.toString(),
+                            icon: Icons.emoji_events,
+                            color: Colors.amber,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
                   Text(
-                    'Progreso de hábitos',
+                    'Progreso semanal',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   AspectRatio(
                     aspectRatio: 1.7,
-                    child: BarChart(
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceAround,
+                    child: LineChart(
+                      LineChartData(
+                        minY: 0,
                         maxY: stats.totalHabits > 0 ? stats.totalHabits.toDouble() : 1,
-                        barTouchData: const BarTouchData(enabled: true),
                         titlesData: FlTitlesData(
                           leftTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: true),
@@ -132,14 +132,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             sideTitles: SideTitles(
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
-                                switch (value.toInt()) {
-                                  case 0:
-                                    return const Text('Completados');
-                                  case 1:
-                                    return const Text('Totales');
-                                  default:
-                                    return const Text('');
-                                }
+                                const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+                                return Text(days[value.toInt() % 7]);
                               },
                             ),
                           ),
@@ -147,23 +141,78 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                         ),
                         borderData: FlBorderData(show: false),
-                        barGroups: [
-                          BarChartGroupData(x: 0, barRods: [BarChartRodData(toY: stats.completedHabits.toDouble(), color: Colors.green, width: 32)]),
-                          BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: stats.totalHabits.toDouble(), color: Colors.blue, width: 32)]),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: weeklyProgress,
+                            isCurved: true,
+                            color: Colors.indigo,
+                            barWidth: 4,
+                            dotData: FlDotData(show: true),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  AnimatedOpacity(
-                    opacity: stats.completedHabits == stats.totalHabits && stats.totalHabits > 0 ? 1 : 0.3,
-                    duration: const Duration(milliseconds: 800),
-                    child: Lottie.asset('assets/lottie/tick_animation_success.json', width: 100, repeat: false),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Porcentaje de éxito',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: CircularProgressIndicator(
+                          value: successPercent / 100,
+                          strokeWidth: 10,
+                          backgroundColor: Colors.grey.shade200,
+                          color: Colors.indigo,
+                        ),
+                      ),
+                      Text(
+                        '${successPercent.toStringAsFixed(1)}%',
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.indigo),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
                   Text(
                     'Última finalización: ${stats.lastCompletion.day}/${stats.lastCompletion.month}/${stats.lastCompletion.year}',
                     style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Distribución de hábitos',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  AspectRatio(
+                    aspectRatio: 1.3,
+                    child: PieChart(
+                      PieChartData(
+                        sections: [
+                          PieChartSectionData(
+                            value: stats.completedHabits.toDouble(),
+                            color: Colors.green,
+                            title: 'Completados',
+                            radius: 50,
+                            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                          PieChartSectionData(
+                            value: (stats.totalHabits - stats.completedHabits).toDouble(),
+                            color: Colors.redAccent,
+                            title: 'Pendientes',
+                            radius: 50,
+                            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ],
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 30,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -210,4 +259,3 @@ class _StatTile extends StatelessWidget {
     );
   }
 }
-
