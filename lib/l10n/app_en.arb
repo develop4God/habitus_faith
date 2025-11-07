@@ -723,5 +723,9 @@
   "requiredFieldLabel": "Required",
   "@requiredFieldLabel": {
     "description": "Label to indicate a field is required"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Button to go back to the previous step in the dialog"
   }
 }

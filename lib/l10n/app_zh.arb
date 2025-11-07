@@ -663,5 +663,9 @@
   "requiredFieldLabel": "必填",
   "@requiredFieldLabel": {
     "description": "用于指示字段为必填项的标签"
+  },
+  "back": "返回",
+  "@back": {
+    "description": "返回上一步的按钮"
   }
 }

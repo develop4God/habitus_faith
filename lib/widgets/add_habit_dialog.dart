@@ -109,9 +109,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     });
   }
 
-  void _skipStep() {
-    _nextStep();
-  }
 
   Future<void> _saveHabit() async {
     final navigator = Navigator.of(context);
@@ -342,23 +339,23 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     bool isRequired = false;
     switch (stepKey) {
       case 'name':
-        stepLabel = '${widget.l10n.name} *';
+        stepLabel = widget.l10n.name;
         isRequired = true;
         break;
       case 'desc':
-        stepLabel = '${widget.l10n.description} (${widget.l10n.optional})';
+        stepLabel = widget.l10n.description;
         break;
       case 'emoji':
-        stepLabel = '${widget.l10n.emoji} (${widget.l10n.optional})';
+        stepLabel = widget.l10n.emoji;
         break;
       case 'category':
-        stepLabel = '${widget.l10n.category} (${widget.l10n.optional})';
+        stepLabel = widget.l10n.category;
         break;
       case 'difficulty':
-        stepLabel = '${widget.l10n.difficulty} (${widget.l10n.optional})';
+        stepLabel = widget.l10n.difficulty;
         break;
       case 'color':
-        stepLabel = '${widget.l10n.color} (${widget.l10n.optional})';
+        stepLabel = widget.l10n.color;
         break;
       default:
         stepLabel = '';
@@ -373,7 +370,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           autofocus: true,
           maxLength: 40,
           decoration: InputDecoration(
-            labelText: stepLabel,
+            labelText: '$stepLabel *',
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitName,
             counterText: '',
@@ -390,7 +387,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           controller: descCtrl,
           maxLength: 120,
           decoration: InputDecoration(
-            labelText: stepLabel,
+            labelText: '${widget.l10n.description} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitDescription,
             counterText: '',
@@ -404,7 +401,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = TextField(
           controller: emojiCtrl,
           decoration: InputDecoration(
-            labelText: stepLabel,
+            labelText: '${widget.l10n.emoji} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),
             hintText: '🙏',
           ),
@@ -417,7 +414,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = DropdownButtonFormField<HabitCategory>(
           initialValue: selectedCategory,
           decoration: InputDecoration(
-            labelText: stepLabel,
+            labelText: '${widget.l10n.category} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),
           ),
           items: HabitCategory.values.map((category) {
@@ -452,14 +449,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              stepLabel,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey.shade700,
-              ),
-            ),
+            // Solo una vez el label, no duplicado
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -543,7 +533,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Barra de progreso visual
+        // Barra de progreso visual y etiqueta clara de campo obligatorio/opcional
         Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Column(
@@ -629,21 +619,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             ],
           ),
         ),
-        // Etiqueta del campo actual
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              stepLabel,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: isRequired ? Colors.red : Colors.grey.shade700,
-              ),
-            ),
-          ),
-        ),
+        // Quitar etiqueta duplicada del campo actual
+        // stepLabel ya va en el labelText del input
         stepWidget,
         const SizedBox(height: 18),
         // Navegación clara
@@ -653,7 +630,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             if (_step > 0)
               OutlinedButton.icon(
                 icon: const Icon(Icons.arrow_back),
-                label: Text(widget.l10n.cancel),
+                label: Text(widget.l10n.back),
                 onPressed: _prevStep,
               ),
             if (stepKey == 'name')
@@ -663,20 +640,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 label: Text(widget.l10n.continueButton),
               )
             else if (!isLast)
-              Row(
-                children: [
-                  OutlinedButton.icon(
-                    icon: const Icon(Icons.skip_next),
-                    label: Text(widget.l10n.optional),
-                    onPressed: _skipStep,
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: _nextStep,
-                    label: Text(widget.l10n.continueButton),
-                  ),
-                ],
+              ElevatedButton.icon(
+                icon: const Icon(Icons.arrow_forward),
+                onPressed: _nextStep,
+                label: Text(widget.l10n.continueButton),
               )
             else
               ElevatedButton.icon(
@@ -687,12 +654,12 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
               ),
           ],
         ),
-        // Agrupador de campos opcionales para saltar directo
+        // Agrupador de campos opcionales para saltar directo (solo un botón skip abajo)
         if (_step < _steps.length - 1 && _step > 0)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: OutlinedButton.icon(
-              icon: const Icon(Icons.double_arrow_rounded, size: 18),
+              icon: const Icon(Icons.skip_next, size: 18),
               label: Text(widget.l10n.optional),
               onPressed: () {
                 setState(() {

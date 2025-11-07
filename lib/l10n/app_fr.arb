@@ -663,5 +663,9 @@
   "requiredFieldLabel": "Obligatoire",
   "@requiredFieldLabel": {
     "description": "Étiquette pour indiquer qu'un champ est obligatoire"
+  },
+  "back": "Retour",
+  "@back": {
+    "description": "Bouton pour revenir à l'étape précédente dans la boîte de dialogue"
   }
 }
