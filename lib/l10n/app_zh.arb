@@ -671,5 +671,9 @@
   "selectAll": "全选",
   "@selectAll": {
     "description": "在习惯页面选择所有习惯的按钮"
+  },
+  "copy": "复制",
+  "@copy": {
+    "description": "用于习惯复制的文本（滑动操作）"
   }
 }

@@ -553,4 +553,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get selectAll => 'Selecionar todos';
+
+  @override
+  String get copy => 'Duplicar';
 }

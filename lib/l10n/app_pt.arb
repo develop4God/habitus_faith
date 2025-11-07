@@ -671,5 +671,9 @@
   "selectAll": "Selecionar todos",
   "@selectAll": {
     "description": "Botão para selecionar todos os hábitos na página de hábitos"
+  },
+  "copy": "Duplicar",
+  "@copy": {
+    "description": "Texto para duplicar um hábito (ação de swipe)"
   }
 }

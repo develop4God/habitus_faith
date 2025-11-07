@@ -524,4 +524,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selectAll => '全选';
+
+  @override
+  String get copy => '复制';
 }

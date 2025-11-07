@@ -1087,6 +1087,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select all'**
   String get selectAll;
+
+  /// Text for duplicating a habit (swipe action)
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get copy;
 }
 
 class _AppLocalizationsDelegate

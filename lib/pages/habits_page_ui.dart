@@ -7,7 +7,6 @@ import '../features/habits/domain/models/display_mode.dart';
 import '../features/habits/presentation/onboarding/display_mode_provider.dart';
 import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
 import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.dart';
-import '../features/habits/presentation/constants/habit_colors.dart';
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
@@ -114,184 +113,7 @@ class HabitsPageUI extends ConsumerWidget {
 
           final displayMode = ref.watch(displayModeProvider);
 
-          if (displayMode == DisplayMode.compact) {
-            // Modo compacto: lista plana de hábitos, sin categorías
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 900),
-                    curve: Curves.easeInOut,
-                    builder: (context, value, child) {
-                      return Opacity(
-                        opacity: value,
-                        child: Transform.translate(
-                          offset: Offset(0, (1 - value) * 20),
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.blue.shade100),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.swipe, color: Color(0xff6366f1)),
-                          SizedBox(width: 8),
-                          Text(
-                            "Desliza a la izquierda para eliminar o a la derecha para duplicar",
-                            style: TextStyle(
-                              color: Color(0xff6366f1),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                if (selectedHabits.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Card(
-                      color: Colors.blue.shade50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            child: Text('${selectedHabits.length} seleccionados'),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                tooltip: 'Eliminar seleccionados',
-                                onPressed: () => deleteSelected(context, ref),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.clear),
-                                tooltip: 'Limpiar selección',
-                                onPressed: clearSelection,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                // Lista plana de hábitos
-                ...habits.map((habit) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Dismissible(
-                      key: Key('compact_habit_${habit.id}'),
-                      background: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.only(left: 24),
-                        child: const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      secondaryBackground: Container(
-                        color: Colors.blue,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 24),
-                        child: const Icon(Icons.copy, color: Colors.white),
-                      ),
-                      confirmDismiss: (direction) async {
-                        if (direction == DismissDirection.startToEnd) {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text(l10n.deleteHabit),
-                              content: Text(l10n.deleteHabitConfirm(habit.name)),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(l10n.cancel),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () => Navigator.pop(context, true),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                  ),
-                                  child: Text(l10n.delete),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirmed == true) {
-                            await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
-                          }
-                          return confirmed == true;
-                        } else {
-                          await duplicateHabit(context, ref, habit);
-                          return false;
-                        }
-                      },
-                      child: CompactHabitCard(
-                        habit: habit,
-                        onComplete: (habitId) async {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                          await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.habitCompleted)),
-                            );
-                          }
-                        },
-                        onUncheck: (habitId) async {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
-                        },
-                        onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
-                        onDelete: () async {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text(l10n.deleteHabit),
-                              content: Text(l10n.deleteHabitConfirm(habit.name)),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
-                                  child: Text(l10n.cancel),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () => Navigator.pop(context, true),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                  ),
-                                  child: Text(l10n.delete),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirmed == true) {
-                            await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
-                          }
-                        },
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 24),
-              ],
-            );
-          }
-
-          // Modo avanzado: mantener agrupamiento por categoría
-          final habitsByCategory = <HabitCategory, List<Habit>>{};
-          for (final habit in habits) {
-            habitsByCategory.putIfAbsent(habit.category, () => []).add(habit);
-          }
-
+          // Mostrar todos los hábitos como lista plana, sin categorías
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -364,15 +186,271 @@ class HabitsPageUI extends ConsumerWidget {
                     ),
                   ),
                 ),
-              for (final category in HabitCategory.values)
-                if (habitsByCategory.containsKey(category))
-                  _buildCategorySection(
-                    context,
-                    ref,
-                    l10n,
-                    category,
-                    habitsByCategory[category]!,
-                  ),
+              ...habits.map((habit) {
+                Widget card;
+                if (displayMode == DisplayMode.compact) {
+                  card = Dismissible(
+                    key: Key('compact_habit_${habit.id}'),
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.delete,
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.blue,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            l10n.copy, // Usar la nueva clave de traducción
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.copy, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.startToEnd) {
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(l10n.deleteHabit),
+                            content: Text(l10n.deleteHabitConfirm(habit.name)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(l10n.cancel),
+                              ),
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                child: Text(l10n.delete),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (confirmed == true) {
+                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                        }
+                        return confirmed == true;
+                      } else {
+                        await duplicateHabit(context, ref, habit);
+                        return false;
+                      }
+                    },
+                    child: CompactHabitCard(
+                      habit: habit,
+                      onComplete: (habitId) async {
+                        await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
+                        await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(l10n.habitCompleted)),
+                          );
+                        }
+                      },
+                      onUncheck: (habitId) async {
+                        await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                      },
+                      onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                      onDelete: () async {
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(l10n.deleteHabit),
+                            content: Text(l10n.deleteHabitConfirm(habit.name)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(l10n.cancel),
+                              ),
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                child: Text(l10n.delete),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (confirmed == true) {
+                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                        }
+                      },
+                    ),
+                  );
+                } else {
+                  card = Dismissible(
+                    key: Key('advanced_habit_${habit.id}'),
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.delete,
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.blue,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            l10n.copy, // Usar la nueva clave de traducción
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.copy, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.startToEnd) {
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(l10n.deleteHabit),
+                            content: Text(l10n.deleteHabitConfirm(habit.name)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(l10n.cancel),
+                              ),
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                child: Text(l10n.delete),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (confirmed == true) {
+                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                        }
+                        return confirmed == true;
+                      } else {
+                        await duplicateHabit(context, ref, habit);
+                        return false;
+                      }
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AdvancedHabitCard(
+                          habit: habit,
+                          onComplete: (habitId) async {
+                            await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
+                            await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(l10n.habitCompleted)),
+                              );
+                            }
+                          },
+                          onUncheck: (habitId) async {
+                            await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                          },
+                          onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                          onDelete: () async {
+                            final confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(l10n.deleteHabit),
+                                content: Text(l10n.deleteHabitConfirm(habit.name)),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context, false),
+                                    child: Text(l10n.cancel),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context, true),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    child: Text(l10n.delete),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if (confirmed == true) {
+                              await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                            }
+                          },
+                        ),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            final riskAsync = ref.watch(habitRiskProvider(habit.id));
+                            return riskAsync.when(
+                              data: (risk) {
+                                if (risk < 0.7) return const SizedBox.shrink();
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                  child: Card(
+                                    color: Theme.of(context).colorScheme.errorContainer,
+                                    child: ListTile(
+                                      leading: Icon(
+                                        Icons.warning_amber,
+                                        color: Theme.of(context).colorScheme.error,
+                                      ),
+                                      title: Text(
+                                        l10n.highRiskWarning,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).colorScheme.onErrorContainer,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        l10n.riskPercentage((risk * 100).toInt()),
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.onErrorContainer,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              loading: () => const SizedBox.shrink(),
+                              error: (_, __) => const SizedBox.shrink(),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: card,
+                );
+              }),
+              const SizedBox(height: 24),
             ],
           );
         },
@@ -405,313 +483,6 @@ class HabitsPageUI extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategorySection(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-    HabitCategory category,
-    List<Habit> habits,
-  ) {
-    final categoryColor = HabitColors.categoryColors[category]!;
-    final categoryIcon = HabitColors.getCategoryIcon(category);
-    final categoryName = HabitColors.getCategoryDisplayName(category, l10n);
-    final displayMode = ref.watch(displayModeProvider);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                categoryColor.withValues(alpha: 0.1),
-                categoryColor.withValues(alpha: 0.05),
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: categoryColor.withValues(alpha: 0.2),
-              width: 1,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                categoryIcon,
-                color: categoryColor,
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Flexible(
-                child: Text(
-                  categoryName,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: categoryColor,
-                  ),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: categoryColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${habits.length}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: categoryColor,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        ),
-        ...habits.map((habit) {
-          Widget card;
-          if (displayMode == DisplayMode.compact) {
-            card = Dismissible(
-              key: Key('compact_habit_${habit.id}'),
-              background: Container(
-                color: Colors.red,
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 24),
-                child: const Icon(Icons.delete, color: Colors.white),
-              ),
-              secondaryBackground: Container(
-                color: Colors.blue,
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 24),
-                child: const Icon(Icons.copy, color: Colors.white),
-              ),
-              confirmDismiss: (direction) async {
-                if (direction == DismissDirection.startToEnd) {
-                  final confirmed = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(l10n.deleteHabit),
-                      content: Text(l10n.deleteHabitConfirm(habit.name)),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(l10n.cancel),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          child: Text(l10n.delete),
-                        ),
-                      ],
-                    ),
-                  );
-                  if (confirmed == true) {
-                    await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
-                  }
-                  return confirmed == true;
-                } else {
-                  await duplicateHabit(context, ref, habit);
-                  return false;
-                }
-              },
-              child: CompactHabitCard(
-                habit: habit,
-                onComplete: (habitId) async {
-                  await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                  await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.habitCompleted)),
-                    );
-                  }
-                },
-                onUncheck: (habitId) async {
-                  await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
-                },
-                onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
-                onDelete: () async {
-                  final confirmed = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(l10n.deleteHabit),
-                      content: Text(l10n.deleteHabitConfirm(habit.name)),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(l10n.cancel),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          child: Text(l10n.delete),
-                        ),
-                      ],
-                    ),
-                  );
-                  if (confirmed == true) {
-                    await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
-                  }
-                },
-              ),
-            );
-          } else {
-            card = Dismissible(
-              key: Key('advanced_habit_${habit.id}'),
-              background: Container(
-                color: Colors.red,
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 24),
-                child: const Icon(Icons.delete, color: Colors.white),
-              ),
-              secondaryBackground: Container(
-                color: Colors.blue,
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 24),
-                child: const Icon(Icons.copy, color: Colors.white),
-              ),
-              confirmDismiss: (direction) async {
-                if (direction == DismissDirection.startToEnd) {
-                  final confirmed = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(l10n.deleteHabit),
-                      content: Text(l10n.deleteHabitConfirm(habit.name)),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(l10n.cancel),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          child: Text(l10n.delete),
-                        ),
-                      ],
-                    ),
-                  );
-                  if (confirmed == true) {
-                    await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
-                  }
-                  return confirmed == true;
-                } else {
-                  await duplicateHabit(context, ref, habit);
-                  return false;
-                }
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AdvancedHabitCard(
-                    habit: habit,
-                    onComplete: (habitId) async {
-                      await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                      await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.habitCompleted)),
-                        );
-                      }
-                    },
-                    onUncheck: (habitId) async {
-                      await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
-                    },
-                    onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
-                    onDelete: () async {
-                      final confirmed = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(l10n.deleteHabit),
-                          content: Text(l10n.deleteHabitConfirm(habit.name)),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: Text(l10n.cancel),
-                            ),
-                            ElevatedButton(
-                              onPressed: () => Navigator.pop(context, true),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                              ),
-                              child: Text(l10n.delete),
-                            ),
-                          ],
-                        ),
-                      );
-                      if (confirmed == true) {
-                        await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
-                      }
-                    },
-                  ),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final riskAsync = ref.watch(habitRiskProvider(habit.id));
-                      return riskAsync.when(
-                        data: (risk) {
-                          if (risk < 0.7) return const SizedBox.shrink();
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 12, bottom: 12),
-                            child: Card(
-                              color: Theme.of(context).colorScheme.errorContainer,
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.warning_amber,
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                                title: Text(
-                                  l10n.highRiskWarning,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.onErrorContainer,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  l10n.riskPercentage((risk * 100).toInt()),
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onErrorContainer,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        loading: () => const SizedBox.shrink(),
-                        error: (_, __) => const SizedBox.shrink(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: card,
-          );
-        }),
-        const SizedBox(height: 24),
-      ],
-    );
-  }
-
   void _showEditHabitDialog(
     BuildContext context,
     WidgetRef ref,
@@ -724,4 +495,3 @@ class HabitsPageUI extends ConsumerWidget {
     );
   }
 }
-

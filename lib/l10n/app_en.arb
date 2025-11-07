@@ -731,5 +731,9 @@
   "selectAll": "Select all",
   "@selectAll": {
     "description": "Button to select all habits on the habits page"
+  },
+  "copy": "Duplicate",
+  "@copy": {
+    "description": "Text for duplicating a habit (swipe action)"
   }
 }
