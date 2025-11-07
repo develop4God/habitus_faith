@@ -659,5 +659,9 @@
   "addHabitDiscoverySubtitle": "选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。",
   "@addHabitDiscoverySubtitle": {
     "description": "添加习惯发现对话框的说明性副标题"
+  },
+  "requiredFieldLabel": "必填",
+  "@requiredFieldLabel": {
+    "description": "用于指示字段为必填项的标签"
   }
 }

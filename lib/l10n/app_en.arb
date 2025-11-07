@@ -719,5 +719,9 @@
   "addHabitDiscoverySubtitle": "Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.",
   "@addHabitDiscoverySubtitle": {
     "description": "Explanatory subtitle for the add habit discovery dialog"
+  },
+  "requiredFieldLabel": "Required",
+  "@requiredFieldLabel": {
+    "description": "Label to indicate a field is required"
   }
 }

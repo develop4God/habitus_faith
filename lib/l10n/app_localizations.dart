@@ -1069,6 +1069,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.'**
   String get addHabitDiscoverySubtitle;
+
+  /// Label to indicate a field is required
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredFieldLabel;
 }
 
 class _AppLocalizationsDelegate

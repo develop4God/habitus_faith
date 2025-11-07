@@ -337,6 +337,33 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     final stepKey = _steps[_step];
     final isLast = _step == _steps.length - 1;
 
+    // Definir si el campo es obligatorio u opcional
+    String stepLabel;
+    bool isRequired = false;
+    switch (stepKey) {
+      case 'name':
+        stepLabel = '${widget.l10n.name} *';
+        isRequired = true;
+        break;
+      case 'desc':
+        stepLabel = '${widget.l10n.description} (${widget.l10n.optional})';
+        break;
+      case 'emoji':
+        stepLabel = '${widget.l10n.emoji} (${widget.l10n.optional})';
+        break;
+      case 'category':
+        stepLabel = '${widget.l10n.category} (${widget.l10n.optional})';
+        break;
+      case 'difficulty':
+        stepLabel = '${widget.l10n.difficulty} (${widget.l10n.optional})';
+        break;
+      case 'color':
+        stepLabel = '${widget.l10n.color} (${widget.l10n.optional})';
+        break;
+      default:
+        stepLabel = '';
+    }
+
     Widget stepWidget;
     switch (stepKey) {
       case 'name':
@@ -344,12 +371,12 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           key: const Key('habit_name_input'),
           controller: nameCtrl,
           autofocus: true,
-          maxLength: 40, // Limite de caracteres para el nombre
+          maxLength: 40,
           decoration: InputDecoration(
-            labelText: widget.l10n.name,
+            labelText: stepLabel,
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitName,
-            counterText: '', // Oculta el contador si prefieres
+            counterText: '',
           ),
           onChanged: (value) => setState(() {}),
           onSubmitted: (_) {
@@ -361,9 +388,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = TextField(
           key: const Key('habit_description_input'),
           controller: descCtrl,
-          maxLength: 120, // Limite de caracteres para la descripción
+          maxLength: 120,
           decoration: InputDecoration(
-            labelText: widget.l10n.description,
+            labelText: stepLabel,
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitDescription,
             counterText: '',
@@ -377,7 +404,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = TextField(
           controller: emojiCtrl,
           decoration: InputDecoration(
-            labelText: widget.l10n.emoji,
+            labelText: stepLabel,
             border: const OutlineInputBorder(),
             hintText: '🙏',
           ),
@@ -390,7 +417,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = DropdownButtonFormField<HabitCategory>(
           initialValue: selectedCategory,
           decoration: InputDecoration(
-            labelText: widget.l10n.category,
+            labelText: stepLabel,
             border: const OutlineInputBorder(),
           ),
           items: HabitCategory.values.map((category) {
@@ -422,61 +449,75 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         );
         break;
       case 'difficulty':
-        stepWidget = Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: HabitDifficulty.values.map((difficulty) {
-            final isSelected = selectedDifficulty == difficulty;
-            final color = HabitColors.categoryColors[selectedCategory]!;
+        stepWidget = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              stepLabel,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: HabitDifficulty.values.map((difficulty) {
+                final isSelected = selectedDifficulty == difficulty;
+                final color = HabitColors.categoryColors[selectedCategory]!;
 
-            return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedDifficulty = difficulty;
-                  });
-                  _nextStep();
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? color.withValues(alpha:0.1)
-                        : Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: isSelected ? color : Colors.grey.shade300,
-                      width: 2,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          HabitDifficultyHelper.getDifficultyStars(difficulty),
-                          (index) => Icon(
-                            Icons.star,
-                            size: 18,
-                            color: isSelected ? color : Colors.grey.shade500,
+                return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedDifficulty = difficulty;
+                      });
+                      _nextStep();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? color.withValues(alpha: 0.1)
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? color : Colors.grey.shade300,
+                          width: 2,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(
+                              HabitDifficultyHelper.getDifficultyStars(difficulty),
+                              (index) => Icon(
+                                Icons.star,
+                                size: 18,
+                                color: isSelected ? color : Colors.grey.shade500,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 4),
+                          Text(
+                            difficulty.displayName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight:
+                                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                              color: isSelected ? color : Colors.grey.shade700,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        difficulty.displayName,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.normal,
-                          color: isSelected ? color : Colors.grey.shade700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ));
-          }).toList(),
+                    ));
+              }).toList(),
+            ),
+          ],
         );
         break;
       case 'color':
@@ -496,107 +537,153 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = const SizedBox.shrink();
     }
 
-    // Vista previa arriba
-    final preview = Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: habitColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: habitColor.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: habitColor.withValues(alpha: 0.18),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
-                style: const TextStyle(fontSize: 22),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  nameCtrl.text.isNotEmpty
-                      ? nameCtrl.text
-                      : widget.l10n.previewHabitName,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  descCtrl.text.isNotEmpty
-                      ? descCtrl.text
-                      : widget.l10n.previewHabitDescription,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    // Barra de progreso y pasos
+    final progress = (_step + 1) / _steps.length;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        preview,
+        // Barra de progreso visual
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Column(
+            children: [
+              LinearProgressIndicator(
+                value: progress,
+                minHeight: 6,
+                backgroundColor: Colors.grey.shade200,
+                color: habitColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '${_step + 1} / ${_steps.length}  •  ${isRequired ? widget.l10n.requiredFieldLabel : widget.l10n.optional}',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: isRequired ? Colors.red : Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Vista previa arriba
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: habitColor.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: habitColor.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: habitColor.withValues(alpha: 0.18),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      nameCtrl.text.isNotEmpty
+                          ? nameCtrl.text
+                          : widget.l10n.previewHabitName,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      descCtrl.text.isNotEmpty
+                          ? descCtrl.text
+                          : widget.l10n.previewHabitDescription,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[600],
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Etiqueta del campo actual
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              stepLabel,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: isRequired ? Colors.red : Colors.grey.shade700,
+              ),
+            ),
+          ),
+        ),
         stepWidget,
         const SizedBox(height: 18),
+        // Navegación clara
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (_step > 0)
-              TextButton(
+              OutlinedButton.icon(
+                icon: const Icon(Icons.arrow_back),
+                label: Text(widget.l10n.cancel),
                 onPressed: _prevStep,
-                child: Text(widget.l10n.cancel),
               ),
             if (stepKey == 'name')
-              ElevatedButton(
+              ElevatedButton.icon(
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: nameCtrl.text.isNotEmpty ? _nextStep : null,
-                child: Text(widget.l10n.continueButton),
+                label: Text(widget.l10n.continueButton),
               )
             else if (!isLast)
               Row(
                 children: [
-                  TextButton(
+                  OutlinedButton.icon(
+                    icon: const Icon(Icons.skip_next),
+                    label: Text(widget.l10n.optional),
                     onPressed: _skipStep,
-                    child: Text(widget.l10n.optional),
                   ),
                   const SizedBox(width: 8),
-                  ElevatedButton(
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.arrow_forward),
                     onPressed: _nextStep,
-                    child: Text(widget.l10n.continueButton),
+                    label: Text(widget.l10n.continueButton),
                   ),
                 ],
               )
             else
-              ElevatedButton(
+              ElevatedButton.icon(
                 key: const Key('confirm_add_habit_button'),
+                icon: const Icon(Icons.check),
                 onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null,
-                child: Text(widget.l10n.add),
+                label: Text(widget.l10n.add),
               ),
           ],
         ),
@@ -604,7 +691,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         if (_step < _steps.length - 1 && _step > 0)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: TextButton.icon(
+            child: OutlinedButton.icon(
               icon: const Icon(Icons.double_arrow_rounded, size: 18),
               label: Text(widget.l10n.optional),
               onPressed: () {

@@ -659,5 +659,9 @@
   "addHabitDiscoverySubtitle": "Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.",
   "@addHabitDiscoverySubtitle": {
     "description": "Subtítulo explicativo para o diálogo de descoberta de adicionar hábito"
+  },
+  "requiredFieldLabel": "Obrigatório",
+  "@requiredFieldLabel": {
+    "description": "Etiqueta para indicar que um campo é obrigatório"
   }
 }
