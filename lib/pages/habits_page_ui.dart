@@ -203,60 +203,20 @@ class HabitsPageUI extends ConsumerWidget {
                 child: StatefulBuilder(
                   builder: (context, setState) {
                     bool lottieVisible = true;
-                    Future.delayed(const Duration(seconds: 10), () {
+                    Future.delayed(const Duration(seconds: 8), () {
                       if (lottieVisible) setState(() => lottieVisible = false);
                     });
                     return AnimatedOpacity(
                       opacity: lottieVisible ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 500),
-                      child: GestureDetector(
-                        onHorizontalDragEnd: (details) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('¡Acción de swipe detectada!'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade50,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.blue.shade100),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2),
-                                      child: Lottie.asset(
-                                        'assets/lottie/swipe_actions.json',
-                                        fit: BoxFit.contain,
-                                        repeat: true,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  const Text(
-                                    "Desliza en hábito para acciones",
-                                    style: TextStyle(
-                                      color: Color(0xff6366f1),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ],
+                      child: Center(
+                        child: SizedBox(
+                          width: 56,
+                          height: 56,
+                          child: Lottie.asset(
+                            'assets/lottie/swipe_actions.json',
+                            fit: BoxFit.contain,
+                            repeat: true,
                           ),
                         ),
                       ),
@@ -635,4 +595,3 @@ class HabitsPageUI extends ConsumerWidget {
     );
   }
 }
-
