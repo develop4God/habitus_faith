@@ -169,8 +169,7 @@ class _AnimatedBorderButton extends StatelessWidget {
     required this.label,
     required this.textColor,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
