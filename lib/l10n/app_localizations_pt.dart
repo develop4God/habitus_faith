@@ -544,4 +544,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get addHabitDiscoverySubtitle =>
       'Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.';
+
+  @override
+  String get requiredFieldLabel => 'Obrigatório';
+
+  @override
+  String get back => 'Voltar';
+
+  @override
+  String get selectAll => 'Selecionar todos';
 }

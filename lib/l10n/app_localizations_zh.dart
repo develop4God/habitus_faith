@@ -515,4 +515,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get addHabitDiscoverySubtitle => '选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。';
+
+  @override
+  String get requiredFieldLabel => '必填';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get selectAll => '全选';
 }

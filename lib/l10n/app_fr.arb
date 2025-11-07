@@ -667,5 +667,9 @@
   "back": "Retour",
   "@back": {
     "description": "Bouton pour revenir à l'étape précédente dans la boîte de dialogue"
+  },
+  "selectAll": "Tout sélectionner",
+  "@selectAll": {
+    "description": "Bouton pour sélectionner toutes les habitudes sur la page des habitudes"
   }
 }

@@ -727,5 +727,9 @@
   "back": "Back",
   "@back": {
     "description": "Button to go back to the previous step in the dialog"
+  },
+  "selectAll": "Select all",
+  "@selectAll": {
+    "description": "Button to select all habits on the habits page"
   }
 }

@@ -667,5 +667,9 @@
   "back": "返回",
   "@back": {
     "description": "返回上一步的按钮"
+  },
+  "selectAll": "全选",
+  "@selectAll": {
+    "description": "在习惯页面选择所有习惯的按钮"
   }
 }

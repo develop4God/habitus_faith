@@ -88,6 +88,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
       category: category,
       colorValue: colorValue,
       difficulty: difficulty,
+      emoji: emoji, // <-- Asegura que el emoji se pase al crear el hábito
     );
 
     result.fold(
@@ -248,13 +249,13 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'select_all',
                     child: Row(
                       children: [
-                        Icon(Icons.select_all, size: 20),
-                        SizedBox(width: 8),
-                        Text('Marcar todo'),
+                        const Icon(Icons.select_all, size: 20),
+                        const SizedBox(width: 8),
+                        Text(l10n.selectAll), // Usar clave de traducción
                       ],
                     ),
                   ),

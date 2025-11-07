@@ -667,5 +667,9 @@
   "back": "Voltar",
   "@back": {
     "description": "Botão para voltar ao passo anterior no diálogo"
+  },
+  "selectAll": "Selecionar todos",
+  "@selectAll": {
+    "description": "Botão para selecionar todos os hábitos na página de hábitos"
   }
 }
