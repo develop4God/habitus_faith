@@ -675,5 +675,9 @@
   "copy": "复制",
   "@copy": {
     "description": "用于习惯复制的文本（滑动操作）"
+  },
+  "introMessage": "最大的改变始于坚持...",
+  "@introMessage": {
+    "description": "在欢迎页显示的激励语。"
   }
 }

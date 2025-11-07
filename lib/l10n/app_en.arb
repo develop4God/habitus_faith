@@ -735,5 +735,9 @@
   "copy": "Duplicate",
   "@copy": {
     "description": "Text for duplicating a habit (swipe action)"
+  },
+  "introMessage": "The greatest changes begin with consistency...",
+  "@introMessage": {
+    "description": "Intro message shown on landing page as a motivational quote."
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import '../l10n/app_localizations.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -21,6 +22,8 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final introMessage = AppLocalizations.of(context)?.introMessage ??
+        'Los mayores cambios, inician en la constancia...';
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       body: Stack(
@@ -29,45 +32,83 @@ class _LandingPageState extends State<LandingPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 220,
-                  child: Lottie.asset('assets/lottie/completing_tasks.json'),
-                ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
                 const Text(
                   'Habitus+Faith',
                   style: TextStyle(
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2,
-                    color: Color(0xff6366f1), // tono más espiritual
-                    fontFamily: 'Montserrat', // fuente moderna y amigable
+                    color: Color(0xff6366f1),
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 220,
+                  child: Lottie.asset('assets/lottie/completing_tasks.json'),
+                ),
+                const SizedBox(height: 24),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: 1),
+                  duration: const Duration(seconds: 2),
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: child,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return LinearGradient(
+                          colors: [Color(0xffa5b4fc), Color(0xffc7d2fe)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ).createShader(bounds);
+                      },
+                      blendMode: BlendMode.srcIn,
+                      child: Text(
+                        introMessage,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
           Positioned(
-            bottom: 64, // Un poco más arriba
+            bottom: 64,
             left: 0,
             right: 0,
             child: Center(
               child: ShaderMask(
                 shaderCallback: (Rect bounds) {
                   return LinearGradient(
-                    colors: [Color(0xff6366f1), Color(0xffa5b4fc)],
+                    colors: [Color(0xffa5b4fc), Color(0xffc7d2fe)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ).createShader(bounds);
                 },
                 blendMode: BlendMode.srcIn,
-                child: const Text(
-                  'Develop4God',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 2,
-                    fontFamily: 'Montserrat', // Fuente moderna y agradable
+                child: Text(
+                  introMessage,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: 'DancingScript', // Fuente cursiva y agradable
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 1.2,
                   ),
                 ),
               ),

@@ -71,3 +71,7 @@ flutter:
     - assets/ml_models/scaler_params.json
     - assets/ml_models/model_metadata.json
     - .env
+  fonts:
+    - family: DancingScript
+      fonts:
+        - asset: assets/fonts/DancingScript-Regular.ttf

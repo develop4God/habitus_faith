@@ -675,5 +675,9 @@
   "copy": "Duplicar",
   "@copy": {
     "description": "Texto para duplicar un hábito (acción swipe)"
+  },
+  "introMessage": "Los mayores cambios, inician en la constancia...",
+  "@introMessage": {
+    "description": "Mensaje motivacional mostrado en la landing page."
   }
 }

@@ -99,15 +99,12 @@ class MyApp extends ConsumerWidget {
       },
       home: authInit.when(
         data: (_) {
-          // Si el onboarding está completo, muestra la landing page
           if (onboardingComplete) {
-            return const LandingPage();
+            return const LandingPage(); // Ya no pasa introMessage
           }
-          // Si el modo de visualización no está seleccionado, muestra la selección de modo
           if (!displayModeSelected) {
             return const DisplayModeSelectionPage();
           }
-          // Si no, muestra el onboarding
           return const OnboardingPage();
         },
         loading: () => const Scaffold(
