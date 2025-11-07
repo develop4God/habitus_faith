@@ -643,5 +643,13 @@
   "chooseFromPredefined": "选择一个预设习惯",
   "@chooseFromPredefined": {
     "description": "选择预设习惯的文本"
+  },
+  "manual": "手动",
+  "@manual": {
+    "description": "手动习惯选项（短标签）"
+  },
+  "custom": "自定义",
+  "@custom": {
+    "description": "自定义习惯选项（短标签）"
   }
 }

@@ -703,5 +703,13 @@
   "chooseFromPredefined": "Choose from predefined habits",
   "@chooseFromPredefined": {
     "description": "Text for choosing from predefined habits"
+  },
+  "manual": "Manual",
+  "@manual": {
+    "description": "Manual habit option (short label)"
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Custom habit option (short label)"
   }
 }

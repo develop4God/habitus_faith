@@ -643,5 +643,13 @@
   "chooseFromPredefined": "Escolha um hábito predefinido",
   "@chooseFromPredefined": {
     "description": "Texto para escolher entre hábitos predefinidos"
+  },
+  "manual": "Manual",
+  "@manual": {
+    "description": "Opção de hábito manual (rótulo curto)"
+  },
+  "custom": "Personalizado",
+  "@custom": {
+    "description": "Opção de hábito personalizado (rótulo curto)"
   }
 }

@@ -643,5 +643,13 @@
   "chooseFromPredefined": "Choisissez une habitude prédéfinie",
   "@chooseFromPredefined": {
     "description": "Texte pour choisir parmi les habitudes prédéfinies"
+  },
+  "manual": "Manuel",
+  "@manual": {
+    "description": "Option d'habitude manuelle (étiquette courte)"
+  },
+  "custom": "Personnalisé",
+  "@custom": {
+    "description": "Option d'habitude personnalisée (étiquette courte)"
   }
 }

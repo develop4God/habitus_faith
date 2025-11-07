@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/predefined_habits_data.dart';
 import '../features/habits/domain/models/predefined_habit.dart';
@@ -29,7 +30,19 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
               l10n.addHabit,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            // Lottie de mano para indicar tap
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: Lottie.asset(
+                  'assets/lottie/hand_tap.json',
+                  repeat: true,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
             Text(
               l10n.chooseHabitType,
               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
@@ -39,8 +52,7 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.edit_note, size: 28),
+                  child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xff6366f1),
@@ -50,10 +62,6 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                       ),
                       elevation: 2,
-                    ),
-                    label: const Text(
-                      'Manual',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -65,12 +73,22 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                         ),
                       );
                     },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.edit_note, size: 32),
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.manual,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.star, size: 28),
+                  child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xff6366f1),
@@ -80,10 +98,6 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                       ),
                       elevation: 2,
-                    ),
-                    label: const Text(
-                      'Personalizado',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -95,6 +109,17 @@ class AddHabitDiscoveryDialog extends StatelessWidget {
                         ),
                       );
                     },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.star, size: 32),
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.custom,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -188,14 +213,14 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                             color: const Color(0xff6366f1),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          tabs: const [
+                          tabs: [
                             Tab(
-                              icon: Icon(Icons.edit_note),
-                              text: 'Manual',
+                              icon: const Icon(Icons.edit_note),
+                              text: widget.l10n.manual,
                             ),
                             Tab(
-                              icon: Icon(Icons.star),
-                              text: 'Personalizado',
+                              icon: const Icon(Icons.star),
+                              text: widget.l10n.custom,
                             ),
                           ],
                         ),

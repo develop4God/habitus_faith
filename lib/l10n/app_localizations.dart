@@ -1045,6 +1045,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose from predefined habits'**
   String get chooseFromPredefined;
+
+  /// Manual habit option (short label)
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get manual;
+
+  /// Custom habit option (short label)
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get custom;
 }
 
 class _AppLocalizationsDelegate
