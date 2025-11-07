@@ -330,11 +330,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   }
 
   Widget _buildDiscoveryStep(Color habitColor) {
-    // Paso actual
     final stepKey = _steps[_step];
     final isLast = _step == _steps.length - 1;
 
-    // Definir si el campo es obligatorio u opcional
     String stepLabel;
     bool isRequired = false;
     switch (stepKey) {
@@ -373,7 +371,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             labelText: '$stepLabel *',
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitName,
-            counterText: '',
+            counterText: '${nameCtrl.text.length}/40',
+            helperText: nameCtrl.text.length == 40 ? widget.l10n.maxThreeHabits : null,
           ),
           onChanged: (value) => setState(() {}),
           onSubmitted: (_) {
@@ -390,7 +389,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             labelText: '${widget.l10n.description} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitDescription,
-            counterText: '',
+            counterText: '${descCtrl.text.length}/120',
+            helperText: descCtrl.text.length == 120 ? widget.l10n.maxThreeHabits : null,
           ),
           maxLines: 2,
           onChanged: (value) => setState(() {}),
@@ -404,6 +404,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             labelText: '${widget.l10n.emoji} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),
             hintText: '🙏',
+            counterText: '${emojiCtrl.text.length}/2',
+            helperText: emojiCtrl.text.length == 2 ? widget.l10n.maxThreeHabits : null,
           ),
           maxLength: 2,
           onChanged: (value) => setState(() {}),
@@ -527,24 +529,41 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = const SizedBox.shrink();
     }
 
-    // Barra de progreso y pasos
-    final progress = (_step + 1) / _steps.length;
+
+    // Barra de pasos visual
+    Widget stepsBar = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(_steps.length, (i) {
+        final isActive = i == _step;
+        final isCompleted = i < _step;
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: isActive ? 28 : 18,
+          height: 8,
+          decoration: BoxDecoration(
+            color: isCompleted
+                ? habitColor
+                : isActive
+                    ? habitColor.withValues(alpha:0.8)
+                    : Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(6),
+            border: isActive
+                ? Border.all(color: habitColor, width: 2)
+                : null,
+          ),
+        );
+      }),
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Barra de progreso visual y etiqueta clara de campo obligatorio/opcional
+        // Barra de pasos visual y progreso
         Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 8),
           child: Column(
             children: [
-              LinearProgressIndicator(
-                value: progress,
-                minHeight: 6,
-                backgroundColor: Colors.grey.shade200,
-                color: habitColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
+              stepsBar,
               const SizedBox(height: 8),
               Text(
                 '${_step + 1} / ${_steps.length}  •  ${isRequired ? widget.l10n.requiredFieldLabel : widget.l10n.optional}',
@@ -619,30 +638,23 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             ],
           ),
         ),
-        // Quitar etiqueta duplicada del campo actual
-        // stepLabel ya va en el labelText del input
         stepWidget,
         const SizedBox(height: 18),
-        // Navegación clara
+        // Navegación clara: Back siempre izquierda, Continue siempre derecha
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (_step > 0)
-              OutlinedButton.icon(
-                icon: const Icon(Icons.arrow_back),
-                label: Text(widget.l10n.back),
-                onPressed: _prevStep,
-              ),
-            if (stepKey == 'name')
+            OutlinedButton.icon(
+              icon: const Icon(Icons.arrow_back),
+              label: Text(widget.l10n.back),
+              onPressed: _step > 0 ? _prevStep : null,
+            ),
+            if (!isLast)
               ElevatedButton.icon(
                 icon: const Icon(Icons.arrow_forward),
-                onPressed: nameCtrl.text.isNotEmpty ? _nextStep : null,
-                label: Text(widget.l10n.continueButton),
-              )
-            else if (!isLast)
-              ElevatedButton.icon(
-                icon: const Icon(Icons.arrow_forward),
-                onPressed: _nextStep,
+                onPressed: (stepKey == 'name' && nameCtrl.text.isEmpty)
+                    ? null
+                    : _nextStep,
                 label: Text(widget.l10n.continueButton),
               )
             else
@@ -654,18 +666,20 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
               ),
           ],
         ),
-        // Agrupador de campos opcionales para saltar directo (solo un botón skip abajo)
+        // Botón Skip centrado y más abajo
         if (_step < _steps.length - 1 && _step > 0)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: OutlinedButton.icon(
-              icon: const Icon(Icons.skip_next, size: 18),
-              label: Text(widget.l10n.optional),
-              onPressed: () {
-                setState(() {
-                  _step = _steps.length - 1;
-                });
-              },
+            padding: const EdgeInsets.only(top: 18),
+            child: Center(
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.skip_next, size: 18),
+                label: Text(widget.l10n.optional),
+                onPressed: () {
+                  setState(() {
+                    _step = _steps.length - 1;
+                  });
+                },
+              ),
             ),
           ),
       ],

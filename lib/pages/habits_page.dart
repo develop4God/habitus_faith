@@ -162,13 +162,80 @@ final jsonHabitsNotifierProvider =
   return JsonHabitsNotifier(ref);
 });
 
-class HabitsPage extends ConsumerWidget {
+class HabitsPage extends ConsumerStatefulWidget {
   const HabitsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HabitsPage> createState() => _HabitsPageState();
+}
+
+class _HabitsPageState extends ConsumerState<HabitsPage> {
+  final Set<String> _selectedHabits = {};
+
+  void _toggleSelect(String habitId) {
+    setState(() {
+      if (_selectedHabits.contains(habitId)) {
+        _selectedHabits.remove(habitId);
+      } else {
+        _selectedHabits.add(habitId);
+      }
+    });
+  }
+
+  void _clearSelection() {
+    setState(() {
+      _selectedHabits.clear();
+    });
+  }
+
+  void _selectAll(List<Habit> habits) {
+    setState(() {
+      _selectedHabits.addAll(habits.map((h) => h.id));
+    });
+  }
+
+  void _selectRandom(List<Habit> habits, int count) {
+    setState(() {
+      _selectedHabits.clear();
+      habits.shuffle();
+      _selectedHabits.addAll(habits.take(count).map((h) => h.id));
+    });
+  }
+
+  Future<void> _deleteSelected(BuildContext context, WidgetRef ref) async {
+    for (final habitId in _selectedHabits) {
+      await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habitId);
+    }
+    _clearSelection();
+  }
+
+  Future<void> _completeSelected(WidgetRef ref) async {
+    for (final habitId in _selectedHabits) {
+      await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
+    }
+    _clearSelection();
+  }
+
+  Future<void> _duplicateHabit(BuildContext context, WidgetRef ref, Habit habit) async {
+    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+      name: "${habit.name} (copy)",
+      description: habit.description,
+      category: habit.category,
+      colorValue: habit.colorValue,
+      difficulty: habit.difficulty,
+      emoji: habit.emoji,
+    );
+    _clearSelection();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Hábito duplicado")),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    debugPrint('HabitsPage.build: started');
     final habitsAsync = ref.watch(jsonHabitsStreamProvider);
 
     // Listen for errors
@@ -195,6 +262,83 @@ class HabitsPage extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: const Color(0xff1a202c),
+        actions: [
+          habitsAsync.when(
+            data: (habits) {
+              if (habits.isEmpty) return const SizedBox.shrink();
+              return PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert),
+                onSelected: (value) async {
+                  if (value == 'select_all') {
+                    _selectAll(habits);
+                  } else if (value == 'clear_selection') {
+                    _clearSelection();
+                  } else if (value == 'delete_all') {
+                    await _deleteSelected(context, ref);
+                  } else if (value == 'complete_all') {
+                    await _completeSelected(ref);
+                  } else if (value == 'select_random') {
+                    _selectRandom(habits, (habits.length / 2).ceil());
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'select_all',
+                    child: Row(
+                      children: [
+                        Icon(Icons.select_all, size: 20),
+                        SizedBox(width: 8),
+                        Text('Seleccionar todos'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'select_random',
+                    child: Row(
+                      children: [
+                        Icon(Icons.shuffle, size: 20),
+                        SizedBox(width: 8),
+                        Text('Seleccionar aleatorios'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'complete_all',
+                    child: Row(
+                      children: [
+                        Icon(Icons.done_all, size: 20),
+                        SizedBox(width: 8),
+                        Text('Marcar todos como completados'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'delete_all',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete_forever, size: 20, color: Colors.red),
+                        SizedBox(width: 8),
+                        Text('Eliminar seleccionados', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'clear_selection',
+                    child: Row(
+                      children: [
+                        Icon(Icons.clear, size: 20),
+                        SizedBox(width: 8),
+                        Text('Limpiar selección'),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+        ],
       ),
       body: habitsAsync.when(
         data: (habits) {
@@ -232,6 +376,50 @@ class HabitsPage extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              if (_selectedHabits.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Card(
+                    color: Colors.blue.shade50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          child: Text('${_selectedHabits.length} seleccionados'),
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.done_all),
+                              tooltip: 'Marcar seleccionados',
+                              onPressed: () => _completeSelected(ref),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              tooltip: 'Eliminar seleccionados',
+                              onPressed: () => _deleteSelected(context, ref),
+                            ),
+                            if (_selectedHabits.length == 1)
+                              IconButton(
+                                icon: const Icon(Icons.copy),
+                                tooltip: 'Duplicar hábito',
+                                onPressed: () {
+                                  final habit = habits.firstWhere((h) => h.id == _selectedHabits.first);
+                                  _duplicateHabit(context, ref, habit);
+                                },
+                              ),
+                            IconButton(
+                              icon: const Icon(Icons.clear),
+                              tooltip: 'Limpiar selección',
+                              onPressed: _clearSelection,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               // Build sections for each category
               for (final category in HabitCategory.values)
                 if (habitsByCategory.containsKey(category))
@@ -278,7 +466,7 @@ class HabitsPage extends ConsumerWidget {
     );
   }
 
-Widget _buildCategorySection(
+  Widget _buildCategorySection(
     BuildContext context,
     WidgetRef ref,
     AppLocalizations l10n,
@@ -364,71 +552,17 @@ Widget _buildCategorySection(
         // ],
         // Habits in this category - use appropriate card based on display mode
         ...habits.map((habit) {
+          final isSelected = _selectedHabits.contains(habit.id);
+          Widget card;
           if (displayMode == DisplayMode.compact) {
-            return CompactHabitCard(
-              key: Key('compact_habit_${habit.id}'),
-              habit: habit,
-              onComplete: (habitId) async {
-                await ref
-                    .read(jsonHabitsNotifierProvider.notifier)
-                    .completeHabit(habitId);
-                await ref
-                    .read(jsonHabitsRepositoryProvider)
-                    .recordCompletionForML(habitId, true);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.habitCompleted)),
-                  );
-                }
-              },
-              onUncheck: (habitId) async {
-                await ref
-                    .read(jsonHabitsNotifierProvider.notifier)
-                    .uncheckHabit(habitId);
-              },
-              onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
-              onDelete: () async {
-                final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(l10n.deleteHabit),
-                    content: Text(l10n.deleteHabitConfirm(habit.name)),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text(l10n.cancel),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                        child: Text(l10n.delete),
-                      ),
-                    ],
-                  ),
-                );
-                if (confirmed == true) {
-                  await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
-                      .deleteHabit(habit.id);
-                }
-              },
-            );
-          } else {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
+            card = Stack(
               children: [
-                AdvancedHabitCard(
-                  key: Key('advanced_habit_${habit.id}'),
+                CompactHabitCard(
+                  key: Key('compact_habit_${habit.id}'),
                   habit: habit,
                   onComplete: (habitId) async {
-                    await ref
-                        .read(jsonHabitsNotifierProvider.notifier)
-                        .completeHabit(habitId);
-                    await ref
-                        .read(jsonHabitsRepositoryProvider)
-                        .recordCompletionForML(habitId, true);
+                    await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
+                    await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(l10n.habitCompleted)),
@@ -436,9 +570,7 @@ Widget _buildCategorySection(
                     }
                   },
                   onUncheck: (habitId) async {
-                    await ref
-                        .read(jsonHabitsNotifierProvider.notifier)
-                        .uncheckHabit(habitId);
+                    await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
                   },
                   onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
                   onDelete: () async {
@@ -463,64 +595,158 @@ Widget _buildCategorySection(
                       ),
                     );
                     if (confirmed == true) {
-                      await ref
-                          .read(jsonHabitsNotifierProvider.notifier)
-                          .deleteHabit(habit.id);
+                      await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
                     }
                   },
                 ),
-                // ML-based risk warning - only in advanced mode
-                Consumer(
-                  builder: (context, ref, child) {
-                    final riskAsync = ref.watch(habitRiskProvider(habit.id));
-
-                    return riskAsync.when(
-                      data: (risk) {
-                        if (risk < 0.7) return const SizedBox.shrink();
-
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 12, bottom: 12),
-                          child: Card(
-                            color: Theme.of(context).colorScheme.errorContainer,
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.warning_amber,
-                                color: Theme.of(context).colorScheme.error,
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: GestureDetector(
+                    onTap: () => _toggleSelect(habit.id),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.blue : Colors.white,
+                        border: Border.all(
+                          color: isSelected ? Colors.blue : Colors.grey.shade400,
+                          width: 2,
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: isSelected
+                          ? const Icon(Icons.check, color: Colors.white, size: 18)
+                          : null,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            card = Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AdvancedHabitCard(
+                      key: Key('advanced_habit_${habit.id}'),
+                      habit: habit,
+                      onComplete: (habitId) async {
+                        await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
+                        await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(l10n.habitCompleted)),
+                          );
+                        }
+                      },
+                      onUncheck: (habitId) async {
+                        await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                      },
+                      onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                      onDelete: () async {
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(l10n.deleteHabit),
+                            content: Text(l10n.deleteHabitConfirm(habit.name)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(l10n.cancel),
                               ),
-                              title: Text(
-                                l10n.highRiskWarning,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onErrorContainer,
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
                                 ),
+                                child: Text(l10n.delete),
                               ),
-                              subtitle: Text(
-                                l10n.riskPercentage((risk * 100).toInt()),
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onErrorContainer,
-                                ),
-                              ),
-                            ),
+                            ],
                           ),
                         );
+                        if (confirmed == true) {
+                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                        }
                       },
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
-                    );
-                  },
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final riskAsync = ref.watch(habitRiskProvider(habit.id));
+                        return riskAsync.when(
+                          data: (risk) {
+                            if (risk < 0.7) return const SizedBox.shrink();
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 12, bottom: 12),
+                              child: Card(
+                                color: Theme.of(context).colorScheme.errorContainer,
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.warning_amber,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                  title: Text(
+                                    l10n.highRiskWarning,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.onErrorContainer,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    l10n.riskPercentage((risk * 100).toInt()),
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onErrorContainer,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: GestureDetector(
+                    onTap: () => _toggleSelect(habit.id),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.blue : Colors.white,
+                        border: Border.all(
+                          color: isSelected ? Colors.blue : Colors.grey.shade400,
+                          width: 2,
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: isSelected
+                          ? const Icon(Icons.check, color: Colors.white, size: 18)
+                          : null,
+                    ),
+                  ),
                 ),
               ],
             );
           }
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: card,
+          );
         }),
         const SizedBox(height: 24),
       ],
     );
   }
+
   void _showEditHabitDialog(
     BuildContext context,
     WidgetRef ref,
