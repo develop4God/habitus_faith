@@ -1033,6 +1033,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get total;
+
+  /// Text for choosing habit type when adding
+  ///
+  /// In en, this message translates to:
+  /// **'What type of habit do you want to add?'**
+  String get chooseHabitType;
+
+  /// Text for choosing from predefined habits
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from predefined habits'**
+  String get chooseFromPredefined;
 }
 
 class _AppLocalizationsDelegate

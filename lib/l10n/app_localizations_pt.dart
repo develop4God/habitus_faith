@@ -525,4 +525,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get total => 'Total';
+
+  @override
+  String get chooseHabitType => 'Que tipo de hábito você deseja adicionar?';
+
+  @override
+  String get chooseFromPredefined => 'Escolha um hábito predefinido';
 }

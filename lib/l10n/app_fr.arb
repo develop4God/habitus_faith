@@ -635,5 +635,13 @@
   "total": "Total",
   "@total": {
     "description": "Étiquette total pour les statistiques"
+  },
+  "chooseHabitType": "Quel type d'habitude souhaitez-vous ajouter ?",
+  "@chooseHabitType": {
+    "description": "Texte pour choisir le type d'habitude à ajouter"
+  },
+  "chooseFromPredefined": "Choisissez une habitude prédéfinie",
+  "@chooseFromPredefined": {
+    "description": "Texte pour choisir parmi les habitudes prédéfinies"
   }
 }

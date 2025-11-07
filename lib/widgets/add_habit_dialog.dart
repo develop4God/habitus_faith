@@ -8,11 +8,110 @@ import '../pages/habits_page.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/predefined_habit_translations.dart';
 
-/// Dialog for adding a new habit with tabs for manual entry and predefined habits
-class AddHabitDialog extends ConsumerStatefulWidget {
+/// Diálogo para agregar un nuevo hábito, con tabs para entrada manual y hábitos predefinidos
+class AddHabitDiscoveryDialog extends StatelessWidget {
   final AppLocalizations l10n;
 
-  const AddHabitDialog({super.key, required this.l10n});
+  const AddHabitDiscoveryDialog({super.key, required this.l10n});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.add_circle_outline, size: 56, color: Color(0xff6366f1)),
+            const SizedBox(height: 16),
+            Text(
+              l10n.addHabit,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.chooseHabitType,
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.edit_note, size: 28),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xff6366f1),
+                      side: const BorderSide(color: Color(0xff6366f1), width: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      elevation: 2,
+                    ),
+                    label: const Text(
+                      'Manual',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddHabitDialog(
+                          l10n: l10n,
+                          initialTab: 0,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.star, size: 28),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xff6366f1),
+                      side: const BorderSide(color: Color(0xff6366f1), width: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      elevation: 2,
+                    ),
+                    label: const Text(
+                      'Personalizado',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddHabitDialog(
+                          l10n: l10n,
+                          initialTab: 1,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Dialog para agregar hábito, ahora recibe initialTab para abrir la vista correcta
+class AddHabitDialog extends ConsumerStatefulWidget {
+  final AppLocalizations l10n;
+  final int initialTab;
+
+  const AddHabitDialog({super.key, required this.l10n, this.initialTab = 0});
 
   @override
   ConsumerState<AddHabitDialog> createState() => _AddHabitDialogState();
@@ -31,7 +130,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
   }
 
   @override
@@ -51,60 +150,82 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600, maxHeight: 700),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Header with title and tabs
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(28)),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          widget.l10n.addHabit,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+            constraints: const BoxConstraints(maxWidth: 700, maxHeight: 800),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header con tabs modernos
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.l10n.addHabit,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 16),
-                        TabBar(
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: TabBar(
                           controller: _tabController,
-                          labelColor: const Color(0xff6366f1),
-                          unselectedLabelColor: Colors.grey,
-                          indicatorColor: const Color(0xff6366f1),
-                          tabs: [
-                            Tab(text: widget.l10n.addManually),
-                            Tab(text: widget.l10n.createCustomHabit),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: const Color(0xff6366f1),
+                          indicator: BoxDecoration(
+                            color: const Color(0xff6366f1),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          tabs: const [
+                            Tab(
+                              icon: Icon(Icons.edit_note),
+                              text: 'Manual',
+                            ),
+                            Tab(
+                              icon: Icon(Icons.star),
+                              text: 'Personalizado',
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  // Tab views
-                  SizedBox(
-                    height: 500, // Ajusta este valor si es necesario
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        // Manual entry tab
-                        _buildManualEntryTab(habitColor),
-                        // Predefined habits tab
-                        _buildPredefinedHabitsTab(),
-                      ],
-                    ),
+                ),
+                // Tab views con mayor altura y scroll
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      // Manual entry tab
+                      Scrollbar(
+                        thumbVisibility: true,
+                        child: SingleChildScrollView(
+                          child: _buildManualEntryTab(habitColor),
+                        ),
+                      ),
+                      // Predefined habits tab
+                      Scrollbar(
+                        thumbVisibility: true,
+                        child: SingleChildScrollView(
+                          child: _buildPredefinedHabitsTab(),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
@@ -366,119 +487,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     );
   }
 
-  Widget _buildPredefinedHabitsTab() {
-    return SizedBox(
-      height: 500, // Igual que el TabBarView principal
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 0.9,
-        ),
-        itemCount: predefinedHabits.length,
-        itemBuilder: (context, index) {
-          final habit = predefinedHabits[index];
-          final habitName = PredefinedHabitTranslations.getTranslatedName(
-              widget.l10n, habit.nameKey);
-          final habitDescription =
-              PredefinedHabitTranslations.getTranslatedDescription(
-                  widget.l10n, habit.descriptionKey);
-          final categoryColor = HabitColors.categoryColors[
-              PredefinedHabitCategoryX(habit.category).toDomainCategory()]!;
-
-          return InkWell(
-            onTap: () async {
-              // Add the predefined habit
-              await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-                    name: habitName,
-                    description: habitDescription,
-                    category:
-                        PredefinedHabitCategoryX(habit.category).toDomainCategory(),
-                    emoji: habit.emoji,
-                  );
-              if (!context.mounted) return;
-              Navigator.pop(context);
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.grey.shade200,
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Color indicator
-                    Container(
-                      width: 4,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: categoryColor,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Emoji
-                    Flexible(
-                      child: Text(
-                        habit.emoji,
-                        style: const TextStyle(fontSize: 40),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Name
-                    Flexible(
-                      child: Text(
-                        habitName,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff1a202c),
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    // Description
-                    Expanded(
-                      child: Text(
-                        habitDescription,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey.shade600,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   Widget _buildColorOption(Color? colorValue, Color displayColor, String? label) {
     final isSelected = selectedColor == colorValue;
 
@@ -512,6 +520,116 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
               style: const TextStyle(fontSize: 10),
             ),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPredefinedHabitsTab() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Título moderno
+          Row(
+            children: [
+              const Icon(Icons.auto_awesome, color: Color(0xff6366f1)),
+              const SizedBox(width: 8),
+              Text(
+                widget.l10n.chooseFromPredefined,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff6366f1),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.95,
+            ),
+            itemCount: predefinedHabits.length,
+            itemBuilder: (context, index) {
+              final habit = predefinedHabits[index];
+              final habitName = PredefinedHabitTranslations.getTranslatedName(
+                  widget.l10n, habit.nameKey);
+              final categoryColor = HabitColors.categoryColors[
+                  PredefinedHabitCategoryX(habit.category).toDomainCategory()]!;
+
+              return InkWell(
+                onTap: () async {
+                  await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+                        name: habitName,
+                        description: PredefinedHabitTranslations.getTranslatedDescription(
+                            widget.l10n, habit.descriptionKey),
+                        category:
+                            PredefinedHabitCategoryX(habit.category).toDomainCategory(),
+                        emoji: habit.emoji,
+                      );
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                },
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.grey.shade200,
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha:0.04),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: categoryColor,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          habit.emoji,
+                          style: const TextStyle(fontSize: 44),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          habitName,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff1a202c),
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

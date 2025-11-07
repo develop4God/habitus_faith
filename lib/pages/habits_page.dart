@@ -266,8 +266,11 @@ class HabitsPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         key: const Key('add_habit_fab'),
         onPressed: () {
-          debugPrint('HabitsPage: FAB pressed -> showing add habit dialog');
-          _showAddHabitDialog(context, ref, l10n);
+          debugPrint('HabitsPage: FAB pressed -> showing add habit discovery dialog');
+          showDialog(
+            context: context,
+            builder: (context) => AddHabitDiscoveryDialog(l10n: l10n),
+          );
         },
         backgroundColor: const Color(0xff6366f1),
         child: const Icon(Icons.add, color: Colors.white),
@@ -530,13 +533,6 @@ Widget _buildCategorySection(
     );
   }
 
-  void _showAddHabitDialog(
-      BuildContext context, WidgetRef ref, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (context) => AddHabitDialog(l10n: l10n),
-    );
-  }
 }
 
 class _EditHabitDialog extends ConsumerStatefulWidget {

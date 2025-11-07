@@ -497,4 +497,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get total => '总计';
+
+  @override
+  String get chooseHabitType => '你想添加哪种类型的习惯？';
+
+  @override
+  String get chooseFromPredefined => '选择一个预设习惯';
 }

@@ -635,5 +635,13 @@
   "total": "总计",
   "@total": {
     "description": "统计数据的总计标签"
+  },
+  "chooseHabitType": "你想添加哪种类型的习惯？",
+  "@chooseHabitType": {
+    "description": "添加习惯时选择类型的文本"
+  },
+  "chooseFromPredefined": "选择一个预设习惯",
+  "@chooseFromPredefined": {
+    "description": "选择预设习惯的文本"
   }
 }

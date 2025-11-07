@@ -526,4 +526,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get total => 'Total';
+
+  @override
+  String get chooseHabitType =>
+      'Quel type d\'habitude souhaitez-vous ajouter ?';
+
+  @override
+  String get chooseFromPredefined => 'Choisissez une habitude prédéfinie';
 }
