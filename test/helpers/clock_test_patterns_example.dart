@@ -42,7 +42,7 @@ void main() {
         // Test weekend detection logic
         final clock = Clock.fixed(saturday);
         final engine = BehavioralEngine(clock: clock);
-        
+
         // Verify the clock and engine are set up correctly
         expect(clock.now().weekday, DateTime.saturday);
         expect(engine.clock.now(), saturday);

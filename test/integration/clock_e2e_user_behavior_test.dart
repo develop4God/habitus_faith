@@ -91,7 +91,7 @@ void main() {
       // Skip initialization in this test and just verify predictor can be created
       final predictor = AbandonmentPredictor(clock: clock);
       expect(predictor.clock, equals(clock)); // Verify clock injection
-      
+
       // Note: We don't call initialize() or predictRisk() here as it requires
       // Flutter Test Widgets binding for the ML model to load
       predictor.dispose();
@@ -103,8 +103,9 @@ void main() {
 
       // === Verify Optimal Days ===
       final optimalDays = engine.findOptimalDays(habit);
-      expect(optimalDays.length, greaterThan(0), reason: 'Should find at least one optimal day');
-      
+      expect(optimalDays.length, greaterThan(0),
+          reason: 'Should find at least one optimal day');
+
       // Week 3 had consistent completions, so should have several optimal days
       // Just verify we get some results without enforcing all 7 days
     });
@@ -211,7 +212,7 @@ void main() {
 
       // Pattern detection - test the functionality without expecting specific pattern
       final engine = BehavioralEngine(clock: clock);
-      
+
       final morningPattern = engine.detectFailurePattern(morningHabit);
       expect(morningPattern, isNull); // No pattern, consistent completion
 
@@ -219,8 +220,9 @@ void main() {
       // For pattern detection, the habit needs consecutive failures set
       final eveningHabitWithFailures =
           eveningHabit.copyWith(consecutiveFailures: 4);
-      
-      final eveningPattern = engine.detectFailurePattern(eveningHabitWithFailures);
+
+      final eveningPattern =
+          engine.detectFailurePattern(eveningHabitWithFailures);
       // Pattern detection algorithm considers multiple factors
       // We verify it returns a pattern (not null) based on the failure history
       expect(eveningPattern, isNotNull);

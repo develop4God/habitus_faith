@@ -695,5 +695,171 @@
   "total": "Total",
   "@total": {
     "description": "Total label for statistics"
+  },
+  "mlPredictionFailed": "Unable to calculate abandonment risk",
+  "@mlPredictionFailed": {
+    "description": "Error message when ML prediction fails"
+  },
+  "mlModelNotLoaded": "Prediction model unavailable. Please restart the app.",
+  "@mlModelNotLoaded": {
+    "description": "Error when ML model is not loaded"
+  },
+  "mlInsufficientData": "Need at least {days} days of data for predictions",
+  "@mlInsufficientData": {
+    "description": "Error when not enough data for predictions",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "backgroundSyncFailed": "Sync failed: {reason}",
+  "@backgroundSyncFailed": {
+    "description": "Background sync failure message",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "backgroundSyncNetwork": "No internet connection. Changes will sync when online.",
+  "@backgroundSyncNetwork": {
+    "description": "Sync failed due to network"
+  },
+  "backgroundSyncPermission": "Background sync disabled. Enable in settings.",
+  "@backgroundSyncPermission": {
+    "description": "Sync disabled due to permissions"
+  },
+  "workmanagerActive": "Background sync active",
+  "@workmanagerActive": {
+    "description": "WorkManager is active"
+  },
+  "workmanagerRestricted": "Background sync may be limited by battery optimization",
+  "@workmanagerRestricted": {
+    "description": "WorkManager restricted warning"
+  },
+  "workmanagerDisabled": "Background sync disabled in system settings",
+  "@workmanagerDisabled": {
+    "description": "WorkManager disabled"
+  },
+  "patternWeekend": "You tend to skip weekends. Try setting a reminder?",
+  "@patternWeekend": {
+    "description": "Weekend pattern detected message"
+  },
+  "patternEvening": "Evening completion rate is low. Consider morning habits?",
+  "@patternEvening": {
+    "description": "Evening pattern detected message"
+  },
+  "optimalTimeFound": "Your best completion time is {time}",
+  "@optimalTimeFound": {
+    "description": "Optimal time found message",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "8:00 AM"
+      }
+    }
+  },
+  "networkTimeout": "Request timed out. Check your connection.",
+  "@networkTimeout": {
+    "description": "Network timeout error"
+  },
+  "firebasePermissionDenied": "Access denied. Please sign in again.",
+  "@firebasePermissionDenied": {
+    "description": "Firebase permission denied"
+  },
+  "errorUnknown": "An unexpected error occurred. Please try again.",
+  "@errorUnknown": {
+    "description": "Generic unknown error"
+  },
+  "devBannerTitle": "Developer Tools",
+  "@devBannerTitle": {
+    "description": "Dev tools banner title"
+  },
+  "devBannerLastSync": "Last sync: {time}",
+  "@devBannerLastSync": {
+    "description": "Last sync time in dev banner",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "2m ago"
+      }
+    }
+  },
+  "devBannerMlStatus": "ML Model: {status}",
+  "@devBannerMlStatus": {
+    "description": "ML model status in dev banner",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Loaded"
+      }
+    }
+  },
+  "devBannerWorkmanager": "Background: {status}",
+  "@devBannerWorkmanager": {
+    "description": "WorkManager status in dev banner",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Active"
+      }
+    }
+  },
+  "devBannerFastTime": "Time: {multiplier}x (Simulated: {date})",
+  "@devBannerFastTime": {
+    "description": "Fast time mode in dev banner",
+    "placeholders": {
+      "multiplier": {
+        "type": "String",
+        "example": "288"
+      },
+      "date": {
+        "type": "String",
+        "example": "Nov 7, 2025"
+      }
+    }
+  },
+  "riskLevelLow": "Low risk",
+  "@riskLevelLow": {
+    "description": "Low abandonment risk level"
+  },
+  "riskLevelMedium": "Medium risk",
+  "@riskLevelMedium": {
+    "description": "Medium abandonment risk level"
+  },
+  "riskLevelHigh": "High risk",
+  "@riskLevelHigh": {
+    "description": "High abandonment risk level"
+  },
+  "predictorRunning": "Analyzing habits...",
+  "@predictorRunning": {
+    "description": "Predictor is running"
+  },
+  "predictorComplete": "Analysis complete",
+  "@predictorComplete": {
+    "description": "Predictor completed"
+  },
+  "syncInProgress": "Syncing...",
+  "@syncInProgress": {
+    "description": "Sync in progress"
+  },
+  "syncComplete": "Sync complete",
+  "@syncComplete": {
+    "description": "Sync completed successfully"
+  },
+  "mlModelLoaded": "Loaded",
+  "@mlModelLoaded": {
+    "description": "ML model loaded status"
+  },
+  "mlModelLoading": "Loading...",
+  "@mlModelLoading": {
+    "description": "ML model loading status"
+  },
+  "mlModelError": "Error",
+  "@mlModelError": {
+    "description": "ML model error status"
   }
 }

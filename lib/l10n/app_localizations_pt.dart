@@ -525,4 +525,119 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get total => 'Total';
+
+  @override
+  String get mlPredictionFailed =>
+      'Não foi possível calcular o risco de abandono';
+
+  @override
+  String get mlModelNotLoaded =>
+      'Modelo de previsão indisponível. Por favor, reinicie o aplicativo.';
+
+  @override
+  String mlInsufficientData(int days) {
+    return 'Precisa de pelo menos $days dias de dados para previsões';
+  }
+
+  @override
+  String backgroundSyncFailed(String reason) {
+    return 'Falha na sincronização: $reason';
+  }
+
+  @override
+  String get backgroundSyncNetwork =>
+      'Sem conexão com a internet. As alterações serão sincronizadas quando estiver online.';
+
+  @override
+  String get backgroundSyncPermission =>
+      'Sincronização em segundo plano desativada. Ative nas configurações.';
+
+  @override
+  String get workmanagerActive => 'Sincronização em segundo plano ativa';
+
+  @override
+  String get workmanagerRestricted =>
+      'A sincronização em segundo plano pode ser limitada pela otimização da bateria';
+
+  @override
+  String get workmanagerDisabled =>
+      'Sincronização em segundo plano desativada nas configurações do sistema';
+
+  @override
+  String get patternWeekend =>
+      'Você tende a pular os fins de semana. Tente definir um lembrete?';
+
+  @override
+  String get patternEvening =>
+      'A taxa de conclusão à noite é baixa. Considere hábitos matinais?';
+
+  @override
+  String optimalTimeFound(String time) {
+    return 'Seu melhor horário de conclusão é $time';
+  }
+
+  @override
+  String get networkTimeout =>
+      'Tempo de espera esgotado. Verifique sua conexão.';
+
+  @override
+  String get firebasePermissionDenied =>
+      'Acesso negado. Por favor, faça login novamente.';
+
+  @override
+  String get errorUnknown =>
+      'Ocorreu um erro inesperado. Por favor, tente novamente.';
+
+  @override
+  String get devBannerTitle => 'Ferramentas de Desenvolvimento';
+
+  @override
+  String devBannerLastSync(String time) {
+    return 'Última sincronização: $time';
+  }
+
+  @override
+  String devBannerMlStatus(String status) {
+    return 'Modelo ML: $status';
+  }
+
+  @override
+  String devBannerWorkmanager(String status) {
+    return 'Segundo plano: $status';
+  }
+
+  @override
+  String devBannerFastTime(String multiplier, String date) {
+    return 'Tempo: ${multiplier}x (Simulado: $date)';
+  }
+
+  @override
+  String get riskLevelLow => 'Risco baixo';
+
+  @override
+  String get riskLevelMedium => 'Risco médio';
+
+  @override
+  String get riskLevelHigh => 'Risco alto';
+
+  @override
+  String get predictorRunning => 'Analisando hábitos...';
+
+  @override
+  String get predictorComplete => 'Análise concluída';
+
+  @override
+  String get syncInProgress => 'Sincronizando...';
+
+  @override
+  String get syncComplete => 'Sincronização concluída';
+
+  @override
+  String get mlModelLoaded => 'Carregado';
+
+  @override
+  String get mlModelLoading => 'Carregando...';
+
+  @override
+  String get mlModelError => 'Erro';
 }
