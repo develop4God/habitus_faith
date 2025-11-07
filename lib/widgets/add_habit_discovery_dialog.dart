@@ -125,7 +125,7 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
                             Color(0xfff59e42),
                           ],
                           backgroundColor: const Color(0xfffff7ed),
-                          icon: Icons.star,
+                          icon: Icons.checklist_outlined,
                           label: widget.l10n.defaultHabit,
                           textColor: const Color(0xfff59e42),
                           onPressed: () {
