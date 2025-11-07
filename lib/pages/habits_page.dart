@@ -780,7 +780,7 @@ class _EditHabitDialogState extends ConsumerState<_EditHabitDialog> {
                       ],
                     ),
                   ));
-                }
+              }
               ).toList(),
             ),
             const SizedBox(height: 16),

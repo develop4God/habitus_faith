@@ -7,8 +7,9 @@ import '../features/habits/presentation/constants/habit_colors.dart';
 import '../pages/habits_page.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/predefined_habit_translations.dart';
+import 'dart:math';
 
-/// Dialog para agregar hábito, ahora recibe initialTab para abrir la vista correcta
+/// Dialog tipo discovery para agregar hábito, con pasos y skip en campos opcionales
 class AddHabitDialog extends ConsumerStatefulWidget {
   final AppLocalizations l10n;
   final int initialTab;
@@ -20,8 +21,12 @@ class AddHabitDialog extends ConsumerStatefulWidget {
 }
 
 class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late TabController _tabController;
+  late AnimationController _gradientController;
+  int _step = 0;
+
+  // Campos del hábito
   final nameCtrl = TextEditingController();
   final descCtrl = TextEditingController();
   final emojiCtrl = TextEditingController();
@@ -29,103 +34,192 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   HabitDifficulty selectedDifficulty = HabitDifficulty.medium;
   Color? selectedColor;
 
+  // Para expand/collapse de campos opcionales
+  bool showAdvanced = false;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
+    _gradientController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _gradientController.dispose();
     nameCtrl.dispose();
     descCtrl.dispose();
     emojiCtrl.dispose();
     super.dispose();
   }
 
-  // Helper function to translate predefined habit names
+  // Gradiente animado para el header según tab
+  Gradient _getHeaderGradient() {
+    final t = _gradientController.value;
+    if (_tabController.index == 0) {
+      // Custom: púrpura
+      return LinearGradient(
+        colors: [
+          Color.lerp(const Color(0xff7c3aed), const Color(0xffc4b5fd), (sin(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(const Color(0xffc4b5fd), const Color(0xff7c3aed), (cos(t * 2 * pi) + 1) / 2)!,
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+    } else {
+      // Default: cyan
+      return LinearGradient(
+        colors: [
+          Color.lerp(const Color(0xff06b6d4), const Color(0xffa5f3fc), (sin(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(const Color(0xffa5f3fc), const Color(0xff06b6d4), (cos(t * 2 * pi) + 1) / 2)!,
+        ],
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+      );
+    }
+  }
+
+  // Wizard steps para agregar hábito manual
+  final List<String> _steps = [
+    'name', // obligatorio
+    'desc', // opcional
+    'emoji', // opcional
+    'category', // opcional
+    'difficulty', // opcional
+    'color', // opcional
+  ];
+
+  void _nextStep() {
+    setState(() {
+      if (_step < _steps.length - 1) {
+        _step++;
+      }
+    });
+  }
+
+  void _prevStep() {
+    setState(() {
+      if (_step > 0) {
+        _step--;
+      }
+    });
+  }
+
+  void _skipStep() {
+    _nextStep();
+  }
+
+  Future<void> _saveHabit() async {
+    final navigator = Navigator.of(context);
+    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+          name: nameCtrl.text,
+          description: descCtrl.text,
+          category: selectedCategory,
+          emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
+          colorValue: selectedColor?.toARGB32(),
+          difficulty: selectedDifficulty,
+        );
+    navigator.pop();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final habitColor =
-        selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
+    final habitColor = selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
+      child: AnimatedBuilder(
+        animation: Listenable.merge([_gradientController, _tabController]),
+        builder: (context, _) {
           return ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800, maxHeight: 900),
+            constraints: const BoxConstraints(maxWidth: 420, maxHeight: 600),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Botón X arriba derecha
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.close, size: 32, color: Color(0xff1a202c)),
-                    splashRadius: 26,
-                    tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-                // Header con tabs modernos y explicación
+                // Header con gradiente animado y tabs modernos
                 Container(
-                  padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    gradient: _getHeaderGradient(),
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                   ),
-                  child: Column(
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                  child: Stack(
                     children: [
-                      Text(
-                        widget.l10n.addHabit,
-                        style: const TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
+                      // Botón X arriba derecha
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, size: 32, color: Colors.white),
+                          splashRadius: 26,
+                          tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      // Opciones tipo ventana para navegación clara
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _OptionTab(
-                            label: widget.l10n.custom,
-                            icon: Icons.edit_note,
-                            selected: _tabController.index == 0,
-                            onTap: () {
-                              _tabController.animateTo(0);
-                              setState(() {});
-                            },
-                          ),
-                          _OptionTab(
-                            label: widget.l10n.defaultHabit,
-                            icon: Icons.star,
-                            selected: _tabController.index == 1,
-                            onTap: () {
-                              _tabController.animateTo(1);
-                              setState(() {});
-                            },
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 24),
+                            Text(
+                              widget.l10n.addHabit,
+                              style: const TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // Tabs modernos
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _OptionTab(
+                                  label: widget.l10n.custom,
+                                  icon: Icons.edit_note,
+                                  selected: _tabController.index == 0,
+                                  color: const Color(0xff7c3aed),
+                                  onTap: () {
+                                    _tabController.animateTo(0);
+                                    setState(() {
+                                      _step = 0;
+                                    });
+                                  },
+                                ),
+                                _OptionTab(
+                                  label: widget.l10n.defaultHabit,
+                                  icon: Icons.checklist_outlined,
+                                  selected: _tabController.index == 1,
+                                  color: const Color(0xff06b6d4),
+                                  onTap: () {
+                                    _tabController.animateTo(1);
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                // Tab views con scroll y sin overflow
+                // Cuerpo del dialogo
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      // Custom habit tab
-                      Scrollbar(
-                        thumbVisibility: true,
-                        child: SingleChildScrollView(
-                          child: _buildManualEntryTab(habitColor),
-                        ),
+                      // Paso a paso para custom
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: _buildDiscoveryStep(habitColor),
                       ),
                       // Default (predefinidos) habit tab
                       Padding(
@@ -134,20 +228,19 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.auto_awesome, color: Color(0xff6366f1)),
+                                const Icon(Icons.auto_awesome, color: Color(0xff06b6d4)),
                                 const SizedBox(width: 8),
                                 Text(
                                   widget.l10n.chooseFromPredefined,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xff6366f1),
+                                    color: Color(0xff06b6d4),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 16),
-                            // Usar Expanded y GridView igual que onboarding
                             Expanded(
                               child: GridView.builder(
                                 padding: EdgeInsets.zero,
@@ -201,7 +294,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            // Emoji
                                             Text(
                                               habit.emoji,
                                               style: const TextStyle(fontSize: 44),
@@ -240,295 +332,289 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     );
   }
 
-  Widget _buildManualEntryTab(Color habitColor) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Quitar subtítulo de vista previa
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: habitColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: habitColor.withValues(alpha: 0.3),
-                width: 1,
+  Widget _buildDiscoveryStep(Color habitColor) {
+    // Paso actual
+    final stepKey = _steps[_step];
+    final isLast = _step == _steps.length - 1;
+
+    Widget stepWidget;
+    switch (stepKey) {
+      case 'name':
+        stepWidget = TextField(
+          key: const Key('habit_name_input'),
+          controller: nameCtrl,
+          autofocus: true,
+          maxLength: 40, // Limite de caracteres para el nombre
+          decoration: InputDecoration(
+            labelText: widget.l10n.name,
+            border: const OutlineInputBorder(),
+            hintText: widget.l10n.previewHabitName,
+            counterText: '', // Oculta el contador si prefieres
+          ),
+          onChanged: (value) => setState(() {}),
+          onSubmitted: (_) {
+            if (nameCtrl.text.isNotEmpty) _nextStep();
+          },
+        );
+        break;
+      case 'desc':
+        stepWidget = TextField(
+          key: const Key('habit_description_input'),
+          controller: descCtrl,
+          maxLength: 120, // Limite de caracteres para la descripción
+          decoration: InputDecoration(
+            labelText: widget.l10n.description,
+            border: const OutlineInputBorder(),
+            hintText: widget.l10n.previewHabitDescription,
+            counterText: '',
+          ),
+          maxLines: 2,
+          onChanged: (value) => setState(() {}),
+          onSubmitted: (_) => _nextStep(),
+        );
+        break;
+      case 'emoji':
+        stepWidget = TextField(
+          controller: emojiCtrl,
+          decoration: InputDecoration(
+            labelText: widget.l10n.emoji,
+            border: const OutlineInputBorder(),
+            hintText: '🙏',
+          ),
+          maxLength: 2,
+          onChanged: (value) => setState(() {}),
+          onSubmitted: (_) => _nextStep(),
+        );
+        break;
+      case 'category':
+        stepWidget = DropdownButtonFormField<HabitCategory>(
+          initialValue: selectedCategory,
+          decoration: InputDecoration(
+            labelText: widget.l10n.category,
+            border: const OutlineInputBorder(),
+          ),
+          items: HabitCategory.values.map((category) {
+            return DropdownMenuItem(
+              value: category,
+              child: Row(
+                children: [
+                  Icon(
+                    HabitColors.getCategoryIcon(category),
+                    size: 20,
+                    color: HabitColors.categoryColors[category],
+                  ),
+                  const SizedBox(width: 8),
+                  Text(HabitColors.getCategoryDisplayName(
+                      category, widget.l10n))
+                ],
               ),
-            ),
-            child: Row(
-              children: [
-                // Color indicator
-                Container(
-                  width: 4,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: habitColor,
-                    borderRadius: BorderRadius.circular(2),
+            );
+          }).toList(),
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                selectedCategory = value;
+                selectedColor = null;
+              });
+            }
+          },
+          onSaved: (_) => _nextStep(),
+        );
+        break;
+      case 'difficulty':
+        stepWidget = Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: HabitDifficulty.values.map((difficulty) {
+            final isSelected = selectedDifficulty == difficulty;
+            final color = HabitColors.categoryColors[selectedCategory]!;
+
+            return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedDifficulty = difficulty;
+                  });
+                  _nextStep();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                ),
-                const SizedBox(width: 12),
-                // Emoji en la vista previa
-                Container(
-                  width: 48,
-                  height: 48,
                   decoration: BoxDecoration(
-                    color: habitColor.withValues(alpha: 0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
-                      style: const TextStyle(fontSize: 24),
+                    color: isSelected
+                        ? color.withValues(alpha:0.1)
+                        : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isSelected ? color : Colors.grey.shade300,
+                      width: 2,
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        nameCtrl.text.isNotEmpty
-                            ? nameCtrl.text
-                            : widget.l10n.previewHabitName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                          HabitDifficultyHelper.getDifficultyStars(difficulty),
+                          (index) => Icon(
+                            Icons.star,
+                            size: 18,
+                            color: isSelected ? color : Colors.grey.shade500,
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        descCtrl.text.isNotEmpty
-                            ? descCtrl.text
-                            : widget.l10n.previewHabitDescription,
+                        difficulty.displayName,
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
+                          fontSize: 12,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                          color: isSelected ? color : Colors.grey.shade700,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
+                ));
+          }).toList(),
+        );
+        break;
+      case 'color':
+        stepWidget = _ColorPickerSection(
+          selectedColor: selectedColor,
+          selectedCategory: selectedCategory,
+          onColorSelected: (color) {
+            setState(() {
+              selectedColor = color;
+            });
+            _nextStep();
+          },
+          l10n: widget.l10n,
+        );
+        break;
+      default:
+        stepWidget = const SizedBox.shrink();
+    }
+
+    // Vista previa arriba
+    final preview = Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: habitColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: habitColor.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: habitColor.withValues(alpha: 0.18),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
+                style: const TextStyle(fontSize: 22),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  nameCtrl.text.isNotEmpty
+                      ? nameCtrl.text
+                      : widget.l10n.previewHabitName,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  descCtrl.text.isNotEmpty
+                      ? descCtrl.text
+                      : widget.l10n.previewHabitDescription,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 16),
-          TextField(
-            key: const Key('habit_name_input'),
-            controller: nameCtrl,
-            decoration: InputDecoration(
-              labelText: widget.l10n.name,
-              border: const OutlineInputBorder(),
-            ),
-            onChanged: (value) => setState(() {}),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            key: const Key('habit_description_input'),
-            controller: descCtrl,
-            decoration: InputDecoration(
-              labelText: widget.l10n.description,
-              border: const OutlineInputBorder(),
-            ),
-            maxLines: 2,
-            onChanged: (value) => setState(() {}),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: emojiCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Emoji',
-              border: OutlineInputBorder(),
-              hintText: '🙏',
-            ),
-            maxLength: 2,
-            onChanged: (value) => setState(() {}),
-          ),
-          const SizedBox(height: 16),
-          // Quitar subtítulo de categoría
-          DropdownButtonFormField<HabitCategory>(
-            initialValue: selectedCategory,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-            ),
-            items: HabitCategory.values.map((category) {
-              return DropdownMenuItem(
-                value: category,
-                child: Row(
-                  children: [
-                    Icon(
-                      HabitColors.getCategoryIcon(category),
-                      size: 20,
-                      color: HabitColors.categoryColors[category],
-                    ),
-                    const SizedBox(width: 8),
-                    Text(HabitColors.getCategoryDisplayName(
-                        category, widget.l10n))
-                  ],
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  selectedCategory = value;
-                  selectedColor = null;
-                });
-              }
-            },
-          ),
-          const SizedBox(height: 16),
-          // Quitar subtítulo de dificultad
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: HabitDifficulty.values.map((difficulty) {
-              final isSelected = selectedDifficulty == difficulty;
-              final color = HabitColors.categoryColors[selectedCategory]!;
-
-              return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedDifficulty = difficulty;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? color.withValues(alpha: 0.1)
-                          : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isSelected ? color : Colors.grey.shade300,
-                        width: 2,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            HabitDifficultyHelper.getDifficultyStars(difficulty),
-                            (index) => Icon(
-                              Icons.star,
-                              size: 18,
-                              color: isSelected ? color : Colors.grey.shade500,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          difficulty.displayName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight:
-                                isSelected ? FontWeight.w600 : FontWeight.normal,
-                            color: isSelected ? color : Colors.grey.shade700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ));
-            }).toList(),
-          ),
-          const SizedBox(height: 16),
-          // Quitar subtítulo de color
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildColorOption(
-                null,
-                HabitColors.categoryColors[selectedCategory]!,
-                widget.l10n.defaultColor,
-              ),
-              ...HabitColors.availableColors.map(
-                (color) => _buildColorOption(color, color, null),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          // Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(widget.l10n.cancel),
-              ),
-              const SizedBox(width: 8),
-              ElevatedButton(
-                key: const Key('confirm_add_habit_button'),
-                onPressed: () async {
-                  if (nameCtrl.text.isNotEmpty && descCtrl.text.isNotEmpty) {
-                    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-                          name: nameCtrl.text,
-                          description: descCtrl.text,
-                          category: selectedCategory,
-                          emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
-                          colorValue: selectedColor?.toARGB32(),
-                          difficulty: selectedDifficulty,
-                        );
-                    if (!mounted) return;
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(widget.l10n.add),
-              ),
-            ],
-          ),
         ],
       ),
     );
-  }
 
-  Widget _buildColorOption(Color? colorValue, Color displayColor, String? label) {
-    final isSelected = selectedColor == colorValue;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedColor = colorValue;
-        });
-      },
-      child: Column(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: displayColor,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: isSelected ? Colors.black : Colors.transparent,
-                width: 3,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        preview,
+        stepWidget,
+        const SizedBox(height: 18),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (_step > 0)
+              TextButton(
+                onPressed: _prevStep,
+                child: Text(widget.l10n.cancel),
               ),
-            ),
-            child: isSelected
-                ? const Icon(Icons.check, color: Colors.white, size: 24)
-                : null,
-          ),
-          if (label != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 10),
-            ),
+            if (stepKey == 'name')
+              ElevatedButton(
+                onPressed: nameCtrl.text.isNotEmpty ? _nextStep : null,
+                child: Text(widget.l10n.continueButton),
+              )
+            else if (!isLast)
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: _skipStep,
+                    child: Text(widget.l10n.optional),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: _nextStep,
+                    child: Text(widget.l10n.continueButton),
+                  ),
+                ],
+              )
+            else
+              ElevatedButton(
+                key: const Key('confirm_add_habit_button'),
+                onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null,
+                child: Text(widget.l10n.add),
+              ),
           ],
-        ],
-      ),
+        ),
+        // Agrupador de campos opcionales para saltar directo
+        if (_step < _steps.length - 1 && _step > 0)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: TextButton.icon(
+              icon: const Icon(Icons.double_arrow_rounded, size: 18),
+              label: Text(widget.l10n.optional),
+              onPressed: () {
+                setState(() {
+                  _step = _steps.length - 1;
+                });
+              },
+            ),
+          ),
+      ],
     );
   }
 }
@@ -537,12 +623,14 @@ class _OptionTab extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool selected;
+  final Color color;
   final VoidCallback? onTap;
 
   const _OptionTab({
     required this.label,
     required this.icon,
     required this.selected,
+    required this.color,
     this.onTap,
   });
 
@@ -555,12 +643,13 @@ class _OptionTab extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xff6366f1) : Colors.grey.shade200,
+          color: selected ? color : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.5), width: 1.2),
           boxShadow: selected
               ? [
                   BoxShadow(
-                    color: const Color(0xff6366f1).withValues(alpha:0.15),
+                    color: color.withValues(alpha: 0.15),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -569,16 +658,114 @@ class _OptionTab extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: selected ? Colors.white : const Color(0xff6366f1)),
+            Icon(icon, color: selected ? Colors.white : color),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: selected ? Colors.white : const Color(0xff6366f1),
+                color: selected ? Colors.white : color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Selector de color agrupado y moderno
+class _ColorPickerSection extends StatelessWidget {
+  final Color? selectedColor;
+  final HabitCategory selectedCategory;
+  final ValueChanged<Color?> onColorSelected;
+  final AppLocalizations l10n;
+
+  const _ColorPickerSection({
+    required this.selectedColor,
+    required this.selectedCategory,
+    required this.onColorSelected,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Agrupa colores por tono
+    final List<List<Color>> colorGroups = [
+      [const Color(0xff7c3aed), const Color(0xffa78bfa), const Color(0xffc4b5fd)], // Purple
+      [const Color(0xff06b6d4), const Color(0xff67e8f9), const Color(0xffa5f3fc)], // Cyan
+      [const Color(0xfff59e42), const Color(0xffffe0b2)], // Orange
+      [const Color(0xff22c55e), const Color(0xffbbf7d0)], // Green
+      [const Color(0xff6366f1), const Color(0xffa5b4fc)], // Indigo
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${l10n.color} (${l10n.optional})',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade700,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          children: [
+            _buildColorOption(
+              null,
+              HabitColors.categoryColors[selectedCategory]!,
+              l10n.defaultColor,
+            ),
+            ...colorGroups.expand((group) => [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: group
+                        .map((color) => _buildColorOption(color, color, null))
+                        .toList(),
+                  ),
+                ]),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorOption(Color? colorValue, Color displayColor, String? label) {
+    final isSelected = selectedColor == colorValue;
+
+    return GestureDetector(
+      onTap: () => onColorSelected(colorValue),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2),
+        child: Column(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: displayColor,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? Colors.black : Colors.transparent,
+                  width: 2.5,
+                ),
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, color: Colors.white, size: 20)
+                  : null,
+            ),
+            if (label != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ],
           ],
         ),
       ),
