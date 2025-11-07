@@ -81,6 +81,47 @@ import 'package:flutter/material.dart';
                             ),
                           ),
                           const SizedBox(width: 16),
+                          // Simple completion checkbox button (ahora a la izquierda)
+                          InkWell(
+                            onTap: _isCompleting ? null : _handleComplete,
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              width: 48,
+                              height: 48,
+                              padding: const EdgeInsets.all(10),
+                              child: _isCompleting
+                                  ? SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                                      ),
+                                    )
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        color: widget.habit.completedToday
+                                            ? habitColor
+                                            : Colors.transparent,
+                                        border: Border.all(
+                                          color: widget.habit.completedToday
+                                              ? habitColor
+                                              : Colors.grey.shade400,
+                                          width: 2.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: widget.habit.completedToday
+                                          ? const Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                              size: 20,
+                                            )
+                                          : null,
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
                           // Habit emoji/icon
                           Container(
                             width: 56,
@@ -134,47 +175,6 @@ import 'package:flutter/material.dart';
                           ),
 
                           const SizedBox(width: 12),
-
-                          // Simple completion checkbox button
-                          InkWell(
-                            onTap: _isCompleting ? null : _handleComplete,
-                            borderRadius: BorderRadius.circular(8),
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              padding: const EdgeInsets.all(10),
-                              child: _isCompleting
-                                  ? SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                        valueColor: AlwaysStoppedAnimation<Color>(habitColor),
-                                      ),
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        color: widget.habit.completedToday
-                                            ? habitColor
-                                            : Colors.transparent,
-                                        border: Border.all(
-                                          color: widget.habit.completedToday
-                                              ? habitColor
-                                              : Colors.grey.shade400,
-                                          width: 2.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: widget.habit.completedToday
-                                          ? const Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 20,
-                                            )
-                                          : null,
-                                    ),
-                            ),
-                          ),
                         ],
                       ),
                       const SizedBox(height: 20),

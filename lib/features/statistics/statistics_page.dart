@@ -102,7 +102,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const SizedBox(height: 24),
                   Text(
                     'Porcentaje de éxito',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -163,6 +162,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Calificación global de hábitos',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  _GlobalRatingSection(stats: stats),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -203,6 +210,40 @@ class _StatTile extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(fontSize: 12, color: Colors.grey),
+        ),
+      ],
+    );
+  }
+}
+
+class _GlobalRatingSection extends StatelessWidget {
+  final StatisticsModel stats;
+
+  const _GlobalRatingSection({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    final double averageCompletion = stats.totalHabits > 0
+        ? (stats.completedHabits / stats.totalHabits) * 100
+        : 0;
+
+    return Column(
+      children: [
+        Text(
+          averageCompletion.toStringAsFixed(1),
+          style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.indigo),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Calificación promedio',
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        const SizedBox(height: 8),
+        LinearProgressIndicator(
+          value: averageCompletion / 100,
+          minHeight: 8,
+          backgroundColor: Colors.grey.shade200,
+          color: Colors.indigo,
         ),
       ],
     );
