@@ -676,6 +676,17 @@
   "@copy": {
     "description": "Texto para duplicar un hábito (acción swipe)"
   },
+  "copyHabit": "¿Deseas duplicar la tarea?",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "¿Seguro que quieres duplicar \"{habitName}\"?",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "Oración matutina"}
+    }
+  },
   "introMessage": "Los mayores cambios, inician en la constancia...",
   "@introMessage": {
     "description": "Mensaje motivacional mostrado en la landing page."

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/habit.dart';
@@ -119,41 +120,68 @@ class HabitsPageUI extends ConsumerWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0.0, end: 1.0),
-                  duration: const Duration(milliseconds: 900),
-                  curve: Curves.easeInOut,
-                  builder: (context, value, child) {
-                    return Opacity(
-                      opacity: value,
-                      child: Transform.translate(
-                        offset: Offset(0, (1 - value) * 20),
-                        child: child,
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    bool lottieVisible = true;
+                    Future.delayed(const Duration(seconds: 10), () {
+                      if (lottieVisible) setState(() => lottieVisible = false);
+                    });
+                    return AnimatedOpacity(
+                      opacity: lottieVisible ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 500),
+                      child: GestureDetector(
+                        onHorizontalDragEnd: (details) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('¡Acción de swipe detectada!'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.blue.shade100),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Lottie.asset(
+                                        'assets/lottie/swipe_actions.json',
+                                        fit: BoxFit.contain,
+                                        repeat: true,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    "Desliza en hábito para acciones",
+                                    style: TextStyle(
+                                      color: Color(0xff6366f1),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     );
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.blue.shade100),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.swipe, color: Color(0xff6366f1)),
-                        SizedBox(width: 8),
-                        Text(
-                          "Desliza a la izquierda para eliminar o a la derecha para duplicar",
-                          style: TextStyle(
-                            color: Color(0xff6366f1),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
               if (selectedHabits.isNotEmpty)
@@ -192,40 +220,68 @@ class HabitsPageUI extends ConsumerWidget {
                   card = Dismissible(
                     key: Key('compact_habit_${habit.id}'),
                     background: Container(
-                      color: Colors.red,
+                      color: Colors.blue, // Derecha: duplicar
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(left: 24),
                       child: Row(
                         children: [
-                          const Icon(Icons.delete, color: Colors.white),
+                          const Icon(Icons.copy, color: Colors.white),
                           const SizedBox(width: 8),
                           Text(
-                            l10n.delete,
+                            l10n.copy, // Usar la nueva clave de traducción
                             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
                     secondaryBackground: Container(
-                      color: Colors.blue,
+                      color: Colors.red, // Izquierda: eliminar
                       alignment: Alignment.centerRight,
                       padding: const EdgeInsets.only(right: 24),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            l10n.copy, // Usar la nueva clave de traducción
+                            l10n.delete,
                             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.copy, color: Colors.white),
+                          const Icon(Icons.delete, color: Colors.white),
                         ],
                       ),
                     ),
                     confirmDismiss: (direction) async {
+                      final dialogContext = context;
                       if (direction == DismissDirection.startToEnd) {
+                        // Derecha: duplicar
                         final confirmed = await showDialog<bool>(
-                          context: context,
+                          context: dialogContext,
+                          builder: (context) => AlertDialog(
+                            title: Text(l10n.copyHabit),
+                            content: Text(l10n.copyHabitConfirm(habit.name)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(l10n.cancel),
+                              ),
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                ),
+                                child: Text(l10n.copy),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (confirmed == true && dialogContext.mounted) {
+                          await duplicateHabit(dialogContext, ref, habit);
+                        }
+                        return false;
+                      } else {
+                        // Izquierda: eliminar
+                        final confirmed = await showDialog<bool>(
+                          context: dialogContext,
                           builder: (context) => AlertDialog(
                             title: Text(l10n.deleteHabit),
                             content: Text(l10n.deleteHabitConfirm(habit.name)),
@@ -244,22 +300,20 @@ class HabitsPageUI extends ConsumerWidget {
                             ],
                           ),
                         );
-                        if (confirmed == true) {
+                        if (confirmed == true && dialogContext.mounted) {
                           await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
                         }
                         return confirmed == true;
-                      } else {
-                        await duplicateHabit(context, ref, habit);
-                        return false;
                       }
                     },
                     child: CompactHabitCard(
                       habit: habit,
                       onComplete: (habitId) async {
+                        final callbackContext = context;
                         await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
                         await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
+                        if (callbackContext.mounted) {
+                          ScaffoldMessenger.of(callbackContext).showSnackBar(
                             SnackBar(content: Text(l10n.habitCompleted)),
                           );
                         }
@@ -269,8 +323,9 @@ class HabitsPageUI extends ConsumerWidget {
                       },
                       onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
                       onDelete: () async {
+                        final dialogContext = context;
                         final confirmed = await showDialog<bool>(
-                          context: context,
+                          context: dialogContext,
                           builder: (context) => AlertDialog(
                             title: Text(l10n.deleteHabit),
                             content: Text(l10n.deleteHabitConfirm(habit.name)),
@@ -289,7 +344,7 @@ class HabitsPageUI extends ConsumerWidget {
                             ],
                           ),
                         );
-                        if (confirmed == true) {
+                        if (confirmed == true && dialogContext.mounted) {
                           await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
                         }
                       },
@@ -330,9 +385,10 @@ class HabitsPageUI extends ConsumerWidget {
                       ),
                     ),
                     confirmDismiss: (direction) async {
+                      final dialogContext = context;
                       if (direction == DismissDirection.startToEnd) {
                         final confirmed = await showDialog<bool>(
-                          context: context,
+                          context: dialogContext,
                           builder: (context) => AlertDialog(
                             title: Text(l10n.deleteHabit),
                             content: Text(l10n.deleteHabitConfirm(habit.name)),
@@ -351,12 +407,14 @@ class HabitsPageUI extends ConsumerWidget {
                             ],
                           ),
                         );
-                        if (confirmed == true) {
+                        if (confirmed == true && dialogContext.mounted) {
                           await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
                         }
                         return confirmed == true;
                       } else {
-                        await duplicateHabit(context, ref, habit);
+                        if (dialogContext.mounted) {
+                          await duplicateHabit(dialogContext, ref, habit);
+                        }
                         return false;
                       }
                     },
@@ -366,10 +424,11 @@ class HabitsPageUI extends ConsumerWidget {
                         AdvancedHabitCard(
                           habit: habit,
                           onComplete: (habitId) async {
+                            final callbackContext = context;
                             await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
                             await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                            if (callbackContext.mounted) {
+                              ScaffoldMessenger.of(callbackContext).showSnackBar(
                                 SnackBar(content: Text(l10n.habitCompleted)),
                               );
                             }
@@ -379,8 +438,9 @@ class HabitsPageUI extends ConsumerWidget {
                           },
                           onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
                           onDelete: () async {
+                            final dialogContext = context;
                             final confirmed = await showDialog<bool>(
-                              context: context,
+                              context: dialogContext,
                               builder: (context) => AlertDialog(
                                 title: Text(l10n.deleteHabit),
                                 content: Text(l10n.deleteHabitConfirm(habit.name)),
@@ -399,7 +459,7 @@ class HabitsPageUI extends ConsumerWidget {
                                 ],
                               ),
                             );
-                            if (confirmed == true) {
+                            if (confirmed == true && dialogContext.mounted) {
                               await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
                             }
                           },

@@ -679,5 +679,16 @@
   "introMessage": "最大的改变始于坚持...",
   "@introMessage": {
     "description": "在欢迎页显示的激励语。"
+  },
+  "copyHabit": "您想要复制此任务吗？",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "您确定要复制\"{habitName}\"吗？",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "晨祷"}
+    }
   }
 }

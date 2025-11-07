@@ -676,6 +676,17 @@
   "@copy": {
     "description": "Texte pour dupliquer une habitude (action swipe)"
   },
+  "copyHabit": "Voulez-vous dupliquer la tâche ?",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "Êtes-vous sûr de vouloir dupliquer \"{habitName}\" ?",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "Prière du matin"}
+    }
+  },
   "introMessage": "Les plus grands changements commencent par la constance...",
   "@introMessage": {
     "description": "Message d'introduction motivant affiché sur la page d'accueil."

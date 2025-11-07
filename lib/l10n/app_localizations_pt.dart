@@ -558,5 +558,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get copy => 'Duplicar';
 
   @override
+  String get copyHabit => 'Deseja duplicar a tarefa?';
+
+  @override
+  String copyHabitConfirm(String habitName) {
+    return 'Tem certeza de que deseja duplicar \"$habitName\"?';
+  }
+
+  @override
   String get introMessage => 'As maiores mudanças começam na constância...';
 }

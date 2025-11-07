@@ -1094,6 +1094,18 @@ abstract class AppLocalizations {
   /// **'Duplicate'**
   String get copy;
 
+  /// Dialog title for duplicating a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to duplicate the task?'**
+  String get copyHabit;
+
+  /// Confirmation message for duplicating a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to duplicate \"{habitName}\"?'**
+  String copyHabitConfirm(String habitName);
+
   /// Intro message shown on landing page as a motivational quote.
   ///
   /// In en, this message translates to:

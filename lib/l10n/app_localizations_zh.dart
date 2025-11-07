@@ -529,5 +529,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get copy => '复制';
 
   @override
+  String get copyHabit => '您想要复制此任务吗？';
+
+  @override
+  String copyHabitConfirm(String habitName) {
+    return '您确定要复制\"$habitName\"吗？';
+  }
+
+  @override
   String get introMessage => '最大的改变始于坚持...';
 }
