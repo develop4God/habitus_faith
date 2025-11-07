@@ -112,6 +112,181 @@ class HabitsPageUI extends ConsumerWidget {
             );
           }
 
+          final displayMode = ref.watch(displayModeProvider);
+
+          if (displayMode == DisplayMode.compact) {
+            // Modo compacto: lista plana de hábitos, sin categorías
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 900),
+                    curve: Curves.easeInOut,
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.translate(
+                          offset: Offset(0, (1 - value) * 20),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.blue.shade100),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.swipe, color: Color(0xff6366f1)),
+                          SizedBox(width: 8),
+                          Text(
+                            "Desliza a la izquierda para eliminar o a la derecha para duplicar",
+                            style: TextStyle(
+                              color: Color(0xff6366f1),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                if (selectedHabits.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Card(
+                      color: Colors.blue.shade50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            child: Text('${selectedHabits.length} seleccionados'),
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                tooltip: 'Eliminar seleccionados',
+                                onPressed: () => deleteSelected(context, ref),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.clear),
+                                tooltip: 'Limpiar selección',
+                                onPressed: clearSelection,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                // Lista plana de hábitos
+                ...habits.map((habit) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Dismissible(
+                      key: Key('compact_habit_${habit.id}'),
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 24),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      secondaryBackground: Container(
+                        color: Colors.blue,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 24),
+                        child: const Icon(Icons.copy, color: Colors.white),
+                      ),
+                      confirmDismiss: (direction) async {
+                        if (direction == DismissDirection.startToEnd) {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(l10n.deleteHabit),
+                              content: Text(l10n.deleteHabitConfirm(habit.name)),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: Text(l10n.cancel),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: Text(l10n.delete),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirmed == true) {
+                            await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          }
+                          return confirmed == true;
+                        } else {
+                          await duplicateHabit(context, ref, habit);
+                          return false;
+                        }
+                      },
+                      child: CompactHabitCard(
+                        habit: habit,
+                        onComplete: (habitId) async {
+                          await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
+                          await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.habitCompleted)),
+                            );
+                          }
+                        },
+                        onUncheck: (habitId) async {
+                          await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                        },
+                        onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                        onDelete: () async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(l10n.deleteHabit),
+                              content: Text(l10n.deleteHabitConfirm(habit.name)),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: Text(l10n.cancel),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: Text(l10n.delete),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirmed == true) {
+                            await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 24),
+              ],
+            );
+          }
+
+          // Modo avanzado: mantener agrupamiento por categoría
           final habitsByCategory = <HabitCategory, List<Habit>>{};
           for (final habit in habits) {
             habitsByCategory.putIfAbsent(habit.category, () => []).add(habit);
