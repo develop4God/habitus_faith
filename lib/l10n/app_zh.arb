@@ -690,5 +690,11 @@
     "placeholders": {
       "habitName": {"type": "String", "example": "晨祷"}
     }
-  }
+  },
+  "usefulTip": "实用提示",
+  "@usefulTip": {"description": "教育提示标题"},
+  "habitsTip": "滑动以查看您的习惯操作",
+  "@habitsTip": {"description": "教育提示描述"},
+  "understood": "明白了",
+  "@understood": {"description": "关闭教育提示的按钮"}
 }

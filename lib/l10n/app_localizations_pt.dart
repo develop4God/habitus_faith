@@ -567,4 +567,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get introMessage => 'As maiores mudanças começam na constância...';
+
+  @override
+  String get usefulTip => 'Dica útil';
+
+  @override
+  String get habitsTip => 'Deslize para ver ações nos seus hábitos';
+
+  @override
+  String get understood => 'Entendido';
 }

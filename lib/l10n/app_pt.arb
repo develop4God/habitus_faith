@@ -690,5 +690,11 @@
   "introMessage": "As maiores mudanças começam na constância...",
   "@introMessage": {
     "description": "Mensagem motivacional mostrada na landing page."
-  }
+  },
+  "usefulTip": "Dica útil",
+  "@usefulTip": {"description": "Título da dica educativa"},
+  "habitsTip": "Deslize para ver ações nos seus hábitos",
+  "@habitsTip": {"description": "Descrição da dica educativa"},
+  "understood": "Entendido",
+  "@understood": {"description": "Botão para fechar a dica educativa"}
 }

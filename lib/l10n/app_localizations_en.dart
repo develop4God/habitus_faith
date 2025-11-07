@@ -563,4 +563,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get introMessage => 'The greatest changes begin with consistency...';
+
+  @override
+  String get usefulTip => 'Useful tip';
+
+  @override
+  String get habitsTip => 'Swipe to see actions on your habits';
+
+  @override
+  String get understood => 'Understood';
 }

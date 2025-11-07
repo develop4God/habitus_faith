@@ -1111,6 +1111,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The greatest changes begin with consistency...'**
   String get introMessage;
+
+  /// Educational tip title
+  ///
+  /// In en, this message translates to:
+  /// **'Useful tip'**
+  String get usefulTip;
+
+  /// Educational tip description
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to see actions on your habits'**
+  String get habitsTip;
+
+  /// Button to close the educational tip
+  ///
+  /// In en, this message translates to:
+  /// **'Understood'**
+  String get understood;
 }
 
 class _AppLocalizationsDelegate

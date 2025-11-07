@@ -538,4 +538,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get introMessage => '最大的改变始于坚持...';
+
+  @override
+  String get usefulTip => '实用提示';
+
+  @override
+  String get habitsTip => '滑动以查看您的习惯操作';
+
+  @override
+  String get understood => '明白了';
 }

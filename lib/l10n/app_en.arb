@@ -750,5 +750,11 @@
   "introMessage": "The greatest changes begin with consistency...",
   "@introMessage": {
     "description": "Intro message shown on landing page as a motivational quote."
-  }
+  },
+  "usefulTip": "Useful tip",
+  "@usefulTip": {"description": "Educational tip title"},
+  "habitsTip": "Swipe to see actions on your habits",
+  "@habitsTip": {"description": "Educational tip description"},
+  "understood": "Understood",
+  "@understood": {"description": "Button to close the educational tip"}
 }

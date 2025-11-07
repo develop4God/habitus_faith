@@ -570,4 +570,14 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get introMessage =>
       'Les plus grands changements commencent par la constance...';
+
+  @override
+  String get usefulTip => 'Astuce utile';
+
+  @override
+  String get habitsTip =>
+      'Faites glisser pour voir les actions sur vos habitudes';
+
+  @override
+  String get understood => 'Compris';
 }

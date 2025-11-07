@@ -690,5 +690,11 @@
   "introMessage": "Les plus grands changements commencent par la constance...",
   "@introMessage": {
     "description": "Message d'introduction motivant affiché sur la page d'accueil."
-  }
+  },
+  "usefulTip": "Astuce utile",
+  "@usefulTip": {"description": "Titre du conseil éducatif"},
+  "habitsTip": "Faites glisser pour voir les actions sur vos habitudes",
+  "@habitsTip": {"description": "Description du conseil éducatif"},
+  "understood": "Compris",
+  "@understood": {"description": "Bouton pour fermer le conseil éducatif"}
 }

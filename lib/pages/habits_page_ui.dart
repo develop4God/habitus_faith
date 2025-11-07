@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/habit.dart';
@@ -34,6 +36,84 @@ class HabitsPageUI extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+
+    // Mostrar tip educativo solo 2 veces
+    Future<void> showEducationalTip() async {
+      final prefs = await SharedPreferences.getInstance();
+      final tipShownCount = prefs.getInt('habits_tip_count') ?? 0;
+      if (tipShownCount < 2) {
+        await Future.delayed(const Duration(milliseconds: 1200));
+        if (context.mounted) {
+          final colorScheme = Theme.of(context).colorScheme;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.lightbulb_outline,
+                      size: 20,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.usefulTip, // Traducción: "Tip útil"
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          l10n.habitsTip, // Traducción: "Desliza para ver acciones en tus hábitos"
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              backgroundColor: colorScheme.primary,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.all(16),
+              duration: const Duration(seconds: 8),
+              elevation: 6,
+              action: SnackBarAction(
+                label: l10n.understood, // Traducción: "Entendido"
+                textColor: Colors.white,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            ),
+          );
+          await prefs.setInt('habits_tip_count', tipShownCount + 1);
+        }
+      }
+    }
+
+    // Llamar el tip educativo al cargar la página
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showEducationalTip();
+    });
 
     ref.listen<AsyncValue<void>>(jsonHabitsNotifierProvider, (previous, next) {
       next.whenOrNull(
@@ -555,3 +635,4 @@ class HabitsPageUI extends ConsumerWidget {
     );
   }
 }
+
