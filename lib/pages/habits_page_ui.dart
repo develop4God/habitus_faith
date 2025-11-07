@@ -37,14 +37,38 @@ class HabitsPageUI extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final habitsAsync = ref.watch(jsonHabitsStreamProvider);
 
-    // Mostrar tip educativo solo 2 veces
-    Future<void> showEducationalTip() async {
+    // Flag para evitar doble ejecución
+    bool tipShown = false;
+
+    Future<void> showEducationalTipWithLottie() async {
       final prefs = await SharedPreferences.getInstance();
       final tipShownCount = prefs.getInt('habits_tip_count') ?? 0;
-      if (tipShownCount < 2) {
+      if (tipShownCount < 2 && !tipShown) {
+        tipShown = true;
         await Future.delayed(const Duration(milliseconds: 1200));
         if (context.mounted) {
           final colorScheme = Theme.of(context).colorScheme;
+          // Mostrar Lottie arriba del SnackBar
+          OverlayEntry? lottieEntry;
+          lottieEntry = OverlayEntry(
+            builder: (context) => Positioned(
+              top: MediaQuery.of(context).size.height * 0.18,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SizedBox(
+                  width: 72,
+                  height: 72,
+                  child: Lottie.asset(
+                    'assets/lottie/swipe_actions.json',
+                    fit: BoxFit.contain,
+                    repeat: true,
+                  ),
+                ),
+              ),
+            ),
+          );
+          Overlay.of(context).insert(lottieEntry);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(
@@ -68,7 +92,7 @@ class HabitsPageUI extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          l10n.usefulTip, // Traducción: "Tip útil"
+                          l10n.usefulTip,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -77,7 +101,7 @@ class HabitsPageUI extends ConsumerWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          l10n.habitsTip, // Traducción: "Desliza para ver acciones en tus hábitos"
+                          l10n.habitsTip,
                           style: const TextStyle(
                             fontSize: 13,
                             color: Colors.white,
@@ -97,22 +121,24 @@ class HabitsPageUI extends ConsumerWidget {
               duration: const Duration(seconds: 8),
               elevation: 6,
               action: SnackBarAction(
-                label: l10n.understood, // Traducción: "Entendido"
+                label: l10n.understood,
                 textColor: Colors.white,
                 onPressed: () {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  lottieEntry?.remove();
                 },
               ),
             ),
           );
+          await Future.delayed(const Duration(seconds: 8));
+          lottieEntry.remove();
           await prefs.setInt('habits_tip_count', tipShownCount + 1);
         }
       }
     }
 
-    // Llamar el tip educativo al cargar la página
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showEducationalTip();
+      showEducationalTipWithLottie();
     });
 
     ref.listen<AsyncValue<void>>(jsonHabitsNotifierProvider, (previous, next) {
