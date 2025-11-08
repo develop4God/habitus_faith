@@ -4,6 +4,8 @@ import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 
+import '../pages/home_page.dart';
+
 class DisplayModeModal extends StatefulWidget {
   final DisplayMode currentMode;
   final WidgetRef ref;
@@ -27,12 +29,12 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
   void initState() {
     super.initState();
     localSelectedMode = widget.currentMode;
-    debugPrint('[DisplayModeModal] initState: localSelectedMode = ' + localSelectedMode.toString());
+    debugPrint('[DisplayModeModal] initState: localSelectedMode = $localSelectedMode');
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('[DisplayModeModal] build: localSelectedMode = ' + localSelectedMode.toString());
+    debugPrint('[DisplayModeModal] build: localSelectedMode = $localSelectedMode');
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -61,12 +63,31 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
               subtitle: Text(mode == DisplayMode.compact
                   ? widget.l10n.compactModeSubtitle
                   : widget.l10n.advancedModeSubtitle),
-              onTap: () {
-                debugPrint('[DisplayModeModal] onTap: seleccionando ' + mode.toString());
+              onTap: () async {
+                debugPrint('[DisplayModeModal] onTap: seleccionando $mode');
                 setState(() {
                   localSelectedMode = mode;
                 });
-                debugPrint('[DisplayModeModal] onTap: localSelectedMode = ' + localSelectedMode.toString());
+                debugPrint('[DisplayModeModal] onTap: localSelectedMode = $localSelectedMode');
+                await widget.ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
+                debugPrint('[DisplayModeModal] onTap: guardado y navegando a HomePage');
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                    (route) => false,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        localSelectedMode == DisplayMode.compact
+                            ? widget.l10n.displayModeUpdated(widget.l10n.compactMode)
+                            : widget.l10n.displayModeUpdated(widget.l10n.advancedMode),
+                      ),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
               },
               selected: isSelected,
             );
@@ -77,7 +98,7 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
             children: [
               TextButton(
                 onPressed: () async {
-                  debugPrint('[DisplayModeModal] onPressed: guardando ' + localSelectedMode.toString());
+                  debugPrint('[DisplayModeModal] onPressed: guardando $localSelectedMode');
                   await widget.ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
                   debugPrint('[DisplayModeModal] onPressed: guardado y cerrando modal');
                   if (context.mounted) {

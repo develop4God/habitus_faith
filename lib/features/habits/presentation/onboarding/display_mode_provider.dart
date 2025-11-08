@@ -34,7 +34,7 @@ class DisplayModeNotifier extends StateNotifier<DisplayMode> {
   /// Set the display mode and persist to storage
   Future<void> setDisplayMode(DisplayMode mode) async {
     state = mode;
-    debugPrint('Provider: displayMode cambiado a ' + mode.toString());
+    debugPrint('Provider: displayMode cambiado a $mode');
     final storage = _ref.read(jsonStorageServiceProvider);
     await storage.setString(_displayModeKey, mode.toStorageString());
   }

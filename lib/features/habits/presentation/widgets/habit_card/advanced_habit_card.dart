@@ -71,6 +71,16 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
             // Header with emoji, name, and completion button
             Row(
               children: [
+                // Color indicator bar
+                Container(
+                  width: 4,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: habitColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 16),
                 // Habit emoji/icon
                 Container(
                   width: 56,
@@ -87,7 +97,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Habit name y descripción
+                // Habit name and description
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,8 +131,8 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     ],
                   ),
                 ),
-                const SizedBox(width: 16),
-                // Botón de completar
+                const SizedBox(width: 12),
+                // Simple completion checkbox button
                 InkWell(
                   onTap: _isCompleting ? null : _handleComplete,
                   borderRadius: BorderRadius.circular(8),
@@ -130,18 +140,6 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     width: 48,
                     height: 48,
                     padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: widget.habit.completedToday
-                          ? habitColor
-                          : Colors.transparent,
-                      border: Border.all(
-                        color: widget.habit.completedToday
-                            ? habitColor
-                            : Colors.grey.shade400,
-                        width: 2.5,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
                     child: _isCompleting
                         ? SizedBox(
                             width: 24,
@@ -151,16 +149,62 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                               valueColor: AlwaysStoppedAnimation<Color>(habitColor),
                             ),
                           )
-                        : (widget.habit.completedToday
-                            ? const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 20,
-                              )
-                            : null),
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: widget.habit.completedToday
+                                  ? habitColor
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: widget.habit.completedToday
+                                    ? habitColor
+                                    : Colors.grey.shade400,
+                                width: 2.5,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: widget.habit.completedToday
+                                ? const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 20,
+                                  )
+                                : null,
+                          ),
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 20),
+
+            // Stats row - always visible
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: habitColor.withAlpha(20),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildStatItem(
+                    l10n.streak,
+                    '${widget.habit.currentStreak}',
+                    Icons.local_fire_department,
+                    Colors.orange,
+                  ),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: Colors.grey[300],
+                  ),
+                  _buildStatItem(
+                    l10n.total,
+                    '${widget.habit.completionHistory.length}',
+                    Icons.check_circle,
+                    Colors.green,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
 
@@ -230,6 +274,32 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStatItem(
+      String label, String value, IconData icon, Color color) {
+    return Column(
+      children: [
+        Icon(icon, color: color, size: 24),
+        const SizedBox(height: 6),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
