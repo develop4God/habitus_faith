@@ -156,7 +156,8 @@ class _FavoriteCard extends ConsumerWidget {
                       Text(
                         dateFormat.format(devocional.date),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isDark ? Colors.grey[500] : Colors.grey[600],
+                              color:
+                                  isDark ? Colors.grey[500] : Colors.grey[600],
                             ),
                       ),
                       const SizedBox(width: 8),
@@ -224,9 +225,8 @@ class _FavoriteCard extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: isDark
-                              ? Colors.grey[400]
-                              : colorScheme.primary,
+                          color:
+                              isDark ? Colors.grey[400] : colorScheme.primary,
                         ),
                       ),
                     );

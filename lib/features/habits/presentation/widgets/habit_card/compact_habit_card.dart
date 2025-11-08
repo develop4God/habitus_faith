@@ -4,6 +4,7 @@ import '../../../domain/habit.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
+import '../abandonment_risk_indicator.dart';
 
 /// Compact habit card with tap-to-expand details
 /// Shows only essential info: name, emoji, streak, completion button
@@ -75,7 +76,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
                   // Color indicator bar
@@ -184,6 +186,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 color: Colors.grey[600],
                               ),
                             ),
+                            if (widget.habit.abandonmentRisk > 0.0) ...[
+                              const SizedBox(width: 12),
+                              AbandonmentRiskIndicator(
+                                risk: widget.habit.abandonmentRisk,
+                              ),
+                            ],
                           ],
                         ),
                       ],
@@ -271,7 +279,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             widget.onEdit();
                           } else if (value == 'delete') {
                             widget.onDelete();
-                          } else if (value == 'uncheck' && widget.habit.completedToday) {
+                          } else if (value == 'uncheck' &&
+                              widget.habit.completedToday) {
                             widget.onUncheck(widget.habit.id);
                           }
                         },
@@ -281,7 +290,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               value: 'uncheck',
                               child: Row(
                                 children: [
-                                  const Icon(Icons.undo, size: 20, color: Colors.orange),
+                                  const Icon(Icons.undo,
+                                      size: 20, color: Colors.orange),
                                   const SizedBox(width: 12),
                                   Text(l10n.uncheck),
                                 ],
@@ -301,7 +311,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             value: 'delete',
                             child: Row(
                               children: [
-                                const Icon(Icons.delete, size: 20, color: Colors.red),
+                                const Icon(Icons.delete,
+                                    size: 20, color: Colors.red),
                                 const SizedBox(width: 12),
                                 Text(
                                   l10n.delete,

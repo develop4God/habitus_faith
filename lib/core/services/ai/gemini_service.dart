@@ -63,7 +63,7 @@ class GeminiService implements IGeminiService {
       _logger?.w('Rate limit exceeded - remaining: 0');
       throw RateLimitExceededException(
         'Monthly limit of ${AiConfig.monthlyRequestLimit} requests reached. '
-            'Limit will reset next month.',
+        'Limit will reset next month.',
       );
     }
 

@@ -58,13 +58,14 @@ class BackgroundTaskService {
 
   /// Schedule daily prediction task at 6:00 AM
   /// Respects battery optimization and user settings
-  Future<void> scheduleDailyPrediction() async {
+  /// Returns true if scheduled successfully, false otherwise
+  Future<bool> scheduleDailyPrediction() async {
     if (!_initialized) {
       developer.log(
         'BackgroundTaskService: Not initialized, cannot schedule task',
         name: 'BackgroundTaskService',
       );
-      return;
+      return false;
     }
 
     try {
@@ -78,7 +79,7 @@ class BackgroundTaskService {
           name: 'BackgroundTaskService',
         );
         await cancelDailyPrediction();
-        return;
+        return false;
       }
 
       // Cancel any existing task first
@@ -101,27 +102,39 @@ class BackgroundTaskService {
         _dailyPredictionTask,
         frequency: const Duration(days: 1),
         initialDelay: initialDelay,
-        existingWorkPolicy: ExistingWorkPolicy.replace, // <--- Este es el parámetro correcto
+        existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(
-          networkType: NetworkType.notRequired, // <--- camelCase para la versión nueva
+          networkType: NetworkType.notRequired,
           requiresBatteryNotLow: true,
           requiresCharging: false,
           requiresDeviceIdle: false,
           requiresStorageNotLow: false,
         ),
         tag: _predictionTaskTag,
+        backoffPolicy: BackoffPolicy.exponential,
+        backoffPolicyDelay: const Duration(minutes: 15),
       );
 
       developer.log(
-        'BackgroundTaskService: Daily prediction task scheduled for 6:00 AM (next run: $nextRun)',
+        'BackgroundTaskService: Daily prediction task scheduled successfully for 6:00 AM (next run: $nextRun)',
         name: 'BackgroundTaskService',
       );
-    } catch (e) {
+
+      // Store last scheduled time for status tracking
+      await prefs.setString(
+        'ml_last_scheduled',
+        DateTime.now().toIso8601String(),
+      );
+
+      return true;
+    } catch (e, stackTrace) {
       developer.log(
         'BackgroundTaskService: Failed to schedule daily prediction: $e',
         name: 'BackgroundTaskService',
         error: e,
+        stackTrace: stackTrace,
       );
+      return false;
     }
   }
 
@@ -150,6 +163,26 @@ class BackgroundTaskService {
   Future<bool> arePredictionsEnabled() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_mlPredictionsEnabledKey) ?? true;
+  }
+
+  /// Get status of last prediction run
+  /// Returns null if no prediction has been run, otherwise returns last run time
+  Future<DateTime?> getLastPredictionTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastScheduled = prefs.getString('ml_last_scheduled');
+    if (lastScheduled != null) {
+      return DateTime.parse(lastScheduled);
+    }
+    return null;
+  }
+
+  /// Check if predictions are stale (not run in last 48 hours)
+  Future<bool> arePredictionsStale() async {
+    final lastTime = await getLastPredictionTime();
+    if (lastTime == null) return true;
+
+    final hoursSinceLastRun = DateTime.now().difference(lastTime).inHours;
+    return hoursSinceLastRun > 48;
   }
 
   /// Enable or disable ML predictions

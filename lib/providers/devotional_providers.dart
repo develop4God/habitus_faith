@@ -84,7 +84,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       String savedLanguage =
           prefs.getString(DevotionalConstants.prefSelectedLanguage) ??
               deviceLanguage;
-      String selectedLanguage = _getSupportedLanguageWithFallback(savedLanguage);
+      String selectedLanguage =
+          _getSupportedLanguageWithFallback(savedLanguage);
 
       // Save language if different from saved
       if (selectedLanguage != savedLanguage) {
@@ -185,19 +186,21 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       // Parse new JSON structure: data -> language -> date -> devotionals[]
       if (data['data'] != null) {
         final dataMap = data['data'] as Map<String, dynamic>;
-        
+
         // Get devotionals for the selected language
         if (dataMap[state.selectedLanguage] != null) {
-          final languageData = dataMap[state.selectedLanguage] as Map<String, dynamic>;
-          
+          final languageData =
+              dataMap[state.selectedLanguage] as Map<String, dynamic>;
+
           // Iterate through each date
           for (var dateEntry in languageData.entries) {
             final dateDevocionales = dateEntry.value as List<dynamic>;
-            
+
             // Parse each devotional for this date
             for (var item in dateDevocionales) {
               try {
-                final devocional = Devocional.fromJson(item as Map<String, dynamic>);
+                final devocional =
+                    Devocional.fromJson(item as Map<String, dynamic>);
                 loadedDevocionales.add(devocional);
               } catch (e) {
                 debugPrint('Error parsing devotional: $e');
@@ -205,22 +208,23 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
             }
           }
         } else {
-          debugPrint('⚠️ No devotionals found for language: ${state.selectedLanguage}');
+          debugPrint(
+              '⚠️ No devotionals found for language: ${state.selectedLanguage}');
         }
       }
 
       // Sort by date: Today's devotionals first, then by date (newest first)
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-      
+
       loadedDevocionales.sort((a, b) {
         final aDate = DateTime(a.date.year, a.date.month, a.date.day);
         final bDate = DateTime(b.date.year, b.date.month, b.date.day);
-        
+
         // Today's devotionals come first
         if (aDate == today && bDate != today) return -1;
         if (bDate == today && aDate != today) return 1;
-        
+
         // Otherwise sort by date (newest first)
         return b.date.compareTo(a.date);
       });
@@ -231,7 +235,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         isLoading: false,
       );
 
-      debugPrint('✅ Loaded ${loadedDevocionales.length} devotionals for ${state.selectedLanguage}');
+      debugPrint(
+          '✅ Loaded ${loadedDevocionales.length} devotionals for ${state.selectedLanguage}');
     } catch (e) {
       debugPrint('Error processing devotional data: $e');
       state = state.copyWith(
@@ -245,8 +250,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
   Future<void> toggleFavorite(Devocional devocional) async {
     try {
       final favorites = List<Devocional>.from(state.favorites);
-      final isFavorite =
-          favorites.any((d) => d.id == devocional.id);
+      final isFavorite = favorites.any((d) => d.id == devocional.id);
 
       if (isFavorite) {
         favorites.removeWhere((d) => d.id == devocional.id);
@@ -320,15 +324,16 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
     final filtered = state.all.where((d) {
       final term = searchTerm.toLowerCase();
-      
+
       // Search in reflection, verse, and prayer
       final inReflection = d.reflexion.toLowerCase().contains(term);
       final inVerse = d.versiculo.toLowerCase().contains(term);
       final inPrayer = d.oracion.toLowerCase().contains(term);
-      
+
       // Search in tags (in the corresponding language)
-      final inTags = d.tags?.any((tag) => tag.toLowerCase().contains(term)) ?? false;
-      
+      final inTags =
+          d.tags?.any((tag) => tag.toLowerCase().contains(term)) ?? false;
+
       return inReflection || inVerse || inPrayer || inTags;
     }).toList();
 

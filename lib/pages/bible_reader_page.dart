@@ -43,7 +43,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   Future<void> _showBookSelector(BuildContext context) async {
     final state = ref.read(bibleReaderProvider);
     final notifier = ref.read(bibleReaderProvider.notifier);
-    
+
     await showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -64,7 +64,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   Future<void> _showChapterSelector(BuildContext context) async {
     final state = ref.read(bibleReaderProvider);
     final notifier = ref.read(bibleReaderProvider.notifier);
-    
+
     if (state.selectedBookName == null) return;
 
     await showDialog(
@@ -90,8 +90,10 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
 
   Future<void> _showVerseSelector(BuildContext context) async {
     final state = ref.read(bibleReaderProvider);
-    
-    if (state.selectedBookName == null || state.selectedChapter == null || state.verses.isEmpty) {
+
+    if (state.selectedBookName == null ||
+        state.selectedChapter == null ||
+        state.verses.isEmpty) {
       return;
     }
 
@@ -108,7 +110,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           chapterNumber: state.selectedChapter!,
           onVerseSelected: (verseNumber) {
             // Scroll to the selected verse
-            final index = state.verses.indexWhere((v) => v['verse'] == verseNumber);
+            final index =
+                state.verses.indexWhere((v) => v['verse'] == verseNumber);
             if (index != -1 && _itemScrollController.isAttached) {
               _itemScrollController.scrollTo(
                 index: index,
@@ -219,25 +222,29 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                           label: Text(
                             state.selectedBookName != null
                                 ? state.books.firstWhere(
-                                    (b) => b['short_name'] == state.selectedBookName,
+                                    (b) =>
+                                        b['short_name'] ==
+                                        state.selectedBookName,
                                     orElse: () => {'long_name': 'Select Book'},
                                   )['long_name'] as String
                                 : l10n.selectBook,
                             overflow: TextOverflow.ellipsis,
                           ),
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 12),
                           ),
                         ),
                       ),
                       const SizedBox(width: 8),
                       // Chapter selector button
                       ElevatedButton(
-                        onPressed: state.selectedBookName != null 
+                        onPressed: state.selectedBookName != null
                             ? () => _showChapterSelector(context)
                             : null,
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                         ),
                         child: Text(
                           state.selectedChapter != null
@@ -249,11 +256,13 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                       const SizedBox(width: 8),
                       // Verse selector button
                       ElevatedButton(
-                        onPressed: state.selectedChapter != null && state.verses.isNotEmpty
+                        onPressed: state.selectedChapter != null &&
+                                state.verses.isNotEmpty
                             ? () => _showVerseSelector(context)
                             : null,
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                         ),
                         child: const Icon(Icons.format_list_numbered, size: 20),
                       ),
@@ -427,8 +436,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               ClipboardData(text: '$reference\n\n$text'),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(l10n.copiedToClipboard)),
+                              SnackBar(content: Text(l10n.copiedToClipboard)),
                             );
                             notifier.clearSelection();
                           },

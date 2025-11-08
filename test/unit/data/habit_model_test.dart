@@ -95,7 +95,8 @@ void main() {
       final testCases = {
         'prayer': HabitCategory.spiritual,
         'bibleReading': HabitCategory.spiritual,
-        'service': HabitCategory.spiritual, // Old categories default to spiritual
+        'service':
+            HabitCategory.spiritual, // Old categories default to spiritual
         'gratitude': HabitCategory.spiritual,
         'other': HabitCategory.spiritual, // Old categories default to spiritual
       };

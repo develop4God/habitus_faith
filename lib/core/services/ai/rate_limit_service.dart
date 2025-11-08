@@ -49,8 +49,7 @@ class RateLimitService implements IRateLimitService {
     var timestamps = _getRequestTimestamps();
 
     timestamps = timestamps
-        .where((ts) =>
-        DateTime.fromMillisecondsSinceEpoch(ts).isAfter(cutoff))
+        .where((ts) => DateTime.fromMillisecondsSinceEpoch(ts).isAfter(cutoff))
         .toList();
 
     _saveRequestTimestamps(timestamps);
@@ -103,8 +102,7 @@ class RateLimitService implements IRateLimitService {
     if (count < _maxRequests) {
       final lastRequest = _getLastRequestTime();
       if (lastRequest != null) {
-        final nextAvailable =
-        lastRequest.add(_minDelayBetweenRequests);
+        final nextAvailable = lastRequest.add(_minDelayBetweenRequests);
         if (DateTime.now().isBefore(nextAvailable)) {
           return nextAvailable;
         }
@@ -116,7 +114,7 @@ class RateLimitService implements IRateLimitService {
     if (timestamps.isEmpty) return null;
 
     final oldestTimestamp =
-    DateTime.fromMillisecondsSinceEpoch(timestamps.first);
+        DateTime.fromMillisecondsSinceEpoch(timestamps.first);
     return oldestTimestamp.add(_timeWindow);
   }
 

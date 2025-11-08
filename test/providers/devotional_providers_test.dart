@@ -65,7 +65,7 @@ void main() {
       addTearDown(container.dispose);
 
       final notifier = container.read(devotionalProvider.notifier);
-      
+
       // Create test devotionals
       final testDevocionales = [
         Devocional(
@@ -79,11 +79,11 @@ void main() {
       ];
 
       // Manually set the state for testing
-      container.read(devotionalProvider.notifier).state = 
+      container.read(devotionalProvider.notifier).state =
           container.read(devotionalProvider).copyWith(
-            all: testDevocionales,
-            filtered: [],
-          );
+        all: testDevocionales,
+        filtered: [],
+      );
 
       notifier.filterBySearch('');
 
@@ -114,11 +114,11 @@ void main() {
         ),
       ];
 
-      container.read(devotionalProvider.notifier).state = 
+      container.read(devotionalProvider.notifier).state =
           container.read(devotionalProvider).copyWith(
-            all: testDevocionales,
-            filtered: testDevocionales,
-          );
+                all: testDevocionales,
+                filtered: testDevocionales,
+              );
 
       container.read(devotionalProvider.notifier).filterBySearch('loved');
 
@@ -140,12 +140,13 @@ void main() {
         date: DateTime(2024, 1, 1),
       );
 
-      container.read(devotionalProvider.notifier).state = 
+      container.read(devotionalProvider.notifier).state =
           container.read(devotionalProvider).copyWith(
-            all: [testDevocional],
-          );
+        all: [testDevocional],
+      );
 
-      final result = container.read(devotionalProvider.notifier)
+      final result = container
+          .read(devotionalProvider.notifier)
           .getDevocionalById('test-123');
 
       expect(result, isNotNull);
@@ -156,7 +157,8 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      final result = container.read(devotionalProvider.notifier)
+      final result = container
+          .read(devotionalProvider.notifier)
           .getDevocionalById('non-existent');
 
       expect(result, isNull);
