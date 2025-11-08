@@ -861,7 +861,7 @@
   "mlModelError": "Error",
   "@mlModelError": {
     "description": "ML model error status"
-  }
+  },
   "chooseHabitType": "What type of habit do you want to add?",
   "@chooseHabitType": {
     "description": "Text for choosing habit type when adding"
