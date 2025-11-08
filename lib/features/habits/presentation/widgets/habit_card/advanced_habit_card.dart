@@ -96,22 +96,74 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        widget.habit.name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (widget.habit.description.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.habit.description,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
+                      // Header with emoji, name, and completion button
+                      Row(
+                        children: [
+                          // Color indicator bar
+                          Container(
+                            width: 4,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: habitColor,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          // Simple completion checkbox button (ahora a la izquierda)
+                          InkWell(
+                            onTap: _isCompleting ? null : _handleComplete,
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              width: 48,
+                              height: 48,
+                              padding: const EdgeInsets.all(10),
+                              child: _isCompleting
+                                  ? SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                                      ),
+                                    )
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        color: widget.habit.completedToday
+                                            ? habitColor
+                                            : Colors.transparent,
+                                        border: Border.all(
+                                          color: widget.habit.completedToday
+                                              ? habitColor
+                                              : Colors.grey.shade400,
+                                          width: 2.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: widget.habit.completedToday
+                                          ? const Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                              size: 20,
+                                            )
+                                          : null,
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          // Habit emoji/icon
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: habitColor.withValues(alpha: 0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.habit.emoji ?? '✓',
+                                style: const TextStyle(fontSize: 28),
+                              ),
+                            ),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -121,38 +173,38 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                   ),
                 ),
 
-                const SizedBox(width: 12),
-
-                // Simple completion checkbox button
-                InkWell(
-                  onTap: _isCompleting ? null : _handleComplete,
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    padding: const EdgeInsets.all(10),
-                    child: _isCompleting
-                        ? SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(habitColor),
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              color: widget.habit.completedToday
-                                  ? habitColor
-                                  : Colors.transparent,
-                              border: Border.all(
-                                color: widget.habit.completedToday
-                                    ? habitColor
-                                    : Colors.grey.shade400,
-                                width: 2.5,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
+                          // Habit name and description
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  widget.habit.name,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: widget.habit.completedToday
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
+                                    decorationThickness: 2,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (widget.habit.description.isNotEmpty) ...[
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    widget.habit.description,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ],
                             ),
                             child: widget.habit.completedToday
                                 ? const Icon(
@@ -168,48 +220,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
             ),
             const SizedBox(height: 20),
 
-            // Stats row - always visible
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: habitColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildStatItem(
-                    l10n.streak,
-                    '${widget.habit.currentStreak}',
-                    Icons.local_fire_department,
-                    Colors.orange,
-                  ),
-                  Container(
-                    width: 1,
-                    height: 40,
-                    color: Colors.grey[300],
-                  ),
-                  _buildStatItem(
-                    l10n.total,
-                    '${widget.habit.completionHistory.length}',
-                    Icons.check_circle,
-                    Colors.green,
-                  ),
-                  if (widget.habit.abandonmentRisk >=
-                      RiskThresholds.mediumRiskThreshold) ...[
-                    Container(
-                      width: 1,
-                      height: 40,
-                      color: Colors.grey[300],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AbandonmentRiskIndicator(
-                            risk: widget.habit.abandonmentRisk,
-                          ),
+                          const SizedBox(width: 12),
                         ],
                       ),
                     ),

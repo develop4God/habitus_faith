@@ -1033,6 +1033,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get total;
+
+  /// Text for choosing habit type when adding
+  ///
+  /// In en, this message translates to:
+  /// **'What type of habit do you want to add?'**
+  String get chooseHabitType;
+
+  /// Text for choosing from predefined habits
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from predefined habits'**
+  String get chooseFromPredefined;
+
+  /// Manual habit option (short label)
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get manual;
+
+  /// Custom habit option (short label)
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get custom;
+
+  /// Default/predefined habit option (short label)
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get defaultHabit;
+
+  /// Explanatory subtitle for the add habit discovery dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.'**
+  String get addHabitDiscoverySubtitle;
+
+  /// Label to indicate a field is required
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredFieldLabel;
+
+  /// Button to go back to the previous step in the dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// Button to select all habits on the habits page
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAll;
+
+  /// Text for duplicating a habit (swipe action)
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get copy;
+
+  /// Dialog title for duplicating a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to duplicate the task?'**
+  String get copyHabit;
+
+  /// Confirmation message for duplicating a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to duplicate \"{habitName}\"?'**
+  String copyHabitConfirm(String habitName);
+
+  /// Intro message shown on landing page as a motivational quote.
+  ///
+  /// In en, this message translates to:
+  /// **'The greatest changes begin with consistency...'**
+  String get introMessage;
+
+  /// Educational tip title
+  ///
+  /// In en, this message translates to:
+  /// **'Useful tip'**
+  String get usefulTip;
+
+  /// Educational tip description
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to see actions on your habits'**
+  String get habitsTip;
+
+  /// Button to close the educational tip
+  ///
+  /// In en, this message translates to:
+  /// **'Understood'**
+  String get understood;
 }
 
 class _AppLocalizationsDelegate

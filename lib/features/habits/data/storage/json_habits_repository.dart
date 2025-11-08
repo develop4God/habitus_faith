@@ -8,6 +8,8 @@ import '../../domain/models/completion_record.dart';
 import '../../domain/ml_features_calculator.dart';
 import '../habit_model.dart';
 import 'json_storage_service.dart';
+import '../../../statistics/statistics_service.dart';
+import '../../../statistics/statistics_model.dart';
 
 /// Repository implementation using JSON storage (SharedPreferences)
 class JsonHabitsRepository implements HabitsRepository {
@@ -191,6 +193,34 @@ class JsonHabitsRepository implements HabitsRepository {
     _emitHabits();
   }
 
+  Future<void> _updateStatistics() async {
+    final habits = _loadHabits();
+    int total = habits.length;
+    int completed = habits.where((h) => h.completedToday).length;
+    int currentStreak = 0;
+    int longestStreak = 0;
+    DateTime lastCompletion = DateTime(2000);
+    for (final h in habits) {
+      if (h.currentStreak > currentStreak) currentStreak = h.currentStreak;
+      if (h.longestStreak > longestStreak) {
+        longestStreak = h.longestStreak;
+      }
+      if (h.lastCompletedAt != null &&
+          h.lastCompletedAt!.isAfter(lastCompletion)) {
+        lastCompletion = h.lastCompletedAt!;
+      }
+    }
+    if (lastCompletion.year == 2000) lastCompletion = DateTime.now();
+    final stats = StatisticsModel(
+      totalHabits: total,
+      completedHabits: completed,
+      currentStreak: currentStreak,
+      longestStreak: longestStreak,
+      lastCompletion: lastCompletion,
+    );
+    await StatisticsService().saveStatistics(stats);
+  }
+
   @override
   Stream<List<Habit>> watchHabits() {
     debugPrint(
@@ -267,6 +297,7 @@ class JsonHabitsRepository implements HabitsRepository {
       debugPrint(
           'JsonHabitsRepository.completeHabit: Completed habit "$habitId"');
       await _saveHabits(habits);
+      await _updateStatistics();
 
       return Success(updatedHabit);
     } catch (e) {
@@ -438,6 +469,7 @@ class JsonHabitsRepository implements HabitsRepository {
       debugPrint(
           'JsonHabitsRepository.uncheckHabit: Unchecked habit "$habitId"');
       await _saveHabits(habits);
+      await _updateStatistics();
 
       return Success(updatedHabit);
     } catch (e) {
@@ -455,6 +487,7 @@ class JsonHabitsRepository implements HabitsRepository {
       habits.removeWhere((h) => h.id == habitId);
       debugPrint('JsonHabitsRepository.deleteHabit: Deleted habit "$habitId"');
       await _saveHabits(habits);
+      await _updateStatistics();
 
       return const Success(null);
     } catch (e) {

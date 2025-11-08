@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'habits_page.dart';
-import 'statistics_page.dart';
+
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
 import 'devotional_discovery_page.dart';
+import '../features/statistics/statistics_page.dart'; // Importa la página correcta
 import '../l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       const HabitsPage(),
       const BibleReaderPage(),
       const DevotionalDiscoveryPage(),
-      const StatisticsPage(),
+      const StatisticsPage(), // Usa la clase correcta
       const SettingsPage(),
     ];
 

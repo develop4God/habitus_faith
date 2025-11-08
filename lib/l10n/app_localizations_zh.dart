@@ -497,4 +497,54 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get total => '总计';
+
+  @override
+  String get chooseHabitType => '你想添加哪种类型的习惯？';
+
+  @override
+  String get chooseFromPredefined => '选择一个预设习惯';
+
+  @override
+  String get manual => '手动';
+
+  @override
+  String get custom => '自定义';
+
+  @override
+  String get defaultHabit => '预设';
+
+  @override
+  String get addHabitDiscoverySubtitle => '选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。';
+
+  @override
+  String get requiredFieldLabel => '必填';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get selectAll => '全选';
+
+  @override
+  String get copy => '复制';
+
+  @override
+  String get copyHabit => '您想要复制此任务吗？';
+
+  @override
+  String copyHabitConfirm(String habitName) {
+    return '您确定要复制\"$habitName\"吗？';
+  }
+
+  @override
+  String get introMessage => '最大的改变始于坚持...';
+
+  @override
+  String get usefulTip => '实用提示';
+
+  @override
+  String get habitsTip => '滑动以查看您的习惯操作';
+
+  @override
+  String get understood => '明白了';
 }

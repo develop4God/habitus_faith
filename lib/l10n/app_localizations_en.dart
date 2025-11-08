@@ -521,4 +521,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get total => 'Total';
+
+  @override
+  String get chooseHabitType => 'What type of habit do you want to add?';
+
+  @override
+  String get chooseFromPredefined => 'Choose from predefined habits';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get custom => 'Custom';
+
+  @override
+  String get defaultHabit => 'Default';
+
+  @override
+  String get addHabitDiscoverySubtitle =>
+      'Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.';
+
+  @override
+  String get requiredFieldLabel => 'Required';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get copy => 'Duplicate';
+
+  @override
+  String get copyHabit => 'Do you want to duplicate the task?';
+
+  @override
+  String copyHabitConfirm(String habitName) {
+    return 'Are you sure you want to duplicate \"$habitName\"?';
+  }
+
+  @override
+  String get introMessage => 'The greatest changes begin with consistency...';
+
+  @override
+  String get usefulTip => 'Useful tip';
+
+  @override
+  String get habitsTip => 'Swipe to see actions on your habits';
+
+  @override
+  String get understood => 'Understood';
 }

@@ -695,5 +695,66 @@
   "total": "Total",
   "@total": {
     "description": "Total label for statistics"
-  }
+  },
+  "chooseHabitType": "What type of habit do you want to add?",
+  "@chooseHabitType": {
+    "description": "Text for choosing habit type when adding"
+  },
+  "chooseFromPredefined": "Choose from predefined habits",
+  "@chooseFromPredefined": {
+    "description": "Text for choosing from predefined habits"
+  },
+  "manual": "Manual",
+  "@manual": {
+    "description": "Manual habit option (short label)"
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Custom habit option (short label)"
+  },
+  "defaultHabit": "Default",
+  "@defaultHabit": {
+    "description": "Default/predefined habit option (short label)"
+  },
+  "addHabitDiscoverySubtitle": "Choose how you want to add your new habit: you can create a custom one or select a predefined habit to get started faster.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Explanatory subtitle for the add habit discovery dialog"
+  },
+  "requiredFieldLabel": "Required",
+  "@requiredFieldLabel": {
+    "description": "Label to indicate a field is required"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Button to go back to the previous step in the dialog"
+  },
+  "selectAll": "Select all",
+  "@selectAll": {
+    "description": "Button to select all habits on the habits page"
+  },
+  "copy": "Duplicate",
+  "@copy": {
+    "description": "Text for duplicating a habit (swipe action)"
+  },
+  "copyHabit": "Do you want to duplicate the task?",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "Are you sure you want to duplicate \"{habitName}\"?",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "Morning Prayer"}
+    }
+  },
+  "introMessage": "The greatest changes begin with consistency...",
+  "@introMessage": {
+    "description": "Intro message shown on landing page as a motivational quote."
+  },
+  "usefulTip": "Useful tip",
+  "@usefulTip": {"description": "Educational tip title"},
+  "habitsTip": "Swipe to see actions on your habits",
+  "@habitsTip": {"description": "Educational tip description"},
+  "understood": "Understood",
+  "@understood": {"description": "Button to close the educational tip"}
 }

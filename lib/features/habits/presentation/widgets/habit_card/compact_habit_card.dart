@@ -80,6 +80,57 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
+                  // Color indicator bar
+                  Container(
+                    width: 4,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: habitColor,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Simple completion checkbox button (ahora a la izquierda)
+                  InkWell(
+                    onTap: _isCompleting ? null : _handleComplete,
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(8),
+                      child: _isCompleting
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: widget.habit.completedToday
+                                    ? habitColor
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: widget.habit.completedToday
+                                      ? habitColor
+                                      : Colors.grey.shade400,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: widget.habit.completedToday
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )
+                                  : null,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   // Habit emoji/icon
                   Container(
                     width: 48,
@@ -105,9 +156,13 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                       children: [
                         Text(
                           widget.habit.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
+                            decoration: widget.habit.completedToday
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            decorationThickness: 2,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -140,50 +195,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           ],
                         ),
                       ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Simple completion checkbox button
-                  InkWell(
-                    onTap: _isCompleting ? null : _handleComplete,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      padding: const EdgeInsets.all(8),
-                      child: _isCompleting
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(habitColor),
-                              ),
-                            )
-                          : Container(
-                              decoration: BoxDecoration(
-                                color: widget.habit.completedToday
-                                    ? habitColor
-                                    : Colors.transparent,
-                                border: Border.all(
-                                  color: widget.habit.completedToday
-                                      ? habitColor
-                                      : Colors.grey.shade400,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: widget.habit.completedToday
-                                  ? const Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: 16,
-                                    )
-                                  : null,
-                            ),
                     ),
                   ),
 

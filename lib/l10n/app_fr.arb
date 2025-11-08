@@ -635,5 +635,66 @@
   "total": "Total",
   "@total": {
     "description": "Étiquette total pour les statistiques"
-  }
+  },
+  "chooseHabitType": "Quel type d'habitude souhaitez-vous ajouter ?",
+  "@chooseHabitType": {
+    "description": "Texte pour choisir le type d'habitude à ajouter"
+  },
+  "chooseFromPredefined": "Choisissez une habitude prédéfinie",
+  "@chooseFromPredefined": {
+    "description": "Texte pour choisir parmi les habitudes prédéfinies"
+  },
+  "manual": "Manuel",
+  "@manual": {
+    "description": "Option d'habitude manuelle (étiquette courte)"
+  },
+  "custom": "Personnalisé",
+  "@custom": {
+    "description": "Option d'habitude personnalisée (étiquette courte)"
+  },
+  "defaultHabit": "Prédéfini",
+  "@defaultHabit": {
+    "description": "Option d'habitude prédéfinie (étiquette courte)"
+  },
+  "addHabitDiscoverySubtitle": "Choisissez comment ajouter votre nouvelle habitude : créez-en une personnalisée ou sélectionnez une habitude prédéfinie pour commencer plus rapidement.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Sous-titre explicatif pour la boîte de dialogue de découverte d'ajout d'habitude"
+  },
+  "requiredFieldLabel": "Obligatoire",
+  "@requiredFieldLabel": {
+    "description": "Étiquette pour indiquer qu'un champ est obligatoire"
+  },
+  "back": "Retour",
+  "@back": {
+    "description": "Bouton pour revenir à l'étape précédente dans la boîte de dialogue"
+  },
+  "selectAll": "Tout sélectionner",
+  "@selectAll": {
+    "description": "Bouton pour sélectionner toutes les habitudes sur la page des habitudes"
+  },
+  "copy": "Dupliquer",
+  "@copy": {
+    "description": "Texte pour dupliquer une habitude (action swipe)"
+  },
+  "copyHabit": "Voulez-vous dupliquer la tâche ?",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "Êtes-vous sûr de vouloir dupliquer \"{habitName}\" ?",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "Prière du matin"}
+    }
+  },
+  "introMessage": "Les plus grands changements commencent par la constance...",
+  "@introMessage": {
+    "description": "Message d'introduction motivant affiché sur la page d'accueil."
+  },
+  "usefulTip": "Astuce utile",
+  "@usefulTip": {"description": "Titre du conseil éducatif"},
+  "habitsTip": "Faites glisser pour voir les actions sur vos habitudes",
+  "@habitsTip": {"description": "Description du conseil éducatif"},
+  "understood": "Compris",
+  "@understood": {"description": "Bouton pour fermer le conseil éducatif"}
 }
