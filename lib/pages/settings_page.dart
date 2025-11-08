@@ -95,79 +95,79 @@ class SettingsPage extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Consumer(
-          builder: (context, ref, child) {
-            final selectedMode = ref.watch(displayModeProvider);
-
-            return StatefulBuilder(
-              builder: (context, setState) {
-                DisplayMode localSelectedMode = selectedMode;
-                return Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          l10n.displayMode,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
+        // Definir el estado local fuera del StatefulBuilder
+        DisplayMode localSelectedMode = ref.read(displayModeProvider);
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      l10n.displayMode,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  // Selección de modo con RadioGroup moderno
+                  ...[DisplayMode.compact, DisplayMode.advanced].map((mode) {
+                    final isSelected = localSelectedMode == mode;
+                    return ListTile(
+                      leading: Icon(
+                        isSelected
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        color: isSelected ? Colors.blue : Colors.grey,
                       ),
-                      // Selección de modo con RadioGroup moderno
-                      ...[DisplayMode.compact, DisplayMode.advanced].map((mode) {
-                        final isSelected = localSelectedMode == mode;
-                        return ListTile(
-                          leading: Icon(
-                            isSelected
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked,
-                            color: isSelected ? Colors.blue : Colors.grey,
-                          ),
-                          title: Text(mode == DisplayMode.compact
-                              ? l10n.compactMode
-                              : l10n.advancedMode),
-                          subtitle: Text(mode == DisplayMode.compact
-                              ? l10n.compactModeSubtitle
-                              : l10n.advancedModeSubtitle),
-                          onTap: () {
-                            setState(() {
-                              localSelectedMode = mode;
-                            });
-                          },
-                          selected: isSelected,
-                        );
-                      }),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              await ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      localSelectedMode == DisplayMode.compact
-                                          ? l10n.displayModeUpdated(l10n.compactMode)
-                                          : l10n.displayModeUpdated(l10n.advancedMode),
-                                    ),
-                                    duration: const Duration(seconds: 2),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text(l10n.save),
-                          ),
-                        ],
+                      title: Text(mode == DisplayMode.compact
+                          ? l10n.compactMode
+                          : l10n.advancedMode),
+                      subtitle: Text(mode == DisplayMode.compact
+                          ? l10n.compactModeSubtitle
+                          : l10n.advancedModeSubtitle),
+                      onTap: () {
+                        setState(() {
+                          localSelectedMode = mode;
+                        });
+                      },
+                      selected: isSelected,
+                    );
+                  }),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          await ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                            // Navegación automática a la pantalla de hábitos para forzar reconstrucción
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => const HomePage()),
+                              (route) => false,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  localSelectedMode == DisplayMode.compact
+                                      ? l10n.displayModeUpdated(l10n.compactMode)
+                                      : l10n.displayModeUpdated(l10n.advancedMode),
+                                ),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                        child: Text(l10n.save),
                       ),
                     ],
                   ),
-                );
-              },
+                ],
+              ),
             );
           },
         );
