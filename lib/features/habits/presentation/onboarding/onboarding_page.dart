@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/predefined_habit.dart';
 import '../../domain/models/predefined_habits_data.dart';
 import '../../domain/habit.dart';
+import '../../data/storage/storage_providers.dart';
 import 'onboarding_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -138,71 +139,120 @@ class OnboardingPage extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  key: const Key('continue_onboarding_button'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff6366f1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 4,
-                  ),
-                  onPressed: selectedHabits.isEmpty || isLoading
-                      ? null
-                      : () async {
-                          debugPrint(
-                              'OnboardingPage: continue pressed - creating habits');
-
-                          // Prepare translated habits
-                          final translatedHabits =
-                              selectedHabits.map((habitId) {
-                            final predefinedHabit = predefinedHabits
-                                .firstWhere((h) => h.id == habitId);
-                            return TranslatedHabit(
-                              id: habitId,
-                              name: _getTranslatedName(
-                                  l10n, predefinedHabit.nameKey),
-                              description: _getTranslatedDescription(
-                                  l10n, predefinedHabit.descriptionKey),
-                              category: PredefinedHabitCategoryX(
-                                      predefinedHabit.category)
-                                  .toDomainCategory(),
-                            );
-                          }).toList();
-
-                          await ref
-                              .read(onboardingNotifierProvider.notifier)
-                              .completeOnboarding(
-                                  translatedHabits: translatedHabits);
-                          debugPrint(
-                              'OnboardingPage: completeOnboarding finished');
-                          if (context.mounted) {
-                            debugPrint('OnboardingPage: navigating to /home');
-                            Navigator.of(context).pushReplacementNamed('/home');
-                          }
-                        },
-                  child: isLoading
-                      ? const SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+              Row(
+                children: [
+                  // Skip button
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 56,
+                      child: OutlinedButton(
+                        key: const Key('skip_onboarding_button'),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xff6366f1)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                        )
-                      : Text(
-                          l10n.continueButton,
+                        ),
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                                // Mark onboarding as complete without selecting habits
+                                final storage =
+                                    ref.read(jsonStorageServiceProvider);
+                                await storage.setBool(
+                                    'onboarding_complete', true);
+                                if (context.mounted) {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/home');
+                                }
+                              },
+                        child: Text(
+                          l10n.cancel,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Color(0xff6366f1),
                           ),
                         ),
-                ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Continue button
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
+                      height: 56,
+                      child: ElevatedButton(
+                        key: const Key('continue_onboarding_button'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff6366f1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 4,
+                        ),
+                        onPressed: selectedHabits.isEmpty || isLoading
+                            ? null
+                            : () async {
+                                debugPrint(
+                                    'OnboardingPage: continue pressed - creating habits');
+
+                                // Prepare translated habits
+                                final translatedHabits =
+                                    selectedHabits.map((habitId) {
+                                  final predefinedHabit = predefinedHabits
+                                      .firstWhere((h) => h.id == habitId);
+                                  return TranslatedHabit(
+                                    id: habitId,
+                                    name: _getTranslatedName(
+                                        l10n, predefinedHabit.nameKey),
+                                    description: _getTranslatedDescription(
+                                        l10n, predefinedHabit.descriptionKey),
+                                    category: PredefinedHabitCategoryX(
+                                            predefinedHabit.category)
+                                        .toDomainCategory(),
+                                    emoji: predefinedHabit.emoji,
+                                  );
+                                }).toList();
+
+                                await ref
+                                    .read(onboardingNotifierProvider.notifier)
+                                    .completeOnboarding(
+                                        translatedHabits: translatedHabits);
+                                debugPrint(
+                                    'OnboardingPage: completeOnboarding finished');
+                                if (context.mounted) {
+                                  debugPrint(
+                                      'OnboardingPage: navigating to /home');
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/home');
+                                }
+                              },
+                        child: isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor:
+                                      AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
+                                ),
+                              )
+                            : Text(
+                                l10n.continueButton,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

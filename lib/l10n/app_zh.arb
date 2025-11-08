@@ -666,4 +666,65 @@
   "mlModelLoaded": "已加载",
   "mlModelLoading": "加载中...",
   "mlModelError": "错误"
+  "chooseHabitType": "你想添加哪种类型的习惯？",
+  "@chooseHabitType": {
+    "description": "添加习惯时选择类型的文本"
+  },
+  "chooseFromPredefined": "选择一个预设习惯",
+  "@chooseFromPredefined": {
+    "description": "选择预设习惯的文本"
+  },
+  "manual": "手动",
+  "@manual": {
+    "description": "手动习惯选项（短标签）"
+  },
+  "custom": "自定义",
+  "@custom": {
+    "description": "自定义习惯选项（短标签）"
+  },
+  "defaultHabit": "预设",
+  "@defaultHabit": {
+    "description": "预设习惯选项（短标签）"
+  },
+  "addHabitDiscoverySubtitle": "选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。",
+  "@addHabitDiscoverySubtitle": {
+    "description": "添加习惯发现对话框的说明性副标题"
+  },
+  "requiredFieldLabel": "必填",
+  "@requiredFieldLabel": {
+    "description": "用于指示字段为必填项的标签"
+  },
+  "back": "返回",
+  "@back": {
+    "description": "返回上一步的按钮"
+  },
+  "selectAll": "全选",
+  "@selectAll": {
+    "description": "在习惯页面选择所有习惯的按钮"
+  },
+  "copy": "复制",
+  "@copy": {
+    "description": "用于习惯复制的文本（滑动操作）"
+  },
+  "introMessage": "最大的改变始于坚持...",
+  "@introMessage": {
+    "description": "在欢迎页显示的激励语。"
+  },
+  "copyHabit": "您想要复制此任务吗？",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "您确定要复制\"{habitName}\"吗？",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "晨祷"}
+    }
+  },
+  "usefulTip": "实用提示",
+  "@usefulTip": {"description": "教育提示标题"},
+  "habitsTip": "滑动以查看您的习惯操作",
+  "@habitsTip": {"description": "教育提示描述"},
+  "understood": "明白了",
+  "@understood": {"description": "关闭教育提示的按钮"}
 }

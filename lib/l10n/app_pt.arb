@@ -666,4 +666,65 @@
   "mlModelLoaded": "Carregado",
   "mlModelLoading": "Carregando...",
   "mlModelError": "Erro"
+  "chooseHabitType": "Que tipo de hábito você deseja adicionar?",
+  "@chooseHabitType": {
+    "description": "Texto para escolher o tipo de hábito ao adicionar"
+  },
+  "chooseFromPredefined": "Escolha um hábito predefinido",
+  "@chooseFromPredefined": {
+    "description": "Texto para escolher entre hábitos predefinidos"
+  },
+  "manual": "Manual",
+  "@manual": {
+    "description": "Opção de hábito manual (rótulo curto)"
+  },
+  "custom": "Personalizado",
+  "@custom": {
+    "description": "Opção de hábito personalizado (rótulo curto)"
+  },
+  "defaultHabit": "Padrão",
+  "@defaultHabit": {
+    "description": "Opção de hábito predefinido (rótulo curto)"
+  },
+  "addHabitDiscoverySubtitle": "Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Subtítulo explicativo para o diálogo de descoberta de adicionar hábito"
+  },
+  "requiredFieldLabel": "Obrigatório",
+  "@requiredFieldLabel": {
+    "description": "Etiqueta para indicar que um campo é obrigatório"
+  },
+  "back": "Voltar",
+  "@back": {
+    "description": "Botão para voltar ao passo anterior no diálogo"
+  },
+  "selectAll": "Selecionar todos",
+  "@selectAll": {
+    "description": "Botão para selecionar todos os hábitos na página de hábitos"
+  },
+  "copy": "Duplicar",
+  "@copy": {
+    "description": "Texto para duplicar um hábito (ação de swipe)"
+  },
+  "copyHabit": "Deseja duplicar a tarefa?",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "Tem certeza de que deseja duplicar \"{habitName}\"?",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "Oração matinal"}
+    }
+  },
+  "introMessage": "As maiores mudanças começam na constância...",
+  "@introMessage": {
+    "description": "Mensagem motivacional mostrada na landing page."
+  },
+  "usefulTip": "Dica útil",
+  "@usefulTip": {"description": "Título da dica educativa"},
+  "habitsTip": "Deslize para ver ações nos seus hábitos",
+  "@habitsTip": {"description": "Descrição da dica educativa"},
+  "understood": "Entendido",
+  "@understood": {"description": "Botão para fechar a dica educativa"}
 }

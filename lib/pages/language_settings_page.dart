@@ -35,6 +35,7 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
           duration: const Duration(seconds: 2),
         ),
       );
+      Navigator.pop(context); // Regresa a SettingsPage
     } finally {
       if (mounted) {
         setState(() {
