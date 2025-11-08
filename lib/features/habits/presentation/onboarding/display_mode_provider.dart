@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart'; // Import for debugPrint
 import '../../data/storage/storage_providers.dart';
 import '../../domain/models/display_mode.dart';
 
@@ -33,6 +34,7 @@ class DisplayModeNotifier extends StateNotifier<DisplayMode> {
   /// Set the display mode and persist to storage
   Future<void> setDisplayMode(DisplayMode mode) async {
     state = mode;
+    debugPrint('Provider: displayMode cambiado a ' + mode.toString());
     final storage = _ref.read(jsonStorageServiceProvider);
     await storage.setString(_displayModeKey, mode.toStorageString());
   }

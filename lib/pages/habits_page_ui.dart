@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/habit.dart';
@@ -36,110 +35,6 @@ class HabitsPageUI extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final habitsAsync = ref.watch(jsonHabitsStreamProvider);
-
-    // Flag para evitar doble ejecución
-    bool tipShown = false;
-
-    Future<void> showEducationalTipWithLottie() async {
-      final prefs = await SharedPreferences.getInstance();
-      final tipShownCount = prefs.getInt('habits_tip_count') ?? 0;
-      if (tipShownCount < 2 && !tipShown) {
-        tipShown = true;
-        await Future.delayed(const Duration(milliseconds: 1200));
-        if (context.mounted) {
-          final colorScheme = Theme.of(context).colorScheme;
-          // Mostrar Lottie arriba del SnackBar
-          OverlayEntry? lottieEntry;
-          lottieEntry = OverlayEntry(
-            builder: (context) => Positioned(
-              top: MediaQuery.of(context).size.height * 0.18,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: SizedBox(
-                  width: 72,
-                  height: 72,
-                  child: Lottie.asset(
-                    'assets/lottie/swipe_actions.json',
-                    fit: BoxFit.contain,
-                    repeat: true,
-                  ),
-                ),
-              ),
-            ),
-          );
-          Overlay.of(context).insert(lottieEntry);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.lightbulb_outline,
-                      size: 20,
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          l10n.usefulTip,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          l10n.habitsTip,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              backgroundColor: colorScheme.primary,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              margin: const EdgeInsets.all(16),
-              duration: const Duration(seconds: 8),
-              elevation: 6,
-              action: SnackBarAction(
-                label: l10n.understood,
-                textColor: Colors.white,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  lottieEntry?.remove();
-                },
-              ),
-            ),
-          );
-          await Future.delayed(const Duration(seconds: 8));
-          lottieEntry.remove();
-          await prefs.setInt('habits_tip_count', tipShownCount + 1);
-        }
-      }
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showEducationalTipWithLottie();
-    });
 
     ref.listen<AsyncValue<void>>(jsonHabitsNotifierProvider, (previous, next) {
       next.whenOrNull(
@@ -219,6 +114,7 @@ class HabitsPageUI extends ConsumerWidget {
           }
 
           final displayMode = ref.watch(displayModeProvider);
+          debugPrint('HabitsPageUI displayMode: $displayMode');
 
           // Mostrar todos los hábitos como lista plana, sin categorías
           return ListView(
@@ -226,29 +122,7 @@ class HabitsPageUI extends ConsumerWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    bool lottieVisible = true;
-                    Future.delayed(const Duration(seconds: 8), () {
-                      if (lottieVisible) setState(() => lottieVisible = false);
-                    });
-                    return AnimatedOpacity(
-                      opacity: lottieVisible ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 500),
-                      child: Center(
-                        child: SizedBox(
-                          width: 56,
-                          height: 56,
-                          child: Lottie.asset(
-                            'assets/lottie/swipe_actions.json',
-                            fit: BoxFit.contain,
-                            repeat: true,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                child: _LottieTip(),
               ),
               if (selectedHabits.isNotEmpty)
                 Padding(
@@ -618,6 +492,50 @@ class HabitsPageUI extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => EditHabitDialog(l10n: l10n, habit: habit),
+    );
+  }
+}
+
+class _LottieTip extends StatefulWidget {
+  @override
+  __LottieTipState createState() => __LottieTipState();
+}
+
+class __LottieTipState extends State<_LottieTip> {
+  bool _visible = true;
+  Timer? _hideTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _hideTimer = Timer(const Duration(seconds: 8), () {
+      if (mounted) {
+        setState(() {
+          _visible = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _hideTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_visible) return const SizedBox.shrink();
+    return Center(
+      child: SizedBox(
+        width: 56,
+        height: 56,
+        child: Lottie.asset(
+          'assets/lottie/swipe_actions.json',
+          fit: BoxFit.contain,
+          repeat: true,
+        ),
+      ),
     );
   }
 }
