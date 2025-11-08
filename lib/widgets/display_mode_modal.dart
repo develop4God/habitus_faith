@@ -27,10 +27,12 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
   void initState() {
     super.initState();
     localSelectedMode = widget.currentMode;
+    debugPrint('[DisplayModeModal] initState: localSelectedMode = ' + localSelectedMode.toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('[DisplayModeModal] build: localSelectedMode = ' + localSelectedMode.toString());
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -60,9 +62,11 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
                   ? widget.l10n.compactModeSubtitle
                   : widget.l10n.advancedModeSubtitle),
               onTap: () {
+                debugPrint('[DisplayModeModal] onTap: seleccionando ' + mode.toString());
                 setState(() {
                   localSelectedMode = mode;
                 });
+                debugPrint('[DisplayModeModal] onTap: localSelectedMode = ' + localSelectedMode.toString());
               },
               selected: isSelected,
             );
@@ -73,7 +77,9 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
             children: [
               TextButton(
                 onPressed: () async {
+                  debugPrint('[DisplayModeModal] onPressed: guardando ' + localSelectedMode.toString());
                   await widget.ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
+                  debugPrint('[DisplayModeModal] onPressed: guardado y cerrando modal');
                   if (context.mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -97,4 +103,3 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
     );
   }
 }
-
