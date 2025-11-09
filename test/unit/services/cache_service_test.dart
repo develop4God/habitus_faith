@@ -64,7 +64,8 @@ void main() {
 
     test('clear removes all cache entries', () async {
       final habits = [
-        const MicroHabit(id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
+        const MicroHabit(
+            id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
       ];
 
       await cache.set('key1', habits);
@@ -78,7 +79,8 @@ void main() {
 
     test('delete removes specific key', () async {
       final habits = [
-        const MicroHabit(id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
+        const MicroHabit(
+            id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
       ];
 
       await cache.set('key1', habits);

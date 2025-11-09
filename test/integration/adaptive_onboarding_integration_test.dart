@@ -42,7 +42,8 @@ void main() {
 
       // Verify initial state: First question (intent detection)
       expect(find.text('¿Qué te trae a habitus+faith?'), findsOneWidget);
-      expect(find.text('1/1'), findsOneWidget); // Only intent question initially
+      expect(
+          find.text('1/1'), findsOneWidget); // Only intent question initially
 
       // Select faith-based intent
       final faithOption = find.text('Fortalecer mi vida espiritual');
@@ -78,8 +79,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Question 3: Faith Walk
-      expect(
-          find.text('¿Cómo describirías tu caminar actual con Dios?'),
+      expect(find.text('¿Cómo describirías tu caminar actual con Dios?'),
           findsOneWidget);
       expect(find.text('3/5'), findsOneWidget);
 
@@ -121,8 +121,7 @@ void main() {
       // Verify navigation to commitment screen
       expect(find.byType(CommitmentScreen), findsOneWidget);
       expect(find.text('¡Casi listo! 🎉'), findsOneWidget);
-      expect(
-          find.text('Firma tu compromiso con Dios:'), findsOneWidget);
+      expect(find.text('Firma tu compromiso con Dios:'), findsOneWidget);
 
       // Verify faith-specific commitments are shown
       expect(find.text('¡Voy a crecer en mi fe!'), findsOneWidget);
@@ -192,8 +191,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify secular commitment screen
-      expect(
-          find.text('Firma tu compromiso contigo mismo:'), findsOneWidget);
+      expect(find.text('Firma tu compromiso contigo mismo:'), findsOneWidget);
       expect(find.text('¡Voy a conseguir mi objetivo!'), findsOneWidget);
       // Should NOT show faith commitments
       expect(find.text('¡Voy a crecer en mi fe!'), findsNothing);
@@ -237,8 +235,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Should have faith walk question
-      expect(
-          find.text('¿Cómo describirías tu caminar actual con Dios?'),
+      expect(find.text('¿Cómo describirías tu caminar actual con Dios?'),
           findsOneWidget);
       expect(find.text('4/6'), findsOneWidget);
 
@@ -252,8 +249,7 @@ void main() {
       expect(find.text('5/6'), findsOneWidget);
     });
 
-    testWidgets('Back navigation works correctly',
-        (WidgetTester tester) async {
+    testWidgets('Back navigation works correctly', (WidgetTester tester) async {
       await tester.pumpWidget(await createApp());
       await tester.pumpAndSettle();
 
@@ -328,8 +324,7 @@ void main() {
         completedAt: DateTime.now(),
       );
 
-      await prefs.setString('onboarding_profile', 
-          '${profile.toJson()}');
+      await prefs.setString('onboarding_profile', '${profile.toJson()}');
       await prefs.setString('user_intent', 'faithBased');
 
       // Verify saved
