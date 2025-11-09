@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter/foundation.dart';
 import '../../../features/habits/domain/models/micro_habit.dart';
 import '../../../features/habits/domain/models/generation_request.dart';
 import '../../../features/habits/domain/habit.dart';
@@ -532,17 +533,24 @@ Requisitos estrictos:
 
     // Build intent-aware prompt
     final prompt = _buildProfilePrompt(profile);
+    final promptTokens = (prompt.length / 4).ceil();
+    debugPrint('[IA] userId: $userId | Prompt tokens estimados: $promptTokens | Prompt length: ${prompt.length}');
 
     try {
       _logger?.d('Sending profile-based request to Gemini API...');
       final response = await _model.generateContent(
           [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
 
+      final responseText = response.text ?? '';
+      final responseTokens = (responseText.length / 4).ceil();
+      debugPrint('[IA] userId: $userId | Response tokens estimados: $responseTokens | Response length: ${responseText.length}');
+
       _logger?.i('Received response from Gemini API');
 
       // Parse and return habit data
       final habits = _parseHabitsResponse(response.text, profile, userId);
       _logger?.i('Successfully parsed ${habits.length} habits from profile');
+      debugPrint('[IA] userId: $userId | Hábitos generados: ${habits.length} | Tokens totales estimados: ${promptTokens + responseTokens}');
 
       return habits;
     } on TimeoutException {
