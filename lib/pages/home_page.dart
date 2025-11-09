@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
 import 'main_home_page.dart';
 
@@ -8,14 +9,14 @@ import 'devotional_discovery_page.dart';
 import '../features/statistics/statistics_page.dart'; // Importa la página correcta
 import '../l10n/app_localizations.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       const HabitsPage(),
       const BibleReaderPage(),
       const DevotionalDiscoveryPage(),
-      const StatisticsPage(), // Usa la clase correcta
+      const StatisticsPage(),
       const SettingsPage(),
     ];
 
