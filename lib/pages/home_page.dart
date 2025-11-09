@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
+
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
 import 'devotional_discovery_page.dart';
@@ -161,22 +162,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     elevation: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            todayDevocional.versiculo,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(color: Colors.orange.shade900),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            todayDevocional.reflexion,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
+                      child: Text(
+                        todayDevocional.versiculo,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: Colors.orange.shade900, fontSize: 16),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
