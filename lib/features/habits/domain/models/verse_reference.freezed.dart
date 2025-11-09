@@ -12,8 +12,7 @@ part of 'verse_reference.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 VerseReference _$VerseReferenceFromJson(Map<String, dynamic> json) {
   return _VerseReference.fromJson(json);
@@ -39,9 +38,8 @@ mixin _$VerseReference {
 /// @nodoc
 abstract class $VerseReferenceCopyWith<$Res> {
   factory $VerseReferenceCopyWith(
-    VerseReference value,
-    $Res Function(VerseReference) then,
-  ) = _$VerseReferenceCopyWithImpl<$Res, VerseReference>;
+          VerseReference value, $Res Function(VerseReference) then) =
+      _$VerseReferenceCopyWithImpl<$Res, VerseReference>;
   @useResult
   $Res call({String book, int chapter, int verse, String? endVerse});
 }
@@ -66,36 +64,33 @@ class _$VerseReferenceCopyWithImpl<$Res, $Val extends VerseReference>
     Object? verse = null,
     Object? endVerse = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-        book: null == book
-            ? _value.book
-            : book // ignore: cast_nullable_to_non_nullable
-                as String,
-        chapter: null == chapter
-            ? _value.chapter
-            : chapter // ignore: cast_nullable_to_non_nullable
-                as int,
-        verse: null == verse
-            ? _value.verse
-            : verse // ignore: cast_nullable_to_non_nullable
-                as int,
-        endVerse: freezed == endVerse
-            ? _value.endVerse
-            : endVerse // ignore: cast_nullable_to_non_nullable
-                as String?,
-      ) as $Val,
-    );
+    return _then(_value.copyWith(
+      book: null == book
+          ? _value.book
+          : book // ignore: cast_nullable_to_non_nullable
+              as String,
+      chapter: null == chapter
+          ? _value.chapter
+          : chapter // ignore: cast_nullable_to_non_nullable
+              as int,
+      verse: null == verse
+          ? _value.verse
+          : verse // ignore: cast_nullable_to_non_nullable
+              as int,
+      endVerse: freezed == endVerse
+          ? _value.endVerse
+          : endVerse // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$VerseReferenceImplCopyWith<$Res>
     implements $VerseReferenceCopyWith<$Res> {
-  factory _$$VerseReferenceImplCopyWith(
-    _$VerseReferenceImpl value,
-    $Res Function(_$VerseReferenceImpl) then,
-  ) = __$$VerseReferenceImplCopyWithImpl<$Res>;
+  factory _$$VerseReferenceImplCopyWith(_$VerseReferenceImpl value,
+          $Res Function(_$VerseReferenceImpl) then) =
+      __$$VerseReferenceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String book, int chapter, int verse, String? endVerse});
@@ -106,9 +101,8 @@ class __$$VerseReferenceImplCopyWithImpl<$Res>
     extends _$VerseReferenceCopyWithImpl<$Res, _$VerseReferenceImpl>
     implements _$$VerseReferenceImplCopyWith<$Res> {
   __$$VerseReferenceImplCopyWithImpl(
-    _$VerseReferenceImpl _value,
-    $Res Function(_$VerseReferenceImpl) _then,
-  ) : super(_value, _then);
+      _$VerseReferenceImpl _value, $Res Function(_$VerseReferenceImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of VerseReference
   /// with the given fields replaced by the non-null parameter values.
@@ -120,38 +114,36 @@ class __$$VerseReferenceImplCopyWithImpl<$Res>
     Object? verse = null,
     Object? endVerse = freezed,
   }) {
-    return _then(
-      _$VerseReferenceImpl(
-        book: null == book
-            ? _value.book
-            : book // ignore: cast_nullable_to_non_nullable
-                as String,
-        chapter: null == chapter
-            ? _value.chapter
-            : chapter // ignore: cast_nullable_to_non_nullable
-                as int,
-        verse: null == verse
-            ? _value.verse
-            : verse // ignore: cast_nullable_to_non_nullable
-                as int,
-        endVerse: freezed == endVerse
-            ? _value.endVerse
-            : endVerse // ignore: cast_nullable_to_non_nullable
-                as String?,
-      ),
-    );
+    return _then(_$VerseReferenceImpl(
+      book: null == book
+          ? _value.book
+          : book // ignore: cast_nullable_to_non_nullable
+              as String,
+      chapter: null == chapter
+          ? _value.chapter
+          : chapter // ignore: cast_nullable_to_non_nullable
+              as int,
+      verse: null == verse
+          ? _value.verse
+          : verse // ignore: cast_nullable_to_non_nullable
+              as int,
+      endVerse: freezed == endVerse
+          ? _value.endVerse
+          : endVerse // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$VerseReferenceImpl extends _VerseReference {
-  const _$VerseReferenceImpl({
-    required this.book,
-    required this.chapter,
-    required this.verse,
-    this.endVerse,
-  }) : super._();
+  const _$VerseReferenceImpl(
+      {required this.book,
+      required this.chapter,
+      required this.verse,
+      this.endVerse})
+      : super._();
 
   factory _$VerseReferenceImpl.fromJson(Map<String, dynamic> json) =>
       _$$VerseReferenceImplFromJson(json);
@@ -193,23 +185,22 @@ class _$VerseReferenceImpl extends _VerseReference {
   @pragma('vm:prefer-inline')
   _$$VerseReferenceImplCopyWith<_$VerseReferenceImpl> get copyWith =>
       __$$VerseReferenceImplCopyWithImpl<_$VerseReferenceImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$VerseReferenceImplToJson(this);
+    return _$$VerseReferenceImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _VerseReference extends VerseReference {
-  const factory _VerseReference({
-    required final String book,
-    required final int chapter,
-    required final int verse,
-    final String? endVerse,
-  }) = _$VerseReferenceImpl;
+  const factory _VerseReference(
+      {required final String book,
+      required final int chapter,
+      required final int verse,
+      final String? endVerse}) = _$VerseReferenceImpl;
   const _VerseReference._() : super._();
 
   factory _VerseReference.fromJson(Map<String, dynamic> json) =

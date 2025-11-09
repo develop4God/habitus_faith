@@ -211,7 +211,7 @@ class _FavoriteCard extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: isDark
                             ? Colors.grey[800]
-                            : colorScheme.primaryContainer.withOpacity(0.3),
+                            : colorScheme.primaryContainer.withAlpha(77), // 0.3 * 255 = 77
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(

@@ -7,8 +7,7 @@ part of 'generation_request.dart';
 // **************************************************************************
 
 _$GenerationRequestImpl _$$GenerationRequestImplFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$GenerationRequestImpl(
       userGoal: json['userGoal'] as String,
       failurePattern: json['failurePattern'] as String?,
@@ -17,8 +16,7 @@ _$GenerationRequestImpl _$$GenerationRequestImplFromJson(
     );
 
 Map<String, dynamic> _$$GenerationRequestImplToJson(
-  _$GenerationRequestImpl instance,
-) =>
+        _$GenerationRequestImpl instance) =>
     <String, dynamic>{
       'userGoal': instance.userGoal,
       'failurePattern': instance.failurePattern,

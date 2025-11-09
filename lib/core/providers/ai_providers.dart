@@ -15,7 +15,7 @@ part 'ai_providers.g.dart';
 /// Provider for Bible database service (for verse enrichment)
 /// Uses default Spanish RVR1960 version
 @riverpod
-Future<BibleDbService?> bibleDbService(WidgetRef ref) async {
+Future<BibleDbService?> bibleDbService(Ref ref) async {
   try {
     final service = BibleDbService();
     await service.initDb('assets/biblia/RVR1960.SQLite3', 'RVR1960.SQLite3');
@@ -28,7 +28,7 @@ Future<BibleDbService?> bibleDbService(WidgetRef ref) async {
 
 /// Provider for logger instance
 @riverpod
-Logger logger(WidgetRef ref) {
+Logger logger(Ref ref) {
   return Logger(
     printer: PrettyPrinter(
       methodCount: 0,
@@ -43,21 +43,21 @@ Logger logger(WidgetRef ref) {
 
 /// Provider for cache service
 @riverpod
-ICacheService cacheService(WidgetRef ref) {
+ICacheService cacheService(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   return CacheService(prefs);
 }
 
 /// Provider for rate limit service
 @riverpod
-IRateLimitService rateLimitService(WidgetRef ref) {
+IRateLimitService rateLimitService(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   return RateLimitService(prefs);
 }
 
 /// Provider for Gemini service with optional Bible enrichment
 @riverpod
-Future<IGeminiService> geminiService(WidgetRef ref) async {
+Future<IGeminiService> geminiService(Ref ref) async {
   final bibleService = await ref.watch(bibleDbServiceProvider.future);
 
   return GeminiService(

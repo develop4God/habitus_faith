@@ -12,8 +12,7 @@ part of 'completion_record.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 CompletionRecord _$CompletionRecordFromJson(Map<String, dynamic> json) {
   return _CompletionRecord.fromJson(json);
@@ -50,21 +49,19 @@ mixin _$CompletionRecord {
 /// @nodoc
 abstract class $CompletionRecordCopyWith<$Res> {
   factory $CompletionRecordCopyWith(
-    CompletionRecord value,
-    $Res Function(CompletionRecord) then,
-  ) = _$CompletionRecordCopyWithImpl<$Res, CompletionRecord>;
+          CompletionRecord value, $Res Function(CompletionRecord) then) =
+      _$CompletionRecordCopyWithImpl<$Res, CompletionRecord>;
   @useResult
-  $Res call({
-    String habitId,
-    DateTime completedAt,
-    String? notes,
-    int? hourOfDay,
-    int? dayOfWeek,
-    int? streakAtTime,
-    int? failuresLast7Days,
-    int? hoursFromReminder,
-    bool? completed,
-  });
+  $Res call(
+      {String habitId,
+      DateTime completedAt,
+      String? notes,
+      int? hourOfDay,
+      int? dayOfWeek,
+      int? streakAtTime,
+      int? failuresLast7Days,
+      int? hoursFromReminder,
+      bool? completed});
 }
 
 /// @nodoc
@@ -92,79 +89,74 @@ class _$CompletionRecordCopyWithImpl<$Res, $Val extends CompletionRecord>
     Object? hoursFromReminder = freezed,
     Object? completed = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-        habitId: null == habitId
-            ? _value.habitId
-            : habitId // ignore: cast_nullable_to_non_nullable
-                as String,
-        completedAt: null == completedAt
-            ? _value.completedAt
-            : completedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-        notes: freezed == notes
-            ? _value.notes
-            : notes // ignore: cast_nullable_to_non_nullable
-                as String?,
-        hourOfDay: freezed == hourOfDay
-            ? _value.hourOfDay
-            : hourOfDay // ignore: cast_nullable_to_non_nullable
-                as int?,
-        dayOfWeek: freezed == dayOfWeek
-            ? _value.dayOfWeek
-            : dayOfWeek // ignore: cast_nullable_to_non_nullable
-                as int?,
-        streakAtTime: freezed == streakAtTime
-            ? _value.streakAtTime
-            : streakAtTime // ignore: cast_nullable_to_non_nullable
-                as int?,
-        failuresLast7Days: freezed == failuresLast7Days
-            ? _value.failuresLast7Days
-            : failuresLast7Days // ignore: cast_nullable_to_non_nullable
-                as int?,
-        hoursFromReminder: freezed == hoursFromReminder
-            ? _value.hoursFromReminder
-            : hoursFromReminder // ignore: cast_nullable_to_non_nullable
-                as int?,
-        completed: freezed == completed
-            ? _value.completed
-            : completed // ignore: cast_nullable_to_non_nullable
-                as bool?,
-      ) as $Val,
-    );
+    return _then(_value.copyWith(
+      habitId: null == habitId
+          ? _value.habitId
+          : habitId // ignore: cast_nullable_to_non_nullable
+              as String,
+      completedAt: null == completedAt
+          ? _value.completedAt
+          : completedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      notes: freezed == notes
+          ? _value.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hourOfDay: freezed == hourOfDay
+          ? _value.hourOfDay
+          : hourOfDay // ignore: cast_nullable_to_non_nullable
+              as int?,
+      dayOfWeek: freezed == dayOfWeek
+          ? _value.dayOfWeek
+          : dayOfWeek // ignore: cast_nullable_to_non_nullable
+              as int?,
+      streakAtTime: freezed == streakAtTime
+          ? _value.streakAtTime
+          : streakAtTime // ignore: cast_nullable_to_non_nullable
+              as int?,
+      failuresLast7Days: freezed == failuresLast7Days
+          ? _value.failuresLast7Days
+          : failuresLast7Days // ignore: cast_nullable_to_non_nullable
+              as int?,
+      hoursFromReminder: freezed == hoursFromReminder
+          ? _value.hoursFromReminder
+          : hoursFromReminder // ignore: cast_nullable_to_non_nullable
+              as int?,
+      completed: freezed == completed
+          ? _value.completed
+          : completed // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$CompletionRecordImplCopyWith<$Res>
     implements $CompletionRecordCopyWith<$Res> {
-  factory _$$CompletionRecordImplCopyWith(
-    _$CompletionRecordImpl value,
-    $Res Function(_$CompletionRecordImpl) then,
-  ) = __$$CompletionRecordImplCopyWithImpl<$Res>;
+  factory _$$CompletionRecordImplCopyWith(_$CompletionRecordImpl value,
+          $Res Function(_$CompletionRecordImpl) then) =
+      __$$CompletionRecordImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String habitId,
-    DateTime completedAt,
-    String? notes,
-    int? hourOfDay,
-    int? dayOfWeek,
-    int? streakAtTime,
-    int? failuresLast7Days,
-    int? hoursFromReminder,
-    bool? completed,
-  });
+  $Res call(
+      {String habitId,
+      DateTime completedAt,
+      String? notes,
+      int? hourOfDay,
+      int? dayOfWeek,
+      int? streakAtTime,
+      int? failuresLast7Days,
+      int? hoursFromReminder,
+      bool? completed});
 }
 
 /// @nodoc
 class __$$CompletionRecordImplCopyWithImpl<$Res>
     extends _$CompletionRecordCopyWithImpl<$Res, _$CompletionRecordImpl>
     implements _$$CompletionRecordImplCopyWith<$Res> {
-  __$$CompletionRecordImplCopyWithImpl(
-    _$CompletionRecordImpl _value,
-    $Res Function(_$CompletionRecordImpl) _then,
-  ) : super(_value, _then);
+  __$$CompletionRecordImplCopyWithImpl(_$CompletionRecordImpl _value,
+      $Res Function(_$CompletionRecordImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of CompletionRecord
   /// with the given fields replaced by the non-null parameter values.
@@ -181,63 +173,61 @@ class __$$CompletionRecordImplCopyWithImpl<$Res>
     Object? hoursFromReminder = freezed,
     Object? completed = freezed,
   }) {
-    return _then(
-      _$CompletionRecordImpl(
-        habitId: null == habitId
-            ? _value.habitId
-            : habitId // ignore: cast_nullable_to_non_nullable
-                as String,
-        completedAt: null == completedAt
-            ? _value.completedAt
-            : completedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-        notes: freezed == notes
-            ? _value.notes
-            : notes // ignore: cast_nullable_to_non_nullable
-                as String?,
-        hourOfDay: freezed == hourOfDay
-            ? _value.hourOfDay
-            : hourOfDay // ignore: cast_nullable_to_non_nullable
-                as int?,
-        dayOfWeek: freezed == dayOfWeek
-            ? _value.dayOfWeek
-            : dayOfWeek // ignore: cast_nullable_to_non_nullable
-                as int?,
-        streakAtTime: freezed == streakAtTime
-            ? _value.streakAtTime
-            : streakAtTime // ignore: cast_nullable_to_non_nullable
-                as int?,
-        failuresLast7Days: freezed == failuresLast7Days
-            ? _value.failuresLast7Days
-            : failuresLast7Days // ignore: cast_nullable_to_non_nullable
-                as int?,
-        hoursFromReminder: freezed == hoursFromReminder
-            ? _value.hoursFromReminder
-            : hoursFromReminder // ignore: cast_nullable_to_non_nullable
-                as int?,
-        completed: freezed == completed
-            ? _value.completed
-            : completed // ignore: cast_nullable_to_non_nullable
-                as bool?,
-      ),
-    );
+    return _then(_$CompletionRecordImpl(
+      habitId: null == habitId
+          ? _value.habitId
+          : habitId // ignore: cast_nullable_to_non_nullable
+              as String,
+      completedAt: null == completedAt
+          ? _value.completedAt
+          : completedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      notes: freezed == notes
+          ? _value.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hourOfDay: freezed == hourOfDay
+          ? _value.hourOfDay
+          : hourOfDay // ignore: cast_nullable_to_non_nullable
+              as int?,
+      dayOfWeek: freezed == dayOfWeek
+          ? _value.dayOfWeek
+          : dayOfWeek // ignore: cast_nullable_to_non_nullable
+              as int?,
+      streakAtTime: freezed == streakAtTime
+          ? _value.streakAtTime
+          : streakAtTime // ignore: cast_nullable_to_non_nullable
+              as int?,
+      failuresLast7Days: freezed == failuresLast7Days
+          ? _value.failuresLast7Days
+          : failuresLast7Days // ignore: cast_nullable_to_non_nullable
+              as int?,
+      hoursFromReminder: freezed == hoursFromReminder
+          ? _value.hoursFromReminder
+          : hoursFromReminder // ignore: cast_nullable_to_non_nullable
+              as int?,
+      completed: freezed == completed
+          ? _value.completed
+          : completed // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$CompletionRecordImpl extends _CompletionRecord {
-  const _$CompletionRecordImpl({
-    required this.habitId,
-    required this.completedAt,
-    this.notes,
-    this.hourOfDay,
-    this.dayOfWeek,
-    this.streakAtTime,
-    this.failuresLast7Days,
-    this.hoursFromReminder,
-    this.completed,
-  }) : super._();
+  const _$CompletionRecordImpl(
+      {required this.habitId,
+      required this.completedAt,
+      this.notes,
+      this.hourOfDay,
+      this.dayOfWeek,
+      this.streakAtTime,
+      this.failuresLast7Days,
+      this.hoursFromReminder,
+      this.completed})
+      : super._();
 
   factory _$CompletionRecordImpl.fromJson(Map<String, dynamic> json) =>
       _$$CompletionRecordImplFromJson(json);
@@ -248,22 +238,22 @@ class _$CompletionRecordImpl extends _CompletionRecord {
   final DateTime completedAt;
   @override
   final String? notes;
-  // ML features for abandonment prediction
+// ML features for abandonment prediction
   @override
   final int? hourOfDay;
-  // 0-23, hour when action occurred
+// 0-23, hour when action occurred
   @override
   final int? dayOfWeek;
-  // 1-7, Monday=1, Sunday=7
+// 1-7, Monday=1, Sunday=7
   @override
   final int? streakAtTime;
-  // user's current streak when this record was created
+// user's current streak when this record was created
   @override
   final int? failuresLast7Days;
-  // count of missed days in prior 7 days
+// count of missed days in prior 7 days
   @override
   final int? hoursFromReminder;
-  // hours elapsed since scheduled reminder time
+// hours elapsed since scheduled reminder time
   @override
   final bool? completed;
 
@@ -298,17 +288,16 @@ class _$CompletionRecordImpl extends _CompletionRecord {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-        runtimeType,
-        habitId,
-        completedAt,
-        notes,
-        hourOfDay,
-        dayOfWeek,
-        streakAtTime,
-        failuresLast7Days,
-        hoursFromReminder,
-        completed,
-      );
+      runtimeType,
+      habitId,
+      completedAt,
+      notes,
+      hourOfDay,
+      dayOfWeek,
+      streakAtTime,
+      failuresLast7Days,
+      hoursFromReminder,
+      completed);
 
   /// Create a copy of CompletionRecord
   /// with the given fields replaced by the non-null parameter values.
@@ -317,28 +306,27 @@ class _$CompletionRecordImpl extends _CompletionRecord {
   @pragma('vm:prefer-inline')
   _$$CompletionRecordImplCopyWith<_$CompletionRecordImpl> get copyWith =>
       __$$CompletionRecordImplCopyWithImpl<_$CompletionRecordImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CompletionRecordImplToJson(this);
+    return _$$CompletionRecordImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _CompletionRecord extends CompletionRecord {
-  const factory _CompletionRecord({
-    required final String habitId,
-    required final DateTime completedAt,
-    final String? notes,
-    final int? hourOfDay,
-    final int? dayOfWeek,
-    final int? streakAtTime,
-    final int? failuresLast7Days,
-    final int? hoursFromReminder,
-    final bool? completed,
-  }) = _$CompletionRecordImpl;
+  const factory _CompletionRecord(
+      {required final String habitId,
+      required final DateTime completedAt,
+      final String? notes,
+      final int? hourOfDay,
+      final int? dayOfWeek,
+      final int? streakAtTime,
+      final int? failuresLast7Days,
+      final int? hoursFromReminder,
+      final bool? completed}) = _$CompletionRecordImpl;
   const _CompletionRecord._() : super._();
 
   factory _CompletionRecord.fromJson(Map<String, dynamic> json) =
