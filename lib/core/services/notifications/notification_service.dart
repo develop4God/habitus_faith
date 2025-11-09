@@ -1,4 +1,5 @@
 // lib/core/services/notifications/notification_service.dart
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -72,13 +73,13 @@ class NotificationService {
 
       const InitializationSettings initializationSettings =
           InitializationSettings(
-            android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-            iOS: DarwinInitializationSettings(
-              requestAlertPermission: true,
-              requestBadgePermission: true,
-              requestSoundPermission: true,
-            ),
-          );
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+        ),
+      );
 
       await _flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
@@ -106,8 +107,8 @@ class NotificationService {
           await _initializeFCM();
 
           // Handle initial message if app was opened from a notification
-          final RemoteMessage? initialMessage = await _firebaseMessaging
-              .getInitialMessage();
+          final RemoteMessage? initialMessage =
+              await _firebaseMessaging.getInitialMessage();
           if (initialMessage != null) {
             developer.log(
               'NotificationService: App opened from initial notification: ${initialMessage.messageId}',
@@ -133,7 +134,7 @@ class NotificationService {
               : true;
           String initialNotificationTime = settingsDoc.exists
               ? (settingsDoc.data()?['notificationTime'] ??
-                    _defaultNotificationTime)
+                  _defaultNotificationTime)
               : _defaultNotificationTime;
           String initialUserTimezone = settingsDoc.exists
               ? (settingsDoc.data()?['userTimezone'] ?? currentDeviceTimezone)
@@ -165,16 +166,16 @@ class NotificationService {
   Future<void> _initializeFCM() async {
     try {
       // Request permission for notifications (iOS and Android 13+)
-      NotificationSettings settings = await _firebaseMessaging
-          .requestPermission(
-            alert: true,
-            announcement: false,
-            badge: true,
-            carPlay: false,
-            criticalAlert: false,
-            provisional: false,
-            sound: true,
-          );
+      NotificationSettings settings =
+          await _firebaseMessaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
 
       developer.log(
         'NotificationService: User permission granted: ${settings.authorizationStatus}',
@@ -352,29 +353,25 @@ class NotificationService {
 
       if (defaultTargetPlatform == TargetPlatform.android) {
         final notificationStatus = await Permission.notification.request();
-        allPermissionsGranted =
-            allPermissionsGranted &&
+        allPermissionsGranted = allPermissionsGranted &&
             (notificationStatus == PermissionStatus.granted);
 
         if (await Permission.scheduleExactAlarm.isDenied) {
           final alarmStatus = await Permission.scheduleExactAlarm.request();
-          allPermissionsGranted =
-              allPermissionsGranted &&
+          allPermissionsGranted = allPermissionsGranted &&
               (alarmStatus == PermissionStatus.granted);
         }
 
         if (await Permission.ignoreBatteryOptimizations.isDenied) {
-          final batteryStatus = await Permission.ignoreBatteryOptimizations
-              .request();
-          allPermissionsGranted =
-              allPermissionsGranted &&
+          final batteryStatus =
+              await Permission.ignoreBatteryOptimizations.request();
+          allPermissionsGranted = allPermissionsGranted &&
               (batteryStatus == PermissionStatus.granted);
         }
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         final bool? result = await _flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin
-            >()
+                IOSFlutterLocalNotificationsPlugin>()
             ?.requestPermissions(alert: true, badge: true, sound: true);
         allPermissionsGranted = result ?? false;
       }
@@ -417,8 +414,7 @@ class NotificationService {
             .get();
         String currentNotificationTime =
             settingsDoc.data()?['notificationTime'] ?? _defaultNotificationTime;
-        String currentUserTimezone =
-            settingsDoc.data()?['userTimezone'] ??
+        String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
 
         await _saveNotificationSettingsToFirestore(
@@ -465,8 +461,7 @@ class NotificationService {
             .get();
         bool currentNotificationsEnabled =
             settingsDoc.data()?['notificationsEnabled'] ?? true;
-        String currentUserTimezone =
-            settingsDoc.data()?['userTimezone'] ??
+        String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
 
         await _saveNotificationSettingsToFirestore(
@@ -498,22 +493,22 @@ class NotificationService {
     try {
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
-            'immediate_habitus',
-            'Habitus Faith Immediate',
-            channelDescription: 'Immediate notification from Habitus Faith',
-            importance: Importance.max,
-            priority: Priority.high,
-            icon: '@mipmap/ic_launcher',
-            styleInformation: BigTextStyleInformation(''),
-          );
+        'immediate_habitus',
+        'Habitus Faith Immediate',
+        channelDescription: 'Immediate notification from Habitus Faith',
+        importance: Importance.max,
+        priority: Priority.high,
+        icon: '@mipmap/ic_launcher',
+        styleInformation: BigTextStyleInformation(''),
+      );
 
       const DarwinNotificationDetails iOSPlatformChannelSpecifics =
           DarwinNotificationDetails(
-            sound: 'default',
-            presentAlert: true,
-            presentBadge: true,
-            presentSound: true,
-          );
+        sound: 'default',
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      );
 
       const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
@@ -629,24 +624,24 @@ class NotificationService {
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'daily_habitus',
-          'Habitus Faith Daily',
-          channelDescription: 'Daily reminder for Habitus Faith',
-          importance: Importance.max,
-          priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
-          sound: RawResourceAndroidNotificationSound('notification'),
-          enableVibration: true,
-          styleInformation: BigTextStyleInformation(''),
-        );
+      'daily_habitus',
+      'Habitus Faith Daily',
+      channelDescription: 'Daily reminder for Habitus Faith',
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+      sound: RawResourceAndroidNotificationSound('notification'),
+      enableVibration: true,
+      styleInformation: BigTextStyleInformation(''),
+    );
 
     const DarwinNotificationDetails iOSPlatformChannelSpecifics =
         DarwinNotificationDetails(
-          sound: 'default',
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        );
+      sound: 'default',
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -690,6 +685,99 @@ class NotificationService {
         name: 'NotificationService',
       );
       return 'en';
+    }
+  }
+
+  /// Schedule context-aware motivational notification for a habit
+  /// Adapts message based on user's onboarding profile intent
+  Future<void> scheduleContextualHabitNotification({
+    required String habitName,
+    required String habitEmoji,
+    required int hour,
+    required int minute,
+    required int notificationId,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final profileJson = prefs.getString('onboarding_profile');
+
+      String message;
+      if (profileJson != null) {
+        // Parse profile to get user intent
+        final profileData =
+            Map<String, dynamic>.from(jsonDecode(profileJson) as Map);
+        final intent = profileData['primaryIntent'] as String?;
+
+        // Adapt message based on intent
+        if (intent == 'wellness') {
+          message = '¡Es momento de $habitName! Tú puedes hacerlo.';
+        } else {
+          // faith or both
+          message = 'Hora de $habitName. Dios te fortalece en este hábito.';
+        }
+      } else {
+        // Fallback if no profile found
+        message = '¡Es momento de $habitName!';
+      }
+
+      // Calculate next scheduled time
+      tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+      tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        hour,
+        minute,
+      );
+
+      if (scheduledDate.isBefore(now)) {
+        scheduledDate = scheduledDate.add(const Duration(days: 1));
+      }
+
+      const AndroidNotificationDetails androidDetails =
+          AndroidNotificationDetails(
+        'habit_reminders',
+        'Habit Reminders',
+        channelDescription: 'Reminders for individual habits',
+        importance: Importance.high,
+        priority: Priority.high,
+        icon: '@mipmap/ic_launcher',
+      );
+
+      const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      );
+
+      const NotificationDetails platformDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: iOSDetails,
+      );
+
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        notificationId,
+        '$habitEmoji $habitName',
+        message,
+        scheduledDate,
+        platformDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+
+      developer.log(
+        'Contextual notification scheduled for $habitName at $scheduledDate',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'Error scheduling contextual notification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
     }
   }
 }
