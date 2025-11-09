@@ -116,7 +116,7 @@ class _DevotionalDiscoveryPageState
                     Text(
                       'Today',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha:0.9),
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -145,7 +145,7 @@ class _DevotionalDiscoveryPageState
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha:0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -235,7 +235,7 @@ class _DevotionalDiscoveryPageState
                           Icon(
                             Icons.book_outlined,
                             size: 64,
-                            color: colorScheme.onSurface.withOpacity(0.5),
+                            color: colorScheme.onSurface.withValues(alpha:0.5),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -276,7 +276,7 @@ class _DevotionalDiscoveryPageState
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha:0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -328,7 +328,7 @@ class _DevotionalDiscoveryPageState
                                     vertical: 6,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha:0.2),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
@@ -342,7 +342,7 @@ class _DevotionalDiscoveryPageState
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha:0.2),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -418,7 +418,7 @@ class _DevotionalDiscoveryPageState
                                 color: isDark
                                     ? Colors.grey[800]
                                     : colorScheme.primaryContainer
-                                        .withOpacity(0.3),
+                                        .withValues(alpha:0.3),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -454,10 +454,10 @@ class _DevotionalDiscoveryPageState
                             ),
                             elevation: 0,
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.menu_book, size: 20),
+                            children: [
+                              Icon(Icons.auto_stories_outlined, size: 20),
                               SizedBox(width: 8),
                               Text(
                                 'Read Verse First',
@@ -843,7 +843,7 @@ class _DevotionalDiscoveryPageState
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: colorScheme.primaryContainer.withOpacity(0.3),
+              color: colorScheme.primaryContainer.withValues(alpha:0.3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(

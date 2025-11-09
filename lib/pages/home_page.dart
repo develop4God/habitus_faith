@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
             label: l10n.readBible,
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
+            icon: Icon(Icons.auto_stories_outlined),
             label: 'Devotionals',
           ),
           BottomNavigationBarItem(

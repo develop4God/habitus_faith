@@ -1129,6 +1129,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Understood'**
   String get understood;
+
+  /// Bible title for AppBar
+  ///
+  /// In en, this message translates to:
+  /// **'Bible'**
+  String get bible;
 }
 
 class _AppLocalizationsDelegate

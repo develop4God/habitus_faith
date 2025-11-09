@@ -580,4 +580,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get understood => 'Compris';
+
+  @override
+  String get bible => 'Bible';
 }

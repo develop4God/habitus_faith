@@ -572,4 +572,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get understood => 'Understood';
+
+  @override
+  String get bible => 'Bible';
 }

@@ -756,5 +756,9 @@
   "habitsTip": "Swipe to see actions on your habits",
   "@habitsTip": {"description": "Educational tip description"},
   "understood": "Understood",
-  "@understood": {"description": "Button to close the educational tip"}
+  "@understood": {"description": "Button to close the educational tip"},
+  "bible": "Bible",
+  "@bible": {
+    "description": "Bible title for AppBar"
+  }
 }

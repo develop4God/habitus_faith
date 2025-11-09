@@ -211,7 +211,7 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha:0.05),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
                     ),
@@ -428,7 +428,7 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
-                    Icons.menu_book,
+                    Icons.auto_stories_outlined,
                     size: 20,
                     color: Colors.purple.shade600,
                   ),
@@ -526,7 +526,7 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: DropdownButtonFormField<HabitCategory>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         decoration: InputDecoration(
                           labelText: l10n.category,
                           border: OutlineInputBorder(
