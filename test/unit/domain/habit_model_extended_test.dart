@@ -101,17 +101,16 @@ void main() {
         now.subtract(const Duration(days: 1)),
       ];
 
-      final habit =
-          Habit.create(
-            id: 'test-4',
-            userId: 'user-1',
-            name: 'Exercise',
-            description: 'Daily workout',
-          ).copyWith(
-            completionHistory: completions,
-            currentStreak: 1,
-            lastCompletedAt: completions.last,
-          );
+      final habit = Habit.create(
+        id: 'test-4',
+        userId: 'user-1',
+        name: 'Exercise',
+        description: 'Daily workout',
+      ).copyWith(
+        completionHistory: completions,
+        currentStreak: 1,
+        lastCompletedAt: completions.last,
+      );
 
       // Act
       final completed = habit.completeToday();
@@ -132,17 +131,16 @@ void main() {
         now.subtract(const Duration(days: 1)),
       ];
 
-      final habit =
-          Habit.create(
-            id: 'test-5',
-            userId: 'user-1',
-            name: 'Perfect Streak',
-            description: 'All 7 days',
-          ).copyWith(
-            completionHistory: completions,
-            currentStreak: 6,
-            lastCompletedAt: completions.last,
-          );
+      final habit = Habit.create(
+        id: 'test-5',
+        userId: 'user-1',
+        name: 'Perfect Streak',
+        description: 'All 7 days',
+      ).copyWith(
+        completionHistory: completions,
+        currentStreak: 6,
+        lastCompletedAt: completions.last,
+      );
 
       // Act
       final completed = habit.completeToday();

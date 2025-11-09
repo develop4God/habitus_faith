@@ -159,9 +159,8 @@ class BibleVerseGridSelector extends StatelessWidget {
             child: Text(
               verseNumber.toString(),
               style: textTheme.bodyMedium?.copyWith(
-                color: isSelected
-                    ? colorScheme.onPrimary
-                    : colorScheme.onSurface,
+                color:
+                    isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 fontSize: 18,
               ),

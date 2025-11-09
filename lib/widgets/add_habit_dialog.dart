@@ -131,9 +131,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
 
   Future<void> _saveHabit() async {
     final navigator = Navigator.of(context);
-    await ref
-        .read(jsonHabitsNotifierProvider.notifier)
-        .addHabit(
+    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
           name: nameCtrl.text,
           description: descCtrl.text,
           category: selectedCategory,
@@ -284,24 +282,23 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                 padding: EdgeInsets.zero,
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 16,
-                                      mainAxisSpacing: 16,
-                                      childAspectRatio: 0.95,
-                                    ),
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                  childAspectRatio: 0.95,
+                                ),
                                 itemCount: predefinedHabits.length,
                                 itemBuilder: (context, index) {
                                   final habit = predefinedHabits[index];
-                                  final habitName =
-                                      PredefinedHabitTranslations.getTranslatedName(
-                                        widget.l10n,
-                                        habit.nameKey,
-                                      );
-                                  final categoryColor =
-                                      HabitColors
-                                          .categoryColors[PredefinedHabitCategoryX(
-                                        habit.category,
-                                      ).toDomainCategory()]!;
+                                  final habitName = PredefinedHabitTranslations
+                                      .getTranslatedName(
+                                    widget.l10n,
+                                    habit.nameKey,
+                                  );
+                                  final categoryColor = HabitColors
+                                      .categoryColors[PredefinedHabitCategoryX(
+                                    habit.category,
+                                  ).toDomainCategory()]!;
 
                                   return InkWell(
                                     onTap: () async {
@@ -312,10 +309,11 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                           .addHabit(
                                             name: habitName,
                                             description:
-                                                PredefinedHabitTranslations.getTranslatedDescription(
-                                                  widget.l10n,
-                                                  habit.descriptionKey,
-                                                ),
+                                                PredefinedHabitTranslations
+                                                    .getTranslatedDescription(
+                                              widget.l10n,
+                                              habit.descriptionKey,
+                                            ),
                                             category: PredefinedHabitCategoryX(
                                               habit.category,
                                             ).toDomainCategory(),
@@ -436,9 +434,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitName,
             counterText: '${nameCtrl.text.length}/40',
-            helperText: nameCtrl.text.length == 40
-                ? widget.l10n.maxThreeHabits
-                : null,
+            helperText:
+                nameCtrl.text.length == 40 ? widget.l10n.maxThreeHabits : null,
           ),
           onChanged: (value) => setState(() {}),
           onSubmitted: (_) {
@@ -456,9 +453,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitDescription,
             counterText: '${descCtrl.text.length}/120',
-            helperText: descCtrl.text.length == 120
-                ? widget.l10n.maxThreeHabits
-                : null,
+            helperText:
+                descCtrl.text.length == 120 ? widget.l10n.maxThreeHabits : null,
           ),
           maxLines: 2,
           onChanged: (value) => setState(() {}),
@@ -473,9 +469,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             border: const OutlineInputBorder(),
             hintText: '🙏',
             counterText: '${emojiCtrl.text.length}/2',
-            helperText: emojiCtrl.text.length == 2
-                ? widget.l10n.maxThreeHabits
-                : null,
+            helperText:
+                emojiCtrl.text.length == 2 ? widget.l10n.maxThreeHabits : null,
           ),
           maxLength: 2,
           onChanged: (value) => setState(() {}),
@@ -618,8 +613,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             color: isCompleted
                 ? habitColor
                 : isActive
-                ? habitColor.withValues(alpha: 0.8)
-                : Colors.grey.shade300,
+                    ? habitColor.withValues(alpha: 0.8)
+                    : Colors.grey.shade300,
             borderRadius: BorderRadius.circular(6),
             border: isActive ? Border.all(color: habitColor, width: 2) : null,
           ),

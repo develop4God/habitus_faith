@@ -1,7 +1,6 @@
 // lib/providers/devotional_providers.dart
 
 import 'dart:convert';
-import 'dart:ui' show PlatformDispatcher;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -83,7 +82,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       // Get saved language or use device language
       String savedLanguage =
           prefs.getString(DevotionalConstants.prefSelectedLanguage) ??
-          deviceLanguage;
+              deviceLanguage;
       String selectedLanguage = _getSupportedLanguageWithFallback(
         savedLanguage,
       );
@@ -101,10 +100,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
           prefs.getString(DevotionalConstants.prefSelectedVersion) ?? '';
       String defaultVersion =
           DevotionalConstants.defaultVersionByLanguage[selectedLanguage] ??
-          'RVR1960';
-      String selectedVersion = savedVersion.isNotEmpty
-          ? savedVersion
-          : defaultVersion;
+              'RVR1960';
+      String selectedVersion =
+          savedVersion.isNotEmpty ? savedVersion : defaultVersion;
 
       // Update state with language and version
       state = state.copyWith(
@@ -144,9 +142,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
       if (favoritesJson != null && favoritesJson.isNotEmpty) {
         final List<dynamic> favoritesData = json.decode(favoritesJson);
-        final favorites = favoritesData
-            .map((item) => Devocional.fromJson(item))
-            .toList();
+        final favorites =
+            favoritesData.map((item) => Devocional.fromJson(item)).toList();
         state = state.copyWith(favorites: favorites);
       }
     } catch (e) {
@@ -299,7 +296,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       // Get default version for the new language
       final defaultVersion =
           DevotionalConstants.defaultVersionByLanguage[languageCode] ??
-          'RVR1960';
+              'RVR1960';
 
       state = state.copyWith(
         selectedLanguage: languageCode,
@@ -367,5 +364,5 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 /// Provider for devotional state
 final devotionalProvider =
     StateNotifierProvider<DevotionalNotifier, DevotionalState>((ref) {
-      return DevotionalNotifier();
-    });
+  return DevotionalNotifier();
+});

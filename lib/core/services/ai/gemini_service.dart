@@ -630,7 +630,7 @@ Ejemplos integrados:
 
 Compromiso del usuario: "${profile.commitment}"
 
-Responde SOLO con JSON válido (sin markdown, sin \`\`\`json):
+Responde SOLO con JSON válido (sin markdown, sin ```json):
 [
   {
     "name": "Nombre del hábito (acción específica)",

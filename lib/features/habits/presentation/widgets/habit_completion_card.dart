@@ -233,7 +233,8 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: List.generate(
-                                          HabitDifficultyHelper.getDifficultyStars(
+                                          HabitDifficultyHelper
+                                              .getDifficultyStars(
                                             widget.habit.difficulty,
                                           ),
                                           (index) => Icon(

@@ -49,8 +49,7 @@ class HabitModel {
       lastCompletedAt: data['lastCompletedAt'] != null
           ? (data['lastCompletedAt'] as Timestamp).toDate()
           : null,
-      completionHistory:
-          (data['completionHistory'] as List<dynamic>?)
+      completionHistory: (data['completionHistory'] as List<dynamic>?)
               ?.map((e) => (e as Timestamp).toDate())
               .toList() ??
           [],
@@ -67,8 +66,7 @@ class HabitModel {
       difficultyLevel: data['difficultyLevel'] as int? ?? 3,
       targetMinutes: data['targetMinutes'] as int? ?? 20, // Matches level 3
       successRate7d: (data['successRate7d'] as num?)?.toDouble() ?? 0.0,
-      optimalDays:
-          (data['optimalDays'] as List<dynamic>?)
+      optimalDays: (data['optimalDays'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
           [],
@@ -155,8 +153,7 @@ class HabitModel {
       lastCompletedAt: json['lastCompletedAt'] != null
           ? DateTime.parse(json['lastCompletedAt'] as String)
           : null,
-      completionHistory:
-          (json['completionHistory'] as List<dynamic>?)
+      completionHistory: (json['completionHistory'] as List<dynamic>?)
               ?.map((e) => DateTime.parse(e as String))
               .toList() ??
           [],
@@ -173,8 +170,7 @@ class HabitModel {
       difficultyLevel: json['difficultyLevel'] as int? ?? 3,
       targetMinutes: json['targetMinutes'] as int? ?? 20, // Matches level 3
       successRate7d: (json['successRate7d'] as num?)?.toDouble() ?? 0.0,
-      optimalDays:
-          (json['optimalDays'] as List<dynamic>?)
+      optimalDays: (json['optimalDays'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
           [],

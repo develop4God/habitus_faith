@@ -90,12 +90,11 @@ class OnboardingPage extends ConsumerWidget {
                     final crossAxisCount = width > 600 ? 3 : 2;
                     final spacing = width > 600 ? 20.0 : 16.0;
                     // Adjust aspect ratio based on available height
-                    final itemHeight =
-                        constraints.maxHeight /
+                    final itemHeight = constraints.maxHeight /
                         (predefinedHabits.length / crossAxisCount).ceil();
                     final itemWidth =
                         (width - (spacing * (crossAxisCount + 1))) /
-                        crossAxisCount;
+                            crossAxisCount;
                     final aspectRatio = (itemWidth / itemHeight).clamp(
                       0.7,
                       1.2,
@@ -454,9 +453,8 @@ class _HabitCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isSelected
-                  ? const Color(0xff6366f1)
-                  : Colors.grey.shade200,
+              color:
+                  isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
               width: isSelected ? 3 : 1,
             ),
             boxShadow: [

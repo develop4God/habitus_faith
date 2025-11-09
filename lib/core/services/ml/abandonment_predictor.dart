@@ -43,14 +43,14 @@ class AbandonmentPredictor {
 
   /// Get prediction statistics
   Map<String, dynamic> get telemetry => {
-    'prediction_count': _predictionCount,
-    'error_count': _errorCount,
-    'last_prediction': _lastPredictionTime?.toIso8601String(),
-    'last_reset': _lastTelemetryReset?.toIso8601String(),
-    'success_rate': _predictionCount > 0
-        ? ((_predictionCount - _errorCount) / _predictionCount)
-        : 0.0,
-  };
+        'prediction_count': _predictionCount,
+        'error_count': _errorCount,
+        'last_prediction': _lastPredictionTime?.toIso8601String(),
+        'last_reset': _lastTelemetryReset?.toIso8601String(),
+        'success_rate': _predictionCount > 0
+            ? ((_predictionCount - _errorCount) / _predictionCount)
+            : 0.0,
+      };
 
   /// Initialize the predictor by loading model and scaler params
   Future<void> initialize() async {

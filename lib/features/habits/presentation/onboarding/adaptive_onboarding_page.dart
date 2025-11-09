@@ -7,7 +7,6 @@ import '../../domain/habit.dart';
 import 'onboarding_models.dart';
 import 'onboarding_questions.dart';
 import 'commitment_screen.dart';
-import '../../../../core/services/ai/gemini_service.dart';
 import '../../../../core/providers/ai_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -161,7 +160,7 @@ class _AdaptiveOnboardingPageState
       // Generate habits using AI based on profile
       final geminiService = await ref.read(geminiServiceProvider.future);
       final storage = ref.read(jsonStorageServiceProvider);
-      final userId = 'local_user'; // For now, using local storage
+      const userId = 'local_user'; // For now, using local storage
 
       final habitsData =
           await geminiService.generateHabitsFromProfile(profile, userId);

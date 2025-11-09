@@ -28,10 +28,10 @@ class JsonHabitsRepository implements HabitsRepository {
     required String userId,
     required String Function() idGenerator,
     FirebaseFirestore? firestore,
-  }) : _storage = storage,
-       _userId = userId,
-       _idGenerator = idGenerator,
-       _firestore = firestore {
+  })  : _storage = storage,
+        _userId = userId,
+        _idGenerator = idGenerator,
+        _firestore = firestore {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
         debugPrint(
@@ -68,9 +68,8 @@ class JsonHabitsRepository implements HabitsRepository {
     debugPrint(
       'JsonHabitsRepository._loadHabits: filtered habits for user "$_userId": ${habits.length}',
     );
-    final loadedHabits = habits
-        .map((habit) => _loadHabitWithCompletions(habit))
-        .toList();
+    final loadedHabits =
+        habits.map((habit) => _loadHabitWithCompletions(habit)).toList();
     debugPrint(
       'JsonHabitsRepository._loadHabits: loadedHabits (with completions): ${loadedHabits.length}',
     );
@@ -144,12 +143,11 @@ class JsonHabitsRepository implements HabitsRepository {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    final sortedDates =
-        completionDates
-            .map((date) => DateTime(date.year, date.month, date.day))
-            .toSet()
-            .toList()
-          ..sort((a, b) => b.compareTo(a));
+    final sortedDates = completionDates
+        .map((date) => DateTime(date.year, date.month, date.day))
+        .toSet()
+        .toList()
+      ..sort((a, b) => b.compareTo(a));
 
     if (sortedDates.first != today) return 0;
 
@@ -171,12 +169,11 @@ class JsonHabitsRepository implements HabitsRepository {
   int _calculateLongestStreak(List<DateTime> completionDates) {
     if (completionDates.isEmpty) return 0;
 
-    final sortedDates =
-        completionDates
-            .map((date) => DateTime(date.year, date.month, date.day))
-            .toSet()
-            .toList()
-          ..sort();
+    final sortedDates = completionDates
+        .map((date) => DateTime(date.year, date.month, date.day))
+        .toSet()
+        .toList()
+      ..sort();
 
     int longestStreak = 1;
     int currentStreak = 1;

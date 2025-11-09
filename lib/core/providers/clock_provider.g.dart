@@ -19,9 +19,8 @@ String _$clockHash() => r'7d0bca9f23a3bb3f7498b9a507251d3a39dda975';
 final clockProvider = Provider<Clock>.internal(
   clock,
   name: r'clockProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$clockHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$clockHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

@@ -15,14 +15,14 @@ String _$bibleDbServiceHash() => r'0af91e65f6b1f537e7da93b2c1f05b5b61a4d328';
 @ProviderFor(bibleDbService)
 final bibleDbServiceProvider =
     AutoDisposeFutureProvider<BibleDbService?>.internal(
-      bibleDbService,
-      name: r'bibleDbServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$bibleDbServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  bibleDbService,
+  name: r'bibleDbServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$bibleDbServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -36,9 +36,8 @@ String _$loggerHash() => r'8b7e11a155f4beb9e222fb7f4bf6f651d0da24d3';
 final loggerProvider = AutoDisposeProvider<Logger>.internal(
   logger,
   name: r'loggerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$loggerHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$loggerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -55,9 +54,8 @@ String _$cacheServiceHash() => r'999391311237c437e6a805774e202f1054c2485a';
 final cacheServiceProvider = AutoDisposeProvider<ICacheService>.internal(
   cacheService,
   name: r'cacheServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$cacheServiceHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$cacheServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -73,14 +71,14 @@ String _$rateLimitServiceHash() => r'34461cb97a53e3c5972e36a36412bd794fa594e3';
 @ProviderFor(rateLimitService)
 final rateLimitServiceProvider =
     AutoDisposeProvider<IRateLimitService>.internal(
-      rateLimitService,
-      name: r'rateLimitServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$rateLimitServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  rateLimitService,
+  name: r'rateLimitServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$rateLimitServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -93,14 +91,14 @@ String _$geminiServiceHash() => r'3f12640f30e4b008631815b6434c1fc869f32884';
 @ProviderFor(geminiService)
 final geminiServiceProvider =
     AutoDisposeFutureProvider<IGeminiService>.internal(
-      geminiService,
-      name: r'geminiServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$geminiServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  geminiService,
+  name: r'geminiServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$geminiServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -112,19 +110,16 @@ String _$microHabitGeneratorHash() =>
 ///
 /// Copied from [MicroHabitGenerator].
 @ProviderFor(MicroHabitGenerator)
-final microHabitGeneratorProvider =
-    AutoDisposeAsyncNotifierProvider<
-      MicroHabitGenerator,
-      List<MicroHabit>
-    >.internal(
-      MicroHabitGenerator.new,
-      name: r'microHabitGeneratorProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$microHabitGeneratorHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final microHabitGeneratorProvider = AutoDisposeAsyncNotifierProvider<
+    MicroHabitGenerator, List<MicroHabit>>.internal(
+  MicroHabitGenerator.new,
+  name: r'microHabitGeneratorProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$microHabitGeneratorHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$MicroHabitGenerator = AutoDisposeAsyncNotifier<List<MicroHabit>>;
 // ignore_for_file: type=lint

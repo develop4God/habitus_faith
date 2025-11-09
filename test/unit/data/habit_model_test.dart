@@ -72,10 +72,8 @@ void main() {
           .set(HabitModel.toFirestore(originalHabit));
 
       // Read back from Firestore
-      final doc = await firestore
-          .collection('habits')
-          .doc(originalHabit.id)
-          .get();
+      final doc =
+          await firestore.collection('habits').doc(originalHabit.id).get();
       final restoredHabit = HabitModel.fromFirestore(doc);
 
       // Assert

@@ -94,44 +94,43 @@ class _$CompletionRecordCopyWithImpl<$Res, $Val extends CompletionRecord>
   }) {
     return _then(
       _value.copyWith(
-            habitId: null == habitId
-                ? _value.habitId
-                : habitId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            completedAt: null == completedAt
-                ? _value.completedAt
-                : completedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            notes: freezed == notes
-                ? _value.notes
-                : notes // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            hourOfDay: freezed == hourOfDay
-                ? _value.hourOfDay
-                : hourOfDay // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            dayOfWeek: freezed == dayOfWeek
-                ? _value.dayOfWeek
-                : dayOfWeek // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            streakAtTime: freezed == streakAtTime
-                ? _value.streakAtTime
-                : streakAtTime // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            failuresLast7Days: freezed == failuresLast7Days
-                ? _value.failuresLast7Days
-                : failuresLast7Days // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            hoursFromReminder: freezed == hoursFromReminder
-                ? _value.hoursFromReminder
-                : hoursFromReminder // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            completed: freezed == completed
-                ? _value.completed
-                : completed // ignore: cast_nullable_to_non_nullable
-                      as bool?,
-          )
-          as $Val,
+        habitId: null == habitId
+            ? _value.habitId
+            : habitId // ignore: cast_nullable_to_non_nullable
+                as String,
+        completedAt: null == completedAt
+            ? _value.completedAt
+            : completedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        notes: freezed == notes
+            ? _value.notes
+            : notes // ignore: cast_nullable_to_non_nullable
+                as String?,
+        hourOfDay: freezed == hourOfDay
+            ? _value.hourOfDay
+            : hourOfDay // ignore: cast_nullable_to_non_nullable
+                as int?,
+        dayOfWeek: freezed == dayOfWeek
+            ? _value.dayOfWeek
+            : dayOfWeek // ignore: cast_nullable_to_non_nullable
+                as int?,
+        streakAtTime: freezed == streakAtTime
+            ? _value.streakAtTime
+            : streakAtTime // ignore: cast_nullable_to_non_nullable
+                as int?,
+        failuresLast7Days: freezed == failuresLast7Days
+            ? _value.failuresLast7Days
+            : failuresLast7Days // ignore: cast_nullable_to_non_nullable
+                as int?,
+        hoursFromReminder: freezed == hoursFromReminder
+            ? _value.hoursFromReminder
+            : hoursFromReminder // ignore: cast_nullable_to_non_nullable
+                as int?,
+        completed: freezed == completed
+            ? _value.completed
+            : completed // ignore: cast_nullable_to_non_nullable
+                as bool?,
+      ) as $Val,
     );
   }
 }
@@ -187,39 +186,39 @@ class __$$CompletionRecordImplCopyWithImpl<$Res>
         habitId: null == habitId
             ? _value.habitId
             : habitId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         completedAt: null == completedAt
             ? _value.completedAt
             : completedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         notes: freezed == notes
             ? _value.notes
             : notes // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         hourOfDay: freezed == hourOfDay
             ? _value.hourOfDay
             : hourOfDay // ignore: cast_nullable_to_non_nullable
-                  as int?,
+                as int?,
         dayOfWeek: freezed == dayOfWeek
             ? _value.dayOfWeek
             : dayOfWeek // ignore: cast_nullable_to_non_nullable
-                  as int?,
+                as int?,
         streakAtTime: freezed == streakAtTime
             ? _value.streakAtTime
             : streakAtTime // ignore: cast_nullable_to_non_nullable
-                  as int?,
+                as int?,
         failuresLast7Days: freezed == failuresLast7Days
             ? _value.failuresLast7Days
             : failuresLast7Days // ignore: cast_nullable_to_non_nullable
-                  as int?,
+                as int?,
         hoursFromReminder: freezed == hoursFromReminder
             ? _value.hoursFromReminder
             : hoursFromReminder // ignore: cast_nullable_to_non_nullable
-                  as int?,
+                as int?,
         completed: freezed == completed
             ? _value.completed
             : completed // ignore: cast_nullable_to_non_nullable
-                  as bool?,
+                as bool?,
       ),
     );
   }
@@ -299,17 +298,17 @@ class _$CompletionRecordImpl extends _CompletionRecord {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    habitId,
-    completedAt,
-    notes,
-    hourOfDay,
-    dayOfWeek,
-    streakAtTime,
-    failuresLast7Days,
-    hoursFromReminder,
-    completed,
-  );
+        runtimeType,
+        habitId,
+        completedAt,
+        notes,
+        hourOfDay,
+        dayOfWeek,
+        streakAtTime,
+        failuresLast7Days,
+        hoursFromReminder,
+        completed,
+      );
 
   /// Create a copy of CompletionRecord
   /// with the given fields replaced by the non-null parameter values.

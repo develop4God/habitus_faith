@@ -81,7 +81,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: AbandonmentRiskIndicator(
               risk: RiskThresholds.mediumRiskThreshold,
@@ -98,7 +98,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: AbandonmentRiskIndicator(
               risk: RiskThresholds.highRiskThreshold,

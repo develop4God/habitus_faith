@@ -29,8 +29,7 @@ class EnvConfig {
   /// Checks .env file first, then --dart-define override
   /// Throws ApiKeyMissingException if not configured or invalid
   static String get geminiApiKey {
-    final key =
-        dotenv.env['GEMINI_API_KEY'] ??
+    final key = dotenv.env['GEMINI_API_KEY'] ??
         const String.fromEnvironment('GEMINI_API_KEY');
 
     if (key.isEmpty) {
@@ -62,8 +61,7 @@ class ApiKeyMissingException implements Exception {
   final String message;
 
   ApiKeyMissingException([
-    this.message =
-        'GEMINI_API_KEY not configured. '
+    this.message = 'GEMINI_API_KEY not configured. '
         'Add it to .env file or use --dart-define=GEMINI_API_KEY=your_key',
   ]);
 

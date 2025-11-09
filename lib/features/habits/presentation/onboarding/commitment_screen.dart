@@ -81,9 +81,9 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
             children: [
               const SizedBox(height: 32),
               // Title
-              Text(
+              const Text(
                 '¡Casi listo! 🎉',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Color(0xff1a202c),
@@ -91,9 +91,9 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Sella tu compromiso con una declaración personal',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff64748b),
                 ),

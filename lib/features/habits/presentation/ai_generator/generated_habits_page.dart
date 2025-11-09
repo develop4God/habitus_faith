@@ -62,9 +62,8 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
     final l10n = AppLocalizations.of(context)!;
     final generatedHabits = ref.read(microHabitGeneratorProvider).value ?? [];
-    final selectedHabits = generatedHabits
-        .where((h) => _selectedHabitIds.contains(h.id))
-        .toList();
+    final selectedHabits =
+        generatedHabits.where((h) => _selectedHabitIds.contains(h.id)).toList();
 
     // Show loading
     showDialog(
@@ -94,9 +93,7 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
           _habitCategories[microHabit.id] ?? HabitCategory.spiritual;
       final emoji = _getCategoryEmoji(category);
 
-      await ref
-          .read(habitsRepositoryProvider)
-          .createHabit(
+      await ref.read(habitsRepositoryProvider).createHabit(
             name: microHabit.action,
             description: microHabit.verseText != null
                 ? '${microHabit.purpose}\n\n${microHabit.verse}: ${microHabit.verseText}'
@@ -230,9 +227,8 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
-                      onPressed: _selectedHabitIds.isEmpty
-                          ? null
-                          : _saveSelected,
+                      onPressed:
+                          _selectedHabitIds.isEmpty ? null : _saveSelected,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff10b981),
                         foregroundColor: Colors.white,

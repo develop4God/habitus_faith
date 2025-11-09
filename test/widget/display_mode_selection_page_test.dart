@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_selection_page.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
-import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -360,8 +358,8 @@ void main() {
               supportedLocales: const [Locale('en', '')],
               routes: {
                 '/onboarding': (context) => const Scaffold(
-                  body: Center(child: Text('Onboarding Page')),
-                ),
+                      body: Center(child: Text('Onboarding Page')),
+                    ),
               },
               home: const DisplayModeSelectionPage(),
             ),
@@ -404,8 +402,8 @@ void main() {
               supportedLocales: const [Locale('en', '')],
               routes: {
                 '/onboarding': (context) => const Scaffold(
-                  body: Center(child: Text('Onboarding Page')),
-                ),
+                      body: Center(child: Text('Onboarding Page')),
+                    ),
               },
               home: const DisplayModeSelectionPage(),
             ),

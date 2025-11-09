@@ -19,11 +19,11 @@ class FavoritesPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Icon(Icons.star, color: Colors.amber, size: 24),
-            const SizedBox(width: 8),
-            const Text('My Favorites'),
+            SizedBox(width: 8),
+            Text('My Favorites'),
           ],
         ),
         elevation: 0,
@@ -42,16 +42,16 @@ class FavoritesPage extends ConsumerWidget {
                   Text(
                     'No favorites yet',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: isDark ? Colors.grey[600] : Colors.grey[500],
-                    ),
+                          color: isDark ? Colors.grey[600] : Colors.grey[500],
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Tap the star icon on any devotional to save it here',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: isDark ? Colors.grey[700] : Colors.grey[400],
-                    ),
+                          color: isDark ? Colors.grey[700] : Colors.grey[400],
+                        ),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
@@ -140,9 +140,9 @@ class _FavoriteCard extends ConsumerWidget {
                     child: Text(
                       _extractVerseReference(devocional.versiculo),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.primary,
+                          ),
                     ),
                   ),
                   Row(
@@ -150,8 +150,9 @@ class _FavoriteCard extends ConsumerWidget {
                       Text(
                         dateFormat.format(devocional.date),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isDark ? Colors.grey[500] : Colors.grey[600],
-                        ),
+                              color:
+                                  isDark ? Colors.grey[500] : Colors.grey[600],
+                            ),
                       ),
                       const SizedBox(width: 8),
                       IconButton(
@@ -218,9 +219,8 @@ class _FavoriteCard extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: isDark
-                              ? Colors.grey[400]
-                              : colorScheme.primary,
+                          color:
+                              isDark ? Colors.grey[400] : colorScheme.primary,
                         ),
                       ),
                     );

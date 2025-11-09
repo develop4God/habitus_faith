@@ -74,7 +74,8 @@ void main() {
       expect(output[0][0], greaterThan(0.7)); // Debe dar ~0.7712
     });
 
-    test('Low-risk user scenario returns low abandonment probability', () async {
+    test('Low-risk user scenario returns low abandonment probability',
+        () async {
       // Simula usuario real: espiritual, completando hábito diario, cerca del recordatorio
       final now = DateTime(2024, 1, 15, 7, 30); // Lunes 7:30 AM
       final completions = List.generate(
@@ -170,9 +171,9 @@ void main() {
         );
         final hoursFromReminder =
             MLFeaturesCalculator.calculateHoursFromReminder(
-              habit,
-              now,
-            ).toDouble();
+          habit,
+          now,
+        ).toDouble();
 
         final features = [
           hourOfDay,

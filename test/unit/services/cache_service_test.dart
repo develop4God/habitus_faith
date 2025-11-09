@@ -16,7 +16,7 @@ void main() {
 
     test('stores and retrieves List<MicroHabit>', () async {
       final habits = [
-        MicroHabit(
+        const MicroHabit(
           id: '1',
           action: 'Orar 3min al despertar',
           verse: 'Salmos 5:3',
@@ -41,7 +41,7 @@ void main() {
 
     test('deletes expired cache entries', () async {
       final habits = [
-        MicroHabit(
+        const MicroHabit(
           id: '1',
           action: 'Test action',
           verse: 'Test 1:1',
@@ -64,7 +64,7 @@ void main() {
 
     test('clear removes all cache entries', () async {
       final habits = [
-        MicroHabit(id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
+        const MicroHabit(id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
       ];
 
       await cache.set('key1', habits);
@@ -78,7 +78,7 @@ void main() {
 
     test('delete removes specific key', () async {
       final habits = [
-        MicroHabit(id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
+        const MicroHabit(id: '1', action: 'Test', verse: 'Test 1:1', purpose: 'Test'),
       ];
 
       await cache.set('key1', habits);

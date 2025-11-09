@@ -123,8 +123,8 @@ class BibleReaderActionModal extends StatelessWidget {
           Text(
             selectedVersesReference,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+                  color: colorScheme.onSurfaceVariant,
+                ),
           ),
           const SizedBox(height: 24),
 
@@ -137,9 +137,8 @@ class BibleReaderActionModal extends StatelessWidget {
               children: [
                 _buildActionButton(
                   context: context,
-                  icon: areVersesSaved
-                      ? Icons.bookmark
-                      : Icons.bookmark_outline,
+                  icon:
+                      areVersesSaved ? Icons.bookmark : Icons.bookmark_outline,
                   label: areVersesSaved
                       ? 'bible.saved_verses'.tr()
                       : 'bible.save_verses'.tr(),

@@ -53,8 +53,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
           final String motivacion = successPercent >= 80
               ? '¡Excelente constancia! Sigue así.'
               : successPercent >= 50
-              ? '¡Vas bien! Mantén el ritmo.'
-              : '¡Cada día cuenta! Puedes mejorar.';
+                  ? '¡Vas bien! Mantén el ritmo.'
+                  : '¡Cada día cuenta! Puedes mejorar.';
 
           return SingleChildScrollView(
             child: Padding(
@@ -71,9 +71,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   Text(
                     motivacion,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.indigoAccent,
-                    ),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigoAccent,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Card(
@@ -112,8 +112,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   Text(
                     'Porcentaje de éxito',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Stack(
@@ -148,8 +148,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   Text(
                     'Distribución de hábitos',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 12),
                   AspectRatio(
@@ -171,10 +171,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             ),
                           ),
                           PieChartSectionData(
-                            value:
-                                (stats.totalHabits - stats.completedHabits) > 0
+                            value: (stats.totalHabits - stats.completedHabits) >
+                                    0
                                 ? (stats.totalHabits - stats.completedHabits)
-                                      .toDouble()
+                                    .toDouble()
                                 : 1,
                             color: Colors.redAccent,
                             title: 'Pendientes',

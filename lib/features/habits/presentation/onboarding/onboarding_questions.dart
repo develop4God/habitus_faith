@@ -56,11 +56,11 @@ class ConditionalMessage {
 }
 
 /// Q1: Intent Detection (Branch Point)
-final intentQuestion = OnboardingQuestion(
+const intentQuestion = OnboardingQuestion(
   id: 'intent',
   title: '¿Qué te trae a habitus+faith?',
   type: QuestionType.singleChoice,
-  options: const [
+  options: [
     QuestionOption(
       id: 'faithBased',
       emoji: '🙏',
@@ -83,12 +83,12 @@ final intentQuestion = OnboardingQuestion(
 );
 
 /// Q2a: Spiritual Motivation (Faith path)
-final spiritualMotivationQuestion = OnboardingQuestion(
+const spiritualMotivationQuestion = OnboardingQuestion(
   id: 'spiritualMotivation',
   title: '¿Qué te motiva en tu caminar con Dios?',
   type: QuestionType.multiChoice,
   maxSelections: 3,
-  options: const [
+  options: [
     QuestionOption(
       id: 'closerToGod',
       emoji: '🔥',
@@ -118,11 +118,11 @@ final spiritualMotivationQuestion = OnboardingQuestion(
 );
 
 /// Q3a: Current Faith Walk
-final faithWalkQuestion = OnboardingQuestion(
+const faithWalkQuestion = OnboardingQuestion(
   id: 'faithWalk',
   title: '¿Cómo describirías tu caminar actual con Dios?',
   type: QuestionType.singleChoice,
-  options: const [
+  options: [
     QuestionOption(
       id: 'new',
       emoji: '🌱',
@@ -147,12 +147,12 @@ final faithWalkQuestion = OnboardingQuestion(
 );
 
 /// Q2b: Wellness Goals (Wellness path)
-final wellnessGoalsQuestion = OnboardingQuestion(
+const wellnessGoalsQuestion = OnboardingQuestion(
   id: 'wellnessGoals',
   title: '¿Qué aspectos de tu vida quieres mejorar?',
   type: QuestionType.multiChoice,
   maxSelections: 3,
-  options: const [
+  options: [
     QuestionOption(
       id: 'timeManagement',
       emoji: '⏰',
@@ -182,11 +182,11 @@ final wellnessGoalsQuestion = OnboardingQuestion(
 );
 
 /// Q3b: Current State (Wellness path)
-final currentStateQuestion = OnboardingQuestion(
+const currentStateQuestion = OnboardingQuestion(
   id: 'currentState',
   title: '¿En qué punto estás ahora?',
   type: QuestionType.singleChoice,
-  options: const [
+  options: [
     QuestionOption(
       id: 'starting',
       emoji: '🆕',
@@ -211,11 +211,11 @@ final currentStateQuestion = OnboardingQuestion(
 );
 
 /// Q4: Main Challenge (Universal)
-final mainChallengeQuestion = OnboardingQuestion(
+const mainChallengeQuestion = OnboardingQuestion(
   id: 'mainChallenge',
   title: '¿Cuál es tu mayor desafío?',
   type: QuestionType.singleChoice,
-  options: const [
+  options: [
     QuestionOption(
       id: 'lackOfTime',
       emoji: '⏰',
@@ -240,11 +240,11 @@ final mainChallengeQuestion = OnboardingQuestion(
 );
 
 /// Q5: Support System (Universal)
-final supportSystemQuestion = OnboardingQuestion(
+const supportSystemQuestion = OnboardingQuestion(
   id: 'supportSystem',
   title: '¿Cómo es tu red de apoyo?',
   type: QuestionType.singleChoice,
-  options: const [
+  options: [
     QuestionOption(
       id: 'strong',
       emoji: '👌',

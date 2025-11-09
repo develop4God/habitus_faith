@@ -45,9 +45,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   }
 
   Future<void> _save() async {
-    await ref
-        .read(jsonHabitsNotifierProvider.notifier)
-        .updateHabit(
+    await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
           description: descCtrl.text,

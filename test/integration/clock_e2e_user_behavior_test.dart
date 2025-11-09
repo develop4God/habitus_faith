@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:habitus_faith/core/services/time/time.dart';
 import 'package:habitus_faith/core/services/ai/behavioral_engine.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
@@ -12,7 +11,8 @@ import '../helpers/clock_test_helpers.dart';
 /// time-dependent features work correctly together.
 void main() {
   group('E2E: Real User Behavior with Time Progression', () {
-    test('Complete user journey: 3 weeks of habit tracking with patterns', () async {
+    test('Complete user journey: 3 weeks of habit tracking with patterns',
+        () async {
       // === WEEK 1: User starts new habit ===
       final startDate = DateTime(2025, 11, 10, 7, 0); // Monday 7 AM
       final clock = AdvancingClock(startDate);
@@ -287,12 +287,10 @@ void main() {
       }
 
       // Verify completions span two months
-      final octoberCompletions = habit.completionHistory
-          .where((d) => d.month == 10)
-          .length;
-      final novemberCompletions = habit.completionHistory
-          .where((d) => d.month == 11)
-          .length;
+      final octoberCompletions =
+          habit.completionHistory.where((d) => d.month == 10).length;
+      final novemberCompletions =
+          habit.completionHistory.where((d) => d.month == 11).length;
 
       expect(octoberCompletions, 7); // Oct 25-31 = 7 days
       expect(novemberCompletions, 7); // Nov 1-7 = 7 days

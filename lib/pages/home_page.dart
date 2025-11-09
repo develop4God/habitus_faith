@@ -99,11 +99,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     Text(
                       l10n.introMessage,
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -179,11 +179,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         todayDevocional.versiculo,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: Colors.orange.shade900,
-                              fontSize: 16,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Colors.orange.shade900,
+                                  fontSize: 16,
+                                ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),

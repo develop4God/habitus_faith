@@ -80,7 +80,7 @@ class Habit {
   final int targetMinutes; // expected duration
   final double successRate7d; // calculated weekly success percentage
   final List<int>
-  optimalDays; // List<int> where 1=Monday, learned from completion patterns
+      optimalDays; // List<int> where 1=Monday, learned from completion patterns
   final TimeOfDay? optimalTime; // when user most succeeds
   final int consecutiveFailures; // triggers intervention
   final FailurePattern? failurePattern;
@@ -192,9 +192,8 @@ class Habit {
     }
 
     // Update longest streak if necessary
-    final newLongestStreak = newStreak > longestStreak
-        ? newStreak
-        : longestStreak;
+    final newLongestStreak =
+        newStreak > longestStreak ? newStreak : longestStreak;
 
     // Add to completion history
     final newHistory = [...completionHistory, now];

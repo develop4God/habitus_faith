@@ -75,24 +75,23 @@ class _$GenerationRequestCopyWithImpl<$Res, $Val extends GenerationRequest>
   }) {
     return _then(
       _value.copyWith(
-            userGoal: null == userGoal
-                ? _value.userGoal
-                : userGoal // ignore: cast_nullable_to_non_nullable
-                      as String,
-            failurePattern: freezed == failurePattern
-                ? _value.failurePattern
-                : failurePattern // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            faithContext: null == faithContext
-                ? _value.faithContext
-                : faithContext // ignore: cast_nullable_to_non_nullable
-                      as String,
-            languageCode: null == languageCode
-                ? _value.languageCode
-                : languageCode // ignore: cast_nullable_to_non_nullable
-                      as String,
-          )
-          as $Val,
+        userGoal: null == userGoal
+            ? _value.userGoal
+            : userGoal // ignore: cast_nullable_to_non_nullable
+                as String,
+        failurePattern: freezed == failurePattern
+            ? _value.failurePattern
+            : failurePattern // ignore: cast_nullable_to_non_nullable
+                as String?,
+        faithContext: null == faithContext
+            ? _value.faithContext
+            : faithContext // ignore: cast_nullable_to_non_nullable
+                as String,
+        languageCode: null == languageCode
+            ? _value.languageCode
+            : languageCode // ignore: cast_nullable_to_non_nullable
+                as String,
+      ) as $Val,
     );
   }
 }
@@ -138,19 +137,19 @@ class __$$GenerationRequestImplCopyWithImpl<$Res>
         userGoal: null == userGoal
             ? _value.userGoal
             : userGoal // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         failurePattern: freezed == failurePattern
             ? _value.failurePattern
             : failurePattern // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         faithContext: null == faithContext
             ? _value.faithContext
             : faithContext // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         languageCode: null == languageCode
             ? _value.languageCode
             : languageCode // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
       ),
     );
   }
@@ -205,12 +204,12 @@ class _$GenerationRequestImpl extends _GenerationRequest {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    userGoal,
-    failurePattern,
-    faithContext,
-    languageCode,
-  );
+        runtimeType,
+        userGoal,
+        failurePattern,
+        faithContext,
+        languageCode,
+      );
 
   /// Create a copy of GenerationRequest
   /// with the given fields replaced by the non-null parameter values.
