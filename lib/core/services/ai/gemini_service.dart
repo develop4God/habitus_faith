@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter/foundation.dart';
@@ -518,9 +519,28 @@ Requisitos estrictos:
   Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
     OnboardingProfile profile,
     String userId,
+    {bool isOnboarding = false}
   ) async {
     _logger?.i(
         'Generating habits from profile - Intent: ${profile.primaryIntent}');
+
+    // A. Buscar en cache por fingerprint exacto
+    final fingerprint = profile.cacheFingerprint;
+    final cached = await _cache.get<List<Map<String, dynamic>>>('profile_$fingerprint');
+    if (cached != null) {
+      debugPrint('[Cache HIT] Exact match for fingerprint: $fingerprint');
+      return cached;
+    }
+
+    // B. Buscar perfiles similares (similarity >85%)
+    final similarProfile = await _findSimilarCachedProfile(profile);
+    if (similarProfile != null) {
+      debugPrint('[Cache HIT] Similar profile match (85%+ similarity)');
+      return similarProfile;
+    }
+
+    // C. Cache MISS - llamar a Gemini
+    debugPrint('[Cache MISS] Calling Gemini API');
 
     // Check rate limit
     await _rateLimit.waitIfNeeded();
@@ -534,7 +554,7 @@ Requisitos estrictos:
     // Build intent-aware prompt
     final prompt = _buildProfilePrompt(profile);
     final promptTokens = (prompt.length / 4).ceil();
-    debugPrint('[IA] userId: $userId | Prompt tokens estimados: $promptTokens | Prompt length: ${prompt.length}');
+    debugPrint('[IA] userId: $userId | Prompt tokens estimados: $promptTokens | Prompt length: ${prompt.length} | Onboarding: $isOnboarding');
 
     try {
       _logger?.d('Sending profile-based request to Gemini API...');
@@ -543,14 +563,17 @@ Requisitos estrictos:
 
       final responseText = response.text ?? '';
       final responseTokens = (responseText.length / 4).ceil();
-      debugPrint('[IA] userId: $userId | Response tokens estimados: $responseTokens | Response length: ${responseText.length}');
+      debugPrint('[IA] userId: $userId | Response tokens estimados: $responseTokens | Response length: ${responseText.length} | Onboarding: $isOnboarding');
 
       _logger?.i('Received response from Gemini API');
 
       // Parse and return habit data
       final habits = _parseHabitsResponse(response.text, profile, userId);
       _logger?.i('Successfully parsed ${habits.length} habits from profile');
-      debugPrint('[IA] userId: $userId | Hábitos generados: ${habits.length} | Tokens totales estimados: ${promptTokens + responseTokens}');
+      debugPrint('[IA] userId: $userId | Hábitos generados: ${habits.length} | Tokens totales estimados: ${promptTokens + responseTokens} | Onboarding: $isOnboarding');
+
+      // D. Guardar con TTL de 30 días
+      await _cache.set('profile_$fingerprint', habits, ttl: const Duration(days: 30));
 
       return habits;
     } on TimeoutException {
@@ -564,6 +587,28 @@ Requisitos estrictos:
       if (e is GeminiException) rethrow;
       throw GeminiException('Failed to generate habits: $e');
     }
+  }
+
+  Future<List<Map<String, dynamic>>?> _findSimilarCachedProfile(
+    OnboardingProfile profile,
+  ) async {
+    // Buscar en SharedPreferences todos los perfiles cacheados
+    final prefs = await SharedPreferences.getInstance();
+    final keys = prefs.getKeys().where((k) => k.startsWith('profile_'));
+    for (final key in keys) {
+      try {
+        final cachedData = prefs.getString(key);
+        if (cachedData == null) continue;
+        final data = jsonDecode(cachedData);
+        final cachedProfile = OnboardingProfile.fromJson(data['profile']);
+        if (profile.similarityTo(cachedProfile) >= 0.85) {
+          return (data['habits'] as List).cast<Map<String, dynamic>>();
+        }
+      } catch (e) {
+        // Skip invalid cache entries
+      }
+    }
+    return null;
   }
 
   /// Build prompt based on user intent

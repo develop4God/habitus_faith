@@ -75,3 +75,24 @@ class OnboardingProfile {
     );
   }
 }
+
+extension OnboardingProfileCache on OnboardingProfile {
+  String get cacheFingerprint {
+    final key = '${primaryIntent.name}_${spiritualMaturity}_${motivations.join('_')}_${challenge}';
+    return key.hashCode.toString();
+  }
+
+  double similarityTo(OnboardingProfile other) {
+    double score = 0.0;
+    // Intent match (peso: 40%)
+    if (primaryIntent == other.primaryIntent) score += 0.4;
+    // Spiritual maturity (peso: 20%)
+    if (spiritualMaturity == other.spiritualMaturity) score += 0.2;
+    // Motivations overlap (peso: 20%)
+    final commonMotivations = motivations.toSet().intersection(other.motivations.toSet());
+    score += 0.2 * (commonMotivations.length / motivations.length);
+    // Challenge similarity (peso: 20%)
+    if (challenge == other.challenge) score += 0.2;
+    return score;
+  }
+}
