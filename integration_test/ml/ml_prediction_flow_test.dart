@@ -5,6 +5,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter/services.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart';
+import 'dart:developer';
 
 /// Integration test for ML predictor with TFLite model and scaler
 /// This test simulates real user scenarios and runs full end-to-end validation
@@ -83,7 +84,7 @@ void main() {
       final output = List.filled(1, 0.0).reshape([1, 1]);
       interpreter.run([normalized], output);
 
-      print('[Low-risk] Predicted risk: ${output[0][0]}');
+      log('[Low-risk] Predicted risk: ${output[0][0]}');
       expect(output[0][0], lessThan(0.5)); // Espera un riesgo bajo
     });
 
@@ -139,7 +140,7 @@ void main() {
         final output = List.filled(1, 0.0).reshape([1, 1]);
         interpreter.run([normalized], output);
 
-        print('[High-risk] Predicted risk: ${output[0][0]}');
+        log('[High-risk] Predicted risk: ${output[0][0]}');
         expect(output[0][0], greaterThan(0.5)); // Espera un riesgo alto
       },
     );
@@ -194,7 +195,7 @@ void main() {
       final output = List.filled(1, 0.0).reshape([1, 1]);
       interpreter.run([normalized], output);
 
-      print('[Medium-risk] Predicted risk: ${output[0][0]}');
+      log('[Medium-risk] Predicted risk: ${output[0][0]}');
       expect(
         output[0][0],
         inInclusiveRange(0.3, 0.7),

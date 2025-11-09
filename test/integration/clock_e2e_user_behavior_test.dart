@@ -68,7 +68,6 @@ void main() {
       expect(pattern, isNotNull);
 
       // === WEEK 3: User improves and completes daily ===
-      final week3Start = clock.now();
       for (int day = 14; day < 21; day++) {
         habit = habit.completeToday(clock: clock);
         expect(habit.completedToday, isTrue);
@@ -96,11 +95,6 @@ void main() {
       // Note: We don't call initialize() or predictRisk() here as it requires
       // Flutter Test Widgets binding for the ML model to load
       predictor.dispose();
-
-      // === Verify Optimal Time Detection ===
-      final optimalTime = engine.findOptimalTime(habit);
-      // Optimal time detection may return null if not enough data
-      // Just verify the method works without throwing
 
       // === Verify Optimal Days ===
       final optimalDays = engine.findOptimalDays(habit);

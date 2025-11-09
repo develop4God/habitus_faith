@@ -59,7 +59,6 @@ class AbandonmentPredictor {
       return;
     }
 
-    final stopwatch = Stopwatch()..start();
     debugPrint('AbandonmentPredictor.initialize: Starting initialization...');
 
     try {

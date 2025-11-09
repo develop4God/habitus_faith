@@ -5,18 +5,14 @@ import 'package:habitus_faith/widgets/floating_font_control_buttons.dart';
 void main() {
   group('FloatingFontControlButtons', () {
     testWidgets('renders all control buttons', (WidgetTester tester) async {
-      var increaseCalled = false; // Callback tracker
-      var decreaseCalled = false; // Callback tracker
-      var closeCalled = false; // Callback tracker
-
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: FloatingFontControlButtons(
               currentFontSize: 16.0,
-              onIncrease: () => increaseCalled = true,
-              onDecrease: () => decreaseCalled = true,
-              onClose: () => closeCalled = true,
+              onIncrease: () {},
+              onDecrease: () {},
+              onClose: () {},
             ),
           ),
         ),
