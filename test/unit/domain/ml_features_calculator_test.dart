@@ -275,5 +275,95 @@ void main() {
         expect(failures, 5);
       });
     });
+
+    group('calculateSuccessRate', () {
+      test('returns 0.0 for empty completion history', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final rate = MLFeaturesCalculator.calculateSuccessRate([], now);
+
+        expect(rate, 0.0);
+      });
+
+      test('calculates correct rate for full week completion', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final completions = List.generate(
+          7,
+          (i) => now.subtract(Duration(days: i)),
+        );
+
+        final rate =
+            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+
+        expect(rate, 1.0); // 7/7 = 100%
+      });
+
+      test('calculates correct rate for partial week completion', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final completions = [
+          now.subtract(const Duration(days: 1)),
+          now.subtract(const Duration(days: 2)),
+          now.subtract(const Duration(days: 4)),
+          now.subtract(const Duration(days: 6)),
+        ];
+
+        final rate =
+            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+
+        expect(rate, closeTo(4 / 7, 0.01)); // ~0.571 (57.1%)
+      });
+
+      test('includes today in the calculation', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final completions = [now]; // Only completed today
+
+        final rate =
+            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+
+        expect(rate, closeTo(1 / 7, 0.01)); // ~0.143 (14.3%)
+      });
+
+      test('ignores completions outside the 7-day window', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final completions = [
+          now.subtract(const Duration(days: 10)),
+          now.subtract(const Duration(days: 15)),
+          now.subtract(const Duration(days: 20)),
+        ];
+
+        final rate =
+            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+
+        expect(rate, 0.0); // No completions in last 7 days
+      });
+
+      test('works with custom days parameter', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final completions = List.generate(
+          14,
+          (i) => now.subtract(Duration(days: i)),
+        );
+
+        final rate = MLFeaturesCalculator.calculateSuccessRate(completions, now,
+            days: 14);
+
+        expect(rate, 1.0); // 14/14 = 100% over 14 days
+      });
+
+      test('handles mixed old and recent completions', () {
+        final now = DateTime(2025, 11, 15, 10, 0);
+        final completions = [
+          now, // Today
+          now.subtract(const Duration(days: 1)),
+          now.subtract(const Duration(days: 2)),
+          now.subtract(const Duration(days: 10)), // Too old
+          now.subtract(const Duration(days: 15)), // Too old
+        ];
+
+        final rate =
+            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+
+        expect(rate, closeTo(3 / 7, 0.01)); // ~0.429 (42.9%)
+      });
+    });
   });
 }

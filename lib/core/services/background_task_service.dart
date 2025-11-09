@@ -6,22 +6,21 @@ import 'package:workmanager/workmanager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/habit_predictor_provider.dart';
 import '../../features/habits/data/storage/storage_providers.dart';
+import '../services/time/time.dart';
 
 /// Service for managing background tasks using WorkManager
 /// Handles daily cron jobs for ML predictions and other background operations
 class BackgroundTaskService {
+  final Clock clock;
+
   static const String _dailyPredictionTask = 'dailyAbandonmentPrediction';
   static const String _predictionTaskTag = 'daily_prediction_6am';
   static const String _mlPredictionsEnabledKey = 'ml_predictions_enabled';
 
-  static final BackgroundTaskService _instance =
-      BackgroundTaskService._internal();
-
-  factory BackgroundTaskService() => _instance;
-
-  BackgroundTaskService._internal();
-
   bool _initialized = false;
+
+  /// Constructor with dependency injection
+  BackgroundTaskService({Clock? clock}) : clock = clock ?? const Clock.system();
 
   /// Initialize the background task service
   /// Must be called before scheduling any tasks
@@ -181,7 +180,8 @@ class BackgroundTaskService {
     final lastTime = await getLastPredictionTime();
     if (lastTime == null) return true;
 
-    final hoursSinceLastRun = DateTime.now().difference(lastTime).inHours;
+    final now = clock.now();
+    final hoursSinceLastRun = now.difference(lastTime).inHours;
     return hoursSinceLastRun > 48;
   }
 

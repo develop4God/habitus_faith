@@ -87,4 +87,38 @@ class MLFeaturesCalculator {
 
     return failures > 0 ? failures : 0;
   }
+
+  /// Calculate success rate over the last N days
+  /// Returns a value between 0.0 and 1.0 representing the success percentage
+  ///
+  /// Example: 5 completions in 7 days = 5/7 = ~0.714 (71.4% success rate)
+  ///
+  /// [completionHistory] - List of completion timestamps
+  /// [now] - Current time (defaults to DateTime.now())
+  /// [days] - Number of days to look back (default: 7)
+  static double calculateSuccessRate(
+    List<DateTime> completionHistory,
+    DateTime now, {
+    int days = 7,
+  }) {
+    if (completionHistory.isEmpty) return 0.0;
+
+    final today = DateTime(now.year, now.month, now.day);
+    final cutoffDate =
+        today.subtract(Duration(days: days - 1)); // -1 to include today
+
+    // Count completions within the window
+    int completionsInWindow = 0;
+    for (final completion in completionHistory) {
+      final completionDate =
+          DateTime(completion.year, completion.month, completion.day);
+      if (completionDate
+              .isAfter(cutoffDate.subtract(const Duration(days: 1))) &&
+          completionDate.isBefore(today.add(const Duration(days: 1)))) {
+        completionsInWindow++;
+      }
+    }
+
+    return completionsInWindow / days.toDouble();
+  }
 }

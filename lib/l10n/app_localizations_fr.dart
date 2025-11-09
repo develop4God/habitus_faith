@@ -528,57 +528,119 @@ class AppLocalizationsFr extends AppLocalizations {
   String get total => 'Total';
 
   @override
-  String get chooseHabitType =>
-      'Quel type d\'habitude souhaitez-vous ajouter ?';
+  String get mlPredictionFailed =>
+      'Impossible de calculer le risque d\'abandon';
 
   @override
-  String get chooseFromPredefined => 'Choisissez une habitude prédéfinie';
+  String get mlModelNotLoaded =>
+      'Modèle de prédiction indisponible. Veuillez redémarrer l\'application.';
 
   @override
-  String get manual => 'Manuel';
-
-  @override
-  String get custom => 'Personnalisé';
-
-  @override
-  String get defaultHabit => 'Prédéfini';
-
-  @override
-  String get addHabitDiscoverySubtitle =>
-      'Choisissez comment ajouter votre nouvelle habitude : créez-en une personnalisée ou sélectionnez une habitude prédéfinie pour commencer plus rapidement.';
-
-  @override
-  String get requiredFieldLabel => 'Obligatoire';
-
-  @override
-  String get back => 'Retour';
-
-  @override
-  String get selectAll => 'Tout sélectionner';
-
-  @override
-  String get copy => 'Dupliquer';
-
-  @override
-  String get copyHabit => 'Voulez-vous dupliquer la tâche ?';
-
-  @override
-  String copyHabitConfirm(String habitName) {
-    return 'Êtes-vous sûr de vouloir dupliquer \"$habitName\" ?';
+  String mlInsufficientData(int days) {
+    return 'Besoin d\'au moins $days jours de données pour les prédictions';
   }
 
   @override
-  String get introMessage =>
-      'Les plus grands changements commencent par la constance...';
+  String backgroundSyncFailed(String reason) {
+    return 'Échec de la synchronisation: $reason';
+  }
 
   @override
-  String get usefulTip => 'Astuce utile';
+  String get backgroundSyncNetwork =>
+      'Pas de connexion Internet. Les modifications seront synchronisées en ligne.';
 
   @override
-  String get habitsTip =>
-      'Faites glisser pour voir les actions sur vos habitudes';
+  String get backgroundSyncPermission =>
+      'Synchronisation en arrière-plan désactivée. Activer dans les paramètres.';
 
   @override
+  String get workmanagerActive => 'Synchronisation en arrière-plan active';
+
+  @override
+  String get workmanagerRestricted =>
+      'La synchronisation en arrière-plan peut être limitée par l\'optimisation de la batterie';
+
+  @override
+  String get workmanagerDisabled =>
+      'Synchronisation en arrière-plan désactivée dans les paramètres système';
+
+  @override
+  String get patternWeekend =>
+      'Vous avez tendance à sauter les week-ends. Essayer de définir un rappel?';
+
+  @override
+  String get patternEvening =>
+      'Le taux de complétion le soir est faible. Envisager des habitudes matinales?';
+
+  @override
+  String optimalTimeFound(String time) {
+    return 'Votre meilleur moment de complétion est $time';
+  }
+
+  @override
+  String get networkTimeout =>
+      'Délai d\'attente dépassé. Vérifiez votre connexion.';
+
+  @override
+  String get firebasePermissionDenied =>
+      'Accès refusé. Veuillez vous reconnecter.';
+
+  @override
+  String get errorUnknown =>
+      'Une erreur inattendue s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get devBannerTitle => 'Outils de Développement';
+
+  @override
+  String devBannerLastSync(String time) {
+    return 'Dernière synchro: $time';
+  }
+
+  @override
+  String devBannerMlStatus(String status) {
+    return 'Modèle ML: $status';
+  }
+
+  @override
+  String devBannerWorkmanager(String status) {
+    return 'Arrière-plan: $status';
+  }
+
+  @override
+  String devBannerFastTime(String multiplier, String date) {
+    return 'Temps: ${multiplier}x (Simulé: $date)';
+  }
+
+  @override
+  String get riskLevelLow => 'Risque faible';
+
+  @override
+  String get riskLevelMedium => 'Risque moyen';
+
+  @override
+  String get riskLevelHigh => 'Risque élevé';
+
+  @override
+  String get predictorRunning => 'Analyse des habitudes...';
+
+  @override
+  String get predictorComplete => 'Analyse terminée';
+
+  @override
+  String get syncInProgress => 'Synchronisation...';
+
+  @override
+  String get syncComplete => 'Synchronisation terminée';
+
+  @override
+  String get mlModelLoaded => 'Chargé';
+
+  @override
+  String get mlModelLoading => 'Chargement...';
+
+  @override
+  String get mlModelError => 'Erreur';
   String get understood => 'Compris';
 
   @override

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import '../../../features/habits/domain/habit.dart';
 import '../../../features/habits/domain/ml_features_calculator.dart';
+import '../../services/time/time.dart';
 
 /// Service for ML-based habit abandonment risk prediction
 /// Loads TFLite model and provides real-time predictions without server dependency
@@ -13,6 +14,7 @@ import '../../../features/habits/domain/ml_features_calculator.dart';
 /// [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
 /// Shape: [1, 5] (batch size 1, 5 features)
 class AbandonmentPredictor {
+  final Clock clock;
   Interpreter? _interpreter;
   Map<String, dynamic>? _scalerParams;
   Map<String, dynamic>? _modelMetadata;
@@ -29,6 +31,9 @@ class AbandonmentPredictor {
   static const String _telemetryErrorCountKey = 'ml_error_count';
   static const String _telemetryLastPredictionKey = 'ml_last_prediction';
   static const String _telemetryLastResetKey = 'ml_last_reset';
+
+  /// Constructor with optional clock injection
+  AbandonmentPredictor({Clock? clock}) : clock = clock ?? const Clock.system();
 
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
@@ -50,24 +55,27 @@ class AbandonmentPredictor {
   /// Initialize the predictor by loading model and scaler params
   Future<void> initialize() async {
     if (_initialized) {
-      debugPrint('AbandonmentPredictor: Already initialized');
+      debugPrint('AbandonmentPredictor.initialize: Already initialized');
       return;
     }
 
+    final stopwatch = Stopwatch()..start();
+    debugPrint('AbandonmentPredictor.initialize: Starting initialization...');
+
     try {
       // Load model metadata
-      debugPrint('AbandonmentPredictor: Loading model metadata...');
+      debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
       final metadataJson =
           await rootBundle.loadString('assets/ml_models/model_metadata.json');
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
       debugPrint(
-          'AbandonmentPredictor: Model version ${_modelMetadata!['version']} loaded');
+          'AbandonmentPredictor.initialize: Model version ${_modelMetadata!['version']} loaded');
 
       // Load TFLite model from assets
-      debugPrint('AbandonmentPredictor: Loading TFLite model...');
+      debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
       _interpreter =
           await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
-      debugPrint('AbandonmentPredictor: TFLite model loaded successfully');
+      debugPrint('AbandonmentPredictor.initialize: TFLite model loaded successfully');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
@@ -145,7 +153,7 @@ class AbandonmentPredictor {
     try {
       // Track prediction attempt
       _predictionCount++;
-      _lastPredictionTime = DateTime.now();
+      _lastPredictionTime = clock.now();
 
       // ⚠️ CRITICAL: Handle first-time habits (no history) → return 0.5 default risk
       if (habit.completionHistory.isEmpty && habit.currentStreak == 0) {
@@ -299,13 +307,13 @@ class AbandonmentPredictor {
         _lastTelemetryReset = DateTime.parse(lastResetStr);
 
         // Reset telemetry weekly (every 7 days)
-        if (DateTime.now().difference(_lastTelemetryReset!).inDays > 7) {
+        if (clock.now().difference(_lastTelemetryReset!).inDays > 7) {
           debugPrint('AbandonmentPredictor: Weekly telemetry reset triggered');
           await _resetTelemetry();
         }
       } else {
         // First time - initialize reset timestamp
-        _lastTelemetryReset = DateTime.now();
+        _lastTelemetryReset = clock.now();
         await prefs.setString(
             _telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
       }
@@ -349,7 +357,7 @@ class AbandonmentPredictor {
       // Reset counters
       _predictionCount = 0;
       _errorCount = 0;
-      _lastTelemetryReset = DateTime.now();
+      _lastTelemetryReset = clock.now();
 
       await prefs.setInt(_telemetryPredictionCountKey, 0);
       await prefs.setInt(_telemetryErrorCountKey, 0);

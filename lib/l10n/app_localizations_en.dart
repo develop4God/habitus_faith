@@ -523,6 +523,115 @@ class AppLocalizationsEn extends AppLocalizations {
   String get total => 'Total';
 
   @override
+  String get mlPredictionFailed => 'Unable to calculate abandonment risk';
+
+  @override
+  String get mlModelNotLoaded =>
+      'Prediction model unavailable. Please restart the app.';
+
+  @override
+  String mlInsufficientData(int days) {
+    return 'Need at least $days days of data for predictions';
+  }
+
+  @override
+  String backgroundSyncFailed(String reason) {
+    return 'Sync failed: $reason';
+  }
+
+  @override
+  String get backgroundSyncNetwork =>
+      'No internet connection. Changes will sync when online.';
+
+  @override
+  String get backgroundSyncPermission =>
+      'Background sync disabled. Enable in settings.';
+
+  @override
+  String get workmanagerActive => 'Background sync active';
+
+  @override
+  String get workmanagerRestricted =>
+      'Background sync may be limited by battery optimization';
+
+  @override
+  String get workmanagerDisabled =>
+      'Background sync disabled in system settings';
+
+  @override
+  String get patternWeekend =>
+      'You tend to skip weekends. Try setting a reminder?';
+
+  @override
+  String get patternEvening =>
+      'Evening completion rate is low. Consider morning habits?';
+
+  @override
+  String optimalTimeFound(String time) {
+    return 'Your best completion time is $time';
+  }
+
+  @override
+  String get networkTimeout => 'Request timed out. Check your connection.';
+
+  @override
+  String get firebasePermissionDenied => 'Access denied. Please sign in again.';
+
+  @override
+  String get errorUnknown => 'An unexpected error occurred. Please try again.';
+
+  @override
+  String get devBannerTitle => 'Developer Tools';
+
+  @override
+  String devBannerLastSync(String time) {
+    return 'Last sync: $time';
+  }
+
+  @override
+  String devBannerMlStatus(String status) {
+    return 'ML Model: $status';
+  }
+
+  @override
+  String devBannerWorkmanager(String status) {
+    return 'Background: $status';
+  }
+
+  @override
+  String devBannerFastTime(String multiplier, String date) {
+    return 'Time: ${multiplier}x (Simulated: $date)';
+  }
+
+  @override
+  String get riskLevelLow => 'Low risk';
+
+  @override
+  String get riskLevelMedium => 'Medium risk';
+
+  @override
+  String get riskLevelHigh => 'High risk';
+
+  @override
+  String get predictorRunning => 'Analyzing habits...';
+
+  @override
+  String get predictorComplete => 'Analysis complete';
+
+  @override
+  String get syncInProgress => 'Syncing...';
+
+  @override
+  String get syncComplete => 'Sync complete';
+
+  @override
+  String get mlModelLoaded => 'Loaded';
+
+  @override
+  String get mlModelLoading => 'Loading...';
+
+  @override
+  String get mlModelError => 'Error';
   String get chooseHabitType => 'What type of habit do you want to add?';
 
   @override

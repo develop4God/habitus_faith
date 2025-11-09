@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../features/habits/domain/habit.dart';
+import '../../services/time/time.dart';
 
 /// Behavioral Engine - Applies TCC (Task Control Components) and Nudge Theory
 /// to analyze habit completion patterns and provide adaptive intelligence
 class BehavioralEngine {
+  final Clock clock;
+
+  /// Constructor with optional clock injection
+  BehavioralEngine({Clock? clock}) : clock = clock ?? const Clock.system();
+
   // TCC (Task Control Components) thresholds
   static const double tccIncreaseThreshold = 0.85;
   static const double tccDecreaseThreshold = 0.50;
@@ -95,7 +101,7 @@ class BehavioralEngine {
     }
 
     // Analyze last 7 days for patterns
-    final now = DateTime.now();
+    final now = clock.now();
     final sevenDaysAgo = now.subtract(const Duration(days: 6));
 
     // Get completions in last 7 days

@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -1034,6 +1034,185 @@ abstract class AppLocalizations {
   /// **'Total'**
   String get total;
 
+  /// Error message when ML prediction fails
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to calculate abandonment risk'**
+  String get mlPredictionFailed;
+
+  /// Error when ML model is not loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Prediction model unavailable. Please restart the app.'**
+  String get mlModelNotLoaded;
+
+  /// Error when not enough data for predictions
+  ///
+  /// In en, this message translates to:
+  /// **'Need at least {days} days of data for predictions'**
+  String mlInsufficientData(int days);
+
+  /// Background sync failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed: {reason}'**
+  String backgroundSyncFailed(String reason);
+
+  /// Sync failed due to network
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Changes will sync when online.'**
+  String get backgroundSyncNetwork;
+
+  /// Sync disabled due to permissions
+  ///
+  /// In en, this message translates to:
+  /// **'Background sync disabled. Enable in settings.'**
+  String get backgroundSyncPermission;
+
+  /// WorkManager is active
+  ///
+  /// In en, this message translates to:
+  /// **'Background sync active'**
+  String get workmanagerActive;
+
+  /// WorkManager restricted warning
+  ///
+  /// In en, this message translates to:
+  /// **'Background sync may be limited by battery optimization'**
+  String get workmanagerRestricted;
+
+  /// WorkManager disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Background sync disabled in system settings'**
+  String get workmanagerDisabled;
+
+  /// Weekend pattern detected message
+  ///
+  /// In en, this message translates to:
+  /// **'You tend to skip weekends. Try setting a reminder?'**
+  String get patternWeekend;
+
+  /// Evening pattern detected message
+  ///
+  /// In en, this message translates to:
+  /// **'Evening completion rate is low. Consider morning habits?'**
+  String get patternEvening;
+
+  /// Optimal time found message
+  ///
+  /// In en, this message translates to:
+  /// **'Your best completion time is {time}'**
+  String optimalTimeFound(String time);
+
+  /// Network timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Check your connection.'**
+  String get networkTimeout;
+
+  /// Firebase permission denied
+  ///
+  /// In en, this message translates to:
+  /// **'Access denied. Please sign in again.'**
+  String get firebasePermissionDenied;
+
+  /// Generic unknown error
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again.'**
+  String get errorUnknown;
+
+  /// Dev tools banner title
+  ///
+  /// In en, this message translates to:
+  /// **'Developer Tools'**
+  String get devBannerTitle;
+
+  /// Last sync time in dev banner
+  ///
+  /// In en, this message translates to:
+  /// **'Last sync: {time}'**
+  String devBannerLastSync(String time);
+
+  /// ML model status in dev banner
+  ///
+  /// In en, this message translates to:
+  /// **'ML Model: {status}'**
+  String devBannerMlStatus(String status);
+
+  /// WorkManager status in dev banner
+  ///
+  /// In en, this message translates to:
+  /// **'Background: {status}'**
+  String devBannerWorkmanager(String status);
+
+  /// Fast time mode in dev banner
+  ///
+  /// In en, this message translates to:
+  /// **'Time: {multiplier}x (Simulated: {date})'**
+  String devBannerFastTime(String multiplier, String date);
+
+  /// Low abandonment risk level
+  ///
+  /// In en, this message translates to:
+  /// **'Low risk'**
+  String get riskLevelLow;
+
+  /// Medium abandonment risk level
+  ///
+  /// In en, this message translates to:
+  /// **'Medium risk'**
+  String get riskLevelMedium;
+
+  /// High abandonment risk level
+  ///
+  /// In en, this message translates to:
+  /// **'High risk'**
+  String get riskLevelHigh;
+
+  /// Predictor is running
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing habits...'**
+  String get predictorRunning;
+
+  /// Predictor completed
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis complete'**
+  String get predictorComplete;
+
+  /// Sync in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing...'**
+  String get syncInProgress;
+
+  /// Sync completed successfully
+  ///
+  /// In en, this message translates to:
+  /// **'Sync complete'**
+  String get syncComplete;
+
+  /// ML model loaded status
+  ///
+  /// In en, this message translates to:
+  /// **'Loaded'**
+  String get mlModelLoaded;
+
+  /// ML model loading status
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get mlModelLoading;
+
+  /// ML model error status
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get mlModelError;
   /// Text for choosing habit type when adding
   ///
   /// In en, this message translates to:

@@ -527,6 +527,118 @@ class AppLocalizationsEs extends AppLocalizations {
   String get total => 'Total';
 
   @override
+  String get mlPredictionFailed => 'No se puede calcular el riesgo de abandono';
+
+  @override
+  String get mlModelNotLoaded =>
+      'Modelo de predicción no disponible. Por favor reinicia la aplicación.';
+
+  @override
+  String mlInsufficientData(int days) {
+    return 'Se necesitan al menos $days días de datos para predicciones';
+  }
+
+  @override
+  String backgroundSyncFailed(String reason) {
+    return 'Sincronización fallida: $reason';
+  }
+
+  @override
+  String get backgroundSyncNetwork =>
+      'Sin conexión a internet. Los cambios se sincronizarán cuando estés en línea.';
+
+  @override
+  String get backgroundSyncPermission =>
+      'Sincronización en segundo plano deshabilitada. Habilita en configuración.';
+
+  @override
+  String get workmanagerActive => 'Sincronización en segundo plano activa';
+
+  @override
+  String get workmanagerRestricted =>
+      'La sincronización en segundo plano puede estar limitada por la optimización de batería';
+
+  @override
+  String get workmanagerDisabled =>
+      'Sincronización en segundo plano deshabilitada en la configuración del sistema';
+
+  @override
+  String get patternWeekend =>
+      'Tiendes a saltarte los fines de semana. ¿Intentas configurar un recordatorio?';
+
+  @override
+  String get patternEvening =>
+      'La tasa de finalización por la noche es baja. ¿Consideras hábitos matutinos?';
+
+  @override
+  String optimalTimeFound(String time) {
+    return 'Tu mejor hora de completación es $time';
+  }
+
+  @override
+  String get networkTimeout =>
+      'Tiempo de espera agotado. Verifica tu conexión.';
+
+  @override
+  String get firebasePermissionDenied =>
+      'Acceso denegado. Por favor inicia sesión nuevamente.';
+
+  @override
+  String get errorUnknown =>
+      'Ocurrió un error inesperado. Por favor intenta de nuevo.';
+
+  @override
+  String get devBannerTitle => 'Herramientas de Desarrollo';
+
+  @override
+  String devBannerLastSync(String time) {
+    return 'Última sincronización: $time';
+  }
+
+  @override
+  String devBannerMlStatus(String status) {
+    return 'Modelo ML: $status';
+  }
+
+  @override
+  String devBannerWorkmanager(String status) {
+    return 'Segundo plano: $status';
+  }
+
+  @override
+  String devBannerFastTime(String multiplier, String date) {
+    return 'Tiempo: ${multiplier}x (Simulado: $date)';
+  }
+
+  @override
+  String get riskLevelLow => 'Riesgo bajo';
+
+  @override
+  String get riskLevelMedium => 'Riesgo medio';
+
+  @override
+  String get riskLevelHigh => 'Riesgo alto';
+
+  @override
+  String get predictorRunning => 'Analizando hábitos...';
+
+  @override
+  String get predictorComplete => 'Análisis completo';
+
+  @override
+  String get syncInProgress => 'Sincronizando...';
+
+  @override
+  String get syncComplete => 'Sincronización completa';
+
+  @override
+  String get mlModelLoaded => 'Cargado';
+
+  @override
+  String get mlModelLoading => 'Cargando...';
+
+  @override
+  String get mlModelError => 'Error';
   String get chooseHabitType => '¿Qué tipo de hábito quieres agregar?';
 
   @override

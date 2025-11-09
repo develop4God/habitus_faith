@@ -499,6 +499,108 @@ class AppLocalizationsZh extends AppLocalizations {
   String get total => '总计';
 
   @override
+  String get mlPredictionFailed => '无法计算放弃风险';
+
+  @override
+  String get mlModelNotLoaded => '预测模型不可用。请重启应用。';
+
+  @override
+  String mlInsufficientData(int days) {
+    return '预测需要至少$days天的数据';
+  }
+
+  @override
+  String backgroundSyncFailed(String reason) {
+    return '同步失败：$reason';
+  }
+
+  @override
+  String get backgroundSyncNetwork => '没有网络连接。更改将在在线时同步。';
+
+  @override
+  String get backgroundSyncPermission => '后台同步已禁用。请在设置中启用。';
+
+  @override
+  String get workmanagerActive => '后台同步活动中';
+
+  @override
+  String get workmanagerRestricted => '后台同步可能受电池优化限制';
+
+  @override
+  String get workmanagerDisabled => '系统设置中已禁用后台同步';
+
+  @override
+  String get patternWeekend => '您倾向于跳过周末。尝试设置提醒？';
+
+  @override
+  String get patternEvening => '晚上完成率较低。考虑早晨的习惯？';
+
+  @override
+  String optimalTimeFound(String time) {
+    return '您最佳完成时间是$time';
+  }
+
+  @override
+  String get networkTimeout => '请求超时。检查您的连接。';
+
+  @override
+  String get firebasePermissionDenied => '访问被拒绝。请重新登录。';
+
+  @override
+  String get errorUnknown => '发生意外错误。请重试。';
+
+  @override
+  String get devBannerTitle => '开发工具';
+
+  @override
+  String devBannerLastSync(String time) {
+    return '最后同步：$time';
+  }
+
+  @override
+  String devBannerMlStatus(String status) {
+    return '机器学习模型：$status';
+  }
+
+  @override
+  String devBannerWorkmanager(String status) {
+    return '后台：$status';
+  }
+
+  @override
+  String devBannerFastTime(String multiplier, String date) {
+    return '时间：$multiplier倍（模拟：$date）';
+  }
+
+  @override
+  String get riskLevelLow => '低风险';
+
+  @override
+  String get riskLevelMedium => '中风险';
+
+  @override
+  String get riskLevelHigh => '高风险';
+
+  @override
+  String get predictorRunning => '正在分析习惯...';
+
+  @override
+  String get predictorComplete => '分析完成';
+
+  @override
+  String get syncInProgress => '同步中...';
+
+  @override
+  String get syncComplete => '同步完成';
+
+  @override
+  String get mlModelLoaded => '已加载';
+
+  @override
+  String get mlModelLoading => '加载中...';
+
+  @override
+  String get mlModelError => '错误';
   String get chooseHabitType => '你想添加哪种类型的习惯？';
 
   @override
