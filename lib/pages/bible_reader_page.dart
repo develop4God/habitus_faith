@@ -177,7 +177,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(state.selectedBookName ?? 'Bible'),
+        title: Text(l10n.bible),
         actions: [
           // Version selector
           if (state.availableVersions.isNotEmpty)
@@ -218,7 +218,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         flex: 3,
                         child: ElevatedButton.icon(
                           onPressed: () => _showBookSelector(context),
-                          icon: const Icon(Icons.menu_book, size: 20),
+                          icon: const Icon(Icons.auto_stories_outlined, size: 20),
                           label: Text(
                             state.selectedBookName != null
                                 ? state.books.firstWhere(
@@ -279,11 +279,26 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               itemScrollController: _itemScrollController,
                               itemPositionsListener: _itemPositionsListener,
                               padding: const EdgeInsets.all(16),
-                              itemCount: state.verses.length +
-                                  1, // +1 for copyright footer
+                              itemCount: state.verses.length + 2, // +1 for copyright, +1 para el título
                               itemBuilder: (context, index) {
-                                // Copyright footer at the end
-                                if (index == state.verses.length) {
+                                // Título dinámico antes del versículo 1
+                                if (index == 0 && state.selectedBookName != null && state.selectedChapter != null) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: Text(
+                                      '${state.books.firstWhere(
+                                        (b) => b['short_name'] == state.selectedBookName,
+                                        orElse: () => {'long_name': state.selectedBookName ?? ''},
+                                      )['long_name']} ${state.selectedChapter}',
+                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+                                }
+                                // Copyright footer al final
+                                if (index == state.verses.length + 1) {
                                   if (state.selectedVersion != null) {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -309,8 +324,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                   }
                                   return const SizedBox.shrink();
                                 }
-
-                                final verse = state.verses[index];
+                                // Versículos
+                                final verse = state.verses[index - 1];
                                 final verseNumber = verse['verse'] as int;
                                 final verseText = verse['text'] as String;
                                 final verseKey =

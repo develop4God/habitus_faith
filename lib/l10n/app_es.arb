@@ -726,5 +726,13 @@
   "habitsTip": "Desliza para ver acciones en tus hábitos",
   "@habitsTip": {"description": "Descripción del tip educativo"},
   "understood": "Entendido",
-  "@understood": {"description": "Botón para cerrar el tip educativo"}
+  "@understood": {"description": "Botón para cerrar el tip educativo"},
+  "bible": "Biblia",
+  "@bible": {
+    "description": "Título para el AppBar de la Biblia"
+  },
+  "home": "Inicio",
+  "@home": {
+    "description": "Etiqueta de la pestaña de inicio"
+  }
 }

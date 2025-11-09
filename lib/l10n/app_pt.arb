@@ -726,5 +726,13 @@
   "habitsTip": "Deslize para ver ações nos seus hábitos",
   "@habitsTip": {"description": "Descrição da dica educativa"},
   "understood": "Entendido",
-  "@understood": {"description": "Botão para fechar a dica educativa"}
+  "@understood": {"description": "Botão para fechar a dica educativa"},
+  "bible": "Bíblia",
+  "@bible": {
+    "description": "Título para o AppBar da Bíblia"
+  },
+  "home": "Início",
+  "@home": {
+    "description": "Rótulo da aba inicial"
+  }
 }

@@ -641,4 +641,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mlModelError => 'Erreur';
+  String get understood => 'Compris';
+
+  @override
+  String get bible => 'Bible';
+
+  @override
+  String get home => 'Accueil';
 }

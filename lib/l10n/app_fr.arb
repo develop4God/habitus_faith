@@ -726,5 +726,13 @@
   "habitsTip": "Faites glisser pour voir les actions sur vos habitudes",
   "@habitsTip": {"description": "Description du conseil éducatif"},
   "understood": "Compris",
-  "@understood": {"description": "Bouton pour fermer le conseil éducatif"}
+  "@understood": {"description": "Bouton pour fermer le conseil éducatif"},
+  "bible": "Bible",
+  "@bible": {
+    "description": "Bible title for AppBar"
+  },
+  "home": "Accueil",
+  "@home": {
+    "description": "Libellé de l'onglet d'accueil"
+  }
 }

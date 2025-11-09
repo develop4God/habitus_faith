@@ -62,7 +62,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Lottie.asset('assets/lottie/Congratulation _ Success batch.json', width: 120, repeat: false),
+                  Lottie.asset(
+                      'assets/lottie/Congratulation _ Success batch.json',
+                      width: 120,
+                      repeat: false),
                   const SizedBox(height: 16),
                   Text(
                     motivacion,
@@ -73,7 +76,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   const SizedBox(height: 8),
                   Card(
                     elevation: 2,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Row(
@@ -104,7 +108,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   const SizedBox(height: 24),
                   Text(
                     'Porcentaje de éxito',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Stack(
@@ -122,7 +129,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       ),
                       Text(
                         '${successPercent.toStringAsFixed(1)}%',
-                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.indigo),
+                        style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.indigo),
                       ),
                     ],
                   ),
@@ -134,7 +144,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   const SizedBox(height: 24),
                   Text(
                     'Distribución de hábitos',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   AspectRatio(
@@ -143,18 +156,30 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       PieChartData(
                         sections: [
                           PieChartSectionData(
-                            value: stats.completedHabits > 0 ? stats.completedHabits.toDouble() : 1,
+                            value: stats.completedHabits > 0
+                                ? stats.completedHabits.toDouble()
+                                : 1,
                             color: Colors.green,
                             title: 'Completados',
                             radius: 50,
-                            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                            titleStyle: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                           PieChartSectionData(
-                            value: (stats.totalHabits - stats.completedHabits) > 0 ? (stats.totalHabits - stats.completedHabits).toDouble() : 1,
+                            value: (stats.totalHabits - stats.completedHabits) >
+                                    0
+                                ? (stats.totalHabits - stats.completedHabits)
+                                    .toDouble()
+                                : 1,
                             color: Colors.redAccent,
                             title: 'Pendientes',
                             radius: 50,
-                            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                            titleStyle: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ],
                         sectionsSpace: 2,
@@ -162,13 +187,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'Calificación global de hábitos',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  _GlobalRatingSection(stats: stats),
                   const SizedBox(height: 24),
                 ],
               ),
@@ -198,7 +216,7 @@ class _StatTile extends StatelessWidget {
     return Column(
       children: [
         CircleAvatar(
-          backgroundColor: color.withValues(alpha:0.15),
+          backgroundColor: color.withValues(alpha: 0.15),
           child: Icon(icon, color: color),
         ),
         const SizedBox(height: 8),
@@ -210,40 +228,6 @@ class _StatTile extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(fontSize: 12, color: Colors.grey),
-        ),
-      ],
-    );
-  }
-}
-
-class _GlobalRatingSection extends StatelessWidget {
-  final StatisticsModel stats;
-
-  const _GlobalRatingSection({required this.stats});
-
-  @override
-  Widget build(BuildContext context) {
-    final double averageCompletion = stats.totalHabits > 0
-        ? (stats.completedHabits / stats.totalHabits) * 100
-        : 0;
-
-    return Column(
-      children: [
-        Text(
-          averageCompletion.toStringAsFixed(1),
-          style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.indigo),
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          'Calificación promedio',
-          style: TextStyle(fontSize: 14, color: Colors.grey),
-        ),
-        const SizedBox(height: 8),
-        LinearProgressIndicator(
-          value: averageCompletion / 100,
-          minHeight: 8,
-          backgroundColor: Colors.grey.shade200,
-          color: Colors.indigo,
         ),
       ],
     );

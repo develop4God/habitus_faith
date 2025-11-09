@@ -7,6 +7,7 @@ import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:habitus_faith/pages/language_settings_page.dart';
 import 'package:habitus_faith/pages/notifications_settings_page.dart';
 import 'package:habitus_faith/pages/home_page.dart';
+import 'package:habitus_faith/widgets/display_mode_modal.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -95,81 +96,10 @@ class SettingsPage extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Consumer(
-          builder: (context, ref, child) {
-            final selectedMode = ref.watch(displayModeProvider);
-
-            return StatefulBuilder(
-              builder: (context, setState) {
-                DisplayMode localSelectedMode = selectedMode;
-                return Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          l10n.displayMode,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                      // Selección de modo con RadioGroup moderno
-                      ...[DisplayMode.compact, DisplayMode.advanced].map((mode) {
-                        final isSelected = localSelectedMode == mode;
-                        return ListTile(
-                          leading: Icon(
-                            isSelected
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked,
-                            color: isSelected ? Colors.blue : Colors.grey,
-                          ),
-                          title: Text(mode == DisplayMode.compact
-                              ? l10n.compactMode
-                              : l10n.advancedMode),
-                          subtitle: Text(mode == DisplayMode.compact
-                              ? l10n.compactModeSubtitle
-                              : l10n.advancedModeSubtitle),
-                          onTap: () {
-                            setState(() {
-                              localSelectedMode = mode;
-                            });
-                          },
-                          selected: isSelected,
-                        );
-                      }),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              await ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      localSelectedMode == DisplayMode.compact
-                                          ? l10n.displayModeUpdated(l10n.compactMode)
-                                          : l10n.displayModeUpdated(l10n.advancedMode),
-                                    ),
-                                    duration: const Duration(seconds: 2),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text(l10n.save),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
+        return DisplayModeModal(
+          currentMode: currentMode,
+          ref: ref,
+          l10n: l10n,
         );
       },
     );

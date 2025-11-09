@@ -649,4 +649,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get understood => '明白了';
+
+  @override
+  String get bible => '圣经';
+
+  @override
+  String get home => '首页';
 }

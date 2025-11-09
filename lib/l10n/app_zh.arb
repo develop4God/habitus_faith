@@ -726,5 +726,13 @@
   "habitsTip": "滑动以查看您的习惯操作",
   "@habitsTip": {"description": "教育提示描述"},
   "understood": "明白了",
-  "@understood": {"description": "关闭教育提示的按钮"}
+  "@understood": {"description": "关闭教育提示的按钮"},
+  "bible": "圣经",
+  "@bible": {
+    "description": "圣经页面标题"
+  },
+  "home": "首页",
+  "@home": {
+    "description": "主页标签"
+  }
 }

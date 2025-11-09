@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/habit.dart';
-import '../../../domain/models/risk_level.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
-import '../abandonment_risk_indicator.dart';
 
 /// Advanced habit card with full tracking info always visible
 /// Shows all details inline: name, description, stats, calendar, actions
@@ -73,12 +71,22 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
             // Header with emoji, name, and completion button
             Row(
               children: [
+                // Color indicator bar
+                Container(
+                  width: 4,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: habitColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 16),
                 // Habit emoji/icon
                 Container(
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: habitColor.withValues(alpha: 0.15),
+                    color: habitColor.withAlpha(40),
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -89,81 +97,32 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                   ),
                 ),
                 const SizedBox(width: 16),
-
                 // Habit name and description
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Header with emoji, name, and completion button
-                      Row(
-                        children: [
-                          // Color indicator bar
-                          Container(
-                            width: 4,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              color: habitColor,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          // Simple completion checkbox button (ahora a la izquierda)
-                          InkWell(
-                            onTap: _isCompleting ? null : _handleComplete,
-                            borderRadius: BorderRadius.circular(8),
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              padding: const EdgeInsets.all(10),
-                              child: _isCompleting
-                                  ? SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                        valueColor: AlwaysStoppedAnimation<Color>(habitColor),
-                                      ),
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        color: widget.habit.completedToday
-                                            ? habitColor
-                                            : Colors.transparent,
-                                        border: Border.all(
-                                          color: widget.habit.completedToday
-                                              ? habitColor
-                                              : Colors.grey.shade400,
-                                          width: 2.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: widget.habit.completedToday
-                                          ? const Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 20,
-                                            )
-                                          : null,
-                                    ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          // Habit emoji/icon
-                          Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              color: habitColor.withValues(alpha: 0.15),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                widget.habit.emoji ?? '✓',
-                                style: const TextStyle(fontSize: 28),
-                              ),
-                            ),
+                      Text(
+                        widget.habit.name,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          decoration: widget.habit.completedToday
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          decorationThickness: 2,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (widget.habit.description.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.habit.description,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -172,39 +131,36 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     ],
                   ),
                 ),
-
-                          // Habit name and description
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  widget.habit.name,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: widget.habit.completedToday
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                    decorationThickness: 2,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                if (widget.habit.description.isNotEmpty) ...[
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    widget.habit.description,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ],
+                const SizedBox(width: 12),
+                // Simple completion checkbox button
+                InkWell(
+                  onTap: _isCompleting ? null : _handleComplete,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    padding: const EdgeInsets.all(10),
+                    child: _isCompleting
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: widget.habit.completedToday
+                                  ? habitColor
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: widget.habit.completedToday
+                                    ? habitColor
+                                    : Colors.grey.shade400,
+                                width: 2.5,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: widget.habit.completedToday
                                 ? const Icon(
@@ -220,11 +176,33 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
             ),
             const SizedBox(height: 20),
 
-                          const SizedBox(width: 12),
-                        ],
-                      ),
-                    ),
-                  ],
+            // Stats row - always visible
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: habitColor.withAlpha(20),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildStatItem(
+                    l10n.streak,
+                    '${widget.habit.currentStreak}',
+                    Icons.local_fire_department,
+                    Colors.orange,
+                  ),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: Colors.grey[300],
+                  ),
+                  _buildStatItem(
+                    l10n.total,
+                    '${widget.habit.completionHistory.length}',
+                    Icons.check_circle,
+                    Colors.green,
+                  ),
                 ],
               ),
             ),
@@ -250,8 +228,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                       widget.onEdit();
                     } else if (value == 'delete') {
                       widget.onDelete();
-                    } else if (value == 'uncheck' &&
-                        widget.habit.completedToday) {
+                    } else if (value == 'uncheck' && widget.habit.completedToday) {
                       widget.onUncheck(widget.habit.id);
                     }
                   },
@@ -261,8 +238,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                         value: 'uncheck',
                         child: Row(
                           children: [
-                            const Icon(Icons.undo,
-                                size: 20, color: Colors.orange),
+                            const Icon(Icons.undo, size: 20, color: Colors.orange),
                             const SizedBox(width: 12),
                             Text(l10n.uncheck),
                           ],
