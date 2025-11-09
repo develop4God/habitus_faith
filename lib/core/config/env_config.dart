@@ -7,10 +7,9 @@ class EnvConfig {
   /// Load environment variables from .env file
   /// Should be called in main() before runApp()
   static Future<void> load() async {
-    debugPrint('[EnvConfig] Starting environment configuration load');
+    debugPrint('[EnvConfig] Validating environment configuration');
     try {
-      await dotenv.load(fileName: '.env');
-      debugPrint('[EnvConfig] .env file loaded successfully');
+      // No volver a llamar dotenv.load(); solo validar y mostrar estado
       debugPrint(
         '[EnvConfig] GEMINI_API_KEY present: ${dotenv.env['GEMINI_API_KEY']?.isNotEmpty}',
       );
@@ -18,17 +17,20 @@ class EnvConfig {
         '[EnvConfig] GEMINI_MODEL: ${dotenv.env['GEMINI_MODEL'] ?? 'using default'}',
       );
     } catch (e) {
-      debugPrint(
-        '[EnvConfig] Warning: .env file not found - falling back to dart-define',
-      );
-      debugPrint('[EnvConfig] Error details: $e');
+      debugPrint('[EnvConfig] Error validating .env: $e');
     }
   }
+
+  /// Verifica si dotenv está inicializado correctamente
+  static bool get isDotenvInitialized => dotenv.isInitialized && dotenv.env.isNotEmpty;
 
   /// Get Gemini API key from environment
   /// Checks .env file first, then --dart-define override
   /// Throws ApiKeyMissingException if not configured or invalid
   static String get geminiApiKey {
+    if (!isDotenvInitialized) {
+      throw Exception('Dotenv no está inicializado. Asegúrate de llamar dotenv.load() en main.dart antes de usar EnvConfig.geminiApiKey.');
+    }
     final key = dotenv.env['GEMINI_API_KEY'] ??
         const String.fromEnvironment('GEMINI_API_KEY');
 

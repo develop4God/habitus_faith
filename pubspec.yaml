@@ -63,14 +63,14 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    # - assets/images/logo.svg
+
     - assets/lottie/animation.json
     - assets/lottie/
     - assets/biblia/
     - assets/ml_models/predictor.tflite
     - assets/ml_models/scaler_params.json
     - assets/ml_models/model_metadata.json
-    # - .env
+    - .env
   fonts:
     - family: DancingScript
       fonts:

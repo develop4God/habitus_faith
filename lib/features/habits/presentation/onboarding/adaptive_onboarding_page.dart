@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,6 +134,8 @@ class _AdaptiveOnboardingPageState
   }
 
   Future<void> _completeOnboarding(String commitment) async {
+    debugPrint('Inicio de _completeOnboarding con commitment: $commitment');
+    log('Inicio de _completeOnboarding con commitment: $commitment', name: 'onboarding');
     setState(() {
       _isLoading = true;
     });
@@ -140,6 +143,8 @@ class _AdaptiveOnboardingPageState
     try {
       final intent = ref.read(selectedIntentProvider);
       final answers = ref.read(answersProvider);
+      debugPrint('Intent: $intent, Answers: ${jsonEncode(answers)}');
+      log('Intent: $intent, Answers: ${jsonEncode(answers)}', name: 'onboarding');
 
       // Build onboarding profile
       final profile = OnboardingProfile(
@@ -151,11 +156,15 @@ class _AdaptiveOnboardingPageState
         commitment: commitment,
         completedAt: DateTime.now(),
       );
+      debugPrint('Perfil construido: ${jsonEncode(profile.toJson())}');
+      log('Perfil construido: ${jsonEncode(profile.toJson())}', name: 'onboarding');
 
       // Save profile to SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('onboarding_profile', jsonEncode(profile.toJson()));
       await prefs.setString('user_intent', intent.name);
+      debugPrint('Perfil guardado en SharedPreferences');
+      log('Perfil guardado en SharedPreferences', name: 'onboarding');
 
       // Generate habits using AI based on profile
       final geminiService = await ref.read(geminiServiceProvider.future);
@@ -164,6 +173,8 @@ class _AdaptiveOnboardingPageState
 
       final habitsData =
           await geminiService.generateHabitsFromProfile(profile, userId);
+      debugPrint('Habits generados por AI: $habitsData');
+      log('Habits generados por AI: $habitsData', name: 'onboarding');
 
       // Create habits from generated data
       final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -175,14 +186,28 @@ class _AdaptiveOnboardingPageState
           emoji: habitData['emoji'] as String?,
         );
       }
+      debugPrint('Hábitos creados en el repositorio');
+      log('Hábitos creados en el repositorio', name: 'onboarding');
 
       // Mark onboarding as complete
       await storage.setBool('onboarding_complete', true);
+      debugPrint('Onboarding marcado como completo en storage');
+      log('Onboarding marcado como completo en storage', name: 'onboarding');
+
+      // Debug print y log para diagnóstico final
+      debugPrint('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}');
+      log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}', name: 'onboarding');
 
       if (mounted) {
+        debugPrint('Navegando a /home');
+        log('Navegando a /home', name: 'onboarding');
         Navigator.of(context).pushReplacementNamed('/home');
       }
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('Error en _completeOnboarding: ${e.toString()}');
+      debugPrint('Stacktrace: $stack');
+      log('Error en _completeOnboarding: ${e.toString()}', name: 'onboarding');
+      log('Stacktrace: $stack', name: 'onboarding');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
