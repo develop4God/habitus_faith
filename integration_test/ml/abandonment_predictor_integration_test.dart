@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
-
+import 'package:flutter/foundation.dart';
 /// Integration test for abandonment predictor with real TFLite model
 /// Tests the new predictRisk(Habit) interface with complete end-to-end flow
 void main() {
@@ -45,8 +45,8 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: Low risk expected
-      print(
-        '[Integration] Low-risk scenario: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] Low-risk scenario: {(risk * 100).toStringAsFixed(1)}%',
       );
       expect(risk, lessThan(0.5));
       expect(risk, greaterThanOrEqualTo(0.0));
@@ -77,8 +77,8 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: High risk expected
-      print(
-        '[Integration] High-risk scenario: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] High-risk scenario: {(risk * 100).toStringAsFixed(1)}%',
       );
       expect(risk, greaterThan(0.5));
       expect(risk, lessThanOrEqualTo(1.0));
@@ -111,8 +111,8 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: Medium risk expected
-      print(
-        '[Integration] Medium-risk scenario: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] Medium-risk scenario: {(risk * 100).toStringAsFixed(1)}%',
       );
       expect(risk, greaterThan(0.2));
       expect(risk, lessThan(0.8));
@@ -138,8 +138,8 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: Should return default 0.5 for first-time habits
-      print(
-        '[Integration] First-time habit: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] First-time habit: {(risk * 100).toStringAsFixed(1)}%',
       );
       expect(risk, 0.5);
     });
@@ -169,8 +169,8 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: Valid risk value
-      print(
-        '[Integration] Relational habit: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] Relational habit: {(risk * 100).toStringAsFixed(1)}%',
       );
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
@@ -203,8 +203,8 @@ void main() {
       stopwatch.stop();
 
       // Assert: Performance requirement
-      print(
-        '[Integration] Prediction time: ${stopwatch.elapsedMilliseconds}ms',
+      debugPrint(
+        '[Integration] Prediction time: {stopwatch.elapsedMilliseconds}ms',
       );
       expect(stopwatch.elapsedMilliseconds, lessThan(100));
     });
@@ -236,12 +236,12 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: Should be high enough to trigger intervention
-      print(
-        '[Integration] Nudge scenario risk: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] Nudge scenario risk: {(risk * 100).toStringAsFixed(1)}%',
       );
       if (risk > 0.65) {
-        print('[Integration] ✓ Would trigger nudge notification');
-        print(
+        debugPrint('[Integration]  Would trigger nudge notification');
+        debugPrint(
           '[Integration] User would see: "¿Reducimos a Xmin? Notamos que podrías abandonar"',
         );
       }
@@ -276,13 +276,13 @@ void main() {
       final risk = await predictor.predictRisk(habit);
 
       // Assert: Verify risk and potential intervention
-      print(
-        '[Integration] Accept nudge scenario risk: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] Accept nudge scenario risk: {(risk * 100).toStringAsFixed(1)}%',
       );
       if (risk > 0.65) {
-        print('[Integration] ✓ Would trigger nudge notification');
-        print(
-          '[Integration] If accepted: difficulty would reduce from ${habit.difficultyLevel} to lower level',
+        debugPrint('[Integration]  Would trigger nudge notification');
+        debugPrint(
+          '[Integration] If accepted: difficulty would reduce from {habit.difficultyLevel} to lower level',
         );
       }
       expect(risk, greaterThanOrEqualTo(0.0));
@@ -324,10 +324,10 @@ void main() {
       // Assert: Should produce valid result with correct feature order
       // Features should be: [14, 1, 8, 0, 2]
       // hourOfDay=14, dayOfWeek=1 (Monday), streak=8, failures=0, category=2 (mental)
-      print(
-        '[Integration] Tensor order test: ${(risk * 100).toStringAsFixed(1)}%',
+      debugPrint(
+        '[Integration] Tensor order test: {(risk * 100).toStringAsFixed(1)}%',
       );
-      print(
+      debugPrint(
         '[Integration] Expected features: [hour=14, day=1, streak=8, failures≈0, category=2]',
       );
       expect(risk, greaterThanOrEqualTo(0.0));
