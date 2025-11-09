@@ -17,8 +17,6 @@ import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
 import 'core/services/ml/model_updater.dart';
 import 'features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
-import 'features/habits/presentation/onboarding/display_mode_selection_page.dart';
-import 'features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
 import 'features/habits/data/storage/json_habits_repository.dart';
 import 'features/habits/data/storage/storage_providers.dart';
@@ -80,7 +78,6 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authInit = ref.watch(authInitProvider);
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
-    final displayModeSelected = ref.watch(displayModeSelectedProvider);
     final currentLocale = ref.watch(appLanguageProvider);
 
     // Initialize notification service
@@ -105,15 +102,11 @@ class MyApp extends ConsumerWidget {
       routes: {
         '/home': (context) => const HomePage(),
         '/onboarding': (context) => const AdaptiveOnboardingPage(),
-        '/display-mode-selection': (context) => const DisplayModeSelectionPage(),
       },
       home: authInit.when(
         data: (_) {
           if (onboardingComplete) {
             return const LandingPage();
-          }
-          if (!displayModeSelected) {
-            return const DisplayModeSelectionPage();
           }
           return const AdaptiveOnboardingPage();
         },

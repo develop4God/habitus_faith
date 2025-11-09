@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 import '../../data/storage/storage_providers.dart';
 import '../../domain/habit.dart';
 import 'onboarding_models.dart';
@@ -373,6 +374,7 @@ class _AdaptiveOnboardingPageState
                       else
                         const SizedBox(width: 48),
                       Text(
+                        // Corrige el indicador para mostrar el número real de preguntas
                         '${currentIndex + 1}/${questions.length}',
                         style: const TextStyle(
                           fontSize: 16,
@@ -406,50 +408,62 @@ class _AdaptiveOnboardingPageState
                   return _QuestionPage(
                     question: question,
                     selectedAnswer: answers[question.id],
-                    onAnswerSelected: (answer) =>
-                        _handleAnswer(question.id, answer),
+                    onAnswerSelected: (answer) => _handleAnswer(question.id, answer),
+                    onAutoAdvance: question.type == QuestionType.singleChoice ? () => _nextQuestion() : null,
                   );
                 },
               ),
             ),
 
+            // Animación Lottie al final para claridad
+            if (currentIndex == questions.length - 1)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Lottie.asset(
+                  'assets/lottie/tap_screen.json',
+                  width: 120,
+                  height: 120,
+                  repeat: true,
+                ),
+              ),
+
             // Continue button
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: SizedBox(
-                height: 56,
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff6366f1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 4,
-                  ),
-                  onPressed: _isLoading ? null : _nextQuestion,
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+              child: (currentQuestion.type == QuestionType.multiChoice)
+                  ? SizedBox(
+                      height: 56,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff6366f1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                        )
-                      : Text(
-                          currentIndex < questions.length - 1
-                              ? l10n.continueButton
-                              : 'Finalizar',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
+                          elevation: 4,
                         ),
-                ),
-              ),
+                        onPressed: _isLoading ? null : _nextQuestion,
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor:
+                                      AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
+                            : Text(
+                                l10n.continueButton,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -462,11 +476,13 @@ class _QuestionPage extends StatelessWidget {
   final OnboardingQuestion question;
   final dynamic selectedAnswer;
   final Function(dynamic) onAnswerSelected;
+  final VoidCallback? onAutoAdvance;
 
   const _QuestionPage({
     required this.question,
     required this.selectedAnswer,
     required this.onAnswerSelected,
+    this.onAutoAdvance,
   });
 
   @override
@@ -500,7 +516,6 @@ class _QuestionPage extends StatelessWidget {
             final isSelected = question.type == QuestionType.singleChoice
                 ? selectedAnswer == option.id
                 : (selectedAnswer as List?)?.contains(option.id) ?? false;
-
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
               child: _OptionCard(
@@ -509,6 +524,9 @@ class _QuestionPage extends StatelessWidget {
                 onTap: () {
                   if (question.type == QuestionType.singleChoice) {
                     onAnswerSelected(option.id);
+                    if (onAutoAdvance != null) {
+                      Future.delayed(const Duration(milliseconds: 150), onAutoAdvance);
+                    }
                   } else {
                     // Multi-select
                     final current = (selectedAnswer as List?)?.toList() ?? [];

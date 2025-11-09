@@ -572,8 +572,26 @@ Requisitos estrictos:
       _logger?.i('Successfully parsed ${habits.length} habits from profile');
       debugPrint('[IA] userId: $userId | Hábitos generados: ${habits.length} | Tokens totales estimados: ${promptTokens + responseTokens} | Onboarding: $isOnboarding');
 
-      // D. Guardar con TTL de 30 días
-      await _cache.set('profile_$fingerprint', habits, ttl: const Duration(days: 30));
+      // D. Guardar con metadata del perfil para similarity matching
+      // Serializar correctamente el campo 'category' como String
+      final habitsForCache = habits.map((habit) {
+        final habitCopy = Map<String, dynamic>.from(habit);
+        if (habitCopy['category'] is HabitCategory) {
+          habitCopy['category'] = habitCopy['category'].toString().split('.').last;
+        }
+        return habitCopy;
+      }).toList();
+      final cacheData = {
+        'profile': profile.toJson(),
+        'habits': habitsForCache,
+        'timestamp': DateTime.now().toIso8601String(),
+        'userId': userId,
+        'isOnboarding': isOnboarding,
+      };
+      final prefs = await SharedPreferences.getInstance();
+      final cachedKey = 'profile_$fingerprint';
+      await prefs.setString(cachedKey, jsonEncode(cacheData));
+      debugPrint('[Cache SAVE] Saved profile with fingerprint: $fingerprint');
 
       return habits;
     } on TimeoutException {
