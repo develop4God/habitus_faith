@@ -575,4 +575,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bible => 'Bible';
+
+  @override
+  String get home => 'Home';
 }

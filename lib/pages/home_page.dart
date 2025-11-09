@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'habits_page.dart';
+import 'main_home_page.dart';
 
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
     final l10n = AppLocalizations.of(context)!;
 
     final List<Widget> pages = [
+      const MainHomePage(),
       const HabitsPage(),
       const BibleReaderPage(),
       const DevotionalDiscoveryPage(),
@@ -40,6 +42,10 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home),
+            label: l10n.home,
+          ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.check_box),
             label: l10n.myHabits,

@@ -700,5 +700,9 @@
   "bible": "圣经",
   "@bible": {
     "description": "圣经页面标题"
+  },
+  "home": "首页",
+  "@home": {
+    "description": "主页标签"
   }
 }

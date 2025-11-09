@@ -700,5 +700,9 @@
   "bible": "Bible",
   "@bible": {
     "description": "Bible title for AppBar"
+  },
+  "home": "Accueil",
+  "@home": {
+    "description": "Libellé de l'onglet d'accueil"
   }
 }

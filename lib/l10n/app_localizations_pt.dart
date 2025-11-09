@@ -579,4 +579,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get bible => 'Bíblia';
+
+  @override
+  String get home => 'Início';
 }

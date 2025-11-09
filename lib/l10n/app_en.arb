@@ -760,5 +760,9 @@
   "bible": "Bible",
   "@bible": {
     "description": "Bible title for AppBar"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home tab label"
   }
 }
