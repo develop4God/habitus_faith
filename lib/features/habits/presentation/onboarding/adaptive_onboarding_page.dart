@@ -9,6 +9,7 @@ import '../../domain/habit.dart';
 import 'onboarding_models.dart';
 import 'onboarding_questions.dart';
 import 'commitment_screen.dart';
+import 'intro_onboarding_page.dart';
 import '../../../../core/providers/ai_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -34,11 +35,18 @@ class _AdaptiveOnboardingPageState
     extends ConsumerState<AdaptiveOnboardingPage> {
   final PageController _pageController = PageController();
   bool _isLoading = false;
+  bool _showIntro = true;
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _startOnboarding() {
+    setState(() {
+      _showIntro = false;
+    });
   }
 
   List<OnboardingQuestion> _getQuestions() {
@@ -118,6 +126,24 @@ class _AdaptiveOnboardingPageState
     final intent = ref.read(selectedIntentProvider);
     if (intent == null) return;
 
+    // Construir el perfil y generar hábitos antes de navegar
+    final answers = ref.read(answersProvider);
+    final profile = OnboardingProfile(
+      primaryIntent: intent,
+      motivations: _extractMotivations(answers, intent),
+      challenge: answers['mainChallenge'] as String? ?? '',
+      supportLevel: answers['supportSystem'] as String? ?? '',
+      spiritualMaturity: _extractSpiritualMaturity(answers, intent),
+      commitment: '',
+      completedAt: DateTime.now(),
+    );
+    final geminiService = await ref.read(geminiServiceProvider.future);
+    const userId = 'local_user';
+    final habitsData = await geminiService.generateHabitsFromProfile(profile, userId);
+    // Extraer resumen de hábitos (nombre y descripción)
+    final habitsSummary = habitsData.map<String>((habit) =>
+      '${habit['emoji'] ?? ''} ${habit['name']}: ${habit['description']}').toList();
+
     final result = await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (context) => CommitmentScreen(
@@ -125,6 +151,7 @@ class _AdaptiveOnboardingPageState
           onCommitmentMade: (commitment) {
             Navigator.of(context).pop(commitment);
           },
+          habitsSummary: habitsSummary,
         ),
       ),
     );
@@ -340,6 +367,9 @@ class _AdaptiveOnboardingPageState
 
   @override
   Widget build(BuildContext context) {
+    if (_showIntro) {
+      return IntroOnboardingPage(onStart: _startOnboarding);
+    }
     final l10n = AppLocalizations.of(context)!;
     final questions = _getQuestions();
     final currentIndex = ref.watch(currentQuestionIndexProvider);
@@ -353,49 +383,92 @@ class _AdaptiveOnboardingPageState
       );
     }
 
+    // Detecta si es la pantalla 2 y si es multiChoice con máximo 3 selecciones
+    final isSecondScreen = currentIndex == 1 && currentQuestion.type == QuestionType.multiChoice && currentQuestion.maxSelections == 3;
+
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       body: SafeArea(
         child: Column(
           children: [
-            // Progress indicator
+            // Barra de pasos moderna y clara
             Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(questions.length, (i) {
+                  final isActive = i == currentIndex;
+                  final isCompleted = i < currentIndex;
+                  return Row(
                     children: [
-                      if (currentIndex > 0)
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: _previousQuestion,
-                        )
-                      else
-                        const SizedBox(width: 48),
-                      Text(
-                        // Corrige el indicador para mostrar el número real de preguntas
-                        '${currentIndex + 1}/${questions.length}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff64748b),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: isActive ? 28 : 20,
+                        height: isActive ? 28 : 20,
+                        decoration: BoxDecoration(
+                          color: isCompleted
+                              ? const Color(0xff6366f1)
+                              : isActive
+                                  ? const Color(0xff6366f1).withOpacity(0.8)
+                                  : Colors.grey.shade300,
+                          shape: BoxShape.circle,
+                          boxShadow: isActive
+                              ? [BoxShadow(color: const Color(0xff6366f1).withOpacity(0.2), blurRadius: 8)]
+                              : [],
+                        ),
+                        child: Center(
+                          child: isCompleted
+                              ? const Icon(Icons.check, color: Colors.white, size: 16)
+                              : Text(
+                                  '${i + 1}',
+                                  style: TextStyle(
+                                    color: isActive ? Colors.white : Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: isActive ? 16 : 12,
+                                  ),
+                                ),
                         ),
                       ),
-                      const SizedBox(width: 48),
+                      if (i < questions.length - 1)
+                        Container(
+                          width: 32,
+                          height: 4,
+                          color: isCompleted ? const Color(0xff6366f1) : Colors.grey.shade300,
+                        ),
                     ],
-                  ),
-                  const SizedBox(height: 16),
-                  LinearProgressIndicator(
-                    value: (currentIndex + 1) / questions.length,
-                    backgroundColor: Colors.grey.shade200,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xff6366f1),
-                    ),
-                  ),
-                ],
+                  );
+                }),
               ),
             ),
+            // Mensaje destacado para pantalla 2 multiChoice
+            if (isSecondScreen)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffeef2ff),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xff6366f1), width: 1.5),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.info_outline, color: Color(0xff6366f1)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Puedes seleccionar hasta 3 opciones que más te identifiquen.',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff6366f1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
             // Question content
             Expanded(
@@ -543,7 +616,7 @@ class _QuestionPage extends StatelessWidget {
                 },
               ),
             );
-          }),
+          }).toList(),
         ],
       ),
     );
@@ -578,13 +651,13 @@ class _OptionCard extends StatelessWidget {
           boxShadow: [
             if (isSelected)
               BoxShadow(
-                color: const Color(0xff6366f1).withValues(alpha: 0.2),
+                color: const Color(0xff6366f1).withOpacity(0.2),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               )
             else
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

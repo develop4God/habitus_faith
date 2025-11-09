@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'onboarding_models.dart';
+import 'package:signature/signature.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class CommitmentScreen extends StatefulWidget {
   final UserIntent userIntent;
   final Function(String commitment) onCommitmentMade;
+  final List<String> habitsSummary;
 
   const CommitmentScreen({
     super.key,
     required this.userIntent,
     required this.onCommitmentMade,
+    required this.habitsSummary,
   });
 
   @override
@@ -18,40 +21,13 @@ class CommitmentScreen extends StatefulWidget {
 
 class _CommitmentScreenState extends State<CommitmentScreen> {
   final TextEditingController _commitmentController = TextEditingController();
-  String? _selectedCommitment;
+  final SignatureController _signatureController = SignatureController(penStrokeWidth: 3, penColor: Colors.black);
 
   @override
   void dispose() {
     _commitmentController.dispose();
+    _signatureController.dispose();
     super.dispose();
-  }
-
-  List<String> _getCommitments() {
-    switch (widget.userIntent) {
-      case UserIntent.faithBased:
-        return [
-          '¡Voy a crecer en mi fe!',
-          '¡Voy a tener disciplina espiritual!',
-          '¡Voy a confiar en Dios con mis hábitos!',
-          '¡Voy a ser mi mejor versión en Cristo!',
-        ];
-      case UserIntent.wellness:
-        return [
-          '¡Voy a conseguir mi objetivo!',
-          '¡Voy a aprovechar mi día al máximo!',
-          '¡Voy a tener una vida organizada!',
-          '¡Voy a ser más disciplinado!',
-        ];
-      case UserIntent.both:
-        return [
-          '¡Voy a crecer en mi fe!',
-          '¡Voy a conseguir mi objetivo!',
-          '¡Voy a tener disciplina espiritual!',
-          '¡Voy a aprovechar mi día al máximo!',
-          '¡Voy a ser mi mejor versión en Cristo!',
-          '¡Voy a tener una vida organizada!',
-        ];
-    }
   }
 
   String _getInputLabel() {
@@ -68,7 +44,6 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final commitments = _getCommitments();
     final inputLabel = _getInputLabel();
 
     return Scaffold(
@@ -79,8 +54,16 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 32),
-              // Title
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              const SizedBox(height: 16),
               const Text(
                 '¡Casi listo! 🎉',
                 style: TextStyle(
@@ -92,70 +75,69 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Sella tu compromiso con una declaración personal',
+                'Estos son los hábitos que te comprometes a realizar:',
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff64748b),
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
-
-              // Commitment options
+              const SizedBox(height: 24),
+              // Mostrar resumen de hábitos
               Expanded(
-                child: ListView(
-                  children: [
-                    ...commitments.map((commitment) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: _CommitmentOption(
-                            text: commitment,
-                            isSelected: _selectedCommitment == commitment,
-                            onTap: () {
-                              setState(() {
-                                _selectedCommitment = commitment;
-                                _commitmentController.text = commitment;
-                              });
-                            },
-                          ),
-                        )),
-                    const SizedBox(height: 24),
-
-                    // Custom commitment input
-                    Text(
-                      inputLabel,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff1a202c),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: _commitmentController,
-                      maxLines: 3,
-                      decoration: InputDecoration(
-                        hintText: 'Escribe tu compromiso aquí...',
-                        border: OutlineInputBorder(
+                child: ListView.builder(
+                  itemCount: widget.habitsSummary.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            widget.habitsSummary[index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff1a202c),
+                            ),
+                          ),
+                        ),
                       ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty) {
-                          setState(() {
-                            _selectedCommitment = null;
-                          });
-                        }
-                      },
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // Continue button
+              const SizedBox(height: 16),
+              Text(
+                inputLabel,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff1a202c),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Signature(
+                  controller: _signatureController,
+                  backgroundColor: Colors.white,
+                ),
+              ),
+              TextButton(
+                onPressed: () => _signatureController.clear(),
+                child: const Text('Limpiar firma'),
+              ),
+              const SizedBox(height: 16),
               SizedBox(
                 height: 56,
                 child: ElevatedButton(
@@ -166,12 +148,11 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                     ),
                     elevation: 4,
                   ),
-                  onPressed: _commitmentController.text.trim().isEmpty
-                      ? null
-                      : () {
-                          widget.onCommitmentMade(
-                              _commitmentController.text.trim());
-                        },
+                  onPressed: _signatureController.isNotEmpty
+                      ? () {
+                          widget.onCommitmentMade('Compromiso firmado');
+                        }
+                      : null,
                   child: Text(
                     l10n.continueButton,
                     style: const TextStyle(
@@ -184,74 +165,6 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CommitmentOption extends StatelessWidget {
-  final String text;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _CommitmentOption({
-    required this.text,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
-            width: isSelected ? 2 : 1,
-          ),
-          boxShadow: [
-            if (isSelected)
-              BoxShadow(
-                color: const Color(0xff6366f1).withValues(alpha: 0.2),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              )
-            else
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              isSelected ? Icons.check_circle : Icons.circle_outlined,
-              color:
-                  isSelected ? const Color(0xff6366f1) : Colors.grey.shade400,
-              size: 24,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected
-                      ? const Color(0xff1a202c)
-                      : const Color(0xff64748b),
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
