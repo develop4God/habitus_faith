@@ -8,17 +8,14 @@ import 'habits_page_ui.dart'; // Nuevo import
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   final repository = ref.watch(jsonHabitsRepositoryProvider);
   debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
-  final stream = repository
-      .watchHabits()
-      .map((list) {
-        debugPrint(
-          'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
-        );
-        return list;
-      })
-      .handleError((e, st) {
-        debugPrint('jsonHabitsStreamProvider: stream error -> $e');
-      });
+  final stream = repository.watchHabits().map((list) {
+    debugPrint(
+      'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
+    );
+    return list;
+  }).handleError((e, st) {
+    debugPrint('jsonHabitsStreamProvider: stream error -> $e');
+  });
   return stream;
 });
 
@@ -157,8 +154,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
 final jsonHabitsNotifierProvider =
     StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
-      return JsonHabitsNotifier(ref);
-    });
+  return JsonHabitsNotifier(ref);
+});
 
 class HabitsPage extends ConsumerStatefulWidget {
   const HabitsPage({super.key});
@@ -169,6 +166,7 @@ class HabitsPage extends ConsumerStatefulWidget {
 
 class _HabitsPageState extends ConsumerState<HabitsPage> {
   final Set<String> _selectedHabits = {};
+  HabitCategory? _categoryFilter;
 
   void _clearSelection() {
     setState(() {
@@ -180,6 +178,19 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     setState(() {
       _selectedHabits.addAll(habits.map((h) => h.id));
     });
+  }
+
+  void _setCategoryFilter(HabitCategory? category) {
+    setState(() {
+      _categoryFilter = category;
+    });
+  }
+
+  List<Habit> _filterHabits(List<Habit> habits) {
+    if (_categoryFilter == null) {
+      return habits;
+    }
+    return habits.where((h) => h.category == _categoryFilter).toList();
   }
 
   Future<void> _deleteSelected(BuildContext context, WidgetRef ref) async {
@@ -194,9 +205,7 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     WidgetRef ref,
     Habit habit,
   ) async {
-    await ref
-        .read(jsonHabitsNotifierProvider.notifier)
-        .addHabit(
+    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
           name: "${habit.name} (copy)",
           description: habit.description,
           category: habit.category,
@@ -219,6 +228,9 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       selectAll: _selectAll,
       deleteSelected: _deleteSelected,
       duplicateHabit: _duplicateHabit,
+      categoryFilter: _categoryFilter,
+      onCategoryFilterChanged: _setCategoryFilter,
+      filterHabits: _filterHabits,
     );
   }
 }

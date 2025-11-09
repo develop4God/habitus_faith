@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/habit.dart';
@@ -21,6 +22,9 @@ class HabitsPageUI extends ConsumerWidget {
   final void Function(List<Habit>) selectAll;
   final Future<void> Function(BuildContext, WidgetRef) deleteSelected;
   final Future<void> Function(BuildContext, WidgetRef, Habit) duplicateHabit;
+  final HabitCategory? categoryFilter;
+  final void Function(HabitCategory?) onCategoryFilterChanged;
+  final List<Habit> Function(List<Habit>) filterHabits;
 
   const HabitsPageUI({
     super.key,
@@ -29,6 +33,9 @@ class HabitsPageUI extends ConsumerWidget {
     required this.selectAll,
     required this.deleteSelected,
     required this.duplicateHabit,
+    required this.categoryFilter,
+    required this.onCategoryFilterChanged,
+    required this.filterHabits,
   });
 
   @override
@@ -114,6 +121,8 @@ class HabitsPageUI extends ConsumerWidget {
           debugPrint('HabitsPageUI displayMode: $displayMode');
 
           // Mostrar todos los hábitos como lista plana, sin categorías
+          final filteredHabits = filterHabits(habits);
+
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -121,6 +130,13 @@ class HabitsPageUI extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: _LottieTip(),
               ),
+              // Category filter chips
+              if (habits.isNotEmpty)
+                _CategoryFilterChips(
+                  selectedCategory: categoryFilter,
+                  onCategorySelected: onCategoryFilterChanged,
+                  habits: habits,
+                ),
               if (selectedHabits.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
@@ -154,7 +170,7 @@ class HabitsPageUI extends ConsumerWidget {
                     ),
                   ),
                 ),
-              ...habits.map((habit) {
+              ...filteredHabits.map((habit) {
                 Widget card;
                 if (displayMode == DisplayMode.compact) {
                   card = Dismissible(
@@ -591,6 +607,119 @@ class __LottieTipState extends State<_LottieTip> {
           repeat: true,
         ),
       ),
+    );
+  }
+}
+
+class _CategoryFilterChips extends StatelessWidget {
+  final HabitCategory? selectedCategory;
+  final void Function(HabitCategory?) onCategorySelected;
+  final List<Habit> habits;
+
+  const _CategoryFilterChips({
+    required this.selectedCategory,
+    required this.onCategorySelected,
+    required this.habits,
+  });
+
+  Future<bool> _shouldShowSpiritualFilter() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final intentStr = prefs.getString('user_intent');
+      // Hide spiritual filter only for wellness-only users
+      return intentStr != 'wellness';
+    } catch (e) {
+      // If there's an error, show all filters by default
+      return true;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _shouldShowSpiritualFilter(),
+      builder: (context, snapshot) {
+        final showSpiritual = snapshot.data ?? true;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FilterChip(
+                  label: const Text('Todos'),
+                  selected: selectedCategory == null,
+                  onSelected: (_) => onCategorySelected(null),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+                const SizedBox(width: 8),
+                if (showSpiritual) ...[
+                  FilterChip(
+                    label: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('✝️ '),
+                        Text('Fe'),
+                      ],
+                    ),
+                    selected: selectedCategory == HabitCategory.spiritual,
+                    onSelected: (_) =>
+                        onCategorySelected(HabitCategory.spiritual),
+                    selectedColor:
+                        const Color(0xff6366f1).withValues(alpha: 0.2),
+                    checkmarkColor: const Color(0xff6366f1),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                FilterChip(
+                  label: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('💪 '),
+                      Text('Salud'),
+                    ],
+                  ),
+                  selected: selectedCategory == HabitCategory.physical,
+                  onSelected: (_) => onCategorySelected(HabitCategory.physical),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('🧠 '),
+                      Text('Mental'),
+                    ],
+                  ),
+                  selected: selectedCategory == HabitCategory.mental,
+                  onSelected: (_) => onCategorySelected(HabitCategory.mental),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('👥 '),
+                      Text('Social'),
+                    ],
+                  ),
+                  selected: selectedCategory == HabitCategory.relational,
+                  onSelected: (_) =>
+                      onCategorySelected(HabitCategory.relational),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
