@@ -72,8 +72,9 @@ class BibleVerseGridSelector extends StatelessWidget {
                         Text(
                           '$bookName $chapterNumber',
                           style: textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onPrimaryContainer
-                                .withValues(alpha: 0.8),
+                            color: colorScheme.onPrimaryContainer.withValues(
+                              alpha: 0.8,
+                            ),
                           ),
                         ),
                       ],
@@ -151,18 +152,16 @@ class BibleVerseGridSelector extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             border: isSelected
-                ? Border.all(
-                    color: colorScheme.onPrimary,
-                    width: 2,
-                  )
+                ? Border.all(color: colorScheme.onPrimary, width: 2)
                 : null,
           ),
           child: Center(
             child: Text(
               verseNumber.toString(),
               style: textTheme.bodyMedium?.copyWith(
-                color:
-                    isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
+                color: isSelected
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 fontSize: 18,
               ),

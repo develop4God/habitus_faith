@@ -12,7 +12,8 @@ part of 'predefined_habit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PredefinedHabit _$PredefinedHabitFromJson(Map<String, dynamic> json) {
   return _PredefinedHabit.fromJson(json);
@@ -41,17 +42,19 @@ mixin _$PredefinedHabit {
 /// @nodoc
 abstract class $PredefinedHabitCopyWith<$Res> {
   factory $PredefinedHabitCopyWith(
-          PredefinedHabit value, $Res Function(PredefinedHabit) then) =
-      _$PredefinedHabitCopyWithImpl<$Res, PredefinedHabit>;
+    PredefinedHabit value,
+    $Res Function(PredefinedHabit) then,
+  ) = _$PredefinedHabitCopyWithImpl<$Res, PredefinedHabit>;
   @useResult
-  $Res call(
-      {String id,
-      String emoji,
-      String nameKey,
-      String descriptionKey,
-      PredefinedHabitCategory category,
-      VerseReference? verse,
-      String? suggestedTime});
+  $Res call({
+    String id,
+    String emoji,
+    String nameKey,
+    String descriptionKey,
+    PredefinedHabitCategory category,
+    VerseReference? verse,
+    String? suggestedTime,
+  });
 
   $VerseReferenceCopyWith<$Res>? get verse;
 }
@@ -79,36 +82,39 @@ class _$PredefinedHabitCopyWithImpl<$Res, $Val extends PredefinedHabit>
     Object? verse = freezed,
     Object? suggestedTime = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      emoji: null == emoji
-          ? _value.emoji
-          : emoji // ignore: cast_nullable_to_non_nullable
-              as String,
-      nameKey: null == nameKey
-          ? _value.nameKey
-          : nameKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      descriptionKey: null == descriptionKey
-          ? _value.descriptionKey
-          : descriptionKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as PredefinedHabitCategory,
-      verse: freezed == verse
-          ? _value.verse
-          : verse // ignore: cast_nullable_to_non_nullable
-              as VerseReference?,
-      suggestedTime: freezed == suggestedTime
-          ? _value.suggestedTime
-          : suggestedTime // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            emoji: null == emoji
+                ? _value.emoji
+                : emoji // ignore: cast_nullable_to_non_nullable
+                      as String,
+            nameKey: null == nameKey
+                ? _value.nameKey
+                : nameKey // ignore: cast_nullable_to_non_nullable
+                      as String,
+            descriptionKey: null == descriptionKey
+                ? _value.descriptionKey
+                : descriptionKey // ignore: cast_nullable_to_non_nullable
+                      as String,
+            category: null == category
+                ? _value.category
+                : category // ignore: cast_nullable_to_non_nullable
+                      as PredefinedHabitCategory,
+            verse: freezed == verse
+                ? _value.verse
+                : verse // ignore: cast_nullable_to_non_nullable
+                      as VerseReference?,
+            suggestedTime: freezed == suggestedTime
+                ? _value.suggestedTime
+                : suggestedTime // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of PredefinedHabit
@@ -129,19 +135,21 @@ class _$PredefinedHabitCopyWithImpl<$Res, $Val extends PredefinedHabit>
 /// @nodoc
 abstract class _$$PredefinedHabitImplCopyWith<$Res>
     implements $PredefinedHabitCopyWith<$Res> {
-  factory _$$PredefinedHabitImplCopyWith(_$PredefinedHabitImpl value,
-          $Res Function(_$PredefinedHabitImpl) then) =
-      __$$PredefinedHabitImplCopyWithImpl<$Res>;
+  factory _$$PredefinedHabitImplCopyWith(
+    _$PredefinedHabitImpl value,
+    $Res Function(_$PredefinedHabitImpl) then,
+  ) = __$$PredefinedHabitImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String emoji,
-      String nameKey,
-      String descriptionKey,
-      PredefinedHabitCategory category,
-      VerseReference? verse,
-      String? suggestedTime});
+  $Res call({
+    String id,
+    String emoji,
+    String nameKey,
+    String descriptionKey,
+    PredefinedHabitCategory category,
+    VerseReference? verse,
+    String? suggestedTime,
+  });
 
   @override
   $VerseReferenceCopyWith<$Res>? get verse;
@@ -152,8 +160,9 @@ class __$$PredefinedHabitImplCopyWithImpl<$Res>
     extends _$PredefinedHabitCopyWithImpl<$Res, _$PredefinedHabitImpl>
     implements _$$PredefinedHabitImplCopyWith<$Res> {
   __$$PredefinedHabitImplCopyWithImpl(
-      _$PredefinedHabitImpl _value, $Res Function(_$PredefinedHabitImpl) _then)
-      : super(_value, _then);
+    _$PredefinedHabitImpl _value,
+    $Res Function(_$PredefinedHabitImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PredefinedHabit
   /// with the given fields replaced by the non-null parameter values.
@@ -168,50 +177,53 @@ class __$$PredefinedHabitImplCopyWithImpl<$Res>
     Object? verse = freezed,
     Object? suggestedTime = freezed,
   }) {
-    return _then(_$PredefinedHabitImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      emoji: null == emoji
-          ? _value.emoji
-          : emoji // ignore: cast_nullable_to_non_nullable
-              as String,
-      nameKey: null == nameKey
-          ? _value.nameKey
-          : nameKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      descriptionKey: null == descriptionKey
-          ? _value.descriptionKey
-          : descriptionKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as PredefinedHabitCategory,
-      verse: freezed == verse
-          ? _value.verse
-          : verse // ignore: cast_nullable_to_non_nullable
-              as VerseReference?,
-      suggestedTime: freezed == suggestedTime
-          ? _value.suggestedTime
-          : suggestedTime // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$PredefinedHabitImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        emoji: null == emoji
+            ? _value.emoji
+            : emoji // ignore: cast_nullable_to_non_nullable
+                  as String,
+        nameKey: null == nameKey
+            ? _value.nameKey
+            : nameKey // ignore: cast_nullable_to_non_nullable
+                  as String,
+        descriptionKey: null == descriptionKey
+            ? _value.descriptionKey
+            : descriptionKey // ignore: cast_nullable_to_non_nullable
+                  as String,
+        category: null == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
+                  as PredefinedHabitCategory,
+        verse: freezed == verse
+            ? _value.verse
+            : verse // ignore: cast_nullable_to_non_nullable
+                  as VerseReference?,
+        suggestedTime: freezed == suggestedTime
+            ? _value.suggestedTime
+            : suggestedTime // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PredefinedHabitImpl implements _PredefinedHabit {
-  const _$PredefinedHabitImpl(
-      {required this.id,
-      required this.emoji,
-      required this.nameKey,
-      required this.descriptionKey,
-      required this.category,
-      this.verse,
-      this.suggestedTime});
+  const _$PredefinedHabitImpl({
+    required this.id,
+    required this.emoji,
+    required this.nameKey,
+    required this.descriptionKey,
+    required this.category,
+    this.verse,
+    this.suggestedTime,
+  });
 
   factory _$PredefinedHabitImpl.fromJson(Map<String, dynamic> json) =>
       _$$PredefinedHabitImplFromJson(json);
@@ -255,8 +267,16 @@ class _$PredefinedHabitImpl implements _PredefinedHabit {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, emoji, nameKey,
-      descriptionKey, category, verse, suggestedTime);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    emoji,
+    nameKey,
+    descriptionKey,
+    category,
+    verse,
+    suggestedTime,
+  );
 
   /// Create a copy of PredefinedHabit
   /// with the given fields replaced by the non-null parameter values.
@@ -265,25 +285,26 @@ class _$PredefinedHabitImpl implements _PredefinedHabit {
   @pragma('vm:prefer-inline')
   _$$PredefinedHabitImplCopyWith<_$PredefinedHabitImpl> get copyWith =>
       __$$PredefinedHabitImplCopyWithImpl<_$PredefinedHabitImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PredefinedHabitImplToJson(
-      this,
-    );
+    return _$$PredefinedHabitImplToJson(this);
   }
 }
 
 abstract class _PredefinedHabit implements PredefinedHabit {
-  const factory _PredefinedHabit(
-      {required final String id,
-      required final String emoji,
-      required final String nameKey,
-      required final String descriptionKey,
-      required final PredefinedHabitCategory category,
-      final VerseReference? verse,
-      final String? suggestedTime}) = _$PredefinedHabitImpl;
+  const factory _PredefinedHabit({
+    required final String id,
+    required final String emoji,
+    required final String nameKey,
+    required final String descriptionKey,
+    required final PredefinedHabitCategory category,
+    final VerseReference? verse,
+    final String? suggestedTime,
+  }) = _$PredefinedHabitImpl;
 
   factory _PredefinedHabit.fromJson(Map<String, dynamic> json) =
       _$PredefinedHabitImpl.fromJson;

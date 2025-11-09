@@ -169,10 +169,7 @@ void main() {
         userId: 'other-user',
         idGenerator: () => 'other-id',
       );
-      await otherRepo.createHabit(
-        name: 'Habit 2',
-        description: 'User 2 habit',
-      );
+      await otherRepo.createHabit(name: 'Habit 2', description: 'User 2 habit');
 
       // Act
       final stream = repository.watchHabits();
@@ -180,9 +177,11 @@ void main() {
       // Assert
       await expectLater(
         stream,
-        emits(predicate<List<Habit>>((habits) {
-          return habits.length == 1 && habits.first.userId == 'test-user';
-        })),
+        emits(
+          predicate<List<Habit>>((habits) {
+            return habits.length == 1 && habits.first.userId == 'test-user';
+          }),
+        ),
       );
     });
 

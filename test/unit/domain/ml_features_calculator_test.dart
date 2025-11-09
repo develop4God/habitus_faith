@@ -291,8 +291,10 @@ void main() {
           (i) => now.subtract(Duration(days: i)),
         );
 
-        final rate =
-            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+        final rate = MLFeaturesCalculator.calculateSuccessRate(
+          completions,
+          now,
+        );
 
         expect(rate, 1.0); // 7/7 = 100%
       });
@@ -306,8 +308,10 @@ void main() {
           now.subtract(const Duration(days: 6)),
         ];
 
-        final rate =
-            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+        final rate = MLFeaturesCalculator.calculateSuccessRate(
+          completions,
+          now,
+        );
 
         expect(rate, closeTo(4 / 7, 0.01)); // ~0.571 (57.1%)
       });
@@ -316,8 +320,10 @@ void main() {
         final now = DateTime(2025, 11, 15, 10, 0);
         final completions = [now]; // Only completed today
 
-        final rate =
-            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+        final rate = MLFeaturesCalculator.calculateSuccessRate(
+          completions,
+          now,
+        );
 
         expect(rate, closeTo(1 / 7, 0.01)); // ~0.143 (14.3%)
       });
@@ -330,8 +336,10 @@ void main() {
           now.subtract(const Duration(days: 20)),
         ];
 
-        final rate =
-            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+        final rate = MLFeaturesCalculator.calculateSuccessRate(
+          completions,
+          now,
+        );
 
         expect(rate, 0.0); // No completions in last 7 days
       });
@@ -343,8 +351,11 @@ void main() {
           (i) => now.subtract(Duration(days: i)),
         );
 
-        final rate = MLFeaturesCalculator.calculateSuccessRate(completions, now,
-            days: 14);
+        final rate = MLFeaturesCalculator.calculateSuccessRate(
+          completions,
+          now,
+          days: 14,
+        );
 
         expect(rate, 1.0); // 14/14 = 100% over 14 days
       });
@@ -359,8 +370,10 @@ void main() {
           now.subtract(const Duration(days: 15)), // Too old
         ];
 
-        final rate =
-            MLFeaturesCalculator.calculateSuccessRate(completions, now);
+        final rate = MLFeaturesCalculator.calculateSuccessRate(
+          completions,
+          now,
+        );
 
         expect(rate, closeTo(3 / 7, 0.01)); // ~0.429 (42.9%)
       });

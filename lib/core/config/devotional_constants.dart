@@ -11,7 +11,10 @@ class DevotionalConstants {
 
   // New method for multilingual support
   static String getDevocionalesApiUrlMultilingual(
-      int year, String languageCode, String versionCode) {
+    int year,
+    String languageCode,
+    String versionCode,
+  ) {
     // Backward compatibility for Spanish RVR1960
     if (languageCode == 'es' && versionCode == 'RVR1960') {
       return getDevocionalesApiUrl(year); // Use original method

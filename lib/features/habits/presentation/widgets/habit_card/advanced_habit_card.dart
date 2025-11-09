@@ -60,9 +60,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -146,7 +144,9 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                             height: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.5,
-                              valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                habitColor,
+                              ),
                             ),
                           )
                         : Container(
@@ -192,11 +192,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                     Icons.local_fire_department,
                     Colors.orange,
                   ),
-                  Container(
-                    width: 1,
-                    height: 40,
-                    color: Colors.grey[300],
-                  ),
+                  Container(width: 1, height: 40, color: Colors.grey[300]),
                   _buildStatItem(
                     l10n.total,
                     '${widget.habit.completionHistory.length}',
@@ -219,16 +215,14 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 PopupMenuButton<String>(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: Colors.grey.shade700,
-                  ),
+                  icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
                   onSelected: (value) {
                     if (value == 'edit') {
                       widget.onEdit();
                     } else if (value == 'delete') {
                       widget.onDelete();
-                    } else if (value == 'uncheck' && widget.habit.completedToday) {
+                    } else if (value == 'uncheck' &&
+                        widget.habit.completedToday) {
                       widget.onUncheck(widget.habit.id);
                     }
                   },
@@ -238,7 +232,11 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                         value: 'uncheck',
                         child: Row(
                           children: [
-                            const Icon(Icons.undo, size: 20, color: Colors.orange),
+                            const Icon(
+                              Icons.undo,
+                              size: 20,
+                              color: Colors.orange,
+                            ),
                             const SizedBox(width: 12),
                             Text(l10n.uncheck),
                           ],
@@ -278,17 +276,18 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
   }
 
   Widget _buildStatItem(
-      String label, String value, IconData icon, Color color) {
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Icon(icon, color: color, size: 24),
         const SizedBox(height: 6),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 2),
         Text(

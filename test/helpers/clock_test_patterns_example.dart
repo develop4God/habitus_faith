@@ -140,10 +140,7 @@ void main() {
 
       test('example: testing consecutive dates helper', () {
         final start = DateTime(2025, 11, 1, 9, 0);
-        final completions = createConsecutiveDates(
-          start: start,
-          count: 10,
-        );
+        final completions = createConsecutiveDates(start: start, count: 10);
 
         expect(completions.length, 10);
         expect(completions.first, start);
@@ -261,10 +258,12 @@ void main() {
         expect(habit.completionHistory.length, 7);
 
         // Verify completions span two months
-        final octCompletions =
-            habit.completionHistory.where((d) => d.month == 10).length;
-        final novCompletions =
-            habit.completionHistory.where((d) => d.month == 11).length;
+        final octCompletions = habit.completionHistory
+            .where((d) => d.month == 10)
+            .length;
+        final novCompletions = habit.completionHistory
+            .where((d) => d.month == 11)
+            .length;
 
         expect(octCompletions, 4); // Oct 28-31
         expect(novCompletions, 3); // Nov 1-3

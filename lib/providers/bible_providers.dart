@@ -3,8 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bible_reader_core/bible_reader_core.dart';
 
 /// Provider for SharedPreferences
-final sharedPreferencesProvider =
-    FutureProvider<SharedPreferences>((ref) async {
+final sharedPreferencesProvider = FutureProvider<SharedPreferences>((
+  ref,
+) async {
   return await SharedPreferences.getInstance();
 });
 
@@ -51,8 +52,10 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
 
 /// Family provider for BibleDbService instances
 /// Each version gets its own initialized database service
-final bibleDbServiceProvider =
-    FutureProvider.family<BibleDbService, String>((ref, versionId) async {
+final bibleDbServiceProvider = FutureProvider.family<BibleDbService, String>((
+  ref,
+  versionId,
+) async {
   final versions = ref.watch(bibleVersionsProvider);
   final version = versions.firstWhere(
     (v) => v.id == versionId,
@@ -102,20 +105,21 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
 /// Provider for current Bible version
 final currentBibleVersionProvider =
     StateNotifierProvider<CurrentBibleVersionNotifier, BibleVersion?>((ref) {
-  return CurrentBibleVersionNotifier(ref);
-});
+      return CurrentBibleVersionNotifier(ref);
+    });
 
 /// Provider for Bible preferences service
-final biblePreferencesServiceProvider =
-    Provider<BiblePreferencesService>((ref) {
+final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((
+  ref,
+) {
   return BiblePreferencesService();
 });
 
 /// Provider for Bible reading position service
 final bibleReadingPositionServiceProvider =
     Provider<BibleReadingPositionService>((ref) {
-  return BibleReadingPositionService();
-});
+      return BibleReadingPositionService();
+    });
 
 /// Provider for Bible reader service
 final bibleReaderServiceProvider = Provider<BibleReaderService>((ref) {
@@ -130,14 +134,14 @@ final bibleReaderServiceProvider = Provider<BibleReaderService>((ref) {
 /// Now using the controller directly as it extends StateNotifier
 final bibleReaderProvider =
     StateNotifierProvider<BibleReaderController, BibleReaderState>((ref) {
-  final versions = ref.watch(bibleVersionsProvider);
-  final readerService = ref.watch(bibleReaderServiceProvider);
-  final preferencesService = ref.watch(biblePreferencesServiceProvider);
+      final versions = ref.watch(bibleVersionsProvider);
+      final readerService = ref.watch(bibleReaderServiceProvider);
+      final preferencesService = ref.watch(biblePreferencesServiceProvider);
 
-  return BibleReaderController(
-    ref: ref,
-    allVersions: versions,
-    readerService: readerService,
-    preferencesService: preferencesService,
-  );
-});
+      return BibleReaderController(
+        ref: ref,
+        allVersions: versions,
+        readerService: readerService,
+        preferencesService: preferencesService,
+      );
+    });

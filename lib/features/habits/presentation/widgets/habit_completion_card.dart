@@ -49,7 +49,8 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
 
   void _handleTap() {
     debugPrint(
-        'HabitCompletionCard tap: completed=${widget.habit.completedToday}, isCompleting=${widget.isCompleting}');
+      'HabitCompletionCard tap: completed=${widget.habit.completedToday}, isCompleting=${widget.isCompleting}',
+    );
     if (!widget.habit.completedToday && !widget.isCompleting) {
       setState(() {
         _showAnimation = true;
@@ -82,10 +83,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey.shade200,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
       ),
       child: Stack(
         children: [
@@ -97,10 +95,7 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Colored left border
-                  Container(
-                    width: 20,
-                    color: habitColor,
-                  ),
+                  Container(width: 20, color: habitColor),
                   // Content
                   Expanded(
                     child: Material(
@@ -166,8 +161,9 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                     // Description
                                     if (widget.habit.description.isNotEmpty)
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 4.0),
+                                        padding: const EdgeInsets.only(
+                                          top: 4.0,
+                                        ),
                                         child: Text(
                                           widget.habit.description,
                                           style: TextStyle(
@@ -181,8 +177,9 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                     // Streak
                                     if (widget.habit.currentStreak > 0)
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 6.0),
+                                        padding: const EdgeInsets.only(
+                                          top: 6.0,
+                                        ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -214,7 +211,8 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                   widget.habit.emoji!.isNotEmpty)
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                    horizontal: 8.0,
+                                  ),
                                   child: Text(
                                     widget.habit.emoji!,
                                     style: const TextStyle(fontSize: 20),
@@ -229,19 +227,21 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                   if (widget.habit.difficulty !=
                                       HabitDifficulty.medium)
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 4.0,
+                                      ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: List.generate(
-                                          HabitDifficultyHelper
-                                              .getDifficultyStars(
-                                                  widget.habit.difficulty),
+                                          HabitDifficultyHelper.getDifficultyStars(
+                                            widget.habit.difficulty,
+                                          ),
                                           (index) => Icon(
                                             Icons.star,
                                             size: 14,
                                             color: habitColor.withValues(
-                                                alpha: 0.6),
+                                              alpha: 0.6,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -273,18 +273,20 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                         }
                                       },
                                       itemBuilder: (context) {
-                                        final l10n =
-                                            AppLocalizations.of(context)!;
+                                        final l10n = AppLocalizations.of(
+                                          context,
+                                        )!;
                                         return [
                                           PopupMenuItem(
                                             value: 'edit',
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Icon(Icons.edit,
-                                                    size: 18,
-                                                    color:
-                                                        Colors.grey.shade700),
+                                                Icon(
+                                                  Icons.edit,
+                                                  size: 18,
+                                                  color: Colors.grey.shade700,
+                                                ),
                                                 const SizedBox(width: 12),
                                                 Text(l10n.edit),
                                               ],
@@ -297,11 +299,11 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Icon(
-                                                      Icons
-                                                          .check_box_outline_blank,
-                                                      size: 18,
-                                                      color:
-                                                          Colors.grey.shade700),
+                                                    Icons
+                                                        .check_box_outline_blank,
+                                                    size: 18,
+                                                    color: Colors.grey.shade700,
+                                                  ),
                                                   const SizedBox(width: 12),
                                                   Text(l10n.uncheck),
                                                 ],
@@ -312,13 +314,18 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                const Icon(Icons.delete,
-                                                    size: 18,
-                                                    color: Colors.red),
+                                                const Icon(
+                                                  Icons.delete,
+                                                  size: 18,
+                                                  color: Colors.red,
+                                                ),
                                                 const SizedBox(width: 12),
-                                                Text(l10n.delete,
-                                                    style: const TextStyle(
-                                                        color: Colors.red)),
+                                                Text(
+                                                  l10n.delete,
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),

@@ -88,52 +88,58 @@ void main() {
         expect(position!['verse'], equals(0));
       });
 
-      test('saves position with very large chapter number (150 - Psalms)',
-          () async {
-        await service.savePosition(
-          bookName: 'Psalms',
-          bookNumber: 19,
-          chapter: 150,
-          verse: 6,
-          version: 'KJV',
-          languageCode: 'en',
-        );
+      test(
+        'saves position with very large chapter number (150 - Psalms)',
+        () async {
+          await service.savePosition(
+            bookName: 'Psalms',
+            bookNumber: 19,
+            chapter: 150,
+            verse: 6,
+            version: 'KJV',
+            languageCode: 'en',
+          );
 
-        final position = await service.getLastPosition();
-        expect(position!['chapter'], equals(150));
-      });
+          final position = await service.getLastPosition();
+          expect(position!['chapter'], equals(150));
+        },
+      );
 
-      test('saves position with very large verse number (176 - Psalm 119)',
-          () async {
-        await service.savePosition(
-          bookName: 'Psalms',
-          bookNumber: 19,
-          chapter: 119,
-          verse: 176,
-          version: 'KJV',
-          languageCode: 'en',
-        );
+      test(
+        'saves position with very large verse number (176 - Psalm 119)',
+        () async {
+          await service.savePosition(
+            bookName: 'Psalms',
+            bookNumber: 19,
+            chapter: 119,
+            verse: 176,
+            version: 'KJV',
+            languageCode: 'en',
+          );
 
-        final position = await service.getLastPosition();
-        expect(position!['verse'], equals(176));
-      });
+          final position = await service.getLastPosition();
+          expect(position!['verse'], equals(176));
+        },
+      );
 
-      test('saves position with book number 66 (Revelation - last book)',
-          () async {
-        await service.savePosition(
-          bookName: 'Revelation',
-          bookNumber: 66,
-          chapter: 22,
-          verse: 21,
-          version: 'KJV',
-          languageCode: 'en',
-        );
+      test(
+        'saves position with book number 66 (Revelation - last book)',
+        () async {
+          await service.savePosition(
+            bookName: 'Revelation',
+            bookNumber: 66,
+            chapter: 22,
+            verse: 21,
+            version: 'KJV',
+            languageCode: 'en',
+          );
 
-        final position = await service.getLastPosition();
-        expect(position!['bookNumber'], equals(66));
-        expect(position['chapter'], equals(22));
-        expect(position['verse'], equals(21));
-      });
+          final position = await service.getLastPosition();
+          expect(position!['bookNumber'], equals(66));
+          expect(position['chapter'], equals(22));
+          expect(position['verse'], equals(21));
+        },
+      );
     });
 
     group('Edge cases - Special characters', () {

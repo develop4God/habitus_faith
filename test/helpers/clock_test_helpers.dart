@@ -19,9 +19,7 @@ import 'package:habitus_faith/core/services/time/time.dart';
 /// ```
 ProviderContainer createContainerWithFixedClock(DateTime fixedTime) {
   return ProviderContainer(
-    overrides: [
-      clockProvider.overrideWithValue(Clock.fixed(fixedTime)),
-    ],
+    overrides: [clockProvider.overrideWithValue(Clock.fixed(fixedTime))],
   );
 }
 
@@ -38,9 +36,7 @@ ProviderContainer createContainerWithFixedClock(DateTime fixedTime) {
 /// ```
 ProviderContainer createContainerWithSystemClock() {
   return ProviderContainer(
-    overrides: [
-      clockProvider.overrideWithValue(const Clock.system()),
-    ],
+    overrides: [clockProvider.overrideWithValue(const Clock.system())],
   );
 }
 
@@ -63,11 +59,7 @@ ProviderContainer createContainerWithSystemClock() {
 /// expect(advancingClock.now(), DateTime(2025, 11, 11, 9, 0));
 /// ```
 ProviderContainer createContainerWithAdvancingClock(AdvancingClock clock) {
-  return ProviderContainer(
-    overrides: [
-      clockProvider.overrideWithValue(clock),
-    ],
-  );
+  return ProviderContainer(overrides: [clockProvider.overrideWithValue(clock)]);
 }
 
 /// A mutable clock implementation for testing time progression
@@ -183,10 +175,7 @@ List<DateTime> createConsecutiveDates({
   required int count,
   Duration spacing = const Duration(days: 1),
 }) {
-  return List.generate(
-    count,
-    (i) => start.add(spacing * i),
-  );
+  return List.generate(count, (i) => start.add(spacing * i));
 }
 
 /// Creates a list of dates with gaps for testing failure patterns

@@ -53,8 +53,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
           final String motivacion = successPercent >= 80
               ? '¡Excelente constancia! Sigue así.'
               : successPercent >= 50
-                  ? '¡Vas bien! Mantén el ritmo.'
-                  : '¡Cada día cuenta! Puedes mejorar.';
+              ? '¡Vas bien! Mantén el ritmo.'
+              : '¡Cada día cuenta! Puedes mejorar.';
 
           return SingleChildScrollView(
             child: Padding(
@@ -63,21 +63,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Lottie.asset(
-                      'assets/lottie/Congratulation _ Success batch.json',
-                      width: 120,
-                      repeat: false),
+                    'assets/lottie/Congratulation _ Success batch.json',
+                    width: 120,
+                    repeat: false,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     motivacion,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.indigoAccent),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.indigoAccent,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Row(
@@ -108,10 +111,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   const SizedBox(height: 24),
                   Text(
                     'Porcentaje de éxito',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Stack(
@@ -130,9 +132,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       Text(
                         '${successPercent.toStringAsFixed(1)}%',
                         style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.indigo),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigo,
+                        ),
                       ),
                     ],
                   ),
@@ -144,10 +147,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   const SizedBox(height: 24),
                   Text(
                     'Distribución de hábitos',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   AspectRatio(
@@ -163,23 +165,25 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             title: 'Completados',
                             radius: 50,
                             titleStyle: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                           PieChartSectionData(
-                            value: (stats.totalHabits - stats.completedHabits) >
-                                    0
+                            value:
+                                (stats.totalHabits - stats.completedHabits) > 0
                                 ? (stats.totalHabits - stats.completedHabits)
-                                    .toDouble()
+                                      .toDouble()
                                 : 1,
                             color: Colors.redAccent,
                             title: 'Pendientes',
                             radius: 50,
                             titleStyle: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                         sectionsSpace: 2,
@@ -225,10 +229,7 @@ class _StatTile extends StatelessWidget {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
-        ),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],
     );
   }

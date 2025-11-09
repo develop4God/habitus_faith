@@ -13,13 +13,11 @@ ProviderContainer createTestContainer({
   String Function()? idGenerator,
 }) {
   final testFirestore = firestore ?? FakeFirebaseFirestore();
-  final testAuth = auth ??
+  final testAuth =
+      auth ??
       MockFirebaseAuth(
         signedIn: true,
-        mockUser: MockUser(
-          uid: 'test-user',
-          email: 'test@example.com',
-        ),
+        mockUser: MockUser(uid: 'test-user', email: 'test@example.com'),
       );
 
   return ProviderContainer(

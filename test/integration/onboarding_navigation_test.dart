@@ -21,8 +21,9 @@ void main() {
   });
 
   group('Onboarding Edge Cases - Long Text', () {
-    testWidgets('handles very long habit names without overflow',
-        (WidgetTester tester) async {
+    testWidgets('handles very long habit names without overflow', (
+      WidgetTester tester,
+    ) async {
       // Test with text that simulates long content
       await tester.pumpWidget(
         MaterialApp(
@@ -57,8 +58,9 @@ void main() {
       expect(find.text('📝'), findsOneWidget);
     });
 
-    testWidgets('handles very long descriptions with proper text overflow',
-        (WidgetTester tester) async {
+    testWidgets('handles very long descriptions with proper text overflow', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -87,8 +89,9 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('handles special characters and emoji in habit names',
-        (WidgetTester tester) async {
+    testWidgets('handles special characters and emoji in habit names', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -112,8 +115,9 @@ void main() {
       expect(find.text('🌟'), findsOneWidget);
     });
 
-    testWidgets('handles empty habit descriptions gracefully',
-        (WidgetTester tester) async {
+    testWidgets('handles empty habit descriptions gracefully', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -137,8 +141,9 @@ void main() {
       expect(find.text('✨'), findsOneWidget);
     });
 
-    testWidgets('responsive grid handles long text on small devices',
-        (WidgetTester tester) async {
+    testWidgets('responsive grid handles long text on small devices', (
+      WidgetTester tester,
+    ) async {
       // Test that card widget handles small screen sizes gracefully
       await tester.pumpWidget(
         MaterialApp(
@@ -218,10 +223,7 @@ class _TestHabitCard extends StatelessWidget {
               Flexible(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(
-                    emoji,
-                    style: const TextStyle(fontSize: 48),
-                  ),
+                  child: Text(emoji, style: const TextStyle(fontSize: 48)),
                 ),
               ),
               const SizedBox(height: 8),
@@ -242,10 +244,7 @@ class _TestHabitCard extends StatelessWidget {
                 child: Text(
                   habitDescription,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),

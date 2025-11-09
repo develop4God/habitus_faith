@@ -36,45 +36,48 @@ void main() {
       expect(habit.completedToday, isFalse);
     });
 
-    test('completeHabit marks habit as completed and creates completion record',
-        () async {
-      // Create a habit
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-        description: 'Test Description',
-      );
-      final habitId = createResult.value.id;
+    test(
+      'completeHabit marks habit as completed and creates completion record',
+      () async {
+        // Create a habit
+        final createResult = await repository.createHabit(
+          name: 'Test Habit',
+          description: 'Test Description',
+        );
+        final habitId = createResult.value.id;
 
-      // Complete the habit
-      final completeResult = await repository.completeHabit(habitId);
+        // Complete the habit
+        final completeResult = await repository.completeHabit(habitId);
 
-      expect(completeResult.isSuccess(), isTrue);
-      final completedHabit = completeResult.value;
-      expect(completedHabit.completedToday, isTrue);
-      expect(completedHabit.currentStreak, 1);
-      expect(completedHabit.completionHistory.length, 1);
-    });
+        expect(completeResult.isSuccess(), isTrue);
+        final completedHabit = completeResult.value;
+        expect(completedHabit.completedToday, isTrue);
+        expect(completedHabit.currentStreak, 1);
+        expect(completedHabit.completionHistory.length, 1);
+      },
+    );
 
     test(
-        'completeHabit is idempotent - completing twice same day returns same result',
-        () async {
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-        description: 'Test Description',
-      );
-      final habitId = createResult.value.id;
+      'completeHabit is idempotent - completing twice same day returns same result',
+      () async {
+        final createResult = await repository.createHabit(
+          name: 'Test Habit',
+          description: 'Test Description',
+        );
+        final habitId = createResult.value.id;
 
-      // Complete once
-      await repository.completeHabit(habitId);
+        // Complete once
+        await repository.completeHabit(habitId);
 
-      // Complete again
-      final secondComplete = await repository.completeHabit(habitId);
+        // Complete again
+        final secondComplete = await repository.completeHabit(habitId);
 
-      expect(secondComplete.isSuccess(), isTrue);
-      final habit = secondComplete.value;
-      expect(habit.currentStreak, 1);
-      expect(habit.completionHistory.length, 1);
-    });
+        expect(secondComplete.isSuccess(), isTrue);
+        final habit = secondComplete.value;
+        expect(habit.currentStreak, 1);
+        expect(habit.completionHistory.length, 1);
+      },
+    );
 
     test('streak calculation works correctly for consecutive days', () async {
       final createResult = await repository.createHabit(
@@ -91,13 +94,15 @@ void main() {
         habitId: {
           _dateKey(now.subtract(const Duration(days: 2))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 2)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 2))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 1))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 1)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 1))
+                .toIso8601String(),
           },
         },
       };
@@ -126,13 +131,15 @@ void main() {
         habitId: {
           _dateKey(now.subtract(const Duration(days: 5))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 5)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 5))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 4))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 4)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 4))
+                .toIso8601String(),
           },
           // Gap here (days 3, 2)
         },
@@ -162,45 +169,53 @@ void main() {
           // First streak of 3
           _dateKey(now.subtract(const Duration(days: 10))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 10)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 10))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 9))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 9)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 9))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 8))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 8)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 8))
+                .toIso8601String(),
           },
           // Gap
           // Second streak of 5
           _dateKey(now.subtract(const Duration(days: 5))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 5)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 5))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 4))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 4)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 4))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 3))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 3)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 3))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 2))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 2)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 2))
+                .toIso8601String(),
           },
           _dateKey(now.subtract(const Duration(days: 1))): {
             'habitId': habitId,
-            'completedAt':
-                now.subtract(const Duration(days: 1)).toIso8601String(),
+            'completedAt': now
+                .subtract(const Duration(days: 1))
+                .toIso8601String(),
           },
         },
       };

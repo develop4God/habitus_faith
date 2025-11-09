@@ -272,10 +272,12 @@ void main() {
       expect(habit.completionHistory.length, 7);
 
       // Verify completions span two months
-      final octoberCompletions =
-          habit.completionHistory.where((d) => d.month == 10).length;
-      final novemberCompletions =
-          habit.completionHistory.where((d) => d.month == 11).length;
+      final octoberCompletions = habit.completionHistory
+          .where((d) => d.month == 10)
+          .length;
+      final novemberCompletions = habit.completionHistory
+          .where((d) => d.month == 11)
+          .length;
 
       expect(octoberCompletions, 4); // Oct 28-31
       expect(novemberCompletions, 3); // Nov 1-3

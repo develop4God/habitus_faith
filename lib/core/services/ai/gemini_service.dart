@@ -33,18 +33,16 @@ class GeminiService implements IGeminiService {
     required IRateLimitService rateLimit,
     BibleDbService? bibleService,
     Logger? logger,
-  })  : _cache = cache,
-        _rateLimit = rateLimit,
-        _bibleService = bibleService,
-        _logger = logger,
-        _model = GenerativeModel(
-          model: modelName,
-          apiKey: apiKey,
-        );
+  }) : _cache = cache,
+       _rateLimit = rateLimit,
+       _bibleService = bibleService,
+       _logger = logger,
+       _model = GenerativeModel(model: modelName, apiKey: apiKey);
 
   @override
   Future<List<MicroHabit>> generateMicroHabits(
-      GenerationRequest request) async {
+    GenerationRequest request,
+  ) async {
     _logger?.i('Starting habit generation for goal: "${request.userGoal}"');
 
     // 1. Sanitize inputs to prevent prompt injection
@@ -54,7 +52,8 @@ class GeminiService implements IGeminiService {
         : null;
 
     _logger?.d(
-        'Input sanitized - Goal length: ${sanitizedGoal.length}, Pattern: ${sanitizedPattern != null ? "provided" : "none"}');
+      'Input sanitized - Goal length: ${sanitizedGoal.length}, Pattern: ${sanitizedPattern != null ? "provided" : "none"}',
+    );
 
     // 2. Check rate limit and wait if needed
     await _rateLimit.waitIfNeeded();
@@ -93,8 +92,9 @@ class GeminiService implements IGeminiService {
     // 5. Call Gemini API with timeout
     try {
       _logger?.d('Sending request to Gemini API...');
-      final response = await _model.generateContent(
-          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+      final response = await _model
+          .generateContent([Content.text(prompt)])
+          .timeout(AiConfig.requestTimeout);
 
       _logger?.i('Received response from Gemini API');
 
@@ -114,7 +114,8 @@ class GeminiService implements IGeminiService {
       return enrichedHabits;
     } on TimeoutException {
       _logger?.e(
-          'API request timed out after ${AiConfig.requestTimeout.inSeconds}s');
+        'API request timed out after ${AiConfig.requestTimeout.inSeconds}s',
+      );
       throw GeminiException(
         'Request timed out after ${AiConfig.requestTimeout.inSeconds} seconds. Please try again.',
       );
@@ -132,7 +133,8 @@ class GeminiService implements IGeminiService {
   String _sanitizeInput(String input, String fieldName) {
     if (input.length > AiConfig.maxInputLength) {
       throw InvalidInputException(
-          '$fieldName exceeds ${AiConfig.maxInputLength} characters');
+        '$fieldName exceeds ${AiConfig.maxInputLength} characters',
+      );
     }
 
     final lowerInput = input.toLowerCase();
@@ -198,7 +200,9 @@ Requisitos estrictos:
 
       if (cleaned.isEmpty) {
         throw GeminiParseException(
-            'Empty response after cleanup', responseText);
+          'Empty response after cleanup',
+          responseText,
+        );
       }
 
       final dynamic json = jsonDecode(cleaned);
@@ -206,7 +210,9 @@ Requisitos estrictos:
       // Validate JSON structure - must be a List
       if (json is! List) {
         throw GeminiParseException(
-            'Expected JSON array, got ${json.runtimeType}', responseText);
+          'Expected JSON array, got ${json.runtimeType}',
+          responseText,
+        );
       }
 
       // Validate exact count
@@ -252,10 +258,7 @@ Requisitos estrictos:
       }).toList();
     } catch (e) {
       if (e is GeminiParseException) rethrow;
-      throw GeminiParseException(
-        'Failed to parse response: $e',
-        responseText,
-      );
+      throw GeminiParseException('Failed to parse response: $e', responseText);
     }
   }
 
@@ -268,21 +271,23 @@ Requisitos estrictos:
 
     _logger?.i('Enriching ${habits.length} habits with verse text');
 
-    return Future.wait(habits.map((habit) async {
-      try {
-        final verseData = await _parseAndFetchVerse(habit.verse);
-        if (verseData != null) {
-          _logger?.d('Successfully fetched verse: ${habit.verse}');
-          return habit.copyWith(verseText: verseData['text'] as String?);
-        } else {
-          _logger?.w('Verse not found in database: ${habit.verse}');
-          return habit;
+    return Future.wait(
+      habits.map((habit) async {
+        try {
+          final verseData = await _parseAndFetchVerse(habit.verse);
+          if (verseData != null) {
+            _logger?.d('Successfully fetched verse: ${habit.verse}');
+            return habit.copyWith(verseText: verseData['text'] as String?);
+          } else {
+            _logger?.w('Verse not found in database: ${habit.verse}');
+            return habit;
+          }
+        } catch (e) {
+          _logger?.w('Failed to fetch verse "${habit.verse}": $e');
+          return habit; // Keep original without text
         }
-      } catch (e) {
-        _logger?.w('Failed to fetch verse "${habit.verse}": $e');
-        return habit; // Keep original without text
-      }
-    }));
+      }),
+    );
   }
 
   /// Parse verse reference and fetch from database

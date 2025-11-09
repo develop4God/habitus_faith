@@ -665,7 +665,7 @@
   "syncComplete": "Synchronisation terminée",
   "mlModelLoaded": "Chargé",
   "mlModelLoading": "Chargement...",
-  "mlModelError": "Erreur"
+  "mlModelError": "Erreur",
   "chooseHabitType": "Quel type d'habitude souhaitez-vous ajouter ?",
   "@chooseHabitType": {
     "description": "Texte pour choisir le type d'habitude à ajouter"

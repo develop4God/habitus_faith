@@ -639,6 +639,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mlModelError => 'Error';
+
+  @override
   String get chooseHabitType => '¿Qué tipo de hábito quieres agregar?';
 
   @override

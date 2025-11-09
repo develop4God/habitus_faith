@@ -79,11 +79,9 @@ void main() {
       ];
 
       // Manually set the state for testing
-      container.read(devotionalProvider.notifier).state =
-          container.read(devotionalProvider).copyWith(
-        all: testDevocionales,
-        filtered: [],
-      );
+      container.read(devotionalProvider.notifier).state = container
+          .read(devotionalProvider)
+          .copyWith(all: testDevocionales, filtered: []);
 
       notifier.filterBySearch('');
 
@@ -114,11 +112,9 @@ void main() {
         ),
       ];
 
-      container.read(devotionalProvider.notifier).state =
-          container.read(devotionalProvider).copyWith(
-                all: testDevocionales,
-                filtered: testDevocionales,
-              );
+      container.read(devotionalProvider.notifier).state = container
+          .read(devotionalProvider)
+          .copyWith(all: testDevocionales, filtered: testDevocionales);
 
       container.read(devotionalProvider.notifier).filterBySearch('loved');
 
@@ -140,10 +136,9 @@ void main() {
         date: DateTime(2024, 1, 1),
       );
 
-      container.read(devotionalProvider.notifier).state =
-          container.read(devotionalProvider).copyWith(
-        all: [testDevocional],
-      );
+      container.read(devotionalProvider.notifier).state = container
+          .read(devotionalProvider)
+          .copyWith(all: [testDevocional]);
 
       final result = container
           .read(devotionalProvider.notifier)

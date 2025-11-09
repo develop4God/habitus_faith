@@ -5,13 +5,12 @@ import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 
 void main() {
   group('AbandonmentRiskIndicator', () {
-    testWidgets('shows green dot for low risk (< 0.3)',
-        (WidgetTester tester) async {
+    testWidgets('shows green dot for low risk (< 0.3)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 0.2),
-          ),
+          home: Scaffold(body: AbandonmentRiskIndicator(risk: 0.2)),
         ),
       );
 
@@ -29,13 +28,12 @@ void main() {
       expect(find.text('High Risk'), findsNothing);
     });
 
-    testWidgets('shows orange indicator with text for medium risk (0.3-0.65)',
-        (WidgetTester tester) async {
+    testWidgets('shows orange indicator with text for medium risk (0.3-0.65)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 0.5),
-          ),
+          home: Scaffold(body: AbandonmentRiskIndicator(risk: 0.5)),
         ),
       );
 
@@ -53,39 +51,41 @@ void main() {
       expect(find.text('At Risk'), findsOneWidget);
     });
 
-    testWidgets('shows red indicator with warning icon for high risk (> 0.65)',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 0.8),
+    testWidgets(
+      'shows red indicator with warning icon for high risk (> 0.65)',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(body: AbandonmentRiskIndicator(risk: 0.8)),
           ),
-        ),
-      );
+        );
 
-      // Should show red dot
-      final redDot = find.byWidgetPredicate(
-        (widget) =>
-            widget is Container &&
-            widget.decoration is BoxDecoration &&
-            (widget.decoration as BoxDecoration).color == Colors.red,
-      );
-      expect(redDot, findsOneWidget);
+        // Should show red dot
+        final redDot = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).color == Colors.red,
+        );
+        expect(redDot, findsOneWidget);
 
-      // Should show "High Risk" text
-      expect(find.text('High Risk'), findsOneWidget);
+        // Should show "High Risk" text
+        expect(find.text('High Risk'), findsOneWidget);
 
-      // Should show warning icon
-      expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
-    });
+        // Should show warning icon
+        expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
+      },
+    );
 
-    testWidgets('handles edge case risk = mediumRiskThreshold (boundary)',
-        (WidgetTester tester) async {
+    testWidgets('handles edge case risk = mediumRiskThreshold (boundary)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: AbandonmentRiskIndicator(
-                risk: RiskThresholds.mediumRiskThreshold),
+              risk: RiskThresholds.mediumRiskThreshold,
+            ),
           ),
         ),
       );
@@ -94,13 +94,15 @@ void main() {
       expect(find.text('At Risk'), findsOneWidget);
     });
 
-    testWidgets('handles edge case risk = highRiskThreshold (boundary)',
-        (WidgetTester tester) async {
+    testWidgets('handles edge case risk = highRiskThreshold (boundary)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: AbandonmentRiskIndicator(
-                risk: RiskThresholds.highRiskThreshold),
+              risk: RiskThresholds.highRiskThreshold,
+            ),
           ),
         ),
       );
@@ -112,9 +114,7 @@ void main() {
     testWidgets('handles risk = 0.0', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 0.0),
-          ),
+          home: Scaffold(body: AbandonmentRiskIndicator(risk: 0.0)),
         ),
       );
 
@@ -131,9 +131,7 @@ void main() {
     testWidgets('handles risk = 1.0', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AbandonmentRiskIndicator(risk: 1.0),
-          ),
+          home: Scaffold(body: AbandonmentRiskIndicator(risk: 1.0)),
         ),
       );
 

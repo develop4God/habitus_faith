@@ -110,8 +110,9 @@ void main() {
 
     group('Edge cases - Special characters', () {
       test('preserves accented characters', () {
-        final result =
-            BibleTextNormalizer.clean('<pb/>En el principio[1] creó');
+        final result = BibleTextNormalizer.clean(
+          '<pb/>En el principio[1] creó',
+        );
         expect(result, equals('En el principio creó'));
       });
 
@@ -139,10 +140,9 @@ void main() {
           '<pb/>In the beginning[a] God[b] created<f id="1"/> the heavens[1] and the earth[2].',
         );
         expect(
-            result,
-            equals(
-              'In the beginning God created the heavens and the earth.',
-            ));
+          result,
+          equals('In the beginning God created the heavens and the earth.'),
+        );
       });
 
       test('cleans John 3:16 with references', () {
@@ -150,10 +150,11 @@ void main() {
           'For God<f ref="note1"/> so loved[a] the world[b], that he gave[1] his only begotten Son[2]',
         );
         expect(
-            result,
-            equals(
-              'For God so loved the world, that he gave his only begotten Son',
-            ));
+          result,
+          equals(
+            'For God so loved the world, that he gave his only begotten Son',
+          ),
+        );
       });
 
       test('cleans Psalm with multiple annotations', () {
@@ -161,10 +162,9 @@ void main() {
           '<pb/><title>Psalm 23<title/>\nThe LORD[a] is my shepherd[1]; I shall not want[b].',
         );
         expect(
-            result,
-            equals(
-              'Psalm 23\nThe LORD is my shepherd; I shall not want.',
-            ));
+          result,
+          equals('Psalm 23\nThe LORD is my shepherd; I shall not want.'),
+        );
       });
     });
 

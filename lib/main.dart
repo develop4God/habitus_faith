@@ -29,9 +29,7 @@ void main() async {
   await EnvConfig.load();
 
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize core services for synchronous overrides
   final prefs = await SharedPreferences.getInstance();
@@ -107,14 +105,10 @@ class MyApp extends ConsumerWidget {
           }
           return const OnboardingPage();
         },
-        loading: () => const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
-        error: (error, stack) => Scaffold(
-          body: Center(
-            child: Text('Error: $error'),
-          ),
-        ),
+        loading: () =>
+            const Scaffold(body: Center(child: CircularProgressIndicator())),
+        error: (error, stack) =>
+            Scaffold(body: Center(child: Text('Error: $error'))),
       ),
     );
   }

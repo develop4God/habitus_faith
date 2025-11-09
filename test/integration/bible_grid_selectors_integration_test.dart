@@ -5,8 +5,9 @@ import 'package:habitus_faith/widgets/bible_verse_grid_selector.dart';
 
 void main() {
   group('BibleChapterGridSelector Integration Tests', () {
-    testWidgets('displays all chapters in grid layout',
-        (WidgetTester tester) async {
+    testWidgets('displays all chapters in grid layout', (
+      WidgetTester tester,
+    ) async {
       var selectedChapter = 0; // Will be updated by callback
 
       await tester.pumpWidget(
@@ -38,8 +39,9 @@ void main() {
       expect(find.text('50'), findsOneWidget);
     });
 
-    testWidgets('highlights selected chapter correctly',
-        (WidgetTester tester) async {
+    testWidgets('highlights selected chapter correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -60,8 +62,9 @@ void main() {
       expect(chapter25Widget, findsOneWidget);
     });
 
-    testWidgets('calls onChapterSelected when chapter is tapped',
-        (WidgetTester tester) async {
+    testWidgets('calls onChapterSelected when chapter is tapped', (
+      WidgetTester tester,
+    ) async {
       var selectedChapter = 0;
 
       await tester.pumpWidget(
@@ -86,8 +89,9 @@ void main() {
       expect(selectedChapter, equals(10));
     });
 
-    testWidgets('displays translated chapter count',
-        (WidgetTester tester) async {
+    testWidgets('displays translated chapter count', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -167,8 +171,9 @@ void main() {
       expect(find.byType(BibleChapterGridSelector), findsNothing);
     });
 
-    testWidgets('grid is scrollable for large chapter counts',
-        (WidgetTester tester) async {
+    testWidgets('grid is scrollable for large chapter counts', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -197,8 +202,9 @@ void main() {
       expect(find.text('150'), findsOneWidget);
     });
 
-    testWidgets('handles single chapter book correctly',
-        (WidgetTester tester) async {
+    testWidgets('handles single chapter book correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -221,8 +227,9 @@ void main() {
   });
 
   group('BibleVerseGridSelector Integration Tests', () {
-    testWidgets('displays all verses in grid layout',
-        (WidgetTester tester) async {
+    testWidgets('displays all verses in grid layout', (
+      WidgetTester tester,
+    ) async {
       var selectedVerse = 0; // Will be updated by callback
 
       await tester.pumpWidget(
@@ -247,8 +254,9 @@ void main() {
       expect(find.text('31'), findsOneWidget);
     });
 
-    testWidgets('highlights selected verse correctly',
-        (WidgetTester tester) async {
+    testWidgets('highlights selected verse correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -270,8 +278,9 @@ void main() {
       expect(verse16Widget, findsOneWidget);
     });
 
-    testWidgets('calls onVerseSelected when verse is tapped',
-        (WidgetTester tester) async {
+    testWidgets('calls onVerseSelected when verse is tapped', (
+      WidgetTester tester,
+    ) async {
       var selectedVerse = 0;
 
       await tester.pumpWidget(
@@ -320,8 +329,9 @@ void main() {
       expect(totalVersesText, findsOneWidget);
     });
 
-    testWidgets('displays book name and chapter in header',
-        (WidgetTester tester) async {
+    testWidgets('displays book name and chapter in header', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -342,8 +352,9 @@ void main() {
       expect(find.text('Genesis 1'), findsOneWidget);
     });
 
-    testWidgets('grid is scrollable for large verse counts',
-        (WidgetTester tester) async {
+    testWidgets('grid is scrollable for large verse counts', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -375,8 +386,9 @@ void main() {
   });
 
   group('Grid Selectors - User Workflow Integration', () {
-    testWidgets('chapter selection followed by verse selection workflow',
-        (WidgetTester tester) async {
+    testWidgets('chapter selection followed by verse selection workflow', (
+      WidgetTester tester,
+    ) async {
       var selectedChapter = 0;
       var selectedVerse = 0;
 

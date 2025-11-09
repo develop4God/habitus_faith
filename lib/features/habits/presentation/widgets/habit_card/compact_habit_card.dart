@@ -62,9 +62,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         children: [
           // Compact view - always visible
@@ -76,8 +74,10 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
               child: Row(
                 children: [
                   // Color indicator bar
@@ -104,7 +104,9 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  habitColor,
+                                ),
                               ),
                             )
                           : Container(
@@ -231,10 +233,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   if (widget.habit.description.isNotEmpty) ...[
                     Text(
                       widget.habit.description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -290,8 +289,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               value: 'uncheck',
                               child: Row(
                                 children: [
-                                  const Icon(Icons.undo,
-                                      size: 20, color: Colors.orange),
+                                  const Icon(
+                                    Icons.undo,
+                                    size: 20,
+                                    color: Colors.orange,
+                                  ),
                                   const SizedBox(width: 12),
                                   Text(l10n.uncheck),
                                 ],
@@ -311,8 +313,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             value: 'delete',
                             child: Row(
                               children: [
-                                const Icon(Icons.delete,
-                                    size: 20, color: Colors.red),
+                                const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Colors.red,
+                                ),
                                 const SizedBox(width: 12),
                                 Text(
                                   l10n.delete,
@@ -334,25 +339,20 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   }
 
   Widget _buildStatItem(
-      String label, String value, IconData icon, Color color) {
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Icon(icon, color: color, size: 20),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
-        ),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
       ],
     );
   }

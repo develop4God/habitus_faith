@@ -15,8 +15,9 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLanguage =
-        ref.watch(appLanguageProvider.notifier).currentLanguage;
+    final currentLanguage = ref
+        .watch(appLanguageProvider.notifier)
+        .currentLanguage;
     final currentMode = ref.watch(displayModeProvider);
 
     return Scaffold(
@@ -96,11 +97,7 @@ class SettingsPage extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return DisplayModeModal(
-          currentMode: currentMode,
-          ref: ref,
-          l10n: l10n,
-        );
+        return DisplayModeModal(currentMode: currentMode, ref: ref, l10n: l10n);
       },
     );
   }

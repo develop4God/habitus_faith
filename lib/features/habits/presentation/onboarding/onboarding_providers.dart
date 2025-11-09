@@ -38,8 +38,9 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
 
   void deselectHabit(String habitId) {
     final current = ref.read(selectedHabitsProvider);
-    ref.read(selectedHabitsProvider.notifier).state =
-        current.where((id) => id != habitId).toList();
+    ref.read(selectedHabitsProvider.notifier).state = current
+        .where((id) => id != habitId)
+        .toList();
   }
 
   Future<bool> completeOnboarding({
@@ -52,7 +53,9 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
       final selectedIds = ref.read(selectedHabitsProvider);
       if (selectedIds.isEmpty) {
         state = AsyncValue.error(
-            'onboarding_error_no_habits_selected', StackTrace.current);
+          'onboarding_error_no_habits_selected',
+          StackTrace.current,
+        );
         return false;
       }
 
@@ -73,8 +76,9 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
       } else {
         // Fallback: use translation keys (for backward compatibility)
         for (final habitId in selectedIds) {
-          final predefinedHabit =
-              predefinedHabits.firstWhere((h) => h.id == habitId);
+          final predefinedHabit = predefinedHabits.firstWhere(
+            (h) => h.id == habitId,
+          );
 
           await repository.createHabit(
             name: predefinedHabit.nameKey,
@@ -113,5 +117,5 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
 
 final onboardingNotifierProvider =
     StateNotifierProvider<OnboardingNotifier, AsyncValue<void>>((ref) {
-  return OnboardingNotifier(ref);
-});
+      return OnboardingNotifier(ref);
+    });

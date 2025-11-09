@@ -640,6 +640,8 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mlModelError => 'Erro';
+
+  @override
   String get chooseHabitType => 'Que tipo de hábito você deseja adicionar?';
 
   @override

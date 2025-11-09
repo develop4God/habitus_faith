@@ -77,8 +77,9 @@ class CacheService implements ICacheService {
   @override
   Future<void> clear() async {
     final keys = _prefs.getKeys();
-    final cacheKeys =
-        keys.where((k) => k.startsWith(_prefix) || k.startsWith(_expiryPrefix));
+    final cacheKeys = keys.where(
+      (k) => k.startsWith(_prefix) || k.startsWith(_expiryPrefix),
+    );
 
     for (final key in cacheKeys) {
       await _prefs.remove(key);

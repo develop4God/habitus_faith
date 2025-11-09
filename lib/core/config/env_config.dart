@@ -12,12 +12,15 @@ class EnvConfig {
       await dotenv.load(fileName: '.env');
       debugPrint('[EnvConfig] .env file loaded successfully');
       debugPrint(
-          '[EnvConfig] GEMINI_API_KEY present: ${dotenv.env['GEMINI_API_KEY']?.isNotEmpty}');
+        '[EnvConfig] GEMINI_API_KEY present: ${dotenv.env['GEMINI_API_KEY']?.isNotEmpty}',
+      );
       debugPrint(
-          '[EnvConfig] GEMINI_MODEL: ${dotenv.env['GEMINI_MODEL'] ?? 'using default'}');
+        '[EnvConfig] GEMINI_MODEL: ${dotenv.env['GEMINI_MODEL'] ?? 'using default'}',
+      );
     } catch (e) {
       debugPrint(
-          '[EnvConfig] Warning: .env file not found - falling back to dart-define');
+        '[EnvConfig] Warning: .env file not found - falling back to dart-define',
+      );
       debugPrint('[EnvConfig] Error details: $e');
     }
   }
@@ -26,12 +29,14 @@ class EnvConfig {
   /// Checks .env file first, then --dart-define override
   /// Throws ApiKeyMissingException if not configured or invalid
   static String get geminiApiKey {
-    final key = dotenv.env['GEMINI_API_KEY'] ??
+    final key =
+        dotenv.env['GEMINI_API_KEY'] ??
         const String.fromEnvironment('GEMINI_API_KEY');
 
     if (key.isEmpty) {
       throw ApiKeyMissingException(
-          'GEMINI_API_KEY not found. Add to .env or use --dart-define');
+        'GEMINI_API_KEY not found. Add to .env or use --dart-define',
+      );
     }
 
     // Gemini keys typically start with "AIza"
@@ -46,8 +51,10 @@ class EnvConfig {
   /// Defaults to gemini-1.5-flash if not specified
   static String get geminiModel =>
       dotenv.env['GEMINI_MODEL'] ??
-      const String.fromEnvironment('GEMINI_MODEL',
-          defaultValue: 'gemini-1.5-flash');
+      const String.fromEnvironment(
+        'GEMINI_MODEL',
+        defaultValue: 'gemini-1.5-flash',
+      );
 }
 
 /// Exception thrown when GEMINI_API_KEY is not configured
@@ -55,7 +62,8 @@ class ApiKeyMissingException implements Exception {
   final String message;
 
   ApiKeyMissingException([
-    this.message = 'GEMINI_API_KEY not configured. '
+    this.message =
+        'GEMINI_API_KEY not configured. '
         'Add it to .env file or use --dart-define=GEMINI_API_KEY=your_key',
   ]);
 

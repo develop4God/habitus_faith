@@ -16,14 +16,14 @@ final displayModeSelectedProvider = Provider<bool>((ref) {
 /// Reads from SharedPreferences and provides the current mode
 final displayModeProvider =
     StateNotifierProvider<DisplayModeNotifier, DisplayMode>((ref) {
-  final storage = ref.watch(jsonStorageServiceProvider);
-  final savedMode = storage.getString(_displayModeKey);
-  final initialMode = savedMode != null
-      ? DisplayMode.fromStorageString(savedMode)
-      : DisplayMode.compact;
+      final storage = ref.watch(jsonStorageServiceProvider);
+      final savedMode = storage.getString(_displayModeKey);
+      final initialMode = savedMode != null
+          ? DisplayMode.fromStorageString(savedMode)
+          : DisplayMode.compact;
 
-  return DisplayModeNotifier(ref, initialMode);
-});
+      return DisplayModeNotifier(ref, initialMode);
+    });
 
 /// Notifier for managing display mode state
 class DisplayModeNotifier extends StateNotifier<DisplayMode> {

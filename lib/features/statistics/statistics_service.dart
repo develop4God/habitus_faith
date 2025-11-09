@@ -22,4 +22,3 @@ class StatisticsService {
     await prefs.remove(statsKey);
   }
 }
-

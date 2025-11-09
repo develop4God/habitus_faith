@@ -68,10 +68,7 @@ class OnboardingPage extends ConsumerWidget {
               const SizedBox(height: 16),
               Text(
                 l10n.selectUpToThreeHabits,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Color(0xff64748b),
-                ),
+                style: const TextStyle(fontSize: 18, color: Color(0xff64748b)),
               ),
               const SizedBox(height: 8),
               Text(
@@ -93,13 +90,16 @@ class OnboardingPage extends ConsumerWidget {
                     final crossAxisCount = width > 600 ? 3 : 2;
                     final spacing = width > 600 ? 20.0 : 16.0;
                     // Adjust aspect ratio based on available height
-                    final itemHeight = constraints.maxHeight /
+                    final itemHeight =
+                        constraints.maxHeight /
                         (predefinedHabits.length / crossAxisCount).ceil();
                     final itemWidth =
                         (width - (spacing * (crossAxisCount + 1))) /
-                            crossAxisCount;
-                    final aspectRatio =
-                        (itemWidth / itemHeight).clamp(0.7, 1.2);
+                        crossAxisCount;
+                    final aspectRatio = (itemWidth / itemHeight).clamp(
+                      0.7,
+                      1.2,
+                    );
 
                     return GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -158,13 +158,17 @@ class OnboardingPage extends ConsumerWidget {
                             ? null
                             : () async {
                                 // Mark onboarding as complete without selecting habits
-                                final storage =
-                                    ref.read(jsonStorageServiceProvider);
+                                final storage = ref.read(
+                                  jsonStorageServiceProvider,
+                                );
                                 await storage.setBool(
-                                    'onboarding_complete', true);
+                                  'onboarding_complete',
+                                  true,
+                                );
                                 if (context.mounted) {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/home');
+                                  Navigator.of(
+                                    context,
+                                  ).pushReplacementNamed('/home');
                                 }
                               },
                         child: Text(
@@ -197,22 +201,28 @@ class OnboardingPage extends ConsumerWidget {
                             ? null
                             : () async {
                                 debugPrint(
-                                    'OnboardingPage: continue pressed - creating habits');
+                                  'OnboardingPage: continue pressed - creating habits',
+                                );
 
                                 // Prepare translated habits
-                                final translatedHabits =
-                                    selectedHabits.map((habitId) {
+                                final translatedHabits = selectedHabits.map((
+                                  habitId,
+                                ) {
                                   final predefinedHabit = predefinedHabits
                                       .firstWhere((h) => h.id == habitId);
                                   return TranslatedHabit(
                                     id: habitId,
                                     name: _getTranslatedName(
-                                        l10n, predefinedHabit.nameKey),
+                                      l10n,
+                                      predefinedHabit.nameKey,
+                                    ),
                                     description: _getTranslatedDescription(
-                                        l10n, predefinedHabit.descriptionKey),
+                                      l10n,
+                                      predefinedHabit.descriptionKey,
+                                    ),
                                     category: PredefinedHabitCategoryX(
-                                            predefinedHabit.category)
-                                        .toDomainCategory(),
+                                      predefinedHabit.category,
+                                    ).toDomainCategory(),
                                     emoji: predefinedHabit.emoji,
                                   );
                                 }).toList();
@@ -220,14 +230,18 @@ class OnboardingPage extends ConsumerWidget {
                                 await ref
                                     .read(onboardingNotifierProvider.notifier)
                                     .completeOnboarding(
-                                        translatedHabits: translatedHabits);
+                                      translatedHabits: translatedHabits,
+                                    );
                                 debugPrint(
-                                    'OnboardingPage: completeOnboarding finished');
+                                  'OnboardingPage: completeOnboarding finished',
+                                );
                                 if (context.mounted) {
                                   debugPrint(
-                                      'OnboardingPage: navigating to /home');
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/home');
+                                    'OnboardingPage: navigating to /home',
+                                  );
+                                  Navigator.of(
+                                    context,
+                                  ).pushReplacementNamed('/home');
                                 }
                               },
                         child: isLoading
@@ -236,9 +250,9 @@ class OnboardingPage extends ConsumerWidget {
                                 width: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
                                 ),
                               )
                             : Text(
@@ -440,8 +454,9 @@ class _HabitCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color:
-                  isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
+              color: isSelected
+                  ? const Color(0xff6366f1)
+                  : Colors.grey.shade200,
               width: isSelected ? 3 : 1,
             ),
             boxShadow: [
@@ -464,12 +479,18 @@ class _HabitCard extends StatelessWidget {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 // Responsive emoji size based on card size
-                final emojiSize =
-                    (constraints.maxWidth * 0.35).clamp(32.0, 56.0);
-                final titleSize =
-                    (constraints.maxWidth * 0.12).clamp(12.0, 16.0);
-                final descSize =
-                    (constraints.maxWidth * 0.09).clamp(10.0, 12.0);
+                final emojiSize = (constraints.maxWidth * 0.35).clamp(
+                  32.0,
+                  56.0,
+                );
+                final titleSize = (constraints.maxWidth * 0.12).clamp(
+                  12.0,
+                  16.0,
+                );
+                final descSize = (constraints.maxWidth * 0.09).clamp(
+                  10.0,
+                  12.0,
+                );
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,

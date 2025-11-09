@@ -18,19 +18,14 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: OnboardingPage(),
           ),
         ),
@@ -39,8 +34,9 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('displays welcome message and habit grid',
-        (WidgetTester tester) async {
+    testWidgets('displays welcome message and habit grid', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Should show welcome text
@@ -53,8 +49,9 @@ void main() {
       expect(find.byType(GridView), findsOneWidget);
 
       // Continue button should be disabled when no habits selected
-      final continueButton =
-          find.byKey(const Key('continue_onboarding_button'));
+      final continueButton = find.byKey(
+        const Key('continue_onboarding_button'),
+      );
       expect(continueButton, findsOneWidget);
 
       final button = tester.widget<ElevatedButton>(continueButton);
@@ -76,8 +73,9 @@ void main() {
       expect(find.textContaining('1/3'), findsOneWidget);
 
       // Continue button should be enabled
-      final continueButton =
-          find.byKey(const Key('continue_onboarding_button'));
+      final continueButton = find.byKey(
+        const Key('continue_onboarding_button'),
+      );
       final button = tester.widget<ElevatedButton>(continueButton);
       expect(button.onPressed, isNotNull); // Enabled
     });
@@ -97,8 +95,9 @@ void main() {
       expect(find.textContaining('2/3'), findsOneWidget);
     });
 
-    testWidgets('selects three habits (maximum) successfully',
-        (WidgetTester tester) async {
+    testWidgets('selects three habits (maximum) successfully', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Select three habits
@@ -115,8 +114,9 @@ void main() {
       expect(find.textContaining('3/3'), findsOneWidget);
     });
 
-    testWidgets('prevents selecting more than 3 habits',
-        (WidgetTester tester) async {
+    testWidgets('prevents selecting more than 3 habits', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Select three habits
@@ -147,8 +147,9 @@ void main() {
       expect(find.textContaining('3/3'), findsOneWidget);
     });
 
-    testWidgets('deselects a habit when tapped again',
-        (WidgetTester tester) async {
+    testWidgets('deselects a habit when tapped again', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Select habit
@@ -166,11 +167,14 @@ void main() {
       expect(find.textContaining('0/3'), findsOneWidget);
     });
 
-    testWidgets('responsive grid on small Android phone',
-        (WidgetTester tester) async {
+    testWidgets('responsive grid on small Android phone', (
+      WidgetTester tester,
+    ) async {
       // Set small Android phone screen size with lower DPR to prevent overflow in test
-      tester.view.physicalSize =
-          const Size(720, 1280); // Logical 360x640 @ 2.0 DPR
+      tester.view.physicalSize = const Size(
+        720,
+        1280,
+      ); // Logical 360x640 @ 2.0 DPR
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() {
         tester.view.resetPhysicalSize();
@@ -186,11 +190,14 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('responsive grid on Android tablet',
-        (WidgetTester tester) async {
+    testWidgets('responsive grid on Android tablet', (
+      WidgetTester tester,
+    ) async {
       // Set Android tablet screen size (Nexus 7) with realistic height
-      tester.view.physicalSize =
-          const Size(600, 1100); // Increased height to prevent overflow
+      tester.view.physicalSize = const Size(
+        600,
+        1100,
+      ); // Increased height to prevent overflow
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() {
         tester.view.resetPhysicalSize();
@@ -206,8 +213,9 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('responsive grid displays correctly on tablet',
-        (WidgetTester tester) async {
+    testWidgets('responsive grid displays correctly on tablet', (
+      WidgetTester tester,
+    ) async {
       // Set tablet screen size (iPad)
       tester.view.physicalSize = const Size(768, 1024);
       tester.view.devicePixelRatio = 2.0;
@@ -240,8 +248,9 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('shows loading spinner while completing onboarding',
-        (WidgetTester tester) async {
+    testWidgets('shows loading spinner while completing onboarding', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Select one habit
@@ -249,14 +258,16 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify continue button is enabled now
-      final continueButton =
-          find.byKey(const Key('continue_onboarding_button'));
+      final continueButton = find.byKey(
+        const Key('continue_onboarding_button'),
+      );
       final button = tester.widget<ElevatedButton>(continueButton);
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('all 12 predefined habits are present',
-        (WidgetTester tester) async {
+    testWidgets('all 12 predefined habits are present', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Find the GridView
@@ -265,12 +276,21 @@ void main() {
 
       // Verify key habits are present - checking first, visible, and last items
       // We check specific habits that should be visible in the grid
-      expect(find.byKey(const Key('habit_card_morning_prayer')), findsOneWidget,
-          reason: 'First habit (morning_prayer) should be present');
-      expect(find.byKey(const Key('habit_card_bible_reading')), findsOneWidget,
-          reason: 'Second habit (bible_reading) should be present');
-      expect(find.byKey(const Key('habit_card_worship')), findsOneWidget,
-          reason: 'Third habit (worship) should be present');
+      expect(
+        find.byKey(const Key('habit_card_morning_prayer')),
+        findsOneWidget,
+        reason: 'First habit (morning_prayer) should be present',
+      );
+      expect(
+        find.byKey(const Key('habit_card_bible_reading')),
+        findsOneWidget,
+        reason: 'Second habit (bible_reading) should be present',
+      );
+      expect(
+        find.byKey(const Key('habit_card_worship')),
+        findsOneWidget,
+        reason: 'Third habit (worship) should be present',
+      );
 
       // The predefinedHabits list in predefined_habits_data.dart has all 12 items
       // GridView will lazy-load others as user scrolls

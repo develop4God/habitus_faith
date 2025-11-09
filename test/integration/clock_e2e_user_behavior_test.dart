@@ -12,8 +12,7 @@ import '../helpers/clock_test_helpers.dart';
 /// time-dependent features work correctly together.
 void main() {
   group('E2E: Real User Behavior with Time Progression', () {
-    test('Complete user journey: 3 weeks of habit tracking with patterns',
-        () async {
+    test('Complete user journey: 3 weeks of habit tracking with patterns', () async {
       // === WEEK 1: User starts new habit ===
       final startDate = DateTime(2025, 11, 10, 7, 0); // Monday 7 AM
       final clock = AdvancingClock(startDate);
@@ -77,8 +76,10 @@ void main() {
       }
 
       // Verify final stats after 3 weeks
-      expect(habit.completionHistory.length,
-          greaterThanOrEqualTo(17)); // At least 17 completions
+      expect(
+        habit.completionHistory.length,
+        greaterThanOrEqualTo(17),
+      ); // At least 17 completions
       expect(habit.currentStreak, 7); // Last 7 days all completed
       expect(habit.longestStreak, greaterThanOrEqualTo(7));
 
@@ -103,8 +104,11 @@ void main() {
 
       // === Verify Optimal Days ===
       final optimalDays = engine.findOptimalDays(habit);
-      expect(optimalDays.length, greaterThan(0),
-          reason: 'Should find at least one optimal day');
+      expect(
+        optimalDays.length,
+        greaterThan(0),
+        reason: 'Should find at least one optimal day',
+      );
 
       // Week 3 had consistent completions, so should have several optimal days
       // Just verify we get some results without enforcing all 7 days
@@ -218,11 +222,13 @@ void main() {
 
       // Evening habit has weekday-only completions
       // For pattern detection, the habit needs consecutive failures set
-      final eveningHabitWithFailures =
-          eveningHabit.copyWith(consecutiveFailures: 4);
+      final eveningHabitWithFailures = eveningHabit.copyWith(
+        consecutiveFailures: 4,
+      );
 
-      final eveningPattern =
-          engine.detectFailurePattern(eveningHabitWithFailures);
+      final eveningPattern = engine.detectFailurePattern(
+        eveningHabitWithFailures,
+      );
       // Pattern detection algorithm considers multiple factors
       // We verify it returns a pattern (not null) based on the failure history
       expect(eveningPattern, isNotNull);
@@ -281,10 +287,12 @@ void main() {
       }
 
       // Verify completions span two months
-      final octoberCompletions =
-          habit.completionHistory.where((d) => d.month == 10).length;
-      final novemberCompletions =
-          habit.completionHistory.where((d) => d.month == 11).length;
+      final octoberCompletions = habit.completionHistory
+          .where((d) => d.month == 10)
+          .length;
+      final novemberCompletions = habit.completionHistory
+          .where((d) => d.month == 11)
+          .length;
 
       expect(octoberCompletions, 7); // Oct 25-31 = 7 days
       expect(novemberCompletions, 7); // Nov 1-7 = 7 days

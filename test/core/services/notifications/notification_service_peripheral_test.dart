@@ -19,13 +19,18 @@ void main() {
     });
 
     group('Notification State Management', () {
-      test('should default to enabled state when no preference is set',
-          () async {
-        // Simulate default behavior
-        final enabled = prefs.getBool('notifications_enabled') ?? true;
-        expect(enabled, isTrue,
-            reason: 'Notifications should be enabled by default');
-      });
+      test(
+        'should default to enabled state when no preference is set',
+        () async {
+          // Simulate default behavior
+          final enabled = prefs.getBool('notifications_enabled') ?? true;
+          expect(
+            enabled,
+            isTrue,
+            reason: 'Notifications should be enabled by default',
+          );
+        },
+      );
 
       test('should persist enabled state change', () async {
         // Simulate enabling notifications
@@ -64,8 +69,11 @@ void main() {
         for (final time in testTimes) {
           await prefs.setString('notification_time', time);
           final savedTime = prefs.getString('notification_time');
-          expect(savedTime, equals(time),
-              reason: 'Time $time should be persisted');
+          expect(
+            savedTime,
+            equals(time),
+            reason: 'Time $time should be persisted',
+          );
         }
       });
 
@@ -79,18 +87,27 @@ void main() {
 
           // Validate format: HH:mm
           final parts = saved!.split(':');
-          expect(parts.length, equals(2),
-              reason: 'Time should have HH:mm format');
+          expect(
+            parts.length,
+            equals(2),
+            reason: 'Time should have HH:mm format',
+          );
 
           final hour = int.tryParse(parts[0]);
           final minute = int.tryParse(parts[1]);
 
           expect(hour, isNotNull);
           expect(minute, isNotNull);
-          expect(hour! >= 0 && hour <= 23, isTrue,
-              reason: 'Hour should be 0-23');
-          expect(minute! >= 0 && minute <= 59, isTrue,
-              reason: 'Minute should be 0-59');
+          expect(
+            hour! >= 0 && hour <= 23,
+            isTrue,
+            reason: 'Hour should be 0-23',
+          );
+          expect(
+            minute! >= 0 && minute <= 59,
+            isTrue,
+            reason: 'Minute should be 0-59',
+          );
         }
       });
     });
@@ -179,8 +196,10 @@ void main() {
 
         // Final state should be consistent
         final finalState = prefs.getBool('notifications_enabled');
-        expect(finalState,
-            isFalse); // Last toggle was to false (9 % 2 == 1, but we inverted)
+        expect(
+          finalState,
+          isFalse,
+        ); // Last toggle was to false (9 % 2 == 1, but we inverted)
       });
     });
 
@@ -287,52 +306,53 @@ void main() {
   });
 
   group(
-      'NotificationService Peripheral Tests - Firestore Integration Simulation',
-      () {
-    test('should simulate successful Firestore write', () async {
-      // Simulate preparing data for Firestore
-      final mockUserData = {
-        'notificationsEnabled': true,
-        'notificationTime': '09:00',
-        'userTimezone': 'America/Panama',
-        'preferredLanguage': 'es',
-        'lastUpdated': DateTime.now().toIso8601String(),
-      };
+    'NotificationService Peripheral Tests - Firestore Integration Simulation',
+    () {
+      test('should simulate successful Firestore write', () async {
+        // Simulate preparing data for Firestore
+        final mockUserData = {
+          'notificationsEnabled': true,
+          'notificationTime': '09:00',
+          'userTimezone': 'America/Panama',
+          'preferredLanguage': 'es',
+          'lastUpdated': DateTime.now().toIso8601String(),
+        };
 
-      // Verify data structure
-      expect(mockUserData['notificationsEnabled'], isA<bool>());
-      expect(mockUserData['notificationTime'], isA<String>());
-      expect(mockUserData['userTimezone'], isA<String>());
-      expect(mockUserData['preferredLanguage'], isA<String>());
-      expect(mockUserData['lastUpdated'], isA<String>());
-    });
+        // Verify data structure
+        expect(mockUserData['notificationsEnabled'], isA<bool>());
+        expect(mockUserData['notificationTime'], isA<String>());
+        expect(mockUserData['userTimezone'], isA<String>());
+        expect(mockUserData['preferredLanguage'], isA<String>());
+        expect(mockUserData['lastUpdated'], isA<String>());
+      });
 
-    test('should simulate Firestore read with defaults', () async {
-      // Simulate reading from Firestore when document doesn't exist
-      Map<String, dynamic>? firestoreData;
+      test('should simulate Firestore read with defaults', () async {
+        // Simulate reading from Firestore when document doesn't exist
+        Map<String, dynamic>? firestoreData;
 
-      // Apply defaults
-      final notificationsEnabled =
-          firestoreData?['notificationsEnabled'] ?? true;
-      final notificationTime = firestoreData?['notificationTime'] ?? '09:00';
-      final userTimezone = firestoreData?['userTimezone'] ?? 'UTC';
+        // Apply defaults
+        final notificationsEnabled =
+            firestoreData?['notificationsEnabled'] ?? true;
+        final notificationTime = firestoreData?['notificationTime'] ?? '09:00';
+        final userTimezone = firestoreData?['userTimezone'] ?? 'UTC';
 
-      expect(notificationsEnabled, isTrue);
-      expect(notificationTime, equals('09:00'));
-      expect(userTimezone, equals('UTC'));
-    });
+        expect(notificationsEnabled, isTrue);
+        expect(notificationTime, equals('09:00'));
+        expect(userTimezone, equals('UTC'));
+      });
 
-    test('should simulate FCM token collection structure', () async {
-      // Simulate FCM token document structure
-      final mockTokenData = {
-        'token': 'mock_token_12345',
-        'createdAt': DateTime.now().toIso8601String(),
-        'platform': 'android',
-      };
+      test('should simulate FCM token collection structure', () async {
+        // Simulate FCM token document structure
+        final mockTokenData = {
+          'token': 'mock_token_12345',
+          'createdAt': DateTime.now().toIso8601String(),
+          'platform': 'android',
+        };
 
-      expect(mockTokenData['token'], isNotEmpty);
-      expect(mockTokenData['createdAt'], isNotEmpty);
-      expect(mockTokenData['platform'], isIn(['android', 'ios', 'web']));
-    });
-  });
+        expect(mockTokenData['token'], isNotEmpty);
+        expect(mockTokenData['createdAt'], isNotEmpty);
+        expect(mockTokenData['platform'], isIn(['android', 'ios', 'web']));
+      });
+    },
+  );
 }

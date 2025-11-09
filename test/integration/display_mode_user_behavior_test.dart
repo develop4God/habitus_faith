@@ -18,15 +18,14 @@ void main() {
     });
 
     group('Settings Page Display Mode Switcher', () {
-      testWidgets('User can open display mode dialog from settings',
-          (WidgetTester tester) async {
+      testWidgets('User can open display mode dialog from settings', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: const MaterialApp(
               localizationsDelegates: [
                 AppLocalizations.delegate,
@@ -41,31 +40,39 @@ void main() {
         await tester.pumpAndSettle();
 
         // Find display mode option
-        expect(find.text('Display Mode'), findsOneWidget,
-            reason: 'Display Mode setting should be visible');
+        expect(
+          find.text('Display Mode'),
+          findsOneWidget,
+          reason: 'Display Mode setting should be visible',
+        );
 
         // Tap to open dialog
         await tester.tap(find.text('Display Mode'));
         await tester.pumpAndSettle();
 
         // Verify dialog opened
-        expect(find.text('Compact Mode'), findsAtLeast(1),
-            reason: 'Dialog should show Compact Mode option');
-        expect(find.text('Advanced Mode'), findsAtLeast(1),
-            reason: 'Dialog should show Advanced Mode option');
+        expect(
+          find.text('Compact Mode'),
+          findsAtLeast(1),
+          reason: 'Dialog should show Compact Mode option',
+        );
+        expect(
+          find.text('Advanced Mode'),
+          findsAtLeast(1),
+          reason: 'Dialog should show Advanced Mode option',
+        );
       });
 
-      testWidgets('User switches from compact to advanced mode',
-          (WidgetTester tester) async {
+      testWidgets('User switches from compact to advanced mode', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
         // Set initial mode to compact
         await prefs.setString('display_mode', 'compact');
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: const MaterialApp(
               localizationsDelegates: [
                 AppLocalizations.delegate,
@@ -89,25 +96,30 @@ void main() {
 
         // Verify mode was saved
         final savedMode = prefs.getString('display_mode');
-        expect(savedMode, 'advanced',
-            reason: 'Mode should be saved as advanced');
+        expect(
+          savedMode,
+          'advanced',
+          reason: 'Mode should be saved as advanced',
+        );
 
         // Verify confirmation message
-        expect(find.textContaining('Display mode updated'), findsOneWidget,
-            reason: 'Should show confirmation message');
+        expect(
+          find.textContaining('Display mode updated'),
+          findsOneWidget,
+          reason: 'Should show confirmation message',
+        );
       });
 
-      testWidgets('User switches from advanced to compact mode',
-          (WidgetTester tester) async {
+      testWidgets('User switches from advanced to compact mode', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
         // Set initial mode to advanced
         await prefs.setString('display_mode', 'advanced');
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: const MaterialApp(
               localizationsDelegates: [
                 AppLocalizations.delegate,
@@ -134,16 +146,15 @@ void main() {
         expect(savedMode, 'compact', reason: 'Mode should be saved as compact');
       });
 
-      testWidgets('Display mode icon changes based on current mode',
-          (WidgetTester tester) async {
+      testWidgets('Display mode icon changes based on current mode', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('display_mode', 'compact');
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: const MaterialApp(
               localizationsDelegates: [
                 AppLocalizations.delegate,
@@ -159,8 +170,11 @@ void main() {
 
         // Verify compact mode icon is shown
         final compactIcon = find.byIcon(Icons.check_circle_outline);
-        expect(compactIcon, findsOneWidget,
-            reason: 'Should show compact mode icon');
+        expect(
+          compactIcon,
+          findsOneWidget,
+          reason: 'Should show compact mode icon',
+        );
 
         // Switch to advanced mode
         await tester.tap(find.text('Display Mode'));
@@ -171,9 +185,7 @@ void main() {
         // Rebuild widget to see updated icon
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: const MaterialApp(
               localizationsDelegates: [
                 AppLocalizations.delegate,
@@ -189,20 +201,22 @@ void main() {
 
         // Verify advanced mode icon is shown
         final advancedIcon = find.byIcon(Icons.insights);
-        expect(advancedIcon, findsOneWidget,
-            reason: 'Should show advanced mode icon');
+        expect(
+          advancedIcon,
+          findsOneWidget,
+          reason: 'Should show advanced mode icon',
+        );
       });
 
-      testWidgets('User can close dialog without changing mode',
-          (WidgetTester tester) async {
+      testWidgets('User can close dialog without changing mode', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('display_mode', 'compact');
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: const MaterialApp(
               localizationsDelegates: [
                 AppLocalizations.delegate,
@@ -231,8 +245,9 @@ void main() {
     });
 
     group('Display Mode Provider Behavior', () {
-      testWidgets('Provider updates immediately on mode change',
-          (WidgetTester tester) async {
+      testWidgets('Provider updates immediately on mode change', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('display_mode', 'compact');
 
@@ -240,15 +255,11 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: Consumer(
               builder: (context, ref, child) {
                 observedMode = ref.watch(displayModeProvider);
-                return const MaterialApp(
-                  home: Scaffold(body: Text('Test')),
-                );
+                return const MaterialApp(home: Scaffold(body: Text('Test')));
               },
             ),
           ),
@@ -268,20 +279,22 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verify mode updated
-        expect(observedMode, DisplayMode.advanced,
-            reason: 'Provider should update immediately');
+        expect(
+          observedMode,
+          DisplayMode.advanced,
+          reason: 'Provider should update immediately',
+        );
       });
 
-      testWidgets('Multiple widgets react to mode changes',
-          (WidgetTester tester) async {
+      testWidgets('Multiple widgets react to mode changes', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('display_mode', 'compact');
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: Consumer(
               builder: (context, ref, child) {
                 final mode = ref.watch(displayModeProvider);
@@ -321,8 +334,9 @@ void main() {
     });
 
     group('Security & Injection Tests', () {
-      testWidgets('SQL injection attempt in mode storage fails safely',
-          (WidgetTester tester) async {
+      testWidgets('SQL injection attempt in mode storage fails safely', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
 
         // Attempt SQL injection
@@ -332,15 +346,11 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: Consumer(
               builder: (context, ref, child) {
                 loadedMode = ref.watch(displayModeProvider);
-                return const MaterialApp(
-                  home: Scaffold(body: Text('Test')),
-                );
+                return const MaterialApp(home: Scaffold(body: Text('Test')));
               },
             ),
           ),
@@ -348,12 +358,16 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verify it defaults to safe value
-        expect(loadedMode, DisplayMode.compact,
-            reason: 'Should default to compact for invalid/malicious input');
+        expect(
+          loadedMode,
+          DisplayMode.compact,
+          reason: 'Should default to compact for invalid/malicious input',
+        );
       });
 
-      testWidgets('XSS attempt in mode storage fails safely',
-          (WidgetTester tester) async {
+      testWidgets('XSS attempt in mode storage fails safely', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
 
         // Attempt XSS injection
@@ -363,15 +377,11 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: Consumer(
               builder: (context, ref, child) {
                 loadedMode = ref.watch(displayModeProvider);
-                return const MaterialApp(
-                  home: Scaffold(body: Text('Test')),
-                );
+                return const MaterialApp(home: Scaffold(body: Text('Test')));
               },
             ),
           ),
@@ -379,12 +389,16 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verify it defaults to safe value
-        expect(loadedMode, DisplayMode.compact,
-            reason: 'Should default to compact for XSS attempt');
+        expect(
+          loadedMode,
+          DisplayMode.compact,
+          reason: 'Should default to compact for XSS attempt',
+        );
       });
 
-      testWidgets('Path traversal attempt in mode storage fails safely',
-          (WidgetTester tester) async {
+      testWidgets('Path traversal attempt in mode storage fails safely', (
+        WidgetTester tester,
+      ) async {
         final prefs = await SharedPreferences.getInstance();
 
         // Attempt path traversal
@@ -394,15 +408,11 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
-            ],
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
             child: Consumer(
               builder: (context, ref, child) {
                 loadedMode = ref.watch(displayModeProvider);
-                return const MaterialApp(
-                  home: Scaffold(body: Text('Test')),
-                );
+                return const MaterialApp(home: Scaffold(body: Text('Test')));
               },
             ),
           ),
@@ -410,8 +420,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verify it defaults to safe value
-        expect(loadedMode, DisplayMode.compact,
-            reason: 'Should default to compact for path traversal attempt');
+        expect(
+          loadedMode,
+          DisplayMode.compact,
+          reason: 'Should default to compact for path traversal attempt',
+        );
       });
     });
   });

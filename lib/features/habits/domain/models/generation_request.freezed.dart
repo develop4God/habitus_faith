@@ -12,7 +12,8 @@ part of 'generation_request.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 GenerationRequest _$GenerationRequestFromJson(Map<String, dynamic> json) {
   return _GenerationRequest.fromJson(json);
@@ -40,14 +41,16 @@ mixin _$GenerationRequest {
 /// @nodoc
 abstract class $GenerationRequestCopyWith<$Res> {
   factory $GenerationRequestCopyWith(
-          GenerationRequest value, $Res Function(GenerationRequest) then) =
-      _$GenerationRequestCopyWithImpl<$Res, GenerationRequest>;
+    GenerationRequest value,
+    $Res Function(GenerationRequest) then,
+  ) = _$GenerationRequestCopyWithImpl<$Res, GenerationRequest>;
   @useResult
-  $Res call(
-      {String userGoal,
-      String? failurePattern,
-      String faithContext,
-      String languageCode});
+  $Res call({
+    String userGoal,
+    String? failurePattern,
+    String faithContext,
+    String languageCode,
+  });
 }
 
 /// @nodoc
@@ -70,49 +73,55 @@ class _$GenerationRequestCopyWithImpl<$Res, $Val extends GenerationRequest>
     Object? faithContext = null,
     Object? languageCode = null,
   }) {
-    return _then(_value.copyWith(
-      userGoal: null == userGoal
-          ? _value.userGoal
-          : userGoal // ignore: cast_nullable_to_non_nullable
-              as String,
-      failurePattern: freezed == failurePattern
-          ? _value.failurePattern
-          : failurePattern // ignore: cast_nullable_to_non_nullable
-              as String?,
-      faithContext: null == faithContext
-          ? _value.faithContext
-          : faithContext // ignore: cast_nullable_to_non_nullable
-              as String,
-      languageCode: null == languageCode
-          ? _value.languageCode
-          : languageCode // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            userGoal: null == userGoal
+                ? _value.userGoal
+                : userGoal // ignore: cast_nullable_to_non_nullable
+                      as String,
+            failurePattern: freezed == failurePattern
+                ? _value.failurePattern
+                : failurePattern // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            faithContext: null == faithContext
+                ? _value.faithContext
+                : faithContext // ignore: cast_nullable_to_non_nullable
+                      as String,
+            languageCode: null == languageCode
+                ? _value.languageCode
+                : languageCode // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GenerationRequestImplCopyWith<$Res>
     implements $GenerationRequestCopyWith<$Res> {
-  factory _$$GenerationRequestImplCopyWith(_$GenerationRequestImpl value,
-          $Res Function(_$GenerationRequestImpl) then) =
-      __$$GenerationRequestImplCopyWithImpl<$Res>;
+  factory _$$GenerationRequestImplCopyWith(
+    _$GenerationRequestImpl value,
+    $Res Function(_$GenerationRequestImpl) then,
+  ) = __$$GenerationRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String userGoal,
-      String? failurePattern,
-      String faithContext,
-      String languageCode});
+  $Res call({
+    String userGoal,
+    String? failurePattern,
+    String faithContext,
+    String languageCode,
+  });
 }
 
 /// @nodoc
 class __$$GenerationRequestImplCopyWithImpl<$Res>
     extends _$GenerationRequestCopyWithImpl<$Res, _$GenerationRequestImpl>
     implements _$$GenerationRequestImplCopyWith<$Res> {
-  __$$GenerationRequestImplCopyWithImpl(_$GenerationRequestImpl _value,
-      $Res Function(_$GenerationRequestImpl) _then)
-      : super(_value, _then);
+  __$$GenerationRequestImplCopyWithImpl(
+    _$GenerationRequestImpl _value,
+    $Res Function(_$GenerationRequestImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of GenerationRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -124,46 +133,48 @@ class __$$GenerationRequestImplCopyWithImpl<$Res>
     Object? faithContext = null,
     Object? languageCode = null,
   }) {
-    return _then(_$GenerationRequestImpl(
-      userGoal: null == userGoal
-          ? _value.userGoal
-          : userGoal // ignore: cast_nullable_to_non_nullable
-              as String,
-      failurePattern: freezed == failurePattern
-          ? _value.failurePattern
-          : failurePattern // ignore: cast_nullable_to_non_nullable
-              as String?,
-      faithContext: null == faithContext
-          ? _value.faithContext
-          : faithContext // ignore: cast_nullable_to_non_nullable
-              as String,
-      languageCode: null == languageCode
-          ? _value.languageCode
-          : languageCode // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$GenerationRequestImpl(
+        userGoal: null == userGoal
+            ? _value.userGoal
+            : userGoal // ignore: cast_nullable_to_non_nullable
+                  as String,
+        failurePattern: freezed == failurePattern
+            ? _value.failurePattern
+            : failurePattern // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        faithContext: null == faithContext
+            ? _value.faithContext
+            : faithContext // ignore: cast_nullable_to_non_nullable
+                  as String,
+        languageCode: null == languageCode
+            ? _value.languageCode
+            : languageCode // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$GenerationRequestImpl extends _GenerationRequest {
-  const _$GenerationRequestImpl(
-      {required this.userGoal,
-      this.failurePattern,
-      this.faithContext = 'Cristiano',
-      this.languageCode = 'es'})
-      : super._();
+  const _$GenerationRequestImpl({
+    required this.userGoal,
+    this.failurePattern,
+    this.faithContext = 'Cristiano',
+    this.languageCode = 'es',
+  }) : super._();
 
   factory _$GenerationRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$GenerationRequestImplFromJson(json);
 
   @override
   final String userGoal;
-// "Quiero orar más consistentemente"
+  // "Quiero orar más consistentemente"
   @override
   final String? failurePattern;
-// "Olvido en las mañanas ocupadas"
+  // "Olvido en las mañanas ocupadas"
   @override
   @JsonKey()
   final String faithContext;
@@ -194,7 +205,12 @@ class _$GenerationRequestImpl extends _GenerationRequest {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, userGoal, failurePattern, faithContext, languageCode);
+    runtimeType,
+    userGoal,
+    failurePattern,
+    faithContext,
+    languageCode,
+  );
 
   /// Create a copy of GenerationRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -203,22 +219,23 @@ class _$GenerationRequestImpl extends _GenerationRequest {
   @pragma('vm:prefer-inline')
   _$$GenerationRequestImplCopyWith<_$GenerationRequestImpl> get copyWith =>
       __$$GenerationRequestImplCopyWithImpl<_$GenerationRequestImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GenerationRequestImplToJson(
-      this,
-    );
+    return _$$GenerationRequestImplToJson(this);
   }
 }
 
 abstract class _GenerationRequest extends GenerationRequest {
-  const factory _GenerationRequest(
-      {required final String userGoal,
-      final String? failurePattern,
-      final String faithContext,
-      final String languageCode}) = _$GenerationRequestImpl;
+  const factory _GenerationRequest({
+    required final String userGoal,
+    final String? failurePattern,
+    final String faithContext,
+    final String languageCode,
+  }) = _$GenerationRequestImpl;
   const _GenerationRequest._() : super._();
 
   factory _GenerationRequest.fromJson(Map<String, dynamic> json) =

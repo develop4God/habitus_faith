@@ -8,13 +8,17 @@ import 'habits_page_ui.dart'; // Nuevo import
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   final repository = ref.watch(jsonHabitsRepositoryProvider);
   debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
-  final stream = repository.watchHabits().map((list) {
-    debugPrint(
-        'jsonHabitsStreamProvider: stream emitted ${list.length} habits');
-    return list;
-  }).handleError((e, st) {
-    debugPrint('jsonHabitsStreamProvider: stream error -> $e');
-  });
+  final stream = repository
+      .watchHabits()
+      .map((list) {
+        debugPrint(
+          'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
+        );
+        return list;
+      })
+      .handleError((e, st) {
+        debugPrint('jsonHabitsStreamProvider: stream error -> $e');
+      });
   return stream;
 });
 
@@ -70,7 +74,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     String? emoji,
   }) async {
     debugPrint(
-        'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description');
+      'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description',
+    );
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -152,8 +157,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
 final jsonHabitsNotifierProvider =
     StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
-  return JsonHabitsNotifier(ref);
-});
+      return JsonHabitsNotifier(ref);
+    });
 
 class HabitsPage extends ConsumerStatefulWidget {
   const HabitsPage({super.key});
@@ -184,19 +189,25 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     _clearSelection();
   }
 
-  Future<void> _duplicateHabit(BuildContext context, WidgetRef ref, Habit habit) async {
-    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-      name: "${habit.name} (copy)",
-      description: habit.description,
-      category: habit.category,
-      colorValue: habit.colorValue,
-      difficulty: habit.difficulty,
-      emoji: habit.emoji,
-    );
+  Future<void> _duplicateHabit(
+    BuildContext context,
+    WidgetRef ref,
+    Habit habit,
+  ) async {
+    await ref
+        .read(jsonHabitsNotifierProvider.notifier)
+        .addHabit(
+          name: "${habit.name} (copy)",
+          description: habit.description,
+          category: habit.category,
+          colorValue: habit.colorValue,
+          difficulty: habit.difficulty,
+          emoji: habit.emoji,
+        );
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Hábito duplicado")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Hábito duplicado")));
     }
   }
 
@@ -211,4 +222,3 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     );
   }
 }
-

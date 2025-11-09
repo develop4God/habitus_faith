@@ -73,10 +73,12 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
         return BibleChapterGridSelector(
           totalChapters: state.maxChapter,
           selectedChapter: state.selectedChapter ?? 1,
-          bookName: state.books.firstWhere(
-            (b) => b['short_name'] == state.selectedBookName,
-            orElse: () => {'long_name': state.selectedBookName ?? ''},
-          )['long_name'] as String,
+          bookName:
+              state.books.firstWhere(
+                    (b) => b['short_name'] == state.selectedBookName,
+                    orElse: () => {'long_name': state.selectedBookName ?? ''},
+                  )['long_name']
+                  as String,
           onChapterSelected: (chapter) async {
             await notifier.selectChapter(chapter);
             if (context.mounted) {
@@ -103,15 +105,18 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
         return BibleVerseGridSelector(
           totalVerses: state.verses.length,
           selectedVerse: state.selectedVerse ?? 1,
-          bookName: state.books.firstWhere(
-            (b) => b['short_name'] == state.selectedBookName,
-            orElse: () => {'long_name': state.selectedBookName ?? ''},
-          )['long_name'] as String,
+          bookName:
+              state.books.firstWhere(
+                    (b) => b['short_name'] == state.selectedBookName,
+                    orElse: () => {'long_name': state.selectedBookName ?? ''},
+                  )['long_name']
+                  as String,
           chapterNumber: state.selectedChapter!,
           onVerseSelected: (verseNumber) {
             // Scroll to the selected verse
-            final index =
-                state.verses.indexWhere((v) => v['verse'] == verseNumber);
+            final index = state.verses.indexWhere(
+              (v) => v['verse'] == verseNumber,
+            );
             if (index != -1 && _itemScrollController.isAttached) {
               _itemScrollController.scrollTo(
                 index: index,
@@ -154,8 +159,9 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
             orElse: () => {},
           );
           if (verse.isNotEmpty) {
-            buffer
-                .writeln('${verse['verse']} ${_cleanVerseText(verse['text'])}');
+            buffer.writeln(
+              '${verse['verse']} ${_cleanVerseText(verse['text'])}',
+            );
           }
         }
       }
@@ -170,9 +176,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
     final l10n = AppLocalizations.of(context)!;
 
     if (state.isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -188,10 +192,12 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                 notifier.changeVersion(version);
               },
               itemBuilder: (context) => state.availableVersions
-                  .map((version) => PopupMenuItem(
-                        value: version,
-                        child: Text(version.name),
-                      ))
+                  .map(
+                    (version) => PopupMenuItem(
+                      value: version,
+                      child: Text(version.name),
+                    ),
+                  )
                   .toList(),
             ),
           // Font size controls
@@ -218,21 +224,29 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         flex: 3,
                         child: ElevatedButton.icon(
                           onPressed: () => _showBookSelector(context),
-                          icon: const Icon(Icons.auto_stories_outlined, size: 20),
+                          icon: const Icon(
+                            Icons.auto_stories_outlined,
+                            size: 20,
+                          ),
                           label: Text(
                             state.selectedBookName != null
                                 ? state.books.firstWhere(
-                                    (b) =>
-                                        b['short_name'] ==
-                                        state.selectedBookName,
-                                    orElse: () => {'long_name': 'Select Book'},
-                                  )['long_name'] as String
+                                        (b) =>
+                                            b['short_name'] ==
+                                            state.selectedBookName,
+                                        orElse: () => {
+                                          'long_name': 'Select Book',
+                                        },
+                                      )['long_name']
+                                      as String
                                 : l10n.selectBook,
                             overflow: TextOverflow.ellipsis,
                           ),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 12),
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -244,7 +258,9 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                             : null,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                         ),
                         child: Text(
                           state.selectedChapter != null
@@ -256,13 +272,16 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                       const SizedBox(width: 8),
                       // Verse selector button
                       ElevatedButton(
-                        onPressed: state.selectedChapter != null &&
+                        onPressed:
+                            state.selectedChapter != null &&
                                 state.verses.isNotEmpty
                             ? () => _showVerseSelector(context)
                             : null,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                         ),
                         child: const Icon(Icons.format_list_numbered, size: 20),
                       ),
@@ -279,18 +298,22 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               itemScrollController: _itemScrollController,
                               itemPositionsListener: _itemPositionsListener,
                               padding: const EdgeInsets.all(16),
-                              itemCount: state.verses.length + 2, // +1 for copyright, +1 para el título
+                              itemCount:
+                                  state.verses.length +
+                                  2, // +1 for copyright, +1 para el título
                               itemBuilder: (context, index) {
                                 // Título dinámico antes del versículo 1
-                                if (index == 0 && state.selectedBookName != null && state.selectedChapter != null) {
+                                if (index == 0 &&
+                                    state.selectedBookName != null &&
+                                    state.selectedChapter != null) {
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 12),
                                     child: Text(
-                                      '${state.books.firstWhere(
-                                        (b) => b['short_name'] == state.selectedBookName,
-                                        orElse: () => {'long_name': state.selectedBookName ?? ''},
-                                      )['long_name']} ${state.selectedChapter}',
-                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      '${state.books.firstWhere((b) => b['short_name'] == state.selectedBookName, orElse: () => {'long_name': state.selectedBookName ?? ''})['long_name']} ${state.selectedChapter}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
                                       textAlign: TextAlign.center,
@@ -302,7 +325,9 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                   if (state.selectedVersion != null) {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 16),
+                                        horizontal: 20,
+                                        vertical: 16,
+                                      ),
                                       child: Text(
                                         CopyrightUtils.getCopyrightText(
                                           state.selectedVersion!.languageCode,
@@ -330,8 +355,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                 final verseText = verse['text'] as String;
                                 final verseKey =
                                     '${state.selectedBookName}|${state.selectedChapter}|$verseNumber';
-                                final isSelected =
-                                    state.selectedVerses.contains(verseKey);
+                                final isSelected = state.selectedVerses
+                                    .contains(verseKey);
                                 final isMarked = state.persistentlyMarkedVerses
                                     .contains(verseKey);
 
@@ -348,9 +373,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                       color: isSelected
                                           ? Colors.blue.withValues(alpha: 0.1)
                                           : isMarked
-                                              ? Colors.yellow
-                                                  .withValues(alpha: 0.2)
-                                              : null,
+                                          ? Colors.yellow.withValues(alpha: 0.2)
+                                          : null,
                                       border: isSelected
                                           ? const Border(
                                               left: BorderSide(
@@ -364,7 +388,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                                       text: TextSpan(
                                         style: TextStyle(
                                           fontSize: state.fontSize,
-                                          color: Theme.of(context).brightness ==
+                                          color:
+                                              Theme.of(context).brightness ==
                                                   Brightness.dark
                                               ? Colors.white
                                               : Colors.black,
@@ -394,13 +419,17 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               FloatingFontControlButtons(
                                 currentFontSize: state.fontSize,
                                 onIncrease: () {
-                                  final newSize =
-                                      (state.fontSize + 2).clamp(12.0, 28.0);
+                                  final newSize = (state.fontSize + 2).clamp(
+                                    12.0,
+                                    28.0,
+                                  );
                                   notifier.setFontSize(newSize);
                                 },
                                 onDecrease: () {
-                                  final newSize =
-                                      (state.fontSize - 2).clamp(12.0, 28.0);
+                                  final newSize = (state.fontSize - 2).clamp(
+                                    12.0,
+                                    28.0,
+                                  );
                                   notifier.setFontSize(newSize);
                                 },
                                 onClose: () {

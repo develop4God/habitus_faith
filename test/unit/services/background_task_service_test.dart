@@ -61,10 +61,7 @@ void main() {
       await service.initialize();
 
       // Act & Assert: Should complete without throwing
-      expect(
-        () => service.scheduleDailyPrediction(),
-        returnsNormally,
-      );
+      expect(() => service.scheduleDailyPrediction(), returnsNormally);
     });
 
     test('cancelDailyPrediction does not throw when initialized', () async {
@@ -72,10 +69,7 @@ void main() {
       await service.initialize();
 
       // Act & Assert: Should complete without throwing
-      expect(
-        () => service.cancelDailyPrediction(),
-        returnsNormally,
-      );
+      expect(() => service.cancelDailyPrediction(), returnsNormally);
     });
 
     test('cancelAll does not throw when initialized', () async {
@@ -83,10 +77,7 @@ void main() {
       await service.initialize();
 
       // Act & Assert: Should complete without throwing
-      expect(
-        () => service.cancelAll(),
-        returnsNormally,
-      );
+      expect(() => service.cancelAll(), returnsNormally);
     });
 
     test('handles multiple initializations gracefully', () async {

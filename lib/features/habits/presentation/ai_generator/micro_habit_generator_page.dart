@@ -112,8 +112,9 @@ class _MicroHabitGeneratorPageState
     final l10n = AppLocalizations.of(context)!;
     final generatorState = ref.watch(microHabitGeneratorProvider);
     final isGenerating = generatorState.isLoading;
-    final remaining =
-        ref.watch(microHabitGeneratorProvider.notifier).remainingRequests;
+    final remaining = ref
+        .watch(microHabitGeneratorProvider.notifier)
+        .remainingRequests;
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -226,8 +227,9 @@ class _MicroHabitGeneratorPageState
 
                 // Generate button
                 ElevatedButton(
-                  onPressed:
-                      isGenerating || remaining <= 0 ? null : _generateHabits,
+                  onPressed: isGenerating || remaining <= 0
+                      ? null
+                      : _generateHabits,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff6366f1),
                     foregroundColor: Colors.white,
@@ -246,8 +248,9 @@ class _MicroHabitGeneratorPageState
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),

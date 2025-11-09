@@ -25,22 +25,22 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
     // Physical keywords (Spanish and English)
     if (RegExp(
-            r'ejercicio|correr|caminar|gym|deporte|dormir|agua|alimenta|exercise|run|walk|sleep|water|eat|stretch')
-        .hasMatch(lower)) {
+      r'ejercicio|correr|caminar|gym|deporte|dormir|agua|alimenta|exercise|run|walk|sleep|water|eat|stretch',
+    ).hasMatch(lower)) {
       return HabitCategory.physical;
     }
 
     // Mental keywords
     if (RegExp(
-            r'leer|estudiar|aprender|escribir|meditar|reflexionar|read|study|learn|write|journal|think')
-        .hasMatch(lower)) {
+      r'leer|estudiar|aprender|escribir|meditar|reflexionar|read|study|learn|write|journal|think',
+    ).hasMatch(lower)) {
       return HabitCategory.mental;
     }
 
     // Relational keywords
     if (RegExp(
-            r'familia|amigo|comunidad|llamar|visitar|compartir|family|friend|community|call|visit|share')
-        .hasMatch(lower)) {
+      r'familia|amigo|comunidad|llamar|visitar|compartir|family|friend|community|call|visit|share',
+    ).hasMatch(lower)) {
       return HabitCategory.relational;
     }
 
@@ -62,8 +62,9 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
     final l10n = AppLocalizations.of(context)!;
     final generatedHabits = ref.read(microHabitGeneratorProvider).value ?? [];
-    final selectedHabits =
-        generatedHabits.where((h) => _selectedHabitIds.contains(h.id)).toList();
+    final selectedHabits = generatedHabits
+        .where((h) => _selectedHabitIds.contains(h.id))
+        .toList();
 
     // Show loading
     showDialog(
@@ -93,7 +94,9 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
           _habitCategories[microHabit.id] ?? HabitCategory.spiritual;
       final emoji = _getCategoryEmoji(category);
 
-      await ref.read(habitsRepositoryProvider).createHabit(
+      await ref
+          .read(habitsRepositoryProvider)
+          .createHabit(
             name: microHabit.action,
             description: microHabit.verseText != null
                 ? '${microHabit.purpose}\n\n${microHabit.verse}: ${microHabit.verseText}'
@@ -105,8 +108,9 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
     if (mounted) {
       Navigator.of(context).pop(); // Close loading dialog
-      Navigator.of(context)
-          .pop(selectedHabits.length); // Return count to generator page
+      Navigator.of(
+        context,
+      ).pop(selectedHabits.length); // Return count to generator page
     }
   }
 
@@ -160,10 +164,7 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                   const SizedBox(height: 16),
                   Text(
                     l10n.generationFailed,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -211,7 +212,7 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha:0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
                     ),
@@ -229,8 +230,9 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
-                      onPressed:
-                          _selectedHabitIds.isEmpty ? null : _saveSelected,
+                      onPressed: _selectedHabitIds.isEmpty
+                          ? null
+                          : _saveSelected,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff10b981),
                         foregroundColor: Colors.white,
@@ -260,23 +262,13 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red.shade400,
-              ),
+              Icon(Icons.error_outline, size: 64, color: Colors.red.shade400),
               const SizedBox(height: 16),
-              Text(
-                l10n.generationFailed,
-                style: const TextStyle(fontSize: 18),
-              ),
+              Text(l10n.generationFailed, style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 8),
               Text(
                 error.toString(),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -526,7 +518,7 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: DropdownButtonFormField<HabitCategory>(
-                        initialValue: _selectedCategory,
+                        value: _selectedCategory,
                         decoration: InputDecoration(
                           labelText: l10n.category,
                           border: OutlineInputBorder(

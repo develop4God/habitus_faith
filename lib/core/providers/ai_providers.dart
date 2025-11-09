@@ -18,10 +18,7 @@ part 'ai_providers.g.dart';
 Future<BibleDbService?> bibleDbService(BibleDbServiceRef ref) async {
   try {
     final service = BibleDbService();
-    await service.initDb(
-      'assets/biblia/RVR1960.SQLite3',
-      'RVR1960.SQLite3',
-    );
+    await service.initDb('assets/biblia/RVR1960.SQLite3', 'RVR1960.SQLite3');
     return service;
   } catch (e) {
     // Graceful degradation - continue without verse enrichment

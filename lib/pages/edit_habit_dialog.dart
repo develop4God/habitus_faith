@@ -45,7 +45,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   }
 
   Future<void> _save() async {
-    await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
+    await ref
+        .read(jsonHabitsNotifierProvider.notifier)
+        .updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
           description: descCtrl.text,
@@ -121,7 +123,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           color: HabitColors.categoryColors[category],
                         ),
                         const SizedBox(width: 8),
-                        Text(HabitColors.getCategoryDisplayName(category, l10n))
+                        Text(
+                          HabitColors.getCategoryDisplayName(category, l10n),
+                        ),
                       ],
                     ),
                   );
@@ -171,24 +175,26 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           content: Wrap(
                             spacing: 8,
                             children: HabitColors.categoryColors.values
-                                .map((color) => GestureDetector(
-                                      onTap: () =>
-                                          Navigator.of(context).pop(color),
-                                      child: Container(
-                                        width: 32,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          color: color,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: selectedColor == color
-                                                ? Colors.black
-                                                : Colors.transparent,
-                                            width: 2,
-                                          ),
+                                .map(
+                                  (color) => GestureDetector(
+                                    onTap: () =>
+                                        Navigator.of(context).pop(color),
+                                    child: Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        color: color,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: selectedColor == color
+                                              ? Colors.black
+                                              : Colors.transparent,
+                                          width: 2,
                                         ),
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                         ),
@@ -205,10 +211,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                       decoration: BoxDecoration(
                         color: habitColor,
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2,
-                        ),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                     ),
                   ),
@@ -228,10 +231,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                     child: Text(l10n.cancel),
                   ),
                   const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _save,
-                    child: Text(l10n.save),
-                  ),
+                  ElevatedButton(onPressed: _save, child: Text(l10n.save)),
                 ],
               ),
             ],
@@ -241,4 +241,3 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     );
   }
 }
-

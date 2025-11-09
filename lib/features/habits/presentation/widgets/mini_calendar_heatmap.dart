@@ -4,10 +4,7 @@ import 'package:intl/intl.dart';
 class MiniCalendarHeatmap extends StatelessWidget {
   final List<DateTime> completionDates;
 
-  const MiniCalendarHeatmap({
-    super.key,
-    required this.completionDates,
-  });
+  const MiniCalendarHeatmap({super.key, required this.completionDates});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +12,9 @@ class MiniCalendarHeatmap extends StatelessWidget {
     final today = DateTime(now.year, now.month, now.day);
 
     // Get last 7 days starting from Monday
-    final lastMonday =
-        today.subtract(Duration(days: (today.weekday - DateTime.monday) % 7));
+    final lastMonday = today.subtract(
+      Duration(days: (today.weekday - DateTime.monday) % 7),
+    );
     final last7Days = List.generate(7, (index) {
       return lastMonday.add(Duration(days: index));
     });
@@ -37,11 +35,9 @@ class MiniCalendarHeatmap extends StatelessWidget {
             final isToday = date == today;
 
             // Get localized day abbreviation
-            final dayAbbr =
-                DateFormat.E(Localizations.localeOf(context).toString())
-                    .format(date)
-                    .substring(0, 1)
-                    .toUpperCase();
+            final dayAbbr = DateFormat.E(
+              Localizations.localeOf(context).toString(),
+            ).format(date).substring(0, 1).toUpperCase();
 
             return Expanded(
               child: Container(
@@ -58,16 +54,14 @@ class MiniCalendarHeatmap extends StatelessWidget {
                   color: isCompleted ? null : Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
                   border: isToday
-                      ? Border.all(
-                          color: const Color(0xff6366f1),
-                          width: 2.5,
-                        )
+                      ? Border.all(color: const Color(0xff6366f1), width: 2.5)
                       : null,
                   boxShadow: isCompleted
                       ? [
                           BoxShadow(
-                            color:
-                                const Color(0xff10b981).withValues(alpha: 0.3),
+                            color: const Color(
+                              0xff10b981,
+                            ).withValues(alpha: 0.3),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           ),
@@ -83,17 +77,14 @@ class MiniCalendarHeatmap extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
-                          color:
-                              isCompleted ? Colors.white : Colors.grey.shade600,
+                          color: isCompleted
+                              ? Colors.white
+                              : Colors.grey.shade600,
                         ),
                       ),
                       const SizedBox(height: 2),
                       if (isCompleted)
-                        const Icon(
-                          Icons.check,
-                          size: 12,
-                          color: Colors.white,
-                        ),
+                        const Icon(Icons.check, size: 12, color: Colors.white),
                     ],
                   ),
                 ),

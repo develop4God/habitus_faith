@@ -23,8 +23,10 @@ void main() {
     test('Low-risk scenario: consistent spiritual habit', () async {
       // Arrange: User completing daily Bible reading consistently
       final now = DateTime(2024, 1, 15, 7, 30); // Monday 7:30 AM
-      final completions =
-          List.generate(10, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        10,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'low_risk_habit',
@@ -44,7 +46,8 @@ void main() {
 
       // Assert: Low risk expected
       print(
-          '[Integration] Low-risk scenario: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] Low-risk scenario: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       expect(risk, lessThan(0.5));
       expect(risk, greaterThanOrEqualTo(0.0));
     });
@@ -75,7 +78,8 @@ void main() {
 
       // Assert: High risk expected
       print(
-          '[Integration] High-risk scenario: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] High-risk scenario: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       expect(risk, greaterThan(0.5));
       expect(risk, lessThanOrEqualTo(1.0));
     });
@@ -108,7 +112,8 @@ void main() {
 
       // Assert: Medium risk expected
       print(
-          '[Integration] Medium-risk scenario: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] Medium-risk scenario: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       expect(risk, greaterThan(0.2));
       expect(risk, lessThan(0.8));
     });
@@ -134,15 +139,18 @@ void main() {
 
       // Assert: Should return default 0.5 for first-time habits
       print(
-          '[Integration] First-time habit: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] First-time habit: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       expect(risk, 0.5);
     });
 
     test('Relational category habit processes correctly', () async {
       // Arrange: Testing relational category (index = 3)
       final now = DateTime(2024, 1, 16, 19, 0); // Tuesday 7 PM
-      final completions =
-          List.generate(5, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        5,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'relational_habit',
@@ -162,7 +170,8 @@ void main() {
 
       // Assert: Valid risk value
       print(
-          '[Integration] Relational habit: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] Relational habit: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
     });
@@ -170,8 +179,10 @@ void main() {
     test('Prediction completes in less than 100ms', () async {
       // Arrange
       final now = DateTime(2024, 1, 15, 12, 0);
-      final completions =
-          List.generate(7, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        7,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'performance_test',
@@ -193,7 +204,8 @@ void main() {
 
       // Assert: Performance requirement
       print(
-          '[Integration] Prediction time: ${stopwatch.elapsedMilliseconds}ms');
+        '[Integration] Prediction time: ${stopwatch.elapsedMilliseconds}ms',
+      );
       expect(stopwatch.elapsedMilliseconds, lessThan(100));
     });
 
@@ -225,11 +237,13 @@ void main() {
 
       // Assert: Should be high enough to trigger intervention
       print(
-          '[Integration] Nudge scenario risk: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] Nudge scenario risk: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       if (risk > 0.65) {
         print('[Integration] ✓ Would trigger nudge notification');
         print(
-            '[Integration] User would see: "¿Reducimos a Xmin? Notamos que podrías abandonar"');
+          '[Integration] User would see: "¿Reducimos a Xmin? Notamos que podrías abandonar"',
+        );
       }
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
@@ -263,11 +277,13 @@ void main() {
 
       // Assert: Verify risk and potential intervention
       print(
-          '[Integration] Accept nudge scenario risk: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] Accept nudge scenario risk: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       if (risk > 0.65) {
         print('[Integration] ✓ Would trigger nudge notification');
         print(
-            '[Integration] If accepted: difficulty would reduce from ${habit.difficultyLevel} to lower level');
+          '[Integration] If accepted: difficulty would reduce from ${habit.difficultyLevel} to lower level',
+        );
       }
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
@@ -277,10 +293,17 @@ void main() {
       // This test verifies that features are in the correct order:
       // [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
 
-      final now =
-          DateTime(2024, 1, 15, 14, 0); // Monday (weekday=1), 2 PM (hour=14)
-      final completions =
-          List.generate(8, (i) => now.subtract(Duration(days: i)));
+      final now = DateTime(
+        2024,
+        1,
+        15,
+        14,
+        0,
+      ); // Monday (weekday=1), 2 PM (hour=14)
+      final completions = List.generate(
+        8,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'tensor_order_test',
@@ -302,9 +325,11 @@ void main() {
       // Features should be: [14, 1, 8, 0, 2]
       // hourOfDay=14, dayOfWeek=1 (Monday), streak=8, failures=0, category=2 (mental)
       print(
-          '[Integration] Tensor order test: ${(risk * 100).toStringAsFixed(1)}%');
+        '[Integration] Tensor order test: ${(risk * 100).toStringAsFixed(1)}%',
+      );
       print(
-          '[Integration] Expected features: [hour=14, day=1, streak=8, failures≈0, category=2]');
+        '[Integration] Expected features: [hour=14, day=1, streak=8, failures≈0, category=2]',
+      );
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
     });

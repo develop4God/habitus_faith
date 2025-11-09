@@ -665,7 +665,7 @@
   "syncComplete": "同步完成",
   "mlModelLoaded": "已加载",
   "mlModelLoading": "加载中...",
-  "mlModelError": "错误"
+  "mlModelError": "错误",
   "chooseHabitType": "你想添加哪种类型的习惯？",
   "@chooseHabitType": {
     "description": "添加习惯时选择类型的文本"

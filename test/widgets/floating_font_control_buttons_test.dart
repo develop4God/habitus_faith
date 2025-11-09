@@ -32,8 +32,9 @@ void main() {
       expect(find.text('A-'), findsOneWidget);
     });
 
-    testWidgets('calls onIncrease when increase button is tapped',
-        (WidgetTester tester) async {
+    testWidgets('calls onIncrease when increase button is tapped', (
+      WidgetTester tester,
+    ) async {
       var increaseCalled = false;
 
       await tester.pumpWidget(
@@ -55,8 +56,9 @@ void main() {
       expect(increaseCalled, isTrue);
     });
 
-    testWidgets('calls onDecrease when decrease button is tapped',
-        (WidgetTester tester) async {
+    testWidgets('calls onDecrease when decrease button is tapped', (
+      WidgetTester tester,
+    ) async {
       var decreaseCalled = false;
 
       await tester.pumpWidget(
@@ -78,8 +80,9 @@ void main() {
       expect(decreaseCalled, isTrue);
     });
 
-    testWidgets('calls onClose when close button is tapped',
-        (WidgetTester tester) async {
+    testWidgets('calls onClose when close button is tapped', (
+      WidgetTester tester,
+    ) async {
       var closeCalled = false;
 
       await tester.pumpWidget(
@@ -101,8 +104,9 @@ void main() {
       expect(closeCalled, isTrue);
     });
 
-    testWidgets('increase button is disabled when at max font size',
-        (WidgetTester tester) async {
+    testWidgets('increase button is disabled when at max font size', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -121,8 +125,9 @@ void main() {
       expect(find.text('A+'), findsOneWidget);
     });
 
-    testWidgets('decrease button is disabled when at min font size',
-        (WidgetTester tester) async {
+    testWidgets('decrease button is disabled when at min font size', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -141,8 +146,9 @@ void main() {
       expect(find.text('A-'), findsOneWidget);
     });
 
-    testWidgets('respects custom min and max font sizes',
-        (WidgetTester tester) async {
+    testWidgets('respects custom min and max font sizes', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

@@ -54,32 +54,44 @@ void main() {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.byType(HabitCompletionCard), findsOneWidget,
-            reason: 'HabitCompletionCard should render');
+        expect(
+          find.byType(HabitCompletionCard),
+          findsOneWidget,
+          reason: 'HabitCompletionCard should render',
+        );
       });
 
       testWidgets('displays habit name', (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.text('Morning Prayer'), findsOneWidget,
-            reason: 'Habit name should be displayed');
+        expect(
+          find.text('Morning Prayer'),
+          findsOneWidget,
+          reason: 'Habit name should be displayed',
+        );
       });
 
       testWidgets('displays habit emoji', (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.text('🙏'), findsOneWidget,
-            reason: 'Habit emoji should be displayed');
+        expect(
+          find.text('🙏'),
+          findsOneWidget,
+          reason: 'Habit emoji should be displayed',
+        );
       });
 
       testWidgets('displays emoji when provided', (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.text('🙏'), findsOneWidget,
-            reason: 'Habit emoji should be displayed');
+        expect(
+          find.text('🙏'),
+          findsOneWidget,
+          reason: 'Habit emoji should be displayed',
+        );
       });
 
       testWidgets('displays streak badges', (WidgetTester tester) async {
@@ -90,25 +102,34 @@ void main() {
         await tester.pumpWidget(createApp(habitWithStreak));
         await tester.pump();
 
-        expect(find.byIcon(Icons.local_fire_department), findsOneWidget,
-            reason: 'Fire icon for current streak should be displayed');
-        expect(find.textContaining('5 día'), findsOneWidget,
-            reason: 'Current streak text should be displayed');
+        expect(
+          find.byIcon(Icons.local_fire_department),
+          findsOneWidget,
+          reason: 'Fire icon for current streak should be displayed',
+        );
+        expect(
+          find.textContaining('5 día'),
+          findsOneWidget,
+          reason: 'Current streak text should be displayed',
+        );
       });
 
       testWidgets('has unique key with habit ID', (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.byKey(const Key('habit_completion_card_test-habit-1')),
-            findsOneWidget,
-            reason: 'Card should have unique key with habit ID');
+        expect(
+          find.byKey(const Key('habit_completion_card_test-habit-1')),
+          findsOneWidget,
+          reason: 'Card should have unique key with habit ID',
+        );
       });
     });
 
     group('Visual States', () {
-      testWidgets('incomplete habit has flat card with border',
-          (WidgetTester tester) async {
+      testWidgets('incomplete habit has flat card with border', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
@@ -119,8 +140,9 @@ void main() {
         expect(shape.side.width, 1, reason: 'Should have a border');
       });
 
-      testWidgets('completed habit has visual distinction',
-          (WidgetTester tester) async {
+      testWidgets('completed habit has visual distinction', (
+        WidgetTester tester,
+      ) async {
         final completedHabit = testHabit.copyWith(completedToday: true);
         await tester.pumpWidget(createApp(completedHabit));
         await tester.pump();
@@ -129,12 +151,16 @@ void main() {
         expect(card.elevation, 0, reason: 'Card should have flat elevation');
 
         // Check for checkbox icon indicating completion
-        expect(find.byIcon(Icons.check), findsOneWidget,
-            reason: 'Completed habit should show check icon');
+        expect(
+          find.byIcon(Icons.check),
+          findsOneWidget,
+          reason: 'Completed habit should show check icon',
+        );
       });
 
-      testWidgets('habit text has strikethrough when completed',
-          (WidgetTester tester) async {
+      testWidgets('habit text has strikethrough when completed', (
+        WidgetTester tester,
+      ) async {
         final completedHabit = testHabit.copyWith(completedToday: true);
         await tester.pumpWidget(createApp(completedHabit));
         await tester.pump();
@@ -143,31 +169,41 @@ void main() {
         expect(textFinder, findsOneWidget);
 
         final text = tester.widget<Text>(textFinder);
-        expect(text.style?.decoration, TextDecoration.lineThrough,
-            reason: 'Completed habit text should have strikethrough');
+        expect(
+          text.style?.decoration,
+          TextDecoration.lineThrough,
+          reason: 'Completed habit text should have strikethrough',
+        );
       });
     });
 
     group('Tap Interaction', () {
-      testWidgets('responds to tap when incomplete',
-          (WidgetTester tester) async {
+      testWidgets('responds to tap when incomplete', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
         tapCalled = false;
         await tester.tap(find.byType(HabitCompletionCard));
         await tester.pump(); // Start animation
-        await tester.pump(const Duration(
-            milliseconds: 1600)); // Wait for animation to complete
-        await tester
-            .pump(const Duration(milliseconds: 600)); // Wait for callback delay
+        await tester.pump(
+          const Duration(milliseconds: 1600),
+        ); // Wait for animation to complete
+        await tester.pump(
+          const Duration(milliseconds: 600),
+        ); // Wait for callback delay
 
-        expect(tapCalled, true,
-            reason: 'onTap should be called when incomplete habit is tapped');
+        expect(
+          tapCalled,
+          true,
+          reason: 'onTap should be called when incomplete habit is tapped',
+        );
       });
 
-      testWidgets('does not call onTap when already completed',
-          (WidgetTester tester) async {
+      testWidgets('does not call onTap when already completed', (
+        WidgetTester tester,
+      ) async {
         final completedHabit = testHabit.copyWith(completedToday: true);
         await tester.pumpWidget(createApp(completedHabit));
         await tester.pump();
@@ -176,12 +212,16 @@ void main() {
         await tester.tap(find.byType(HabitCompletionCard));
         await tester.pump();
 
-        expect(tapCalled, false,
-            reason: 'onTap should not be called when habit already completed');
+        expect(
+          tapCalled,
+          false,
+          reason: 'onTap should not be called when habit already completed',
+        );
       });
 
-      testWidgets('does not call onTap when isCompleting is true',
-          (WidgetTester tester) async {
+      testWidgets('does not call onTap when isCompleting is true', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createApp(testHabit, isCompleting: true));
         await tester.pump();
 
@@ -189,14 +229,18 @@ void main() {
         await tester.tap(find.byType(HabitCompletionCard));
         await tester.pump();
 
-        expect(tapCalled, false,
-            reason: 'onTap should not be called during async completion');
+        expect(
+          tapCalled,
+          false,
+          reason: 'onTap should not be called during async completion',
+        );
       });
     });
 
     group('Streak Display', () {
-      testWidgets('shows current streak with fire icon',
-          (WidgetTester tester) async {
+      testWidgets('shows current streak with fire icon', (
+        WidgetTester tester,
+      ) async {
         final habitWithStreaks = testHabit.copyWith(
           currentStreak: 7,
           longestStreak: 15,
@@ -204,24 +248,34 @@ void main() {
         await tester.pumpWidget(createApp(habitWithStreaks));
         await tester.pump();
 
-        expect(find.textContaining('7 día'), findsOneWidget,
-            reason: 'Current streak should be displayed with text');
-        expect(find.byIcon(Icons.local_fire_department), findsOneWidget,
-            reason: 'Fire icon for current streak');
+        expect(
+          find.textContaining('7 día'),
+          findsOneWidget,
+          reason: 'Current streak should be displayed with text',
+        );
+        expect(
+          find.byIcon(Icons.local_fire_department),
+          findsOneWidget,
+          reason: 'Fire icon for current streak',
+        );
       });
 
       testWidgets('hides streak when zero', (WidgetTester tester) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
-        expect(find.byIcon(Icons.local_fire_department), findsNothing,
-            reason: 'Should not show fire icon when streak is 0');
+        expect(
+          find.byIcon(Icons.local_fire_department),
+          findsNothing,
+          reason: 'Should not show fire icon when streak is 0',
+        );
       });
     });
 
     group('Edge Cases', () {
-      testWidgets('handles multiple rapid taps gracefully',
-          (WidgetTester tester) async {
+      testWidgets('handles multiple rapid taps gracefully', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createApp(testHabit));
         await tester.pump();
 
@@ -232,8 +286,11 @@ void main() {
         await tester.pump();
 
         // Should handle gracefully without crashing
-        expect(find.byType(HabitCompletionCard), findsOneWidget,
-            reason: 'Card should still be rendered after rapid taps');
+        expect(
+          find.byType(HabitCompletionCard),
+          findsOneWidget,
+          reason: 'Card should still be rendered after rapid taps',
+        );
       });
 
       testWidgets('handles very long habit names', (WidgetTester tester) async {
@@ -244,12 +301,16 @@ void main() {
         await tester.pumpWidget(createApp(longNameHabit));
         await tester.pump();
 
-        expect(find.textContaining('This is a very long'), findsOneWidget,
-            reason: 'Long habit name should be displayed');
+        expect(
+          find.textContaining('This is a very long'),
+          findsOneWidget,
+          reason: 'Long habit name should be displayed',
+        );
       });
 
-      testWidgets('handles very large streak numbers',
-          (WidgetTester tester) async {
+      testWidgets('handles very large streak numbers', (
+        WidgetTester tester,
+      ) async {
         final largeStreakHabit = testHabit.copyWith(
           currentStreak: 999,
           longestStreak: 1234,
@@ -257,8 +318,11 @@ void main() {
         await tester.pumpWidget(createApp(largeStreakHabit));
         await tester.pump();
 
-        expect(find.textContaining('999'), findsOneWidget,
-            reason: 'Large current streak number should be displayed');
+        expect(
+          find.textContaining('999'),
+          findsOneWidget,
+          reason: 'Large current streak number should be displayed',
+        );
       });
     });
 
@@ -268,8 +332,11 @@ void main() {
         await tester.pump();
 
         // Card should render with localized content
-        expect(find.byType(HabitCompletionCard), findsOneWidget,
-            reason: 'Card with localized content should render');
+        expect(
+          find.byType(HabitCompletionCard),
+          findsOneWidget,
+          reason: 'Card with localized content should render',
+        );
       });
     });
   });

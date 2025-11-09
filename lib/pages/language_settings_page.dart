@@ -29,9 +29,7 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Language changed to ${language.name}',
-          ),
+          content: Text('Language changed to ${language.name}'),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -48,13 +46,12 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLanguage =
-        ref.watch(appLanguageProvider.notifier).currentLanguage;
+    final currentLanguage = ref
+        .watch(appLanguageProvider.notifier)
+        .currentLanguage;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.languageSettings),
-      ),
+      appBar: AppBar(title: Text(l10n.languageSettings)),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -90,16 +87,19 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
                           ),
                         ),
                         trailing: isSelected
-                            ? const Icon(Icons.check_circle,
-                                color: Colors.green)
+                            ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
                             : _isChangingLanguage
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                        strokeWidth: 2),
-                                  )
-                                : const Icon(Icons.circle_outlined),
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.circle_outlined),
                         onTap: _isChangingLanguage || isSelected
                             ? null
                             : () => _changeLanguage(language),
@@ -117,16 +117,9 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.info_outline,
-                    size: 48,
-                    color: Colors.blue,
-                  ),
+                  const Icon(Icons.info_outline, size: 48, color: Colors.blue),
                   const SizedBox(height: 16),
-                  Text(
-                    l10n.languageInfo,
-                    style: const TextStyle(fontSize: 14),
-                  ),
+                  Text(l10n.languageInfo, style: const TextStyle(fontSize: 14)),
                 ],
               ),
             ),

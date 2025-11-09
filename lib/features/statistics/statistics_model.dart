@@ -1,4 +1,3 @@
-
 class StatisticsModel {
   final int totalHabits;
   final int completedHabits;
@@ -15,27 +14,28 @@ class StatisticsModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'totalHabits': totalHabits,
-        'completedHabits': completedHabits,
-        'currentStreak': currentStreak,
-        'longestStreak': longestStreak,
-        'lastCompletion': lastCompletion.toIso8601String(),
-      };
+    'totalHabits': totalHabits,
+    'completedHabits': completedHabits,
+    'currentStreak': currentStreak,
+    'longestStreak': longestStreak,
+    'lastCompletion': lastCompletion.toIso8601String(),
+  };
 
-  factory StatisticsModel.fromJson(Map<String, dynamic> json) => StatisticsModel(
+  factory StatisticsModel.fromJson(Map<String, dynamic> json) =>
+      StatisticsModel(
         totalHabits: json['totalHabits'] ?? 0,
         completedHabits: json['completedHabits'] ?? 0,
         currentStreak: json['currentStreak'] ?? 0,
         longestStreak: json['longestStreak'] ?? 0,
-        lastCompletion: DateTime.tryParse(json['lastCompletion'] ?? '') ?? DateTime.now(),
+        lastCompletion:
+            DateTime.tryParse(json['lastCompletion'] ?? '') ?? DateTime.now(),
       );
 
   static StatisticsModel empty() => StatisticsModel(
-        totalHabits: 0,
-        completedHabits: 0,
-        currentStreak: 0,
-        longestStreak: 0,
-        lastCompletion: DateTime.now(),
-      );
+    totalHabits: 0,
+    completedHabits: 0,
+    currentStreak: 0,
+    longestStreak: 0,
+    lastCompletion: DateTime.now(),
+  );
 }
-

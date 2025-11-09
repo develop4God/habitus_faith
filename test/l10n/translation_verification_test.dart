@@ -11,45 +11,93 @@ void main() {
         final l10n = lookupAppLocalizations(Locale(locale));
 
         // Test key habit page translations
-        expect(l10n.myHabits, isNotEmpty,
-            reason: 'myHabits should not be empty for $locale');
-        expect(l10n.noHabits, isNotEmpty,
-            reason: 'noHabits should not be empty for $locale');
-        expect(l10n.addHabit, isNotEmpty,
-            reason: 'addHabit should not be empty for $locale');
-        expect(l10n.deleteHabit, isNotEmpty,
-            reason: 'deleteHabit should not be empty for $locale');
-        expect(l10n.editHabit, isNotEmpty,
-            reason: 'editHabit should not be empty for $locale');
-        expect(l10n.habitCompleted, isNotEmpty,
-            reason: 'habitCompleted should not be empty for $locale');
-        expect(l10n.currentStreak, isNotEmpty,
-            reason: 'currentStreak should not be empty for $locale');
-        expect(l10n.longestStreak, isNotEmpty,
-            reason: 'longestStreak should not be empty for $locale');
-        expect(l10n.category, isNotEmpty,
-            reason: 'category should not be empty for $locale');
-        expect(l10n.difficulty, isNotEmpty,
-            reason: 'difficulty should not be empty for $locale');
-        expect(l10n.save, isNotEmpty,
-            reason: 'save should not be empty for $locale');
-        expect(l10n.cancel, isNotEmpty,
-            reason: 'cancel should not be empty for $locale');
-        expect(l10n.delete, isNotEmpty,
-            reason: 'delete should not be empty for $locale');
-        expect(l10n.uncheck, isNotEmpty,
-            reason: 'uncheck should not be empty for $locale');
+        expect(
+          l10n.myHabits,
+          isNotEmpty,
+          reason: 'myHabits should not be empty for $locale',
+        );
+        expect(
+          l10n.noHabits,
+          isNotEmpty,
+          reason: 'noHabits should not be empty for $locale',
+        );
+        expect(
+          l10n.addHabit,
+          isNotEmpty,
+          reason: 'addHabit should not be empty for $locale',
+        );
+        expect(
+          l10n.deleteHabit,
+          isNotEmpty,
+          reason: 'deleteHabit should not be empty for $locale',
+        );
+        expect(
+          l10n.editHabit,
+          isNotEmpty,
+          reason: 'editHabit should not be empty for $locale',
+        );
+        expect(
+          l10n.habitCompleted,
+          isNotEmpty,
+          reason: 'habitCompleted should not be empty for $locale',
+        );
+        expect(
+          l10n.currentStreak,
+          isNotEmpty,
+          reason: 'currentStreak should not be empty for $locale',
+        );
+        expect(
+          l10n.longestStreak,
+          isNotEmpty,
+          reason: 'longestStreak should not be empty for $locale',
+        );
+        expect(
+          l10n.category,
+          isNotEmpty,
+          reason: 'category should not be empty for $locale',
+        );
+        expect(
+          l10n.difficulty,
+          isNotEmpty,
+          reason: 'difficulty should not be empty for $locale',
+        );
+        expect(
+          l10n.save,
+          isNotEmpty,
+          reason: 'save should not be empty for $locale',
+        );
+        expect(
+          l10n.cancel,
+          isNotEmpty,
+          reason: 'cancel should not be empty for $locale',
+        );
+        expect(
+          l10n.delete,
+          isNotEmpty,
+          reason: 'delete should not be empty for $locale',
+        );
+        expect(
+          l10n.uncheck,
+          isNotEmpty,
+          reason: 'uncheck should not be empty for $locale',
+        );
 
         // Test parameterized translations
         const habitName = 'Test Habit';
         final deleteConfirm = l10n.deleteHabitConfirm(habitName);
-        expect(deleteConfirm, contains(habitName),
-            reason: 'deleteHabitConfirm should contain habit name for $locale');
+        expect(
+          deleteConfirm,
+          contains(habitName),
+          reason: 'deleteHabitConfirm should contain habit name for $locale',
+        );
 
         const riskPercent = 85;
         final riskMsg = l10n.riskPercentage(riskPercent);
-        expect(riskMsg, contains('85'),
-            reason: 'riskPercentage should contain percentage for $locale');
+        expect(
+          riskMsg,
+          contains('85'),
+          reason: 'riskPercentage should contain percentage for $locale',
+        );
       }
     });
 
@@ -77,14 +125,26 @@ void main() {
       for (final locale in locales) {
         final l10n = lookupAppLocalizations(Locale(locale));
 
-        expect(l10n.spiritual, isNotEmpty,
-            reason: 'spiritual should not be empty for $locale');
-        expect(l10n.physical, isNotEmpty,
-            reason: 'physical should not be empty for $locale');
-        expect(l10n.mental, isNotEmpty,
-            reason: 'mental should not be empty for $locale');
-        expect(l10n.relational, isNotEmpty,
-            reason: 'relational should not be empty for $locale');
+        expect(
+          l10n.spiritual,
+          isNotEmpty,
+          reason: 'spiritual should not be empty for $locale',
+        );
+        expect(
+          l10n.physical,
+          isNotEmpty,
+          reason: 'physical should not be empty for $locale',
+        );
+        expect(
+          l10n.mental,
+          isNotEmpty,
+          reason: 'mental should not be empty for $locale',
+        );
+        expect(
+          l10n.relational,
+          isNotEmpty,
+          reason: 'relational should not be empty for $locale',
+        );
       }
     });
   });
