@@ -274,10 +274,23 @@ class _AdaptiveOnboardingPageState
       // Create habits from generated data
       final repository = ref.read(jsonHabitsRepositoryProvider);
       for (final habitData in habitsData) {
+        // Corregir casteo: convertir string a HabitCategory
+        HabitCategory category;
+        final catValue = habitData['category'];
+        if (catValue is String) {
+          category = HabitCategory.values.firstWhere(
+            (e) => e.toString().split('.').last == catValue,
+            orElse: () => HabitCategory.spiritual,
+          );
+        } else if (catValue is HabitCategory) {
+          category = catValue;
+        } else {
+          category = HabitCategory.spiritual;
+        }
         await repository.createHabit(
           name: habitData['name'] as String,
           description: habitData['description'] as String,
-          category: habitData['category'] as HabitCategory,
+          category: category,
           emoji: habitData['emoji'] as String?,
         );
         if (!mounted) return;
@@ -296,9 +309,9 @@ class _AdaptiveOnboardingPageState
       log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}', name: 'onboarding');
 
       if (!mounted) return;
-      debugPrint('Navegando a /home');
-      log('Navegando a /home', name: 'onboarding');
-      Navigator.of(context).pushReplacementNamed('/home');
+      debugPrint('Navegando a /habits');
+      log('Navegando a /habits', name: 'onboarding');
+      Navigator.of(context).pushReplacementNamed('/habits');
     } catch (e, stack) {
       debugPrint('Error en _completeOnboarding: ${e.toString()}');
       debugPrint('Stacktrace: $stack');

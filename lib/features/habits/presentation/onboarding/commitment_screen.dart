@@ -70,7 +70,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    const inputLabel = '✔ Tu compromiso contigo mismo';
+    const inputLabel = 'Firma con un ✔ el compromiso contigo mismo';
     final commitments = _getCommitments();
 
     return Scaffold(
