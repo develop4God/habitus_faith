@@ -80,31 +80,97 @@ class _AdaptiveOnboardingPageState
     final currentQuestion = questions[currentIndex];
     final answers = ref.read(answersProvider);
     final answer = answers[currentQuestion.id];
-    final localMounted = mounted;
 
+    // Mostrar SnackBar antes de cualquier await
     if (currentQuestion.isRequired && answer == null) {
-      if (localMounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Por favor selecciona una opción'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor selecciona una opción'),
+          duration: Duration(seconds: 2),
+        ),
+      );
       return;
     }
 
-    // Check if we should show encouragement message
+    // Mostrar diálogo antes de cualquier await
     if (currentQuestion.id == 'supportSystem') {
       final intent = ref.read(selectedIntentProvider);
       final supportLevel = answer as String?;
       if (intent != null && supportLevel != null) {
         final message = getEncouragementMessage(intent, supportLevel);
-        if (message != null && localMounted) {
-          await _showEncouragementDialog(message);
+        if (message != null) {
+          await showDialog<void>(
+            context: context,
+            builder: (BuildContext dialogContext) {
+              return AlertDialog(
+                title: Row(
+                  children: [
+                    const Icon(Icons.favorite, color: Color(0xff6366f1)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        message.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff1a202c),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      message.message,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    if (message.verseReference != null) ...[
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xfff8fafc),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: const Color(0xff6366f1)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              message.verseReference!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff6366f1),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              message.verseText ?? '',
+                              style: const TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    child: const Text('Continuar'),
+                  ),
+                ],
+              );
+            },
+          );
         }
       }
     }
+
+    // Después de cualquier await, verifica que el widget sigue montado
+    if (!mounted) return;
 
     // Move to next question or commitment screen
     if (currentIndex < questions.length - 1) {
@@ -114,10 +180,7 @@ class _AdaptiveOnboardingPageState
         curve: Curves.easeInOut,
       );
     } else {
-      // Go to commitment screen
-      if (localMounted) {
-        await _goToCommitmentScreen();
-      }
+      await _goToCommitmentScreen();
     }
   }
 
@@ -137,10 +200,12 @@ class _AdaptiveOnboardingPageState
       completedAt: DateTime.now(),
     );
     final geminiService = await ref.read(geminiServiceProvider.future);
+    if (!mounted) return;
     const userId = 'local_user';
     final habitsData = await geminiService.generateHabitsFromProfile(profile, userId);
+    if (!mounted) return;
     // Extraer resumen de hábitos (nombre y descripción)
-    final habitsSummary = habitsData.map<String>((habit) =>
+    habitsData.map<String>((habit) =>
       '${habit['emoji'] ?? ''} ${habit['name']}: ${habit['description']}').toList();
 
     final result = await Navigator.of(context).push<String>(
@@ -150,12 +215,12 @@ class _AdaptiveOnboardingPageState
           onCommitmentMade: (commitment) {
             Navigator.of(context).pop(commitment);
           },
-          habitsSummary: habitsSummary,
         ),
       ),
     );
 
-    if (result != null && mounted) {
+    if (!mounted) return;
+    if (result != null) {
       await _completeOnboarding(result);
     }
   }
@@ -188,6 +253,7 @@ class _AdaptiveOnboardingPageState
 
       // Save profile to SharedPreferences
       final prefs = await SharedPreferences.getInstance();
+      if (!mounted) return;
       await prefs.setString('onboarding_profile', jsonEncode(profile.toJson()));
       await prefs.setString('user_intent', intent.name);
       debugPrint('Perfil guardado en SharedPreferences');
@@ -195,11 +261,13 @@ class _AdaptiveOnboardingPageState
 
       // Generate habits using AI based on profile
       final geminiService = await ref.read(geminiServiceProvider.future);
+      if (!mounted) return;
       final storage = ref.read(jsonStorageServiceProvider);
       const userId = 'local_user'; // For now, using local storage
 
       final habitsData =
           await geminiService.generateHabitsFromProfile(profile, userId);
+      if (!mounted) return;
       debugPrint('Habits generados por AI: $habitsData');
       log('Habits generados por AI: $habitsData', name: 'onboarding');
 
@@ -212,12 +280,14 @@ class _AdaptiveOnboardingPageState
           category: habitData['category'] as HabitCategory,
           emoji: habitData['emoji'] as String?,
         );
+        if (!mounted) return;
       }
       debugPrint('Hábitos creados en el repositorio');
       log('Hábitos creados en el repositorio', name: 'onboarding');
 
       // Mark onboarding as complete
       await storage.setBool('onboarding_complete', true);
+      if (!mounted) return;
       debugPrint('Onboarding marcado como completo en storage');
       log('Onboarding marcado como completo en storage', name: 'onboarding');
 
@@ -225,31 +295,30 @@ class _AdaptiveOnboardingPageState
       debugPrint('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}');
       log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}', name: 'onboarding');
 
-      if (mounted) {
-        debugPrint('Navegando a /home');
-        log('Navegando a /home', name: 'onboarding');
-        Navigator.of(context).pushReplacementNamed('/home');
-      }
+      if (!mounted) return;
+      debugPrint('Navegando a /home');
+      log('Navegando a /home', name: 'onboarding');
+      Navigator.of(context).pushReplacementNamed('/home');
     } catch (e, stack) {
       debugPrint('Error en _completeOnboarding: ${e.toString()}');
       debugPrint('Stacktrace: $stack');
       log('Error en _completeOnboarding: ${e.toString()}', name: 'onboarding');
       log('Stacktrace: $stack', name: 'onboarding');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 5),
-          ),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
+      // No usar return aquí
     }
   }
 
@@ -284,74 +353,6 @@ class _AdaptiveOnboardingPageState
     return answers['faithWalk'] as String?;
   }
 
-  Future<void> _showEncouragementDialog(ConditionalMessage message) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            children: [
-              const Icon(Icons.favorite, color: Color(0xff6366f1)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  message.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff1a202c),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                message.message,
-                style: const TextStyle(fontSize: 16),
-              ),
-              if (message.verseReference != null) ...[
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xfff8fafc),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xff6366f1)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        message.verseReference!,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff6366f1),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        message.verseText ?? '',
-                        style: const TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Continuar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 
   @override
@@ -380,101 +381,124 @@ class _AdaptiveOnboardingPageState
       body: SafeArea(
         child: Column(
           children: [
-            // Barra de pasos moderna y clara
+            // Barra de pasos moderna y clara + botón Back arriba a la izquierda en pantalla 2
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(questions.length, (i) {
-                  final isActive = i == currentIndex;
-                  final isCompleted = i < currentIndex;
-                  return Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: isActive ? 28 : 20,
-                        height: isActive ? 28 : 20,
-                        decoration: BoxDecoration(
-                          color: isCompleted
-                              ? const Color(0xff6366f1)
-                              : isActive
-                                  ? const Color(0xff6366f1).withValues(alpha: 0.8)
-                                  : Colors.grey.shade300,
-                          shape: BoxShape.circle,
-                          boxShadow: isActive
-                              ? [BoxShadow(color: const Color(0xff6366f1).withValues(alpha: 0.2), blurRadius: 8)]
-                              : [],
-                        ),
-                        child: Center(
-                          child: isCompleted
-                              ? const Icon(Icons.check, color: Colors.white, size: 16)
-                              : Text(
-                                  '${i + 1}',
-                                  style: TextStyle(
-                                    color: isActive ? Colors.white : Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: isActive ? 16 : 12,
-                                  ),
-                                ),
-                        ),
-                      ),
-                      if (i < questions.length - 1)
-                        Container(
-                          width: 32,
-                          height: 4,
-                          color: isCompleted ? const Color(0xff6366f1) : Colors.grey.shade300,
-                        ),
-                    ],
-                  );
-                }),
-              ),
-            ),
-            // Pregunta y mensaje destacado para pantalla 2 multiChoice
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
-                  Text(
-                    currentQuestion.title,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff1a202c),
+                  if (currentIndex > 0)
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Color(0xff6366f1)),
+                      tooltip: 'Atrás',
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              if (currentIndex > 0) {
+                                ref.read(currentQuestionIndexProvider.notifier).state = currentIndex - 1;
+                                _pageController.previousPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }
+                            },
                     ),
-                  ),
-                  if (isSecondScreen)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xffeef2ff),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xff6366f1), width: 1.5),
-                        ),
-                        child: const Row(
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(questions.length, (i) {
+                        final isActive = i == currentIndex;
+                        final isCompleted = i < currentIndex;
+                        return Row(
                           children: [
-                            Icon(Icons.info_outline, color: Color(0xff6366f1)),
-                            SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                'Puedes seleccionar hasta 3 opciones que más te identifiquen.',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xff6366f1),
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: isActive ? 28 : 20,
+                              height: isActive ? 28 : 20,
+                              decoration: BoxDecoration(
+                                color: isCompleted
+                                    ? const Color(0xff6366f1)
+                                    : isActive
+                                        ? const Color(0xff6366f1).withValues(alpha: 0.8)
+                                        : Colors.grey.shade300,
+                                shape: BoxShape.circle,
+                                boxShadow: isActive
+                                    ? [BoxShadow(color: const Color(0xff6366f1).withValues(alpha: 0.2), blurRadius: 8)]
+                                    : [],
+                              ),
+                              child: Center(
+                                child: isCompleted
+                                    ? const Icon(Icons.check, color: Colors.white, size: 16)
+                                    : Text(
+                                        '${i + 1}',
+                                        style: TextStyle(
+                                          color: isActive ? Colors.white : Colors.black54,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: isActive ? 16 : 12,
+                                        ),
+                                      ),
                               ),
                             ),
+                            if (i < questions.length - 1)
+                              Container(
+                                width: 32,
+                                height: 4,
+                                color: isCompleted ? const Color(0xff6366f1) : Colors.grey.shade300,
+                              ),
                           ],
-                        ),
-                      ),
+                        );
+                      }),
                     ),
+                  ),
                 ],
               ),
             ),
+            // Pregunta y mensaje destacado para pantalla 2 multiChoice
+            if (currentIndex != 0) // Solo mostrar el título de la pregunta si no es la primera
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    Text(
+                      currentQuestion.title,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff1a202c),
+                      ),
+                    ),
+                    if (isSecondScreen)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffeef2ff),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xff6366f1), width: 1.5),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.info_outline, color: Color(0xff6366f1)),
+                              SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Puedes seleccionar hasta 3 opciones que más te identifiquen.',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff6366f1),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             // Opciones
             Expanded(
               child: PageView.builder(
@@ -501,42 +525,6 @@ class _AdaptiveOnboardingPageState
                   width: 120,
                   height: 120,
                   repeat: true,
-                ),
-              ),
-            // Botón Back solo en la pantalla 5 (índice 4)
-            if (currentIndex == 4)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    icon: const Icon(Icons.arrow_back, color: Color(0xff6366f1)),
-                    label: const Text(
-                      'Atrás',
-                      style: TextStyle(
-                        color: Color(0xff6366f1),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xff6366f1)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            if (currentIndex > 0) {
-                              ref.read(currentQuestionIndexProvider.notifier).state = currentIndex - 1;
-                              _pageController.previousPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                              );
-                            }
-                          },
-                  ),
                 ),
               ),
             // Continue button
@@ -599,30 +587,25 @@ class _QuestionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Evito mostrar el título dos veces en la página 3 (faithWalk)
+    final showTitle = question.id != 'faithWalk';
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
-          Text(
-            question.title,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color(0xff1a202c),
-            ),
-          ),
-          const SizedBox(height: 24),
-          if (question.type == QuestionType.multiChoice &&
-              question.maxSelections != null)
+          if (showTitle)
             Text(
-              'Selecciona hasta ${question.maxSelections} opciones',
+              question.title,
               style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xff64748b),
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff1a202c),
               ),
             ),
+          if (!showTitle)
+            const SizedBox(height: 8),
           const SizedBox(height: 16),
           ...question.options.map((option) {
             final isSelected = question.type == QuestionType.singleChoice
@@ -640,15 +623,11 @@ class _QuestionPage extends StatelessWidget {
                       Future.delayed(const Duration(milliseconds: 150), onAutoAdvance);
                     }
                   } else {
-                    // Multi-select
                     final current = (selectedAnswer as List?)?.toList() ?? [];
                     if (isSelected) {
                       current.remove(option.id);
                     } else {
-                      if (question.maxSelections == null ||
-                          current.length < question.maxSelections!) {
-                        current.add(option.id);
-                      }
+                      current.add(option.id);
                     }
                     onAnswerSelected(current);
                   }

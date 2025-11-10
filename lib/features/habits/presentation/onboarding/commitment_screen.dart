@@ -6,13 +6,11 @@ import '../../../../l10n/app_localizations.dart';
 class CommitmentScreen extends StatefulWidget {
   final UserIntent userIntent;
   final Function(String commitment) onCommitmentMade;
-  final List<String> habitsSummary;
 
   const CommitmentScreen({
     super.key,
     required this.userIntent,
     required this.onCommitmentMade,
-    required this.habitsSummary,
   });
 
   @override
@@ -22,11 +20,23 @@ class CommitmentScreen extends StatefulWidget {
 class _CommitmentScreenState extends State<CommitmentScreen> {
   final TextEditingController _commitmentController = TextEditingController();
   final SignatureController _signatureController = SignatureController(penStrokeWidth: 3, penColor: Colors.black);
+  final ValueNotifier<bool> _isSignatureNotEmpty = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _signatureController.addListener(_onSignatureChanged);
+  }
+
+  void _onSignatureChanged() {
+    _isSignatureNotEmpty.value = _signatureController.isNotEmpty;
+  }
 
   @override
   void dispose() {
     _commitmentController.dispose();
     _signatureController.dispose();
+    _isSignatureNotEmpty.dispose();
     super.dispose();
   }
 
@@ -83,33 +93,32 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              // Mostrar resumen de hábitos
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.habitsSummary.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            widget.habitsSummary[index],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Color(0xff1a202c),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+              // Lista fija de compromisos personales
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      'Me comprometo a mejorar mi disciplina personal.',
+                      style: TextStyle(fontSize: 16, color: Color(0xff1a202c)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      'Buscaré crecer espiritualmente y cuidar mi bienestar.',
+                      style: TextStyle(fontSize: 16, color: Color(0xff1a202c)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      'Seré constante y perseverante en mis hábitos diarios.',
+                      style: TextStyle(fontSize: 16, color: Color(0xff1a202c)),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               Text(
@@ -138,30 +147,35 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 child: const Text('Limpiar firma'),
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                height: 56,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff6366f1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+              ValueListenableBuilder<bool>(
+                valueListenable: _isSignatureNotEmpty,
+                builder: (context, isNotEmpty, child) {
+                  return SizedBox(
+                    height: 56,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff6366f1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 4,
+                      ),
+                      onPressed: isNotEmpty
+                          ? () {
+                              widget.onCommitmentMade('Compromiso firmado');
+                            }
+                          : null,
+                      child: Text(
+                        l10n.continueButton,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    elevation: 4,
-                  ),
-                  onPressed: _signatureController.isNotEmpty
-                      ? () {
-                          widget.onCommitmentMade('Compromiso firmado');
-                        }
-                      : null,
-                  child: Text(
-                    l10n.continueButton,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
