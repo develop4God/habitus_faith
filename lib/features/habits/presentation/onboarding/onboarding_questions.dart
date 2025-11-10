@@ -58,7 +58,7 @@ class ConditionalMessage {
 /// Q1: Intent Detection (Branch Point)
 const intentQuestion = OnboardingQuestion(
   id: 'intent',
-  title: '¿Qué te trae a habitus+faith?',
+  title: '¿Cuál es tu principal motivación para usar habitus+faith?',
   type: QuestionType.singleChoice,
   options: [
     QuestionOption(

@@ -78,13 +78,12 @@ class _AdaptiveOnboardingPageState
     final currentIndex = ref.read(currentQuestionIndexProvider);
     final questions = _getQuestions();
     final currentQuestion = questions[currentIndex];
-
-    // Validate answer
     final answers = ref.read(answersProvider);
     final answer = answers[currentQuestion.id];
+    final localMounted = mounted;
 
     if (currentQuestion.isRequired && answer == null) {
-      if (mounted) {
+      if (localMounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Por favor selecciona una opción'),
@@ -101,7 +100,7 @@ class _AdaptiveOnboardingPageState
       final supportLevel = answer as String?;
       if (intent != null && supportLevel != null) {
         final message = getEncouragementMessage(intent, supportLevel);
-        if (message != null && mounted) {
+        if (message != null && localMounted) {
           await _showEncouragementDialog(message);
         }
       }
@@ -116,7 +115,7 @@ class _AdaptiveOnboardingPageState
       );
     } else {
       // Go to commitment screen
-      if (mounted) {
+      if (localMounted) {
         await _goToCommitmentScreen();
       }
     }
@@ -354,16 +353,6 @@ class _AdaptiveOnboardingPageState
     );
   }
 
-  void _previousQuestion() {
-    final currentIndex = ref.read(currentQuestionIndexProvider);
-    if (currentIndex > 0) {
-      ref.read(currentQuestionIndexProvider.notifier).state = currentIndex - 1;
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -409,11 +398,11 @@ class _AdaptiveOnboardingPageState
                           color: isCompleted
                               ? const Color(0xff6366f1)
                               : isActive
-                                  ? const Color(0xff6366f1).withOpacity(0.8)
+                                  ? const Color(0xff6366f1).withValues(alpha: 0.8)
                                   : Colors.grey.shade300,
                           shape: BoxShape.circle,
                           boxShadow: isActive
-                              ? [BoxShadow(color: const Color(0xff6366f1).withOpacity(0.2), blurRadius: 8)]
+                              ? [BoxShadow(color: const Color(0xff6366f1).withValues(alpha: 0.2), blurRadius: 8)]
                               : [],
                         ),
                         child: Center(
@@ -440,37 +429,53 @@ class _AdaptiveOnboardingPageState
                 }),
               ),
             ),
-            // Mensaje destacado para pantalla 2 multiChoice
-            if (isSecondScreen)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffeef2ff),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xff6366f1), width: 1.5),
+            // Pregunta y mensaje destacado para pantalla 2 multiChoice
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  Text(
+                    currentQuestion.title,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff1a202c),
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.info_outline, color: Color(0xff6366f1)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Puedes seleccionar hasta 3 opciones que más te identifiquen.',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff6366f1),
-                            fontWeight: FontWeight.w600,
-                          ),
+                  if (isSecondScreen)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xffeef2ff),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xff6366f1), width: 1.5),
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.info_outline, color: Color(0xff6366f1)),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'Puedes seleccionar hasta 3 opciones que más te identifiquen.',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xff6366f1),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                ],
               ),
-
-            // Question content
+            ),
+            // Opciones
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -487,8 +492,7 @@ class _AdaptiveOnboardingPageState
                 },
               ),
             ),
-
-            // Animación Lottie al final para claridad
+            // Animación Lottie solo en la última pantalla, no en la 5
             if (currentIndex == questions.length - 1)
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
@@ -499,7 +503,42 @@ class _AdaptiveOnboardingPageState
                   repeat: true,
                 ),
               ),
-
+            // Botón Back solo en la pantalla 5 (índice 4)
+            if (currentIndex == 4)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.arrow_back, color: Color(0xff6366f1)),
+                    label: const Text(
+                      'Atrás',
+                      style: TextStyle(
+                        color: Color(0xff6366f1),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Color(0xff6366f1)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: _isLoading
+                        ? null
+                        : () {
+                            if (currentIndex > 0) {
+                              ref.read(currentQuestionIndexProvider.notifier).state = currentIndex - 1;
+                              _pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            }
+                          },
+                  ),
+                ),
+              ),
             // Continue button
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -616,7 +655,7 @@ class _QuestionPage extends StatelessWidget {
                 },
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -636,6 +675,8 @@ class _OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Si el texto es "Estrés y ansiedad", reemplazo el emoji por 😌
+    final emoji = option.text == 'Estrés y ansiedad' ? '😌' : option.emoji;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -651,13 +692,13 @@ class _OptionCard extends StatelessWidget {
           boxShadow: [
             if (isSelected)
               BoxShadow(
-                color: const Color(0xff6366f1).withOpacity(0.2),
+                color: const Color(0xff6366f1).withValues(alpha: 0.2),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               )
             else
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -666,7 +707,7 @@ class _OptionCard extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              option.emoji,
+              emoji,
               style: const TextStyle(fontSize: 32),
             ),
             const SizedBox(width: 16),
