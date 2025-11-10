@@ -5,6 +5,7 @@ import '../../domain/habit.dart';
 import '../../domain/habits_repository.dart';
 import '../../domain/failures.dart';
 import '../../domain/models/completion_record.dart';
+import '../../domain/models/habit_notification.dart';
 import '../../domain/ml_features_calculator.dart';
 import '../habit_model.dart';
 import 'json_storage_service.dart';
@@ -376,6 +377,9 @@ class JsonHabitsRepository implements HabitsRepository {
     String? emoji,
     int? colorValue,
     HabitDifficulty? difficulty,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
   }) async {
     try {
       final habits = _loadHabits();
@@ -397,6 +401,9 @@ class JsonHabitsRepository implements HabitsRepository {
         emoji: emoji,
         colorValue: colorValue,
         difficulty: difficulty,
+        notificationSettings: notificationSettings,
+        recurrence: recurrence,
+        subtasks: subtasks,
       );
 
       habits[index] = updatedHabit;

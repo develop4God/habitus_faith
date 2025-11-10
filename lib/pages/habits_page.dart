@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
+import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
@@ -103,6 +104,9 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     String? emoji,
     int? colorValue,
     HabitDifficulty? difficulty,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
   }) async {
     debugPrint('JsonHabitsNotifier.updateHabit: start -> $habitId');
     state = const AsyncLoading();
@@ -116,6 +120,9 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
       emoji: emoji,
       colorValue: colorValue,
       difficulty: difficulty,
+      notificationSettings: notificationSettings,
+      recurrence: recurrence,
+      subtasks: subtasks,
     );
 
     result.fold(
