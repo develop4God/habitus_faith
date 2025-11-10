@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
+import '../core/providers/notification_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/reminder_config_dialog.dart';
 import '../widgets/recurrence_config_dialog.dart';
+import '../widgets/subtasks_section.dart';
 import 'habits_page.dart';
 
 class EditHabitDialog extends ConsumerStatefulWidget {
@@ -70,6 +72,31 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
           recurrence: recurrence,
           subtasks: subtasks,
         );
+
+    // Schedule or cancel notifications based on settings
+    final notificationService = ref.read(notificationServiceProvider);
+    if (notificationSettings != null &&
+        notificationSettings!.timing != NotificationTiming.none &&
+        notificationSettings!.eventTime != null) {
+      // Calculate minutes before
+      int? minutesBefore;
+      if (notificationSettings!.timing == NotificationTiming.custom) {
+        minutesBefore = notificationSettings!.customMinutesBefore;
+      } else {
+        minutesBefore = notificationSettings!.timing.minutesBefore;
+      }
+
+      await notificationService.scheduleHabitNotification(
+        habitId: widget.habit.id,
+        habitName: nameCtrl.text,
+        eventTime: notificationSettings!.eventTime!,
+        minutesBefore: minutesBefore,
+      );
+    } else {
+      // Cancel notification if disabled
+      await notificationService.cancelHabitNotification(widget.habit.id);
+    }
+
     if (mounted) Navigator.of(context).pop();
   }
 
@@ -304,6 +331,16 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                       recurrence = result;
                     });
                   }
+                },
+              ),
+              const SizedBox(height: 20),
+              // Subtasks section
+              SubtasksSection(
+                initialSubtasks: subtasks,
+                onSubtasksChanged: (newSubtasks) {
+                  setState(() {
+                    subtasks = newSubtasks;
+                  });
                 },
               ),
               const SizedBox(height: 20),
