@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -1321,6 +1321,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get home;
+
+  /// Reminder configuration dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Configuration'**
+  String get reminderConfig;
+
+  /// Recurrence configuration dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Repetitions'**
+  String get recurrenceConfig;
+
+  /// Repeat toggle label
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get repeat;
+
+  /// Subtitle for repeat toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Set a cycle for your plan'**
+  String get setCycleForPlan;
+
+  /// Subtasks section label
+  ///
+  /// In en, this message translates to:
+  /// **'Subtasks'**
+  String get subtasks;
+
+  /// Add subtask hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Add subtask'**
+  String get addSubtask;
+
+  /// Custom minutes before label
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes before'**
+  String get minutesBefore;
+
+  /// Interval label for recurrence
+  ///
+  /// In en, this message translates to:
+  /// **'Interval'**
+  String get interval;
+
+  /// End date label for recurrence
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get endDate;
+
+  /// Daily frequency option
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get daily;
+
+  /// Weekly frequency option
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// Monthly frequency option
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// Every X days text
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} day(s)'**
+  String everyXDays(int count);
+
+  /// Every X weeks text
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} week(s)'**
+  String everyXWeeks(int count);
+
+  /// Every X months text
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} month(s)'**
+  String everyXMonths(int count);
+
+  /// No repetition text
+  ///
+  /// In en, this message translates to:
+  /// **'No repetition'**
+  String get noRepetition;
+
+  /// Reminder label
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get reminder;
+
+  /// Repetition label
+  ///
+  /// In en, this message translates to:
+  /// **'Repetition'**
+  String get repetition;
+
+  /// Event time label
+  ///
+  /// In en, this message translates to:
+  /// **'Event time (HH:MM)'**
+  String get eventTime;
+
+  /// Validation message for invalid custom minutes
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number between 1 and 1440'**
+  String get invalidMinutes;
+
+  /// Validation message for invalid interval
+  ///
+  /// In en, this message translates to:
+  /// **'Interval must be at least 1'**
+  String get invalidInterval;
 }
 
 class _AppLocalizationsDelegate
@@ -1356,9 +1482,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

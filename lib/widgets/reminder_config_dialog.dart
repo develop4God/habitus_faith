@@ -21,12 +21,27 @@ class ReminderConfigDialog extends ConsumerStatefulWidget {
 class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
   late NotificationTiming selectedTiming;
   int? customMinutes;
+  String? customMinutesError;
 
   @override
   void initState() {
     super.initState();
     selectedTiming = widget.initialSettings?.timing ?? NotificationTiming.none;
     customMinutes = widget.initialSettings?.customMinutesBefore;
+  }
+
+  bool _validateCustomMinutes(String value) {
+    final minutes = int.tryParse(value);
+    if (minutes == null || minutes < 1 || minutes > 1440) {
+      setState(() {
+        customMinutesError = AppLocalizations.of(context)!.invalidMinutes;
+      });
+      return false;
+    }
+    setState(() {
+      customMinutesError = null;
+    });
+    return true;
   }
 
   String _getEffectiveTime(NotificationTiming timing) {
@@ -78,7 +93,7 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Configuración de recordatorio',
+              l10n.reminderConfig,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -128,6 +143,19 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  // Validate custom minutes if that option is selected
+                  if (selectedTiming == NotificationTiming.custom) {
+                    if (customMinutes == null ||
+                        customMinutes! < 1 ||
+                        customMinutes! > 1440) {
+                      setState(() {
+                        customMinutesError =
+                            AppLocalizations.of(context)!.invalidMinutes;
+                      });
+                      return;
+                    }
+                  }
+
                   final settings = HabitNotificationSettings(
                     timing: selectedTiming,
                     customMinutesBefore: customMinutes,
@@ -197,15 +225,20 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                       padding: const EdgeInsets.only(top: 8),
                       child: TextField(
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Minutos antes',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.minutesBefore,
+                          border: const OutlineInputBorder(),
                           isDense: true,
+                          errorText: customMinutesError,
                         ),
                         onChanged: (value) {
-                          setState(() {
-                            customMinutes = int.tryParse(value);
-                          });
+                          if (value.isNotEmpty) {
+                            _validateCustomMinutes(value);
+                            setState(() {
+                              customMinutes = int.tryParse(value);
+                            });
+                          }
                         },
                       ),
                     ),

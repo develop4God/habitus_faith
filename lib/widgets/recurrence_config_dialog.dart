@@ -59,7 +59,7 @@ class _RecurrenceConfigDialogState
               ),
               const SizedBox(height: 8),
               Text(
-                'Repeticiones cada día',
+                l10n.recurrenceConfig,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -80,15 +80,15 @@ class _RecurrenceConfigDialogState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Repetir',
-                            style: TextStyle(
+                          Text(
+                            l10n.repeat,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
-                            'Fija un ciclo para tu plan',
+                            l10n.setCycleForPlan,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey.shade600,
@@ -122,19 +122,19 @@ class _RecurrenceConfigDialogState
                       Expanded(
                         child: _buildFrequencyTab(
                           RecurrenceFrequency.daily,
-                          'Diario',
+                          l10n.daily,
                         ),
                       ),
                       Expanded(
                         child: _buildFrequencyTab(
                           RecurrenceFrequency.weekly,
-                          'Semanal',
+                          l10n.weekly,
                         ),
                       ),
                       Expanded(
                         child: _buildFrequencyTab(
                           RecurrenceFrequency.monthly,
-                          'Mensual',
+                          l10n.monthly,
                         ),
                       ),
                     ],
@@ -145,9 +145,9 @@ class _RecurrenceConfigDialogState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Intervalo',
-                      style: TextStyle(
+                    Text(
+                      l10n.interval,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -173,9 +173,9 @@ class _RecurrenceConfigDialogState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Fecha de finalización',
-                        style: TextStyle(
+                      Text(
+                        l10n.endDate,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

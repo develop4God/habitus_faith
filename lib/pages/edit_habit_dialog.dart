@@ -266,9 +266,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               // Event time for notifications
               TextField(
                 controller: eventTimeCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Hora del evento (HH:MM)',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.eventTime,
+                  border: const OutlineInputBorder(),
                   hintText: '09:00',
                 ),
                 onChanged: (value) {
@@ -286,7 +286,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               // Notification configuration button
               ListTile(
                 leading: const Icon(Icons.notifications),
-                title: const Text('Recordatorio'),
+                title: Text(l10n.reminder),
                 subtitle: Text(
                   notificationSettings?.timing.displayName ?? 'Sin aviso',
                 ),
@@ -312,11 +312,11 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               // Recurrence configuration button
               ListTile(
                 leading: const Icon(Icons.repeat),
-                title: const Text('Repetición'),
+                title: Text(l10n.repetition),
                 subtitle: Text(
                   recurrence?.enabled == true
                       ? '${recurrence!.frequency.displayName} (Cada ${recurrence!.interval} ${_getFrequencyUnit(recurrence!.frequency)})'
-                      : 'Sin repetición',
+                      : l10n.noRepetition,
                 ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () async {

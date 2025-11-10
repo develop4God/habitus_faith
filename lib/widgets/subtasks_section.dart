@@ -65,12 +65,14 @@ class _SubtasksSectionState extends State<SubtasksSection> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Subtareas',
-          style: TextStyle(
+        Text(
+          l10n.subtasks,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -113,9 +115,9 @@ class _SubtasksSectionState extends State<SubtasksSection> {
             Expanded(
               child: TextField(
                 controller: _newSubtaskController,
-                decoration: const InputDecoration(
-                  hintText: 'Agregar subtarea',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  hintText: l10n.addSubtask,
+                  border: const OutlineInputBorder(),
                   isDense: true,
                 ),
                 onSubmitted: (_) => _addSubtask(),
