@@ -40,21 +40,38 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
     super.dispose();
   }
 
-  String _getInputLabel() {
+
+  List<String> _getCommitments() {
     switch (widget.userIntent) {
       case UserIntent.faithBased:
-        return 'Firma tu compromiso con Dios:';
+        return [
+          'Me comprometo a fortalecer mi relación con Dios.',
+          'Buscaré crecer espiritualmente y vivir mi fe cada día.',
+          'Seré constante en mis hábitos espirituales y oración.',
+          'Dedicaré tiempo a la reflexión y gratitud diariamente.',
+        ];
       case UserIntent.wellness:
-        return 'Firma tu compromiso contigo mismo:';
+        return [
+          'Me comprometo a mejorar mi disciplina personal.',
+          'Cuidaré mi bienestar físico y mental.',
+          'Seré constante y perseverante en mis hábitos saludables.',
+          'Dedicaré tiempo a la reflexión y gratitud diariamente.',
+        ];
       case UserIntent.both:
-        return 'Firma tu compromiso:';
+        return [
+          'Me comprometo a mejorar mi disciplina personal y espiritual.',
+          'Buscaré crecer espiritualmente y cuidar mi bienestar.',
+          'Seré constante y perseverante en mis hábitos diarios.',
+          'Dedicaré tiempo a la reflexión y gratitud diariamente.',
+        ];
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final inputLabel = _getInputLabel();
+    const inputLabel = '✔ Tu compromiso contigo mismo';
+    final commitments = _getCommitments();
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -85,7 +102,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Estos son los hábitos que te comprometes a realizar:',
+                'Estos son los compromisos que asumes:',
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff64748b),
@@ -93,37 +110,29 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              // Lista fija de compromisos personales
+              // Compromisos con check
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      'Me comprometo a mejorar mi disciplina personal.',
-                      style: TextStyle(fontSize: 16, color: Color(0xff1a202c)),
-                    ),
+                children: commitments.map((text) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.check_circle, color: Color(0xff6366f1), size: 22),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          text,
+                          style: const TextStyle(fontSize: 16, color: Color(0xff1a202c)),
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      'Buscaré crecer espiritualmente y cuidar mi bienestar.',
-                      style: TextStyle(fontSize: 16, color: Color(0xff1a202c)),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      'Seré constante y perseverante en mis hábitos diarios.',
-                      style: TextStyle(fontSize: 16, color: Color(0xff1a202c)),
-                    ),
-                  ),
-                ],
+                )).toList(),
               ),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 inputLabel,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Color(0xff1a202c),
@@ -142,9 +151,13 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                   backgroundColor: Colors.white,
                 ),
               ),
-              TextButton(
-                onPressed: () => _signatureController.clear(),
-                child: const Text('Limpiar firma'),
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 4.0),
+                child: Text(
+                  'La firma es simbólica y no se guarda en el sistema.',
+                  style: TextStyle(fontSize: 13, color: Color(0xff64748b)),
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 16),
               ValueListenableBuilder<bool>(

@@ -516,7 +516,7 @@ class _AdaptiveOnboardingPageState
                 },
               ),
             ),
-            // Animación Lottie solo en la última pantalla, no en la 5
+            // Animación Lottie solo en la última pantalla, no en la 4 ni en la 5
             if (currentIndex == questions.length - 1)
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
@@ -587,8 +587,8 @@ class _QuestionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Evito mostrar el título dos veces en la página 3 (faithWalk)
-    final showTitle = question.id != 'faithWalk';
+    // Evito mostrar el título dos veces en la página 4 (supportSystem)
+    final showTitle = question.id != 'supportSystem';
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
