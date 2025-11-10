@@ -601,6 +601,8 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mlModelError => '错误';
+
+  @override
   String get chooseHabitType => '你想添加哪种类型的习惯？';
 
   @override
