@@ -41,37 +41,38 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
   }
 
 
-  List<String> _getCommitments() {
-    switch (widget.userIntent) {
-      case UserIntent.faithBased:
-        return [
-          'Me comprometo a fortalecer mi relación con Dios.',
-          'Buscaré crecer espiritualmente y vivir mi fe cada día.',
-          'Seré constante en mis hábitos espirituales y oración.',
-          'Dedicaré tiempo a la reflexión y gratitud diariamente.',
-        ];
-      case UserIntent.wellness:
-        return [
-          'Me comprometo a mejorar mi disciplina personal.',
-          'Cuidaré mi bienestar físico y mental.',
-          'Seré constante y perseverante en mis hábitos saludables.',
-          'Dedicaré tiempo a la reflexión y gratitud diariamente.',
-        ];
-      case UserIntent.both:
-        return [
-          'Me comprometo a mejorar mi disciplina personal y espiritual.',
-          'Buscaré crecer espiritualmente y cuidar mi bienestar.',
-          'Seré constante y perseverante en mis hábitos diarios.',
-          'Dedicaré tiempo a la reflexión y gratitud diariamente.',
-        ];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    const inputLabel = 'Firma con un ✔ el compromiso contigo mismo';
-    final commitments = _getCommitments();
+    const inputLabel = 'Firma con check con el dedo:';
+    const disclaimer = '*Simbólico. Tu firma se registrará.';
+    final secularCommitments = [
+      '¡Voy a lograr mis objetivos!',
+      '¡Voy a aprovechar mi tiempo al máximo!',
+      '¡Voy a tener mi vida en organización!',
+      '¡Voy a olvidarme lo que me preocupa!',
+      '¡Voy a ser muy productivo!',
+      '¡Voy a ser la mejor versión de mi!'
+    ];
+    final spiritualCommitments = [
+      '¡Voy a confiar en Dios con mis hábitos!',
+      '¡Voy a buscar la guía de Jesucristo cada día!',
+      '¡Voy a fortalecer mi fe y mi relación con Dios!',
+      '¡Voy a vivir con propósito y esperanza!',
+      '¡Voy a ser luz y ejemplo para otros!',
+      '¡Voy a crecer espiritualmente y servir a mi comunidad!'
+    ];
+    List<String> commitments;
+    if (widget.userIntent == UserIntent.both) {
+      commitments = [
+        ...spiritualCommitments.take(3),
+        ...secularCommitments.take(2),
+      ];
+    } else if (widget.userIntent == UserIntent.faithBased) {
+      commitments = spiritualCommitments;
+    } else {
+      commitments = secularCommitments;
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -92,7 +93,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                '¡Casi listo! 🎉',
+                'Haremos un trato',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -101,15 +102,6 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Estos son los compromisos que asumes:',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Color(0xff64748b),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
               // Compromisos con check
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +146,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
               const Padding(
                 padding: EdgeInsets.only(top: 8.0, bottom: 4.0),
                 child: Text(
-                  'La firma es simbólica y no se guarda en el sistema.',
+                  disclaimer,
                   style: TextStyle(fontSize: 13, color: Color(0xff64748b)),
                   textAlign: TextAlign.center,
                 ),
