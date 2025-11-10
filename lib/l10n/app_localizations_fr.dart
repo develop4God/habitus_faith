@@ -770,4 +770,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invalidInterval => 'Interval must be at least 1';
+
+  @override
+  String get habitTracking => 'Habit Tracking';
 }

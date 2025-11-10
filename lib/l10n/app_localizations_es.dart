@@ -765,4 +765,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get invalidInterval => 'El intervalo debe ser al menos 1';
+
+  @override
+  String get habitTracking => 'Seguimiento de Hábitos';
 }

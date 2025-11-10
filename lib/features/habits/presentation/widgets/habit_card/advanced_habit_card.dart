@@ -146,7 +146,8 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                             height: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.5,
-                              valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(habitColor),
                             ),
                           )
                         : Container(
@@ -228,7 +229,8 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                       widget.onEdit();
                     } else if (value == 'delete') {
                       widget.onDelete();
-                    } else if (value == 'uncheck' && widget.habit.completedToday) {
+                    } else if (value == 'uncheck' &&
+                        widget.habit.completedToday) {
                       widget.onUncheck(widget.habit.id);
                     }
                   },
@@ -238,7 +240,8 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                         value: 'uncheck',
                         child: Row(
                           children: [
-                            const Icon(Icons.undo, size: 20, color: Colors.orange),
+                            const Icon(Icons.undo,
+                                size: 20, color: Colors.orange),
                             const SizedBox(width: 12),
                             Text(l10n.uncheck),
                           ],

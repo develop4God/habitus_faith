@@ -76,10 +76,14 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Hero section con transición de hábitos
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.orange.shade200, Colors.deepOrange.shade400],
+                    colors: [
+                      Colors.orange.shade200,
+                      Colors.deepOrange.shade400
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -93,17 +97,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     Text(
                       l10n.introMessage,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       formattedDate,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white70,
-                      ),
+                            color: Colors.white70,
+                          ),
                     ),
                     const SizedBox(height: 16),
                     if (habits.isNotEmpty)
@@ -167,7 +172,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium
-                            ?.copyWith(color: Colors.orange.shade900, fontSize: 16),
+                            ?.copyWith(
+                                color: Colors.orange.shade900, fontSize: 16),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -193,7 +199,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.habitsCompletedCount(completedHabits, totalHabits),
+                          l10n.habitsCompletedCount(
+                              completedHabits, totalHabits),
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8),

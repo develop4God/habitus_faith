@@ -218,7 +218,8 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         flex: 3,
                         child: ElevatedButton.icon(
                           onPressed: () => _showBookSelector(context),
-                          icon: const Icon(Icons.auto_stories_outlined, size: 20),
+                          icon:
+                              const Icon(Icons.auto_stories_outlined, size: 20),
                           label: Text(
                             state.selectedBookName != null
                                 ? state.books.firstWhere(
@@ -279,18 +280,29 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                               itemScrollController: _itemScrollController,
                               itemPositionsListener: _itemPositionsListener,
                               padding: const EdgeInsets.all(16),
-                              itemCount: state.verses.length + 2, // +1 for copyright, +1 para el título
+                              itemCount: state.verses.length +
+                                  2, // +1 for copyright, +1 para el título
                               itemBuilder: (context, index) {
                                 // Título dinámico antes del versículo 1
-                                if (index == 0 && state.selectedBookName != null && state.selectedChapter != null) {
+                                if (index == 0 &&
+                                    state.selectedBookName != null &&
+                                    state.selectedChapter != null) {
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 12),
                                     child: Text(
                                       '${state.books.firstWhere(
-                                        (b) => b['short_name'] == state.selectedBookName,
-                                        orElse: () => {'long_name': state.selectedBookName ?? ''},
+                                        (b) =>
+                                            b['short_name'] ==
+                                            state.selectedBookName,
+                                        orElse: () => {
+                                          'long_name':
+                                              state.selectedBookName ?? ''
+                                        },
                                       )['long_name']} ${state.selectedChapter}',
-                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
                                       textAlign: TextAlign.center,

@@ -104,7 +104,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(habitColor),
                               ),
                             )
                           : Container(

@@ -1029,5 +1029,9 @@
   "invalidInterval": "Interval must be at least 1",
   "@invalidInterval": {
     "description": "Validation message for invalid interval"
+  },
+  "habitTracking": "Habit Tracking",
+  "@habitTracking": {
+    "description": "Title for habit tracking calendar page"
   }
 }

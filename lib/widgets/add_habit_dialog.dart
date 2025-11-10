@@ -40,7 +40,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
+    _tabController =
+        TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
     _gradientController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -64,8 +65,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       // Custom: púrpura
       return LinearGradient(
         colors: [
-          Color.lerp(const Color(0xff7c3aed), const Color(0xffc4b5fd), (sin(t * 2 * pi) + 1) / 2)!,
-          Color.lerp(const Color(0xffc4b5fd), const Color(0xff7c3aed), (cos(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(const Color(0xff7c3aed), const Color(0xffc4b5fd),
+              (sin(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(const Color(0xffc4b5fd), const Color(0xff7c3aed),
+              (cos(t * 2 * pi) + 1) / 2)!,
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -74,8 +77,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       // Default: cyan
       return LinearGradient(
         colors: [
-          Color.lerp(const Color(0xff06b6d4), const Color(0xffa5f3fc), (sin(t * 2 * pi) + 1) / 2)!,
-          Color.lerp(const Color(0xffa5f3fc), const Color(0xff06b6d4), (cos(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(const Color(0xff06b6d4), const Color(0xffa5f3fc),
+              (sin(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(const Color(0xffa5f3fc), const Color(0xff06b6d4),
+              (cos(t * 2 * pi) + 1) / 2)!,
         ],
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
@@ -109,7 +114,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     });
   }
 
-
   Future<void> _saveHabit() async {
     final navigator = Navigator.of(context);
     await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
@@ -125,7 +129,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
 
   @override
   Widget build(BuildContext context) {
-    final habitColor = selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
+    final habitColor =
+        selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
@@ -142,9 +147,11 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 Container(
                   decoration: BoxDecoration(
                     gradient: _getHeaderGradient(),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(32)),
                   ),
-                  padding: const EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                  padding: const EdgeInsets.only(
+                      left: 0, right: 0, top: 0, bottom: 0),
                   child: Stack(
                     children: [
                       // Botón X arriba derecha
@@ -152,14 +159,17 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                         top: 0,
                         right: 0,
                         child: IconButton(
-                          icon: const Icon(Icons.close, size: 32, color: Colors.white),
+                          icon: const Icon(Icons.close,
+                              size: 32, color: Colors.white),
                           splashRadius: 26,
-                          tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                          tooltip: MaterialLocalizations.of(context)
+                              .closeButtonTooltip,
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 0),
                         child: Column(
                           children: [
                             const SizedBox(height: 24),
@@ -225,7 +235,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.auto_awesome, color: Color(0xff06b6d4)),
+                                const Icon(Icons.auto_awesome,
+                                    color: Color(0xff06b6d4)),
                                 const SizedBox(width: 8),
                                 Text(
                                   widget.l10n.chooseFromPredefined,
@@ -241,7 +252,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                             Expanded(
                               child: GridView.builder(
                                 padding: EdgeInsets.zero,
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 16,
                                   mainAxisSpacing: 16,
@@ -250,20 +262,31 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                 itemCount: predefinedHabits.length,
                                 itemBuilder: (context, index) {
                                   final habit = predefinedHabits[index];
-                                  final habitName = PredefinedHabitTranslations.getTranslatedName(
-                                      widget.l10n, habit.nameKey);
-                                  final categoryColor = HabitColors.categoryColors[
-                                      PredefinedHabitCategoryX(habit.category).toDomainCategory()]!;
+                                  final habitName = PredefinedHabitTranslations
+                                      .getTranslatedName(
+                                          widget.l10n, habit.nameKey);
+                                  final categoryColor = HabitColors
+                                          .categoryColors[
+                                      PredefinedHabitCategoryX(habit.category)
+                                          .toDomainCategory()]!;
 
                                   return InkWell(
                                     onTap: () async {
-                                      await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+                                      await ref
+                                          .read(jsonHabitsNotifierProvider
+                                              .notifier)
+                                          .addHabit(
                                             name: habitName,
-                                            description: PredefinedHabitTranslations.getTranslatedDescription(
-                                                widget.l10n, habit.descriptionKey),
-                                            category:
-                                                PredefinedHabitCategoryX(habit.category).toDomainCategory(),
-                                            emoji: habit.emoji, // Asegura que el emoji se guarde
+                                            description:
+                                                PredefinedHabitTranslations
+                                                    .getTranslatedDescription(
+                                                        widget.l10n,
+                                                        habit.descriptionKey),
+                                            category: PredefinedHabitCategoryX(
+                                                    habit.category)
+                                                .toDomainCategory(),
+                                            emoji: habit
+                                                .emoji, // Asegura que el emoji se guarde
                                           );
                                       if (!context.mounted) return;
                                       Navigator.pop(context);
@@ -274,12 +297,14 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(
-                                          color: categoryColor.withValues(alpha:0.7),
+                                          color: categoryColor.withValues(
+                                              alpha: 0.7),
                                           width: 2.5,
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: categoryColor.withValues(alpha:0.13),
+                                            color: categoryColor.withValues(
+                                                alpha: 0.13),
                                             blurRadius: 16,
                                             spreadRadius: 2,
                                             offset: const Offset(0, 4),
@@ -289,11 +314,13 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               habit.emoji,
-                                              style: const TextStyle(fontSize: 44),
+                                              style:
+                                                  const TextStyle(fontSize: 44),
                                             ),
                                             const SizedBox(height: 12),
                                             Text(
@@ -372,7 +399,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitName,
             counterText: '${nameCtrl.text.length}/40',
-            helperText: nameCtrl.text.length == 40 ? widget.l10n.maxThreeHabits : null,
+            helperText:
+                nameCtrl.text.length == 40 ? widget.l10n.maxThreeHabits : null,
           ),
           onChanged: (value) => setState(() {}),
           onSubmitted: (_) {
@@ -390,7 +418,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             border: const OutlineInputBorder(),
             hintText: widget.l10n.previewHabitDescription,
             counterText: '${descCtrl.text.length}/120',
-            helperText: descCtrl.text.length == 120 ? widget.l10n.maxThreeHabits : null,
+            helperText:
+                descCtrl.text.length == 120 ? widget.l10n.maxThreeHabits : null,
           ),
           maxLines: 2,
           onChanged: (value) => setState(() {}),
@@ -405,7 +434,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             border: const OutlineInputBorder(),
             hintText: '🙏',
             counterText: '${emojiCtrl.text.length}/2',
-            helperText: emojiCtrl.text.length == 2 ? widget.l10n.maxThreeHabits : null,
+            helperText:
+                emojiCtrl.text.length == 2 ? widget.l10n.maxThreeHabits : null,
           ),
           maxLength: 2,
           onChanged: (value) => setState(() {}),
@@ -430,8 +460,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                     color: HabitColors.categoryColors[category],
                   ),
                   const SizedBox(width: 8),
-                  Text(HabitColors.getCategoryDisplayName(
-                      category, widget.l10n))
+                  Text(
+                      HabitColors.getCategoryDisplayName(category, widget.l10n))
                 ],
               ),
             );
@@ -486,11 +516,13 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: List.generate(
-                              HabitDifficultyHelper.getDifficultyStars(difficulty),
+                              HabitDifficultyHelper.getDifficultyStars(
+                                  difficulty),
                               (index) => Icon(
                                 Icons.star,
                                 size: 18,
-                                color: isSelected ? color : Colors.grey.shade500,
+                                color:
+                                    isSelected ? color : Colors.grey.shade500,
                               ),
                             ),
                           ),
@@ -499,8 +531,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                             difficulty.displayName,
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight:
-                                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                               color: isSelected ? color : Colors.grey.shade700,
                             ),
                           ),
@@ -529,7 +562,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepWidget = const SizedBox.shrink();
     }
 
-
     // Barra de pasos visual
     Widget stepsBar = Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -544,12 +576,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             color: isCompleted
                 ? habitColor
                 : isActive
-                    ? habitColor.withValues(alpha:0.8)
+                    ? habitColor.withValues(alpha: 0.8)
                     : Colors.grey.shade300,
             borderRadius: BorderRadius.circular(6),
-            border: isActive
-                ? Border.all(color: habitColor, width: 2)
-                : null,
+            border: isActive ? Border.all(color: habitColor, width: 2) : null,
           ),
         );
       }),
@@ -761,8 +791,16 @@ class _ColorPickerSection extends StatelessWidget {
   Widget build(BuildContext context) {
     // Agrupa colores por tono
     final List<List<Color>> colorGroups = [
-      [const Color(0xff7c3aed), const Color(0xffa78bfa), const Color(0xffc4b5fd)], // Purple
-      [const Color(0xff06b6d4), const Color(0xff67e8f9), const Color(0xffa5f3fc)], // Cyan
+      [
+        const Color(0xff7c3aed),
+        const Color(0xffa78bfa),
+        const Color(0xffc4b5fd)
+      ], // Purple
+      [
+        const Color(0xff06b6d4),
+        const Color(0xff67e8f9),
+        const Color(0xffa5f3fc)
+      ], // Cyan
       [const Color(0xfff59e42), const Color(0xffffe0b2)], // Orange
       [const Color(0xff22c55e), const Color(0xffbbf7d0)], // Green
       [const Color(0xff6366f1), const Color(0xffa5b4fc)], // Indigo
@@ -803,7 +841,8 @@ class _ColorPickerSection extends StatelessWidget {
     );
   }
 
-  Widget _buildColorOption(Color? colorValue, Color displayColor, String? label) {
+  Widget _buildColorOption(
+      Color? colorValue, Color displayColor, String? label) {
     final isSelected = selectedColor == colorValue;
 
     return GestureDetector(

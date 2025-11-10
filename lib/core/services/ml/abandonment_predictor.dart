@@ -75,7 +75,8 @@ class AbandonmentPredictor {
       debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
       _interpreter =
           await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
-      debugPrint('AbandonmentPredictor.initialize: TFLite model loaded successfully');
+      debugPrint(
+          'AbandonmentPredictor.initialize: TFLite model loaded successfully');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');

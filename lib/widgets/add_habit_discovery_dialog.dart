@@ -3,14 +3,14 @@ import 'package:lottie/lottie.dart';
 import '../l10n/app_localizations.dart';
 import 'add_habit_dialog.dart';
 
-
 class AddHabitDiscoveryDialog extends StatefulWidget {
   final AppLocalizations l10n;
 
   const AddHabitDiscoveryDialog({super.key, required this.l10n});
 
   @override
-  State<AddHabitDiscoveryDialog> createState() => _AddHabitDiscoveryDialogState();
+  State<AddHabitDiscoveryDialog> createState() =>
+      _AddHabitDiscoveryDialogState();
 }
 
 class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
@@ -46,7 +46,8 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
               top: 0,
               right: 0,
               child: IconButton(
-                icon: const Icon(Icons.close, size: 32, color: Color(0xff1a202c)),
+                icon:
+                    const Icon(Icons.close, size: 32, color: Color(0xff1a202c)),
                 splashRadius: 26,
                 tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 onPressed: () => Navigator.of(context).pop(),
@@ -59,11 +60,13 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 8),
-                  const Icon(Icons.add_circle_outline, size: 56, color: Color(0xff6366f1)),
+                  const Icon(Icons.add_circle_outline,
+                      size: 56, color: Color(0xff6366f1)),
                   const SizedBox(height: 16),
                   Text(
                     widget.l10n.addHabit,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   // Subtítulo explicativo traducido

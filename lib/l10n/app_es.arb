@@ -833,5 +833,9 @@
   "invalidInterval": "El intervalo debe ser al menos 1",
   "@invalidInterval": {
     "description": "Mensaje de validación para intervalo inválido"
+  },
+  "habitTracking": "Seguimiento de Hábitos",
+  "@habitTracking": {
+    "description": "Título de la página de calendario de seguimiento de hábitos"
   }
 }

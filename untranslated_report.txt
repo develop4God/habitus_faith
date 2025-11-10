@@ -20,7 +20,8 @@
     "repetition",
     "eventTime",
     "invalidMinutes",
-    "invalidInterval"
+    "invalidInterval",
+    "habitTracking"
   ],
 
   "pt": [
@@ -44,7 +45,8 @@
     "repetition",
     "eventTime",
     "invalidMinutes",
-    "invalidInterval"
+    "invalidInterval",
+    "habitTracking"
   ],
 
   "zh": [
@@ -68,6 +70,7 @@
     "repetition",
     "eventTime",
     "invalidMinutes",
-    "invalidInterval"
+    "invalidInterval",
+    "habitTracking"
   ]
 }

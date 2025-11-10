@@ -191,15 +191,16 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     _clearSelection();
   }
 
-  Future<void> _duplicateHabit(BuildContext context, WidgetRef ref, Habit habit) async {
+  Future<void> _duplicateHabit(
+      BuildContext context, WidgetRef ref, Habit habit) async {
     await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-      name: "${habit.name} (copy)",
-      description: habit.description,
-      category: habit.category,
-      colorValue: habit.colorValue,
-      difficulty: habit.difficulty,
-      emoji: habit.emoji,
-    );
+          name: "${habit.name} (copy)",
+          description: habit.description,
+          category: habit.category,
+          colorValue: habit.colorValue,
+          difficulty: habit.difficulty,
+          emoji: habit.emoji,
+        );
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Hábito duplicado")),
@@ -218,4 +219,3 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     );
   }
 }
-

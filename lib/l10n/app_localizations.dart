@@ -1447,6 +1447,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Interval must be at least 1'**
   String get invalidInterval;
+
+  /// Title for habit tracking calendar page
+  ///
+  /// In en, this message translates to:
+  /// **'Habit Tracking'**
+  String get habitTracking;
 }
 
 class _AppLocalizationsDelegate

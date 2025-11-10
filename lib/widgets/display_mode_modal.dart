@@ -29,12 +29,14 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
   void initState() {
     super.initState();
     localSelectedMode = widget.currentMode;
-    debugPrint('[DisplayModeModal] initState: localSelectedMode = $localSelectedMode');
+    debugPrint(
+        '[DisplayModeModal] initState: localSelectedMode = $localSelectedMode');
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('[DisplayModeModal] build: localSelectedMode = $localSelectedMode');
+    debugPrint(
+        '[DisplayModeModal] build: localSelectedMode = $localSelectedMode');
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -68,9 +70,13 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
                 setState(() {
                   localSelectedMode = mode;
                 });
-                debugPrint('[DisplayModeModal] onTap: localSelectedMode = $localSelectedMode');
-                await widget.ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
-                debugPrint('[DisplayModeModal] onTap: guardado y navegando a HomePage');
+                debugPrint(
+                    '[DisplayModeModal] onTap: localSelectedMode = $localSelectedMode');
+                await widget.ref
+                    .read(displayModeProvider.notifier)
+                    .setDisplayMode(localSelectedMode);
+                debugPrint(
+                    '[DisplayModeModal] onTap: guardado y navegando a HomePage');
                 if (context.mounted) {
                   Navigator.pop(context);
                   Navigator.of(context).pushAndRemoveUntil(
@@ -81,8 +87,10 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
                     SnackBar(
                       content: Text(
                         localSelectedMode == DisplayMode.compact
-                            ? widget.l10n.displayModeUpdated(widget.l10n.compactMode)
-                            : widget.l10n.displayModeUpdated(widget.l10n.advancedMode),
+                            ? widget.l10n
+                                .displayModeUpdated(widget.l10n.compactMode)
+                            : widget.l10n
+                                .displayModeUpdated(widget.l10n.advancedMode),
                       ),
                       duration: const Duration(seconds: 2),
                     ),
@@ -98,17 +106,23 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
             children: [
               TextButton(
                 onPressed: () async {
-                  debugPrint('[DisplayModeModal] onPressed: guardando $localSelectedMode');
-                  await widget.ref.read(displayModeProvider.notifier).setDisplayMode(localSelectedMode);
-                  debugPrint('[DisplayModeModal] onPressed: guardado y cerrando modal');
+                  debugPrint(
+                      '[DisplayModeModal] onPressed: guardando $localSelectedMode');
+                  await widget.ref
+                      .read(displayModeProvider.notifier)
+                      .setDisplayMode(localSelectedMode);
+                  debugPrint(
+                      '[DisplayModeModal] onPressed: guardado y cerrando modal');
                   if (context.mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
                           localSelectedMode == DisplayMode.compact
-                              ? widget.l10n.displayModeUpdated(widget.l10n.compactMode)
-                              : widget.l10n.displayModeUpdated(widget.l10n.advancedMode),
+                              ? widget.l10n
+                                  .displayModeUpdated(widget.l10n.compactMode)
+                              : widget.l10n
+                                  .displayModeUpdated(widget.l10n.advancedMode),
                         ),
                         duration: const Duration(seconds: 2),
                       ),

@@ -12,6 +12,7 @@ import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.d
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
+import '../widgets/habit_calendar_view.dart';
 import 'habits_page.dart';
 import 'edit_habit_dialog.dart';
 
@@ -59,6 +60,18 @@ class HabitsPageUI extends ConsumerWidget {
         elevation: 0,
         foregroundColor: const Color(0xff1a202c),
         actions: [
+          // Calendar icon
+          IconButton(
+            icon: const Icon(Icons.calendar_month),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const HabitCalendarView(),
+                ),
+              );
+            },
+            tooltip: 'View Calendar',
+          ),
           habitsAsync.when(
             data: (habits) {
               if (habits.isEmpty) return const SizedBox.shrink();
@@ -133,7 +146,8 @@ class HabitsPageUI extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           child: Text('${selectedHabits.length} seleccionados'),
                         ),
                         Row(
@@ -169,7 +183,9 @@ class HabitsPageUI extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Text(
                             l10n.copy, // Usar la nueva clave de traducción
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -183,7 +199,9 @@ class HabitsPageUI extends ConsumerWidget {
                         children: [
                           Text(
                             l10n.delete,
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 8),
                           const Icon(Icons.delete, color: Colors.white),
@@ -241,7 +259,9 @@ class HabitsPageUI extends ConsumerWidget {
                           ),
                         );
                         if (confirmed == true && dialogContext.mounted) {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          await ref
+                              .read(jsonHabitsNotifierProvider.notifier)
+                              .deleteHabit(habit.id);
                         }
                         return confirmed == true;
                       }
@@ -250,8 +270,12 @@ class HabitsPageUI extends ConsumerWidget {
                       habit: habit,
                       onComplete: (habitId) async {
                         final callbackContext = context;
-                        await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                        await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                        await ref
+                            .read(jsonHabitsNotifierProvider.notifier)
+                            .completeHabit(habitId);
+                        await ref
+                            .read(jsonHabitsRepositoryProvider)
+                            .recordCompletionForML(habitId, true);
                         if (callbackContext.mounted) {
                           ScaffoldMessenger.of(callbackContext).showSnackBar(
                             SnackBar(content: Text(l10n.habitCompleted)),
@@ -259,9 +283,12 @@ class HabitsPageUI extends ConsumerWidget {
                         }
                       },
                       onUncheck: (habitId) async {
-                        await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                        await ref
+                            .read(jsonHabitsNotifierProvider.notifier)
+                            .uncheckHabit(habitId);
                       },
-                      onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                      onEdit: () =>
+                          _showEditHabitDialog(context, ref, l10n, habit),
                       onDelete: () async {
                         final dialogContext = context;
                         final confirmed = await showDialog<bool>(
@@ -285,7 +312,9 @@ class HabitsPageUI extends ConsumerWidget {
                           ),
                         );
                         if (confirmed == true && dialogContext.mounted) {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          await ref
+                              .read(jsonHabitsNotifierProvider.notifier)
+                              .deleteHabit(habit.id);
                         }
                       },
                     ),
@@ -303,7 +332,9 @@ class HabitsPageUI extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Text(
                             l10n.delete,
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -317,7 +348,9 @@ class HabitsPageUI extends ConsumerWidget {
                         children: [
                           Text(
                             l10n.copy, // Usar la nueva clave de traducción
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 8),
                           const Icon(Icons.copy, color: Colors.white),
@@ -348,7 +381,9 @@ class HabitsPageUI extends ConsumerWidget {
                           ),
                         );
                         if (confirmed == true && dialogContext.mounted) {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          await ref
+                              .read(jsonHabitsNotifierProvider.notifier)
+                              .deleteHabit(habit.id);
                         }
                         return confirmed == true;
                       } else {
@@ -365,32 +400,43 @@ class HabitsPageUI extends ConsumerWidget {
                           habit: habit,
                           onComplete: (habitId) async {
                             final callbackContext = context;
-                            await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                            await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                            await ref
+                                .read(jsonHabitsNotifierProvider.notifier)
+                                .completeHabit(habitId);
+                            await ref
+                                .read(jsonHabitsRepositoryProvider)
+                                .recordCompletionForML(habitId, true);
                             if (callbackContext.mounted) {
-                              ScaffoldMessenger.of(callbackContext).showSnackBar(
+                              ScaffoldMessenger.of(callbackContext)
+                                  .showSnackBar(
                                 SnackBar(content: Text(l10n.habitCompleted)),
                               );
                             }
                           },
                           onUncheck: (habitId) async {
-                            await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                            await ref
+                                .read(jsonHabitsNotifierProvider.notifier)
+                                .uncheckHabit(habitId);
                           },
-                          onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                          onEdit: () =>
+                              _showEditHabitDialog(context, ref, l10n, habit),
                           onDelete: () async {
                             final dialogContext = context;
                             final confirmed = await showDialog<bool>(
                               context: dialogContext,
                               builder: (context) => AlertDialog(
                                 title: Text(l10n.deleteHabit),
-                                content: Text(l10n.deleteHabitConfirm(habit.name)),
+                                content:
+                                    Text(l10n.deleteHabitConfirm(habit.name)),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context, false),
+                                    onPressed: () =>
+                                        Navigator.pop(context, false),
                                     child: Text(l10n.cancel),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () => Navigator.pop(context, true),
+                                    onPressed: () =>
+                                        Navigator.pop(context, true),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                     ),
@@ -400,36 +446,48 @@ class HabitsPageUI extends ConsumerWidget {
                               ),
                             );
                             if (confirmed == true && dialogContext.mounted) {
-                              await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                              await ref
+                                  .read(jsonHabitsNotifierProvider.notifier)
+                                  .deleteHabit(habit.id);
                             }
                           },
                         ),
                         Consumer(
                           builder: (context, ref, child) {
-                            final riskAsync = ref.watch(habitRiskProvider(habit.id));
+                            final riskAsync =
+                                ref.watch(habitRiskProvider(habit.id));
                             return riskAsync.when(
                               data: (risk) {
                                 if (risk < 0.7) return const SizedBox.shrink();
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                  padding: const EdgeInsets.only(
+                                      top: 12, bottom: 12),
                                   child: Card(
-                                    color: Theme.of(context).colorScheme.errorContainer,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .errorContainer,
                                     child: ListTile(
                                       leading: Icon(
                                         Icons.warning_amber,
-                                        color: Theme.of(context).colorScheme.error,
+                                        color:
+                                            Theme.of(context).colorScheme.error,
                                       ),
                                       title: Text(
                                         l10n.highRiskWarning,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).colorScheme.onErrorContainer,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onErrorContainer,
                                         ),
                                       ),
                                       subtitle: Text(
-                                        l10n.riskPercentage((risk * 100).toInt()),
+                                        l10n.riskPercentage(
+                                            (risk * 100).toInt()),
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onErrorContainer,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onErrorContainer,
                                         ),
                                       ),
                                     ),
