@@ -78,7 +78,7 @@ class OnboardingProfile {
 
 extension OnboardingProfileCache on OnboardingProfile {
   String get cacheFingerprint {
-    final key = '${primaryIntent.name}_${spiritualMaturity}_${motivations.join('_')}_${challenge}';
+    final key = '${primaryIntent.name}_${spiritualMaturity}_${motivations.join('_')}_$challenge';
     return key.hashCode.toString();
   }
 

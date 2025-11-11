@@ -107,7 +107,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.asset('assets/lottie/success.json', width: 120, height: 120, repeat: false),
+              Lottie.asset('assets/lottie/tick_animation_success.json', width: 120, height: 120, repeat: false),
               const SizedBox(height: 16),
               const Text(
                 '¡Tus hábitos han sido generados exitosamente!',

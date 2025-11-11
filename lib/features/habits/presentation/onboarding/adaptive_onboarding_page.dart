@@ -187,87 +187,120 @@ class _AdaptiveOnboardingPageState
     if (intent == null) return;
     ref.read(answersProvider);
     final navigator = Navigator.of(context);
+    Future showSuccessDialog() => showDialog(
+      context: navigator.context,
+      barrierDismissible: false,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha:0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset('assets/lottie/success.json', width: 120, height: 120, repeat: false),
+              const SizedBox(height: 16),
+              const Text(
+                '¡Tus hábitos han sido generados exitosamente!',
+                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    Future showLoadingDialog() => showDialog(
+      context: navigator.context,
+      barrierDismissible: false,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha:0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset('assets/lottie/gears.json', width: 120, height: 120, repeat: true),
+              const SizedBox(height: 16),
+              const Text(
+                'Generando tus primeras tareas, por favor espera...',
+                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
     await navigator.push<String>(
       MaterialPageRoute(
         builder: (context) => CommitmentScreen(
           userIntent: intent,
           onCommitmentMade: (commitment) async {
-            // Guardar referencias antes del await
-            final navigator = Navigator.of(context);
-            Future showSuccessDialog() => showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (dialogContext) => Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha:0.08),
-                        blurRadius: 16,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Lottie.asset('assets/lottie/success.json', width: 120, height: 120, repeat: false),
-                      const SizedBox(height: 16),
-                      const Text(
-                        '¡Tus hábitos han sido generados exitosamente!',
-                        style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-            // Mostrar modal de carga con Lottie gears.json y mensaje
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha:0.08),
-                        blurRadius: 16,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Lottie.asset('assets/lottie/gears.json', width: 120, height: 120, repeat: true),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Generando tus primeras tareas, por favor espera...',
-                        style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
+            showLoadingDialog();
             final success = await _completeOnboarding(commitment);
-            if (mounted) navigator.pop(); // Cierra modal de carga
-            if (success && mounted) {
+            if (navigator.mounted) navigator.pop(); // Cierra modal de carga
+            if (success && navigator.mounted) {
               showSuccessDialog();
               await Future.delayed(const Duration(seconds: 2));
-              if (mounted) navigator.pop();
-              if (mounted) navigator.pushReplacementNamed('/habits');
+              if (navigator.mounted) navigator.pop();
+              if (navigator.mounted) navigator.pushReplacementNamed('/habits');
+            } else if (navigator.mounted) {
+              // Mostrar error amigable
+              showDialog(
+                context: navigator.context,
+                barrierDismissible: true,
+                builder: (dialogContext) => Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha:0.08),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.error_outline, color: Colors.red, size: 48),
+                        SizedBox(height: 16),
+                        Text(
+                          'No se pudieron generar tus hábitos en este momento. Por favor, reintenta más tarde.',
+                          style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
             }
           },
         ),
