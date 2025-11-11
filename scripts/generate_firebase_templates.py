@@ -1,5 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
+import os
 import json
 
 # Inicializa Firebase Admin SDK
@@ -7,55 +8,42 @@ cred = credentials.Certificate('C:/Users/cesar/habitus_faith/habitus-faith-app-f
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-# Ejemplo de datos para guardar como template maestro
-fingerprint = 'wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress'
-profile = {
-    "primaryIntent": "wellness",
-    "motivations": ["physicalHealth", "reduceStress"],
-    "challenge": "lackOfMotivation",
-    "supportLevel": None,
-    "spiritualMaturity": "inconsistent"
-}
-habits = [
-    {
-        "name": "Quick Stretch Break",
-        "description": "Simple movement to reduce stress and boost energy",
-        "category": "physical",
-        "emoji": "🧘",
-        "microHabits": [
-            {"title": "Take 5 deep breaths", "durationMinutes": 1, "order": 0},
-            {"title": "Stretch neck and shoulders", "durationMinutes": 2, "order": 1}
-        ],
-        "notifications": [
-            {"time": "14:00", "title": "Relaxation Break 🧘", "body": "Take 3 minutes to relax", "enabled": True}
-        ]
-    },
-    {
-        "name": "Gratitude Moment",
-        "description": "Improve mindset and reduce stress through gratitude",
-        "category": "mental",
-        "emoji": "🌈",
-        "microHabits": [
-            {"title": "Write down 3 good things from today", "durationMinutes": 2, "order": 0},
-            {"title": "Set one small goal for tomorrow", "durationMinutes": 1, "order": 1}
-        ],
-        "notifications": [
-            {"time": "20:00", "title": "Gratitude Time 🌈", "body": "Reflect on your day", "enabled": True}
-        ]
-    }
+# Carpetas de templates por idioma
+template_dirs = [
+    'C:/Users/cesar/habitus_faith/habit_templates/templates-en',
+    'C:/Users/cesar/habitus_faith/habit_templates/templates-es',
+    'C:/Users/cesar/habitus_faith/habit_templates/templates-fr',
+    'C:/Users/cesar/habitus_faith/habit_templates/templates-pt',
+    'C:/Users/cesar/habitus_faith/habit_templates/templates-zh',
 ]
 
-data = {
-    'fingerprint': fingerprint,
-    'profile': profile,
-    'habits': habits,
-    'createdAt': firestore.SERVER_TIMESTAMP,
-    'source': 'manual'
-}
+def clean_habit(habit):
+    habit = dict(habit)
+    habit.pop('description', None)
+    return habit
 
-doc_ref = db.collection('habit_templates_master').document(fingerprint)
-doc_ref.set(data)
-print(f'Template guardado en Firebase con fingerprint: {fingerprint}')
+def migrate_templates():
+    for dir_path in template_dirs:
+        lang = dir_path.split('-')[-1]
+        for filename in os.listdir(dir_path):
+            if filename.endswith('.json') and filename != 'metadata.json':
+                with open(os.path.join(dir_path, filename), 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    fingerprint = data.get('pattern_id')
+                    profile = data.get('fingerprint')
+                    habits = data.get('generated_habits', [])
+                    habits_clean = [clean_habit(h) for h in habits]
+                    doc_data = {
+                        'fingerprint': fingerprint,
+                        'profile': profile,
+                        'habits': habits_clean,
+                        'createdAt': firestore.SERVER_TIMESTAMP,
+                        'source': 'migrated',
+                        'language': lang
+                    }
+                    db.collection('habit_templates_master').document(fingerprint).set(doc_data)
+                    print(f'Template migrado: {fingerprint} ({lang})')
 
-# Puedes repetir el bloque anterior para otros fingerprints y templates
-
+if __name__ == '__main__':
+    migrate_templates()
+    print('Migración completa de todos los templates locales a Firestore sin descripción.')
