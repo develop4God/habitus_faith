@@ -21,7 +21,8 @@ class HabitModalSheet extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.white.withValues(alpha: 0.35), // fondo claro desenfocado
-      enableDrag: false,
+      enableDrag: true,
+      isDismissible: true,
       builder: (ctx) => HabitModalSheet(
         maxHeight: maxHeight,
         child: child,
