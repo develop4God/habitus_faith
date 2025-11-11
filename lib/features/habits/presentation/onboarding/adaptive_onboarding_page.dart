@@ -80,10 +80,11 @@ class _AdaptiveOnboardingPageState
     final currentQuestion = questions[currentIndex];
     final answers = ref.read(answersProvider);
     final answer = answers[currentQuestion.id];
-
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     // Mostrar SnackBar antes de cualquier await
     if (currentQuestion.isRequired && answer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(
           content: Text('Por favor selecciona una opción'),
           duration: Duration(seconds: 2),
@@ -91,7 +92,6 @@ class _AdaptiveOnboardingPageState
       );
       return;
     }
-
     // Mostrar diálogo antes de cualquier await
     if (currentQuestion.id == 'supportSystem') {
       final intent = ref.read(selectedIntentProvider);
@@ -158,7 +158,7 @@ class _AdaptiveOnboardingPageState
                 ),
                 actions: [
                   TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    onPressed: () => navigator.pop(),
                     child: const Text('Continuar'),
                   ),
                 ],
@@ -168,10 +168,8 @@ class _AdaptiveOnboardingPageState
         }
       }
     }
-
     // Después de cualquier await, verifica que el widget sigue montado
     if (!mounted) return;
-
     // Move to next question or commitment screen
     if (currentIndex < questions.length - 1) {
       ref.read(currentQuestionIndexProvider.notifier).state = currentIndex + 1;
@@ -187,15 +185,48 @@ class _AdaptiveOnboardingPageState
   Future<void> _goToCommitmentScreen() async {
     final intent = ref.read(selectedIntentProvider);
     if (intent == null) return;
-
-    // Construir el perfil antes de navegar, pero NO generar hábitos aquí
     ref.read(answersProvider);
-
-    await Navigator.of(context).push<String>(
+    final navigator = Navigator.of(context);
+    await navigator.push<String>(
       MaterialPageRoute(
         builder: (context) => CommitmentScreen(
           userIntent: intent,
           onCommitmentMade: (commitment) async {
+            // Guardar referencias antes del await
+            final navigator = Navigator.of(context);
+            Future showSuccessDialog() => showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (dialogContext) => Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha:0.08),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Lottie.asset('assets/lottie/success.json', width: 120, height: 120, repeat: false),
+                      const SizedBox(height: 16),
+                      const Text(
+                        '¡Tus hábitos han sido generados exitosamente!',
+                        style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
             // Mostrar modal de carga con Lottie gears.json y mensaje
             showDialog(
               context: context,
@@ -230,24 +261,29 @@ class _AdaptiveOnboardingPageState
                 ),
               ),
             );
-            await _completeOnboarding(commitment);
-            if (mounted) Navigator.of(context, rootNavigator: true).pop();
+            final success = await _completeOnboarding(commitment);
+            if (mounted) navigator.pop(); // Cierra modal de carga
+            if (success && mounted) {
+              showSuccessDialog();
+              await Future.delayed(const Duration(seconds: 2));
+              if (mounted) navigator.pop();
+              if (mounted) navigator.pushReplacementNamed('/habits');
+            }
           },
         ),
       ),
     );
-
     if (!mounted) return;
-    // La generación de hábitos y navegación ocurre en _completeOnboarding
   }
 
-  Future<void> _completeOnboarding(String commitment) async {
+  Future<bool> _completeOnboarding(String commitment) async {
     debugPrint('Inicio de _completeOnboarding con commitment: $commitment');
     log('Inicio de _completeOnboarding con commitment: $commitment', name: 'onboarding');
     setState(() {
       _isLoading = true;
     });
-
+    bool success = false;
+    final messenger = ScaffoldMessenger.of(context);
     try {
       final intent = ref.read(selectedIntentProvider);
       final answers = ref.read(answersProvider);
@@ -269,7 +305,7 @@ class _AdaptiveOnboardingPageState
 
       // Save profile to SharedPreferences
       final prefs = await SharedPreferences.getInstance();
-      if (!mounted) return;
+      if (!mounted) return false;
       await prefs.setString('onboarding_profile', jsonEncode(profile.toJson()));
       await prefs.setString('user_intent', intent.name);
       debugPrint('Perfil guardado en SharedPreferences');
@@ -277,13 +313,13 @@ class _AdaptiveOnboardingPageState
 
       // Generate habits using AI based on profile
       final geminiService = await ref.read(geminiServiceProvider.future);
-      if (!mounted) return;
+      if (!mounted) return false;
       final storage = ref.read(jsonStorageServiceProvider);
       const userId = 'local_user'; // For now, using local storage
 
       final habitsData =
           await geminiService.generateHabitsFromProfile(profile, userId);
-      if (!mounted) return;
+      if (!mounted) return false;
       debugPrint('Habits generados por AI: $habitsData');
       log('Habits generados por AI: $habitsData', name: 'onboarding');
 
@@ -309,14 +345,14 @@ class _AdaptiveOnboardingPageState
           category: category,
           emoji: habitData['emoji'] as String?,
         );
-        if (!mounted) return;
+        if (!mounted) return false;
       }
       debugPrint('Hábitos creados en el repositorio');
       log('Hábitos creados en el repositorio', name: 'onboarding');
 
       // Mark onboarding as complete
       await storage.setBool('onboarding_complete', true);
-      if (!mounted) return;
+      if (!mounted) return false;
       debugPrint('Onboarding marcado como completo en storage');
       log('Onboarding marcado como completo en storage', name: 'onboarding');
 
@@ -324,23 +360,23 @@ class _AdaptiveOnboardingPageState
       debugPrint('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}');
       log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}', name: 'onboarding');
 
-      if (!mounted) return;
+      if (!mounted) return false;
       debugPrint('Navegando a /habits');
       log('Navegando a /habits', name: 'onboarding');
-      Navigator.of(context).pushReplacementNamed('/habits');
+      success = true;
     } catch (e, stack) {
       debugPrint('Error en _completeOnboarding: ${e.toString()}');
       debugPrint('Stacktrace: $stack');
       log('Error en _completeOnboarding: ${e.toString()}', name: 'onboarding');
       log('Stacktrace: $stack', name: 'onboarding');
-      if (!mounted) return;
+      if (!mounted) return false;
       String errorMessage;
       if (e.toString().contains('Resource exhausted') || e.toString().contains('error-code-429')) {
         errorMessage = 'La generación de hábitos está temporalmente limitada por el proveedor de IA. Por favor intenta nuevamente en unos minutos. Si el problema persiste, contacta soporte.';
       } else {
         errorMessage = 'Ocurrió un error inesperado al finalizar el onboarding. Por favor verifica tu conexión y vuelve a intentarlo. Si el problema persiste, contacta soporte.';
       }
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
             errorMessage,
@@ -356,8 +392,8 @@ class _AdaptiveOnboardingPageState
           _isLoading = false;
         });
       }
-      // No usar return aquí
     }
+    return success;
   }
 
   List<String> _extractMotivations(
@@ -723,7 +759,7 @@ class _OptionCard extends StatelessWidget {
               )
             else
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
