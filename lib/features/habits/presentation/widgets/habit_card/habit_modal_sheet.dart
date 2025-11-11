@@ -14,7 +14,7 @@ class HabitModalSheet {
       isDismissible: true,
       builder: (ctx) => Container(
         constraints: maxHeight != null
-            ? BoxConstraints(maxHeight: maxHeight!)
+            ? BoxConstraints(maxHeight: maxHeight)
             : const BoxConstraints(maxHeight: 480),
         child: child,
       ),
@@ -164,7 +164,7 @@ class _HabitModalContentState extends State<HabitModalContent> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.add, color: Colors.purple, size: 24),
+                        const Icon(Icons.add, color: Colors.purple, size: 24),
                         const SizedBox(width: 8),
                         Text('Subtareas', style: TextStyle(fontSize: 16, color: Colors.purple.shade700)),
                         const Spacer(),
@@ -194,7 +194,7 @@ void showTestHabitModal(BuildContext context) {
     child: HabitModalContent(
       habitName: 'Ejemplo de tarea',
       initialCompleted: false,
-      initialSubtasks: [],
+      initialSubtasks: const [],
       onCompletedChanged: (completed) {
         // Lógica para manejar el cambio de estado de completado
       },
