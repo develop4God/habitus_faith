@@ -7,7 +7,7 @@ part of 'template_providers.dart';
 // **************************************************************************
 
 String _$templateMatchingServiceHash() =>
-    r'571e94d014447ed331470a91692934efd7071b89';
+    r'f272684ecd4ed097425e2d9a533c67f27a0310fb';
 
 /// Provider for the template matching service
 /// Not a singleton - creates new instance with cache service dependency

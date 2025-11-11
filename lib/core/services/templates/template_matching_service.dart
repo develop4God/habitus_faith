@@ -44,7 +44,7 @@ class TemplateMatchingService {
       log('Looking for template with pattern: $patternId', name: 'templates');
 
       // Try to get from cache first
-      final cacheKey = 'template_$language\_$patternId';
+      final cacheKey = 'template_${language}_$patternId';
       final cached = await _cache.get<Map<String, dynamic>>(cacheKey);
       if (cached != null) {
         log('Template found in cache', name: 'templates');
@@ -82,7 +82,7 @@ class TemplateMatchingService {
         final template = await _fetchTemplate(language, fuzzyMatch['file']);
         if (template != null) {
           // Cache with a different key for fuzzy matches
-          final fuzzyCacheKey = 'template_fuzzy_$language\_$patternId';
+          final fuzzyCacheKey = 'template_fuzzy_${language}_$patternId';
           await _cache.set(
             fuzzyCacheKey,
             template,
