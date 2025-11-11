@@ -224,15 +224,18 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return HabitsPageUI(
-      selectedHabits: _selectedHabits,
-      clearSelection: _clearSelection,
-      selectAll: _selectAll,
-      deleteSelected: _deleteSelected,
-      duplicateHabit: _duplicateHabit,
-      categoryFilter: _categoryFilter,
-      onCategoryFilterChanged: _setCategoryFilter,
-      filterHabits: _filterHabits,
+    return Consumer(
+      builder: (context, ref, _) {
+        final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+        return habitsAsync.when(
+          data: (habits) => ModernWeeklyCalendar(
+            habits: _filterHabits(habits),
+            initialDate: DateTime.now(),
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, st) => Center(child: Text('Error cargando hábitos')),
+        );
+      },
     );
   }
 }

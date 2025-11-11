@@ -1,749 +1,160 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart' show Lottie;
-import 'package:shared_preferences/shared_preferences.dart';
-import '../features/habits/data/storage/storage_providers.dart';
-import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/habit.dart';
-import '../features/habits/domain/models/display_mode.dart';
-import '../features/habits/presentation/onboarding/display_mode_provider.dart';
-import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
-import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.dart';
-import '../core/providers/ml_providers.dart';
-import '../l10n/app_localizations.dart';
-import '../widgets/add_habit_discovery_dialog.dart';
-import '../widgets/habit_calendar_view.dart';
-import '../widgets/modern_weekly_calendar.dart';
-import 'habits_page.dart';
-import 'edit_habit_dialog.dart';
 
-class HabitsPageUI extends ConsumerWidget {
-  final Set<String> selectedHabits;
-  final VoidCallback clearSelection;
-  final void Function(List<Habit>) selectAll;
-  final Future<void> Function(BuildContext, WidgetRef) deleteSelected;
-  final Future<void> Function(BuildContext, WidgetRef, Habit) duplicateHabit;
-  final HabitCategory? categoryFilter;
-  final void Function(HabitCategory?) onCategoryFilterChanged;
-  final List<Habit> Function(List<Habit>) filterHabits;
+class ModernWeeklyCalendar extends StatefulWidget {
+  final List<Habit> habits;
+  final DateTime? initialDate;
 
-  const HabitsPageUI({
+  const ModernWeeklyCalendar({
     super.key,
-    required this.selectedHabits,
-    required this.clearSelection,
-    required this.selectAll,
-    required this.deleteSelected,
-    required this.duplicateHabit,
-    required this.categoryFilter,
-    required this.onCategoryFilterChanged,
-    required this.filterHabits,
+    required this.habits,
+    this.initialDate,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final habitsAsync = ref.watch(jsonHabitsStreamProvider);
-
-    ref.listen<AsyncValue<void>>(jsonHabitsNotifierProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, stack) {
-          if (error is HabitFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(error.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
-      );
-    });
-
-    return Scaffold(
-      backgroundColor: const Color(0xfff8fafc),
-      appBar: AppBar(
-        title: const SizedBox.shrink(),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: const Color(0xff1a202c),
-        actions: [
-          // Calendar icon
-          IconButton(
-            icon: const Icon(Icons.calendar_month),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const HabitCalendarView(),
-                ),
-              );
-            },
-            tooltip: 'View Calendar',
-          ),
-          habitsAsync.when(
-            data: (habits) {
-              if (habits.isEmpty) return const SizedBox.shrink();
-              return PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert),
-                onSelected: (value) async {
-                  if (value == 'select_all') {
-                    selectAll(habits);
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'select_all',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.select_all, size: 20),
-                        const SizedBox(width: 8),
-                        Text(l10n.selectAll),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
-          ),
-        ],
-      ),
-      body: habitsAsync.when(
-        data: (habits) {
-          if (habits.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.auto_awesome,
-                    size: 80,
-                    color: Colors.grey.shade300,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    l10n.noHabits,
-                    style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final displayMode = ref.watch(displayModeProvider);
-          debugPrint('HabitsPageUI displayMode: $displayMode');
-
-          // Mostrar todos los hábitos como lista plana, sin categorías
-          final filteredHabits = filterHabits(habits);
-
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Center(
-                  child: Text(
-                    l10n.today,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 22,
-                        ),
-                  ),
-                ),
-              ),
-              ModernWeeklyCalendar(habits: habits),
-              // Category filter chips
-              if (habits.isNotEmpty)
-                _CategoryFilterChips(
-                  selectedCategory: categoryFilter,
-                  onCategorySelected: onCategoryFilterChanged,
-                  habits: habits,
-                ),
-              if (selectedHabits.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Card(
-                    color: Colors.blue.shade50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          child: Text('${selectedHabits.length} seleccionados'),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              tooltip: 'Eliminar seleccionados',
-                              onPressed: () => deleteSelected(context, ref),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.clear),
-                              tooltip: 'Limpiar selección',
-                              onPressed: clearSelection,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ...filteredHabits.map((habit) {
-                Widget card;
-                if (displayMode == DisplayMode.compact) {
-                  card = Dismissible(
-                    key: Key('compact_habit_${habit.id}'),
-                    background: Container(
-                      color: Colors.blue, // Derecha: duplicar
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(left: 24),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.copy, color: Colors.white),
-                          const SizedBox(width: 8),
-                          Text(
-                            l10n.copy, // Usar la nueva clave de traducción
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      color: Colors.red, // Izquierda: eliminar
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            l10n.delete,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.delete, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                    confirmDismiss: (direction) async {
-                      final dialogContext = context;
-                      if (direction == DismissDirection.startToEnd) {
-                        // Derecha: duplicar
-                        final confirmed = await showDialog<bool>(
-                          context: dialogContext,
-                          builder: (context) => AlertDialog(
-                            title: Text(l10n.copyHabit),
-                            content: Text(l10n.copyHabitConfirm(habit.name)),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: Text(l10n.cancel),
-                              ),
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                child: Text(l10n.copy),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirmed == true && dialogContext.mounted) {
-                          await duplicateHabit(dialogContext, ref, habit);
-                        }
-                        return false;
-                      } else {
-                        // Izquierda: eliminar
-                        final confirmed = await showDialog<bool>(
-                          context: dialogContext,
-                          builder: (context) => AlertDialog(
-                            title: Text(l10n.deleteHabit),
-                            content: Text(l10n.deleteHabitConfirm(habit.name)),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: Text(l10n.cancel),
-                              ),
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                child: Text(l10n.delete),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirmed == true && dialogContext.mounted) {
-                          await ref
-                              .read(jsonHabitsNotifierProvider.notifier)
-                              .deleteHabit(habit.id);
-                        }
-                        return confirmed == true;
-                      }
-                    },
-                    child: CompactHabitCard(
-                      habit: habit,
-                      onComplete: (habitId) async {
-                        final callbackContext = context;
-                        await ref
-                            .read(jsonHabitsNotifierProvider.notifier)
-                            .completeHabit(habitId);
-                        await ref
-                            .read(jsonHabitsRepositoryProvider)
-                            .recordCompletionForML(habitId, true);
-                        if (callbackContext.mounted) {
-                          ScaffoldMessenger.of(callbackContext).showSnackBar(
-                            SnackBar(content: Text(l10n.habitCompleted)),
-                          );
-                        }
-                      },
-                      onUncheck: (habitId) async {
-                        await ref
-                            .read(jsonHabitsNotifierProvider.notifier)
-                            .uncheckHabit(habitId);
-                      },
-                      onEdit: () =>
-                          _showEditHabitDialog(context, ref, l10n, habit),
-                      onDelete: () async {
-                        final dialogContext = context;
-                        final confirmed = await showDialog<bool>(
-                          context: dialogContext,
-                          builder: (context) => AlertDialog(
-                            title: Text(l10n.deleteHabit),
-                            content: Text(l10n.deleteHabitConfirm(habit.name)),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: Text(l10n.cancel),
-                              ),
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                child: Text(l10n.delete),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirmed == true && dialogContext.mounted) {
-                          await ref
-                              .read(jsonHabitsNotifierProvider.notifier)
-                              .deleteHabit(habit.id);
-                        }
-                      },
-                    ),
-                  );
-                } else {
-                  card = Dismissible(
-                    key: Key('advanced_habit_${habit.id}'),
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(left: 24),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.delete, color: Colors.white),
-                          const SizedBox(width: 8),
-                          Text(
-                            l10n.delete,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      color: Colors.blue,
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            l10n.copy, // Usar la nueva clave de traducción
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.copy, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                    confirmDismiss: (direction) async {
-                      final dialogContext = context;
-                      if (direction == DismissDirection.startToEnd) {
-                        final confirmed = await showDialog<bool>(
-                          context: dialogContext,
-                          builder: (context) => AlertDialog(
-                            title: Text(l10n.deleteHabit),
-                            content: Text(l10n.deleteHabitConfirm(habit.name)),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: Text(l10n.cancel),
-                              ),
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                child: Text(l10n.delete),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirmed == true && dialogContext.mounted) {
-                          await ref
-                              .read(jsonHabitsNotifierProvider.notifier)
-                              .deleteHabit(habit.id);
-                        }
-                        return confirmed == true;
-                      } else {
-                        if (dialogContext.mounted) {
-                          await duplicateHabit(dialogContext, ref, habit);
-                        }
-                        return false;
-                      }
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AdvancedHabitCard(
-                          habit: habit,
-                          onComplete: (habitId) async {
-                            final callbackContext = context;
-                            await ref
-                                .read(jsonHabitsNotifierProvider.notifier)
-                                .completeHabit(habitId);
-                            await ref
-                                .read(jsonHabitsRepositoryProvider)
-                                .recordCompletionForML(habitId, true);
-                            if (callbackContext.mounted) {
-                              ScaffoldMessenger.of(
-                                callbackContext,
-                              ).showSnackBar(
-                                SnackBar(content: Text(l10n.habitCompleted)),
-                              );
-                            }
-                          },
-                          onUncheck: (habitId) async {
-                            await ref
-                                .read(jsonHabitsNotifierProvider.notifier)
-                                .uncheckHabit(habitId);
-                          },
-                          onEdit: () =>
-                              _showEditHabitDialog(context, ref, l10n, habit),
-                          onDelete: () async {
-                            final dialogContext = context;
-                            final confirmed = await showDialog<bool>(
-                              context: dialogContext,
-                              builder: (context) => AlertDialog(
-                                title: Text(l10n.deleteHabit),
-                                content: Text(
-                                  l10n.deleteHabitConfirm(habit.name),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
-                                    child: Text(l10n.cancel),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                    ),
-                                    child: Text(l10n.delete),
-                                  ),
-                                ],
-                              ),
-                            );
-                            if (confirmed == true && dialogContext.mounted) {
-                              await ref
-                                  .read(jsonHabitsNotifierProvider.notifier)
-                                  .deleteHabit(habit.id);
-                            }
-                          },
-                        ),
-                        Consumer(
-                          builder: (context, ref, child) {
-                            final riskAsync = ref.watch(
-                              habitRiskProvider(habit.id),
-                            );
-                            return riskAsync.when(
-                              data: (risk) {
-                                if (risk < 0.7) return const SizedBox.shrink();
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 12,
-                                    bottom: 12,
-                                  ),
-                                  child: Card(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.errorContainer,
-                                    child: ListTile(
-                                      leading: Icon(
-                                        Icons.warning_amber,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.error,
-                                      ),
-                                      title: Text(
-                                        l10n.highRiskWarning,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.onErrorContainer,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        l10n.riskPercentage(
-                                          (risk * 100).toInt(),
-                                        ),
-                                        style: TextStyle(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.onErrorContainer,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              loading: () => const SizedBox.shrink(),
-                              error: (_, __) => const SizedBox.shrink(),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: card,
-                );
-              }),
-              const SizedBox(height: 24),
-            ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                const SizedBox(height: 16),
-                Text('Error: $error'),
-              ],
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        key: const Key('add_habit_fab'),
-        onPressed: () {
-          final l10n = AppLocalizations.of(context)!;
-          showDialog(
-            context: context,
-            builder: (context) => AddHabitDiscoveryDialog(l10n: l10n),
-          );
-        },
-        backgroundColor: const Color(0xff6366f1),
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-    );
-  }
-
-  void _showEditHabitDialog(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-    Habit habit,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) => EditHabitDialog(l10n: l10n, habit: habit),
-    );
-  }
+  State<ModernWeeklyCalendar> createState() => _ModernWeeklyCalendarState();
 }
 
-class _LottieTip extends StatefulWidget {
-  @override
-  __LottieTipState createState() => __LottieTipState();
-}
-
-class __LottieTipState extends State<_LottieTip> {
-  Timer? _hideTimer;
-  bool _visible = true;
+class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
+  late DateTime _focusedDate;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _hideTimer = Timer(const Duration(seconds: 8), () {
-      if (mounted) {
-        setState(() {
-          _visible = false;
-        });
-      }
-    });
+    _focusedDate = widget.initialDate ?? DateTime.now();
+    _pageController = PageController(initialPage: 1000);
   }
 
   @override
   void dispose() {
-    _hideTimer?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (!_visible) return const SizedBox.shrink();
-    return Center(
-      child: SizedBox(
-        width: 56,
-        height: 56,
-        child: Lottie.asset(
-          'assets/lottie/swipe_actions.json',
-          fit: BoxFit.contain,
-          repeat: true,
-        ),
-      ),
-    );
-  }
-}
-
-class _CategoryFilterChips extends StatelessWidget {
-  final HabitCategory? selectedCategory;
-  final void Function(HabitCategory?) onCategorySelected;
-  final List<Habit> habits;
-
-  const _CategoryFilterChips({
-    required this.selectedCategory,
-    required this.onCategorySelected,
-    required this.habits,
-  });
-
-  Future<bool> _shouldShowSpiritualFilter() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final intentStr = prefs.getString('user_intent');
-      // Hide spiritual filter only for wellness-only users
-      return intentStr != 'wellness';
-    } catch (e) {
-      // If there's an error, show all filters by default
-      return true;
-    }
+  Color _getProgressColor(double progress) {
+    if (progress == 0) return Colors.grey.shade50;
+    if (progress <= 0.40) return const Color(0xFFFFEBEE);
+    if (progress <= 0.70) return const Color(0xFFFFF9C4);
+    if (progress < 1.0) return const Color(0xFFE8F5E9);
+    return const Color(0xFFA5D6A7);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _shouldShowSpiritualFilter(),
-      builder: (context, snapshot) {
-        final showSpiritual = snapshot.data ?? true;
+  Widget _buildWeek(DateTime weekStart) {
+    final daysOfWeek = List.generate(7, (i) => weekStart.add(Duration(days: i)));
+    final today = DateTime.now();
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                FilterChip(
-                  label: const Text('Todos'),
-                  selected: selectedCategory == null,
-                  onSelected: (_) => onCategorySelected(null),
-                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
-                  checkmarkColor: const Color(0xff6366f1),
-                ),
-                const SizedBox(width: 8),
-                if (showSpiritual) ...[
-                  FilterChip(
-                    label: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('✝️ '),
-                        Text('Fe'),
-                      ],
-                    ),
-                    selected: selectedCategory == HabitCategory.spiritual,
-                    onSelected: (_) =>
-                        onCategorySelected(HabitCategory.spiritual),
-                    selectedColor:
-                        const Color(0xff6366f1).withValues(alpha: 0.2),
-                    checkmarkColor: const Color(0xff6366f1),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(7, (index) {
+        final day = daysOfWeek[index];
+        final isToday = day.year == today.year &&
+            day.month == today.month &&
+            day.day == today.day;
+        final completedHabits = widget.habits.where((h) =>
+            h.completionHistory.any((dt) =>
+            dt.year == day.year &&
+                dt.month == day.month &&
+                dt.day == day.day
+            )
+        ).length;
+        final totalHabits = widget.habits.length;
+        final progress = totalHabits > 0 ? completedHabits / totalHabits : 0.0;
+
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: isToday ? const Color(0xFFE3F2FD) : _getProgressColor(progress),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: (isToday ? const Color(0xFF2196F3) : Colors.grey.shade400).withOpacity(0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
                   ),
-                  const SizedBox(width: 8),
                 ],
-                FilterChip(
-                  label: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('💪 '),
-                      Text('Salud'),
-                    ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][day.weekday % 7],
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
-                  selected: selectedCategory == HabitCategory.physical,
-                  onSelected: (_) => onCategorySelected(HabitCategory.physical),
-                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
-                  checkmarkColor: const Color(0xff6366f1),
-                ),
-                const SizedBox(width: 8),
-                FilterChip(
-                  label: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('🧠 '),
-                      Text('Mental'),
-                    ],
+                  const SizedBox(height: 4),
+                  Text(
+                    '${day.day}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: isToday ? const Color(0xFF1976D2) : Colors.grey.shade800,
+                    ),
                   ),
-                  selected: selectedCategory == HabitCategory.mental,
-                  onSelected: (_) => onCategorySelected(HabitCategory.mental),
-                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
-                  checkmarkColor: const Color(0xff6366f1),
-                ),
-                const SizedBox(width: 8),
-                FilterChip(
-                  label: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('👥 '),
-                      Text('Social'),
-                    ],
-                  ),
-                  selected: selectedCategory == HabitCategory.relational,
-                  onSelected: (_) =>
-                      onCategorySelected(HabitCategory.relational),
-                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
-                  checkmarkColor: const Color(0xff6366f1),
-                ),
-              ],
+                  if (totalHabits > 0) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      '$completedHabits/$totalHabits',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         );
-      },
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SizedBox(
+        height: 80,
+        child: PageView.builder(
+          controller: _pageController,
+          onPageChanged: (page) {
+            setState(() {
+              final weekOffset = page - 1000;
+              _focusedDate = DateTime.now().add(Duration(days: weekOffset * 7));
+            });
+          },
+          itemBuilder: (context, page) {
+            final weekOffset = page - 1000;
+            final baseDate = DateTime.now().add(Duration(days: weekOffset * 7));
+            final monday = baseDate.subtract(Duration(days: baseDate.weekday - 1));
+            return _buildWeek(monday);
+          },
+        ),
+      ),
     );
   }
 }

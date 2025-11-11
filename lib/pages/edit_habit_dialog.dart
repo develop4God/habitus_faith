@@ -72,7 +72,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
-          description: '',
           category: selectedCategory,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),

@@ -385,7 +385,7 @@ class _AdaptiveOnboardingPageState
           final geminiService = await ref.read(geminiServiceProvider.future);
           if (!mounted) return false;
           const userId = 'local_user';
-          habitsData = await geminiService.generateHabitsFromProfile(profile, userId);
+          habitsData = await geminiService.generateHabitsFromProfile(profile, userId, language: language);
           debugPrint('✨ Gemini generó hábitos: ${habitsData.length}');
           log('Generated with Gemini (no template match, ${habitsData.length} habits)',
               name: 'onboarding');

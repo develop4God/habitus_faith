@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../features/habits/domain/models/micro_habit.dart';
 import '../../../features/habits/domain/models/generation_request.dart';
 import '../../../features/habits/domain/habit.dart';
@@ -14,12 +15,17 @@ import '../cache/cache_service.dart';
 import '../../config/ai_config.dart';
 import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
+import 'gemini_template_firestore_service.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
   Future<List<MicroHabit>> generateMicroHabits(GenerationRequest request);
   Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
-      OnboardingProfile profile, String userId);
+    OnboardingProfile profile,
+    String userId, {
+    String language = 'es',
+    bool isOnboarding = false,
+  });
   int getRemainingRequests();
 }
 
@@ -518,7 +524,7 @@ Requisitos estrictos:
   @override
   Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
       OnboardingProfile profile, String userId,
-      {bool isOnboarding = false}) async {
+      {String language = 'es', bool isOnboarding = false}) async {
     _logger?.i(
         'Generating habits from profile - Intent: ${profile.primaryIntent}');
 
@@ -595,6 +601,16 @@ Requisitos estrictos:
       final cachedKey = 'profile_$fingerprint';
       await prefs.setString(cachedKey, jsonEncode(cacheData));
       debugPrint('[Cache SAVE] Saved profile with fingerprint: $fingerprint');
+
+      // Después de parsear los hábitos generados por Gemini:
+      final firestoreService = GeminiTemplateFirestoreService(FirebaseFirestore.instance);
+      await firestoreService.saveGeminiTemplate(
+        fingerprint: fingerprint,
+        profile: profile.toJson(),
+        habits: habitsForCache,
+        language: language,
+        source: 'gemini',
+      );
 
       return habits;
     } on TimeoutException {
