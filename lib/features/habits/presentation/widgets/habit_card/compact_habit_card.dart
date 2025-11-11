@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/add_habit_button_visible_provider.dart';
 import '../../../domain/habit.dart';
 import '../../../domain/models/habit_notification.dart';
-import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
-import '../abandonment_risk_indicator.dart';
 
 /// Compact habit card with tap-to-expand details
 /// Shows only essential info: name, emoji, streak, completion button
@@ -72,12 +70,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   @override
   void didUpdateWidget(covariant CompactHabitCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Si el card se expande, ocultar el botón global
-    if (_isExpanded) {
-      _setAddHabitButtonVisibility(false);
-    } else {
-      _setAddHabitButtonVisibility(true);
-    }
+    // Eliminado: no modificar providers en el ciclo de vida del widget
+    // if (_isExpanded) {
+    //   _setAddHabitButtonVisibility(false);
+    // } else {
+    //   _setAddHabitButtonVisibility(true);
+    // }
   }
 
   @override
@@ -85,10 +83,22 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     final l10n = AppLocalizations.of(context)!;
     final habitColor = HabitColors.getHabitColor(widget.habit);
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border(
+          left: BorderSide(color: habitColor, width: 4),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha:0.04),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         children: [
           // Compact view - always visible
@@ -96,7 +106,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             onTap: () {
               setState(() {
                 _isExpanded = !_isExpanded;
-                // Oculta/muestra el botón global al expandir/colapsar
+              });
+              Future(() {
                 _setAddHabitButtonVisibility(!_isExpanded);
               });
             },
@@ -108,17 +119,70 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               ),
               child: Row(
                 children: [
-                  // Color indicator bar
+                  // Emoji a la izquierda
                   Container(
-                    width: 4,
+                    width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: habitColor,
-                      borderRadius: BorderRadius.circular(2),
+                      color: habitColor.withValues(alpha:0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.habit.emoji ?? '✓',
+                        style: const TextStyle(fontSize: 24),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // Simple completion checkbox button (ahora a la izquierda)
+                  // Nombre y racha centrados
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          widget.habit.name,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            decoration: widget.habit.completedToday
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            decorationThickness: 2,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 4),
+                        if (!_isExpanded) // Mostrar racha solo en vista compacta
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.local_fire_department,
+                                size: 16,
+                                color: widget.habit.currentStreak > 0
+                                    ? Colors.orange
+                                    : Colors.grey,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${widget.habit.currentStreak} ${l10n.days}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Check box a la derecha
                   InkWell(
                     onTap: _isCompleting ? null : _handleComplete,
                     borderRadius: BorderRadius.circular(8),
@@ -161,80 +225,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // Habit emoji/icon
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: habitColor.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        widget.habit.emoji ?? '✓',
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-
-                  // Habit name and streak
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          widget.habit.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            decoration: widget.habit.completedToday
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            decorationThickness: 2,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.local_fire_department,
-                              size: 16,
-                              color: widget.habit.currentStreak > 0
-                                  ? Colors.orange
-                                  : Colors.grey,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${widget.habit.currentStreak} ${l10n.days}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            if (widget.habit.abandonmentRisk > 0.0) ...[
-                              const SizedBox(width: 12),
-                              AbandonmentRiskIndicator(
-                                risk: widget.habit.abandonmentRisk,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Expand indicator
-                  Icon(
-                    _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Colors.grey[400],
-                  ),
                 ],
               ),
             ),
@@ -256,39 +246,36 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                 children: [
                   const Divider(height: 1),
                   const SizedBox(height: 16),
-
-                  // Description
-                  if (widget.habit.description.isNotEmpty) ...[
-                    Text(
-                      widget.habit.description,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-
-                  // Stats row
+                  // Icono de notificaciones
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatItem(
-                        l10n.streak,
-                        '${widget.habit.currentStreak}',
-                        Icons.local_fire_department,
-                        Colors.orange,
+                      Icon(
+                        widget.habit.notificationSettings != null
+                          ? Icons.notifications_active
+                          : Icons.notifications_off,
+                        color: widget.habit.notificationSettings != null
+                          ? Colors.orange
+                          : Colors.grey,
+                        size: 24,
                       ),
-                      _buildStatItem(
-                        l10n.total,
-                        '${widget.habit.completionHistory.length}',
-                        Icons.check_circle,
-                        Colors.green,
+                      const SizedBox(width: 8),
+                      Text(
+                        widget.habit.notificationSettings != null
+                          ? l10n.notifications
+                          : l10n.notificationsOff,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      const Spacer(),
+                      // Botón minimalista de editar tarea
+                      IconButton(
+                        icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
+                        tooltip: l10n.edit,
+                        onPressed: widget.onEdit,
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Mini calendar
-                  MiniCalendarHeatmap(
-                    completionDates: widget.habit.completionHistory,
                   ),
                   const SizedBox(height: 16),
 
@@ -481,22 +468,4 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 
-  Widget _buildStatItem(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-      ],
-    );
-  }
 }
