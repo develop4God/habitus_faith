@@ -11,6 +11,7 @@ import 'onboarding_questions.dart';
 import 'commitment_screen.dart';
 import 'intro_onboarding_page.dart';
 import '../../../../core/providers/ai_providers.dart';
+import '../../../../core/services/templates/template_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Provider for current question index in onboarding flow
@@ -359,20 +360,39 @@ class _AdaptiveOnboardingPageState
       debugPrint('Perfil guardado en SharedPreferences');
       log('Perfil guardado en SharedPreferences', name: 'onboarding');
 
-      // Generate habits using AI based on profile
-      final geminiService = await ref.read(geminiServiceProvider.future);
-      if (!mounted) return false;
-      final storage = ref.read(jsonStorageServiceProvider);
-      const userId = 'local_user'; // For now, using local storage
+      // Get current language
+      final locale = Localizations.localeOf(context);
+      final language = locale.languageCode; // 'es', 'en', 'pt', 'fr'
 
-      final habitsData =
-          await geminiService.generateHabitsFromProfile(profile, userId);
+      // Try to fetch template first
+      final templateService = ref.read(templateMatchingServiceProvider);
+      final templateHabits = await templateService.findMatch(profile, language);
+
+      List<Map<String, dynamic>> habitsData;
+      if (templateHabits != null && templateHabits.isNotEmpty) {
+        habitsData = templateHabits;
+        log('Using pre-generated template (${templateHabits.length} habits)',
+            name: 'onboarding');
+        debugPrint(
+            'Using pre-generated template (${templateHabits.length} habits)');
+      } else {
+        // Fallback to Gemini AI generation
+        final geminiService = await ref.read(geminiServiceProvider.future);
+        if (!mounted) return false;
+        const userId = 'local_user';
+        habitsData =
+            await geminiService.generateHabitsFromProfile(profile, userId);
+        log('Generated with Gemini (no template match, ${habitsData.length} habits)',
+            name: 'onboarding');
+        debugPrint(
+            'Generated with Gemini (no template match, ${habitsData.length} habits)');
+      }
+
       if (!mounted) return false;
-      debugPrint('Habits generados por AI: $habitsData');
-      log('Habits generados por AI: $habitsData', name: 'onboarding');
 
       // Create habits from generated data
       final repository = ref.read(jsonHabitsRepositoryProvider);
+      final storage = ref.read(jsonStorageServiceProvider);
       for (final habitData in habitsData) {
         // Corregir casteo: convertir string a HabitCategory
         HabitCategory category;

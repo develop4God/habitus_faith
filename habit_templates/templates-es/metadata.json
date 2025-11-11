@@ -1,0 +1,62 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-11",
+  "language": "es",
+  "templates": [
+    {
+      "pattern_id": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline",
+      "file": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": ["closerToGod", "prayerDiscipline"],
+        "challenge": "lackOfTime",
+        "supportLevel": null,
+        "spiritualMaturity": "new"
+      }
+    },
+    {
+      "pattern_id": "faithBased_growing_lackOfMotivation_understandBible_growInFaith",
+      "file": "faithBased_growing_lackOfMotivation_understandBible_growInFaith.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": ["understandBible", "growInFaith"],
+        "challenge": "lackOfMotivation",
+        "supportLevel": null,
+        "spiritualMaturity": "growing"
+      }
+    },
+    {
+      "pattern_id": "faithBased_mature_dontKnowStart_overcomeHabits_closerToGod",
+      "file": "faithBased_mature_dontKnowStart_overcomeHabits_closerToGod.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": ["overcomeHabits", "closerToGod"],
+        "challenge": "dontKnowStart",
+        "supportLevel": null,
+        "spiritualMaturity": "mature"
+      }
+    },
+    {
+      "pattern_id": "wellness_starting_lackOfTime_timeManagement_productivity",
+      "file": "wellness_starting_lackOfTime_timeManagement_productivity.json",
+      "fingerprint": {
+        "primaryIntent": "wellness",
+        "motivations": ["timeManagement", "productivity"],
+        "challenge": "lackOfTime",
+        "supportLevel": null,
+        "spiritualMaturity": "starting"
+      }
+    },
+    {
+      "pattern_id": "both_new_lackOfTime_closerToGod_prayerDiscipline",
+      "file": "both_new_lackOfTime_closerToGod_prayerDiscipline.json",
+      "fingerprint": {
+        "primaryIntent": "both",
+        "motivations": ["closerToGod", "prayerDiscipline"],
+        "challenge": "lackOfTime",
+        "supportLevel": null,
+        "spiritualMaturity": "new"
+      }
+    }
+  ]
+}
