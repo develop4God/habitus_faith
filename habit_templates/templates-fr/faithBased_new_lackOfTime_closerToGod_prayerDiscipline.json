@@ -1,0 +1,68 @@
+{
+  "pattern_id": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": ["closerToGod", "prayerDiscipline"],
+    "challenge": "lackOfTime",
+    "supportLevel": null,
+    "spiritualMaturity": "new"
+  },
+  "generated_habits": [
+    {
+      "name": "Prière matinale de 2 minutes",
+      "description": "Commencez votre journée en vous connectant avec Dieu dans une prière brève mais puissante",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "microHabits": [
+        {
+          "title": "Remercier Dieu pour 3 choses spécifiques",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "Demander sa guidance pour la journée",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "07:00",
+          "title": "Moment avec Dieu ☀️",
+          "body": "Commencez votre journée en prière",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Verset du jour",
+      "description": "Lisez et méditez sur un verset biblique chaque jour",
+      "category": "spiritual",
+      "emoji": "📖",
+      "microHabits": [
+        {
+          "title": "Lire le Psaume 23 à haute voix",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Écrire ce que Dieu vous dit aujourd'hui",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "20:00",
+          "title": "Parole de Dieu 📖",
+          "body": "Votre verset quotidien vous attend",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

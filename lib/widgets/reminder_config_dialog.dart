@@ -32,20 +32,6 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
     customTime = null;
   }
 
-  bool _validateCustomMinutes(String value) {
-    final minutes = int.tryParse(value);
-    if (minutes == null || minutes < 1 || minutes > 1440) {
-      setState(() {
-        customMinutesError = AppLocalizations.of(context)!.invalidMinutes;
-      });
-      return false;
-    }
-    setState(() {
-      customMinutesError = null;
-    });
-    return true;
-  }
-
   String _getEffectiveTime(NotificationTiming timing) {
     if (widget.eventTime == null) return '';
 
@@ -118,7 +104,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                 title: NotificationTiming.tenMinutesBefore.displayName,
                 effectiveTime:
                     _getEffectiveTime(NotificationTiming.tenMinutesBefore),
-                isSelected: selectedTiming == NotificationTiming.tenMinutesBefore,
+                isSelected:
+                    selectedTiming == NotificationTiming.tenMinutesBefore,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.thirtyMinutesBefore,
@@ -231,7 +218,7 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                       padding: const EdgeInsets.only(top: 4),
                       child: Row(
                         children: [
-                          Text('Seleccionar hora'),
+                          const Text('Seleccionar hora'),
                           const SizedBox(width: 8),
                           Expanded(
                             child: ElevatedButton(

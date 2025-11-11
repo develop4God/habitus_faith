@@ -1,0 +1,68 @@
+{
+  "pattern_id": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": ["closerToGod", "prayerDiscipline"],
+    "challenge": "lackOfTime",
+    "supportLevel": null,
+    "spiritualMaturity": "new"
+  },
+  "generated_habits": [
+    {
+      "name": "Oración matutina de 2 minutos",
+      "description": "Comienza tu día conectándote con Dios en oración breve pero poderosa",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "microHabits": [
+        {
+          "title": "Agradecer a Dios por 3 cosas específicas",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "Pedir su guía para el día",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "07:00",
+          "title": "Momento con Dios ☀️",
+          "body": "Comienza tu día en oración",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Versículo del día",
+      "description": "Lee y medita en un versículo bíblico cada día",
+      "category": "spiritual",
+      "emoji": "📖",
+      "microHabits": [
+        {
+          "title": "Leer Salmo 23 en voz alta",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Escribir qué te dice Dios hoy",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "20:00",
+          "title": "Palabra de Dios 📖",
+          "body": "Tu versículo diario te espera",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

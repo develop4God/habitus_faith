@@ -32,8 +32,10 @@ void main() async {
     await dotenv.load(fileName: ".env");
     debugPrint('Archivo .env cargado correctamente desde ruta relativa');
   } catch (e) {
-    debugPrint('Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}');
-    debugPrint('Ejecuta Flutter desde la raíz del proyecto y verifica que el archivo .env esté junto a pubspec.yaml, sin extensión oculta y con permisos de lectura.');
+    debugPrint(
+        'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}');
+    debugPrint(
+        'Ejecuta Flutter desde la raíz del proyecto y verifica que el archivo .env esté junto a pubspec.yaml, sin extensión oculta y con permisos de lectura.');
   }
 
   // Load environment configuration before Firebase
@@ -102,7 +104,8 @@ class MyApp extends ConsumerWidget {
       routes: {
         '/home': (context) => const HomePage(),
         '/onboarding': (context) => const AdaptiveOnboardingPage(),
-        '/habits': (context) => const HomePage(), // ← Agregado para solucionar el error de ruta
+        '/habits': (context) =>
+            const HomePage(), // ← Agregado para solucionar el error de ruta
       },
       home: authInit.when(
         data: (_) {
@@ -111,8 +114,10 @@ class MyApp extends ConsumerWidget {
           }
           return const AdaptiveOnboardingPage();
         },
-        loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-        error: (error, stack) => Scaffold(body: Center(child: Text('Error: $error'))),
+        loading: () =>
+            const Scaffold(body: Center(child: CircularProgressIndicator())),
+        error: (error, stack) =>
+            Scaffold(body: Center(child: Text('Error: $error'))),
       ),
     );
   }

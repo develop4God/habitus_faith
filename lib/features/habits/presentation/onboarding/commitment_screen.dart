@@ -20,7 +20,8 @@ class CommitmentScreen extends StatefulWidget {
 
 class _CommitmentScreenState extends State<CommitmentScreen> {
   final TextEditingController _commitmentController = TextEditingController();
-  final SignatureController _signatureController = SignatureController(penStrokeWidth: 3, penColor: Colors.black);
+  final SignatureController _signatureController =
+      SignatureController(penStrokeWidth: 3, penColor: Colors.black);
   final ValueNotifier<bool> _isSignatureNotEmpty = ValueNotifier<bool>(false);
   bool _isProcessing = false;
   bool _backEnabled = true;
@@ -61,7 +62,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha:0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
@@ -70,11 +71,15 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.asset('assets/lottie/gears.json', width: 120, height: 120, repeat: true),
+              Lottie.asset('assets/lottie/gears.json',
+                  width: 120, height: 120, repeat: true),
               const SizedBox(height: 16),
               const Text(
                 'Generando tus primeras tareas, por favor espera...',
-                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xff6366f1),
+                    fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -84,7 +89,8 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
     );
     await widget.onCommitmentMade('Compromiso firmado');
     if (!mounted) return;
-    Navigator.of(context, rootNavigator: true).pop(); // Cierra el modal de carga
+    Navigator.of(context, rootNavigator: true)
+        .pop(); // Cierra el modal de carga
     // Mostrar modal de éxito
     showDialog(
       context: context,
@@ -98,7 +104,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha:0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
@@ -107,11 +113,15 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.asset('assets/lottie/tick_animation_success.json', width: 120, height: 120, repeat: false),
+              Lottie.asset('assets/lottie/tick_animation_success.json',
+                  width: 120, height: 120, repeat: false),
               const SizedBox(height: 16),
               const Text(
                 '¡Tus hábitos han sido generados exitosamente!',
-                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xff6366f1),
+                    fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -121,7 +131,8 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
     );
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
-    Navigator.of(context, rootNavigator: true).pop(); // Cierra el modal de éxito
+    Navigator.of(context, rootNavigator: true)
+        .pop(); // Cierra el modal de éxito
     // Navega a /habits
     Navigator.of(context).pushReplacementNamed('/habits');
   }
@@ -171,7 +182,8 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: _backEnabled ? () => Navigator.of(context).pop() : null,
+                    onPressed:
+                        _backEnabled ? () => Navigator.of(context).pop() : null,
                   ),
                   const Spacer(),
                 ],
@@ -190,21 +202,25 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
               // Compromisos con check
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: commitments.map((text) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.check_circle, color: Color(0xff6366f1), size: 22),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          text,
-                          style: const TextStyle(fontSize: 16, color: Color(0xff1a202c)),
-                        ),
-                      ),
-                    ],
-                  ),
-                )).toList(),
+                children: commitments
+                    .map((text) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.check_circle,
+                                  color: Color(0xff6366f1), size: 22),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  text,
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Color(0xff1a202c)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
+                    .toList(),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -259,7 +275,8 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                               width: 24,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : Text(

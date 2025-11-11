@@ -117,7 +117,6 @@ void main() {
       });
 
       test('Notification 1 hour before midnight event', () {
-
         // Should calculate to 23:30 previous day
         const eventMinutes = 0 * 60 + 30;
         var notifMinutes = eventMinutes - 60;
@@ -251,9 +250,8 @@ void main() {
         ];
 
         final jsonList = originalSubtasks.map((s) => s.toJson()).toList();
-        final restored = jsonList
-            .map((json) => Subtask.fromJson(json))
-            .toList();
+        final restored =
+            jsonList.map((json) => Subtask.fromJson(json)).toList();
 
         expect(restored.length, 2);
         expect(restored[0].completed, true);

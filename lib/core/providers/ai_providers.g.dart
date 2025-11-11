@@ -83,7 +83,7 @@ final rateLimitServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef RateLimitServiceRef = AutoDisposeProviderRef<IRateLimitService>;
-String _$geminiServiceHash() => r'13dc1468f26d8611f69b3dd189bf6d8b90e7b2e8';
+String _$geminiServiceHash() => r'd23b5a8e1ddae5ddb1d037ed40620018e287c9cb';
 
 /// Provider for Gemini service with optional Bible enrichment
 ///

@@ -40,3 +40,11 @@ class DisplayModeNotifier extends StateNotifier<DisplayMode> {
   /// Check if current mode is advanced
   bool get isAdvancedMode => state == DisplayMode.advanced;
 }
+
+/// Provider that checks if a display mode has been selected
+/// Returns true if a display mode is stored, false otherwise
+final displayModeSelectedProvider = Provider<bool>((ref) {
+  final storage = ref.watch(jsonStorageServiceProvider);
+  final savedMode = storage.getString(_displayModeKey);
+  return savedMode != null;
+});

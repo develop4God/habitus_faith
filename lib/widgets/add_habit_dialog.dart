@@ -40,8 +40,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(
+    _tabController = TabController(
       length: 2,
       vsync: this,
       initialIndex: widget.initialTab,
@@ -163,8 +162,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 Container(
                   decoration: BoxDecoration(
                     gradient: _getHeaderGradient(),
-                    borderRadius:
-                        const BorderRadius.vertical(
+                    borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(32),
                     ),
                   ),
@@ -189,8 +187,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                           splashRadius: 26,
                           tooltip: MaterialLocalizations.of(
                             context,
-                          )
-                              .closeButtonTooltip,
+                          ).closeButtonTooltip,
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
@@ -355,8 +352,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                           children: [
                                             Text(
                                               habit.emoji,
-                                              style:
-                                                  const TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 44,
                                               ),
                                             ),
@@ -482,7 +478,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         break;
       case 'category':
         stepWidget = DropdownButtonFormField<HabitCategory>(
-          initialValue: selectedCategory,
+          value: selectedCategory,
           decoration: InputDecoration(
             labelText: '${widget.l10n.category} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),

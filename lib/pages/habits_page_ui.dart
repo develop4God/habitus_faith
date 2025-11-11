@@ -439,8 +439,7 @@ class HabitsPageUI extends ConsumerWidget {
                             if (callbackContext.mounted) {
                               ScaffoldMessenger.of(
                                 callbackContext,
-                              )
-                                  .showSnackBar(
+                              ).showSnackBar(
                                 SnackBar(content: Text(l10n.habitCompleted)),
                               );
                             }
@@ -458,8 +457,7 @@ class HabitsPageUI extends ConsumerWidget {
                               context: dialogContext,
                               builder: (context) => AlertDialog(
                                 title: Text(l10n.deleteHabit),
-                                content:
-                                    Text(
+                                content: Text(
                                   l10n.deleteHabitConfirm(habit.name),
                                 ),
                                 actions: [
@@ -488,8 +486,7 @@ class HabitsPageUI extends ConsumerWidget {
                         ),
                         Consumer(
                           builder: (context, ref, child) {
-                            final riskAsync =
-                                ref.watch(
+                            final riskAsync = ref.watch(
                               habitRiskProvider(habit.id),
                             );
                             return riskAsync.when(
@@ -503,14 +500,11 @@ class HabitsPageUI extends ConsumerWidget {
                                   child: Card(
                                     color: Theme.of(
                                       context,
-                                    )
-                                        .colorScheme
-                                        .errorContainer,
+                                    ).colorScheme.errorContainer,
                                     child: ListTile(
                                       leading: Icon(
                                         Icons.warning_amber,
-                                        color:
-                                            Theme.of(
+                                        color: Theme.of(
                                           context,
                                         ).colorScheme.error,
                                       ),
@@ -520,9 +514,7 @@ class HabitsPageUI extends ConsumerWidget {
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(
                                             context,
-                                          )
-                                              .colorScheme
-                                              .onErrorContainer,
+                                          ).colorScheme.onErrorContainer,
                                         ),
                                       ),
                                       subtitle: Text(
@@ -532,9 +524,7 @@ class HabitsPageUI extends ConsumerWidget {
                                         style: TextStyle(
                                           color: Theme.of(
                                             context,
-                                          )
-                                              .colorScheme
-                                              .onErrorContainer,
+                                          ).colorScheme.onErrorContainer,
                                         ),
                                       ),
                                     ),
@@ -643,7 +633,6 @@ class __LottieTipState extends State<_LottieTip> {
       ),
     );
   }
-
 }
 
 class _CategoryFilterChips extends StatelessWidget {

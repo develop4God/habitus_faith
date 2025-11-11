@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 
 class ModernWeeklyCalendar extends StatefulWidget {
@@ -33,126 +32,145 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
     super.dispose();
   }
 
-  Color _getProgressColor(double progress) {
-    if (progress == 0) return Colors.grey.shade50;
-    if (progress <= 0.40) return const Color(0xFFFFEBEE);
-    if (progress <= 0.70) return const Color(0xFFFFF9C4);
-    if (progress < 1.0) return const Color(0xFFE8F5E9);
-    return const Color(0xFFA5D6A7);
+  void _prevWeek() {
+    setState(() {
+      _focusedDate = _focusedDate.subtract(const Duration(days: 7));
+    });
   }
 
-  Widget _buildWeek(DateTime weekStart) {
-    final daysOfWeek = List.generate(7, (i) => weekStart.add(Duration(days: i)));
-    final today = DateTime.now();
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(7, (index) {
-        final day = daysOfWeek[index];
-        final isToday = day.year == today.year &&
-            day.month == today.month &&
-            day.day == today.day;
-        final completedHabits = widget.habits.where((h) =>
-            h.completionHistory.any((dt) =>
-            dt.year == day.year &&
-                dt.month == day.month &&
-                dt.day == day.day
-            )
-        ).length;
-        final totalHabits = widget.habits.length;
-        final progress = totalHabits > 0 ? completedHabits / totalHabits : 0.0;
-
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: isToday ? const Color(0xFFE3F2FD) : _getProgressColor(progress),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: (isToday ? const Color(0xFF2196F3) : Colors.grey.shade400).withOpacity(0.2),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][day.weekday % 7],
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${day.day}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: isToday ? const Color(0xFF1976D2) : Colors.grey.shade800,
-                    ),
-                  ),
-                  if (totalHabits > 0) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      '$completedHabits/$totalHabits',
-                      style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        );
-      }),
-    );
+  void _nextWeek() {
+    setState(() {
+      _focusedDate = _focusedDate.add(const Duration(days: 7));
+    });
   }
+
+  DateTime get _monday {
+    final weekday = _focusedDate.weekday;
+    return _focusedDate.subtract(Duration(days: weekday == 7 ? 6 : weekday - 1));
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SizedBox(
-        height: 80,
-        child: PageView.builder(
-          controller: _pageController,
-          onPageChanged: (page) {
-            setState(() {
-              final weekOffset = page - 1000;
-              _focusedDate = DateTime.now().add(Duration(days: weekOffset * 7));
-            });
-          },
-          itemBuilder: (context, page) {
-            final weekOffset = page - 1000;
-            final baseDate = DateTime.now().add(Duration(days: weekOffset * 7));
-            final monday = baseDate.subtract(Duration(days: baseDate.weekday - 1));
-            return _buildWeek(monday);
-          },
+    final monday = _monday;
+    final daysOfWeek = List.generate(7, (i) => monday.add(Duration(days: i)));
+    final today = DateTime.now();
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: _prevWeek,
+                ),
+                Text(
+                  'Semana del ${monday.day}/${monday.month}/${monday.year}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: _nextWeek,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 90,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: 7,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final day = daysOfWeek[index];
+                  final isToday = day.year == today.year &&
+                      day.month == today.month &&
+                      day.day == today.day;
+                  final completedHabits = widget.habits
+                      .where((h) => h.completionHistory.any((dt) =>
+                          dt.year == day.year &&
+                          dt.month == day.month &&
+                          dt.day == day.day))
+                      .toList();
+                  final totalHabits = widget.habits.length;
+                  final progress = totalHabits > 0
+                      ? completedHabits.length / totalHabits
+                      : 0.0;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: isToday ? Colors.blue.shade100 : Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: isToday ? Colors.blue : Colors.transparent,
+                          width: 2),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          ['L', 'M', 'X', 'J', 'V', 'S', 'D'][index],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: isToday ? Colors.blue : Colors.black),
+                        ),
+                        Text(
+                          '${day.day}',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: isToday ? Colors.blue : Colors.black),
+                        ),
+                        const SizedBox(height: 4),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              height: 18,
+                              width: 36,
+                              child: LinearProgressIndicator(
+                                value: progress,
+                                backgroundColor: Colors.grey.shade300,
+                                color: isToday ? Colors.blue : Colors.green,
+                                minHeight: 6,
+                              ),
+                            ),
+                            if (completedHabits.isNotEmpty)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: completedHabits
+                                    .take(2)
+                                    .map((habit) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2),
+                                          child: Text(habit.emoji ?? '✔️',
+                                              style: const TextStyle(
+                                                  fontSize: 14)),
+                                        ))
+                                    .toList(),
+                              ),
+                            if (completedHabits.length == totalHabits &&
+                                totalHabits > 0)
+                              const Icon(Icons.check_circle,
+                                  color: Colors.green, size: 18),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
