@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
-import '../features/habits/data/storage/storage_providers.dart';
 import '../pages/habits_page.dart';
 import '../l10n/app_localizations.dart';
 

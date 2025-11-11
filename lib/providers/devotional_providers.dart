@@ -1,7 +1,6 @@
 // lib/providers/devotional_providers.dart
 
 import 'dart:convert';
-import 'dart:ui' show PlatformDispatcher;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;

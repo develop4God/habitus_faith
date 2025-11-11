@@ -19,15 +19,15 @@ class FavoritesPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Icon(
               Icons.star,
               color: Colors.amber,
               size: 24,
             ),
-            const SizedBox(width: 8),
-            const Text('My Favorites'),
+            SizedBox(width: 8),
+            Text('My Favorites'),
           ],
         ),
         elevation: 0,

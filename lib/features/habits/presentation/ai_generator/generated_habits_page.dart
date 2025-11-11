@@ -526,7 +526,7 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: DropdownButtonFormField<HabitCategory>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         decoration: InputDecoration(
                           labelText: l10n.category,
                           border: OutlineInputBorder(

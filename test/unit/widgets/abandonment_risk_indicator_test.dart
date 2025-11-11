@@ -82,7 +82,7 @@ void main() {
     testWidgets('handles edge case risk = mediumRiskThreshold (boundary)',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: AbandonmentRiskIndicator(
                 risk: RiskThresholds.mediumRiskThreshold),
@@ -97,7 +97,7 @@ void main() {
     testWidgets('handles edge case risk = highRiskThreshold (boundary)',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: AbandonmentRiskIndicator(
                 risk: RiskThresholds.highRiskThreshold),

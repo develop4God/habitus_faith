@@ -13,7 +13,7 @@ void main() {
           description: 'Daily prayer routine',
         );
 
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.atEventTime,
           eventTime: '07:00',
         );
@@ -27,16 +27,16 @@ void main() {
       });
 
       test('User wants reminder 10 minutes before bedtime prayer at 10pm', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.tenMinutesBefore,
           eventTime: '22:00',
         );
 
         expect(settings.timing.minutesBefore, 10);
         // Notification should be at 21:50
-        final eventHour = 22;
-        final eventMinute = 0;
-        final notifMinutes = eventHour * 60 + eventMinute - 10;
+        const eventHour = 22;
+        const eventMinute = 0;
+        const notifMinutes = eventHour * 60 + eventMinute - 10;
         expect(notifMinutes, 1310); // 21:50 in minutes
       });
 
@@ -48,7 +48,7 @@ void main() {
           description: 'Read 1 chapter',
         );
 
-        final recurrence = HabitRecurrence(
+        const recurrence = HabitRecurrence(
           enabled: true,
           frequency: RecurrenceFrequency.daily,
           interval: 1,
@@ -70,9 +70,9 @@ void main() {
         );
 
         final subtasks = [
-          Subtask(id: '1', title: 'Warm up - 5 min'),
-          Subtask(id: '2', title: 'Running - 20 min'),
-          Subtask(id: '3', title: 'Cool down - 5 min'),
+          const Subtask(id: '1', title: 'Warm up - 5 min'),
+          const Subtask(id: '2', title: 'Running - 20 min'),
+          const Subtask(id: '3', title: 'Cool down - 5 min'),
         ];
 
         final updatedHabit = habit.copyWith(subtasks: subtasks);
@@ -83,7 +83,7 @@ void main() {
       });
 
       test('User completes subtasks one by one', () {
-        final subtask1 = Subtask(id: '1', title: 'Task 1');
+        const subtask1 = Subtask(id: '1', title: 'Task 1');
         expect(subtask1.completed, false);
 
         final completed1 = subtask1.copyWith(completed: true);
@@ -107,7 +107,7 @@ void main() {
 
     group('Edge Cases', () {
       test('Notification at midnight (00:00)', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.atEventTime,
           eventTime: '00:00',
         );
@@ -117,13 +117,13 @@ void main() {
       });
 
       test('Notification 1 hour before midnight event', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.oneHourBefore,
           eventTime: '00:30',
         );
 
         // Should calculate to 23:30 previous day
-        final eventMinutes = 0 * 60 + 30;
+        const eventMinutes = 0 * 60 + 30;
         var notifMinutes = eventMinutes - 60;
         if (notifMinutes < 0) {
           notifMinutes += 24 * 60; // Wrap to previous day
@@ -132,7 +132,7 @@ void main() {
       });
 
       test('Custom notification with maximum minutes (1440 - 24 hours)', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.custom,
           customMinutesBefore: 1440,
           eventTime: '09:00',
@@ -143,7 +143,7 @@ void main() {
       });
 
       test('Custom notification with minimum minutes (1)', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.custom,
           customMinutesBefore: 1,
           eventTime: '09:00',
@@ -154,7 +154,7 @@ void main() {
       });
 
       test('Monthly recurrence with interval of 2 (bi-monthly)', () {
-        final recurrence = HabitRecurrence(
+        const recurrence = HabitRecurrence(
           enabled: true,
           frequency: RecurrenceFrequency.monthly,
           interval: 2,
@@ -165,7 +165,7 @@ void main() {
       });
 
       test('Recurrence without end date (continuous)', () {
-        final recurrence = HabitRecurrence(
+        const recurrence = HabitRecurrence(
           enabled: true,
           frequency: RecurrenceFrequency.daily,
           interval: 1,
@@ -195,7 +195,7 @@ void main() {
       });
 
       test('No notification (disabled)', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.none,
         );
 
@@ -204,7 +204,7 @@ void main() {
       });
 
       test('Recurrence disabled but with settings', () {
-        final recurrence = HabitRecurrence(
+        const recurrence = HabitRecurrence(
           enabled: false,
           frequency: RecurrenceFrequency.daily,
           interval: 1,
@@ -218,7 +218,7 @@ void main() {
 
     group('Serialization - Real World Persistence', () {
       test('NotificationSettings survives JSON round-trip', () {
-        final original = HabitNotificationSettings(
+        const original = HabitNotificationSettings(
           timing: NotificationTiming.thirtyMinutesBefore,
           eventTime: '08:00',
         );
@@ -250,13 +250,13 @@ void main() {
 
       test('Subtasks list survives JSON round-trip', () {
         final originalSubtasks = [
-          Subtask(id: '1', title: 'Task 1', completed: true),
-          Subtask(id: '2', title: 'Task 2', completed: false),
+          const Subtask(id: '1', title: 'Task 1', completed: true),
+          const Subtask(id: '2', title: 'Task 2', completed: false),
         ];
 
         final jsonList = originalSubtasks.map((s) => s.toJson()).toList();
         final restored = jsonList
-            .map((json) => Subtask.fromJson(json as Map<String, dynamic>))
+            .map((json) => Subtask.fromJson(json))
             .toList();
 
         expect(restored.length, 2);
@@ -266,7 +266,7 @@ void main() {
       });
 
       test('Custom notification with null minutes preserved', () {
-        final settings = HabitNotificationSettings(
+        const settings = HabitNotificationSettings(
           timing: NotificationTiming.custom,
           customMinutesBefore: null,
           eventTime: '09:00',
@@ -291,7 +291,7 @@ void main() {
         );
 
         // Step 2: Add notification
-        final notification = HabitNotificationSettings(
+        const notification = HabitNotificationSettings(
           timing: NotificationTiming.tenMinutesBefore,
           eventTime: '06:00',
         );
@@ -306,9 +306,9 @@ void main() {
 
         // Step 4: Add subtasks
         final subtasks = [
-          Subtask(id: '1', title: 'Stretching'),
-          Subtask(id: '2', title: 'Cardio'),
-          Subtask(id: '3', title: 'Strength'),
+          const Subtask(id: '1', title: 'Stretching'),
+          const Subtask(id: '2', title: 'Cardio'),
+          const Subtask(id: '3', title: 'Strength'),
         ];
 
         // Step 5: Update habit with all settings
@@ -333,14 +333,14 @@ void main() {
           name: 'Prayer',
           description: 'Daily prayer',
         ).copyWith(
-          notificationSettings: HabitNotificationSettings(
+          notificationSettings: const HabitNotificationSettings(
             timing: NotificationTiming.atEventTime,
             eventTime: '07:00',
           ),
         );
 
         // User changes notification time
-        final newSettings = HabitNotificationSettings(
+        const newSettings = HabitNotificationSettings(
           timing: NotificationTiming.tenMinutesBefore,
           eventTime: '08:00',
         );
@@ -353,7 +353,7 @@ void main() {
       });
 
       test('User disables then re-enables recurrence', () {
-        final recurrence = HabitRecurrence(
+        const recurrence = HabitRecurrence(
           enabled: true,
           frequency: RecurrenceFrequency.daily,
           interval: 1,
