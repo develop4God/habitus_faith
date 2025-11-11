@@ -244,19 +244,19 @@ class _HomePageState extends ConsumerState<HomePage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.home_filled),
             label: l10n.home,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.check_box),
-            label: l10n.myHabits,
+            icon: const Icon(Icons.playlist_add_check_circle_outlined),
+            label: l10n.routine,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.book),
+            icon: const Icon(Icons.auto_stories_outlined),
             label: l10n.readBible,
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.auto_stories_outlined),
+            icon: Icon(Icons.local_library_outlined),
             label: 'Devotionals',
           ),
           BottomNavigationBarItem(

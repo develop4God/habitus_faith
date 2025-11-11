@@ -1453,6 +1453,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Habit Tracking'**
   String get habitTracking;
+
+  /// Label for routine option in navigation bar
+  ///
+  /// In en, this message translates to:
+  /// **'Routine'**
+  String get routine;
 }
 
 class _AppLocalizationsDelegate

@@ -729,10 +729,14 @@
   "@understood": {"description": "关闭教育提示的按钮"},
   "bible": "圣经",
   "@bible": {
-    "description": "圣经页面标题"
+    "description": "圣经页面的标题"
   },
   "home": "首页",
   "@home": {
     "description": "主页标签"
+  },
+  "routine": "常规",
+  "@routine": {
+    "description": "导航栏中常规选项的标签"
   }
 }

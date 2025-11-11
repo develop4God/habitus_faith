@@ -8,7 +8,7 @@
   "@start": {
     "description": "Start button text"
   },
-  "readBible": "Leer Biblia",
+  "readBible": "Biblia",
   "@readBible": {
     "description": "Read Bible button text"
   },
@@ -837,5 +837,9 @@
   "habitTracking": "Seguimiento de Hábitos",
   "@habitTracking": {
     "description": "Título de la página de calendario de seguimiento de hábitos"
+  },
+  "routine": "Rutina",
+  "@routine": {
+    "description": "Etiqueta para la opción de rutina en la barra de navegación"
   }
 }

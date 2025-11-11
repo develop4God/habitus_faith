@@ -768,4 +768,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get habitTracking => 'Seguimiento de Hábitos';
+
+  @override
+  String get routine => 'Rutina';
 }

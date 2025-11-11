@@ -8,7 +8,7 @@
   "@start": {
     "description": "Start button text"
   },
-  "readBible": "Lire la Bible",
+  "readBible": "Bible",
   "@readBible": {
     "description": "Read Bible button text"
   },
@@ -734,5 +734,9 @@
   "home": "Accueil",
   "@home": {
     "description": "Libellé de l'onglet d'accueil"
+  },
+  "routine": "Routine",
+  "@routine": {
+    "description": "Libellé pour l'option routine dans la barre de navigation"
   }
 }

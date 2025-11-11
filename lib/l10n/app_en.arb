@@ -8,7 +8,7 @@
   "@start": {
     "description": "Start button text"
   },
-  "readBible": "Read Bible",
+  "readBible": "Bible",
   "@readBible": {
     "description": "Read Bible button text"
   },
@@ -1033,5 +1033,9 @@
   "habitTracking": "Habit Tracking",
   "@habitTracking": {
     "description": "Title for habit tracking calendar page"
+  },
+  "routine": "Routine",
+  "@routine": {
+    "description": "Label for routine option in navigation bar"
   }
 }

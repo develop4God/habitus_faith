@@ -773,4 +773,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get habitTracking => 'Habit Tracking';
+
+  @override
+  String get routine => 'Routine';
 }
