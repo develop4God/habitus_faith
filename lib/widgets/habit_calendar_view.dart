@@ -102,16 +102,18 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                 style: const TextStyle(fontSize: 24),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                habit.name,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                              Flexible(
+                                child: Text(
+                                  habit.name,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
@@ -239,57 +241,64 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${habit.emoji ?? '📝'} ${habit.name}',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${habit.emoji ?? '📝'} ${habit.name}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildStatItem(
+                        l10n.streak,
+                        '${habit.currentStreak} ${l10n.days}',
+                        Icons.local_fire_department,
+                        Colors.orange,
+                      ),
+                      _buildStatItem(
+                        l10n.best,
+                        '${habit.longestStreak} ${l10n.days}',
+                        Icons.calendar_today,
+                        Colors.blue,
+                      ),
+                      _buildStatItem(
+                        'This Month',
+                        '$completedThisMonth ${l10n.days}',
+                        Icons.calendar_today,
+                        Colors.blue,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  LinearProgressIndicator(
+                    value: completedThisMonth / DateTime.now().day,
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade400),
+                    minHeight: 8,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Completion rate this month: ${(completedThisMonth / DateTime.now().day * 100).toStringAsFixed(1)}%',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatItem(
-                  l10n.streak,
-                  '${habit.currentStreak} ${l10n.days}',
-                  Icons.local_fire_department,
-                  Colors.orange,
-                ),
-                _buildStatItem(
-                  l10n.best,
-                  '${habit.longestStreak} ${l10n.days}',
-                  Icons.calendar_today,
-                  Colors.blue,
-                ),
-                _buildStatItem(
-                  'This Month',
-                  '$completedThisMonth ${l10n.days}',
-                  Icons.calendar_today,
-                  Colors.blue,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            LinearProgressIndicator(
-              value: completedThisMonth / DateTime.now().day,
-              backgroundColor: Colors.grey.shade200,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade400),
-              minHeight: 8,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Completion rate this month: ${(completedThisMonth / DateTime.now().day * 100).toStringAsFixed(1)}%',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -298,6 +307,7 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
   Widget _buildStatItem(
       String label, String value, IconData icon, Color color) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, color: color, size: 28),
         const SizedBox(height: 4),
@@ -308,11 +318,12 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
+        Flexible(
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 12),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
