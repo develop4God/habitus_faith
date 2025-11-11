@@ -57,6 +57,39 @@
         "supportLevel": null,
         "spiritualMaturity": "new"
       }
+    },
+    {
+      "pattern_id": "faithBased_passionate_lackOfMotivation_overcomeHabits_closerToGod",
+      "file": "faithBased_passionate_lackOfMotivation_overcomeHabits_closerToGod.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": ["overcomeHabits", "closerToGod"],
+        "challenge": "lackOfMotivation",
+        "supportLevel": null,
+        "spiritualMaturity": "passionate"
+      }
+    },
+    {
+      "pattern_id": "wellness_optimizing_dontKnowStart_betterSleep_reduceStress",
+      "file": "wellness_optimizing_dontKnowStart_betterSleep_reduceStress.json",
+      "fingerprint": {
+        "primaryIntent": "wellness",
+        "motivations": ["betterSleep", "reduceStress"],
+        "challenge": "dontKnowStart",
+        "supportLevel": null,
+        "spiritualMaturity": "optimizing"
+      }
+    },
+    {
+      "pattern_id": "both_growing_givingUp_closerToGod_understandBible",
+      "file": "both_growing_givingUp_closerToGod_understandBible.json",
+      "fingerprint": {
+        "primaryIntent": "both",
+        "motivations": ["closerToGod", "understandBible"],
+        "challenge": "givingUp",
+        "supportLevel": null,
+        "spiritualMaturity": "growing"
+      }
     }
   ]
 }

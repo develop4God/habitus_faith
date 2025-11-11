@@ -42,8 +42,8 @@ void main() {
 
       final patternId = service.generatePatternId(profile);
 
-      expect(patternId,
-          'faithBased_new_lackOfTime_closerToGod_prayerDiscipline');
+      expect(
+          patternId, 'faithBased_new_lackOfTime_closerToGod_prayerDiscipline');
     });
 
     test('generates correct pattern ID for wellness profile', () {
@@ -59,8 +59,8 @@ void main() {
 
       final patternId = service.generatePatternId(profile);
 
-      expect(
-          patternId, 'wellness_timeManagement_lackOfMotivation_timeManagement_productivity');
+      expect(patternId,
+          'wellness_timeManagement_lackOfMotivation_timeManagement_productivity');
     });
 
     test('uses only first two motivations', () {
@@ -174,8 +174,8 @@ void main() {
         }
       });
 
-      when(() => mockCache.set<Map<String, dynamic>>(
-          any(), any(), ttl: any(named: 'ttl'))).thenAnswer((_) async {});
+      when(() => mockCache.set<Map<String, dynamic>>(any(), any(),
+          ttl: any(named: 'ttl'))).thenAnswer((_) async {});
 
       final result = await service.findMatch(profile, 'es');
 
@@ -184,8 +184,8 @@ void main() {
       expect(result[0]['name'], 'Morning Prayer');
 
       // Verify cache was called
-      verify(() => mockCache.set<Map<String, dynamic>>(
-          any(), any(), ttl: any(named: 'ttl'))).called(greaterThan(0));
+      verify(() => mockCache.set<Map<String, dynamic>>(any(), any(),
+          ttl: any(named: 'ttl'))).called(greaterThan(0));
     });
 
     test('returns null on network error', () async {
@@ -273,8 +273,8 @@ void main() {
         }
       });
 
-      when(() => mockCache.set<Map<String, dynamic>>(
-          any(), any(), ttl: any(named: 'ttl'))).thenAnswer((_) async {});
+      when(() => mockCache.set<Map<String, dynamic>>(any(), any(),
+          ttl: any(named: 'ttl'))).thenAnswer((_) async {});
 
       final result = await service.findMatch(profile, 'es');
 
@@ -332,6 +332,254 @@ void main() {
       final result = await service.findMatch(profile, 'es');
 
       expect(result, isNull);
+    });
+  });
+
+  group('Multi-language support', () {
+    test('fetches Chinese templates successfully', () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.faithBased,
+        motivations: ['closerToGod', 'prayerDiscipline'],
+        challenge: 'lackOfTime',
+        supportLevel: 'strong',
+        spiritualMaturity: 'new',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      final metadata = {
+        'templates': [
+          {
+            'pattern_id':
+                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+            'file':
+                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json',
+            'fingerprint': {
+              'primaryIntent': 'faithBased',
+              'motivations': ['closerToGod', 'prayerDiscipline'],
+              'challenge': 'lackOfTime',
+              'supportLevel': null,
+              'spiritualMaturity': 'new'
+            }
+          }
+        ]
+      };
+
+      final template = {
+        'generated_habits': [
+          {
+            'name': '晨间祷告',
+            'category': 'spiritual',
+            'emoji': '🙏',
+          }
+        ]
+      };
+
+      when(() => mockCache.get<Map<String, dynamic>>(any()))
+          .thenAnswer((_) async => null);
+
+      final metadataResponse = MockResponse();
+      when(() => metadataResponse.statusCode).thenReturn(200);
+      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
+
+      final templateResponse = MockResponse();
+      when(() => templateResponse.statusCode).thenReturn(200);
+      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+
+      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments[0] as Uri;
+        if (uri.path.contains('metadata.json')) {
+          return metadataResponse;
+        } else {
+          return templateResponse;
+        }
+      });
+
+      when(() => mockCache.set<Map<String, dynamic>>(any(), any(),
+          ttl: any(named: 'ttl'))).thenAnswer((_) async {});
+
+      final result = await service.findMatch(profile, 'zh');
+
+      expect(result, isNotNull);
+      expect(result!.length, 1);
+      expect(result[0]['name'], '晨间祷告');
+    });
+
+    test('supports multiple languages (es, en, pt, fr, zh)', () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.faithBased,
+        motivations: ['closerToGod', 'prayerDiscipline'],
+        challenge: 'lackOfTime',
+        supportLevel: 'strong',
+        spiritualMaturity: 'new',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      final languages = ['es', 'en', 'pt', 'fr', 'zh'];
+
+      for (final lang in languages) {
+        final metadata = {
+          'templates': [
+            {
+              'pattern_id':
+                  'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+              'file':
+                  'faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json',
+              'fingerprint': {
+                'primaryIntent': 'faithBased',
+                'motivations': ['closerToGod', 'prayerDiscipline'],
+                'challenge': 'lackOfTime',
+                'supportLevel': null,
+                'spiritualMaturity': 'new'
+              }
+            }
+          ]
+        };
+
+        final template = {
+          'generated_habits': [
+            {'name': 'Test', 'category': 'spiritual', 'emoji': '🙏'}
+          ]
+        };
+
+        when(() => mockCache.get<Map<String, dynamic>>(any()))
+            .thenAnswer((_) async => null);
+
+        final metadataResponse = MockResponse();
+        when(() => metadataResponse.statusCode).thenReturn(200);
+        when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
+
+        final templateResponse = MockResponse();
+        when(() => templateResponse.statusCode).thenReturn(200);
+        when(() => templateResponse.body).thenReturn(jsonEncode(template));
+
+        when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
+          final uri = invocation.positionalArguments[0] as Uri;
+          // Verify the URL contains the correct language code
+          expect(uri.path.contains('templates-$lang'), isTrue);
+
+          if (uri.path.contains('metadata.json')) {
+            return metadataResponse;
+          } else {
+            return templateResponse;
+          }
+        });
+
+        when(() => mockCache.set<Map<String, dynamic>>(any(), any(),
+            ttl: any(named: 'ttl'))).thenAnswer((_) async {});
+
+        final result = await service.findMatch(profile, lang);
+
+        expect(result, isNotNull,
+            reason: 'Should fetch template for language: $lang');
+      }
+    });
+  });
+
+  group('Extended template scenarios', () {
+    test('matches passionate spiritual maturity with givingUp challenge',
+        () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.faithBased,
+        motivations: ['prayerDiscipline', 'growInFaith'],
+        challenge: 'givingUp',
+        supportLevel: 'weak',
+        spiritualMaturity: 'passionate',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      final patternId = service.generatePatternId(profile);
+
+      expect(patternId,
+          'faithBased_passionate_givingUp_prayerDiscipline_growInFaith');
+    });
+
+    test('matches wellness profile with betterSleep and reduceStress',
+        () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.wellness,
+        motivations: ['betterSleep', 'reduceStress'],
+        challenge: 'dontKnowStart',
+        supportLevel: 'normal',
+        spiritualMaturity: null,
+        commitment: 'weekly',
+        completedAt: DateTime.now(),
+      );
+
+      final metadata = {
+        'templates': [
+          {
+            'pattern_id':
+                'wellness_betterSleep_dontKnowStart_betterSleep_reduceStress',
+            'file':
+                'wellness_optimizing_dontKnowStart_betterSleep_reduceStress.json',
+            'fingerprint': {
+              'primaryIntent': 'wellness',
+              'motivations': ['betterSleep', 'reduceStress'],
+              'challenge': 'dontKnowStart',
+              'supportLevel': 'normal',
+              'spiritualMaturity': 'optimizing'
+            }
+          }
+        ]
+      };
+
+      final template = {
+        'generated_habits': [
+          {
+            'name': 'Night Routine',
+            'category': 'physical',
+            'emoji': '🌙',
+          }
+        ]
+      };
+
+      when(() => mockCache.get<Map<String, dynamic>>(any()))
+          .thenAnswer((_) async => null);
+
+      final metadataResponse = MockResponse();
+      when(() => metadataResponse.statusCode).thenReturn(200);
+      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
+
+      final templateResponse = MockResponse();
+      when(() => templateResponse.statusCode).thenReturn(200);
+      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+
+      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments[0] as Uri;
+        if (uri.path.contains('metadata.json')) {
+          return metadataResponse;
+        } else {
+          return templateResponse;
+        }
+      });
+
+      when(() => mockCache.set<Map<String, dynamic>>(any(), any(),
+          ttl: any(named: 'ttl'))).thenAnswer((_) async {});
+
+      final result = await service.findMatch(profile, 'es');
+
+      expect(result, isNotNull);
+      expect(result!.length, 1);
+    });
+
+    test('matches both path with growing maturity and givingUp challenge',
+        () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.both,
+        motivations: ['closerToGod', 'understandBible'],
+        challenge: 'givingUp',
+        supportLevel: 'strong',
+        spiritualMaturity: 'growing',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      final patternId = service.generatePatternId(profile);
+
+      expect(patternId, 'both_growing_givingUp_closerToGod_understandBible');
     });
   });
 }
