@@ -314,46 +314,64 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               ),
               const SizedBox(width: 8),
               // Check box a la derecha
-              InkWell(
-                onTap: _isCompleting ? null : _handleComplete,
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  padding: const EdgeInsets.all(8),
-                  child: _isCompleting
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              habitColor,
+              StatefulBuilder(
+                builder: (context, setModalState) {
+                  return InkWell(
+                    onTap: _isCompleting
+                        ? null
+                        : () async {
+                            setModalState(() {
+                              _isCompleting = true;
+                            });
+                            if (widget.habit.completedToday) {
+                              await widget.onUncheck(widget.habit.id);
+                            } else {
+                              await widget.onComplete(widget.habit.id);
+                            }
+                            setModalState(() {
+                              _isCompleting = false;
+                            });
+                          },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(8),
+                      child: _isCompleting
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  habitColor,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: widget.habit.completedToday
+                                    ? habitColor
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: widget.habit.completedToday
+                                      ? habitColor
+                                      : Colors.grey.shade400,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: widget.habit.completedToday
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )
+                                  : null,
                             ),
-                          ),
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            color: widget.habit.completedToday
-                                ? habitColor
-                                : Colors.transparent,
-                            border: Border.all(
-                              color: widget.habit.completedToday
-                                  ? habitColor
-                                  : Colors.grey.shade400,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: widget.habit.completedToday
-                              ? const Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 16,
-                                )
-                              : null,
-                        ),
-                ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(width: 8),
             ],
@@ -427,6 +445,27 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 8),
+            // Barra de subtareas moderna
+            Container(
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.purple.shade100, width: 1),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Icon(Icons.add, color: Colors.purple, size: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text('Subtareas', style: TextStyle(fontSize: 16, color: Colors.purple.shade700), textAlign: TextAlign.center),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Lista de subtareas
             Column(
               children: [
                 ..._subtasks.map((subtask) => Container(
@@ -481,53 +520,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         ),
                       ),
                     )),
-                // Campo para agregar subtarea
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _subtaskController,
-                          decoration: InputDecoration(
-                            hintText: 'Nueva subtarea...',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                        ),
-                        onPressed: () {
-                          final text = _subtaskController.text.trim();
-                          if (text.isNotEmpty) {
-                            setModalState(() {
-                              _subtasks.add(Subtask(
-                                id: DateTime.now()
-                                    .millisecondsSinceEpoch
-                                    .toString(),
-                                title: text,
-                                completed: false,
-                              ));
-                              _subtaskController.clear();
-                            });
-                          }
-                        },
-                        child: const Icon(Icons.add),
-                      ),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 16),
                 // Botón para editar la tarea
                 Center(
@@ -549,7 +541,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
           ],
           // Action buttons
           Row(
