@@ -104,12 +104,18 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         children: [
           // Compact view - always visible
           InkWell(
-            onTap: () {
-              HabitModalSheet.show(
+            onTap: () async {
+              await HabitModalSheet.show(
                 context: context,
-                child: _buildExpandedContent(context, l10n, habitColor),
+                child: StatefulBuilder(
+                  builder: (context, setModalState) {
+                    return _buildExpandedContent(context, l10n, habitColor, setModalState);
+                  },
+                ),
                 maxHeight: 480,
               );
+              // Aquí puedes refrescar la lista de hábitos si es necesario
+              setState(() {});
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
@@ -234,7 +240,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 
-  Widget _buildExpandedContent(BuildContext context, AppLocalizations l10n, Color habitColor) {
+  Widget _buildExpandedContent(BuildContext context, AppLocalizations l10n, Color habitColor, StateSetter setModalState) {
     final isCompleted = widget.habit.completedToday;
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -440,7 +446,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         leading: Checkbox(
                           value: subtask.completed,
                           onChanged: (val) {
-                            setState(() {
+                            setModalState(() {
                               final idx = _subtasks.indexOf(subtask);
                               _subtasks[idx] = subtask.copyWith(
                                   completed: val ?? false);
@@ -468,7 +474,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           icon: const Icon(Icons.delete,
                               color: Colors.redAccent, size: 20),
                           onPressed: () {
-                            setState(() {
+                            setModalState(() {
                               _subtasks.remove(subtask);
                             });
                           },
@@ -505,7 +511,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         onPressed: () {
                           final text = _subtaskController.text.trim();
                           if (text.isNotEmpty) {
-                            setState(() {
+                            setModalState(() {
                               _subtasks.add(Subtask(
                                 id: DateTime.now()
                                     .millisecondsSinceEpoch
@@ -520,6 +526,25 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         child: const Icon(Icons.add),
                       ),
                     ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Botón para editar la tarea
+                Center(
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
+                      elevation: 1,
+                    ),
+                    icon: const Icon(Icons.edit, size: 20),
+                    label: Text(l10n.edit, style: const TextStyle(fontSize: 16)),
+                    onPressed: widget.onEdit,
                   ),
                 ),
               ],
