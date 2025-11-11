@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_selection_page.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_page.dart';
+import 'package:habitus_faith/features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
@@ -35,7 +35,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -86,7 +88,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -261,7 +265,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -314,7 +320,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),

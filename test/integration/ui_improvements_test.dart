@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_page.dart';
+import 'package:habitus_faith/features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
 import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
@@ -15,7 +15,7 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    Future<void> pumpOnboardingPage(WidgetTester tester) async {
+    Future<void> pumpAdaptiveOnboardingPage(WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
@@ -28,7 +28,7 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', ''), Locale('es', '')],
-            home: OnboardingPage(),
+            home: AdaptiveOnboardingPage(),
           ),
         ),
       );
@@ -39,7 +39,7 @@ void main() {
     testWidgets('User can skip onboarding without selecting habits', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Find skip button
       final skipButton = find.byKey(const Key('skip_onboarding_button'));
@@ -53,7 +53,7 @@ void main() {
     testWidgets('Skip button is visible alongside continue button', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Both buttons should be visible
       final skipButton = find.byKey(const Key('skip_onboarding_button'));
@@ -90,7 +90,7 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', ''), Locale('es', '')],
-            home: OnboardingPage(),
+            home: AdaptiveOnboardingPage(),
           ),
         ),
       );
@@ -444,7 +444,7 @@ void main() {
               ],
               supportedLocales: const [Locale('en', ''), Locale('es', '')],
               routes: {
-                '/': (context) => const OnboardingPage(),
+                '/': (context) => const AdaptiveOnboardingPage(),
                 '/home': (context) => const HabitsPage(),
               },
             ),

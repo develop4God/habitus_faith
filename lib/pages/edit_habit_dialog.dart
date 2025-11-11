@@ -163,7 +163,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitCategory>(
-                initialValue: selectedCategory,
+                value: selectedCategory,
                 decoration: InputDecoration(
                   labelText: l10n.category,
                   border: OutlineInputBorder(
@@ -198,7 +198,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitDifficulty>(
-                initialValue: selectedDifficulty,
+                value: selectedDifficulty,
                 decoration: InputDecoration(
                   labelText: l10n.difficulty,
                   border: OutlineInputBorder(
@@ -290,7 +290,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        side: BorderSide(color: Colors.blueAccent, width: 2),
+                        side: const BorderSide(color: Colors.blueAccent, width: 2),
                         backgroundColor: Colors.blue.shade50,
                         foregroundColor: Colors.blue.shade900,
                         padding: const EdgeInsets.symmetric(vertical: 16),

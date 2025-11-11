@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_page.dart';
+import 'package:habitus_faith/features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  group('OnboardingPage Integration Tests', () {
+  group('AdaptiveOnboardingPage Integration Tests', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    Future<void> pumpOnboardingPage(WidgetTester tester) async {
+    Future<void> pumpAdaptiveOnboardingPage(WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
@@ -26,7 +26,7 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', ''), Locale('es', '')],
-            home: OnboardingPage(),
+            home: AdaptiveOnboardingPage(),
           ),
         ),
       );
@@ -37,7 +37,7 @@ void main() {
     testWidgets('displays welcome message and habit grid', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Should show welcome text
       expect(find.textContaining('Welcome'), findsOneWidget);
@@ -59,7 +59,7 @@ void main() {
     });
 
     testWidgets('selects one habit successfully', (WidgetTester tester) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Find first habit card
       final firstHabitCard = find.byKey(const Key('habit_card_morning_prayer'));
@@ -81,7 +81,7 @@ void main() {
     });
 
     testWidgets('selects two habits successfully', (WidgetTester tester) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Select first habit
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
@@ -98,7 +98,7 @@ void main() {
     testWidgets('selects three habits (maximum) successfully', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Select three habits
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
@@ -117,7 +117,7 @@ void main() {
     testWidgets('prevents selecting more than 3 habits', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Select three habits
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
@@ -150,7 +150,7 @@ void main() {
     testWidgets('deselects a habit when tapped again', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Select habit
       final habitCard = find.byKey(const Key('habit_card_morning_prayer'));
@@ -181,7 +181,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Grid should be visible
       expect(find.byType(GridView), findsOneWidget);
@@ -204,7 +204,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Grid should be visible
       expect(find.byType(GridView), findsOneWidget);
@@ -224,7 +224,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Should render without overflow
       expect(tester.takeException(), isNull);
@@ -234,7 +234,7 @@ void main() {
     });
 
     testWidgets('grid scrolls to show all habits', (WidgetTester tester) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Find grid view
       final gridView = find.byType(GridView);
@@ -251,7 +251,7 @@ void main() {
     testWidgets('shows loading spinner while completing onboarding', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Select one habit
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
@@ -268,7 +268,7 @@ void main() {
     testWidgets('all 12 predefined habits are present', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Find the GridView
       final gridFinder = find.byType(GridView);
