@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
+import 'package:lottie/lottie.dart' show Lottie;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/domain/failures.dart';
@@ -14,6 +14,7 @@ import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
 import '../widgets/habit_calendar_view.dart';
+import '../widgets/modern_weekly_calendar.dart';
 import 'habits_page.dart';
 import 'edit_habit_dialog.dart';
 
@@ -139,10 +140,7 @@ class HabitsPageUI extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _LottieTip(),
-              ),
+              ModernWeeklyCalendar(habits: habits),
               // Category filter chips
               if (habits.isNotEmpty)
                 _CategoryFilterChips(
@@ -596,8 +594,8 @@ class _LottieTip extends StatefulWidget {
 }
 
 class __LottieTipState extends State<_LottieTip> {
-  bool _visible = true;
   Timer? _hideTimer;
+  bool _visible = true;
 
   @override
   void initState() {
@@ -632,6 +630,7 @@ class __LottieTipState extends State<_LottieTip> {
       ),
     );
   }
+
 }
 
 class _CategoryFilterChips extends StatelessWidget {
