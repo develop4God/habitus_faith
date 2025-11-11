@@ -60,7 +60,6 @@ class Habit {
   final String id;
   final String userId;
   final String name;
-  final String description;
   final HabitCategory category;
   final String? emoji;
   final VerseReference? verse;
@@ -97,7 +96,6 @@ class Habit {
     required this.id,
     required this.userId,
     required this.name,
-    required this.description,
     required this.category,
     this.emoji,
     this.verse,
@@ -130,7 +128,6 @@ class Habit {
     required String id,
     required String userId,
     required String name,
-    required String description,
     HabitCategory category = HabitCategory.spiritual,
     String? emoji,
     VerseReference? verse,
@@ -148,7 +145,6 @@ class Habit {
       id: id,
       userId: userId,
       name: name,
-      description: description,
       category: category,
       emoji: emoji,
       verse: verse,
@@ -232,7 +228,6 @@ class Habit {
     String? id,
     String? userId,
     String? name,
-    String? description,
     HabitCategory? category,
     String? emoji,
     VerseReference? verse,
@@ -264,7 +259,6 @@ class Habit {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
-      description: description ?? this.description,
       category: category ?? this.category,
       emoji: emoji ?? this.emoji,
       verse: verse ?? this.verse,

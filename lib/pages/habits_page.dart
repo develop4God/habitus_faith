@@ -65,21 +65,19 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> addHabit({
     required String name,
-    required String description,
     HabitCategory category = HabitCategory.mental,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
     String? emoji,
   }) async {
     debugPrint(
-      'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description',
+      'JsonHabitsNotifier.addHabit: start -> name:$name',
     );
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
     final result = await repository.createHabit(
       name: name,
-      description: description,
       category: category,
       colorValue: colorValue,
       difficulty: difficulty,
@@ -101,7 +99,6 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
   Future<void> updateHabit({
     required String habitId,
     String? name,
-    String? description,
     HabitCategory? category,
     String? emoji,
     int? colorValue,
@@ -117,7 +114,6 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     final result = await repository.updateHabit(
       habitId: habitId,
       name: name,
-      description: description,
       category: category,
       emoji: emoji,
       colorValue: colorValue,
@@ -214,7 +210,6 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
   ) async {
     await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
           name: "${habit.name} (copy)",
-          description: habit.description,
           category: habit.category,
           colorValue: habit.colorValue,
           difficulty: habit.difficulty,

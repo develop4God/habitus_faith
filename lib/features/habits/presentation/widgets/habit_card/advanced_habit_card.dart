@@ -95,7 +95,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Habit name and description
+                // Habit name
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,18 +114,6 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (widget.habit.description.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.habit.description,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
                     ],
                   ),
                 ),

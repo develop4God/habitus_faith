@@ -463,7 +463,6 @@ class _AdaptiveOnboardingPageState
         }
         await repository.createHabit(
           name: habitData['name'] as String,
-          description: habitData['description'] as String,
           category: category,
           emoji: habitData['emoji'] as String?,
           notificationSettings: notificationSettings,
