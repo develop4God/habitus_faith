@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitus_faith/core/providers/add_habit_button_visible_provider.dart';
 import '../../../domain/habit.dart';
+import '../../../domain/models/habit_notification.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
@@ -31,6 +33,14 @@ class CompactHabitCard extends ConsumerStatefulWidget {
 class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   bool _isExpanded = false;
   bool _isCompleting = false;
+  final TextEditingController _subtaskController = TextEditingController();
+  List<Subtask> _subtasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _subtasks = List<Subtask>.from(widget.habit.subtasks);
+  }
 
   Future<void> _handleComplete() async {
     if (_isCompleting) return;
@@ -54,6 +64,22 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     }
   }
 
+  // Callback para ocultar el botón global de agregar hábito
+  void _setAddHabitButtonVisibility(bool visible) {
+    ref.read(addHabitButtonVisibleProvider.notifier).state = visible;
+  }
+
+  @override
+  void didUpdateWidget(covariant CompactHabitCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Si el card se expande, ocultar el botón global
+    if (_isExpanded) {
+      _setAddHabitButtonVisibility(false);
+    } else {
+      _setAddHabitButtonVisibility(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -70,6 +96,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             onTap: () {
               setState(() {
                 _isExpanded = !_isExpanded;
+                // Oculta/muestra el botón global al expandir/colapsar
+                _setAddHabitButtonVisibility(!_isExpanded);
               });
             },
             borderRadius: BorderRadius.circular(12),
@@ -264,6 +292,102 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                     completionDates: widget.habit.completionHistory,
                   ),
                   const SizedBox(height: 16),
+
+                  // Subtasks section (solo en vista expandida)
+                  if (_subtasks.isNotEmpty || true) ...[
+                    Text(
+                      l10n.subtasks,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    Column(
+                      children: [
+                        ..._subtasks.map((subtask) => Container(
+                          margin: const EdgeInsets.symmetric(vertical: 2),
+                          decoration: BoxDecoration(
+                            color: subtask.completed ? Colors.green.shade50 : Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.purple.shade100, width: 1),
+                          ),
+                          child: ListTile(
+                            dense: true,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                            leading: Checkbox(
+                              value: subtask.completed,
+                              onChanged: (val) {
+                                setState(() {
+                                  final idx = _subtasks.indexOf(subtask);
+                                  _subtasks[idx] = subtask.copyWith(completed: val ?? false);
+                                });
+                              },
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              activeColor: Colors.purple,
+                            ),
+                            title: Text(
+                              subtask.title,
+                              style: TextStyle(
+                                fontSize: 15,
+                                decoration: subtask.completed ? TextDecoration.lineThrough : null,
+                                color: subtask.completed ? Colors.green : Colors.black,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
+                              onPressed: () {
+                                setState(() {
+                                  _subtasks.remove(subtask);
+                                });
+                              },
+                            ),
+                          ),
+                        )),
+                        // Campo para agregar subtarea
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _subtaskController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Nueva subtarea...',
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.purple,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                ),
+                                onPressed: () {
+                                  final text = _subtaskController.text.trim();
+                                  if (text.isNotEmpty) {
+                                    setState(() {
+                                      _subtasks.add(Subtask(
+                                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                                        title: text,
+                                        completed: false,
+                                      ));
+                                      _subtaskController.clear();
+                                    });
+                                  }
+                                },
+                                child: const Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
 
                   // Action buttons
                   Row(

@@ -377,28 +377,19 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 20),
               // Subtasks section
-              Card(
-                color: Colors.purple.shade50,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                elevation: 2,
-                margin: const EdgeInsets.only(bottom: 20),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: SubtasksSection(
-                    initialSubtasks: subtasks,
-                    onSubtasksChanged: (newSubtasks) {
-                      setState(() {
-                        subtasks = newSubtasks;
-                      });
-                    },
-                    showAddButton: true,
-                    addButtonStyle: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                    ),
-                  ),
+              SubtasksSection(
+                initialSubtasks: subtasks,
+                onSubtasksChanged: (newSubtasks) {
+                  setState(() {
+                    subtasks = newSubtasks;
+                  });
+                },
+                showAddButton: true,
+                addButtonStyle: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 ),
               ),
               Row(
