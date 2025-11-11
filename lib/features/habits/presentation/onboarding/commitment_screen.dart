@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'onboarding_models.dart';
 import 'package:signature/signature.dart';
+import 'package:lottie/lottie.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class CommitmentScreen extends StatefulWidget {
@@ -21,6 +22,8 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
   final TextEditingController _commitmentController = TextEditingController();
   final SignatureController _signatureController = SignatureController(penStrokeWidth: 3, penColor: Colors.black);
   final ValueNotifier<bool> _isSignatureNotEmpty = ValueNotifier<bool>(false);
+  bool _isProcessing = false;
+  bool _backEnabled = true;
 
   @override
   void initState() {
@@ -40,12 +43,94 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
     super.dispose();
   }
 
+  Future<void> _handleCommitment() async {
+    setState(() {
+      _isProcessing = true;
+      _backEnabled = false;
+    });
+    // Mostrar modal de carga
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha:0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset('assets/lottie/gears.json', width: 120, height: 120, repeat: true),
+              const SizedBox(height: 16),
+              const Text(
+                'Generando tus primeras tareas, por favor espera...',
+                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await widget.onCommitmentMade('Compromiso firmado');
+    if (!mounted) return;
+    Navigator.of(context, rootNavigator: true).pop(); // Cierra el modal de carga
+    // Mostrar modal de éxito
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha:0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset('assets/lottie/success.json', width: 120, height: 120, repeat: false),
+              const SizedBox(height: 16),
+              const Text(
+                '¡Tus hábitos han sido generados exitosamente!',
+                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+    Navigator.of(context, rootNavigator: true).pop(); // Cierra el modal de éxito
+    // Navega a /habits
+    Navigator.of(context).pushReplacementNamed('/habits');
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     const inputLabel = 'Firma con check con el dedo:';
-    const disclaimer = '*Simbólico. Tu firma se registrará.';
+    const disclaimer = '*Simbólico. Tu firma NO se registrará.';
     final secularCommitments = [
       '¡Voy a lograr mis objetivos!',
       '¡Voy a aprovechar mi tiempo al máximo!',
@@ -86,7 +171,7 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: _backEnabled ? () => Navigator.of(context).pop() : null,
                   ),
                   const Spacer(),
                 ],
@@ -165,19 +250,26 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                         ),
                         elevation: 4,
                       ),
-                      onPressed: isNotEmpty
-                          ? () {
-                              widget.onCommitmentMade('Compromiso firmado');
-                            }
+                      onPressed: isNotEmpty && !_isProcessing
+                          ? _handleCommitment
                           : null,
-                      child: Text(
-                        l10n.continueButton,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _isProcessing
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Text(
+                              l10n.continueButton,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   );
                 },

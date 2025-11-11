@@ -102,6 +102,7 @@ class MyApp extends ConsumerWidget {
       routes: {
         '/home': (context) => const HomePage(),
         '/onboarding': (context) => const AdaptiveOnboardingPage(),
+        '/habits': (context) => const HomePage(), // ← Agregado para solucionar el error de ruta
       },
       home: authInit.when(
         data: (_) {

@@ -188,41 +188,57 @@ class _AdaptiveOnboardingPageState
     final intent = ref.read(selectedIntentProvider);
     if (intent == null) return;
 
-    // Construir el perfil y generar hábitos antes de navegar
-    final answers = ref.read(answersProvider);
-    final profile = OnboardingProfile(
-      primaryIntent: intent,
-      motivations: _extractMotivations(answers, intent),
-      challenge: answers['mainChallenge'] as String? ?? '',
-      supportLevel: answers['supportSystem'] as String? ?? '',
-      spiritualMaturity: _extractSpiritualMaturity(answers, intent),
-      commitment: '',
-      completedAt: DateTime.now(),
-    );
-    final geminiService = await ref.read(geminiServiceProvider.future);
-    if (!mounted) return;
-    const userId = 'local_user';
-    final habitsData = await geminiService.generateHabitsFromProfile(profile, userId);
-    if (!mounted) return;
-    // Extraer resumen de hábitos (nombre y descripción)
-    habitsData.map<String>((habit) =>
-      '${habit['emoji'] ?? ''} ${habit['name']}: ${habit['description']}').toList();
+    // Construir el perfil antes de navegar, pero NO generar hábitos aquí
+    ref.read(answersProvider);
 
-    final result = await Navigator.of(context).push<String>(
+    await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (context) => CommitmentScreen(
           userIntent: intent,
-          onCommitmentMade: (commitment) {
-            Navigator.of(context).pop(commitment);
+          onCommitmentMade: (commitment) async {
+            // Mostrar modal de carga con Lottie gears.json y mensaje
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha:0.08),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Lottie.asset('assets/lottie/gears.json', width: 120, height: 120, repeat: true),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Generando tus primeras tareas, por favor espera...',
+                        style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+            await _completeOnboarding(commitment);
+            if (mounted) Navigator.of(context, rootNavigator: true).pop();
           },
         ),
       ),
     );
 
     if (!mounted) return;
-    if (result != null) {
-      await _completeOnboarding(result);
-    }
+    // La generación de hábitos y navegación ocurre en _completeOnboarding
   }
 
   Future<void> _completeOnboarding(String commitment) async {
@@ -318,11 +334,20 @@ class _AdaptiveOnboardingPageState
       log('Error en _completeOnboarding: ${e.toString()}', name: 'onboarding');
       log('Stacktrace: $stack', name: 'onboarding');
       if (!mounted) return;
+      String errorMessage;
+      if (e.toString().contains('Resource exhausted') || e.toString().contains('error-code-429')) {
+        errorMessage = 'La generación de hábitos está temporalmente limitada por el proveedor de IA. Por favor intenta nuevamente en unos minutos. Si el problema persiste, contacta soporte.';
+      } else {
+        errorMessage = 'Ocurrió un error inesperado al finalizar el onboarding. Por favor verifica tu conexión y vuelve a intentarlo. Si el problema persiste, contacta soporte.';
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: ${e.toString()}'),
+          content: Text(
+            errorMessage,
+            style: const TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.red,
-          duration: const Duration(seconds: 5),
+          duration: const Duration(seconds: 8),
         ),
       );
     } finally {
@@ -407,6 +432,14 @@ class _AdaptiveOnboardingPageState
                           ? null
                           : () {
                               if (currentIndex > 0) {
+                                // Si la pregunta anterior es de selección única, limpiar respuesta para permitir avance
+                                final prevQuestion = questions[currentIndex - 1];
+                                if (prevQuestion.type == QuestionType.singleChoice) {
+                                  final answers = ref.read(answersProvider);
+                                  final newAnswers = Map<String, dynamic>.from(answers);
+                                  newAnswers.remove(prevQuestion.id);
+                                  ref.read(answersProvider.notifier).state = newAnswers;
+                                }
                                 ref.read(currentQuestionIndexProvider.notifier).state = currentIndex - 1;
                                 _pageController.previousPage(
                                   duration: const Duration(milliseconds: 300),
