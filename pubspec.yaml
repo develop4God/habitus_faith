@@ -75,7 +75,7 @@ flutter:
     - assets/ml_models/predictor.tflite
     - assets/ml_models/scaler_params.json
     - assets/ml_models/model_metadata.json
-    # - .env  # Commented out - file doesn't exist
+    - .env
   fonts:
     - family: DancingScript
       fonts:
