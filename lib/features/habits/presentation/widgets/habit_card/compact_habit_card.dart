@@ -242,97 +242,175 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Nombre del hábito destacado
-          Center(
-            child: Text(
-              widget.habit.name,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: habitColor,
-                letterSpacing: 0.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 12),
-          // Botón moderno para marcar/desmarcar
-          Center(
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isCompleted ? Colors.grey[300] : habitColor,
-                foregroundColor: isCompleted ? Colors.black : Colors.white,
-                minimumSize: const Size(160, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+          // Tarea igual que en la vista compacta
+          Row(
+            children: [
+              // Emoji a la izquierda
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: habitColor.withValues(alpha:0.1),
+                  shape: BoxShape.circle,
                 ),
-                elevation: 2,
+                child: Center(
+                  child: Text(
+                    widget.habit.emoji ?? '✓',
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
               ),
-              icon: Icon(isCompleted ? Icons.undo : Icons.check,
-                  color: isCompleted ? Colors.black : Colors.white),
-              label: Text(isCompleted ? l10n.uncheck : l10n.completeNow,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              onPressed: isCompleted
-                  ? () => widget.onUncheck(widget.habit.id)
-                  : () => widget.onComplete(widget.habit.id),
-            ),
+              const SizedBox(width: 12),
+              // Nombre y racha centrados
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.habit.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        decoration: widget.habit.completedToday
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        decorationThickness: 2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.local_fire_department,
+                          size: 16,
+                          color: widget.habit.currentStreak > 0
+                              ? Colors.orange
+                              : Colors.grey,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${widget.habit.currentStreak} ${l10n.days}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Check box a la derecha
+              InkWell(
+                onTap: _isCompleting ? null : _handleComplete,
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  padding: const EdgeInsets.all(8),
+                  child: _isCompleting
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              habitColor,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: widget.habit.completedToday
+                                ? habitColor
+                                : Colors.transparent,
+                            border: Border.all(
+                              color: widget.habit.completedToday
+                                  ? habitColor
+                                  : Colors.grey.shade400,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: widget.habit.completedToday
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 16,
+                                )
+                              : null,
+                        ),
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
           ),
           const SizedBox(height: 16),
           // Iconos y estado de notificaciones y repetición
-          Row(
-            children: [
-              // Notificaciones reales
-              if (widget.habit.notificationSettings != null &&
-                  widget.habit.notificationSettings!.timing != NotificationTiming.none)
-                Row(
-                  children: [
-                    const Icon(Icons.notifications_active, color: Colors.orange, size: 24),
-                    const SizedBox(width: 8),
-                    Text(l10n.notifications,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                    ),
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    const Icon(Icons.notifications_off, color: Colors.grey, size: 24),
-                    const SizedBox(width: 8),
-                    Text(l10n.notificationsOff,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                    ),
-                  ],
+          // Línea de notificaciones reales
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              children: [
+                Icon(
+                  widget.habit.notificationSettings != null && widget.habit.notificationSettings!.timing != NotificationTiming.none
+                      ? Icons.notifications_active
+                      : Icons.notifications_off,
+                  color: widget.habit.notificationSettings != null && widget.habit.notificationSettings!.timing != NotificationTiming.none
+                      ? Colors.orange
+                      : Colors.grey,
+                  size: 22,
                 ),
-              const SizedBox(width: 24),
-              // Repetición
-              if (widget.habit.recurrence != null && widget.habit.recurrence!.enabled)
-                Row(
-                  children: [
-                    const Icon(Icons.repeat, color: Colors.green, size: 24),
-                    const SizedBox(width: 8),
-                    Text(l10n.repetition,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                    ),
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    const Icon(Icons.repeat, color: Colors.grey, size: 24),
-                    const SizedBox(width: 8),
-                    Text(l10n.noRepetition,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                    ),
-                  ],
+                const SizedBox(width: 8),
+                Expanded(
+                  child: widget.habit.notificationSettings != null && widget.habit.notificationSettings!.timing != NotificationTiming.none
+                      ? Text(
+                          '${widget.habit.notificationSettings!.eventTime ?? ''} · ${widget.habit.notificationSettings!.timing.displayName}',
+                          style: const TextStyle(fontSize: 15),
+                        )
+                      : Text(
+                          l10n.notificationsOff,
+                          style: const TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
                 ),
-              const Spacer(),
-              // Botón minimalista de editar tarea
-              IconButton(
-                icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
-                tooltip: l10n.edit,
-                onPressed: widget.onEdit,
-              ),
-            ],
+              ],
+            ),
+          ),
+          // Línea de repetición real
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              children: [
+                Icon(
+                  widget.habit.recurrence != null && widget.habit.recurrence!.enabled
+                      ? Icons.repeat
+                      : Icons.repeat,
+                  color: widget.habit.recurrence != null && widget.habit.recurrence!.enabled
+                      ? Colors.green
+                      : Colors.grey,
+                  size: 22,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: widget.habit.recurrence != null && widget.habit.recurrence!.enabled
+                      ? Text(
+                          '${widget.habit.recurrence!.frequency.displayName} · Cada ${widget.habit.recurrence!.interval} ${_getFrequencyUnit(widget.habit.recurrence!.frequency)}',
+                          style: const TextStyle(fontSize: 15),
+                        )
+                      : Text(
+                          l10n.noRepetition,
+                          style: const TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
           // Subtasks section (solo en vista expandida)
@@ -517,6 +595,19 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         ],
       ),
     );
+  }
+
+  String _getFrequencyUnit(RecurrenceFrequency frequency) {
+    switch (frequency) {
+      case RecurrenceFrequency.daily:
+        return 'día';
+      case RecurrenceFrequency.weekly:
+        return 'semana';
+      case RecurrenceFrequency.monthly:
+        return 'mes';
+      default:
+        return '';
+    }
   }
 
 }
