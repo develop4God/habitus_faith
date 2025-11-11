@@ -22,7 +22,6 @@ class EditHabitDialog extends ConsumerStatefulWidget {
 
 class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   late TextEditingController nameCtrl;
-  late TextEditingController descCtrl;
   late TextEditingController emojiCtrl;
   late TextEditingController eventTimeCtrl;
   late HabitCategory selectedCategory;
@@ -37,7 +36,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   void initState() {
     super.initState();
     nameCtrl = TextEditingController(text: widget.habit.name);
-    descCtrl = TextEditingController(text: widget.habit.description);
     emojiCtrl = TextEditingController(text: widget.habit.emoji ?? '');
     eventTimeCtrl = TextEditingController(
       text: widget.habit.notificationSettings?.eventTime ?? '',
@@ -65,7 +63,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   @override
   void dispose() {
     nameCtrl.dispose();
-    descCtrl.dispose();
     emojiCtrl.dispose();
     eventTimeCtrl.dispose();
     super.dispose();
@@ -75,7 +72,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
-          description: descCtrl.text,
+          description: '',
           category: selectedCategory,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
@@ -138,15 +135,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 controller: nameCtrl,
                 decoration: InputDecoration(
                   labelText: l10n.name,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: descCtrl,
-                decoration: InputDecoration(
-                  labelText: l10n.description,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16)),
                 ),
@@ -219,67 +207,50 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 },
               ),
               const SizedBox(height: 12),
-              // Color picker simple
-              Row(
-                children: [
-                  Text(l10n.color),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () async {
-                      final color = await showDialog<Color>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(l10n.color),
-                          content: Wrap(
-                            spacing: 8,
-                            children: HabitColors.categoryColors.values
-                                .map(
-                                  (color) => GestureDetector(
-                                    onTap: () =>
-                                        Navigator.of(context).pop(color),
-                                    child: Container(
-                                      width: 32,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                        color: color,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: selectedColor == color
-                                              ? Colors.black
-                                              : Colors.transparent,
-                                          width: 2,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      );
-                      if (color != null) {
+              // Color picker moderno y agradable
+              SizedBox(
+                height: 56,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: HabitColors.categoryColors.values.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (context, idx) {
+                    final color = HabitColors.categoryColors.values.elementAt(idx);
+                    final isSelected = selectedColor == color;
+                    return GestureDetector(
+                      onTap: () {
                         setState(() {
                           selectedColor = color;
                         });
-                      }
-                    },
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: habitColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black, width: 2),
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: isSelected ? 48 : 40,
+                        height: isSelected ? 48 : 40,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected ? Colors.black : Colors.transparent,
+                            width: isSelected ? 3 : 1,
+                          ),
+                          boxShadow: isSelected
+                              ? [BoxShadow(color: color.withOpacity(0.4), blurRadius: 8)]
+                              : [],
+                        ),
+                        child: isSelected
+                            ? const Icon(Icons.check, color: Colors.white, size: 24)
+                            : null,
                       ),
-                    ),
-                  ),
-                  if (selectedColor != null)
-                    IconButton(
-                      icon: const Icon(Icons.clear, size: 18),
-                      onPressed: () => setState(() => selectedColor = null),
-                    ),
-                ],
+                    );
+                  },
+                ),
               ),
+              if (selectedColor != null)
+                IconButton(
+                  icon: const Icon(Icons.clear, size: 18),
+                  onPressed: () => setState(() => selectedColor = null),
+                ),
               const SizedBox(height: 20),
               // Event time for notifications
               Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/add_habit_button_visible_provider.dart';
+import 'habit_modal_sheet.dart';
 import '../../../domain/habit.dart';
 import '../../../domain/models/habit_notification.dart';
 import '../../../../../l10n/app_localizations.dart';
@@ -104,12 +105,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
           // Compact view - always visible
           InkWell(
             onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
-              Future(() {
-                _setAddHabitButtonVisibility(!_isExpanded);
-              });
+              HabitModalSheet.show(
+                context: context,
+                child: _buildExpandedContent(context, l10n, habitColor),
+                maxHeight: 480,
+              );
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
@@ -229,240 +229,291 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
 
-          // Expanded details - shown when tapped
-          if (_isExpanded)
-            Container(
-              decoration: BoxDecoration(
-                color: habitColor.withValues(alpha: 0.05),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                ),
+  Widget _buildExpandedContent(BuildContext context, AppLocalizations l10n, Color habitColor) {
+    final isCompleted = widget.habit.completedToday;
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Nombre del hábito destacado
+          Center(
+            child: Text(
+              widget.habit.name,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: habitColor,
+                letterSpacing: 0.5,
               ),
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Divider(height: 1),
-                  const SizedBox(height: 16),
-                  // Icono de notificaciones
-                  Row(
-                    children: [
-                      Icon(
-                        widget.habit.notificationSettings != null
-                          ? Icons.notifications_active
-                          : Icons.notifications_off,
-                        color: widget.habit.notificationSettings != null
-                          ? Colors.orange
-                          : Colors.grey,
-                        size: 24,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Botón moderno para marcar/desmarcar
+          Center(
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isCompleted ? Colors.grey[300] : habitColor,
+                foregroundColor: isCompleted ? Colors.black : Colors.white,
+                minimumSize: const Size(160, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 2,
+              ),
+              icon: Icon(isCompleted ? Icons.undo : Icons.check,
+                  color: isCompleted ? Colors.black : Colors.white),
+              label: Text(isCompleted ? l10n.uncheck : l10n.completeNow,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              onPressed: isCompleted
+                  ? () => widget.onUncheck(widget.habit.id)
+                  : () => widget.onComplete(widget.habit.id),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Iconos y estado de notificaciones y repetición
+          Row(
+            children: [
+              // Notificaciones reales
+              if (widget.habit.notificationSettings != null &&
+                  widget.habit.notificationSettings!.timing != NotificationTiming.none)
+                Row(
+                  children: [
+                    const Icon(Icons.notifications_active, color: Colors.orange, size: 24),
+                    const SizedBox(width: 8),
+                    Text(l10n.notifications,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    ),
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    const Icon(Icons.notifications_off, color: Colors.grey, size: 24),
+                    const SizedBox(width: 8),
+                    Text(l10n.notificationsOff,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    ),
+                  ],
+                ),
+              const SizedBox(width: 24),
+              // Repetición
+              if (widget.habit.recurrence != null && widget.habit.recurrence!.enabled)
+                Row(
+                  children: [
+                    const Icon(Icons.repeat, color: Colors.green, size: 24),
+                    const SizedBox(width: 8),
+                    Text(l10n.repetition,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    ),
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    const Icon(Icons.repeat, color: Colors.grey, size: 24),
+                    const SizedBox(width: 8),
+                    Text(l10n.noRepetition,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    ),
+                  ],
+                ),
+              const Spacer(),
+              // Botón minimalista de editar tarea
+              IconButton(
+                icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
+                tooltip: l10n.edit,
+                onPressed: widget.onEdit,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Subtasks section (solo en vista expandida)
+          if (_subtasks.isNotEmpty || true) ...[
+            Text(
+              l10n.subtasks,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Column(
+              children: [
+                ..._subtasks.map((subtask) => Container(
+                      margin: const EdgeInsets.symmetric(vertical: 2),
+                      decoration: BoxDecoration(
+                        color: subtask.completed
+                            ? Colors.green.shade50
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: Colors.purple.shade100, width: 1),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        widget.habit.notificationSettings != null
-                          ? l10n.notifications
-                          : l10n.notificationsOff,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey[700],
+                      child: ListTile(
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 0),
+                        leading: Checkbox(
+                          value: subtask.completed,
+                          onChanged: (val) {
+                            setState(() {
+                              final idx = _subtasks.indexOf(subtask);
+                              _subtasks[idx] = subtask.copyWith(
+                                  completed: val ?? false);
+                            });
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          activeColor: Colors.purple,
+                        ),
+                        title: Text(
+                          subtask.title,
+                          style: TextStyle(
+                            fontSize: 15,
+                            decoration: subtask.completed
+                                ? TextDecoration.lineThrough
+                                : null,
+                            color: subtask.completed
+                                ? Colors.green
+                                : Colors.black,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete,
+                              color: Colors.redAccent, size: 20),
+                          onPressed: () {
+                            setState(() {
+                              _subtasks.remove(subtask);
+                            });
+                          },
                         ),
                       ),
-                      const Spacer(),
-                      // Botón minimalista de editar tarea
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
-                        tooltip: l10n.edit,
-                        onPressed: widget.onEdit,
+                    )),
+                // Campo para agregar subtarea
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _subtaskController,
+                          decoration: InputDecoration(
+                            hintText: 'Nueva subtarea...',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
+                        ),
+                        onPressed: () {
+                          final text = _subtaskController.text.trim();
+                          if (text.isNotEmpty) {
+                            setState(() {
+                              _subtasks.add(Subtask(
+                                id: DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString(),
+                                title: text,
+                                completed: false,
+                              ));
+                              _subtaskController.clear();
+                            });
+                          }
+                        },
+                        child: const Icon(Icons.add),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-
-                  // Subtasks section (solo en vista expandida)
-                  if (_subtasks.isNotEmpty || true) ...[
-                    Text(
-                      l10n.subtasks,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(height: 8),
-                    Column(
-                      children: [
-                        ..._subtasks.map((subtask) => Container(
-                              margin: const EdgeInsets.symmetric(vertical: 2),
-                              decoration: BoxDecoration(
-                                color: subtask.completed
-                                    ? Colors.green.shade50
-                                    : Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                    color: Colors.purple.shade100, width: 1),
-                              ),
-                              child: ListTile(
-                                dense: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 0),
-                                leading: Checkbox(
-                                  value: subtask.completed,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      final idx = _subtasks.indexOf(subtask);
-                                      _subtasks[idx] = subtask.copyWith(
-                                          completed: val ?? false);
-                                    });
-                                  },
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                  activeColor: Colors.purple,
-                                ),
-                                title: Text(
-                                  subtask.title,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    decoration: subtask.completed
-                                        ? TextDecoration.lineThrough
-                                        : null,
-                                    color: subtask.completed
-                                        ? Colors.green
-                                        : Colors.black,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.redAccent, size: 20),
-                                  onPressed: () {
-                                    setState(() {
-                                      _subtasks.remove(subtask);
-                                    });
-                                  },
-                                ),
-                              ),
-                            )),
-                        // Campo para agregar subtarea
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _subtaskController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Nueva subtarea...',
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.purple,
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16)),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 16),
-                                ),
-                                onPressed: () {
-                                  final text = _subtaskController.text.trim();
-                                  if (text.isNotEmpty) {
-                                    setState(() {
-                                      _subtasks.add(Subtask(
-                                        id: DateTime.now()
-                                            .millisecondsSinceEpoch
-                                            .toString(),
-                                        title: text,
-                                        completed: false,
-                                      ));
-                                      _subtaskController.clear();
-                                    });
-                                  }
-                                },
-                                child: const Icon(Icons.add),
-                              ),
-                            ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+          // Action buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              PopupMenuButton<String>(
+                icon: Icon(
+                  Icons.more_vert,
+                  color: Colors.grey.shade700,
+                ),
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    widget.onEdit();
+                  } else if (value == 'delete') {
+                    widget.onDelete();
+                  } else if (value == 'uncheck' &&
+                      widget.habit.completedToday) {
+                    widget.onUncheck(widget.habit.id);
+                  }
+                },
+                itemBuilder: (BuildContext context) => [
+                  if (widget.habit.completedToday)
+                    PopupMenuItem<String>(
+                      value: 'uncheck',
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.undo,
+                            size: 20,
+                            color: Colors.orange,
                           ),
+                          const SizedBox(width: 12),
+                          Text(l10n.uncheck),
+                        ],
+                      ),
+                    ),
+                  PopupMenuItem<String>(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.edit, size: 20),
+                        const SizedBox(width: 12),
+                        Text(l10n.edit),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.delete,
+                          size: 20,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          l10n.delete,
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                  ],
-
-                  // Action buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      PopupMenuButton<String>(
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: Colors.grey.shade700,
-                        ),
-                        onSelected: (value) {
-                          if (value == 'edit') {
-                            widget.onEdit();
-                          } else if (value == 'delete') {
-                            widget.onDelete();
-                          } else if (value == 'uncheck' &&
-                              widget.habit.completedToday) {
-                            widget.onUncheck(widget.habit.id);
-                          }
-                        },
-                        itemBuilder: (BuildContext context) => [
-                          if (widget.habit.completedToday)
-                            PopupMenuItem<String>(
-                              value: 'uncheck',
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.undo,
-                                    size: 20,
-                                    color: Colors.orange,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(l10n.uncheck),
-                                ],
-                              ),
-                            ),
-                          PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                const Icon(Icons.edit, size: 20),
-                                const SizedBox(width: 12),
-                                Text(l10n.edit),
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.red,
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  l10n.delete,
-                                  style: const TextStyle(color: Colors.red),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ],
               ),
-            ),
+            ],
+          ),
         ],
       ),
     );
