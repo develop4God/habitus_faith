@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../config/template_constants.dart';
 import '../cache/cache_service.dart';
 import '../../../features/habits/presentation/onboarding/onboarding_models.dart';
@@ -10,11 +11,14 @@ import '../../../features/habits/presentation/onboarding/onboarding_models.dart'
 class TemplateMatchingService {
   final ICacheService _cache;
   final http.Client? _httpClient;
+  final FirebaseFirestore? _firestore;
 
   TemplateMatchingService(
     this._cache, {
     http.Client? httpClient,
-  }) : _httpClient = httpClient;
+    FirebaseFirestore? firestore,
+  })  : _httpClient = httpClient,
+        _firestore = firestore;
 
   /// Generate a pattern ID from an onboarding profile
   /// Used to match against template fingerprints
@@ -43,7 +47,20 @@ class TemplateMatchingService {
       final patternId = generatePatternId(profile);
       log('Looking for template with pattern: $patternId', name: 'templates');
 
-      // Try to get from cache first
+      // 1. Buscar en Firestore por fingerprint e idioma
+      if (_firestore != null) {
+        final docId = '${patternId}_$language';
+        final doc = await _firestore!.collection('habit_templates_master').doc(docId).get();
+        if (doc.exists) {
+          final data = doc.data();
+          if (data != null && data['habits'] != null) {
+            log('Template found in Firestore: $docId', name: 'templates');
+            return (data['habits'] as List<dynamic>).cast<Map<String, dynamic>>();
+          }
+        }
+      }
+
+      // 2. Buscar en cache local
       final cacheKey = 'template_${language}_$patternId';
       final cached = await _cache.get<Map<String, dynamic>>(cacheKey);
       if (cached != null) {

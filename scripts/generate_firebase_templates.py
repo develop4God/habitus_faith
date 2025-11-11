@@ -22,6 +22,19 @@ def clean_habit(habit):
     habit.pop('description', None)
     return habit
 
+def count_local_templates():
+    print('--- Archivos locales por idioma ---')
+    for dir_path in template_dirs:
+        lang = dir_path.split('-')[-1]
+        count = len([f for f in os.listdir(dir_path) if f.endswith('.json') and f != 'metadata.json'])
+        print(f'{lang}: {count} archivos .json')
+
+def count_firestore_templates():
+    print('--- Templates en Firestore por idioma ---')
+    for lang in ['en', 'es', 'fr', 'pt', 'zh']:
+        docs = list(db.collection('habit_templates_master').where('language', '==', lang).stream())
+        print(f'{lang}: {len(docs)} templates en Firestore')
+
 def migrate_templates():
     for dir_path in template_dirs:
         lang = dir_path.split('-')[-1]
@@ -45,5 +58,7 @@ def migrate_templates():
                     print(f'Template migrado: {fingerprint} ({lang})')
 
 if __name__ == '__main__':
+    count_local_templates()
     migrate_templates()
     print('Migración completa de todos los templates locales a Firestore sin descripción.')
+    count_firestore_templates()

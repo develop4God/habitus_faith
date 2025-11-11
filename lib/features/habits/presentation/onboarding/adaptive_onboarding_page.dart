@@ -331,9 +331,10 @@ class _AdaptiveOnboardingPageState
       _isLoading = true;
     });
     bool success = false;
+    // Extraer dependencias de context antes de cualquier await
     final messenger = ScaffoldMessenger.of(context);
-    Navigator.of(context);
-    final locale = Localizations.localeOf(context);
+    final assetBundle = DefaultAssetBundle.of(context);
+    final language = Localizations.localeOf(context).languageCode;
     try {
       final intent = ref.read(selectedIntentProvider);
       final answers = ref.read(answersProvider);
@@ -364,14 +365,15 @@ class _AdaptiveOnboardingPageState
       log('Perfil guardado en SharedPreferences', name: 'onboarding');
 
       // Get current language
-      final language = locale.languageCode; // 'es', 'en', 'pt', 'fr'
+      // final language = locale.languageCode; // 'es', 'en', 'pt', 'fr'
 
       // Try to fetch template first
       final templateService = ref.read(templateMatchingServiceProvider);
       final templateHabits = await templateService.findMatch(profile, language);
-
       List<Map<String, dynamic>> habitsData;
+      debugPrint('🔎 Buscando template en Firestore, cache, GitHub o Gemini...');
       if (templateHabits != null && templateHabits.isNotEmpty) {
+        debugPrint('✅ Template encontrado: usando template pre-generado (Firestore/cache/GitHub)');
         habitsData = templateHabits;
         log('Using pre-generated template (${templateHabits.length} habits)',
             name: 'onboarding');
@@ -379,41 +381,41 @@ class _AdaptiveOnboardingPageState
             'Using pre-generated template (${templateHabits.length} habits)');
       } else {
         try {
-          // Fallback a Gemini
+          debugPrint('🤖 No hay template, llamando a Gemini...');
           final geminiService = await ref.read(geminiServiceProvider.future);
           if (!mounted) return false;
           const userId = 'local_user';
           habitsData = await geminiService.generateHabitsFromProfile(profile, userId);
+          debugPrint('✨ Gemini generó hábitos: ${habitsData.length}');
           log('Generated with Gemini (no template match, ${habitsData.length} habits)',
               name: 'onboarding');
           debugPrint(
               'Generated with Gemini (no template match, ${habitsData.length} habits)');
         } catch (e) {
-          // Si Gemini falla, buscar el template más parecido por intent
-          debugPrint('Gemini falló, buscando template fallback por intent');
+          debugPrint('⚠️ Gemini falló, buscando template fallback por intent...');
           String fallbackFile;
           if (intent == UserIntent.wellness) {
             fallbackFile = 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
+            debugPrint('🧘 Usando fallback secular (wellness)');
           } else if (intent == UserIntent.faithBased) {
             fallbackFile = 'habit_templates/templates-en/faithBased_growing_lackOfMotivation_understandBible_growInFaith.json';
+            debugPrint('🙏 Usando fallback cristiano (faithBased)');
           } else {
-            // Si es both, usa wellness por defecto
             fallbackFile = 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
+            debugPrint('🔀 Usando fallback mixto (wellness por defecto)');
           }
           try {
-            final fallbackJson = await DefaultAssetBundle.of(context).loadString(fallbackFile);
+            final fallbackJson = await assetBundle.loadString(fallbackFile);
             final fallbackMap = jsonDecode(fallbackJson) as Map<String, dynamic>;
             final generated = fallbackMap['generated_habits'] as List<dynamic>?;
             habitsData = generated != null
                 ? generated.map((e) => Map<String, dynamic>.from(e)).toList()
                 : [];
-            debugPrint('Usando template fallback por intent: $fallbackFile');
+            debugPrint('✅ Fallback por intent: ${habitsData.length} hábitos');
           } catch (e) {
-            // Si no hay nada, crea un hábito genérico
             habitsData = [
               {
                 'name': 'Planificar el día',
-                'description': 'Organiza tus tareas y prioridades',
                 'category': 'mental',
                 'emoji': '📝',
                 'notifications': [
@@ -426,7 +428,7 @@ class _AdaptiveOnboardingPageState
                 ]
               }
             ];
-            debugPrint('No se encontró ningún template, usando hábito genérico');
+            debugPrint('🆘 Usando hábito genérico por último recurso');
           }
         }
       }
