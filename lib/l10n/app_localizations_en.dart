@@ -15,7 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get start => 'Start';
 
   @override
-  String get readBible => 'Read Bible';
+  String get readBible => 'Bible';
 
   @override
   String get myHabits => 'My Habits';
@@ -764,4 +764,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routine => 'Routine';
+
+  @override
+  String get today => 'Today';
 }

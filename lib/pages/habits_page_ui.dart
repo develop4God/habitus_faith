@@ -63,7 +63,7 @@ class HabitsPageUI extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       appBar: AppBar(
-        title: Text(l10n.myHabits),
+        title: const SizedBox.shrink(),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: const Color(0xff1a202c),
@@ -140,6 +140,19 @@ class HabitsPageUI extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Center(
+                  child: Text(
+                    l10n.today,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 22,
+                        ),
+                  ),
+                ),
+              ),
               ModernWeeklyCalendar(habits: habits),
               // Category filter chips
               if (habits.isNotEmpty)

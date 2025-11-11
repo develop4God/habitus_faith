@@ -119,7 +119,7 @@ abstract class AppLocalizations {
   /// Read Bible button text
   ///
   /// In en, this message translates to:
-  /// **'Read Bible'**
+  /// **'Bible'**
   String get readBible;
 
   /// Title for habits page
@@ -1459,6 +1459,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Routine'**
   String get routine;
+
+  /// Label to show the current day in the habits view
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
 }
 
 class _AppLocalizationsDelegate

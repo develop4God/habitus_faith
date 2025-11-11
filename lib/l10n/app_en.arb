@@ -1037,5 +1037,9 @@
   "routine": "Routine",
   "@routine": {
     "description": "Label for routine option in navigation bar"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Label to show the current day in the habits view"
   }
 }

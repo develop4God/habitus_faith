@@ -738,5 +738,9 @@
   "routine": "Rotina",
   "@routine": {
     "description": "Etiqueta para a opção de rotina na barra de navegação"
+  },
+  "today": "Hoje",
+  "@today": {
+    "description": "Rótulo para mostrar o dia atual na visualização de hábitos"
   }
 }

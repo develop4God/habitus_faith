@@ -732,4 +732,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get routine => '常规';
+
+  @override
+  String get today => '今天';
 }

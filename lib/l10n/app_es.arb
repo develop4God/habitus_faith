@@ -841,5 +841,9 @@
   "routine": "Rutina",
   "@routine": {
     "description": "Etiqueta para la opción de rutina en la barra de navegación"
+  },
+  "today": "Hoy",
+  "@today": {
+    "description": "Etiqueta para mostrar el día actual en la vista de hábitos"
   }
 }

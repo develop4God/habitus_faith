@@ -738,5 +738,9 @@
   "routine": "常规",
   "@routine": {
     "description": "导航栏中常规选项的标签"
+  },
+  "today": "今天",
+  "@today": {
+    "description": "用于在习惯视图中显示当天的标签"
   }
 }

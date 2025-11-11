@@ -738,5 +738,9 @@
   "routine": "Routine",
   "@routine": {
     "description": "Libellé pour l'option routine dans la barre de navigation"
+  },
+  "today": "Aujourd'hui",
+  "@today": {
+    "description": "Libellé pour afficher le jour actuel dans la vue des habitudes"
   }
 }
