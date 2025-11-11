@@ -132,8 +132,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(
+                                valueColor: AlwaysStoppedAnimation<Color>(
                                   habitColor,
                                 ),
                               ),
@@ -297,52 +296,64 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   if (_subtasks.isNotEmpty || true) ...[
                     Text(
                       l10n.subtasks,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     const SizedBox(height: 8),
                     Column(
                       children: [
                         ..._subtasks.map((subtask) => Container(
-                          margin: const EdgeInsets.symmetric(vertical: 2),
-                          decoration: BoxDecoration(
-                            color: subtask.completed ? Colors.green.shade50 : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.purple.shade100, width: 1),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                            leading: Checkbox(
-                              value: subtask.completed,
-                              onChanged: (val) {
-                                setState(() {
-                                  final idx = _subtasks.indexOf(subtask);
-                                  _subtasks[idx] = subtask.copyWith(completed: val ?? false);
-                                });
-                              },
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              activeColor: Colors.purple,
-                            ),
-                            title: Text(
-                              subtask.title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                decoration: subtask.completed ? TextDecoration.lineThrough : null,
-                                color: subtask.completed ? Colors.green : Colors.black,
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              decoration: BoxDecoration(
+                                color: subtask.completed
+                                    ? Colors.green.shade50
+                                    : Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    color: Colors.purple.shade100, width: 1),
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
-                              onPressed: () {
-                                setState(() {
-                                  _subtasks.remove(subtask);
-                                });
-                              },
-                            ),
-                          ),
-                        )),
+                              child: ListTile(
+                                dense: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 0),
+                                leading: Checkbox(
+                                  value: subtask.completed,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      final idx = _subtasks.indexOf(subtask);
+                                      _subtasks[idx] = subtask.copyWith(
+                                          completed: val ?? false);
+                                    });
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  activeColor: Colors.purple,
+                                ),
+                                title: Text(
+                                  subtask.title,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    decoration: subtask.completed
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                    color: subtask.completed
+                                        ? Colors.green
+                                        : Colors.black,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.redAccent, size: 20),
+                                  onPressed: () {
+                                    setState(() {
+                                      _subtasks.remove(subtask);
+                                    });
+                                  },
+                                ),
+                              ),
+                            )),
                         // Campo para agregar subtarea
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
@@ -353,8 +364,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                   controller: _subtaskController,
                                   decoration: InputDecoration(
                                     hintText: 'Nueva subtarea...',
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
                                   ),
                                 ),
                               ),
@@ -363,15 +377,19 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple,
                                   foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16)),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 16),
                                 ),
                                 onPressed: () {
                                   final text = _subtaskController.text.trim();
                                   if (text.isNotEmpty) {
                                     setState(() {
                                       _subtasks.add(Subtask(
-                                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                                        id: DateTime.now()
+                                            .millisecondsSinceEpoch
+                                            .toString(),
                                         title: text,
                                         completed: false,
                                       ));

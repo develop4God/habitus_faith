@@ -220,8 +220,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         flex: 3,
                         child: ElevatedButton.icon(
                           onPressed: () => _showBookSelector(context),
-                          icon:
-                              const Icon(
+                          icon: const Icon(
                             Icons.auto_stories_outlined,
                             size: 20,
                           ),

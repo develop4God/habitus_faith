@@ -72,4 +72,3 @@ class IntroOnboardingPage extends StatelessWidget {
     );
   }
 }
-

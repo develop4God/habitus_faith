@@ -118,7 +118,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                 title: NotificationTiming.tenMinutesBefore.displayName,
                 effectiveTime:
                     _getEffectiveTime(NotificationTiming.tenMinutesBefore),
-                isSelected: selectedTiming == NotificationTiming.tenMinutesBefore,
+                isSelected:
+                    selectedTiming == NotificationTiming.tenMinutesBefore,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.thirtyMinutesBefore,

@@ -144,8 +144,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
                             height: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.5,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(
+                              valueColor: AlwaysStoppedAnimation<Color>(
                                 habitColor,
                               ),
                             ),

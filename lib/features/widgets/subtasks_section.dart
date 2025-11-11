@@ -74,14 +74,17 @@ class _SubtasksSectionState extends State<SubtasksSection> {
           final index = entry.key;
           final subtask = entry.value;
           return Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             color: subtask.completed ? Colors.green.shade50 : Colors.white,
             child: ListTile(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               leading: Checkbox(
                 value: subtask.completed,
                 onChanged: (_) => _toggleSubtask(index),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
                 activeColor: Colors.purple,
               ),
               title: Text(subtask.title),
@@ -101,18 +104,22 @@ class _SubtasksSectionState extends State<SubtasksSection> {
                   controller: _newSubtaskController,
                   decoration: InputDecoration(
                     labelText: 'Agregar subtarea',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                style: widget.addButtonStyle ?? ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                ),
+                style: widget.addButtonStyle ??
+                    ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
+                    ),
                 onPressed: _addSubtask,
                 child: const Icon(Icons.add, size: 24),
               ),

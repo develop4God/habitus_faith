@@ -148,7 +148,8 @@ class _AdaptiveOnboardingPageState
                             const SizedBox(height: 8),
                             Text(
                               message.verseText ?? '',
-                              style: const TextStyle(fontStyle: FontStyle.italic),
+                              style:
+                                  const TextStyle(fontStyle: FontStyle.italic),
                             ),
                           ],
                         ),
@@ -188,71 +189,79 @@ class _AdaptiveOnboardingPageState
     ref.read(answersProvider);
     final navigator = Navigator.of(context);
     Future showSuccessDialog() => showDialog(
-      context: navigator.context,
-      barrierDismissible: false,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha:0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
+          context: navigator.context,
+          barrierDismissible: false,
+          builder: (dialogContext) => Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset('assets/lottie/success.json', width: 120, height: 120, repeat: false),
-              const SizedBox(height: 16),
-              const Text(
-                '¡Tus hábitos han sido generados exitosamente!',
-                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Lottie.asset('assets/lottie/success.json',
+                      width: 120, height: 120, repeat: false),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '¡Tus hábitos han sido generados exitosamente!',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xff6366f1),
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
     Future showLoadingDialog() => showDialog(
-      context: navigator.context,
-      barrierDismissible: false,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha:0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
+          context: navigator.context,
+          barrierDismissible: false,
+          builder: (dialogContext) => Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset('assets/lottie/gears.json', width: 120, height: 120, repeat: true),
-              const SizedBox(height: 16),
-              const Text(
-                'Generando tus primeras tareas, por favor espera...',
-                style: TextStyle(fontSize: 18, color: Color(0xff6366f1), fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Lottie.asset('assets/lottie/gears.json',
+                      width: 120, height: 120, repeat: true),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Generando tus primeras tareas, por favor espera...',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xff6366f1),
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
     await navigator.push<String>(
       MaterialPageRoute(
         builder: (context) => CommitmentScreen(
@@ -280,7 +289,7 @@ class _AdaptiveOnboardingPageState
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha:0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 16,
                           offset: const Offset(0, 4),
                         ),
@@ -293,7 +302,10 @@ class _AdaptiveOnboardingPageState
                         SizedBox(height: 16),
                         Text(
                           'No se pudieron generar tus hábitos en este momento. Por favor, reintenta más tarde.',
-                          style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -311,7 +323,8 @@ class _AdaptiveOnboardingPageState
 
   Future<bool> _completeOnboarding(String commitment) async {
     debugPrint('Inicio de _completeOnboarding con commitment: $commitment');
-    log('Inicio de _completeOnboarding con commitment: $commitment', name: 'onboarding');
+    log('Inicio de _completeOnboarding con commitment: $commitment',
+        name: 'onboarding');
     setState(() {
       _isLoading = true;
     });
@@ -321,7 +334,8 @@ class _AdaptiveOnboardingPageState
       final intent = ref.read(selectedIntentProvider);
       final answers = ref.read(answersProvider);
       debugPrint('Intent: $intent, Answers: ${jsonEncode(answers)}');
-      log('Intent: $intent, Answers: ${jsonEncode(answers)}', name: 'onboarding');
+      log('Intent: $intent, Answers: ${jsonEncode(answers)}',
+          name: 'onboarding');
 
       // Build onboarding profile
       final profile = OnboardingProfile(
@@ -334,7 +348,8 @@ class _AdaptiveOnboardingPageState
         completedAt: DateTime.now(),
       );
       debugPrint('Perfil construido: ${jsonEncode(profile.toJson())}');
-      log('Perfil construido: ${jsonEncode(profile.toJson())}', name: 'onboarding');
+      log('Perfil construido: ${jsonEncode(profile.toJson())}',
+          name: 'onboarding');
 
       // Save profile to SharedPreferences
       final prefs = await SharedPreferences.getInstance();
@@ -390,8 +405,10 @@ class _AdaptiveOnboardingPageState
       log('Onboarding marcado como completo en storage', name: 'onboarding');
 
       // Debug print y log para diagnóstico final
-      debugPrint('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}');
-      log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}', name: 'onboarding');
+      debugPrint(
+          'Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}');
+      log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}',
+          name: 'onboarding');
 
       if (!mounted) return false;
       debugPrint('Navegando a /habits');
@@ -404,10 +421,13 @@ class _AdaptiveOnboardingPageState
       log('Stacktrace: $stack', name: 'onboarding');
       if (!mounted) return false;
       String errorMessage;
-      if (e.toString().contains('Resource exhausted') || e.toString().contains('error-code-429')) {
-        errorMessage = 'La generación de hábitos está temporalmente limitada por el proveedor de IA. Por favor intenta nuevamente en unos minutos. Si el problema persiste, contacta soporte.';
+      if (e.toString().contains('Resource exhausted') ||
+          e.toString().contains('error-code-429')) {
+        errorMessage =
+            'La generación de hábitos está temporalmente limitada por el proveedor de IA. Por favor intenta nuevamente en unos minutos. Si el problema persiste, contacta soporte.';
       } else {
-        errorMessage = 'Ocurrió un error inesperado al finalizar el onboarding. Por favor verifica tu conexión y vuelve a intentarlo. Si el problema persiste, contacta soporte.';
+        errorMessage =
+            'Ocurrió un error inesperado al finalizar el onboarding. Por favor verifica tu conexión y vuelve a intentarlo. Si el problema persiste, contacta soporte.';
       }
       messenger.showSnackBar(
         SnackBar(
@@ -460,8 +480,6 @@ class _AdaptiveOnboardingPageState
     return answers['faithWalk'] as String?;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     if (_showIntro) {
@@ -481,7 +499,9 @@ class _AdaptiveOnboardingPageState
     }
 
     // Detecta si es la pantalla 2 y si es multiChoice con máximo 3 selecciones
-    final isSecondScreen = currentIndex == 1 && currentQuestion.type == QuestionType.multiChoice && currentQuestion.maxSelections == 3;
+    final isSecondScreen = currentIndex == 1 &&
+        currentQuestion.type == QuestionType.multiChoice &&
+        currentQuestion.maxSelections == 3;
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
@@ -490,26 +510,34 @@ class _AdaptiveOnboardingPageState
           children: [
             // Barra de pasos moderna y clara + botón Back arriba a la izquierda en pantalla 2
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
               child: Row(
                 children: [
                   if (currentIndex > 0)
                     IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Color(0xff6366f1)),
+                      icon: const Icon(Icons.arrow_back,
+                          color: Color(0xff6366f1)),
                       tooltip: 'Atrás',
                       onPressed: _isLoading
                           ? null
                           : () {
                               if (currentIndex > 0) {
                                 // Si la pregunta anterior es de selección única, limpiar respuesta para permitir avance
-                                final prevQuestion = questions[currentIndex - 1];
-                                if (prevQuestion.type == QuestionType.singleChoice) {
+                                final prevQuestion =
+                                    questions[currentIndex - 1];
+                                if (prevQuestion.type ==
+                                    QuestionType.singleChoice) {
                                   final answers = ref.read(answersProvider);
-                                  final newAnswers = Map<String, dynamic>.from(answers);
+                                  final newAnswers =
+                                      Map<String, dynamic>.from(answers);
                                   newAnswers.remove(prevQuestion.id);
-                                  ref.read(answersProvider.notifier).state = newAnswers;
+                                  ref.read(answersProvider.notifier).state =
+                                      newAnswers;
                                 }
-                                ref.read(currentQuestionIndexProvider.notifier).state = currentIndex - 1;
+                                ref
+                                    .read(currentQuestionIndexProvider.notifier)
+                                    .state = currentIndex - 1;
                                 _pageController.previousPage(
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
@@ -533,20 +561,29 @@ class _AdaptiveOnboardingPageState
                                 color: isCompleted
                                     ? const Color(0xff6366f1)
                                     : isActive
-                                        ? const Color(0xff6366f1).withValues(alpha: 0.8)
+                                        ? const Color(0xff6366f1)
+                                            .withValues(alpha: 0.8)
                                         : Colors.grey.shade300,
                                 shape: BoxShape.circle,
                                 boxShadow: isActive
-                                    ? [BoxShadow(color: const Color(0xff6366f1).withValues(alpha: 0.2), blurRadius: 8)]
+                                    ? [
+                                        BoxShadow(
+                                            color: const Color(0xff6366f1)
+                                                .withValues(alpha: 0.2),
+                                            blurRadius: 8)
+                                      ]
                                     : [],
                               ),
                               child: Center(
                                 child: isCompleted
-                                    ? const Icon(Icons.check, color: Colors.white, size: 16)
+                                    ? const Icon(Icons.check,
+                                        color: Colors.white, size: 16)
                                     : Text(
                                         '${i + 1}',
                                         style: TextStyle(
-                                          color: isActive ? Colors.white : Colors.black54,
+                                          color: isActive
+                                              ? Colors.white
+                                              : Colors.black54,
                                           fontWeight: FontWeight.bold,
                                           fontSize: isActive ? 16 : 12,
                                         ),
@@ -557,7 +594,9 @@ class _AdaptiveOnboardingPageState
                               Container(
                                 width: 32,
                                 height: 4,
-                                color: isCompleted ? const Color(0xff6366f1) : Colors.grey.shade300,
+                                color: isCompleted
+                                    ? const Color(0xff6366f1)
+                                    : Colors.grey.shade300,
                               ),
                           ],
                         );
@@ -568,7 +607,8 @@ class _AdaptiveOnboardingPageState
               ),
             ),
             // Pregunta y mensaje destacado para pantalla 2 multiChoice
-            if (currentIndex != 0) // Solo mostrar el título de la pregunta si no es la primera
+            if (currentIndex !=
+                0) // Solo mostrar el título de la pregunta si no es la primera
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
@@ -591,11 +631,13 @@ class _AdaptiveOnboardingPageState
                           decoration: BoxDecoration(
                             color: const Color(0xffeef2ff),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xff6366f1), width: 1.5),
+                            border: Border.all(
+                                color: const Color(0xff6366f1), width: 1.5),
                           ),
                           child: const Row(
                             children: [
-                              Icon(Icons.info_outline, color: Color(0xff6366f1)),
+                              Icon(Icons.info_outline,
+                                  color: Color(0xff6366f1)),
                               SizedBox(width: 12),
                               Expanded(
                                 child: Text(
@@ -625,8 +667,11 @@ class _AdaptiveOnboardingPageState
                   return _QuestionPage(
                     question: question,
                     selectedAnswer: answers[question.id],
-                    onAnswerSelected: (answer) => _handleAnswer(question.id, answer),
-                    onAutoAdvance: question.type == QuestionType.singleChoice ? () => _nextQuestion() : null,
+                    onAnswerSelected: (answer) =>
+                        _handleAnswer(question.id, answer),
+                    onAutoAdvance: question.type == QuestionType.singleChoice
+                        ? () => _nextQuestion()
+                        : null,
                   );
                 },
               ),
@@ -664,8 +709,8 @@ class _AdaptiveOnboardingPageState
                                 width: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
                                 ),
                               )
                             : Text(
@@ -719,8 +764,7 @@ class _QuestionPage extends StatelessWidget {
                 color: Color(0xff1a202c),
               ),
             ),
-          if (!showTitle)
-            const SizedBox(height: 8),
+          if (!showTitle) const SizedBox(height: 8),
           const SizedBox(height: 16),
           ...question.options.map((option) {
             final isSelected = question.type == QuestionType.singleChoice
@@ -735,7 +779,8 @@ class _QuestionPage extends StatelessWidget {
                   if (question.type == QuestionType.singleChoice) {
                     onAnswerSelected(option.id);
                     if (onAutoAdvance != null) {
-                      Future.delayed(const Duration(milliseconds: 150), onAutoAdvance);
+                      Future.delayed(
+                          const Duration(milliseconds: 150), onAutoAdvance);
                     }
                   } else {
                     final current = (selectedAnswer as List?)?.toList() ?? [];
