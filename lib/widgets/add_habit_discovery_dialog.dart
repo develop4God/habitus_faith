@@ -46,7 +46,8 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
               top: 0,
               right: 0,
               child: IconButton(
-                icon: const Icon(
+                icon:
+                    const Icon(
                   Icons.close,
                   size: 32,
                   color: Color(0xff1a202c),

@@ -21,7 +21,11 @@ class FavoritesPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Row(
           children: [
-            Icon(Icons.star, color: Colors.amber, size: 24),
+            Icon(
+              Icons.star,
+              color: Colors.amber,
+              size: 24,
+            ),
             SizedBox(width: 8),
             Text('My Favorites'),
           ],

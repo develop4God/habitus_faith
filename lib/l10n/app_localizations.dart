@@ -1321,6 +1321,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get home;
+
+  /// Reminder configuration dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Configuration'**
+  String get reminderConfig;
+
+  /// Recurrence configuration dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Repetitions'**
+  String get recurrenceConfig;
+
+  /// Repeat toggle label
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get repeat;
+
+  /// Subtitle for repeat toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Set a cycle for your plan'**
+  String get setCycleForPlan;
+
+  /// Subtasks section label
+  ///
+  /// In en, this message translates to:
+  /// **'Subtasks'**
+  String get subtasks;
+
+  /// Add subtask hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Add subtask'**
+  String get addSubtask;
+
+  /// Custom minutes before label
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes before'**
+  String get minutesBefore;
+
+  /// Interval label for recurrence
+  ///
+  /// In en, this message translates to:
+  /// **'Interval'**
+  String get interval;
+
+  /// End date label for recurrence
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get endDate;
+
+  /// Daily frequency option
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get daily;
+
+  /// Weekly frequency option
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// Monthly frequency option
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// Every X days text
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} day(s)'**
+  String everyXDays(int count);
+
+  /// Every X weeks text
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} week(s)'**
+  String everyXWeeks(int count);
+
+  /// Every X months text
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} month(s)'**
+  String everyXMonths(int count);
+
+  /// No repetition text
+  ///
+  /// In en, this message translates to:
+  /// **'No repetition'**
+  String get noRepetition;
+
+  /// Reminder label
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get reminder;
+
+  /// Repetition label
+  ///
+  /// In en, this message translates to:
+  /// **'Repetition'**
+  String get repetition;
+
+  /// Event time label
+  ///
+  /// In en, this message translates to:
+  /// **'Event time (HH:MM)'**
+  String get eventTime;
+
+  /// Validation message for invalid custom minutes
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number between 1 and 1440'**
+  String get invalidMinutes;
+
+  /// Validation message for invalid interval
+  ///
+  /// In en, this message translates to:
+  /// **'Interval must be at least 1'**
+  String get invalidInterval;
+
+  /// Title for habit tracking calendar page
+  ///
+  /// In en, this message translates to:
+  /// **'Habit Tracking'**
+  String get habitTracking;
 }
 
 class _AppLocalizationsDelegate

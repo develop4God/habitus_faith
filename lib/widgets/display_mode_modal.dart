@@ -95,10 +95,12 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
                     SnackBar(
                       content: Text(
                         localSelectedMode == DisplayMode.compact
-                            ? widget.l10n.displayModeUpdated(
+                            ? widget.l10n
+                                .displayModeUpdated(
                                 widget.l10n.compactMode,
                               )
-                            : widget.l10n.displayModeUpdated(
+                            : widget.l10n
+                                .displayModeUpdated(
                                 widget.l10n.advancedMode,
                               ),
                       ),
@@ -131,10 +133,12 @@ class _DisplayModeModalState extends State<DisplayModeModal> {
                       SnackBar(
                         content: Text(
                           localSelectedMode == DisplayMode.compact
-                              ? widget.l10n.displayModeUpdated(
+                              ? widget.l10n
+                                  .displayModeUpdated(
                                   widget.l10n.compactMode,
                                 )
-                              : widget.l10n.displayModeUpdated(
+                              : widget.l10n
+                                  .displayModeUpdated(
                                   widget.l10n.advancedMode,
                                 ),
                         ),

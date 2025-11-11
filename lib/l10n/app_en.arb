@@ -930,5 +930,108 @@
   "home": "Home",
   "@home": {
     "description": "Home tab label"
+  },
+  "reminderConfig": "Reminder Configuration",
+  "@reminderConfig": {
+    "description": "Reminder configuration dialog title"
+  },
+  "recurrenceConfig": "Daily Repetitions",
+  "@recurrenceConfig": {
+    "description": "Recurrence configuration dialog title"
+  },
+  "repeat": "Repeat",
+  "@repeat": {
+    "description": "Repeat toggle label"
+  },
+  "setCycleForPlan": "Set a cycle for your plan",
+  "@setCycleForPlan": {
+    "description": "Subtitle for repeat toggle"
+  },
+  "subtasks": "Subtasks",
+  "@subtasks": {
+    "description": "Subtasks section label"
+  },
+  "addSubtask": "Add subtask",
+  "@addSubtask": {
+    "description": "Add subtask hint text"
+  },
+  "minutesBefore": "Minutes before",
+  "@minutesBefore": {
+    "description": "Custom minutes before label"
+  },
+  "interval": "Interval",
+  "@interval": {
+    "description": "Interval label for recurrence"
+  },
+  "endDate": "End date",
+  "@endDate": {
+    "description": "End date label for recurrence"
+  },
+  "daily": "Daily",
+  "@daily": {
+    "description": "Daily frequency option"
+  },
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": "Weekly frequency option"
+  },
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": "Monthly frequency option"
+  },
+  "everyXDays": "Every {count} day(s)",
+  "@everyXDays": {
+    "description": "Every X days text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXWeeks": "Every {count} week(s)",
+  "@everyXWeeks": {
+    "description": "Every X weeks text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXMonths": "Every {count} month(s)",
+  "@everyXMonths": {
+    "description": "Every X months text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noRepetition": "No repetition",
+  "@noRepetition": {
+    "description": "No repetition text"
+  },
+  "reminder": "Reminder",
+  "@reminder": {
+    "description": "Reminder label"
+  },
+  "repetition": "Repetition",
+  "@repetition": {
+    "description": "Repetition label"
+  },
+  "eventTime": "Event time (HH:MM)",
+  "@eventTime": {
+    "description": "Event time label"
+  },
+  "invalidMinutes": "Please enter a valid number between 1 and 1440",
+  "@invalidMinutes": {
+    "description": "Validation message for invalid custom minutes"
+  },
+  "invalidInterval": "Interval must be at least 1",
+  "@invalidInterval": {
+    "description": "Validation message for invalid interval"
+  },
+  "habitTracking": "Habit Tracking",
+  "@habitTracking": {
+    "description": "Title for habit tracking calendar page"
   }
 }

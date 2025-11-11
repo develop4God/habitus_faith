@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
+import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
+import '../core/providers/notification_provider.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/reminder_config_dialog.dart';
+import '../widgets/recurrence_config_dialog.dart';
+import '../widgets/subtasks_section.dart';
 import 'habits_page.dart';
 
 class EditHabitDialog extends ConsumerStatefulWidget {
@@ -19,9 +24,13 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   late TextEditingController nameCtrl;
   late TextEditingController descCtrl;
   late TextEditingController emojiCtrl;
+  late TextEditingController eventTimeCtrl;
   late HabitCategory selectedCategory;
   late HabitDifficulty selectedDifficulty;
   Color? selectedColor;
+  HabitNotificationSettings? notificationSettings;
+  HabitRecurrence? recurrence;
+  List<Subtask> subtasks = [];
 
   @override
   void initState() {
@@ -29,11 +38,16 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     nameCtrl = TextEditingController(text: widget.habit.name);
     descCtrl = TextEditingController(text: widget.habit.description);
     emojiCtrl = TextEditingController(text: widget.habit.emoji ?? '');
+    eventTimeCtrl = TextEditingController(
+        text: widget.habit.notificationSettings?.eventTime ?? '');
     selectedCategory = widget.habit.category;
     selectedDifficulty = widget.habit.difficulty;
     selectedColor = widget.habit.colorValue != null
         ? Color(widget.habit.colorValue!)
         : null;
+    notificationSettings = widget.habit.notificationSettings;
+    recurrence = widget.habit.recurrence;
+    subtasks = List.from(widget.habit.subtasks);
   }
 
   @override
@@ -41,6 +55,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     nameCtrl.dispose();
     descCtrl.dispose();
     emojiCtrl.dispose();
+    eventTimeCtrl.dispose();
     super.dispose();
   }
 
@@ -53,7 +68,35 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
           difficulty: selectedDifficulty,
+          notificationSettings: notificationSettings,
+          recurrence: recurrence,
+          subtasks: subtasks,
         );
+
+    // Schedule or cancel notifications based on settings
+    final notificationService = ref.read(notificationServiceProvider);
+    if (notificationSettings != null &&
+        notificationSettings!.timing != NotificationTiming.none &&
+        notificationSettings!.eventTime != null) {
+      // Calculate minutes before
+      int? minutesBefore;
+      if (notificationSettings!.timing == NotificationTiming.custom) {
+        minutesBefore = notificationSettings!.customMinutesBefore;
+      } else {
+        minutesBefore = notificationSettings!.timing.minutesBefore;
+      }
+
+      await notificationService.scheduleHabitNotification(
+        habitId: widget.habit.id,
+        habitName: nameCtrl.text,
+        eventTime: notificationSettings!.eventTime!,
+        minutesBefore: minutesBefore,
+      );
+    } else {
+      // Cancel notification if disabled
+      await notificationService.cancelHabitNotification(widget.habit.id);
+    }
+
     if (mounted) Navigator.of(context).pop();
   }
 
@@ -221,6 +264,87 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 ],
               ),
               const SizedBox(height: 20),
+              // Event time for notifications
+              TextField(
+                controller: eventTimeCtrl,
+                decoration: InputDecoration(
+                  labelText: l10n.eventTime,
+                  border: const OutlineInputBorder(),
+                  hintText: '09:00',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    // Update notification settings with new event time
+                    if (notificationSettings != null) {
+                      notificationSettings = notificationSettings!.copyWith(
+                        eventTime: value,
+                      );
+                    }
+                  });
+                },
+              ),
+              const SizedBox(height: 12),
+              // Notification configuration button
+              ListTile(
+                leading: const Icon(Icons.notifications),
+                title: Text(l10n.reminder),
+                subtitle: Text(
+                  notificationSettings?.timing.displayName ?? 'Sin aviso',
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  final result = await showDialog<HabitNotificationSettings>(
+                    context: context,
+                    builder: (context) => ReminderConfigDialog(
+                      initialSettings: notificationSettings,
+                      eventTime: eventTimeCtrl.text.isNotEmpty
+                          ? eventTimeCtrl.text
+                          : null,
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      notificationSettings = result;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              // Recurrence configuration button
+              ListTile(
+                leading: const Icon(Icons.repeat),
+                title: Text(l10n.repetition),
+                subtitle: Text(
+                  recurrence?.enabled == true
+                      ? '${recurrence!.frequency.displayName} (Cada ${recurrence!.interval} ${_getFrequencyUnit(recurrence!.frequency)})'
+                      : l10n.noRepetition,
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  final result = await showDialog<HabitRecurrence>(
+                    context: context,
+                    builder: (context) => RecurrenceConfigDialog(
+                      initialRecurrence: recurrence,
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      recurrence = result;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              // Subtasks section
+              SubtasksSection(
+                initialSubtasks: subtasks,
+                onSubtasksChanged: (newSubtasks) {
+                  setState(() {
+                    subtasks = newSubtasks;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -237,5 +361,16 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
         ),
       ),
     );
+  }
+
+  String _getFrequencyUnit(RecurrenceFrequency frequency) {
+    switch (frequency) {
+      case RecurrenceFrequency.daily:
+        return 'día';
+      case RecurrenceFrequency.weekly:
+        return 'semana';
+      case RecurrenceFrequency.monthly:
+        return 'mes';
+    }
   }
 }

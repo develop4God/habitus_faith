@@ -1,5 +1,6 @@
 import 'habit.dart';
 import 'failures.dart';
+import 'models/habit_notification.dart';
 
 /// Result type for typed errors
 sealed class Result<T, F> {
@@ -57,6 +58,9 @@ abstract class HabitsRepository {
     String? emoji,
     int? colorValue,
     HabitDifficulty? difficulty,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
   });
 
   /// Uncheck a habit (reset today's completion)

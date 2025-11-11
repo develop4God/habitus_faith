@@ -13,6 +13,7 @@ import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.d
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
+import '../widgets/habit_calendar_view.dart';
 import 'habits_page.dart';
 import 'edit_habit_dialog.dart';
 
@@ -66,6 +67,18 @@ class HabitsPageUI extends ConsumerWidget {
         elevation: 0,
         foregroundColor: const Color(0xff1a202c),
         actions: [
+          // Calendar icon
+          IconButton(
+            icon: const Icon(Icons.calendar_month),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const HabitCalendarView(),
+                ),
+              );
+            },
+            tooltip: 'View Calendar',
+          ),
           habitsAsync.when(
             data: (habits) {
               if (habits.isEmpty) return const SizedBox.shrink();
@@ -415,7 +428,8 @@ class HabitsPageUI extends ConsumerWidget {
                             if (callbackContext.mounted) {
                               ScaffoldMessenger.of(
                                 callbackContext,
-                              ).showSnackBar(
+                              )
+                                  .showSnackBar(
                                 SnackBar(content: Text(l10n.habitCompleted)),
                               );
                             }
@@ -433,7 +447,8 @@ class HabitsPageUI extends ConsumerWidget {
                               context: dialogContext,
                               builder: (context) => AlertDialog(
                                 title: Text(l10n.deleteHabit),
-                                content: Text(
+                                content:
+                                    Text(
                                   l10n.deleteHabitConfirm(habit.name),
                                 ),
                                 actions: [
@@ -462,7 +477,8 @@ class HabitsPageUI extends ConsumerWidget {
                         ),
                         Consumer(
                           builder: (context, ref, child) {
-                            final riskAsync = ref.watch(
+                            final riskAsync =
+                                ref.watch(
                               habitRiskProvider(habit.id),
                             );
                             return riskAsync.when(
@@ -476,11 +492,14 @@ class HabitsPageUI extends ConsumerWidget {
                                   child: Card(
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.errorContainer,
+                                    )
+                                        .colorScheme
+                                        .errorContainer,
                                     child: ListTile(
                                       leading: Icon(
                                         Icons.warning_amber,
-                                        color: Theme.of(
+                                        color:
+                                            Theme.of(
                                           context,
                                         ).colorScheme.error,
                                       ),
@@ -490,7 +509,9 @@ class HabitsPageUI extends ConsumerWidget {
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(
                                             context,
-                                          ).colorScheme.onErrorContainer,
+                                          )
+                                              .colorScheme
+                                              .onErrorContainer,
                                         ),
                                       ),
                                       subtitle: Text(
@@ -500,7 +521,9 @@ class HabitsPageUI extends ConsumerWidget {
                                         style: TextStyle(
                                           color: Theme.of(
                                             context,
-                                          ).colorScheme.onErrorContainer,
+                                          )
+                                              .colorScheme
+                                              .onErrorContainer,
                                         ),
                                       ),
                                     ),

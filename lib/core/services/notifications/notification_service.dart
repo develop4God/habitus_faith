@@ -1,5 +1,4 @@
 // lib/core/services/notifications/notification_service.dart
-import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -688,93 +687,104 @@ class NotificationService {
     }
   }
 
-  /// Schedule context-aware motivational notification for a habit
-  /// Adapts message based on user's onboarding profile intent
-  Future<void> scheduleContextualHabitNotification({
+  /// Schedule a notification for a specific habit
+  Future<void> scheduleHabitNotification({
+    required String habitId,
     required String habitName,
-    required String habitEmoji,
-    required int hour,
-    required int minute,
-    required int notificationId,
+    required String eventTime,
+    int? minutesBefore,
   }) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final profileJson = prefs.getString('onboarding_profile');
+      // Parse event time
+      final parts = eventTime.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = int.parse(parts[1]);
 
-      String message;
-      if (profileJson != null) {
-        // Parse profile to get user intent
-        final profileData =
-            Map<String, dynamic>.from(jsonDecode(profileJson) as Map);
-        final intent = profileData['primaryIntent'] as String?;
-
-        // Adapt message based on intent
-        if (intent == 'wellness') {
-          message = '¡Es momento de $habitName! Tú puedes hacerlo.';
-        } else {
-          // faith or both
-          message = 'Hora de $habitName. Dios te fortalece en este hábito.';
-        }
-      } else {
-        // Fallback if no profile found
-        message = '¡Es momento de $habitName!';
+      // Calculate notification time
+      int notificationMinutes = hour * 60 + minute;
+      if (minutesBefore != null) {
+        notificationMinutes -= minutesBefore;
       }
+      if (notificationMinutes < 0) notificationMinutes += 24 * 60;
 
-      // Calculate next scheduled time
-      tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-      tz.TZDateTime scheduledDate = tz.TZDateTime(
+      final notificationHour = (notificationMinutes ~/ 60) % 24;
+      final notificationMinute = notificationMinutes % 60;
+
+      // Schedule notification
+      final scheduledDate = tz.TZDateTime(
         tz.local,
-        now.year,
-        now.month,
-        now.day,
-        hour,
-        minute,
+        tz.TZDateTime.now(tz.local).year,
+        tz.TZDateTime.now(tz.local).month,
+        tz.TZDateTime.now(tz.local).day,
+        notificationHour,
+        notificationMinute,
       );
 
-      if (scheduledDate.isBefore(now)) {
-        scheduledDate = scheduledDate.add(const Duration(days: 1));
+      var finalScheduledDate = scheduledDate;
+      if (finalScheduledDate.isBefore(tz.TZDateTime.now(tz.local))) {
+        finalScheduledDate = finalScheduledDate.add(const Duration(days: 1));
       }
 
-      const AndroidNotificationDetails androidDetails =
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
         'habit_reminders',
         'Habit Reminders',
-        channelDescription: 'Reminders for individual habits',
-        importance: Importance.high,
+        channelDescription: 'Reminders for your habits',
+        importance: Importance.max,
         priority: Priority.high,
         icon: '@mipmap/ic_launcher',
       );
 
-      const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails(
+      const DarwinNotificationDetails iOSPlatformChannelSpecifics =
+          DarwinNotificationDetails(
+        sound: 'default',
         presentAlert: true,
         presentBadge: true,
         presentSound: true,
       );
 
-      const NotificationDetails platformDetails = NotificationDetails(
-        android: androidDetails,
-        iOS: iOSDetails,
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics,
       );
 
       await _flutterLocalNotificationsPlugin.zonedSchedule(
-        notificationId,
-        '$habitEmoji $habitName',
-        message,
-        scheduledDate,
-        platformDetails,
+        habitId.hashCode,
+        habitName,
+        'Es hora de completar tu hábito: $habitName',
+        finalScheduledDate,
+        platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
+        payload: 'habit_$habitId',
       );
 
       developer.log(
-        'Contextual notification scheduled for $habitName at $scheduledDate',
+        'Habit notification scheduled for $habitName at $finalScheduledDate',
         name: 'NotificationService',
       );
     } catch (e) {
       developer.log(
-        'Error scheduling contextual notification: $e',
+        'ERROR scheduling habit notification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+    }
+  }
+
+  /// Cancel a habit notification
+  Future<void> cancelHabitNotification(String habitId) async {
+    try {
+      await _flutterLocalNotificationsPlugin.cancel(habitId.hashCode);
+      developer.log(
+        'Habit notification cancelled for habitId: $habitId',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'ERROR cancelling habit notification: $e',
         name: 'NotificationService',
         error: e,
       );

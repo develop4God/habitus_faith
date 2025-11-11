@@ -40,7 +40,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
+    _tabController =
+        TabController(
       length: 2,
       vsync: this,
       initialIndex: widget.initialTab,
@@ -162,7 +163,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 Container(
                   decoration: BoxDecoration(
                     gradient: _getHeaderGradient(),
-                    borderRadius: const BorderRadius.vertical(
+                    borderRadius:
+                        const BorderRadius.vertical(
                       top: Radius.circular(32),
                     ),
                   ),
@@ -187,7 +189,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                           splashRadius: 26,
                           tooltip: MaterialLocalizations.of(
                             context,
-                          ).closeButtonTooltip,
+                          )
+                              .closeButtonTooltip,
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
@@ -311,12 +314,11 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                             description:
                                                 PredefinedHabitTranslations
                                                     .getTranslatedDescription(
-                                              widget.l10n,
-                                              habit.descriptionKey,
-                                            ),
+                                                        widget.l10n,
+                                                        habit.descriptionKey),
                                             category: PredefinedHabitCategoryX(
-                                              habit.category,
-                                            ).toDomainCategory(),
+                                                    habit.category)
+                                                .toDomainCategory(),
                                             emoji: habit
                                                 .emoji, // Asegura que el emoji se guarde
                                           );
@@ -353,7 +355,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                           children: [
                                             Text(
                                               habit.emoji,
-                                              style: const TextStyle(
+                                              style:
+                                                  const TextStyle(
                                                 fontSize: 44,
                                               ),
                                             ),

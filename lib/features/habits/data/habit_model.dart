@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../domain/habit.dart';
 import '../domain/models/verse_reference.dart';
+import '../domain/models/habit_notification.dart';
 
 /// Data model for Firestore serialization
 class HabitModel {
@@ -87,6 +88,18 @@ class HabitModel {
       lastAdjustedAt: data['lastAdjustedAt'] != null
           ? (data['lastAdjustedAt'] as Timestamp).toDate()
           : null,
+      // Notification and recurrence fields
+      notificationSettings: data['notificationSettings'] != null
+          ? HabitNotificationSettings.fromJson(
+              data['notificationSettings'] as Map<String, dynamic>)
+          : null,
+      recurrence: data['recurrence'] != null
+          ? HabitRecurrence.fromJson(data['recurrence'] as Map<String, dynamic>)
+          : null,
+      subtasks: (data['subtasks'] as List<dynamic>?)
+              ?.map((e) => Subtask.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -130,6 +143,10 @@ class HabitModel {
       'lastAdjustedAt': habit.lastAdjustedAt != null
           ? Timestamp.fromDate(habit.lastAdjustedAt!)
           : null,
+      // Notification and recurrence fields
+      'notificationSettings': habit.notificationSettings?.toJson(),
+      'recurrence': habit.recurrence?.toJson(),
+      'subtasks': habit.subtasks.map((s) => s.toJson()).toList(),
     };
   }
 
@@ -191,6 +208,18 @@ class HabitModel {
       lastAdjustedAt: json['lastAdjustedAt'] != null
           ? DateTime.parse(json['lastAdjustedAt'] as String)
           : null,
+      // Notification and recurrence fields
+      notificationSettings: json['notificationSettings'] != null
+          ? HabitNotificationSettings.fromJson(
+              json['notificationSettings'] as Map<String, dynamic>)
+          : null,
+      recurrence: json['recurrence'] != null
+          ? HabitRecurrence.fromJson(json['recurrence'] as Map<String, dynamic>)
+          : null,
+      subtasks: (json['subtasks'] as List<dynamic>?)
+              ?.map((e) => Subtask.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -231,6 +260,10 @@ class HabitModel {
       'failurePattern': habit.failurePattern?.name,
       'abandonmentRisk': habit.abandonmentRisk,
       'lastAdjustedAt': habit.lastAdjustedAt?.toIso8601String(),
+      // Notification and recurrence fields
+      'notificationSettings': habit.notificationSettings?.toJson(),
+      'recurrence': habit.recurrence?.toJson(),
+      'subtasks': habit.subtasks.map((s) => s.toJson()).toList(),
     };
   }
 }
