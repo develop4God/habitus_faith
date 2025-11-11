@@ -67,7 +67,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    # - assets/images/logo.svg  # Commented out - file doesn't exist
+
     - assets/lottie/animation.json
     - assets/lottie/
     - assets/biblia/
