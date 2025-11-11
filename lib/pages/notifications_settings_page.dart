@@ -127,19 +127,13 @@ class _NotificationsSettingsPageState
 
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.notificationSettings),
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        appBar: AppBar(title: Text(l10n.notificationSettings)),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.notificationSettings),
-      ),
+      appBar: AppBar(title: Text(l10n.notificationSettings)),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -165,9 +159,7 @@ class _NotificationsSettingsPageState
                           ? l10n.notificationsOn
                           : l10n.notificationsOff,
                     ),
-                    subtitle: Text(
-                      l10n.receiveReminderNotifications,
-                    ),
+                    subtitle: Text(l10n.receiveReminderNotifications),
                   ),
                 ],
               ),
@@ -211,10 +203,7 @@ class _NotificationsSettingsPageState
                 children: [
                   const Text(
                     'Smart Predictions',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   SwitchListTile(
@@ -248,11 +237,7 @@ class _NotificationsSettingsPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.info_outline,
-                    size: 48,
-                    color: Colors.blue,
-                  ),
+                  const Icon(Icons.info_outline, size: 48, color: Colors.blue),
                   const SizedBox(height: 16),
                   Text(
                     l10n.notificationInfo,

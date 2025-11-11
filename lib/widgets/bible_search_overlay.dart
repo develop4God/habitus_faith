@@ -96,10 +96,14 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
               onTap: () {}, // Prevent tap from propagating to background
               child: Center(
                 child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
-                  constraints:
-                      const BoxConstraints(maxWidth: 600, maxHeight: 700),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 40,
+                  ),
+                  constraints: const BoxConstraints(
+                    maxWidth: 600,
+                    maxHeight: 700,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(16),
@@ -117,7 +121,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                       // Header with close button
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                         decoration: BoxDecoration(
                           color: colorScheme.surfaceContainerHighest,
                           borderRadius: const BorderRadius.only(
@@ -205,8 +211,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: colorScheme.onSurface
-                                          .withValues(alpha: 0.5),
+                                      color: colorScheme.onSurface.withValues(
+                                        alpha: 0.5,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -222,8 +229,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: colorScheme.onSurface
-                                          .withValues(alpha: 0.7),
+                                      color: colorScheme.onSurface.withValues(
+                                        alpha: 0.7,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -239,8 +247,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                                     result['long_name'] ?? result['short_name'];
                                 final chapter = result['chapter'];
                                 final verse = result['verse'];
-                                final text =
-                                    widget.cleanVerseText(result['text']);
+                                final text = widget.cleanVerseText(
+                                  result['text'],
+                                );
 
                                 return Card(
                                   margin: const EdgeInsets.only(bottom: 12),
@@ -335,40 +344,46 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
       }
 
       if (matchIndex == -1) {
-        spans.add(TextSpan(
-          text: text.substring(lastIndex),
-          style: TextStyle(
-            fontSize: 15,
-            color: colorScheme.onSurface,
-            height: 1.4,
+        spans.add(
+          TextSpan(
+            text: text.substring(lastIndex),
+            style: TextStyle(
+              fontSize: 15,
+              color: colorScheme.onSurface,
+              height: 1.4,
+            ),
           ),
-        ));
+        );
         break;
       }
 
       if (matchIndex > lastIndex) {
-        spans.add(TextSpan(
-          text: text.substring(lastIndex, matchIndex),
+        spans.add(
+          TextSpan(
+            text: text.substring(lastIndex, matchIndex),
+            style: TextStyle(
+              fontSize: 15,
+              color: colorScheme.onSurface,
+              height: 1.4,
+            ),
+          ),
+        );
+      }
+
+      spans.add(
+        TextSpan(
+          text: text.substring(matchIndex, matchIndex + matchLength),
           style: TextStyle(
             fontSize: 15,
             color: colorScheme.onSurface,
             height: 1.4,
+            fontWeight: FontWeight.bold,
+            backgroundColor: colorScheme.primaryContainer,
+            decoration: TextDecoration.underline,
+            decorationColor: colorScheme.primary,
           ),
-        ));
-      }
-
-      spans.add(TextSpan(
-        text: text.substring(matchIndex, matchIndex + matchLength),
-        style: TextStyle(
-          fontSize: 15,
-          color: colorScheme.onSurface,
-          height: 1.4,
-          fontWeight: FontWeight.bold,
-          backgroundColor: colorScheme.primaryContainer,
-          decoration: TextDecoration.underline,
-          decorationColor: colorScheme.primary,
         ),
-      ));
+      );
 
       lastIndex = matchIndex + matchLength;
     }

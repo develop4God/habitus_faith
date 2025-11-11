@@ -4,11 +4,7 @@ import 'package:habitus_faith/features/habits/domain/models/verse_reference.dart
 void main() {
   group('VerseReference', () {
     test('creates a valid verse reference', () {
-      const verse = VerseReference(
-        book: 'John',
-        chapter: 3,
-        verse: 16,
-      );
+      const verse = VerseReference(book: 'John', chapter: 3, verse: 16);
 
       expect(verse.book, 'John');
       expect(verse.chapter, 3);
@@ -17,11 +13,7 @@ void main() {
     });
 
     test('displayText shows single verse correctly', () {
-      const verse = VerseReference(
-        book: 'John',
-        chapter: 3,
-        verse: 16,
-      );
+      const verse = VerseReference(book: 'John', chapter: 3, verse: 16);
 
       expect(verse.displayText, 'John 3:16');
     });
@@ -38,11 +30,7 @@ void main() {
     });
 
     test('serializes to JSON correctly', () {
-      const verse = VerseReference(
-        book: 'Psalm',
-        chapter: 23,
-        verse: 1,
-      );
+      const verse = VerseReference(book: 'Psalm', chapter: 23, verse: 1);
 
       final json = verse.toJson();
 
@@ -52,11 +40,7 @@ void main() {
     });
 
     test('deserializes from JSON correctly', () {
-      final json = {
-        'book': 'Psalm',
-        'chapter': 23,
-        'verse': 1,
-      };
+      final json = {'book': 'Psalm', 'chapter': 23, 'verse': 1};
 
       final verse = VerseReference.fromJson(json);
 

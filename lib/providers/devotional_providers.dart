@@ -1,7 +1,6 @@
 // lib/providers/devotional_providers.dart
 
 import 'dart:convert';
-import 'dart:ui' show PlatformDispatcher;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -84,13 +83,16 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       String savedLanguage =
           prefs.getString(DevotionalConstants.prefSelectedLanguage) ??
               deviceLanguage;
-      String selectedLanguage =
-          _getSupportedLanguageWithFallback(savedLanguage);
+      String selectedLanguage = _getSupportedLanguageWithFallback(
+        savedLanguage,
+      );
 
       // Save language if different from saved
       if (selectedLanguage != savedLanguage) {
         await prefs.setString(
-            DevotionalConstants.prefSelectedLanguage, selectedLanguage);
+          DevotionalConstants.prefSelectedLanguage,
+          selectedLanguage,
+        );
       }
 
       // Get saved version or use default
@@ -134,8 +136,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
   Future<void> _loadFavorites() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final String? favoritesJson =
-          prefs.getString(DevotionalConstants.prefFavorites);
+      final String? favoritesJson = prefs.getString(
+        DevotionalConstants.prefFavorites,
+      );
 
       if (favoritesJson != null && favoritesJson.isNotEmpty) {
         final List<dynamic> favoritesData = json.decode(favoritesJson);
@@ -199,8 +202,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
             // Parse each devotional for this date
             for (var item in dateDevocionales) {
               try {
-                final devocional =
-                    Devocional.fromJson(item as Map<String, dynamic>);
+                final devocional = Devocional.fromJson(
+                  item as Map<String, dynamic>,
+                );
                 loadedDevocionales.add(devocional);
               } catch (e) {
                 debugPrint('Error parsing devotional: $e');
@@ -209,7 +213,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
           }
         } else {
           debugPrint(
-              '⚠️ No devotionals found for language: ${state.selectedLanguage}');
+            '⚠️ No devotionals found for language: ${state.selectedLanguage}',
+          );
         }
       }
 
@@ -236,7 +241,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       );
 
       debugPrint(
-          '✅ Loaded ${loadedDevocionales.length} devotionals for ${state.selectedLanguage}');
+        '✅ Loaded ${loadedDevocionales.length} devotionals for ${state.selectedLanguage}',
+      );
     } catch (e) {
       debugPrint('Error processing devotional data: $e');
       state = state.copyWith(
@@ -262,8 +268,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
       // Save to preferences
       final prefs = await SharedPreferences.getInstance();
-      final favoritesJson =
-          json.encode(favorites.map((d) => d.toJson()).toList());
+      final favoritesJson = json.encode(
+        favorites.map((d) => d.toJson()).toList(),
+      );
       await prefs.setString(DevotionalConstants.prefFavorites, favoritesJson);
 
       debugPrint('✅ Favorite toggled for: ${devocional.id}');
@@ -282,7 +289,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(
-          DevotionalConstants.prefSelectedLanguage, languageCode);
+        DevotionalConstants.prefSelectedLanguage,
+        languageCode,
+      );
 
       // Get default version for the new language
       final defaultVersion =
@@ -305,7 +314,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(
-          DevotionalConstants.prefSelectedVersion, versionCode);
+        DevotionalConstants.prefSelectedVersion,
+        versionCode,
+      );
 
       state = state.copyWith(selectedVersion: versionCode);
 

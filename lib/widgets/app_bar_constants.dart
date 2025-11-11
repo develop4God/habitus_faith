@@ -29,27 +29,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: titleWidget ??
           Text(
             titleText ?? '',
-            style: textTheme.titleLarge?.copyWith(
-              color: colorScheme.onPrimary,
-            ),
+            style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary),
           ),
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              colorScheme.primary,
-              colorScheme.secondary,
-            ],
+            colors: [colorScheme.primary, colorScheme.secondary],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
       ),
-      iconTheme: IconThemeData(
-        color: colorScheme.onPrimary,
-      ),
+      iconTheme: IconThemeData(color: colorScheme.onPrimary),
       bottom: bottom,
     );
   }

@@ -19,15 +19,15 @@ class FavoritesPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Icon(
               Icons.star,
               color: Colors.amber,
               size: 24,
             ),
-            const SizedBox(width: 8),
-            const Text('My Favorites'),
+            SizedBox(width: 8),
+            Text('My Favorites'),
           ],
         ),
         elevation: 0,
@@ -122,9 +122,7 @@ class _FavoriteCard extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: isDark ? Colors.grey[900] : Colors.white,
       child: InkWell(
         onTap: () {
@@ -217,7 +215,7 @@ class _FavoriteCard extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: isDark
                             ? Colors.grey[800]
-                            : colorScheme.primaryContainer.withOpacity(0.3),
+                            : colorScheme.primaryContainer.withAlpha(77), // 0.3 * 255 = 77
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(

@@ -3,8 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bible_reader_core/bible_reader_core.dart';
 
 /// Provider for SharedPreferences
-final sharedPreferencesProvider =
-    FutureProvider<SharedPreferences>((ref) async {
+final sharedPreferencesProvider = FutureProvider<SharedPreferences>((
+  ref,
+) async {
   return await SharedPreferences.getInstance();
 });
 
@@ -51,8 +52,10 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
 
 /// Family provider for BibleDbService instances
 /// Each version gets its own initialized database service
-final bibleDbServiceProvider =
-    FutureProvider.family<BibleDbService, String>((ref, versionId) async {
+final bibleDbServiceProvider = FutureProvider.family<BibleDbService, String>((
+  ref,
+  versionId,
+) async {
   final versions = ref.watch(bibleVersionsProvider);
   final version = versions.firstWhere(
     (v) => v.id == versionId,
@@ -106,8 +109,9 @@ final currentBibleVersionProvider =
 });
 
 /// Provider for Bible preferences service
-final biblePreferencesServiceProvider =
-    Provider<BiblePreferencesService>((ref) {
+final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((
+  ref,
+) {
   return BiblePreferencesService();
 });
 

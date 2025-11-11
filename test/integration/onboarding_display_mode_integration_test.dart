@@ -18,16 +18,15 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    testWidgets('Complete onboarding flow: Display mode -> Habit selection',
-        (WidgetTester tester) async {
+    testWidgets('Complete onboarding flow: Display mode -> Habit selection', (
+      WidgetTester tester,
+    ) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: MaterialApp(
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -36,9 +35,7 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {
-              '/onboarding': (context) => const OnboardingPage(),
-            },
+            routes: {'/onboarding': (context) => const OnboardingPage()},
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -46,8 +43,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Step 1: Verify display mode selection page is shown
-      expect(find.text('Choose Your Experience'), findsOneWidget,
-          reason: 'Display mode selection page should be shown first');
+      expect(
+        find.text('Choose Your Experience'),
+        findsOneWidget,
+        reason: 'Display mode selection page should be shown first',
+      );
 
       // Step 2: Select compact mode
       await tester.tap(find.byKey(const Key('compact_mode_card')));
@@ -58,24 +58,26 @@ void main() {
       await tester.pumpAndSettle();
 
       // Step 4: Verify navigation to onboarding page
-      expect(find.text('Welcome to Habitus Faith'), findsOneWidget,
-          reason: 'Should navigate to onboarding page after mode selection');
+      expect(
+        find.text('Welcome to Habitus Faith'),
+        findsOneWidget,
+        reason: 'Should navigate to onboarding page after mode selection',
+      );
 
       // Step 5: Verify display mode was persisted
       final savedMode = prefs.getString('display_mode');
       expect(savedMode, 'compact', reason: 'Display mode should be saved');
     });
 
-    testWidgets('Onboarding flow: Advanced mode selection',
-        (WidgetTester tester) async {
+    testWidgets('Onboarding flow: Advanced mode selection', (
+      WidgetTester tester,
+    ) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: MaterialApp(
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -84,9 +86,7 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {
-              '/onboarding': (context) => const OnboardingPage(),
-            },
+            routes: {'/onboarding': (context) => const OnboardingPage()},
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -110,35 +110,33 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify navigation to onboarding page
-      expect(find.text('Welcome to Habitus Faith'), findsOneWidget,
-          reason: 'Should navigate to onboarding page after mode selection');
+      expect(
+        find.text('Welcome to Habitus Faith'),
+        findsOneWidget,
+        reason: 'Should navigate to onboarding page after mode selection',
+      );
 
       // Verify display mode was persisted
       final savedMode = prefs.getString('display_mode');
       expect(savedMode, 'advanced', reason: 'Advanced mode should be saved');
     });
 
-    testWidgets('Display mode provider correctly loads persisted mode',
-        (WidgetTester tester) async {
-      SharedPreferences.setMockInitialValues({
-        'display_mode': 'advanced',
-      });
+    testWidgets('Display mode provider correctly loads persisted mode', (
+      WidgetTester tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({'display_mode': 'advanced'});
       final prefs = await SharedPreferences.getInstance();
 
       DisplayMode? loadedMode;
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: Consumer(
             builder: (context, ref, child) {
               loadedMode = ref.watch(displayModeProvider);
               return const MaterialApp(
-                home: Scaffold(
-                  body: Center(child: Text('Test')),
-                ),
+                home: Scaffold(body: Center(child: Text('Test'))),
               );
             },
           ),
@@ -146,12 +144,16 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(loadedMode, DisplayMode.advanced,
-          reason: 'Provider should load persisted advanced mode');
+      expect(
+        loadedMode,
+        DisplayMode.advanced,
+        reason: 'Provider should load persisted advanced mode',
+      );
     });
 
-    testWidgets('Display mode provider defaults to compact when not set',
-        (WidgetTester tester) async {
+    testWidgets('Display mode provider defaults to compact when not set', (
+      WidgetTester tester,
+    ) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
 
@@ -159,16 +161,12 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: Consumer(
             builder: (context, ref, child) {
               loadedMode = ref.watch(displayModeProvider);
               return const MaterialApp(
-                home: Scaffold(
-                  body: Center(child: Text('Test')),
-                ),
+                home: Scaffold(body: Center(child: Text('Test'))),
               );
             },
           ),
@@ -176,31 +174,29 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(loadedMode, DisplayMode.compact,
-          reason: 'Provider should default to compact mode when not set');
+      expect(
+        loadedMode,
+        DisplayMode.compact,
+        reason: 'Provider should default to compact mode when not set',
+      );
     });
 
-    testWidgets('displayModeSelectedProvider returns true when mode is set',
-        (WidgetTester tester) async {
-      SharedPreferences.setMockInitialValues({
-        'display_mode': 'compact',
-      });
+    testWidgets('displayModeSelectedProvider returns true when mode is set', (
+      WidgetTester tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({'display_mode': 'compact'});
       final prefs = await SharedPreferences.getInstance();
 
       bool? isSelected;
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: Consumer(
             builder: (context, ref, child) {
               isSelected = ref.watch(displayModeSelectedProvider);
               return const MaterialApp(
-                home: Scaffold(
-                  body: Center(child: Text('Test')),
-                ),
+                home: Scaffold(body: Center(child: Text('Test'))),
               );
             },
           ),
@@ -208,53 +204,55 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(isSelected, true,
-          reason:
-              'displayModeSelectedProvider should return true when mode is set');
+      expect(
+        isSelected,
+        true,
+        reason:
+            'displayModeSelectedProvider should return true when mode is set',
+      );
     });
 
     testWidgets(
-        'displayModeSelectedProvider returns false when mode is not set',
-        (WidgetTester tester) async {
-      SharedPreferences.setMockInitialValues({});
-      final prefs = await SharedPreferences.getInstance();
+      'displayModeSelectedProvider returns false when mode is not set',
+      (WidgetTester tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
 
-      bool? isSelected;
+        bool? isSelected;
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
-          child: Consumer(
-            builder: (context, ref, child) {
-              isSelected = ref.watch(displayModeSelectedProvider);
-              return const MaterialApp(
-                home: Scaffold(
-                  body: Center(child: Text('Test')),
-                ),
-              );
-            },
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+            child: Consumer(
+              builder: (context, ref, child) {
+                isSelected = ref.watch(displayModeSelectedProvider);
+                return const MaterialApp(
+                  home: Scaffold(body: Center(child: Text('Test'))),
+                );
+              },
+            ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(isSelected, false,
+        expect(
+          isSelected,
+          false,
           reason:
-              'displayModeSelectedProvider should return false when mode is not set');
-    });
+              'displayModeSelectedProvider should return false when mode is not set',
+        );
+      },
+    );
 
-    testWidgets('User can change mode selection before confirming',
-        (WidgetTester tester) async {
+    testWidgets('User can change mode selection before confirming', (
+      WidgetTester tester,
+    ) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: MaterialApp(
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -263,9 +261,7 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {
-              '/onboarding': (context) => const OnboardingPage(),
-            },
+            routes: {'/onboarding': (context) => const OnboardingPage()},
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -294,20 +290,22 @@ void main() {
 
       // Verify final selection was advanced
       final savedMode = prefs.getString('display_mode');
-      expect(savedMode, 'advanced',
-          reason: 'Final selection should be advanced mode');
+      expect(
+        savedMode,
+        'advanced',
+        reason: 'Final selection should be advanced mode',
+      );
     });
 
-    testWidgets('Cannot proceed without selecting a mode',
-        (WidgetTester tester) async {
+    testWidgets('Cannot proceed without selecting a mode', (
+      WidgetTester tester,
+    ) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: MaterialApp(
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -316,9 +314,7 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {
-              '/onboarding': (context) => const OnboardingPage(),
-            },
+            routes: {'/onboarding': (context) => const OnboardingPage()},
             home: const DisplayModeSelectionPage(),
           ),
         ),
@@ -326,16 +322,23 @@ void main() {
       await tester.pumpAndSettle();
 
       // Try to tap the button without selecting a mode
-      final selectButton = tester
-          .widget<ElevatedButton>(find.byKey(const Key('select_mode_button')));
+      final selectButton = tester.widget<ElevatedButton>(
+        find.byKey(const Key('select_mode_button')),
+      );
 
-      expect(selectButton.enabled, false,
-          reason: 'Button should be disabled without mode selection');
+      expect(
+        selectButton.enabled,
+        false,
+        reason: 'Button should be disabled without mode selection',
+      );
 
       // Verify no mode was saved
       final savedMode = prefs.getString('display_mode');
-      expect(savedMode, isNull,
-          reason: 'No mode should be saved without selection');
+      expect(
+        savedMode,
+        isNull,
+        reason: 'No mode should be saved without selection',
+      );
     });
   });
 }

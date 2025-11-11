@@ -20,19 +20,14 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: OnboardingPage(),
           ),
         ),
@@ -41,8 +36,9 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('User can skip onboarding without selecting habits',
-        (WidgetTester tester) async {
+    testWidgets('User can skip onboarding without selecting habits', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Find skip button
@@ -54,23 +50,22 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('Skip button is visible alongside continue button',
-        (WidgetTester tester) async {
+    testWidgets('Skip button is visible alongside continue button', (
+      WidgetTester tester,
+    ) async {
       await pumpOnboardingPage(tester);
 
       // Both buttons should be visible
       final skipButton = find.byKey(const Key('skip_onboarding_button'));
-      final continueButton =
-          find.byKey(const Key('continue_onboarding_button'));
+      final continueButton = find.byKey(
+        const Key('continue_onboarding_button'),
+      );
 
       expect(skipButton, findsOneWidget);
       expect(continueButton, findsOneWidget);
 
       // Verify they are in the same Row
-      final row = find.ancestor(
-        of: skipButton,
-        matching: find.byType(Row),
-      );
+      final row = find.ancestor(of: skipButton, matching: find.byType(Row));
       expect(row, findsOneWidget);
     });
   });
@@ -80,25 +75,21 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    testWidgets('Predefined habits show emojis on onboarding page',
-        (WidgetTester tester) async {
+    testWidgets('Predefined habits show emojis on onboarding page', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: OnboardingPage(),
           ),
         ),
@@ -125,14 +116,13 @@ void main() {
       });
     });
 
-    testWidgets('Habit cards display color indicators',
-        (WidgetTester tester) async {
+    testWidgets('Habit cards display color indicators', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       // Add a test habit with specific data
-      await prefs.setString(
-        'habits',
-        '''[{
+      await prefs.setString('habits', '''[{
           "id": "test_habit_1",
           "userId": "test_user",
           "name": "Test Habit",
@@ -151,24 +141,18 @@ void main() {
           "consecutiveFailures": 0,
           "abandonmentRisk": 0.0,
           "difficulty": "medium"
-        }]''',
-      );
+        }]''');
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: HabitsPage(),
           ),
         ),
@@ -192,22 +176,19 @@ void main() {
 
   group('UI Improvements - Strikethrough Completed Habits', () {
     setUp(() {
-      SharedPreferences.setMockInitialValues({
-        'onboarding_complete': true,
-      });
+      SharedPreferences.setMockInitialValues({'onboarding_complete': true});
     });
 
-    testWidgets('Completed habits show strikethrough text',
-        (WidgetTester tester) async {
+    testWidgets('Completed habits show strikethrough text', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       // Add a completed habit
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
 
-      await prefs.setString(
-        'habits',
-        '''[{
+      await prefs.setString('habits', '''[{
           "id": "completed_habit",
           "userId": "test_user",
           "name": "Completed Habit",
@@ -226,36 +207,27 @@ void main() {
           "consecutiveFailures": 0,
           "abandonmentRisk": 0.0,
           "difficulty": "medium"
-        }]''',
-      );
+        }]''');
 
-      await prefs.setString(
-        'completions',
-        '''{
+      await prefs.setString('completions', '''{
           "completed_habit": {
             "completion_1": {
               "habitId": "completed_habit",
               "completedAt": "${today.toIso8601String()}"
             }
           }
-        }''',
-      );
+        }''');
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: HabitsPage(),
           ),
         ),
@@ -274,14 +246,13 @@ void main() {
       expect(strikethroughTexts, findsWidgets);
     });
 
-    testWidgets('Uncompleted habits do not show strikethrough',
-        (WidgetTester tester) async {
+    testWidgets('Uncompleted habits do not show strikethrough', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       // Add an uncompleted habit
-      await prefs.setString(
-        'habits',
-        '''[{
+      await prefs.setString('habits', '''[{
           "id": "uncompleted_habit",
           "userId": "test_user",
           "name": "Uncompleted Habit",
@@ -300,26 +271,20 @@ void main() {
           "consecutiveFailures": 0,
           "abandonmentRisk": 0.0,
           "difficulty": "medium"
-        }]''',
-      );
+        }]''');
 
       await prefs.setString('completions', '{}');
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: HabitsPage(),
           ),
         ),
@@ -333,10 +298,7 @@ void main() {
 
       // Verify it doesn't have strikethrough
       final textWidget = tester.widget<Text>(habitNameText.first);
-      expect(
-        textWidget.style?.decoration,
-        isNot(TextDecoration.lineThrough),
-      );
+      expect(textWidget.style?.decoration, isNot(TextDecoration.lineThrough));
     });
   });
 
@@ -354,19 +316,14 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: HabitsPage(),
           ),
         ),
@@ -387,25 +344,21 @@ void main() {
       expect(find.text('Add Manually'), findsOneWidget);
     });
 
-    testWidgets('Can switch between manual and predefined tabs',
-        (WidgetTester tester) async {
+    testWidgets('Can switch between manual and predefined tabs', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: HabitsPage(),
           ),
         ),
@@ -430,25 +383,21 @@ void main() {
       expect(find.text('🙏'), findsOneWidget); // Morning Prayer
     });
 
-    testWidgets('Predefined habits grid displays emojis and names',
-        (WidgetTester tester) async {
+    testWidgets('Predefined habits grid displays emojis and names', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
+            supportedLocales: [Locale('en', ''), Locale('es', '')],
             home: HabitsPage(),
           ),
         ),
@@ -480,43 +429,39 @@ void main() {
     });
 
     testWidgets(
-        'Complete user flow: onboarding with skip, then add predefined habit',
-        (WidgetTester tester) async {
-      final prefs = await SharedPreferences.getInstance();
+      'Complete user flow: onboarding with skip, then add predefined habit',
+      (WidgetTester tester) async {
+        final prefs = await SharedPreferences.getInstance();
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
-          child: MaterialApp(
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en', ''),
-              Locale('es', ''),
-            ],
-            routes: {
-              '/': (context) => const OnboardingPage(),
-              '/home': (context) => const HabitsPage(),
-            },
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+            child: MaterialApp(
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: const [Locale('en', ''), Locale('es', '')],
+              routes: {
+                '/': (context) => const OnboardingPage(),
+                '/home': (context) => const HabitsPage(),
+              },
+            ),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // User skips onboarding
-      final skipButton = find.byKey(const Key('skip_onboarding_button'));
-      expect(skipButton, findsOneWidget);
+        // User skips onboarding
+        final skipButton = find.byKey(const Key('skip_onboarding_button'));
+        expect(skipButton, findsOneWidget);
 
-      // Note: In a real test, we would navigate but for unit tests
-      // we'll just verify the button exists and is enabled
-      final button = tester.widget<OutlinedButton>(skipButton);
-      expect(button.onPressed, isNotNull);
-    });
+        // Note: In a real test, we would navigate but for unit tests
+        // we'll just verify the button exists and is enabled
+        final button = tester.widget<OutlinedButton>(skipButton);
+        expect(button.onPressed, isNotNull);
+      },
+    );
   });
 }

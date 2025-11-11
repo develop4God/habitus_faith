@@ -85,8 +85,10 @@ void main() {
       expect(restoredHabit.completedToday, originalHabit.completedToday);
       expect(restoredHabit.currentStreak, originalHabit.currentStreak);
       expect(restoredHabit.longestStreak, originalHabit.longestStreak);
-      expect(restoredHabit.completionHistory.length,
-          originalHabit.completionHistory.length);
+      expect(
+        restoredHabit.completionHistory.length,
+        originalHabit.completionHistory.length,
+      );
       expect(restoredHabit.isArchived, originalHabit.isArchived);
     });
 
@@ -125,9 +127,12 @@ void main() {
         final habit = HabitModel.fromFirestore(doc);
 
         // Assert - Verify migration
-        expect(habit.category, expectedCategory,
-            reason:
-                'Category "$oldCategory" should migrate to ${expectedCategory.name}');
+        expect(
+          habit.category,
+          expectedCategory,
+          reason:
+              'Category "$oldCategory" should migrate to ${expectedCategory.name}',
+        );
       }
     });
   });

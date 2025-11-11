@@ -42,10 +42,7 @@ class _DisplayModeSelectionPageState
               const SizedBox(height: 16),
               Text(
                 l10n.displayModeDescription,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Color(0xff64748b),
-                ),
+                style: const TextStyle(fontSize: 18, color: Color(0xff64748b)),
               ),
               const SizedBox(height: 32),
               Expanded(
@@ -127,8 +124,9 @@ class _DisplayModeSelectionPageState
                               .read(displayModeProvider.notifier)
                               .setDisplayMode(_selectedMode!);
                           if (context.mounted) {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/onboarding');
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/onboarding');
                           }
                         },
                   child: Text(
@@ -273,30 +271,32 @@ class _ModeCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                ...features.map((feature) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            size: 20,
-                            color: isSelected
-                                ? const Color(0xff6366f1)
-                                : Colors.grey.shade400,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              feature,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey.shade700,
-                              ),
+                ...features.map(
+                  (feature) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          size: 20,
+                          color: isSelected
+                              ? const Color(0xff6366f1)
+                              : Colors.grey.shade400,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            feature,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey.shade700,
                             ),
                           ),
-                        ],
-                      ),
-                    )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -24,8 +24,9 @@ enum AppLanguage {
 }
 
 // Provider for current app language
-final appLanguageProvider =
-    StateNotifierProvider<AppLanguageNotifier, Locale>((ref) {
+final appLanguageProvider = StateNotifierProvider<AppLanguageNotifier, Locale>((
+  ref,
+) {
   return AppLanguageNotifier();
 });
 

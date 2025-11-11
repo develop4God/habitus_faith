@@ -665,7 +665,7 @@
   "syncComplete": "同步完成",
   "mlModelLoaded": "已加载",
   "mlModelLoading": "加载中...",
-  "mlModelError": "错误"
+  "mlModelError": "错误",
   "chooseHabitType": "你想添加哪种类型的习惯？",
   "@chooseHabitType": {
     "description": "添加习惯时选择类型的文本"
@@ -729,10 +729,18 @@
   "@understood": {"description": "关闭教育提示的按钮"},
   "bible": "圣经",
   "@bible": {
-    "description": "圣经页面标题"
+    "description": "圣经页面的标题"
   },
   "home": "首页",
   "@home": {
     "description": "主页标签"
+  },
+  "routine": "常规",
+  "@routine": {
+    "description": "导航栏中常规选项的标签"
+  },
+  "today": "今天",
+  "@today": {
+    "description": "用于在习惯视图中显示当天的标签"
   }
 }

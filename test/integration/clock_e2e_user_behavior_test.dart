@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:habitus_faith/core/services/time/time.dart';
 import 'package:habitus_faith/core/services/ai/behavioral_engine.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
@@ -69,7 +68,6 @@ void main() {
       expect(pattern, isNotNull);
 
       // === WEEK 3: User improves and completes daily ===
-      final week3Start = clock.now();
       for (int day = 14; day < 21; day++) {
         habit = habit.completeToday(clock: clock);
         expect(habit.completedToday, isTrue);
@@ -77,8 +75,10 @@ void main() {
       }
 
       // Verify final stats after 3 weeks
-      expect(habit.completionHistory.length,
-          greaterThanOrEqualTo(17)); // At least 17 completions
+      expect(
+        habit.completionHistory.length,
+        greaterThanOrEqualTo(17),
+      ); // At least 17 completions
       expect(habit.currentStreak, 7); // Last 7 days all completed
       expect(habit.longestStreak, greaterThanOrEqualTo(7));
 
@@ -96,15 +96,13 @@ void main() {
       // Flutter Test Widgets binding for the ML model to load
       predictor.dispose();
 
-      // === Verify Optimal Time Detection ===
-      final optimalTime = engine.findOptimalTime(habit);
-      // Optimal time detection may return null if not enough data
-      // Just verify the method works without throwing
-
       // === Verify Optimal Days ===
       final optimalDays = engine.findOptimalDays(habit);
-      expect(optimalDays.length, greaterThan(0),
-          reason: 'Should find at least one optimal day');
+      expect(
+        optimalDays.length,
+        greaterThan(0),
+        reason: 'Should find at least one optimal day',
+      );
 
       // Week 3 had consistent completions, so should have several optimal days
       // Just verify we get some results without enforcing all 7 days
@@ -218,11 +216,13 @@ void main() {
 
       // Evening habit has weekday-only completions
       // For pattern detection, the habit needs consecutive failures set
-      final eveningHabitWithFailures =
-          eveningHabit.copyWith(consecutiveFailures: 4);
+      final eveningHabitWithFailures = eveningHabit.copyWith(
+        consecutiveFailures: 4,
+      );
 
-      final eveningPattern =
-          engine.detectFailurePattern(eveningHabitWithFailures);
+      final eveningPattern = engine.detectFailurePattern(
+        eveningHabitWithFailures,
+      );
       // Pattern detection algorithm considers multiple factors
       // We verify it returns a pattern (not null) based on the failure history
       expect(eveningPattern, isNotNull);

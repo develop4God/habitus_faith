@@ -171,12 +171,9 @@ void main() {
       final notifier = container.read(appLanguageProvider.notifier);
 
       final locales = <String>[];
-      container.listen<Locale>(
-        appLanguageProvider,
-        (previous, next) {
-          locales.add(next.languageCode);
-        },
-      );
+      container.listen<Locale>(appLanguageProvider, (previous, next) {
+        locales.add(next.languageCode);
+      });
 
       await notifier.setLanguage('en');
       await notifier.setLanguage('es');
@@ -228,24 +225,26 @@ void main() {
       }
     });
 
-    test('should preserve language across provider container dispose',
-        () async {
-      SharedPreferences.setMockInitialValues({});
+    test(
+      'should preserve language across provider container dispose',
+      () async {
+        SharedPreferences.setMockInitialValues({});
 
-      // First container
-      final container1 = ProviderContainer();
-      final notifier1 = container1.read(appLanguageProvider.notifier);
-      await notifier1.setLanguage('zh');
-      container1.dispose();
+        // First container
+        final container1 = ProviderContainer();
+        final notifier1 = container1.read(appLanguageProvider.notifier);
+        await notifier1.setLanguage('zh');
+        container1.dispose();
 
-      // Second container should load saved language
-      final container2 = ProviderContainer();
-      addTearDown(container2.dispose);
-      final notifier2 = container2.read(appLanguageProvider.notifier);
-      await Future.delayed(const Duration(milliseconds: 100));
+        // Second container should load saved language
+        final container2 = ProviderContainer();
+        addTearDown(container2.dispose);
+        final notifier2 = container2.read(appLanguageProvider.notifier);
+        await Future.delayed(const Duration(milliseconds: 100));
 
-      expect(notifier2.state.languageCode, equals('zh'));
-    });
+        expect(notifier2.state.languageCode, equals('zh'));
+      },
+    );
 
     test('should handle setting same language multiple times', () async {
       SharedPreferences.setMockInitialValues({});

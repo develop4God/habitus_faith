@@ -9,10 +9,7 @@ import '../../domain/models/risk_level.dart';
 class AbandonmentRiskIndicator extends StatelessWidget {
   final double risk; // 0.0-1.0 probability
 
-  const AbandonmentRiskIndicator({
-    super.key,
-    required this.risk,
-  });
+  const AbandonmentRiskIndicator({super.key, required this.risk});
 
   @override
   Widget build(BuildContext context) {

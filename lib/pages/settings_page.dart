@@ -96,11 +96,7 @@ class SettingsPage extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return DisplayModeModal(
-          currentMode: currentMode,
-          ref: ref,
-          l10n: l10n,
-        );
+        return DisplayModeModal(currentMode: currentMode, ref: ref, l10n: l10n);
       },
     );
   }

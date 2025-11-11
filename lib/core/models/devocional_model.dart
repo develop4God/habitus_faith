@@ -41,7 +41,8 @@ class Devocional {
         parsedDate = DateTime.parse(dateString);
       } catch (e) {
         debugPrint(
-            'Error parsing date: $dateString, using DateTime.now(). Error: $e');
+          'Error parsing date: $dateString, using DateTime.now(). Error: $e',
+        );
         parsedDate = DateTime.now(); // Fallback to current date
       }
     } else {
@@ -56,7 +57,8 @@ class Devocional {
       reflexion: json['reflexion'] ?? '',
       paraMeditar: (json['para_meditar'] as List<dynamic>?)
               ?.map(
-                  (item) => ParaMeditar.fromJson(item as Map<String, dynamic>))
+                (item) => ParaMeditar.fromJson(item as Map<String, dynamic>),
+              )
               .toList() ??
           [],
       oracion: json['oracion'] ?? '',
@@ -93,10 +95,7 @@ class ParaMeditar {
   final String cita; // Bible reference/citation
   final String texto; // Meditation text
 
-  ParaMeditar({
-    required this.cita,
-    required this.texto,
-  });
+  ParaMeditar({required this.cita, required this.texto});
 
   factory ParaMeditar.fromJson(Map<String, dynamic> json) {
     return ParaMeditar(
@@ -106,9 +105,6 @@ class ParaMeditar {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'cita': cita,
-      'texto': texto,
-    };
+    return {'cita': cita, 'texto': texto};
   }
 }

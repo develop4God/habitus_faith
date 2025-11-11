@@ -48,10 +48,7 @@ class CopyrightUtils {
         'RVR1960': 'Reina Valera 1960',
         'NVI': 'Nueva Versión Internacional',
       },
-      'en': {
-        'KJV': 'King James Version',
-        'NIV': 'New International Version',
-      },
+      'en': {'KJV': 'King James Version', 'NIV': 'New International Version'},
       'pt': {
         'ARC': 'Almeida Revista e Corrigida',
         'NVI': 'Nova Versão Internacional',
@@ -60,10 +57,7 @@ class CopyrightUtils {
         'LSG1910': 'Louis Segond 1910',
         'TOB': 'Traduction Oecuménique de la Bible',
       },
-      'ja': {
-        'KJV': 'キング・ジェームズ版',
-        'NIV': '新国際版',
-      },
+      'ja': {'KJV': 'キング・ジェームズ版', 'NIV': '新国際版'},
     };
 
     return versionNames[language]?[version] ?? version;

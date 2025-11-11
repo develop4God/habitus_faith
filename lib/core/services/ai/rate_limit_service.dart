@@ -113,8 +113,9 @@ class RateLimitService implements IRateLimitService {
     final timestamps = _getRequestTimestamps();
     if (timestamps.isEmpty) return null;
 
-    final oldestTimestamp =
-        DateTime.fromMillisecondsSinceEpoch(timestamps.first);
+    final oldestTimestamp = DateTime.fromMillisecondsSinceEpoch(
+      timestamps.first,
+    );
     return oldestTimestamp.add(_timeWindow);
   }
 

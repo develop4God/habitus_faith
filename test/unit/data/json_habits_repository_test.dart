@@ -36,45 +36,48 @@ void main() {
       expect(habit.completedToday, isFalse);
     });
 
-    test('completeHabit marks habit as completed and creates completion record',
-        () async {
-      // Create a habit
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-        description: 'Test Description',
-      );
-      final habitId = createResult.value.id;
+    test(
+      'completeHabit marks habit as completed and creates completion record',
+      () async {
+        // Create a habit
+        final createResult = await repository.createHabit(
+          name: 'Test Habit',
+          description: 'Test Description',
+        );
+        final habitId = createResult.value.id;
 
-      // Complete the habit
-      final completeResult = await repository.completeHabit(habitId);
+        // Complete the habit
+        final completeResult = await repository.completeHabit(habitId);
 
-      expect(completeResult.isSuccess(), isTrue);
-      final completedHabit = completeResult.value;
-      expect(completedHabit.completedToday, isTrue);
-      expect(completedHabit.currentStreak, 1);
-      expect(completedHabit.completionHistory.length, 1);
-    });
+        expect(completeResult.isSuccess(), isTrue);
+        final completedHabit = completeResult.value;
+        expect(completedHabit.completedToday, isTrue);
+        expect(completedHabit.currentStreak, 1);
+        expect(completedHabit.completionHistory.length, 1);
+      },
+    );
 
     test(
-        'completeHabit is idempotent - completing twice same day returns same result',
-        () async {
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-        description: 'Test Description',
-      );
-      final habitId = createResult.value.id;
+      'completeHabit is idempotent - completing twice same day returns same result',
+      () async {
+        final createResult = await repository.createHabit(
+          name: 'Test Habit',
+          description: 'Test Description',
+        );
+        final habitId = createResult.value.id;
 
-      // Complete once
-      await repository.completeHabit(habitId);
+        // Complete once
+        await repository.completeHabit(habitId);
 
-      // Complete again
-      final secondComplete = await repository.completeHabit(habitId);
+        // Complete again
+        final secondComplete = await repository.completeHabit(habitId);
 
-      expect(secondComplete.isSuccess(), isTrue);
-      final habit = secondComplete.value;
-      expect(habit.currentStreak, 1);
-      expect(habit.completionHistory.length, 1);
-    });
+        expect(secondComplete.isSuccess(), isTrue);
+        final habit = secondComplete.value;
+        expect(habit.currentStreak, 1);
+        expect(habit.completionHistory.length, 1);
+      },
+    );
 
     test('streak calculation works correctly for consecutive days', () async {
       final createResult = await repository.createHabit(

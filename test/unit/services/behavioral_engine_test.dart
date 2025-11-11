@@ -17,10 +17,7 @@ void main() {
         userId: 'user-1',
         name: 'High Success',
         description: 'Doing great',
-      ).copyWith(
-        difficultyLevel: 3,
-        successRate7d: 0.87,
-      );
+      ).copyWith(difficultyLevel: 3, successRate7d: 0.87);
 
       // Act
       final nextDifficulty = engine.calculateNextDifficulty(habit);
@@ -36,10 +33,7 @@ void main() {
         userId: 'user-1',
         name: 'Max Level',
         description: 'Already at peak',
-      ).copyWith(
-        difficultyLevel: 5,
-        successRate7d: 0.87,
-      );
+      ).copyWith(difficultyLevel: 5, successRate7d: 0.87);
 
       // Act
       final nextDifficulty = engine.calculateNextDifficulty(habit);
@@ -55,10 +49,7 @@ void main() {
         userId: 'user-1',
         name: 'Struggling',
         description: 'Need easier challenge',
-      ).copyWith(
-        difficultyLevel: 3,
-        successRate7d: 0.45,
-      );
+      ).copyWith(difficultyLevel: 3, successRate7d: 0.45);
 
       // Act
       final nextDifficulty = engine.calculateNextDifficulty(habit);
@@ -74,10 +65,7 @@ void main() {
         userId: 'user-1',
         name: 'Min Level',
         description: 'Already at easiest',
-      ).copyWith(
-        difficultyLevel: 1,
-        successRate7d: 0.45,
-      );
+      ).copyWith(difficultyLevel: 1, successRate7d: 0.45);
 
       // Act
       final nextDifficulty = engine.calculateNextDifficulty(habit);
@@ -93,10 +81,7 @@ void main() {
         userId: 'user-1',
         name: 'Moderate',
         description: 'Just right',
-      ).copyWith(
-        difficultyLevel: 3,
-        successRate7d: 0.71,
-      );
+      ).copyWith(difficultyLevel: 3, successRate7d: 0.71);
 
       // Act
       final nextDifficulty = engine.calculateNextDifficulty(habit);
@@ -146,126 +131,132 @@ void main() {
     });
 
     test(
-        'Returns hour of single completion when exactly 3 completions at same hour',
-        () {
-      // Arrange
-      final now = DateTime.now();
-      final sevenAM = DateTime(now.year, now.month, now.day, 7, 0);
-      final habit = Habit.create(
-        id: 'test-8',
-        userId: 'user-1',
-        name: 'Morning Routine',
-        description: 'Always at 7am',
-      ).copyWith(
-        completionHistory: [
-          sevenAM.subtract(const Duration(days: 2)),
-          sevenAM.subtract(const Duration(days: 1)),
-          sevenAM,
-        ],
-      );
+      'Returns hour of single completion when exactly 3 completions at same hour',
+      () {
+        // Arrange
+        final now = DateTime.now();
+        final sevenAM = DateTime(now.year, now.month, now.day, 7, 0);
+        final habit = Habit.create(
+          id: 'test-8',
+          userId: 'user-1',
+          name: 'Morning Routine',
+          description: 'Always at 7am',
+        ).copyWith(
+          completionHistory: [
+            sevenAM.subtract(const Duration(days: 2)),
+            sevenAM.subtract(const Duration(days: 1)),
+            sevenAM,
+          ],
+        );
 
-      // Act
-      final optimalTime = engine.findOptimalTime(habit);
+        // Act
+        final optimalTime = engine.findOptimalTime(habit);
 
-      // Assert
-      expect(optimalTime, isNotNull);
-      expect(optimalTime!.hour, 7);
-      expect(optimalTime.minute, 0);
-    });
-
-    test(
-        'Returns most frequent hour with mixed times (7am wins: 5 vs 9am: 4 vs 8am: 1)',
-        () {
-      // Arrange
-      final now = DateTime.now();
-      final baseDate = DateTime(now.year, now.month, now.day);
-      final habit = Habit.create(
-        id: 'test-9',
-        userId: 'user-1',
-        name: 'Mixed Times',
-        description: 'Various completion times',
-      ).copyWith(
-        completionHistory: [
-          baseDate
-              .subtract(const Duration(days: 9))
-              .add(const Duration(hours: 7)),
-          baseDate
-              .subtract(const Duration(days: 8))
-              .add(const Duration(hours: 9)),
-          baseDate
-              .subtract(const Duration(days: 7))
-              .add(const Duration(hours: 7)),
-          baseDate
-              .subtract(const Duration(days: 6))
-              .add(const Duration(hours: 9)),
-          baseDate
-              .subtract(const Duration(days: 5))
-              .add(const Duration(hours: 7)),
-          baseDate
-              .subtract(const Duration(days: 4))
-              .add(const Duration(hours: 9)),
-          baseDate
-              .subtract(const Duration(days: 3))
-              .add(const Duration(hours: 7)),
-          baseDate
-              .subtract(const Duration(days: 2))
-              .add(const Duration(hours: 9)),
-          baseDate
-              .subtract(const Duration(days: 1))
-              .add(const Duration(hours: 7)),
-          baseDate.add(const Duration(hours: 8)),
-        ],
-      );
-
-      // Act
-      final optimalTime = engine.findOptimalTime(habit);
-
-      // Assert
-      expect(optimalTime, isNotNull);
-      expect(optimalTime!.hour, 7,
-          reason: '7am appears 5 times, most frequent');
-      expect(optimalTime.minute, 0);
-    });
+        // Assert
+        expect(optimalTime, isNotNull);
+        expect(optimalTime!.hour, 7);
+        expect(optimalTime.minute, 0);
+      },
+    );
 
     test(
-        'Returns most frequent hour for tie-breaking (first encountered in frequency map)',
-        () {
-      // Arrange
-      final now = DateTime.now();
-      final baseDate = DateTime(now.year, now.month, now.day);
-      final habit = Habit.create(
-        id: 'test-10',
-        userId: 'user-1',
-        name: 'Tie Scenario',
-        description: 'Equal frequency',
-      ).copyWith(
-        completionHistory: [
-          baseDate
-              .subtract(const Duration(days: 5))
-              .add(const Duration(hours: 7)),
-          baseDate
-              .subtract(const Duration(days: 4))
-              .add(const Duration(hours: 9)),
-          baseDate
-              .subtract(const Duration(days: 3))
-              .add(const Duration(hours: 7)),
-          baseDate
-              .subtract(const Duration(days: 2))
-              .add(const Duration(hours: 9)),
-          baseDate
-              .subtract(const Duration(days: 1))
-              .add(const Duration(hours: 7)),
-          baseDate.add(const Duration(hours: 9)),
-        ],
-      );
+      'Returns most frequent hour with mixed times (7am wins: 5 vs 9am: 4 vs 8am: 1)',
+      () {
+        // Arrange
+        final now = DateTime.now();
+        final baseDate = DateTime(now.year, now.month, now.day);
+        final habit = Habit.create(
+          id: 'test-9',
+          userId: 'user-1',
+          name: 'Mixed Times',
+          description: 'Various completion times',
+        ).copyWith(
+          completionHistory: [
+            baseDate
+                .subtract(const Duration(days: 9))
+                .add(const Duration(hours: 7)),
+            baseDate
+                .subtract(const Duration(days: 8))
+                .add(const Duration(hours: 9)),
+            baseDate
+                .subtract(const Duration(days: 7))
+                .add(const Duration(hours: 7)),
+            baseDate
+                .subtract(const Duration(days: 6))
+                .add(const Duration(hours: 9)),
+            baseDate
+                .subtract(const Duration(days: 5))
+                .add(const Duration(hours: 7)),
+            baseDate
+                .subtract(const Duration(days: 4))
+                .add(const Duration(hours: 9)),
+            baseDate
+                .subtract(const Duration(days: 3))
+                .add(const Duration(hours: 7)),
+            baseDate
+                .subtract(const Duration(days: 2))
+                .add(const Duration(hours: 9)),
+            baseDate
+                .subtract(const Duration(days: 1))
+                .add(const Duration(hours: 7)),
+            baseDate.add(const Duration(hours: 8)),
+          ],
+        );
 
-      // Act
-      final optimalTime = engine.findOptimalTime(habit);
+        // Act
+        final optimalTime = engine.findOptimalTime(habit);
 
-      // Assert - Both 7am and 9am appear 3 times, but we just need A result
-      expect(optimalTime, isNotNull);
-      expect([7, 9].contains(optimalTime!.hour), isTrue);
-    });
+        // Assert
+        expect(optimalTime, isNotNull);
+        expect(
+          optimalTime!.hour,
+          7,
+          reason: '7am appears 5 times, most frequent',
+        );
+        expect(optimalTime.minute, 0);
+      },
+    );
+
+    test(
+      'Returns most frequent hour for tie-breaking (first encountered in frequency map)',
+      () {
+        // Arrange
+        final now = DateTime.now();
+        final baseDate = DateTime(now.year, now.month, now.day);
+        final habit = Habit.create(
+          id: 'test-10',
+          userId: 'user-1',
+          name: 'Tie Scenario',
+          description: 'Equal frequency',
+        ).copyWith(
+          completionHistory: [
+            baseDate
+                .subtract(const Duration(days: 5))
+                .add(const Duration(hours: 7)),
+            baseDate
+                .subtract(const Duration(days: 4))
+                .add(const Duration(hours: 9)),
+            baseDate
+                .subtract(const Duration(days: 3))
+                .add(const Duration(hours: 7)),
+            baseDate
+                .subtract(const Duration(days: 2))
+                .add(const Duration(hours: 9)),
+            baseDate
+                .subtract(const Duration(days: 1))
+                .add(const Duration(hours: 7)),
+            baseDate.add(const Duration(hours: 9)),
+          ],
+        );
+
+        // Act
+        final optimalTime = engine.findOptimalTime(habit);
+
+        // Assert - Both 7am and 9am appear 3 times, but we just need A result
+        expect(optimalTime, isNotNull);
+        expect([7, 9].contains(optimalTime!.hour), isTrue);
+      },
+    );
   });
 
   group('BehavioralEngine - findOptimalDays', () {
@@ -322,8 +313,11 @@ void main() {
       // Assert - Should return [1, 3, 5] representing Monday, Wednesday, Friday
       expect(optimalDays.length, 3);
       expect(optimalDays.contains(1), isTrue, reason: 'Should include Monday');
-      expect(optimalDays.contains(3), isTrue,
-          reason: 'Should include Wednesday');
+      expect(
+        optimalDays.contains(3),
+        isTrue,
+        reason: 'Should include Wednesday',
+      );
       expect(optimalDays.contains(5), isTrue, reason: 'Should include Friday');
     });
 
@@ -359,12 +353,21 @@ void main() {
 
       // Assert - Should return top 3: [1 (Mon-4), 3 (Wed-3), 2 (Tue-2)]
       expect(optimalDays.length, 3);
-      expect(optimalDays[0], 1,
-          reason: 'Monday should be first (4 occurrences)');
-      expect(optimalDays[1], 3,
-          reason: 'Wednesday should be second (3 occurrences)');
-      expect(optimalDays[2], 2,
-          reason: 'Tuesday should be third (2 occurrences)');
+      expect(
+        optimalDays[0],
+        1,
+        reason: 'Monday should be first (4 occurrences)',
+      );
+      expect(
+        optimalDays[1],
+        3,
+        reason: 'Wednesday should be second (3 occurrences)',
+      );
+      expect(
+        optimalDays[2],
+        2,
+        reason: 'Tuesday should be third (2 occurrences)',
+      );
     });
 
     test('Returns fewer than 3 days if only 1-2 unique days completed', () {
@@ -404,9 +407,7 @@ void main() {
         userId: 'user-1',
         name: 'Few Failures',
         description: 'Not enough failures',
-      ).copyWith(
-        consecutiveFailures: 2,
-      );
+      ).copyWith(consecutiveFailures: 2);
 
       // Act
       final pattern = engine.detectFailurePattern(habit);
@@ -514,24 +515,23 @@ void main() {
       expect(pattern, FailurePattern.inconsistent);
     });
 
-    test('Returns null for empty completion history with consecutive failures',
-        () {
-      // Arrange
-      final habit = Habit.create(
-        id: 'test-19',
-        userId: 'user-1',
-        name: 'Never Completed',
-        description: 'No completions at all',
-      ).copyWith(
-        consecutiveFailures: 5,
-        completionHistory: [],
-      );
+    test(
+      'Returns null for empty completion history with consecutive failures',
+      () {
+        // Arrange
+        final habit = Habit.create(
+          id: 'test-19',
+          userId: 'user-1',
+          name: 'Never Completed',
+          description: 'No completions at all',
+        ).copyWith(consecutiveFailures: 5, completionHistory: []);
 
-      // Act
-      final pattern = engine.detectFailurePattern(habit);
+        // Act
+        final pattern = engine.detectFailurePattern(habit);
 
-      // Assert - Can't detect pattern without data
-      expect(pattern, isNull);
-    });
+        // Assert - Can't detect pattern without data
+        expect(pattern, isNull);
+      },
+    );
   });
 }

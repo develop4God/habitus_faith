@@ -36,7 +36,7 @@ void main() {
         'app_es.arb',
         'app_fr.arb',
         'app_pt.arb',
-        'app_zh.arb'
+        'app_zh.arb',
       ];
 
       for (int i = 0; i < translationFiles.length; i++) {
@@ -48,8 +48,9 @@ void main() {
             .toSet();
 
         // Check for missing keys
-        final missingKeys =
-            masterContentKeys.difference(translationContentKeys);
+        final missingKeys = masterContentKeys.difference(
+          translationContentKeys,
+        );
         expect(
           missingKeys,
           isEmpty,
@@ -110,8 +111,12 @@ void main() {
 
         // Verify all translation files have the key
         for (int i = 0; i < translationFiles.length; i++) {
-          final fileName =
-              ['app_es.arb', 'app_fr.arb', 'app_pt.arb', 'app_zh.arb'][i];
+          final fileName = [
+            'app_es.arb',
+            'app_fr.arb',
+            'app_pt.arb',
+            'app_zh.arb',
+          ][i];
           expect(
             translationFiles[i].containsKey(key),
             isTrue,
@@ -124,7 +129,7 @@ void main() {
     test('No empty translations', () {
       final fileNames = [
         'app_en.arb',
-        ...['app_es.arb', 'app_fr.arb', 'app_pt.arb', 'app_zh.arb']
+        ...['app_es.arb', 'app_fr.arb', 'app_pt.arb', 'app_zh.arb'],
       ];
       final allFiles = [masterKeys, ...translationFiles];
 

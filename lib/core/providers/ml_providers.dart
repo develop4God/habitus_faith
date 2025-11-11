@@ -27,8 +27,10 @@ final abandonmentPredictorProvider = Provider<AbandonmentPredictor>((ref) {
 /// - Habits already completed today
 /// - Habits that don't exist
 /// - Any errors during prediction
-final habitRiskProvider =
-    FutureProvider.family<double, String>((ref, habitId) async {
+final habitRiskProvider = FutureProvider.family<double, String>((
+  ref,
+  habitId,
+) async {
   // Watch habits stream to get current habit state
   final habitsAsync = ref.watch(jsonHabitsStreamProvider);
 

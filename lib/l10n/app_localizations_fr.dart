@@ -15,7 +15,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get start => 'Commencer';
 
   @override
-  String get readBible => 'Lire la Bible';
+  String get readBible => 'Bible';
 
   @override
   String get myHabits => 'Mes Habitudes';
@@ -641,6 +641,59 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mlModelError => 'Erreur';
+
+  @override
+  String get chooseHabitType =>
+      'Quel type d\'habitude souhaitez-vous ajouter ?';
+
+  @override
+  String get chooseFromPredefined => 'Choisissez une habitude prédéfinie';
+
+  @override
+  String get manual => 'Manuel';
+
+  @override
+  String get custom => 'Personnalisé';
+
+  @override
+  String get defaultHabit => 'Prédéfini';
+
+  @override
+  String get addHabitDiscoverySubtitle =>
+      'Choisissez comment ajouter votre nouvelle habitude : créez-en une personnalisée ou sélectionnez une habitude prédéfinie pour commencer plus rapidement.';
+
+  @override
+  String get requiredFieldLabel => 'Obligatoire';
+
+  @override
+  String get back => 'Retour';
+
+  @override
+  String get selectAll => 'Tout sélectionner';
+
+  @override
+  String get copy => 'Dupliquer';
+
+  @override
+  String get copyHabit => 'Voulez-vous dupliquer la tâche ?';
+
+  @override
+  String copyHabitConfirm(String habitName) {
+    return 'Êtes-vous sûr de vouloir dupliquer \"$habitName\" ?';
+  }
+
+  @override
+  String get introMessage =>
+      'Les plus grands changements commencent par la constance...';
+
+  @override
+  String get usefulTip => 'Astuce utile';
+
+  @override
+  String get habitsTip =>
+      'Faites glisser pour voir les actions sur vos habitudes';
+
+  @override
   String get understood => 'Compris';
 
   @override
@@ -648,4 +701,82 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get home => 'Accueil';
+
+  @override
+  String get reminderConfig => 'Reminder Configuration';
+
+  @override
+  String get recurrenceConfig => 'Daily Repetitions';
+
+  @override
+  String get repeat => 'Repeat';
+
+  @override
+  String get setCycleForPlan => 'Set a cycle for your plan';
+
+  @override
+  String get subtasks => 'Subtasks';
+
+  @override
+  String get addSubtask => 'Add subtask';
+
+  @override
+  String get minutesBefore => 'Minutes before';
+
+  @override
+  String get interval => 'Interval';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String everyXDays(int count) {
+    return 'Every $count day(s)';
+  }
+
+  @override
+  String everyXWeeks(int count) {
+    return 'Every $count week(s)';
+  }
+
+  @override
+  String everyXMonths(int count) {
+    return 'Every $count month(s)';
+  }
+
+  @override
+  String get noRepetition => 'No repetition';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get repetition => 'Repetition';
+
+  @override
+  String get eventTime => 'Event time (HH:MM)';
+
+  @override
+  String get invalidMinutes => 'Please enter a valid number between 1 and 1440';
+
+  @override
+  String get invalidInterval => 'Interval must be at least 1';
+
+  @override
+  String get habitTracking => 'Habit Tracking';
+
+  @override
+  String get routine => 'Routine';
+
+  @override
+  String get today => 'Aujourd\'hui';
 }

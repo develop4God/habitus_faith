@@ -150,22 +150,23 @@ void main() {
     });
 
     test(
-        'completeToday() calculates successRate7d with 1/7 completion (first completion)',
-        () {
-      // Arrange
-      final habit = Habit.create(
-        id: 'test-6',
-        userId: 'user-1',
-        name: 'New Habit',
-        description: 'Just starting',
-      );
+      'completeToday() calculates successRate7d with 1/7 completion (first completion)',
+      () {
+        // Arrange
+        final habit = Habit.create(
+          id: 'test-6',
+          userId: 'user-1',
+          name: 'New Habit',
+          description: 'Just starting',
+        );
 
-      // Act
-      final completed = habit.completeToday();
+        // Act
+        final completed = habit.completeToday();
 
-      // Assert - 1 completion over 7 days = 1/7 ≈ 0.143
-      expect(completed.successRate7d, closeTo(1 / 7, 0.01));
-    });
+        // Assert - 1 completion over 7 days = 1/7 ≈ 0.143
+        expect(completed.successRate7d, closeTo(1 / 7, 0.01));
+      },
+    );
 
     test('completeToday() resets consecutiveFailures to 0', () {
       // Arrange
@@ -174,9 +175,7 @@ void main() {
         userId: 'user-1',
         name: 'Recovery',
         description: 'Recovering from failures',
-      ).copyWith(
-        consecutiveFailures: 5,
-      );
+      ).copyWith(consecutiveFailures: 5);
 
       // Act
       final completed = habit.completeToday();

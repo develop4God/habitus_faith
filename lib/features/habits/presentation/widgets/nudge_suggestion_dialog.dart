@@ -26,9 +26,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -72,11 +70,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
               color: Colors.grey,
             ),
             const SizedBox(height: 8),
-            Icon(
-              Icons.arrow_downward,
-              color: Colors.grey.shade400,
-              size: 20,
-            ),
+            Icon(Icons.arrow_downward, color: Colors.grey.shade400, size: 20),
             const SizedBox(height: 8),
             _buildComparisonRow(
               context,
@@ -94,10 +88,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.amber.shade50,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.amber.shade200,
-                  width: 1,
-                ),
+                border: Border.all(color: Colors.amber.shade200, width: 1),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,10 +131,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.blue.shade200,
-                    width: 1,
-                  ),
+                  border: Border.all(color: Colors.blue.shade200, width: 1),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,9 +199,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
                   ),
                   child: const Text(
                     'Yes, reduce',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -238,10 +224,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           '$label: ',
-          style: TextStyle(
-            color: Colors.grey.shade700,
-            fontSize: 14,
-          ),
+          style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
         ),
         Text(
           value,

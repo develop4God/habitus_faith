@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter/foundation.dart';
 import '../../../features/habits/domain/models/micro_habit.dart';
 import '../../../features/habits/domain/models/generation_request.dart';
+import '../../../features/habits/domain/habit.dart';
+import '../../../features/habits/presentation/onboarding/onboarding_models.dart';
 import '../../../bible_reader_core/src/bible_db_service.dart';
 import '../cache/cache_service.dart';
 import '../../config/ai_config.dart';
@@ -14,6 +18,8 @@ import 'gemini_exceptions.dart';
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
   Future<List<MicroHabit>> generateMicroHabits(GenerationRequest request);
+  Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
+      OnboardingProfile profile, String userId);
   int getRemainingRequests();
 }
 
@@ -37,14 +43,12 @@ class GeminiService implements IGeminiService {
         _rateLimit = rateLimit,
         _bibleService = bibleService,
         _logger = logger,
-        _model = GenerativeModel(
-          model: modelName,
-          apiKey: apiKey,
-        );
+        _model = GenerativeModel(model: modelName, apiKey: apiKey);
 
   @override
   Future<List<MicroHabit>> generateMicroHabits(
-      GenerationRequest request) async {
+    GenerationRequest request,
+  ) async {
     _logger?.i('Starting habit generation for goal: "${request.userGoal}"');
 
     // 1. Sanitize inputs to prevent prompt injection
@@ -54,7 +58,8 @@ class GeminiService implements IGeminiService {
         : null;
 
     _logger?.d(
-        'Input sanitized - Goal length: ${sanitizedGoal.length}, Pattern: ${sanitizedPattern != null ? "provided" : "none"}');
+      'Input sanitized - Goal length: ${sanitizedGoal.length}, Pattern: ${sanitizedPattern != null ? "provided" : "none"}',
+    );
 
     // 2. Check rate limit and wait if needed
     await _rateLimit.waitIfNeeded();
@@ -114,7 +119,8 @@ class GeminiService implements IGeminiService {
       return enrichedHabits;
     } on TimeoutException {
       _logger?.e(
-          'API request timed out after ${AiConfig.requestTimeout.inSeconds}s');
+        'API request timed out after ${AiConfig.requestTimeout.inSeconds}s',
+      );
       throw GeminiException(
         'Request timed out after ${AiConfig.requestTimeout.inSeconds} seconds. Please try again.',
       );
@@ -132,7 +138,8 @@ class GeminiService implements IGeminiService {
   String _sanitizeInput(String input, String fieldName) {
     if (input.length > AiConfig.maxInputLength) {
       throw InvalidInputException(
-          '$fieldName exceeds ${AiConfig.maxInputLength} characters');
+        '$fieldName exceeds ${AiConfig.maxInputLength} characters',
+      );
     }
 
     final lowerInput = input.toLowerCase();
@@ -198,7 +205,9 @@ Requisitos estrictos:
 
       if (cleaned.isEmpty) {
         throw GeminiParseException(
-            'Empty response after cleanup', responseText);
+          'Empty response after cleanup',
+          responseText,
+        );
       }
 
       final dynamic json = jsonDecode(cleaned);
@@ -206,7 +215,9 @@ Requisitos estrictos:
       // Validate JSON structure - must be a List
       if (json is! List) {
         throw GeminiParseException(
-            'Expected JSON array, got ${json.runtimeType}', responseText);
+          'Expected JSON array, got ${json.runtimeType}',
+          responseText,
+        );
       }
 
       // Validate exact count
@@ -252,10 +263,7 @@ Requisitos estrictos:
       }).toList();
     } catch (e) {
       if (e is GeminiParseException) rethrow;
-      throw GeminiParseException(
-        'Failed to parse response: $e',
-        responseText,
-      );
+      throw GeminiParseException('Failed to parse response: $e', responseText);
     }
   }
 
@@ -268,21 +276,23 @@ Requisitos estrictos:
 
     _logger?.i('Enriching ${habits.length} habits with verse text');
 
-    return Future.wait(habits.map((habit) async {
-      try {
-        final verseData = await _parseAndFetchVerse(habit.verse);
-        if (verseData != null) {
-          _logger?.d('Successfully fetched verse: ${habit.verse}');
-          return habit.copyWith(verseText: verseData['text'] as String?);
-        } else {
-          _logger?.w('Verse not found in database: ${habit.verse}');
-          return habit;
+    return Future.wait(
+      habits.map((habit) async {
+        try {
+          final verseData = await _parseAndFetchVerse(habit.verse);
+          if (verseData != null) {
+            _logger?.d('Successfully fetched verse: ${habit.verse}');
+            return habit.copyWith(verseText: verseData['text'] as String?);
+          } else {
+            _logger?.w('Verse not found in database: ${habit.verse}');
+            return habit;
+          }
+        } catch (e) {
+          _logger?.w('Failed to fetch verse "${habit.verse}": $e');
+          return habit; // Keep original without text
         }
-      } catch (e) {
-        _logger?.w('Failed to fetch verse "${habit.verse}": $e');
-        return habit; // Keep original without text
-      }
-    }));
+      }),
+    );
   }
 
   /// Parse verse reference and fetch from database
@@ -502,5 +512,302 @@ Requisitos estrictos:
     };
 
     return mapping[normalized];
+  }
+
+  /// Generate habits based on onboarding profile with intent-aware context
+  @override
+  Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
+    OnboardingProfile profile,
+    String userId,
+    {bool isOnboarding = false}
+  ) async {
+    _logger?.i(
+        'Generating habits from profile - Intent: ${profile.primaryIntent}');
+
+    // A. Buscar en cache por fingerprint exacto
+    final fingerprint = profile.cacheFingerprint;
+    final cached = await _cache.get<List<Map<String, dynamic>>>('profile_$fingerprint');
+    if (cached != null) {
+      debugPrint('[Cache HIT] Exact match for fingerprint: $fingerprint');
+      return cached;
+    }
+
+    // B. Buscar perfiles similares (similarity >85%)
+    final similarProfile = await _findSimilarCachedProfile(profile);
+    if (similarProfile != null) {
+      debugPrint('[Cache HIT] Similar profile match (85%+ similarity)');
+      return similarProfile;
+    }
+
+    // C. Cache MISS - llamar a Gemini
+    debugPrint('[Cache MISS] Calling Gemini API');
+
+    // Check rate limit
+    await _rateLimit.waitIfNeeded();
+    if (!_rateLimit.canMakeRequest()) {
+      throw RateLimitExceededException(
+        'Monthly limit reached. Please try again next month.',
+      );
+    }
+    _rateLimit.recordRequest();
+
+    // Build intent-aware prompt
+    final prompt = _buildProfilePrompt(profile);
+    final promptTokens = (prompt.length / 4).ceil();
+    debugPrint('[IA] userId: $userId | Prompt tokens estimados: $promptTokens | Prompt length: ${prompt.length} | Onboarding: $isOnboarding');
+
+    try {
+      _logger?.d('Sending profile-based request to Gemini API...');
+      final response = await _model.generateContent(
+          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+
+      final responseText = response.text ?? '';
+      final responseTokens = (responseText.length / 4).ceil();
+      debugPrint('[IA] userId: $userId | Response tokens estimados: $responseTokens | Response length: ${responseText.length} | Onboarding: $isOnboarding');
+
+      _logger?.i('Received response from Gemini API');
+
+      // Parse and return habit data
+      final habits = _parseHabitsResponse(response.text, profile, userId);
+      _logger?.i('Successfully parsed ${habits.length} habits from profile');
+      debugPrint('[IA] userId: $userId | Hábitos generados: ${habits.length} | Tokens totales estimados: ${promptTokens + responseTokens} | Onboarding: $isOnboarding');
+
+      // D. Guardar con metadata del perfil para similarity matching
+      // Serializar correctamente el campo 'category' como String
+      final habitsForCache = habits.map((habit) {
+        final habitCopy = Map<String, dynamic>.from(habit);
+        if (habitCopy['category'] is HabitCategory) {
+          habitCopy['category'] = habitCopy['category'].toString().split('.').last;
+        }
+        return habitCopy;
+      }).toList();
+      final cacheData = {
+        'profile': profile.toJson(),
+        'habits': habitsForCache,
+        'timestamp': DateTime.now().toIso8601String(),
+        'userId': userId,
+        'isOnboarding': isOnboarding,
+      };
+      final prefs = await SharedPreferences.getInstance();
+      final cachedKey = 'profile_$fingerprint';
+      await prefs.setString(cachedKey, jsonEncode(cacheData));
+      debugPrint('[Cache SAVE] Saved profile with fingerprint: $fingerprint');
+
+      return habits;
+    } on TimeoutException {
+      _logger?.e(
+          'API request timed out after ${AiConfig.requestTimeout.inSeconds}s');
+      throw GeminiException(
+        'Request timed out. Please try again.',
+      );
+    } catch (e) {
+      _logger?.e('Error during profile-based habit generation', error: e);
+      if (e is GeminiException) rethrow;
+      throw GeminiException('Failed to generate habits: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>?> _findSimilarCachedProfile(
+    OnboardingProfile profile,
+  ) async {
+    // Buscar en SharedPreferences todos los perfiles cacheados
+    final prefs = await SharedPreferences.getInstance();
+    final keys = prefs.getKeys().where((k) => k.startsWith('profile_'));
+    for (final key in keys) {
+      try {
+        final cachedData = prefs.getString(key);
+        if (cachedData == null) continue;
+        final data = jsonDecode(cachedData);
+        final cachedProfile = OnboardingProfile.fromJson(data['profile']);
+        if (profile.similarityTo(cachedProfile) >= 0.85) {
+          return (data['habits'] as List).cast<Map<String, dynamic>>();
+        }
+      } catch (e) {
+        // Skip invalid cache entries
+      }
+    }
+    return null;
+  }
+
+  /// Build prompt based on user intent
+  String _buildProfilePrompt(OnboardingProfile profile) {
+    String prompt;
+
+    switch (profile.primaryIntent) {
+      case UserIntent.faithBased:
+        prompt = '''
+Usuario cristiano busca fortalecer fe.
+Motivaciones: ${profile.motivations.join(', ')}
+Madurez espiritual: ${profile.spiritualMaturity}
+Desafío principal: ${profile.challenge}
+Apoyo: ${profile.supportLevel}
+
+Genera EXACTAMENTE 6 hábitos: 4 espirituales + 2 prácticos de soporte.
+
+Ejemplos espirituales:
+- "Oración matutina 10 min" (categoría: spiritual)
+- "Lectio Divina diaria" (categoría: spiritual)
+- "Ayuno semanal" (categoría: spiritual)
+- "Memorizar versículo semanal" (categoría: spiritual)
+
+Ejemplos prácticos de soporte:
+- "Dormir 8 horas" (categoría: physical) - para estar alerta en oración
+- "Caminar 20 min" (categoría: physical) - para salud física que honra a Dios
+''';
+        break;
+
+      case UserIntent.wellness:
+        prompt = '''
+Usuario busca bienestar secular.
+Objetivos: ${profile.motivations.join(', ')}
+Estado actual: derivado de respuestas
+Desafío principal: ${profile.challenge}
+Apoyo: ${profile.supportLevel}
+
+Genera EXACTAMENTE 6 hábitos prácticos: salud, productividad, mindfulness.
+NO incluir contenido religioso explícito.
+
+Ejemplos:
+- "Meditar 5 min al despertar" (categoría: mental)
+- "Caminar 30 min diarios" (categoría: physical)
+- "Journaling nocturno 10 min" (categoría: mental)
+- "Beber 8 vasos de agua" (categoría: physical)
+- "Leer 20 páginas" (categoría: mental)
+- "Estiramientos matutinos" (categoría: physical)
+''';
+        break;
+
+      case UserIntent.both:
+        prompt = '''
+Usuario busca integración fe + bienestar.
+Motivaciones: ${profile.motivations.join(', ')}
+Madurez espiritual: ${profile.spiritualMaturity}
+Desafío principal: ${profile.challenge}
+Apoyo: ${profile.supportLevel}
+
+Genera EXACTAMENTE 7 hábitos: 3 espirituales + 4 prácticos integrados.
+
+Ejemplos integrados:
+- "Caminata de oración 30 min" (categoría: physical) - ejercicio + espiritualidad
+- "Gratitud nocturna 5 min" (categoría: mental) - reflexión que incluye agradecimiento a Dios
+- "Lectura bíblica matutina 15 min" (categoría: spiritual)
+- "Meditación y silencio 10 min" (categoría: mental)
+- "Servicio semanal comunitario" (categoría: relational)
+''';
+        break;
+    }
+
+    prompt += '''
+
+Compromiso del usuario: "${profile.commitment}"
+
+Responde SOLO con JSON válido (sin markdown, sin ```json):
+[
+  {
+    "name": "Nombre del hábito (acción específica)",
+    "description": "Descripción clara del hábito (1-2 oraciones)",
+    "category": "spiritual" | "physical" | "mental" | "relational",
+    "emoji": "emoji apropiado",
+    "scheduledTime": "HH:mm" (opcional, basado en momento óptimo) o null,
+    "tasks": ["subtarea 1", "subtarea 2"] (opcional, para hábitos complejos)
+  }
+]
+
+Requisitos:
+- Hábitos deben ser ESPECÍFICOS y MEDIBLES
+- Incluir tiempo estimado en el nombre si relevante
+- Las descripciones deben motivar y explicar el beneficio
+- Tono: motivacional, práctico, esperanzador
+- Respetar el contexto del usuario (${profile.primaryIntent.name})
+''';
+
+    return prompt;
+  }
+
+  /// Parse habits from JSON response
+  List<Map<String, dynamic>> _parseHabitsResponse(
+    String? responseText,
+    OnboardingProfile profile,
+    String userId,
+  ) {
+    if (responseText == null || responseText.trim().isEmpty) {
+      throw GeminiParseException('API returned empty response', '');
+    }
+
+    try {
+      // Remove markdown code blocks if present
+      final cleaned = responseText
+          .replaceAll(RegExp(r'```json\s*'), '')
+          .replaceAll(RegExp(r'```\s*'), '')
+          .trim();
+
+      if (cleaned.isEmpty) {
+        throw GeminiParseException(
+            'Empty response after cleanup', responseText);
+      }
+
+      final dynamic json = jsonDecode(cleaned);
+
+      if (json is! List) {
+        throw GeminiParseException(
+            'Expected JSON array, got ${json.runtimeType}', responseText);
+      }
+
+      // Parse each habit
+      return json.map((data) {
+        final habitData = data as Map<String, dynamic>;
+
+        // Validate required fields
+        final requiredFields = ['name', 'description', 'category', 'emoji'];
+        for (final field in requiredFields) {
+          if (!habitData.containsKey(field)) {
+            throw GeminiParseException(
+              'Missing required field "$field"',
+              data.toString(),
+            );
+          }
+        }
+
+        // Return habit data that can be used to create a Habit object
+        return {
+          'id': const Uuid().v4(),
+          'userId': userId,
+          'name': habitData['name'] as String,
+          'description': habitData['description'] as String,
+          'category': _parseCategory(habitData['category'] as String),
+          'emoji': habitData['emoji'] as String,
+          'reminderTime': habitData['scheduledTime'] as String?,
+          'createdAt': DateTime.now().toIso8601String(),
+          'completedToday': false,
+          'currentStreak': 0,
+          'longestStreak': 0,
+          'completionHistory': <String>[],
+          'isArchived': false,
+          'difficulty': 'medium',
+        };
+      }).toList();
+    } catch (e) {
+      if (e is GeminiParseException) rethrow;
+      throw GeminiParseException(
+        'Failed to parse response: $e',
+        responseText,
+      );
+    }
+  }
+
+  /// Parse category string to HabitCategory enum
+  HabitCategory _parseCategory(String category) {
+    switch (category.toLowerCase()) {
+      case 'spiritual':
+        return HabitCategory.spiritual;
+      case 'physical':
+        return HabitCategory.physical;
+      case 'mental':
+        return HabitCategory.mental;
+      case 'relational':
+        return HabitCategory.relational;
+      default:
+        return HabitCategory.other;
+    }
   }
 }

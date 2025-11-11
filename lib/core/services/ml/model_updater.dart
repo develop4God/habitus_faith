@@ -31,7 +31,8 @@ class ModelUpdater {
 
         if (timeSinceLastCheck < _checkInterval) {
           debugPrint(
-              'ModelUpdater: Last check was ${timeSinceLastCheck.inDays} days ago, skipping');
+            'ModelUpdater: Last check was ${timeSinceLastCheck.inDays} days ago, skipping',
+          );
           return;
         }
       }
@@ -73,14 +74,16 @@ class ModelUpdater {
 
       if (modelResponse.statusCode != 200) {
         debugPrint(
-            'ModelUpdater: Failed to download model, status: ${modelResponse.statusCode}');
+          'ModelUpdater: Failed to download model, status: ${modelResponse.statusCode}',
+        );
         return false;
       }
 
       final modelFile = File('${mlDir.path}/predictor.tflite');
       await modelFile.writeAsBytes(modelResponse.bodyBytes);
       debugPrint(
-          'ModelUpdater: predictor.tflite downloaded (${modelResponse.bodyBytes.length} bytes)');
+        'ModelUpdater: predictor.tflite downloaded (${modelResponse.bodyBytes.length} bytes)',
+      );
 
       // Download scaler_params.json
       debugPrint('ModelUpdater: Downloading scaler_params.json...');
@@ -88,7 +91,8 @@ class ModelUpdater {
 
       if (scalerResponse.statusCode != 200) {
         debugPrint(
-            'ModelUpdater: Failed to download scaler, status: ${scalerResponse.statusCode}');
+          'ModelUpdater: Failed to download scaler, status: ${scalerResponse.statusCode}',
+        );
         return false;
       }
 

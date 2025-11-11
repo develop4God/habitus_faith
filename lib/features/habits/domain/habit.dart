@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'models/verse_reference.dart';
+import 'models/habit_notification.dart';
 import '../../../core/services/time/time.dart';
 import 'ml_features_calculator.dart';
 
-enum FailurePattern {
-  weekendGap,
-  eveningSlump,
-  inconsistent,
-}
+enum FailurePattern { weekendGap, eveningSlump, inconsistent }
 
 enum HabitCategory {
   spiritual, // prayer, bible reading, worship, fasting
@@ -91,6 +88,11 @@ class Habit {
   final double abandonmentRisk; // 0.0-1.0 from ML predictor
   final DateTime? lastAdjustedAt; // for tracking auto-adjustments
 
+  // Notification and recurrence fields
+  final HabitNotificationSettings? notificationSettings;
+  final HabitRecurrence? recurrence;
+  final List<Subtask> subtasks;
+
   Habit({
     required this.id,
     required this.userId,
@@ -119,6 +121,9 @@ class Habit {
     this.failurePattern,
     this.abandonmentRisk = 0.0,
     this.lastAdjustedAt,
+    this.notificationSettings,
+    this.recurrence,
+    this.subtasks = const [],
   });
 
   factory Habit.create({
@@ -203,8 +208,11 @@ class Habit {
     final newHistory = [...completionHistory, now];
 
     // Calculate successRate7d based on last 7 days using MLFeaturesCalculator
-    final newSuccessRate7d =
-        MLFeaturesCalculator.calculateSuccessRate(newHistory, now, days: 7);
+    final newSuccessRate7d = MLFeaturesCalculator.calculateSuccessRate(
+      newHistory,
+      now,
+      days: 7,
+    );
 
     return copyWith(
       completedToday: true,
@@ -246,6 +254,9 @@ class Habit {
     FailurePattern? failurePattern,
     double? abandonmentRisk,
     DateTime? lastAdjustedAt,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -275,6 +286,9 @@ class Habit {
       failurePattern: failurePattern ?? this.failurePattern,
       abandonmentRisk: abandonmentRisk ?? this.abandonmentRisk,
       lastAdjustedAt: lastAdjustedAt ?? this.lastAdjustedAt,
+      notificationSettings: notificationSettings ?? this.notificationSettings,
+      recurrence: recurrence ?? this.recurrence,
+      subtasks: subtasks ?? this.subtasks,
     );
   }
 }

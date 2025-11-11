@@ -5,31 +5,11 @@ import 'package:habitus_faith/widgets/bible_book_selector_dialog.dart';
 void main() {
   group('BibleBookSelectorDialog', () {
     final testBooks = [
-      {
-        'book_number': 1,
-        'short_name': 'Gen',
-        'long_name': 'Genesis',
-      },
-      {
-        'book_number': 2,
-        'short_name': 'Exo',
-        'long_name': 'Exodus',
-      },
-      {
-        'book_number': 3,
-        'short_name': 'Lev',
-        'long_name': 'Leviticus',
-      },
-      {
-        'book_number': 4,
-        'short_name': 'Num',
-        'long_name': 'Numbers',
-      },
-      {
-        'book_number': 5,
-        'short_name': 'Deu',
-        'long_name': 'Deuteronomy',
-      },
+      {'book_number': 1, 'short_name': 'Gen', 'long_name': 'Genesis'},
+      {'book_number': 2, 'short_name': 'Exo', 'long_name': 'Exodus'},
+      {'book_number': 3, 'short_name': 'Lev', 'long_name': 'Leviticus'},
+      {'book_number': 4, 'short_name': 'Num', 'long_name': 'Numbers'},
+      {'book_number': 5, 'short_name': 'Deu', 'long_name': 'Deuteronomy'},
     ];
 
     testWidgets('displays all books in the list', (WidgetTester tester) async {
@@ -75,8 +55,9 @@ void main() {
       expect(exodusTile, findsOneWidget);
     });
 
-    testWidgets('calls onBookSelected when book is tapped',
-        (WidgetTester tester) async {
+    testWidgets('calls onBookSelected when book is tapped', (
+      WidgetTester tester,
+    ) async {
       Map<String, dynamic>? selectedBook;
 
       await tester.pumpWidget(

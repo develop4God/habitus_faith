@@ -48,11 +48,7 @@ class _FastTimeBannerState extends ConsumerState<FastTimeBanner> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             children: [
-              const Icon(
-                Icons.fast_forward,
-                color: Colors.white,
-                size: 20,
-              ),
+              const Icon(Icons.fast_forward, color: Colors.white, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -69,9 +65,9 @@ class _FastTimeBannerState extends ConsumerState<FastTimeBanner> {
                     ),
                     Text(
                       'Simulated: ${DateFormat('MMM d, y HH:mm:ss').format(now)}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.white70,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: Colors.white70),
                     ),
                   ],
                 ),
@@ -116,10 +112,7 @@ class _FastTimeBannerState extends ConsumerState<FastTimeBanner> {
 class WithFastTimeBanner extends StatelessWidget {
   final Widget child;
 
-  const WithFastTimeBanner({
-    super.key,
-    required this.child,
-  });
+  const WithFastTimeBanner({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
+import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
@@ -10,7 +11,8 @@ final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
   final stream = repository.watchHabits().map((list) {
     debugPrint(
-        'jsonHabitsStreamProvider: stream emitted ${list.length} habits');
+      'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
+    );
     return list;
   }).handleError((e, st) {
     debugPrint('jsonHabitsStreamProvider: stream error -> $e');
@@ -70,7 +72,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     String? emoji,
   }) async {
     debugPrint(
-        'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description');
+      'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description',
+    );
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -103,6 +106,9 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     String? emoji,
     int? colorValue,
     HabitDifficulty? difficulty,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
   }) async {
     debugPrint('JsonHabitsNotifier.updateHabit: start -> $habitId');
     state = const AsyncLoading();
@@ -116,6 +122,9 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
       emoji: emoji,
       colorValue: colorValue,
       difficulty: difficulty,
+      notificationSettings: notificationSettings,
+      recurrence: recurrence,
+      subtasks: subtasks,
     );
 
     result.fold(
@@ -164,6 +173,7 @@ class HabitsPage extends ConsumerStatefulWidget {
 
 class _HabitsPageState extends ConsumerState<HabitsPage> {
   final Set<String> _selectedHabits = {};
+  HabitCategory? _categoryFilter;
 
   void _clearSelection() {
     setState(() {
@@ -177,6 +187,19 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     });
   }
 
+  void _setCategoryFilter(HabitCategory? category) {
+    setState(() {
+      _categoryFilter = category;
+    });
+  }
+
+  List<Habit> _filterHabits(List<Habit> habits) {
+    if (_categoryFilter == null) {
+      return habits;
+    }
+    return habits.where((h) => h.category == _categoryFilter).toList();
+  }
+
   Future<void> _deleteSelected(BuildContext context, WidgetRef ref) async {
     for (final habitId in _selectedHabits) {
       await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habitId);
@@ -184,19 +207,23 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     _clearSelection();
   }
 
-  Future<void> _duplicateHabit(BuildContext context, WidgetRef ref, Habit habit) async {
+  Future<void> _duplicateHabit(
+    BuildContext context,
+    WidgetRef ref,
+    Habit habit,
+  ) async {
     await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-      name: "${habit.name} (copy)",
-      description: habit.description,
-      category: habit.category,
-      colorValue: habit.colorValue,
-      difficulty: habit.difficulty,
-      emoji: habit.emoji,
-    );
+          name: "${habit.name} (copy)",
+          description: habit.description,
+          category: habit.category,
+          colorValue: habit.colorValue,
+          difficulty: habit.difficulty,
+          emoji: habit.emoji,
+        );
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Hábito duplicado")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Hábito duplicado")));
     }
   }
 
@@ -208,7 +235,9 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       selectAll: _selectAll,
       deleteSelected: _deleteSelected,
       duplicateHabit: _duplicateHabit,
+      categoryFilter: _categoryFilter,
+      onCategoryFilterChanged: _setCategoryFilter,
+      filterHabits: _filterHabits,
     );
   }
 }
-

@@ -83,9 +83,7 @@ class _DevotionalDiscoveryPageState
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const FavoritesPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const FavoritesPage()),
               );
             },
             tooltip: 'Favorites',
@@ -116,7 +114,7 @@ class _DevotionalDiscoveryPageState
                     Text(
                       'Today',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha:0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -145,7 +143,7 @@ class _DevotionalDiscoveryPageState
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha:0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -190,9 +188,7 @@ class _DevotionalDiscoveryPageState
 
           // Loading indicator
           if (state.isLoading)
-            const Expanded(
-              child: Center(child: CircularProgressIndicator()),
-            ),
+            const Expanded(child: Center(child: CircularProgressIndicator())),
 
           // Error message
           if (state.errorMessage != null && !state.isLoading)
@@ -235,7 +231,7 @@ class _DevotionalDiscoveryPageState
                           Icon(
                             Icons.book_outlined,
                             size: 64,
-                            color: colorScheme.onSurface.withValues(alpha:0.5),
+                            color: colorScheme.onSurface.withValues(alpha: 0.5),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -251,7 +247,10 @@ class _DevotionalDiscoveryPageState
                       itemBuilder: (context, index) {
                         final devocional = state.filtered[index];
                         return _buildDevocionalCard(
-                            context, devocional, colorScheme);
+                          context,
+                          devocional,
+                          colorScheme,
+                        );
                       },
                     ),
             ),
@@ -261,7 +260,10 @@ class _DevotionalDiscoveryPageState
   }
 
   Widget _buildDevocionalCard(
-      BuildContext context, Devocional devocional, ColorScheme colorScheme) {
+    BuildContext context,
+    Devocional devocional,
+    ColorScheme colorScheme,
+  ) {
     final isFavorite =
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -276,7 +278,7 @@ class _DevotionalDiscoveryPageState
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha:0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -307,9 +309,7 @@ class _DevotionalDiscoveryPageState
                       Positioned.fill(
                         child: Opacity(
                           opacity: 0.1,
-                          child: CustomPaint(
-                            painter: _DotPatternPainter(),
-                          ),
+                          child: CustomPaint(painter: _DotPatternPainter()),
                         ),
                       ),
                       // Content
@@ -328,7 +328,7 @@ class _DevotionalDiscoveryPageState
                                     vertical: 6,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha:0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
@@ -342,7 +342,7 @@ class _DevotionalDiscoveryPageState
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha:0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -417,8 +417,9 @@ class _DevotionalDiscoveryPageState
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? Colors.grey[800]
-                                    : colorScheme.primaryContainer
-                                        .withValues(alpha:0.3),
+                                    : colorScheme.primaryContainer.withValues(
+                                        alpha: 0.3,
+                                      ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -486,7 +487,10 @@ class _DevotionalDiscoveryPageState
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final devDate = DateTime(
-        devocional.date.year, devocional.date.month, devocional.date.day);
+      devocional.date.year,
+      devocional.date.month,
+      devocional.date.day,
+    );
 
     // If date is today, show "Today"
     if (devDate == today) {
@@ -497,8 +501,11 @@ class _DevotionalDiscoveryPageState
     // by adding years until it's in the future
     DateTime displayDate = devDate;
     while (displayDate.isBefore(today)) {
-      displayDate =
-          DateTime(displayDate.year + 1, displayDate.month, displayDate.day);
+      displayDate = DateTime(
+        displayDate.year + 1,
+        displayDate.month,
+        displayDate.day,
+      );
     }
 
     // Check if it's tomorrow
@@ -594,9 +601,9 @@ class _DevotionalDiscoveryPageState
               children: [
                 Text(
                   'Select Language',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 _buildLanguageOption(context, 'es', 'Español', '🇪🇸'),
@@ -604,8 +611,12 @@ class _DevotionalDiscoveryPageState
                 _buildLanguageOption(context, 'pt', 'Português', '🇧🇷'),
                 _buildLanguageOption(context, 'fr', 'Français', '🇫🇷'),
                 _buildLanguageOption(
-                    context, 'zh', 'Chinese (Coming Soon)', '🇨🇳',
-                    disabled: true),
+                  context,
+                  'zh',
+                  'Chinese (Coming Soon)',
+                  '🇨🇳',
+                  disabled: true,
+                ),
               ],
             ),
           ),
@@ -657,9 +668,7 @@ class _DevotionalDiscoveryPageState
       // Navigate to Bible reader
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => const BibleReaderPage(),
-        ),
+        MaterialPageRoute(builder: (context) => const BibleReaderPage()),
       );
 
       // Wait a bit for the page to load, then navigate to the specific passage
@@ -696,16 +705,12 @@ class _DevotionalDiscoveryPageState
       // If parsing fails, just open Bible reader
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => const BibleReaderPage(),
-        ),
+        MaterialPageRoute(builder: (context) => const BibleReaderPage()),
       );
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Opening Bible to: ${devocional.versiculo}'),
-          ),
+          SnackBar(content: Text('Opening Bible to: ${devocional.versiculo}')),
         );
       }
     }
@@ -725,14 +730,20 @@ class _DevotionalDiscoveryPageState
         expand: false,
         builder: (context, scrollController) {
           return _buildDevocionalDetailContent(
-              context, devocional, scrollController);
+            context,
+            devocional,
+            scrollController,
+          );
         },
       ),
     );
   }
 
-  Widget _buildDevocionalDetailContent(BuildContext context,
-      Devocional devocional, ScrollController controller) {
+  Widget _buildDevocionalDetailContent(
+    BuildContext context,
+    Devocional devocional,
+    ScrollController controller,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -789,9 +800,9 @@ class _DevotionalDiscoveryPageState
           // Reflection
           Text(
             'Reflection',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
@@ -804,53 +815,55 @@ class _DevotionalDiscoveryPageState
           if (devocional.paraMeditar.isNotEmpty) ...[
             Text(
               'For Meditation',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            ...devocional.paraMeditar.map((punto) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        punto.cita,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.secondary,
-                            ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        punto.texto,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                )),
+            ...devocional.paraMeditar.map(
+              (punto) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      punto.cita,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.secondary,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      punto.texto,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 24),
           ],
 
           // Prayer
           Text(
             'Prayer',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: colorScheme.primaryContainer.withValues(alpha:0.3),
+              color: colorScheme.primaryContainer.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               devocional.oracion,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontStyle: FontStyle.italic,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic),
             ),
           ),
         ],

@@ -4,7 +4,7 @@ import 'package:habitus_faith/core/services/time/time.dart';
 void main() {
   group('Clock implementations', () {
     test('SystemClock returns current time', () {
-      final clock = const Clock.system();
+      const clock = Clock.system();
       final now = DateTime.now();
       final clockNow = clock.now();
 

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/background_task_service.dart';
-import 'package:habitus_faith/core/services/time/time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -61,10 +60,7 @@ void main() {
       await service.initialize();
 
       // Act & Assert: Should complete without throwing
-      expect(
-        () => service.scheduleDailyPrediction(),
-        returnsNormally,
-      );
+      expect(() => service.scheduleDailyPrediction(), returnsNormally);
     });
 
     test('cancelDailyPrediction does not throw when initialized', () async {
@@ -72,10 +68,7 @@ void main() {
       await service.initialize();
 
       // Act & Assert: Should complete without throwing
-      expect(
-        () => service.cancelDailyPrediction(),
-        returnsNormally,
-      );
+      expect(() => service.cancelDailyPrediction(), returnsNormally);
     });
 
     test('cancelAll does not throw when initialized', () async {
@@ -83,10 +76,7 @@ void main() {
       await service.initialize();
 
       // Act & Assert: Should complete without throwing
-      expect(
-        () => service.cancelAll(),
-        returnsNormally,
-      );
+      expect(() => service.cancelAll(), returnsNormally);
     });
 
     test('handles multiple initializations gracefully', () async {

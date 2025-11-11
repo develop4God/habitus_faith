@@ -8,7 +8,7 @@
   "@start": {
     "description": "Start button text"
   },
-  "readBible": "Leer Biblia",
+  "readBible": "Biblia",
   "@readBible": {
     "description": "Read Bible button text"
   },
@@ -665,7 +665,7 @@
   "syncComplete": "Sincronización completa",
   "mlModelLoaded": "Cargado",
   "mlModelLoading": "Cargando...",
-  "mlModelError": "Error"
+  "mlModelError": "Error",
   "chooseHabitType": "¿Qué tipo de hábito quieres agregar?",
   "@chooseHabitType": {
     "description": "Texto para elegir tipo de hábito al agregar"
@@ -734,5 +734,116 @@
   "home": "Inicio",
   "@home": {
     "description": "Etiqueta de la pestaña de inicio"
+  },
+  "reminderConfig": "Configuración de recordatorio",
+  "@reminderConfig": {
+    "description": "Título del diálogo de configuración de recordatorio"
+  },
+  "recurrenceConfig": "Repeticiones cada día",
+  "@recurrenceConfig": {
+    "description": "Título del diálogo de configuración de recurrencia"
+  },
+  "repeat": "Repetir",
+  "@repeat": {
+    "description": "Etiqueta del interruptor de repetición"
+  },
+  "setCycleForPlan": "Fija un ciclo para tu plan",
+  "@setCycleForPlan": {
+    "description": "Subtítulo del interruptor de repetición"
+  },
+  "subtasks": "Subtareas",
+  "@subtasks": {
+    "description": "Etiqueta de la sección de subtareas"
+  },
+  "addSubtask": "Agregar subtarea",
+  "@addSubtask": {
+    "description": "Texto de ayuda para agregar subtarea"
+  },
+  "minutesBefore": "Minutos antes",
+  "@minutesBefore": {
+    "description": "Etiqueta de minutos antes personalizados"
+  },
+  "interval": "Intervalo",
+  "@interval": {
+    "description": "Etiqueta de intervalo para recurrencia"
+  },
+  "endDate": "Fecha de finalización",
+  "@endDate": {
+    "description": "Etiqueta de fecha de finalización para recurrencia"
+  },
+  "daily": "Diario",
+  "@daily": {
+    "description": "Opción de frecuencia diaria"
+  },
+  "weekly": "Semanal",
+  "@weekly": {
+    "description": "Opción de frecuencia semanal"
+  },
+  "monthly": "Mensual",
+  "@monthly": {
+    "description": "Opción de frecuencia mensual"
+  },
+  "everyXDays": "Cada {count} día(s)",
+  "@everyXDays": {
+    "description": "Texto de cada X días",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXWeeks": "Cada {count} semana(s)",
+  "@everyXWeeks": {
+    "description": "Texto de cada X semanas",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXMonths": "Cada {count} mes(es)",
+  "@everyXMonths": {
+    "description": "Texto de cada X meses",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noRepetition": "Sin repetición",
+  "@noRepetition": {
+    "description": "Texto de sin repetición"
+  },
+  "reminder": "Recordatorio",
+  "@reminder": {
+    "description": "Etiqueta de recordatorio"
+  },
+  "repetition": "Repetición",
+  "@repetition": {
+    "description": "Etiqueta de repetición"
+  },
+  "eventTime": "Hora del evento (HH:MM)",
+  "@eventTime": {
+    "description": "Etiqueta de hora del evento"
+  },
+  "invalidMinutes": "Ingrese un número válido entre 1 y 1440",
+  "@invalidMinutes": {
+    "description": "Mensaje de validación para minutos personalizados inválidos"
+  },
+  "invalidInterval": "El intervalo debe ser al menos 1",
+  "@invalidInterval": {
+    "description": "Mensaje de validación para intervalo inválido"
+  },
+  "habitTracking": "Seguimiento de Hábitos",
+  "@habitTracking": {
+    "description": "Título de la página de calendario de seguimiento de hábitos"
+  },
+  "routine": "Rutina",
+  "@routine": {
+    "description": "Etiqueta para la opción de rutina en la barra de navegación"
+  },
+  "today": "Hoy",
+  "@today": {
+    "description": "Etiqueta para mostrar el día actual en la vista de hábitos"
   }
 }

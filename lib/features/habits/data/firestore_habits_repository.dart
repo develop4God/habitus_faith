@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../domain/habit.dart';
 import '../domain/habits_repository.dart';
 import '../domain/failures.dart';
+import '../domain/models/habit_notification.dart';
 import 'habit_model.dart';
 
 class FirestoreHabitsRepository implements HabitsRepository {
@@ -108,6 +109,9 @@ class FirestoreHabitsRepository implements HabitsRepository {
     String? emoji,
     int? colorValue,
     HabitDifficulty? difficulty,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
   }) async {
     try {
       if (userId == null) {
@@ -127,6 +131,9 @@ class FirestoreHabitsRepository implements HabitsRepository {
         emoji: emoji,
         colorValue: colorValue,
         difficulty: difficulty,
+        notificationSettings: notificationSettings,
+        recurrence: recurrence,
+        subtasks: subtasks,
       );
 
       await firestore

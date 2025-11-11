@@ -90,13 +90,17 @@ void main() {
 
       // Test setting below minimum (should be ignored or clamped)
       await controller.setFontSize(8.0);
-      expect(container.read(bibleReaderProvider).fontSize,
-          greaterThanOrEqualTo(12.0));
+      expect(
+        container.read(bibleReaderProvider).fontSize,
+        greaterThanOrEqualTo(12.0),
+      );
 
       // Test setting above maximum (should be ignored or clamped)
       await controller.setFontSize(40.0);
-      expect(container.read(bibleReaderProvider).fontSize,
-          lessThanOrEqualTo(32.0));
+      expect(
+        container.read(bibleReaderProvider).fontSize,
+        lessThanOrEqualTo(32.0),
+      );
     });
 
     test('toggleVerseSelection adds and removes correctly', () {
@@ -106,14 +110,16 @@ void main() {
       // Add verse
       controller.toggleVerseSelection(verseKey);
       expect(
-          container.read(bibleReaderProvider).selectedVerses.contains(verseKey),
-          isTrue);
+        container.read(bibleReaderProvider).selectedVerses.contains(verseKey),
+        isTrue,
+      );
 
       // Remove verse
       controller.toggleVerseSelection(verseKey);
       expect(
-          container.read(bibleReaderProvider).selectedVerses.contains(verseKey),
-          isFalse);
+        container.read(bibleReaderProvider).selectedVerses.contains(verseKey),
+        isFalse,
+      );
     });
 
     test('clearSelection removes all selected verses', () {
@@ -125,13 +131,17 @@ void main() {
       controller.toggleVerseSelection('Genesis|1|3');
 
       expect(
-          container.read(bibleReaderProvider).selectedVerses.length, equals(3));
+        container.read(bibleReaderProvider).selectedVerses.length,
+        equals(3),
+      );
 
       // Clear selection
       controller.clearSelection();
 
       expect(
-          container.read(bibleReaderProvider).selectedVerses.isEmpty, isTrue);
+        container.read(bibleReaderProvider).selectedVerses.isEmpty,
+        isTrue,
+      );
     });
 
     test('toggleFontControls changes visibility', () {
@@ -140,12 +150,16 @@ void main() {
           container.read(bibleReaderProvider).showFontControls;
 
       controller.toggleFontControls();
-      expect(container.read(bibleReaderProvider).showFontControls,
-          equals(!initialVisible));
+      expect(
+        container.read(bibleReaderProvider).showFontControls,
+        equals(!initialVisible),
+      );
 
       controller.toggleFontControls();
-      expect(container.read(bibleReaderProvider).showFontControls,
-          equals(initialVisible));
+      expect(
+        container.read(bibleReaderProvider).showFontControls,
+        equals(initialVisible),
+      );
     });
   });
 
@@ -179,9 +193,11 @@ void main() {
       // Requires mocked BibleReferenceParser
     });
 
-    test('performSearch falls back to text search on invalid reference',
-        () async {
-      // Test that invalid references trigger text search
-    });
+    test(
+      'performSearch falls back to text search on invalid reference',
+      () async {
+        // Test that invalid references trigger text search
+      },
+    );
   });
 }

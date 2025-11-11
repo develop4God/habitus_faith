@@ -4,12 +4,7 @@ import 'verse_reference.dart';
 part 'predefined_habit.freezed.dart';
 part 'predefined_habit.g.dart';
 
-enum PredefinedHabitCategory {
-  spiritual,
-  physical,
-  mental,
-  relational,
-}
+enum PredefinedHabitCategory { spiritual, physical, mental, relational }
 
 /// Predefined habit template with localization keys
 @freezed

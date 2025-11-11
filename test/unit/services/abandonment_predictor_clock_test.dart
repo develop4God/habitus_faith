@@ -73,8 +73,10 @@ void main() {
         createdAt: fixedTime.subtract(const Duration(days: 14)),
         currentStreak: 7,
         lastCompletedAt: fixedTime,
-        completionHistory:
-            List.generate(7, (i) => fixedTime.subtract(Duration(days: i))),
+        completionHistory: List.generate(
+          7,
+          (i) => fixedTime.subtract(Duration(days: i)),
+        ),
       );
 
       final risk1 = await predictor1.predictRisk(habit);
@@ -102,8 +104,10 @@ void main() {
         createdAt: now.subtract(const Duration(days: 7)),
         currentStreak: 3,
         lastCompletedAt: now.subtract(const Duration(days: 1)),
-        completionHistory:
-            List.generate(3, (i) => now.subtract(Duration(days: i + 1))),
+        completionHistory: List.generate(
+          3,
+          (i) => now.subtract(Duration(days: i + 1)),
+        ),
       );
 
       final risk = await predictor.predictRisk(habit);

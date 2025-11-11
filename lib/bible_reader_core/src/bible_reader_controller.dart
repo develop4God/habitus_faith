@@ -174,8 +174,9 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     if (state.selectedVersion == null) {
       throw Exception('No version selected');
     }
-    return await ref
-        .read(bibleDbServiceProvider(state.selectedVersion!.id).future);
+    return await ref.read(
+      bibleDbServiceProvider(state.selectedVersion!.id).future,
+    );
   }
 
   /// Get the database service for a specific version
@@ -189,9 +190,7 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     }
 
     final dbService = await _getDbService();
-    final maxChapter = await dbService.getMaxChapter(
-      state.selectedBookNumber!,
-    );
+    final maxChapter = await dbService.getMaxChapter(state.selectedBookNumber!);
 
     final verses = await dbService.getChapterVerses(
       state.selectedBookNumber!,
@@ -307,9 +306,7 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     if (result['bookName'] != null) {
       // Book changed, need to reload max chapter
       final dbService = await _getDbService();
-      final maxChapter = await dbService.getMaxChapter(
-        result['bookNumber'],
-      );
+      final maxChapter = await dbService.getMaxChapter(result['bookNumber']);
       state = state.copyWith(maxChapter: maxChapter);
     }
 
@@ -341,9 +338,7 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
     if (result['bookName'] != null) {
       // Book changed, need to reload max chapter
       final dbService = await _getDbService();
-      final maxChapter = await dbService.getMaxChapter(
-        result['bookNumber'],
-      );
+      final maxChapter = await dbService.getMaxChapter(result['bookNumber']);
       state = state.copyWith(maxChapter: maxChapter);
     }
 
@@ -354,7 +349,10 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
   Future<void> performSearch(String query) async {
     if (query.trim().isEmpty) {
       state = state.copyWith(
-          isSearching: false, searchResults: [], searchQuery: '');
+        isSearching: false,
+        searchResults: [],
+        searchQuery: '',
+      );
       return;
     }
 
@@ -416,8 +414,11 @@ class BibleReaderController extends StateNotifier<BibleReaderState> {
 
   /// Clear search results and exit search mode
   void clearSearch() {
-    state =
-        state.copyWith(isSearching: false, searchResults: [], searchQuery: '');
+    state = state.copyWith(
+      isSearching: false,
+      searchResults: [],
+      searchQuery: '',
+    );
   }
 
   /// Toggle verse selection for copy/share

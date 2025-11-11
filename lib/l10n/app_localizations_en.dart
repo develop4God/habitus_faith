@@ -15,7 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get start => 'Start';
 
   @override
-  String get readBible => 'Read Bible';
+  String get readBible => 'Bible';
 
   @override
   String get myHabits => 'My Habits';
@@ -632,6 +632,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mlModelError => 'Error';
+
+  @override
   String get chooseHabitType => 'What type of habit do you want to add?';
 
   @override
@@ -687,4 +689,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get home => 'Home';
+
+  @override
+  String get reminderConfig => 'Reminder Configuration';
+
+  @override
+  String get recurrenceConfig => 'Daily Repetitions';
+
+  @override
+  String get repeat => 'Repeat';
+
+  @override
+  String get setCycleForPlan => 'Set a cycle for your plan';
+
+  @override
+  String get subtasks => 'Subtasks';
+
+  @override
+  String get addSubtask => 'Add subtask';
+
+  @override
+  String get minutesBefore => 'Minutes before';
+
+  @override
+  String get interval => 'Interval';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String everyXDays(int count) {
+    return 'Every $count day(s)';
+  }
+
+  @override
+  String everyXWeeks(int count) {
+    return 'Every $count week(s)';
+  }
+
+  @override
+  String everyXMonths(int count) {
+    return 'Every $count month(s)';
+  }
+
+  @override
+  String get noRepetition => 'No repetition';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get repetition => 'Repetition';
+
+  @override
+  String get eventTime => 'Event time (HH:MM)';
+
+  @override
+  String get invalidMinutes => 'Please enter a valid number between 1 and 1440';
+
+  @override
+  String get invalidInterval => 'Interval must be at least 1';
+
+  @override
+  String get habitTracking => 'Habit Tracking';
+
+  @override
+  String get routine => 'Routine';
+
+  @override
+  String get today => 'Today';
 }

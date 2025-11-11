@@ -65,35 +65,37 @@ void main() {
       expect(risk, lessThanOrEqualTo(0.5));
     });
 
-    test('returns high risk for habit with no streak and many failures',
-        () async {
-      // Arrange: Habit with broken streak, many missed days
-      final now = DateTime(2024, 1, 15, 21, 0);
-      final completions = [
-        now.subtract(const Duration(days: 10)),
-        now.subtract(const Duration(days: 15)),
-      ];
+    test(
+      'returns high risk for habit with no streak and many failures',
+      () async {
+        // Arrange: Habit with broken streak, many missed days
+        final now = DateTime(2024, 1, 15, 21, 0);
+        final completions = [
+          now.subtract(const Duration(days: 10)),
+          now.subtract(const Duration(days: 15)),
+        ];
 
-      final habit = Habit(
-        id: 'weak_habit',
-        userId: 'user1',
-        name: 'Weak Habit',
-        description: 'Many failures',
-        category: HabitCategory.physical,
-        createdAt: now.subtract(const Duration(days: 30)),
-        currentStreak: 0,
-        lastCompletedAt: completions.first,
-        completionHistory: completions,
-      );
+        final habit = Habit(
+          id: 'weak_habit',
+          userId: 'user1',
+          name: 'Weak Habit',
+          description: 'Many failures',
+          category: HabitCategory.physical,
+          createdAt: now.subtract(const Duration(days: 30)),
+          currentStreak: 0,
+          lastCompletedAt: completions.first,
+          completionHistory: completions,
+        );
 
-      // Act
-      final risk = await predictor.predictRisk(habit);
+        // Act
+        final risk = await predictor.predictRisk(habit);
 
-      // Assert: Should be high risk (> 0.5), or 0.0 if model not loaded
-      // In production environment: > 0.5, In test: >= 0.0
-      expect(risk, greaterThanOrEqualTo(0.0));
-      expect(risk, lessThanOrEqualTo(1.0));
-    });
+        // Assert: Should be high risk (> 0.5), or 0.0 if model not loaded
+        // In production environment: > 0.5, In test: >= 0.0
+        expect(risk, greaterThanOrEqualTo(0.0));
+        expect(risk, lessThanOrEqualTo(1.0));
+      },
+    );
 
     test('uses correct default values for missing lastCompletedAt', () async {
       // Arrange: Habit with some completions but we'll test defaults
@@ -121,8 +123,10 @@ void main() {
     test('handles different habit categories correctly', () async {
       // Arrange: Test all 4 category types
       final now = DateTime(2024, 1, 15, 12, 0);
-      final completions =
-          List.generate(5, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        5,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final categories = [
         HabitCategory.spiritual,
@@ -154,8 +158,10 @@ void main() {
     test('produces consistent results for same input', () async {
       // Arrange: Same habit tested twice
       final now = DateTime(2024, 1, 15, 15, 0);
-      final completions =
-          List.generate(7, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        7,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'consistent_habit',
@@ -180,8 +186,10 @@ void main() {
     test('handles edge case with very high streak', () async {
       // Arrange: Habit with 100-day streak
       final now = DateTime(2024, 1, 15, 8, 0);
-      final completions =
-          List.generate(100, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        100,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'super_habit',
@@ -205,8 +213,10 @@ void main() {
     test('handles edge case with zero failures in last 7 days', () async {
       // Arrange: Perfect 7-day completion record
       final now = DateTime(2024, 1, 15, 10, 0);
-      final completions =
-          List.generate(7, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        7,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'perfect_habit',
@@ -258,8 +268,10 @@ void main() {
     test('completes prediction in less than 100ms', () async {
       // Arrange
       final now = DateTime(2024, 1, 15, 12, 0);
-      final completions =
-          List.generate(10, (i) => now.subtract(Duration(days: i)));
+      final completions = List.generate(
+        10,
+        (i) => now.subtract(Duration(days: i)),
+      );
 
       final habit = Habit(
         id: 'performance_habit',

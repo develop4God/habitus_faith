@@ -140,10 +140,7 @@ void main() {
 
       test('example: testing consecutive dates helper', () {
         final start = DateTime(2025, 11, 1, 9, 0);
-        final completions = createConsecutiveDates(
-          start: start,
-          count: 10,
-        );
+        final completions = createConsecutiveDates(start: start, count: 10);
 
         expect(completions.length, 10);
         expect(completions.first, start);

@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/env_config.dart';
 import '../services/cache/cache_service.dart';
 import '../services/ai/rate_limit_service.dart';
@@ -15,13 +15,10 @@ part 'ai_providers.g.dart';
 /// Provider for Bible database service (for verse enrichment)
 /// Uses default Spanish RVR1960 version
 @riverpod
-Future<BibleDbService?> bibleDbService(BibleDbServiceRef ref) async {
+Future<BibleDbService?> bibleDbService(Ref ref) async {
   try {
     final service = BibleDbService();
-    await service.initDb(
-      'assets/biblia/RVR1960.SQLite3',
-      'RVR1960.SQLite3',
-    );
+    await service.initDb('assets/biblia/RVR1960.SQLite3', 'RVR1960.SQLite3');
     return service;
   } catch (e) {
     // Graceful degradation - continue without verse enrichment
@@ -31,7 +28,7 @@ Future<BibleDbService?> bibleDbService(BibleDbServiceRef ref) async {
 
 /// Provider for logger instance
 @riverpod
-Logger logger(LoggerRef ref) {
+Logger logger(Ref ref) {
   return Logger(
     printer: PrettyPrinter(
       methodCount: 0,
@@ -46,21 +43,25 @@ Logger logger(LoggerRef ref) {
 
 /// Provider for cache service
 @riverpod
-ICacheService cacheService(CacheServiceRef ref) {
+ICacheService cacheService(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   return CacheService(prefs);
 }
 
 /// Provider for rate limit service
 @riverpod
-IRateLimitService rateLimitService(RateLimitServiceRef ref) {
+IRateLimitService rateLimitService(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   return RateLimitService(prefs);
 }
 
 /// Provider for Gemini service with optional Bible enrichment
 @riverpod
-Future<IGeminiService> geminiService(GeminiServiceRef ref) async {
+Future<IGeminiService> geminiService(Ref ref) async {
+  // Espera a que dotenv esté inicializado antes de acceder a la API key
+  if (!EnvConfig.isDotenvInitialized) {
+    throw Exception('Dotenv no está inicializado. Asegúrate de llamar dotenv.load() en main.dart antes de usar geminiServiceProvider.');
+  }
   final bibleService = await ref.watch(bibleDbServiceProvider.future);
 
   return GeminiService(

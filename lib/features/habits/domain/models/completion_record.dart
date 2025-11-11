@@ -26,11 +26,7 @@ class CompletionRecord with _$CompletionRecord {
 
   /// Get date-only string for grouping (YYYY-MM-DD)
   String get dateKey {
-    final date = DateTime(
-      completedAt.year,
-      completedAt.month,
-      completedAt.day,
-    );
+    final date = DateTime(completedAt.year, completedAt.month, completedAt.day);
     return date.toIso8601String().split('T')[0];
   }
 }

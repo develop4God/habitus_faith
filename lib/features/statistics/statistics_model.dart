@@ -1,4 +1,3 @@
-
 class StatisticsModel {
   final int totalHabits;
   final int completedHabits;
@@ -22,12 +21,14 @@ class StatisticsModel {
         'lastCompletion': lastCompletion.toIso8601String(),
       };
 
-  factory StatisticsModel.fromJson(Map<String, dynamic> json) => StatisticsModel(
+  factory StatisticsModel.fromJson(Map<String, dynamic> json) =>
+      StatisticsModel(
         totalHabits: json['totalHabits'] ?? 0,
         completedHabits: json['completedHabits'] ?? 0,
         currentStreak: json['currentStreak'] ?? 0,
         longestStreak: json['longestStreak'] ?? 0,
-        lastCompletion: DateTime.tryParse(json['lastCompletion'] ?? '') ?? DateTime.now(),
+        lastCompletion:
+            DateTime.tryParse(json['lastCompletion'] ?? '') ?? DateTime.now(),
       );
 
   static StatisticsModel empty() => StatisticsModel(
@@ -38,4 +39,3 @@ class StatisticsModel {
         lastCompletion: DateTime.now(),
       );
 }
-

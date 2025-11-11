@@ -15,7 +15,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get start => 'Comenzar';
 
   @override
-  String get readBible => 'Leer Biblia';
+  String get readBible => 'Biblia';
 
   @override
   String get myHabits => 'Mis Hábitos';
@@ -639,6 +639,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mlModelError => 'Error';
+
+  @override
   String get chooseHabitType => '¿Qué tipo de hábito quieres agregar?';
 
   @override
@@ -694,4 +696,82 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get home => 'Inicio';
+
+  @override
+  String get reminderConfig => 'Configuración de recordatorio';
+
+  @override
+  String get recurrenceConfig => 'Repeticiones cada día';
+
+  @override
+  String get repeat => 'Repetir';
+
+  @override
+  String get setCycleForPlan => 'Fija un ciclo para tu plan';
+
+  @override
+  String get subtasks => 'Subtareas';
+
+  @override
+  String get addSubtask => 'Agregar subtarea';
+
+  @override
+  String get minutesBefore => 'Minutos antes';
+
+  @override
+  String get interval => 'Intervalo';
+
+  @override
+  String get endDate => 'Fecha de finalización';
+
+  @override
+  String get daily => 'Diario';
+
+  @override
+  String get weekly => 'Semanal';
+
+  @override
+  String get monthly => 'Mensual';
+
+  @override
+  String everyXDays(int count) {
+    return 'Cada $count día(s)';
+  }
+
+  @override
+  String everyXWeeks(int count) {
+    return 'Cada $count semana(s)';
+  }
+
+  @override
+  String everyXMonths(int count) {
+    return 'Cada $count mes(es)';
+  }
+
+  @override
+  String get noRepetition => 'Sin repetición';
+
+  @override
+  String get reminder => 'Recordatorio';
+
+  @override
+  String get repetition => 'Repetición';
+
+  @override
+  String get eventTime => 'Hora del evento (HH:MM)';
+
+  @override
+  String get invalidMinutes => 'Ingrese un número válido entre 1 y 1440';
+
+  @override
+  String get invalidInterval => 'El intervalo debe ser al menos 1';
+
+  @override
+  String get habitTracking => 'Seguimiento de Hábitos';
+
+  @override
+  String get routine => 'Rutina';
+
+  @override
+  String get today => 'Hoy';
 }

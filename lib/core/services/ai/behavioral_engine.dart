@@ -107,8 +107,11 @@ class BehavioralEngine {
     // Get completions in last 7 days
     final recentCompletions = habit.completionHistory.where((dt) {
       final date = DateTime(dt.year, dt.month, dt.day);
-      final start =
-          DateTime(sevenDaysAgo.year, sevenDaysAgo.month, sevenDaysAgo.day);
+      final start = DateTime(
+        sevenDaysAgo.year,
+        sevenDaysAgo.month,
+        sevenDaysAgo.day,
+      );
       final end = DateTime(now.year, now.month, now.day);
       return (date.isAfter(start.subtract(const Duration(days: 1))) &&
           date.isBefore(end.add(const Duration(days: 1))));
@@ -127,10 +130,12 @@ class BehavioralEngine {
     }
 
     // Check for weekend gap (Saturday=6, Sunday=7 have 0 completions)
-    final hasWeekdayCompletions =
-        dayCompletions.keys.any((day) => day >= 1 && day <= 5);
-    final hasWeekendCompletions =
-        dayCompletions.keys.any((day) => day == 6 || day == 7);
+    final hasWeekdayCompletions = dayCompletions.keys.any(
+      (day) => day >= 1 && day <= 5,
+    );
+    final hasWeekendCompletions = dayCompletions.keys.any(
+      (day) => day == 6 || day == 7,
+    );
 
     if (hasWeekdayCompletions &&
         !hasWeekendCompletions &&

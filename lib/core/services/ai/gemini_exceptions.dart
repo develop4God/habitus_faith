@@ -29,9 +29,7 @@ class GeminiParseException extends GeminiException {
 
 /// Exception thrown when GEMINI_API_KEY is not configured
 class ApiKeyMissingException extends GeminiException {
-  ApiKeyMissingException([
-    super.message = 'GEMINI_API_KEY not configured',
-  ]);
+  ApiKeyMissingException([super.message = 'GEMINI_API_KEY not configured']);
 
   @override
   String toString() => 'ApiKeyMissingException: $message';

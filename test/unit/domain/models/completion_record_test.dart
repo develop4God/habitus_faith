@@ -5,10 +5,7 @@ void main() {
   group('CompletionRecord', () {
     test('creates a valid completion record', () {
       final now = DateTime.now();
-      final record = CompletionRecord(
-        habitId: 'habit123',
-        completedAt: now,
-      );
+      final record = CompletionRecord(habitId: 'habit123', completedAt: now);
 
       expect(record.habitId, 'habit123');
       expect(record.completedAt, now);
@@ -29,10 +26,7 @@ void main() {
 
     test('dateKey returns correct date string', () {
       final date = DateTime(2024, 10, 24, 14, 30);
-      final record = CompletionRecord(
-        habitId: 'habit123',
-        completedAt: date,
-      );
+      final record = CompletionRecord(habitId: 'habit123', completedAt: date);
 
       expect(record.dateKey, '2024-10-24');
     });

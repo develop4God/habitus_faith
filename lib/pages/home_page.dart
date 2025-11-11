@@ -76,10 +76,17 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Hero section con transición de hábitos
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(
+                  vertical: 32,
+                  horizontal: 24,
+                ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.orange.shade200, Colors.deepOrange.shade400],
+                    colors: [
+                      Colors.orange.shade200,
+                      Colors.deepOrange.shade400,
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -93,17 +100,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     Text(
                       l10n.introMessage,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       formattedDate,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white70,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium?.copyWith(color: Colors.white70),
                     ),
                     const SizedBox(height: 16),
                     if (habits.isNotEmpty)
@@ -120,27 +128,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 color: Colors.white,
                                 elevation: 4,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16)),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
                                   child: Row(
                                     children: [
-                                      Text(habit.emoji ?? '✓',
-                                          style: const TextStyle(fontSize: 28)),
+                                      Text(
+                                        habit.emoji ?? '✓',
+                                        style: const TextStyle(fontSize: 28),
+                                      ),
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Text(
                                           habit.name,
                                           style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       if (habit.completedToday)
-                                        const Icon(Icons.check_circle,
-                                            color: Colors.green),
+                                        const Icon(
+                                          Icons.check_circle,
+                                          color: Colors.green,
+                                        ),
                                     ],
                                   ),
                                 ),
@@ -164,10 +180,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         todayDevocional.versiculo,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: Colors.orange.shade900, fontSize: 16),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Colors.orange.shade900,
+                                  fontSize: 16,
+                                ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -193,7 +210,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.habitsCompletedCount(completedHabits, totalHabits),
+                          l10n.habitsCompletedCount(
+                            completedHabits,
+                            totalHabits,
+                          ),
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8),
@@ -224,19 +244,19 @@ class _HomePageState extends ConsumerState<HomePage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.home_filled),
             label: l10n.home,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.check_box),
-            label: l10n.myHabits,
+            icon: const Icon(Icons.playlist_add_check_circle_outlined),
+            label: l10n.routine,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.book),
+            icon: const Icon(Icons.auto_stories_outlined),
             label: l10n.readBible,
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.auto_stories_outlined),
+            icon: Icon(Icons.local_library_outlined),
             label: 'Devotionals',
           ),
           BottomNavigationBarItem(

@@ -49,10 +49,9 @@ class NotificationService {
     final User? user = _auth.currentUser;
     if (user != null) {
       final userDocRef = _firestore.collection('users').doc(user.uid);
-      await userDocRef.set(
-        {'lastLogin': FieldValue.serverTimestamp()},
-        SetOptions(merge: true),
-      );
+      await userDocRef.set({
+        'lastLogin': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
       developer.log(
         'NotificationService: lastLogin updated for user ${user.uid}',
         name: 'NotificationService',
@@ -316,16 +315,13 @@ class NotificationService {
           .collection('settings')
           .doc('notifications');
 
-      await docRef.set(
-        {
-          'notificationsEnabled': notificationsEnabled,
-          'notificationTime': notificationTime,
-          'userTimezone': userTimezone,
-          'lastUpdated': FieldValue.serverTimestamp(),
-          'preferredLanguage': currentLanguage,
-        },
-        SetOptions(merge: true),
-      );
+      await docRef.set({
+        'notificationsEnabled': notificationsEnabled,
+        'notificationTime': notificationTime,
+        'userTimezone': userTimezone,
+        'lastUpdated': FieldValue.serverTimestamp(),
+        'preferredLanguage': currentLanguage,
+      }, SetOptions(merge: true));
       developer.log(
         'NotificationService: Notification settings saved for $userId: '
         'Enabled: $notificationsEnabled, Time: $notificationTime, Timezone: $userTimezone, Language: $currentLanguage',
@@ -688,6 +684,110 @@ class NotificationService {
         name: 'NotificationService',
       );
       return 'en';
+    }
+  }
+
+  /// Schedule a notification for a specific habit
+  Future<void> scheduleHabitNotification({
+    required String habitId,
+    required String habitName,
+    required String eventTime,
+    int? minutesBefore,
+  }) async {
+    try {
+      // Parse event time
+      final parts = eventTime.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = int.parse(parts[1]);
+
+      // Calculate notification time
+      int notificationMinutes = hour * 60 + minute;
+      if (minutesBefore != null) {
+        notificationMinutes -= minutesBefore;
+      }
+      if (notificationMinutes < 0) notificationMinutes += 24 * 60;
+
+      final notificationHour = (notificationMinutes ~/ 60) % 24;
+      final notificationMinute = notificationMinutes % 60;
+
+      // Schedule notification
+      final scheduledDate = tz.TZDateTime(
+        tz.local,
+        tz.TZDateTime.now(tz.local).year,
+        tz.TZDateTime.now(tz.local).month,
+        tz.TZDateTime.now(tz.local).day,
+        notificationHour,
+        notificationMinute,
+      );
+
+      var finalScheduledDate = scheduledDate;
+      if (finalScheduledDate.isBefore(tz.TZDateTime.now(tz.local))) {
+        finalScheduledDate = finalScheduledDate.add(const Duration(days: 1));
+      }
+
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+        'habit_reminders',
+        'Habit Reminders',
+        channelDescription: 'Reminders for your habits',
+        importance: Importance.max,
+        priority: Priority.high,
+        icon: '@mipmap/ic_launcher',
+      );
+
+      const DarwinNotificationDetails iOSPlatformChannelSpecifics =
+          DarwinNotificationDetails(
+        sound: 'default',
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      );
+
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics,
+      );
+
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        habitId.hashCode,
+        habitName,
+        'Es hora de completar tu hábito: $habitName',
+        finalScheduledDate,
+        platformChannelSpecifics,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: 'habit_$habitId',
+      );
+
+      developer.log(
+        'Habit notification scheduled for $habitName at $finalScheduledDate',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'ERROR scheduling habit notification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+    }
+  }
+
+  /// Cancel a habit notification
+  Future<void> cancelHabitNotification(String habitId) async {
+    try {
+      await _flutterLocalNotificationsPlugin.cancel(habitId.hashCode);
+      developer.log(
+        'Habit notification cancelled for habitId: $habitId',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'ERROR cancelling habit notification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
     }
   }
 }

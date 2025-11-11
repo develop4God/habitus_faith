@@ -172,8 +172,9 @@ void main() {
       });
 
       test('parses book with spaces and accents', () {
-        final result =
-            BibleReferenceParser.parse('Cántico de los Cánticos 2:1');
+        final result = BibleReferenceParser.parse(
+          'Cántico de los Cánticos 2:1',
+        );
         expect(result, isNotNull);
         expect(result!['bookName'], equals('Cántico de los Cánticos'));
       });

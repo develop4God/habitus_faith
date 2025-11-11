@@ -6,7 +6,7 @@ part of 'ai_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bibleDbServiceHash() => r'0af91e65f6b1f537e7da93b2c1f05b5b61a4d328';
+String _$bibleDbServiceHash() => r'72f293b5ef89775da50f7cc174c2f1c4ea12cfce';
 
 /// Provider for Bible database service (for verse enrichment)
 /// Uses default Spanish RVR1960 version
@@ -27,7 +27,7 @@ final bibleDbServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef BibleDbServiceRef = AutoDisposeFutureProviderRef<BibleDbService?>;
-String _$loggerHash() => r'8b7e11a155f4beb9e222fb7f4bf6f651d0da24d3';
+String _$loggerHash() => r'd82e17351f7a6c96c7ef50f1535546f76e38e5b9';
 
 /// Provider for logger instance
 ///
@@ -45,7 +45,7 @@ final loggerProvider = AutoDisposeProvider<Logger>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef LoggerRef = AutoDisposeProviderRef<Logger>;
-String _$cacheServiceHash() => r'999391311237c437e6a805774e202f1054c2485a';
+String _$cacheServiceHash() => r'f6a834603c48562a7bdb40c7e576149a167fb10d';
 
 /// Provider for cache service
 ///
@@ -63,7 +63,7 @@ final cacheServiceProvider = AutoDisposeProvider<ICacheService>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CacheServiceRef = AutoDisposeProviderRef<ICacheService>;
-String _$rateLimitServiceHash() => r'34461cb97a53e3c5972e36a36412bd794fa594e3';
+String _$rateLimitServiceHash() => r'e4131004ca6c03162ee33c4b5d6cecc63191d9d4';
 
 /// Provider for rate limit service
 ///
@@ -83,7 +83,7 @@ final rateLimitServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef RateLimitServiceRef = AutoDisposeProviderRef<IRateLimitService>;
-String _$geminiServiceHash() => r'3f12640f30e4b008631815b6434c1fc869f32884';
+String _$geminiServiceHash() => r'13dc1468f26d8611f69b3dd189bf6d8b90e7b2e8';
 
 /// Provider for Gemini service with optional Bible enrichment
 ///

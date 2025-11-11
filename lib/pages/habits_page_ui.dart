@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
+import 'package:lottie/lottie.dart' show Lottie;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../features/habits/data/storage/storage_providers.dart';
 import '../features/habits/domain/failures.dart';
 import '../features/habits/domain/habit.dart';
@@ -12,6 +13,8 @@ import '../features/habits/presentation/widgets/habit_card/advanced_habit_card.d
 import '../core/providers/ml_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
+import '../widgets/habit_calendar_view.dart';
+import '../widgets/modern_weekly_calendar.dart';
 import 'habits_page.dart';
 import 'edit_habit_dialog.dart';
 
@@ -21,6 +24,9 @@ class HabitsPageUI extends ConsumerWidget {
   final void Function(List<Habit>) selectAll;
   final Future<void> Function(BuildContext, WidgetRef) deleteSelected;
   final Future<void> Function(BuildContext, WidgetRef, Habit) duplicateHabit;
+  final HabitCategory? categoryFilter;
+  final void Function(HabitCategory?) onCategoryFilterChanged;
+  final List<Habit> Function(List<Habit>) filterHabits;
 
   const HabitsPageUI({
     super.key,
@@ -29,6 +35,9 @@ class HabitsPageUI extends ConsumerWidget {
     required this.selectAll,
     required this.deleteSelected,
     required this.duplicateHabit,
+    required this.categoryFilter,
+    required this.onCategoryFilterChanged,
+    required this.filterHabits,
   });
 
   @override
@@ -54,11 +63,23 @@ class HabitsPageUI extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       appBar: AppBar(
-        title: Text(l10n.myHabits),
+        title: const SizedBox.shrink(),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: const Color(0xff1a202c),
         actions: [
+          // Calendar icon
+          IconButton(
+            icon: const Icon(Icons.calendar_month),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const HabitCalendarView(),
+                ),
+              );
+            },
+            tooltip: 'View Calendar',
+          ),
           habitsAsync.when(
             data: (habits) {
               if (habits.isEmpty) return const SizedBox.shrink();
@@ -103,10 +124,7 @@ class HabitsPageUI extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     l10n.noHabits,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -117,13 +135,32 @@ class HabitsPageUI extends ConsumerWidget {
           debugPrint('HabitsPageUI displayMode: $displayMode');
 
           // Mostrar todos los hábitos como lista plana, sin categorías
+          final filteredHabits = filterHabits(habits);
+
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _LottieTip(),
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Center(
+                  child: Text(
+                    l10n.today,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 22,
+                        ),
+                  ),
+                ),
               ),
+              ModernWeeklyCalendar(habits: habits),
+              // Category filter chips
+              if (habits.isNotEmpty)
+                _CategoryFilterChips(
+                  selectedCategory: categoryFilter,
+                  onCategorySelected: onCategoryFilterChanged,
+                  habits: habits,
+                ),
               if (selectedHabits.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
@@ -133,7 +170,10 @@ class HabitsPageUI extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           child: Text('${selectedHabits.length} seleccionados'),
                         ),
                         Row(
@@ -154,7 +194,7 @@ class HabitsPageUI extends ConsumerWidget {
                     ),
                   ),
                 ),
-              ...habits.map((habit) {
+              ...filteredHabits.map((habit) {
                 Widget card;
                 if (displayMode == DisplayMode.compact) {
                   card = Dismissible(
@@ -169,7 +209,10 @@ class HabitsPageUI extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Text(
                             l10n.copy, // Usar la nueva clave de traducción
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -183,7 +226,10 @@ class HabitsPageUI extends ConsumerWidget {
                         children: [
                           Text(
                             l10n.delete,
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(width: 8),
                           const Icon(Icons.delete, color: Colors.white),
@@ -241,7 +287,9 @@ class HabitsPageUI extends ConsumerWidget {
                           ),
                         );
                         if (confirmed == true && dialogContext.mounted) {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          await ref
+                              .read(jsonHabitsNotifierProvider.notifier)
+                              .deleteHabit(habit.id);
                         }
                         return confirmed == true;
                       }
@@ -250,8 +298,12 @@ class HabitsPageUI extends ConsumerWidget {
                       habit: habit,
                       onComplete: (habitId) async {
                         final callbackContext = context;
-                        await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                        await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                        await ref
+                            .read(jsonHabitsNotifierProvider.notifier)
+                            .completeHabit(habitId);
+                        await ref
+                            .read(jsonHabitsRepositoryProvider)
+                            .recordCompletionForML(habitId, true);
                         if (callbackContext.mounted) {
                           ScaffoldMessenger.of(callbackContext).showSnackBar(
                             SnackBar(content: Text(l10n.habitCompleted)),
@@ -259,9 +311,12 @@ class HabitsPageUI extends ConsumerWidget {
                         }
                       },
                       onUncheck: (habitId) async {
-                        await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                        await ref
+                            .read(jsonHabitsNotifierProvider.notifier)
+                            .uncheckHabit(habitId);
                       },
-                      onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                      onEdit: () =>
+                          _showEditHabitDialog(context, ref, l10n, habit),
                       onDelete: () async {
                         final dialogContext = context;
                         final confirmed = await showDialog<bool>(
@@ -285,7 +340,9 @@ class HabitsPageUI extends ConsumerWidget {
                           ),
                         );
                         if (confirmed == true && dialogContext.mounted) {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          await ref
+                              .read(jsonHabitsNotifierProvider.notifier)
+                              .deleteHabit(habit.id);
                         }
                       },
                     ),
@@ -303,7 +360,10 @@ class HabitsPageUI extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Text(
                             l10n.delete,
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -317,7 +377,10 @@ class HabitsPageUI extends ConsumerWidget {
                         children: [
                           Text(
                             l10n.copy, // Usar la nueva clave de traducción
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(width: 8),
                           const Icon(Icons.copy, color: Colors.white),
@@ -348,7 +411,9 @@ class HabitsPageUI extends ConsumerWidget {
                           ),
                         );
                         if (confirmed == true && dialogContext.mounted) {
-                          await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                          await ref
+                              .read(jsonHabitsNotifierProvider.notifier)
+                              .deleteHabit(habit.id);
                         }
                         return confirmed == true;
                       } else {
@@ -365,32 +430,47 @@ class HabitsPageUI extends ConsumerWidget {
                           habit: habit,
                           onComplete: (habitId) async {
                             final callbackContext = context;
-                            await ref.read(jsonHabitsNotifierProvider.notifier).completeHabit(habitId);
-                            await ref.read(jsonHabitsRepositoryProvider).recordCompletionForML(habitId, true);
+                            await ref
+                                .read(jsonHabitsNotifierProvider.notifier)
+                                .completeHabit(habitId);
+                            await ref
+                                .read(jsonHabitsRepositoryProvider)
+                                .recordCompletionForML(habitId, true);
                             if (callbackContext.mounted) {
-                              ScaffoldMessenger.of(callbackContext).showSnackBar(
+                              ScaffoldMessenger.of(
+                                callbackContext,
+                              )
+                                  .showSnackBar(
                                 SnackBar(content: Text(l10n.habitCompleted)),
                               );
                             }
                           },
                           onUncheck: (habitId) async {
-                            await ref.read(jsonHabitsNotifierProvider.notifier).uncheckHabit(habitId);
+                            await ref
+                                .read(jsonHabitsNotifierProvider.notifier)
+                                .uncheckHabit(habitId);
                           },
-                          onEdit: () => _showEditHabitDialog(context, ref, l10n, habit),
+                          onEdit: () =>
+                              _showEditHabitDialog(context, ref, l10n, habit),
                           onDelete: () async {
                             final dialogContext = context;
                             final confirmed = await showDialog<bool>(
                               context: dialogContext,
                               builder: (context) => AlertDialog(
                                 title: Text(l10n.deleteHabit),
-                                content: Text(l10n.deleteHabitConfirm(habit.name)),
+                                content:
+                                    Text(
+                                  l10n.deleteHabitConfirm(habit.name),
+                                ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context, false),
+                                    onPressed: () =>
+                                        Navigator.pop(context, false),
                                     child: Text(l10n.cancel),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () => Navigator.pop(context, true),
+                                    onPressed: () =>
+                                        Navigator.pop(context, true),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                     ),
@@ -400,36 +480,61 @@ class HabitsPageUI extends ConsumerWidget {
                               ),
                             );
                             if (confirmed == true && dialogContext.mounted) {
-                              await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habit.id);
+                              await ref
+                                  .read(jsonHabitsNotifierProvider.notifier)
+                                  .deleteHabit(habit.id);
                             }
                           },
                         ),
                         Consumer(
                           builder: (context, ref, child) {
-                            final riskAsync = ref.watch(habitRiskProvider(habit.id));
+                            final riskAsync =
+                                ref.watch(
+                              habitRiskProvider(habit.id),
+                            );
                             return riskAsync.when(
                               data: (risk) {
                                 if (risk < 0.7) return const SizedBox.shrink();
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                  padding: const EdgeInsets.only(
+                                    top: 12,
+                                    bottom: 12,
+                                  ),
                                   child: Card(
-                                    color: Theme.of(context).colorScheme.errorContainer,
+                                    color: Theme.of(
+                                      context,
+                                    )
+                                        .colorScheme
+                                        .errorContainer,
                                     child: ListTile(
                                       leading: Icon(
                                         Icons.warning_amber,
-                                        color: Theme.of(context).colorScheme.error,
+                                        color:
+                                            Theme.of(
+                                          context,
+                                        ).colorScheme.error,
                                       ),
                                       title: Text(
                                         l10n.highRiskWarning,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).colorScheme.onErrorContainer,
+                                          color: Theme.of(
+                                            context,
+                                          )
+                                              .colorScheme
+                                              .onErrorContainer,
                                         ),
                                       ),
                                       subtitle: Text(
-                                        l10n.riskPercentage((risk * 100).toInt()),
+                                        l10n.riskPercentage(
+                                          (risk * 100).toInt(),
+                                        ),
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onErrorContainer,
+                                          color: Theme.of(
+                                            context,
+                                          )
+                                              .colorScheme
+                                              .onErrorContainer,
                                         ),
                                       ),
                                     ),
@@ -502,8 +607,8 @@ class _LottieTip extends StatefulWidget {
 }
 
 class __LottieTipState extends State<_LottieTip> {
-  bool _visible = true;
   Timer? _hideTimer;
+  bool _visible = true;
 
   @override
   void initState() {
@@ -536,6 +641,120 @@ class __LottieTipState extends State<_LottieTip> {
           repeat: true,
         ),
       ),
+    );
+  }
+
+}
+
+class _CategoryFilterChips extends StatelessWidget {
+  final HabitCategory? selectedCategory;
+  final void Function(HabitCategory?) onCategorySelected;
+  final List<Habit> habits;
+
+  const _CategoryFilterChips({
+    required this.selectedCategory,
+    required this.onCategorySelected,
+    required this.habits,
+  });
+
+  Future<bool> _shouldShowSpiritualFilter() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final intentStr = prefs.getString('user_intent');
+      // Hide spiritual filter only for wellness-only users
+      return intentStr != 'wellness';
+    } catch (e) {
+      // If there's an error, show all filters by default
+      return true;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _shouldShowSpiritualFilter(),
+      builder: (context, snapshot) {
+        final showSpiritual = snapshot.data ?? true;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FilterChip(
+                  label: const Text('Todos'),
+                  selected: selectedCategory == null,
+                  onSelected: (_) => onCategorySelected(null),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+                const SizedBox(width: 8),
+                if (showSpiritual) ...[
+                  FilterChip(
+                    label: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('✝️ '),
+                        Text('Fe'),
+                      ],
+                    ),
+                    selected: selectedCategory == HabitCategory.spiritual,
+                    onSelected: (_) =>
+                        onCategorySelected(HabitCategory.spiritual),
+                    selectedColor:
+                        const Color(0xff6366f1).withValues(alpha: 0.2),
+                    checkmarkColor: const Color(0xff6366f1),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                FilterChip(
+                  label: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('💪 '),
+                      Text('Salud'),
+                    ],
+                  ),
+                  selected: selectedCategory == HabitCategory.physical,
+                  onSelected: (_) => onCategorySelected(HabitCategory.physical),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('🧠 '),
+                      Text('Mental'),
+                    ],
+                  ),
+                  selected: selectedCategory == HabitCategory.mental,
+                  onSelected: (_) => onCategorySelected(HabitCategory.mental),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('👥 '),
+                      Text('Social'),
+                    ],
+                  ),
+                  selected: selectedCategory == HabitCategory.relational,
+                  onSelected: (_) =>
+                      onCategorySelected(HabitCategory.relational),
+                  selectedColor: const Color(0xff6366f1).withValues(alpha: 0.2),
+                  checkmarkColor: const Color(0xff6366f1),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

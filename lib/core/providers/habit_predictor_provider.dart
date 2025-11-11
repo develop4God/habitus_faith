@@ -231,8 +231,10 @@ class HabitPredictorService {
 
         // Calculate new difficulty level from suggested minutes
         final newDifficultyLevel = Habit.targetMinutesByLevel.entries
-            .firstWhere((entry) => entry.value == suggestedMinutes,
-                orElse: () => const MapEntry(3, 20))
+            .firstWhere(
+              (entry) => entry.value == suggestedMinutes,
+              orElse: () => const MapEntry(3, 20),
+            )
             .key;
 
         final updatedHabit = habit.copyWith(

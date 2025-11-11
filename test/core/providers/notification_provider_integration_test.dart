@@ -16,7 +16,9 @@ void main() {
 
     test('notificationsEnabledProvider should be a FutureProvider<bool>', () {
       expect(
-          notificationsEnabledProvider.toString(), contains('FutureProvider'));
+        notificationsEnabledProvider.toString(),
+        contains('FutureProvider'),
+      );
     });
 
     test('notificationTimeProvider should be a FutureProvider<String>', () {
@@ -54,10 +56,7 @@ void main() {
 
     test('notificationTimeProvider should return String Future', () {
       // Should be FutureProvider<String>
-      expect(
-        notificationTimeProvider.toString(),
-        contains('FutureProvider'),
-      );
+      expect(notificationTimeProvider.toString(), contains('FutureProvider'));
     });
   });
 }

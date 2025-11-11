@@ -59,28 +59,33 @@ class AbandonmentPredictor {
       return;
     }
 
-    final stopwatch = Stopwatch()..start();
     debugPrint('AbandonmentPredictor.initialize: Starting initialization...');
 
     try {
       // Load model metadata
       debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
-      final metadataJson =
-          await rootBundle.loadString('assets/ml_models/model_metadata.json');
+      final metadataJson = await rootBundle.loadString(
+        'assets/ml_models/model_metadata.json',
+      );
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
       debugPrint(
-          'AbandonmentPredictor.initialize: Model version ${_modelMetadata!['version']} loaded');
+        'AbandonmentPredictor.initialize: Model version ${_modelMetadata!['version']} loaded',
+      );
 
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
-      _interpreter =
-          await Interpreter.fromAsset('assets/ml_models/predictor.tflite');
-      debugPrint('AbandonmentPredictor.initialize: TFLite model loaded successfully');
+      _interpreter = await Interpreter.fromAsset(
+        'assets/ml_models/predictor.tflite',
+      );
+      debugPrint(
+        'AbandonmentPredictor.initialize: TFLite model loaded successfully',
+      );
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
-      final scalerJson =
-          await rootBundle.loadString('assets/ml_models/scaler_params.json');
+      final scalerJson = await rootBundle.loadString(
+        'assets/ml_models/scaler_params.json',
+      );
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
@@ -90,9 +95,11 @@ class AbandonmentPredictor {
       _initialized = true;
       debugPrint('AbandonmentPredictor: Initialization complete');
       debugPrint(
-          'AbandonmentPredictor: Model metadata - Training samples: ${_modelMetadata!['training_samples']}, Accuracy: ${_modelMetadata!['accuracy']}');
+        'AbandonmentPredictor: Model metadata - Training samples: ${_modelMetadata!['training_samples']}, Accuracy: ${_modelMetadata!['accuracy']}',
+      );
       debugPrint(
-          'AbandonmentPredictor: Telemetry - Predictions: $_predictionCount, Errors: $_errorCount');
+        'AbandonmentPredictor: Telemetry - Predictions: $_predictionCount, Errors: $_errorCount',
+      );
     } catch (e) {
       debugPrint('AbandonmentPredictor: Initialization failed: $e');
       // Non-critical failure - predictor will return 0.0 for predictions
@@ -105,7 +112,8 @@ class AbandonmentPredictor {
   List<double> _normalizeFeatures(List<double> features) {
     if (_scalerParams == null) {
       debugPrint(
-          'AbandonmentPredictor: Scaler params not loaded, returning raw features');
+        'AbandonmentPredictor: Scaler params not loaded, returning raw features',
+      );
       return features;
     }
 
@@ -114,7 +122,8 @@ class AbandonmentPredictor {
 
     if (mean.length != features.length || scale.length != features.length) {
       debugPrint(
-          'AbandonmentPredictor: Feature length mismatch, returning raw features');
+        'AbandonmentPredictor: Feature length mismatch, returning raw features',
+      );
       return features;
     }
 
@@ -145,7 +154,8 @@ class AbandonmentPredictor {
   Future<double> predictRisk(Habit habit) async {
     if (!_initialized || _interpreter == null) {
       debugPrint(
-          'AbandonmentPredictor: Not initialized, returning neutral risk 0.5');
+        'AbandonmentPredictor: Not initialized, returning neutral risk 0.5',
+      );
       _errorCount++;
       return 0.5; // Return neutral risk when not initialized
     }
@@ -158,7 +168,8 @@ class AbandonmentPredictor {
       // ⚠️ CRITICAL: Handle first-time habits (no history) → return 0.5 default risk
       if (habit.completionHistory.isEmpty && habit.currentStreak == 0) {
         debugPrint(
-            'AbandonmentPredictor: First-time habit detected, returning default risk 0.5');
+          'AbandonmentPredictor: First-time habit detected, returning default risk 0.5',
+        );
         return 0.5;
       }
 
@@ -166,8 +177,10 @@ class AbandonmentPredictor {
       final hourOfDay = habit.lastCompletedAt?.hour ?? 12;
       final dayOfWeek = habit.lastCompletedAt?.weekday ?? 1;
       final currentStreak = habit.currentStreak;
-      final failuresLast7Days =
-          MLFeaturesCalculator.countRecentFailures(habit, 7);
+      final failuresLast7Days = MLFeaturesCalculator.countRecentFailures(
+        habit,
+        7,
+      );
       final categoryEnumValue = habit.category.index;
 
       // Prepare input features in exact order:
@@ -181,8 +194,9 @@ class AbandonmentPredictor {
       ];
 
       debugPrint(
-          'AbandonmentPredictor: Raw features [hour=$hourOfDay, day=$dayOfWeek, '
-          'streak=$currentStreak, failures=$failuresLast7Days, category=$categoryEnumValue]');
+        'AbandonmentPredictor: Raw features [hour=$hourOfDay, day=$dayOfWeek, '
+        'streak=$currentStreak, failures=$failuresLast7Days, category=$categoryEnumValue]',
+      );
 
       // Normalize features using StandardScaler (x - mean) / std
       final normalizedFeatures = _normalizeFeatures(rawFeatures);
@@ -201,8 +215,9 @@ class AbandonmentPredictor {
       final probability = output[0][0];
 
       debugPrint(
-          'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}% '
-          '(model v${_modelMetadata?['version']})');
+        'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}% '
+        '(model v${_modelMetadata?['version']})',
+      );
 
       // Save telemetry after successful prediction
       await _saveTelemetry();
@@ -232,7 +247,8 @@ class AbandonmentPredictor {
   ///
   /// Returns: Probability of abandonment (0.0-1.0)
   @Deprecated(
-      'Use predictRisk(Habit) instead. This method will be removed in a future version.')
+    'Use predictRisk(Habit) instead. This method will be removed in a future version.',
+  )
   Future<double> predictAbandonmentRisk({
     required int hourOfDay,
     required int dayOfWeek,
@@ -271,7 +287,8 @@ class AbandonmentPredictor {
       final probability = output[0][0];
 
       debugPrint(
-          'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}%');
+        'AbandonmentPredictor: Predicted risk = ${(probability * 100).toStringAsFixed(1)}%',
+      );
 
       return probability.clamp(0.0, 1.0);
     } catch (e) {
@@ -315,11 +332,14 @@ class AbandonmentPredictor {
         // First time - initialize reset timestamp
         _lastTelemetryReset = clock.now();
         await prefs.setString(
-            _telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
+          _telemetryLastResetKey,
+          _lastTelemetryReset!.toIso8601String(),
+        );
       }
 
       debugPrint(
-          'AbandonmentPredictor: Telemetry loaded - Predictions: $_predictionCount, Errors: $_errorCount');
+        'AbandonmentPredictor: Telemetry loaded - Predictions: $_predictionCount, Errors: $_errorCount',
+      );
     } catch (e) {
       debugPrint('AbandonmentPredictor: Failed to load telemetry: $e');
       // Continue with default values
@@ -335,8 +355,10 @@ class AbandonmentPredictor {
       await prefs.setInt(_telemetryErrorCountKey, _errorCount);
 
       if (_lastPredictionTime != null) {
-        await prefs.setString(_telemetryLastPredictionKey,
-            _lastPredictionTime!.toIso8601String());
+        await prefs.setString(
+          _telemetryLastPredictionKey,
+          _lastPredictionTime!.toIso8601String(),
+        );
       }
     } catch (e) {
       debugPrint('AbandonmentPredictor: Failed to save telemetry: $e');
@@ -350,9 +372,11 @@ class AbandonmentPredictor {
       final prefs = await SharedPreferences.getInstance();
 
       // Log final stats before reset
-      debugPrint('AbandonmentPredictor: Resetting telemetry - '
-          'Final stats: $_predictionCount predictions, $_errorCount errors, '
-          'success rate: ${telemetry['success_rate']}');
+      debugPrint(
+        'AbandonmentPredictor: Resetting telemetry - '
+        'Final stats: $_predictionCount predictions, $_errorCount errors, '
+        'success rate: ${telemetry['success_rate']}',
+      );
 
       // Reset counters
       _predictionCount = 0;
@@ -362,7 +386,9 @@ class AbandonmentPredictor {
       await prefs.setInt(_telemetryPredictionCountKey, 0);
       await prefs.setInt(_telemetryErrorCountKey, 0);
       await prefs.setString(
-          _telemetryLastResetKey, _lastTelemetryReset!.toIso8601String());
+        _telemetryLastResetKey,
+        _lastTelemetryReset!.toIso8601String(),
+      );
 
       debugPrint('AbandonmentPredictor: Telemetry reset complete');
     } catch (e) {
