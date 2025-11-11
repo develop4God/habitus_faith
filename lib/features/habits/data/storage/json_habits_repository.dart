@@ -248,6 +248,7 @@ class JsonHabitsRepository implements HabitsRepository {
     String? emoji,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
+    HabitNotificationSettings? notificationSettings,
   }) async {
     try {
       final habits = _loadHabits();
@@ -260,6 +261,7 @@ class JsonHabitsRepository implements HabitsRepository {
         emoji: emoji,
         colorValue: colorValue,
         difficulty: difficulty,
+        notificationSettings: notificationSettings,
       );
 
       habits.add(newHabit);

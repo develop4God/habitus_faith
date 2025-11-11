@@ -44,6 +44,7 @@ abstract class HabitsRepository {
     String? emoji,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
+    HabitNotificationSettings? notificationSettings,
   });
 
   /// Complete a habit for today

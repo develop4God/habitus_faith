@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import '../../data/storage/storage_providers.dart';
 import '../../domain/habit.dart';
+import '../../domain/models/habit_notification.dart';
 import 'onboarding_models.dart';
 import 'onboarding_questions.dart';
 import 'commitment_screen.dart';
@@ -331,6 +332,8 @@ class _AdaptiveOnboardingPageState
     });
     bool success = false;
     final messenger = ScaffoldMessenger.of(context);
+    Navigator.of(context);
+    final locale = Localizations.localeOf(context);
     try {
       final intent = ref.read(selectedIntentProvider);
       final answers = ref.read(answersProvider);
@@ -361,7 +364,6 @@ class _AdaptiveOnboardingPageState
       log('Perfil guardado en SharedPreferences', name: 'onboarding');
 
       // Get current language
-      final locale = Localizations.localeOf(context);
       final language = locale.languageCode; // 'es', 'en', 'pt', 'fr'
 
       // Try to fetch template first
@@ -376,16 +378,57 @@ class _AdaptiveOnboardingPageState
         debugPrint(
             'Using pre-generated template (${templateHabits.length} habits)');
       } else {
-        // Fallback to Gemini AI generation
-        final geminiService = await ref.read(geminiServiceProvider.future);
-        if (!mounted) return false;
-        const userId = 'local_user';
-        habitsData =
-            await geminiService.generateHabitsFromProfile(profile, userId);
-        log('Generated with Gemini (no template match, ${habitsData.length} habits)',
-            name: 'onboarding');
-        debugPrint(
-            'Generated with Gemini (no template match, ${habitsData.length} habits)');
+        try {
+          // Fallback a Gemini
+          final geminiService = await ref.read(geminiServiceProvider.future);
+          if (!mounted) return false;
+          const userId = 'local_user';
+          habitsData = await geminiService.generateHabitsFromProfile(profile, userId);
+          log('Generated with Gemini (no template match, ${habitsData.length} habits)',
+              name: 'onboarding');
+          debugPrint(
+              'Generated with Gemini (no template match, ${habitsData.length} habits)');
+        } catch (e) {
+          // Si Gemini falla, buscar el template más parecido por intent
+          debugPrint('Gemini falló, buscando template fallback por intent');
+          String fallbackFile;
+          if (intent == UserIntent.wellness) {
+            fallbackFile = 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
+          } else if (intent == UserIntent.faithBased) {
+            fallbackFile = 'habit_templates/templates-en/faithBased_growing_lackOfMotivation_understandBible_growInFaith.json';
+          } else {
+            // Si es both, usa wellness por defecto
+            fallbackFile = 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
+          }
+          try {
+            final fallbackJson = await DefaultAssetBundle.of(context).loadString(fallbackFile);
+            final fallbackMap = jsonDecode(fallbackJson) as Map<String, dynamic>;
+            final generated = fallbackMap['generated_habits'] as List<dynamic>?;
+            habitsData = generated != null
+                ? generated.map((e) => Map<String, dynamic>.from(e)).toList()
+                : [];
+            debugPrint('Usando template fallback por intent: $fallbackFile');
+          } catch (e) {
+            // Si no hay nada, crea un hábito genérico
+            habitsData = [
+              {
+                'name': 'Planificar el día',
+                'description': 'Organiza tus tareas y prioridades',
+                'category': 'mental',
+                'emoji': '📝',
+                'notifications': [
+                  {
+                    'time': '08:00',
+                    'title': 'Planifica tu día',
+                    'body': 'Haz tu lista de tareas',
+                    'enabled': true
+                  }
+                ]
+              }
+            ];
+            debugPrint('No se encontró ningún template, usando hábito genérico');
+          }
+        }
       }
 
       if (!mounted) return false;
@@ -394,7 +437,6 @@ class _AdaptiveOnboardingPageState
       final repository = ref.read(jsonHabitsRepositoryProvider);
       final storage = ref.read(jsonStorageServiceProvider);
       for (final habitData in habitsData) {
-        // Corregir casteo: convertir string a HabitCategory
         HabitCategory category;
         final catValue = habitData['category'];
         if (catValue is String) {
@@ -407,11 +449,22 @@ class _AdaptiveOnboardingPageState
         } else {
           category = HabitCategory.spiritual;
         }
+        // Convertir array de notificaciones a HabitNotificationSettings
+        HabitNotificationSettings? notificationSettings;
+        final notifications = habitData['notifications'] as List<dynamic>?;
+        if (notifications != null && notifications.isNotEmpty) {
+          final notif = notifications.first as Map<String, dynamic>;
+          notificationSettings = HabitNotificationSettings(
+            timing: NotificationTiming.atEventTime,
+            eventTime: notif['time'] as String?,
+          );
+        }
         await repository.createHabit(
           name: habitData['name'] as String,
           description: habitData['description'] as String,
           category: category,
           emoji: habitData['emoji'] as String?,
+          notificationSettings: notificationSettings,
         );
         if (!mounted) return false;
       }
@@ -430,6 +483,17 @@ class _AdaptiveOnboardingPageState
       log('Onboarding completado correctamente. Perfil: ${jsonEncode(profile.toJson())}',
           name: 'onboarding');
 
+      // Si se usó Gemini, guardar fingerprint/id para reutilización
+      if (templateHabits == null || templateHabits.isEmpty) {
+        final fingerprint = habitsData.isNotEmpty && habitsData.first.containsKey('fingerprint')
+            ? habitsData.first['fingerprint']
+            : null;
+        if (fingerprint != null) {
+          await prefs.setString('last_gemini_fingerprint', fingerprint);
+          debugPrint('Fingerprint de Gemini guardado: $fingerprint');
+        }
+      }
+
       if (!mounted) return false;
       debugPrint('Navegando a /habits');
       log('Navegando a /habits', name: 'onboarding');
@@ -444,7 +508,7 @@ class _AdaptiveOnboardingPageState
       if (e.toString().contains('Resource exhausted') ||
           e.toString().contains('error-code-429')) {
         errorMessage =
-            'La generación de hábitos está temporalmente limitada por el proveedor de IA. Por favor intenta nuevamente en unos minutos. Si el problema persiste, contacta soporte.';
+            'No se pudieron generar tus hábitos en este momento. Por favor intenta nuevamente en unos minutos. Si el problema persiste, contacta soporte.';
       } else {
         errorMessage =
             'Ocurrió un error inesperado al finalizar el onboarding. Por favor verifica tu conexión y vuelve a intentarlo. Si el problema persiste, contacta soporte.';

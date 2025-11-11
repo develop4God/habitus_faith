@@ -141,6 +141,7 @@ class Habit {
     int difficultyLevel = 3,
     int? targetMinutes,
     Clock? clock,
+    HabitNotificationSettings? notificationSettings,
   }) {
     final effectiveClock = clock ?? const Clock.system();
     return Habit(
@@ -158,6 +159,7 @@ class Habit {
       difficulty: difficulty,
       difficultyLevel: difficultyLevel,
       targetMinutes: targetMinutes ?? targetMinutesByLevel[difficultyLevel]!,
+      notificationSettings: notificationSettings,
     );
   }
 
