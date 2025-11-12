@@ -2,7 +2,7 @@ import unittest
 import importlib.util
 import json
 
-spec = importlib.util.spec_from_file_location('gen', 'generate_habit_templates_onboarding_V1.0.py')
+spec = importlib.util.spec_from_file_location('gen', 'generate_habit_templates_onboarding_V2.0.py')
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
