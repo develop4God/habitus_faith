@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitus_faith/core/providers/add_habit_button_visible_provider.dart';
 import 'habit_modal_sheet.dart';
 import '../../../domain/habit.dart';
 import '../../../domain/models/habit_notification.dart';
@@ -32,8 +31,8 @@ class CompactHabitCard extends ConsumerStatefulWidget {
 class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   bool _isExpanded = false;
   bool _isCompleting = false;
-  final TextEditingController _subtaskController = TextEditingController();
   List<Subtask> _subtasks = [];
+  bool _showLottieTick = false;
 
   @override
   void initState() {
@@ -50,9 +49,17 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
 
     try {
       if (widget.habit.completedToday) {
+        debugPrint('Desmarcando hábito: ${widget.habit.id}');
         await widget.onUncheck(widget.habit.id);
+        setState(() {
+          _showLottieTick = false;
+        });
       } else {
+        debugPrint('Marcando hábito: ${widget.habit.id}');
         await widget.onComplete(widget.habit.id);
+        setState(() {
+          _showLottieTick = true;
+        });
       }
     } finally {
       if (mounted) {
@@ -63,20 +70,9 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     }
   }
 
-  // Callback para ocultar el botón global de agregar hábito
-  void _setAddHabitButtonVisibility(bool visible) {
-    ref.read(addHabitButtonVisibleProvider.notifier).state = visible;
-  }
-
   @override
   void didUpdateWidget(covariant CompactHabitCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Eliminado: no modificar providers en el ciclo de vida del widget
-    // if (_isExpanded) {
-    //   _setAddHabitButtonVisibility(false);
-    // } else {
-    //   _setAddHabitButtonVisibility(true);
-    // }
   }
 
   @override
@@ -94,7 +90,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha:0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -130,7 +126,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: habitColor.withValues(alpha:0.1),
+                      color: habitColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -152,7 +148,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            decoration: widget.habit.completedToday
+                            decoration: widget.habit.completedToday || _showLottieTick
                                 ? TextDecoration.lineThrough
                                 : TextDecoration.none,
                             decorationThickness: 2,
@@ -207,26 +203,18 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 ),
                               ),
                             )
-                          : Container(
-                              decoration: BoxDecoration(
-                                color: widget.habit.completedToday
-                                    ? habitColor
-                                    : Colors.transparent,
-                                border: Border.all(
-                                  color: widget.habit.completedToday
-                                      ? habitColor
-                                      : Colors.grey.shade400,
-                                  width: 2,
-                                ),
+                          : Checkbox(
+                              value: widget.habit.completedToday,
+                              onChanged: (val) {
+                                if (!_isCompleting) _handleComplete();
+                              },
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: widget.habit.completedToday
-                                  ? const Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: 16,
-                                    )
-                                  : null,
+                              activeColor: habitColor,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                              side: BorderSide(width: 2, color: habitColor),
                             ),
                     ),
                   ),
@@ -241,7 +229,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   }
 
   Widget _buildExpandedContent(BuildContext context, AppLocalizations l10n, Color habitColor, StateSetter setModalState) {
-    final isCompleted = widget.habit.completedToday;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -348,26 +335,18 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 ),
                               ),
                             )
-                          : Container(
-                              decoration: BoxDecoration(
-                                color: widget.habit.completedToday
-                                    ? habitColor
-                                    : Colors.transparent,
-                                border: Border.all(
-                                  color: widget.habit.completedToday
-                                      ? habitColor
-                                      : Colors.grey.shade400,
-                                  width: 2,
-                                ),
+                          : Checkbox(
+                              value: widget.habit.completedToday,
+                              onChanged: (val) {
+                                if (!_isCompleting) _handleComplete();
+                              },
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: widget.habit.completedToday
-                                  ? const Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: 16,
-                                    )
-                                  : null,
+                              activeColor: habitColor,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                              side: BorderSide(width: 2, color: habitColor),
                             ),
                     ),
                   );
@@ -494,6 +473,9 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                           activeColor: Colors.purple,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                          side: BorderSide(width: 2, color: Colors.purple),
                         ),
                         title: Text(
                           subtask.title,
@@ -621,8 +603,6 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         return 'semana';
       case RecurrenceFrequency.monthly:
         return 'mes';
-      default:
-        return '';
     }
   }
 

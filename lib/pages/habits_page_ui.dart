@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../features/habits/domain/habit.dart';
+import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
 
 class ModernWeeklyCalendar extends StatefulWidget {
   final List<Habit> habits;
@@ -21,11 +22,13 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   @override
   void initState() {
     super.initState();
+    debugPrint('ModernWeeklyCalendarState.initState: inicializando calendario semanal, recibidos ${widget.habits.length} hábitos');
     _pageController = PageController(initialPage: 1000);
   }
 
   @override
   void dispose() {
+    debugPrint('ModernWeeklyCalendarState.dispose: liberando recursos');
     _pageController.dispose();
     super.dispose();
   }
@@ -68,7 +71,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               width: 48,
-              height: 48,
+              height: 64, // Ajuste de alto para evitar overflow
               decoration: BoxDecoration(
                 color: isToday ? const Color(0xFFE3F2FD) : _getProgressColor(progress),
                 shape: BoxShape.circle,
@@ -82,6 +85,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
                 children: [
                   Text(
                     ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][day.weekday % 7],
@@ -91,17 +95,17 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                       color: Colors.grey.shade600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2), // Menos espacio
                   Text(
                     '${day.day}',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: isToday ? const Color(0xFF1976D2) : Colors.grey.shade800,
                     ),
                   ),
                   if (totalHabits > 0) ...[
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       '$completedHabits/$totalHabits',
                       style: TextStyle(
@@ -123,36 +127,78 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   @override
   Widget build(BuildContext context) {
     debugPrint('ModernWeeklyCalendar.build: renderizando con ${widget.habits.length} hábitos');
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha:0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+        Center(
+          child: Text(
+            'Hoy',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1976D2),
+            ),
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
-      child: SizedBox(
-        height: 80,
-        child: PageView.builder(
-          controller: _pageController,
-          onPageChanged: (page) {
-            setState(() {
-            });
-          },
-          itemBuilder: (context, page) {
-            final weekOffset = page - 1000;
-            final baseDate = DateTime.now().add(Duration(days: weekOffset * 7));
-            final monday = baseDate.subtract(Duration(days: baseDate.weekday - 1));
-            return _buildWeek(monday);
-          },
         ),
-      ),
+        const SizedBox(height: 8),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha:0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: SizedBox(
+            height: 100, // Ajuste de alto para el calendario semanal
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (page) {
+                setState(() {});
+              },
+              itemBuilder: (context, page) {
+                final weekOffset = page - 1000;
+                final baseDate = DateTime.now().add(Duration(days: weekOffset * 7));
+                final monday = baseDate.subtract(Duration(days: baseDate.weekday - 1));
+                return _buildWeek(monday);
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: widget.habits.length,
+            itemBuilder: (context, index) {
+              final habit = widget.habits[index];
+              debugPrint('CompactHabitCard: renderizando hábito \x1B[32m${habit.name}\x1B[0m');
+              return CompactHabitCard(
+                habit: habit,
+                onDelete: () {
+                  debugPrint('CompactHabitCard: eliminar hábito ${habit.name}');
+                },
+                onEdit: () {
+                  debugPrint('CompactHabitCard: editar hábito ${habit.name}');
+                },
+                onComplete: (id) {
+                  debugPrint('CompactHabitCard: marcado hábito $id');
+                  // Aquí debe ir la lógica de marcado igual que en la vista compacta
+                },
+                onUncheck: (id) {
+                  debugPrint('CompactHabitCard: desmarcado hábito $id');
+                  // Aquí debe ir la lógica de desmarcado igual que en la vista compacta
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
