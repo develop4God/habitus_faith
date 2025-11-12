@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
+import 'edit_habit_dialog.dart';
+import '../l10n/app_localizations.dart';
 
 class ModernWeeklyCalendar extends StatefulWidget {
   final List<Habit> habits;
@@ -215,9 +217,15 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                             'HabitsPageUI: eliminar hábito ${habit.name}');
                         // Lógica real de borrado
                       },
-                      onEdit: () {
+                      onEdit: () async {
                         debugPrint('HabitsPageUI: editar hábito ${habit.name}');
-                        // Lógica real de edición
+                        final l10n = AppLocalizations.of(context)!;
+                        await showDialog(
+                          context: context,
+                          builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                        );
+                        // Después de cerrar el diálogo, refrescar la vista
+                        setState(() {});
                       },
                       onComplete: (id) {
                         debugPrint('HabitsPageUI: marcado hábito $id');
