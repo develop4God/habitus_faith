@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+class HabitStateManager {
+  static void updateCompleted({
+    required String habitId,
+    required bool completed,
+    required void Function(String, bool) onUpdate,
+  }) {
+    debugPrint('HabitStateManager.updateCompleted: habitId=$habitId, completed=$completed');
+    onUpdate(habitId, completed);
+  }
+}
+
 class HabitModalSheet {
   static Future<T?> show<T>({
     required BuildContext context,
@@ -23,6 +34,7 @@ class HabitModalSheet {
 }
 
 class HabitModalContent extends StatefulWidget {
+  final String habitId;
   final String habitName;
   final bool initialCompleted;
   final List<String> initialSubtasks;
@@ -31,6 +43,7 @@ class HabitModalContent extends StatefulWidget {
 
   const HabitModalContent({
     super.key,
+    required this.habitId,
     required this.habitName,
     required this.initialCompleted,
     required this.initialSubtasks,
@@ -53,12 +66,13 @@ class _HabitModalContentState extends State<HabitModalContent> {
     super.initState();
     completed = widget.initialCompleted;
     subtasks = List<String>.from(widget.initialSubtasks);
+    debugPrint('HabitModalContent.initState: habitName=${widget.habitName}, initialCompleted=${widget.initialCompleted}');
   }
 
   @override
   void didUpdateWidget(covariant HabitModalContent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    debugPrint('HabitModalContent.didUpdateWidget: INICIO - completed=$completed, widget.initialCompleted=${widget.initialCompleted}');
+    debugPrint('HabitModalContent.didUpdateWidget: INICIO - completed=$completed, widget.initialCompleted=${widget.initialCompleted}, oldWidget.initialCompleted=${oldWidget.initialCompleted}');
     if (completed != widget.initialCompleted) {
       debugPrint('HabitModalContent.didUpdateWidget: completed cambiado de '+completed.toString()+" a "+widget.initialCompleted.toString());
       setState(() {
@@ -74,7 +88,7 @@ class _HabitModalContentState extends State<HabitModalContent> {
         debugPrint('HabitModalContent.didUpdateWidget: setState ejecutado, subtasks=${subtasks.toString()}');
       });
     }
-    debugPrint('HabitModalContent.didUpdateWidget: FIN - completed=$completed');
+    debugPrint('HabitModalContent.didUpdateWidget: FIN - completed=$completed, widget.initialCompleted=${widget.initialCompleted}');
   }
 
   void _updateCompleted(bool value) {
@@ -83,13 +97,17 @@ class _HabitModalContentState extends State<HabitModalContent> {
       completed = value;
       debugPrint('HabitModalSheet: setState ejecutado, completed=$completed');
     });
+    HabitStateManager.updateCompleted(
+      habitId: widget.habitId,
+      completed: completed,
+      onUpdate: (id, val) {
+        if (widget.onCompletedChanged != null) {
+          debugPrint('HabitModalSheet: onCompletedChanged callback disparado con valor $completed');
+          widget.onCompletedChanged!(completed);
+        }
+      },
+    );
     debugPrint('HabitModalSheet: Estado actualizado, completed=$completed');
-    // Solo notifica el cambio, no espera valor de retorno
-    if (widget.onCompletedChanged != null) {
-      debugPrint('HabitModalSheet: onCompletedChanged callback disparado con valor $completed');
-      widget.onCompletedChanged!(completed);
-      debugPrint('HabitModalSheet: callback ejecutado, esperando actualización externa...');
-    }
   }
 
   void _addSubtask(String text) {
@@ -228,6 +246,7 @@ void showTestHabitModal(BuildContext context) {
   HabitModalSheet.show(
     context: context,
     child: HabitModalContent(
+      habitId: '1',
       habitName: 'Ejemplo de tarea',
       initialCompleted: false,
       initialSubtasks: const [],
