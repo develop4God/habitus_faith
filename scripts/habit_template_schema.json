@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "language", "generated_at", "templates"],
+  "properties": {
+    "version": { "type": "string" },
+    "language": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pattern_id", "habits", "scenario_id", "fingerprint"],
+        "properties": {
+          "pattern_id": { "type": "string" },
+          "scenario_id": { "type": "string" },
+          "fingerprint": {
+            "type": "object",
+            "required": ["primaryIntent", "motivations", "challenge"],
+            "properties": {
+              "primaryIntent": { "type": "string" },
+              "motivations": { "type": "array", "items": { "type": ["string", "null"] } },
+              "challenge": { "type": "string" },
+              "spiritualMaturity": { "type": ["string", "null"] }
+            }
+          },
+          "habits": {
+            "type": "array",
+            "minItems": 6,
+            "items": {
+              "type": "object",
+              "required": ["name", "category", "target_minutes", "difficulty", "predefined_id"],
+              "properties": {
+                "name": { "type": "string" },
+                "category": { "type": "string", "enum": ["spiritual","physical","mental","relational","other"] },
+                "emoji": { "type": ["string", "null"] },
+                "target_minutes": { "type": "integer", "minimum": 1 },
+                "difficulty": { "type": "string", "enum": ["easy","medium","hard"] },
+                "predefined_id": { "type": "string" },
+                "subtasks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["id","title","completed"],
+                    "properties": {
+                      "id": { "type": "string" },
+                      "title": { "type": "string" },
+                      "completed": { "type": "boolean" }
+                    }
+                  }
+                },
+                "recommended_time": { "type": ["string", "null"] },
+                "notification": { "type": ["object", "null"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
