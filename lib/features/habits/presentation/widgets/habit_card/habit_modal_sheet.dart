@@ -55,14 +55,41 @@ class _HabitModalContentState extends State<HabitModalContent> {
     subtasks = List<String>.from(widget.initialSubtasks);
   }
 
+  @override
+  void didUpdateWidget(covariant HabitModalContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint('HabitModalContent.didUpdateWidget: INICIO - completed=$completed, widget.initialCompleted=${widget.initialCompleted}');
+    if (completed != widget.initialCompleted) {
+      debugPrint('HabitModalContent.didUpdateWidget: completed cambiado de '+completed.toString()+" a "+widget.initialCompleted.toString());
+      setState(() {
+        completed = widget.initialCompleted;
+        debugPrint('HabitModalContent.didUpdateWidget: setState ejecutado, completed=$completed');
+      });
+      debugPrint('HabitModalContent.didUpdateWidget: completed actualizado desde externo');
+    }
+    if (subtasks != widget.initialSubtasks) {
+      debugPrint('HabitModalContent.didUpdateWidget: subtasks cambiadas');
+      setState(() {
+        subtasks = List<String>.from(widget.initialSubtasks);
+        debugPrint('HabitModalContent.didUpdateWidget: setState ejecutado, subtasks=${subtasks.toString()}');
+      });
+    }
+    debugPrint('HabitModalContent.didUpdateWidget: FIN - completed=$completed');
+  }
+
   void _updateCompleted(bool value) {
-    debugPrint('HabitModalSheet: Checkbox tapped. Valor actual: '
-        + completed.toString() + '. Nuevo valor: ' + value.toString());
+    debugPrint('HabitModalSheet: Checkbox tapped. Valor actual: $completed. Nuevo valor: $value');
     setState(() {
       completed = value;
+      debugPrint('HabitModalSheet: setState ejecutado, completed=$completed');
     });
-    debugPrint('HabitModalSheet: Estado actualizado, completed=' + completed.toString());
-    widget.onCompletedChanged?.call(completed);
+    debugPrint('HabitModalSheet: Estado actualizado, completed=$completed');
+    // Solo notifica el cambio, no espera valor de retorno
+    if (widget.onCompletedChanged != null) {
+      debugPrint('HabitModalSheet: onCompletedChanged callback disparado con valor $completed');
+      widget.onCompletedChanged!(completed);
+      debugPrint('HabitModalSheet: callback ejecutado, esperando actualización externa...');
+    }
   }
 
   void _addSubtask(String text) {
