@@ -170,21 +170,18 @@ class HabitsPage extends ConsumerStatefulWidget {
 class _HabitsPageState extends ConsumerState<HabitsPage> {
   HabitCategory? _categoryFilter;
 
-
-
-
   List<Habit> _filterHabits(List<Habit> habits) {
     debugPrint('HabitsPage._filterHabits: recibidos ${habits.length} hábitos');
     if (_categoryFilter == null) {
       debugPrint('HabitsPage._filterHabits: sin filtro, retornando todos');
       return habits;
     }
-    final filtrados = habits.where((h) => h.category == _categoryFilter).toList();
-    debugPrint('HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos');
+    final filtrados =
+        habits.where((h) => h.category == _categoryFilter).toList();
+    debugPrint(
+        'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos');
     return filtrados;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -194,9 +191,11 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
         debugPrint('HabitsPage.build: estado de habitsAsync: $habitsAsync');
         return habitsAsync.when(
           data: (habits) {
-            debugPrint('HabitsPage.build: data recibida con ${habits.length} hábitos');
+            debugPrint(
+                'HabitsPage.build: data recibida con ${habits.length} hábitos');
             final filtrados = _filterHabits(habits);
-            debugPrint('HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
+            debugPrint(
+                'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
             return ModernWeeklyCalendar(
               habits: filtrados,
               initialDate: DateTime.now(),

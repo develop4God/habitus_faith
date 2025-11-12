@@ -65,7 +65,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
-        debugPrint('HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}');
+        debugPrint(
+            'HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}');
         state = const AsyncData(null);
       },
     );
@@ -98,7 +99,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
-        debugPrint('HabitsNotifier.uncheckHabit: éxito, habit.completedToday=${habit.completedToday}');
+        debugPrint(
+            'HabitsNotifier.uncheckHabit: éxito, habit.completedToday=${habit.completedToday}');
         state = const AsyncData(null);
       },
     );

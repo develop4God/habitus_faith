@@ -6,7 +6,6 @@ class TestFixtures {
       id: 'test-habit-1',
       userId: 'test-user',
       name: 'Oración',
-      description: 'Dedica tiempo a la oración diaria.',
       category: HabitCategory.spiritual,
     );
   }
@@ -16,7 +15,6 @@ class TestFixtures {
       id: 'test-habit-2',
       userId: 'test-user',
       name: 'Lectura Bíblica',
-      description: 'Lee un capítulo de la Biblia.',
       category: HabitCategory.spiritual,
     );
   }
@@ -26,7 +24,6 @@ class TestFixtures {
       id: 'test-habit-streak',
       userId: 'test-user',
       name: 'Hábito con racha',
-      description: 'Hábito para probar rachas',
     );
 
     // Simulate completing the habit for consecutive days
@@ -53,7 +50,6 @@ class TestFixtures {
         id: 'test-habit-$index',
         userId: 'test-user',
         name: 'Hábito ${index + 1}',
-        description: 'Descripción del hábito ${index + 1}',
       ),
     );
   }

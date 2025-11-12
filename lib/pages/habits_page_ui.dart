@@ -22,7 +22,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   @override
   void initState() {
     super.initState();
-    debugPrint('ModernWeeklyCalendarState.initState: inicializando calendario semanal, recibidos ${widget.habits.length} hábitos');
+    debugPrint(
+        'ModernWeeklyCalendarState.initState: inicializando calendario semanal, recibidos ${widget.habits.length} hábitos');
     _pageController = PageController(initialPage: 1000);
   }
 
@@ -42,8 +43,10 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   }
 
   Widget _buildWeek(DateTime weekStart) {
-    debugPrint('ModernWeeklyCalendar._buildWeek: recibiendo ${widget.habits.length} hábitos');
-    final daysOfWeek = List.generate(7, (i) => weekStart.add(Duration(days: i)));
+    debugPrint(
+        'ModernWeeklyCalendar._buildWeek: recibiendo ${widget.habits.length} hábitos');
+    final daysOfWeek =
+        List.generate(7, (i) => weekStart.add(Duration(days: i)));
     final today = DateTime.now();
 
     return Row(
@@ -53,16 +56,16 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
         final isToday = day.year == today.year &&
             day.month == today.month &&
             day.day == today.day;
-        final completedHabits = widget.habits.where((h) =>
-            h.completionHistory.any((dt) =>
-            dt.year == day.year &&
+        final completedHabits = widget.habits
+            .where((h) => h.completionHistory.any((dt) =>
+                dt.year == day.year &&
                 dt.month == day.month &&
-                dt.day == day.day
-            )
-        ).length;
+                dt.day == day.day))
+            .length;
         final totalHabits = widget.habits.length;
         final progress = totalHabits > 0 ? completedHabits / totalHabits : 0.0;
-        debugPrint('ModernWeeklyCalendar._buildWeek: día ${day.day}/${day.month} - completados: $completedHabits/$totalHabits, progreso: $progress');
+        debugPrint(
+            'ModernWeeklyCalendar._buildWeek: día ${day.day}/${day.month} - completados: $completedHabits/$totalHabits, progreso: $progress');
 
         return Expanded(
           child: Padding(
@@ -73,11 +76,16 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               width: 48,
               height: 64, // Ajuste de alto para evitar overflow
               decoration: BoxDecoration(
-                color: isToday ? const Color(0xFFE3F2FD) : _getProgressColor(progress),
+                color: isToday
+                    ? const Color(0xFFE3F2FD)
+                    : _getProgressColor(progress),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: (isToday ? const Color(0xFF2196F3) : Colors.grey.shade400).withValues(alpha:0.2),
+                    color: (isToday
+                            ? const Color(0xFF2196F3)
+                            : Colors.grey.shade400)
+                        .withValues(alpha: 0.2),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -85,10 +93,19 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Centrado vertical
                 children: [
                   Text(
-                    ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][day.weekday % 7],
+                    [
+                      'Dom',
+                      'Lun',
+                      'Mar',
+                      'Mié',
+                      'Jue',
+                      'Vie',
+                      'Sáb'
+                    ][day.weekday % 7],
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
@@ -101,7 +118,9 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: isToday ? const Color(0xFF1976D2) : Colors.grey.shade800,
+                      color: isToday
+                          ? const Color(0xFF1976D2)
+                          : Colors.grey.shade800,
                     ),
                   ),
                   if (totalHabits > 0) ...[
@@ -126,7 +145,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('ModernWeeklyCalendar.build: renderizando con ${widget.habits.length} hábitos');
+    debugPrint(
+        'ModernWeeklyCalendar.build: renderizando con ${widget.habits.length} hábitos');
     return Column(
       children: [
         const SizedBox(height: 12),
@@ -150,7 +170,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha:0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -165,8 +185,10 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               },
               itemBuilder: (context, page) {
                 final weekOffset = page - 1000;
-                final baseDate = DateTime.now().add(Duration(days: weekOffset * 7));
-                final monday = baseDate.subtract(Duration(days: baseDate.weekday - 1));
+                final baseDate =
+                    DateTime.now().add(Duration(days: weekOffset * 7));
+                final monday =
+                    baseDate.subtract(Duration(days: baseDate.weekday - 1));
                 return _buildWeek(monday);
               },
             ),
@@ -175,49 +197,57 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
         Expanded(
           child: widget.habits.isEmpty
               ? Center(
-            child: Text(
-              'No tienes hábitos para hoy',
-              style: TextStyle(fontSize: 18, color: Colors.grey[500]),
-            ),
-          )
+                  child: Text(
+                    'No tienes hábitos para hoy',
+                    style: TextStyle(fontSize: 18, color: Colors.grey[500]),
+                  ),
+                )
               : ListView.builder(
-            itemCount: widget.habits.length,
-            itemBuilder: (context, index) {
-              final habit = widget.habits[index];
-              debugPrint('HabitsPageUI: renderizando hábito ${habit.name} con estado completedToday=${habit.completedToday}');
-              return CompactHabitCard(
-                habit: habit,
-                onDelete: () {
-                  debugPrint('HabitsPageUI: eliminar hábito ${habit.name}');
-                  // Lógica real de borrado
-                },
-                onEdit: () {
-                  debugPrint('HabitsPageUI: editar hábito ${habit.name}');
-                  // Lógica real de edición
-                },
-                onComplete: (id) {
-                  debugPrint('HabitsPageUI: marcado hábito $id');
-                  setState(() {
-                    final idx = widget.habits.indexWhere((h) => h.id == id);
-                    if (idx != -1) {
-                      widget.habits[idx] = widget.habits[idx].copyWith(completedToday: true);
-                      debugPrint('HabitsPageUI: habit ${widget.habits[idx].name} marcado como completado');
-                    }
-                  });
-                },
-                onUncheck: (id) {
-                  debugPrint('HabitsPageUI: desmarcado hábito $id');
-                  setState(() {
-                    final idx = widget.habits.indexWhere((h) => h.id == id);
-                    if (idx != -1) {
-                      widget.habits[idx] = widget.habits[idx].copyWith(completedToday: false);
-                      debugPrint('HabitsPageUI: habit ${widget.habits[idx].name} desmarcado como completado');
-                    }
-                  });
-                },
-              );
-            },
-          ),
+                  itemCount: widget.habits.length,
+                  itemBuilder: (context, index) {
+                    final habit = widget.habits[index];
+                    debugPrint(
+                        'HabitsPageUI: renderizando hábito ${habit.name} con estado completedToday=${habit.completedToday}');
+                    return CompactHabitCard(
+                      habit: habit,
+                      onDelete: () {
+                        debugPrint(
+                            'HabitsPageUI: eliminar hábito ${habit.name}');
+                        // Lógica real de borrado
+                      },
+                      onEdit: () {
+                        debugPrint('HabitsPageUI: editar hábito ${habit.name}');
+                        // Lógica real de edición
+                      },
+                      onComplete: (id) {
+                        debugPrint('HabitsPageUI: marcado hábito $id');
+                        setState(() {
+                          final idx =
+                              widget.habits.indexWhere((h) => h.id == id);
+                          if (idx != -1) {
+                            widget.habits[idx] = widget.habits[idx]
+                                .copyWith(completedToday: true);
+                            debugPrint(
+                                'HabitsPageUI: habit ${widget.habits[idx].name} marcado como completado');
+                          }
+                        });
+                      },
+                      onUncheck: (id) {
+                        debugPrint('HabitsPageUI: desmarcado hábito $id');
+                        setState(() {
+                          final idx =
+                              widget.habits.indexWhere((h) => h.id == id);
+                          if (idx != -1) {
+                            widget.habits[idx] = widget.habits[idx]
+                                .copyWith(completedToday: false);
+                            debugPrint(
+                                'HabitsPageUI: habit ${widget.habits[idx].name} desmarcado como completado');
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
         ),
       ],
     );

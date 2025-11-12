@@ -12,7 +12,6 @@ final testHabits = [
     id: '1',
     userId: 'user1',
     name: 'Orar',
-    description: 'Orar cada mañana',
     category: HabitCategory.spiritual,
     emoji: '🙏',
     createdAt: DateTime.now(),

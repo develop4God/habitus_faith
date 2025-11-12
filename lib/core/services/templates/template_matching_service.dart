@@ -50,12 +50,16 @@ class TemplateMatchingService {
       // 1. Buscar en Firestore por fingerprint e idioma
       if (_firestore != null) {
         final docId = '${patternId}_$language';
-        final doc = await _firestore!.collection('habit_templates_master').doc(docId).get();
+        final doc = await _firestore!
+            .collection('habit_templates_master')
+            .doc(docId)
+            .get();
         if (doc.exists) {
           final data = doc.data();
           if (data != null && data['habits'] != null) {
             log('Template found in Firestore: $docId', name: 'templates');
-            return (data['habits'] as List<dynamic>).cast<Map<String, dynamic>>();
+            return (data['habits'] as List<dynamic>)
+                .cast<Map<String, dynamic>>();
           }
         }
       }

@@ -292,7 +292,8 @@ class JsonHabitsRepository implements HabitsRepository {
       }
       final now = DateTime.now();
       final habit = habits[index];
-      debugPrint('completeHabit: estado completedToday antes: ${habit.completedToday}');
+      debugPrint(
+          'completeHabit: estado completedToday antes: ${habit.completedToday}');
       if (habit.completedToday) {
         debugPrint('completeHabit: hábito "$habitId" ya completado hoy');
         return Success(habit);
@@ -304,14 +305,16 @@ class JsonHabitsRepository implements HabitsRepository {
       await _saveCompletionRecord(completionRecord);
       debugPrint('completeHabit: registro de completado guardado');
       final updatedHabit = _loadHabitWithCompletions(habit);
-      debugPrint('completeHabit: estado completedToday después: ${updatedHabit.completedToday}');
+      debugPrint(
+          'completeHabit: estado completedToday después: ${updatedHabit.completedToday}');
       habits[index] = updatedHabit;
       debugPrint('completeHabit: hábito actualizado en la lista');
       await _saveHabits(habits);
       debugPrint('completeHabit: hábitos guardados');
       await _updateStatistics();
       debugPrint('completeHabit: estadísticas actualizadas');
-      debugPrint('Happy path: completeHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
+      debugPrint(
+          'Happy path: completeHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('completeHabit: error: $e');
@@ -440,7 +443,8 @@ class JsonHabitsRepository implements HabitsRepository {
         return Failure(HabitFailure.notFound('Habit not found: $habitId'));
       }
       final habit = habits[index];
-      debugPrint('uncheckHabit: estado completedToday antes: ${habit.completedToday}');
+      debugPrint(
+          'uncheckHabit: estado completedToday antes: ${habit.completedToday}');
       if (!habit.completedToday) {
         debugPrint('uncheckHabit: hábito "$habitId" no completado hoy');
         return Success(habit);
@@ -476,7 +480,8 @@ class JsonHabitsRepository implements HabitsRepository {
       debugPrint('uncheckHabit: hábitos guardados');
       await _updateStatistics();
       debugPrint('uncheckHabit: estadísticas actualizadas');
-      debugPrint('Happy path: uncheckHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
+      debugPrint(
+          'Happy path: uncheckHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('uncheckHabit: error: $e');

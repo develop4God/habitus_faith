@@ -9,7 +9,6 @@ void main() {
         id: 'test-1',
         userId: 'user-1',
         name: 'Oración',
-        description: 'Orar diariamente',
       );
 
       // Act
@@ -36,7 +35,6 @@ void main() {
         id: 'test-2',
         userId: 'user-1',
         name: 'Lectura',
-        description: 'Leer la Biblia',
       ).copyWith(
         currentStreak: 5,
         longestStreak: 5,
@@ -66,7 +64,6 @@ void main() {
         id: 'test-3',
         userId: 'user-1',
         name: 'Servicio',
-        description: 'Servir a otros',
       ).copyWith(
         currentStreak: 10,
         longestStreak: 15,
@@ -96,7 +93,6 @@ void main() {
         id: 'test-4',
         userId: 'user-1',
         name: 'Gratitud',
-        description: 'Agradecer',
       );
 
       // Act

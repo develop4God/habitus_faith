@@ -34,7 +34,6 @@ void main() {
         id: 'test1',
         userId: 'user1',
         name: 'Morning meditation',
-        description: 'Daily meditation practice',
         category: HabitCategory.spiritual,
         clock: fakeClock,
       );
@@ -98,7 +97,6 @@ void main() {
         id: 'test2',
         userId: 'user1',
         name: 'Reading',
-        description: 'Daily reading',
         category: HabitCategory.mental,
         clock: fakeClock,
       );
@@ -126,7 +124,6 @@ void main() {
         id: 'test3',
         userId: 'user1',
         name: 'Exercise',
-        description: 'Daily workout',
         category: HabitCategory.physical,
         clock: fakeClock,
       );
@@ -153,7 +150,6 @@ void main() {
         id: 'test4',
         userId: 'user1',
         name: 'Journaling',
-        description: 'Daily journal',
         category: HabitCategory.spiritual,
         clock: fakeClock,
       );
@@ -185,7 +181,6 @@ void main() {
         id: 'test5',
         userId: 'user1',
         name: 'Prayer',
-        description: 'Morning prayer',
         category: HabitCategory.spiritual,
         clock: fakeClock,
       );
@@ -217,7 +212,6 @@ void main() {
         id: 'test6',
         userId: 'user1',
         name: 'Gym',
-        description: 'Workout',
         category: HabitCategory.physical,
         clock: fakeClock,
       );
@@ -257,7 +251,6 @@ void main() {
         id: 'test7',
         userId: 'user1',
         name: 'Reading',
-        description: 'Daily reading',
         category: HabitCategory.mental,
         clock: fakeClock,
       );

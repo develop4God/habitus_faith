@@ -18,7 +18,6 @@ void main() {
           id: 'test1',
           userId: 'user1',
           name: 'Morning prayer',
-          description: 'Prayer habit',
           category: HabitCategory.spiritual,
           difficultyLevel: 2,
         );
@@ -73,7 +72,6 @@ void main() {
           id: 'test2',
           userId: 'user1',
           name: 'Exercise',
-          description: 'Daily workout',
           category: HabitCategory.physical,
           difficultyLevel: 4,
           targetMinutes: 30,
@@ -124,7 +122,6 @@ void main() {
           id: 'test3',
           userId: 'user1',
           name: 'Meditation',
-          description: 'Daily meditation',
           category: HabitCategory.mental,
         );
 
@@ -174,7 +171,6 @@ void main() {
           id: 'test4',
           userId: 'user1',
           name: 'Bible reading',
-          description: 'Daily reading',
           category: HabitCategory.spiritual,
         );
 
@@ -223,7 +219,6 @@ void main() {
           id: 'test5',
           userId: 'user1',
           name: 'Journaling',
-          description: 'Daily gratitude journal',
           category: HabitCategory.spiritual,
           difficultyLevel: 3,
           targetMinutes: 20,
@@ -288,7 +283,6 @@ void main() {
           id: 'test6a',
           userId: 'user1',
           name: 'Workout',
-          description: 'Morning exercise',
           category: HabitCategory.physical,
         ).copyWith(completionHistory: physicalCompletions);
 
@@ -304,7 +298,6 @@ void main() {
           id: 'test6b',
           userId: 'user1',
           name: 'Prayer',
-          description: 'Evening prayer',
           category: HabitCategory.spiritual,
         ).copyWith(completionHistory: spiritualCompletions);
 
@@ -342,7 +335,6 @@ void main() {
           id: 'test7',
           userId: 'user1',
           name: 'Reading',
-          description: 'Daily reading',
           category: HabitCategory.mental,
         );
 
@@ -382,7 +374,6 @@ void main() {
           id: 'test8',
           userId: 'user1',
           name: 'Habit crossing months',
-          description: 'Test month boundary',
           category: HabitCategory.relational,
         );
 

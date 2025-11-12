@@ -16,7 +16,6 @@ void main() {
         id: 'test-1',
         userId: 'user-1',
         name: 'High Success',
-        description: 'Doing great',
       ).copyWith(difficultyLevel: 3, successRate7d: 0.87);
 
       // Act
@@ -32,7 +31,6 @@ void main() {
         id: 'test-2',
         userId: 'user-1',
         name: 'Max Level',
-        description: 'Already at peak',
       ).copyWith(difficultyLevel: 5, successRate7d: 0.87);
 
       // Act
@@ -48,7 +46,6 @@ void main() {
         id: 'test-3',
         userId: 'user-1',
         name: 'Struggling',
-        description: 'Need easier challenge',
       ).copyWith(difficultyLevel: 3, successRate7d: 0.45);
 
       // Act
@@ -64,7 +61,6 @@ void main() {
         id: 'test-4',
         userId: 'user-1',
         name: 'Min Level',
-        description: 'Already at easiest',
       ).copyWith(difficultyLevel: 1, successRate7d: 0.45);
 
       // Act
@@ -80,7 +76,6 @@ void main() {
         id: 'test-5',
         userId: 'user-1',
         name: 'Moderate',
-        description: 'Just right',
       ).copyWith(difficultyLevel: 3, successRate7d: 0.71);
 
       // Act
@@ -98,7 +93,6 @@ void main() {
         id: 'test-6',
         userId: 'user-1',
         name: 'No Completions',
-        description: 'Never completed',
       );
 
       // Act
@@ -115,7 +109,6 @@ void main() {
         id: 'test-7',
         userId: 'user-1',
         name: 'Few Completions',
-        description: 'Only 2 completions',
       ).copyWith(
         completionHistory: [
           now.subtract(const Duration(days: 2)),
@@ -140,7 +133,6 @@ void main() {
           id: 'test-8',
           userId: 'user-1',
           name: 'Morning Routine',
-          description: 'Always at 7am',
         ).copyWith(
           completionHistory: [
             sevenAM.subtract(const Duration(days: 2)),
@@ -169,7 +161,6 @@ void main() {
           id: 'test-9',
           userId: 'user-1',
           name: 'Mixed Times',
-          description: 'Various completion times',
         ).copyWith(
           completionHistory: [
             baseDate
@@ -227,7 +218,6 @@ void main() {
           id: 'test-10',
           userId: 'user-1',
           name: 'Tie Scenario',
-          description: 'Equal frequency',
         ).copyWith(
           completionHistory: [
             baseDate
@@ -267,7 +257,6 @@ void main() {
         id: 'test-11',
         userId: 'user-1',
         name: 'Few Completions',
-        description: 'Only 4 completions',
       ).copyWith(
         completionHistory: [
           now.subtract(const Duration(days: 4)),
@@ -294,7 +283,6 @@ void main() {
         id: 'test-12',
         userId: 'user-1',
         name: 'MWF Pattern',
-        description: 'Mon/Wed/Fri completion pattern',
       ).copyWith(
         completionHistory: [
           monday.subtract(const Duration(days: 14)), // Mon, 2 weeks ago
@@ -330,7 +318,6 @@ void main() {
         id: 'test-13',
         userId: 'user-1',
         name: 'Varied Frequency',
-        description: 'Different day frequencies',
       ).copyWith(
         completionHistory: [
           // Monday appears 4 times
@@ -379,7 +366,6 @@ void main() {
         id: 'test-14',
         userId: 'user-1',
         name: 'Only Mondays',
-        description: 'Completed only on Mondays',
       ).copyWith(
         completionHistory: [
           monday.subtract(const Duration(days: 21)),
@@ -406,7 +392,6 @@ void main() {
         id: 'test-15',
         userId: 'user-1',
         name: 'Few Failures',
-        description: 'Not enough failures',
       ).copyWith(consecutiveFailures: 2);
 
       // Act
@@ -425,7 +410,6 @@ void main() {
         id: 'test-16',
         userId: 'user-1',
         name: 'Weekday Only',
-        description: 'No weekend completions',
       ).copyWith(
         consecutiveFailures: 3,
         completionHistory: [
@@ -455,7 +439,6 @@ void main() {
         id: 'test-17',
         userId: 'user-1',
         name: 'Morning Only',
-        description: 'No evening completions',
       ).copyWith(
         consecutiveFailures: 3,
         completionHistory: [
@@ -488,7 +471,6 @@ void main() {
         id: 'test-18',
         userId: 'user-1',
         name: 'Random Pattern',
-        description: 'No specific pattern',
       ).copyWith(
         consecutiveFailures: 3,
         completionHistory: [
@@ -523,7 +505,6 @@ void main() {
           id: 'test-19',
           userId: 'user-1',
           name: 'Never Completed',
-          description: 'No completions at all',
         ).copyWith(consecutiveFailures: 5, completionHistory: []);
 
         // Act

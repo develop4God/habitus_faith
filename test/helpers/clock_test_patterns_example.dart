@@ -24,7 +24,6 @@ void main() {
           id: 'test1',
           userId: 'user1',
           name: 'Morning Prayer',
-          description: 'Daily prayer',
           category: HabitCategory.spiritual,
           clock: clock,
         ).completeToday(clock: clock);
@@ -57,7 +56,6 @@ void main() {
           id: 'test2',
           userId: 'user1',
           name: 'Exercise',
-          description: 'Daily workout',
           category: HabitCategory.physical,
           clock: clock,
         );
@@ -85,7 +83,6 @@ void main() {
           id: 'test3',
           userId: 'user1',
           name: 'Reading',
-          description: 'Daily reading',
           category: HabitCategory.mental,
           clock: clock,
         );
@@ -125,7 +122,6 @@ void main() {
           id: 'test4',
           userId: 'user1',
           name: 'Meditation',
-          description: 'Daily meditation',
           category: HabitCategory.spiritual,
           createdAt: now.subtract(const Duration(days: 30)),
           completionHistory: completions,
@@ -183,7 +179,6 @@ void main() {
           id: 'test5',
           userId: 'user1',
           name: 'Workout',
-          description: 'Gym sessions',
           category: HabitCategory.physical,
           createdAt: monday,
           completionHistory: completions,
@@ -220,7 +215,6 @@ void main() {
           id: 'test6',
           userId: 'user1',
           name: 'Morning Routine',
-          description: 'Daily routine',
           category: HabitCategory.spiritual,
           createdAt: monday,
           completionHistory: completions,
@@ -243,7 +237,6 @@ void main() {
           id: 'test7',
           userId: 'user1',
           name: 'Study',
-          description: 'Daily study',
           category: HabitCategory.mental,
           clock: clock,
         );
@@ -295,7 +288,6 @@ void main() {
           id: 'test8',
           userId: 'user1',
           name: 'Prayer',
-          description: 'Morning prayer',
           category: HabitCategory.spiritual,
           clock: clock,
         );
@@ -317,7 +309,6 @@ void main() {
           id: 'test9',
           userId: 'user1',
           name: 'Test',
-          description: 'Test',
           category: HabitCategory.spiritual,
           clock: clockMidnight,
         ).completeToday(clock: clockMidnight);
@@ -331,7 +322,6 @@ void main() {
           id: 'test10',
           userId: 'user1',
           name: 'Test',
-          description: 'Test',
           category: HabitCategory.spiritual,
           clock: clockAlmostMidnight,
         ).completeToday(clock: clockAlmostMidnight);

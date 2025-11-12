@@ -95,9 +95,6 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
       await ref.read(habitsRepositoryProvider).createHabit(
             name: microHabit.action,
-            description: microHabit.verseText != null
-                ? '${microHabit.purpose}\n\n${microHabit.verse}: ${microHabit.verseText}'
-                : '${microHabit.purpose}\n\n${microHabit.verse}',
             category: category,
             emoji: emoji,
           );

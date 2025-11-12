@@ -10,7 +10,6 @@ void main() {
           id: 'prayer',
           userId: 'user1',
           name: 'Morning Prayer',
-          description: 'Daily prayer routine',
         );
 
         const settings = HabitNotificationSettings(
@@ -45,7 +44,6 @@ void main() {
           id: 'bible',
           userId: 'user1',
           name: 'Bible Reading',
-          description: 'Read 1 chapter',
         );
 
         const recurrence = HabitRecurrence(
@@ -66,7 +64,6 @@ void main() {
           id: 'exercise',
           userId: 'user1',
           name: 'Morning Exercise',
-          description: 'Daily workout',
         );
 
         final subtasks = [
@@ -175,7 +172,6 @@ void main() {
           id: 'test',
           userId: 'user1',
           name: 'Test Habit',
-          description: 'Test',
         );
 
         expect(habit.subtasks, isEmpty);
@@ -281,7 +277,6 @@ void main() {
           id: 'workout',
           userId: 'user1',
           name: 'Morning Workout',
-          description: 'Daily exercise routine',
         );
 
         // Step 2: Add notification
@@ -325,7 +320,6 @@ void main() {
           id: 'prayer',
           userId: 'user1',
           name: 'Prayer',
-          description: 'Daily prayer',
         ).copyWith(
           notificationSettings: const HabitNotificationSettings(
             timing: NotificationTiming.atEventTime,

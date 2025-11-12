@@ -19,7 +19,6 @@ void main() {
         id: 'test-6',
         userId: 'user-1',
         name: 'Test',
-        description: 'Test desc',
         category: HabitCategory.spiritual,
         completedToday: true,
         currentStreak: 3,
@@ -54,7 +53,6 @@ void main() {
         id: 'test-7',
         userId: 'user-1',
         name: 'Round Trip Test',
-        description: 'Testing serialization',
         category: HabitCategory.spiritual,
         completedToday: true,
         currentStreak: 7,
@@ -80,7 +78,7 @@ void main() {
       expect(restoredHabit.id, originalHabit.id);
       expect(restoredHabit.userId, originalHabit.userId);
       expect(restoredHabit.name, originalHabit.name);
-      expect(restoredHabit.description, originalHabit.description);
+      // Note: description field removed from Habit model
       expect(restoredHabit.category, originalHabit.category);
       expect(restoredHabit.completedToday, originalHabit.completedToday);
       expect(restoredHabit.currentStreak, originalHabit.currentStreak);

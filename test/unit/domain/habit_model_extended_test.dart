@@ -10,7 +10,6 @@ void main() {
         id: 'test-1',
         userId: 'user-1',
         name: 'Prayer',
-        description: 'Daily prayer',
       );
 
       // Assert
@@ -32,7 +31,6 @@ void main() {
         id: 'test-2',
         userId: 'user-1',
         name: 'Bible Reading',
-        description: 'Read 1 chapter',
         category: HabitCategory.spiritual,
         createdAt: now,
         difficultyLevel: 4,
@@ -64,7 +62,6 @@ void main() {
         id: 'test-3',
         userId: 'user-1',
         name: 'Gratitude',
-        description: 'Write in journal',
       );
 
       // Act
@@ -105,7 +102,6 @@ void main() {
         id: 'test-4',
         userId: 'user-1',
         name: 'Exercise',
-        description: 'Daily workout',
       ).copyWith(
         completionHistory: completions,
         currentStreak: 1,
@@ -135,7 +131,6 @@ void main() {
         id: 'test-5',
         userId: 'user-1',
         name: 'Perfect Streak',
-        description: 'All 7 days',
       ).copyWith(
         completionHistory: completions,
         currentStreak: 6,
@@ -157,7 +152,6 @@ void main() {
           id: 'test-6',
           userId: 'user-1',
           name: 'New Habit',
-          description: 'Just starting',
         );
 
         // Act
@@ -174,7 +168,6 @@ void main() {
         id: 'test-7',
         userId: 'user-1',
         name: 'Recovery',
-        description: 'Recovering from failures',
       ).copyWith(consecutiveFailures: 5);
 
       // Act

@@ -25,7 +25,6 @@ void main() {
     test('createHabit creates habit successfully', () async {
       final result = await repository.createHabit(
         name: 'Test Habit',
-        description: 'Test Description',
         category: HabitCategory.spiritual,
       );
 
@@ -42,7 +41,6 @@ void main() {
         // Create a habit
         final createResult = await repository.createHabit(
           name: 'Test Habit',
-          description: 'Test Description',
         );
         final habitId = createResult.value.id;
 
@@ -62,7 +60,6 @@ void main() {
       () async {
         final createResult = await repository.createHabit(
           name: 'Test Habit',
-          description: 'Test Description',
         );
         final habitId = createResult.value.id;
 
@@ -82,7 +79,6 @@ void main() {
     test('streak calculation works correctly for consecutive days', () async {
       final createResult = await repository.createHabit(
         name: 'Test Habit',
-        description: 'Test Description',
       );
       final habitId = createResult.value.id;
 
@@ -118,7 +114,6 @@ void main() {
     test('streak resets when there is a gap', () async {
       final createResult = await repository.createHabit(
         name: 'Test Habit',
-        description: 'Test Description',
       );
       final habitId = createResult.value.id;
 
@@ -153,7 +148,6 @@ void main() {
     test('longestStreak is calculated correctly', () async {
       final createResult = await repository.createHabit(
         name: 'Test Habit',
-        description: 'Test Description',
       );
       final habitId = createResult.value.id;
 
@@ -221,7 +215,6 @@ void main() {
     test('deleteHabit removes habit from storage', () async {
       final createResult = await repository.createHabit(
         name: 'Test Habit',
-        description: 'Test Description',
       );
       final habitId = createResult.value.id;
 

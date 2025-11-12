@@ -24,7 +24,6 @@ class FirestoreHabitsRepository implements HabitsRepository {
   @override
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
-    required String description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
@@ -32,13 +31,15 @@ class FirestoreHabitsRepository implements HabitsRepository {
     HabitNotificationSettings? notificationSettings,
   }) async {
     // Firestore desactivado
-    return Failure(HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
+    return Failure(
+        HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
   }
 
   @override
   Future<Result<Habit, HabitFailure>> completeHabit(String habitId) async {
     // Firestore desactivado
-    return Failure(HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
+    return Failure(
+        HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
   }
 
   @override
@@ -55,19 +56,22 @@ class FirestoreHabitsRepository implements HabitsRepository {
     List<Subtask>? subtasks,
   }) async {
     // Firestore desactivado
-    return Failure(HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
+    return Failure(
+        HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
   }
 
   @override
   Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId) async {
     // Firestore desactivado
-    return Failure(HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
+    return Failure(
+        HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
   }
 
   @override
   Future<Result<void, HabitFailure>> deleteHabit(String habitId) async {
     // Firestore desactivado
-    return Failure(HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
+    return Failure(
+        HabitFailure.persistence('Funcionalidad desactivada temporalmente.'));
   }
 
   @override

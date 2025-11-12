@@ -67,7 +67,6 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
         for (final translatedHabit in translatedHabits) {
           await repository.createHabit(
             name: translatedHabit.name,
-            description: translatedHabit.description,
             category: translatedHabit.category,
             emoji: translatedHabit.emoji,
           );
@@ -81,7 +80,6 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
 
           await repository.createHabit(
             name: predefinedHabit.nameKey,
-            description: predefinedHabit.descriptionKey,
             category: predefinedHabit.category.toDomainCategory(),
             emoji: predefinedHabit.emoji,
           );

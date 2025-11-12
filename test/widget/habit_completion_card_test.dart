@@ -18,7 +18,6 @@ void main() {
         id: 'test-habit-1',
         userId: 'test-user-1',
         name: 'Morning Prayer',
-        description: 'Pray each morning',
         category: HabitCategory.spiritual,
         emoji: '🙏',
         createdAt: DateTime.now(),

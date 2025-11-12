@@ -214,7 +214,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   itemCount: HabitColors.categoryColors.values.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 12),
                   itemBuilder: (context, idx) {
-                    final color = HabitColors.categoryColors.values.elementAt(idx);
+                    final color =
+                        HabitColors.categoryColors.values.elementAt(idx);
                     final isSelected = selectedColor == color;
                     return GestureDetector(
                       onTap: () {
@@ -230,15 +231,21 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           color: color,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isSelected ? Colors.black : Colors.transparent,
+                            color:
+                                isSelected ? Colors.black : Colors.transparent,
                             width: isSelected ? 3 : 1,
                           ),
                           boxShadow: isSelected
-                              ? [BoxShadow(color: color.withOpacity(0.4), blurRadius: 8)]
+                              ? [
+                                  BoxShadow(
+                                      color: color.withOpacity(0.4),
+                                      blurRadius: 8)
+                                ]
                               : [],
                         ),
                         child: isSelected
-                            ? const Icon(Icons.check, color: Colors.white, size: 24)
+                            ? const Icon(Icons.check,
+                                color: Colors.white, size: 24)
                             : null,
                       ),
                     );
@@ -260,7 +267,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        side: const BorderSide(color: Colors.blueAccent, width: 2),
+                        side: const BorderSide(
+                            color: Colors.blueAccent, width: 2),
                         backgroundColor: Colors.blue.shade50,
                         foregroundColor: Colors.blue.shade900,
                         padding: const EdgeInsets.symmetric(vertical: 16),

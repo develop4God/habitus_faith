@@ -371,9 +371,11 @@ class _AdaptiveOnboardingPageState
       final templateService = ref.read(templateMatchingServiceProvider);
       final templateHabits = await templateService.findMatch(profile, language);
       List<Map<String, dynamic>> habitsData;
-      debugPrint('🔎 Buscando template en Firestore, cache, GitHub o Gemini...');
+      debugPrint(
+          '🔎 Buscando template en Firestore, cache, GitHub o Gemini...');
       if (templateHabits != null && templateHabits.isNotEmpty) {
-        debugPrint('✅ Template encontrado: usando template pre-generado (Firestore/cache/GitHub)');
+        debugPrint(
+            '✅ Template encontrado: usando template pre-generado (Firestore/cache/GitHub)');
         habitsData = templateHabits;
         log('Using pre-generated template (${templateHabits.length} habits)',
             name: 'onboarding');
@@ -385,28 +387,34 @@ class _AdaptiveOnboardingPageState
           final geminiService = await ref.read(geminiServiceProvider.future);
           if (!mounted) return false;
           const userId = 'local_user';
-          habitsData = await geminiService.generateHabitsFromProfile(profile, userId, language: language);
+          habitsData = await geminiService
+              .generateHabitsFromProfile(profile, userId, language: language);
           debugPrint('✨ Gemini generó hábitos: ${habitsData.length}');
           log('Generated with Gemini (no template match, ${habitsData.length} habits)',
               name: 'onboarding');
           debugPrint(
               'Generated with Gemini (no template match, ${habitsData.length} habits)');
         } catch (e) {
-          debugPrint('⚠️ Gemini falló, buscando template fallback por intent...');
+          debugPrint(
+              '⚠️ Gemini falló, buscando template fallback por intent...');
           String fallbackFile;
           if (intent == UserIntent.wellness) {
-            fallbackFile = 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
+            fallbackFile =
+                'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
             debugPrint('🧘 Usando fallback secular (wellness)');
           } else if (intent == UserIntent.faithBased) {
-            fallbackFile = 'habit_templates/templates-en/faithBased_growing_lackOfMotivation_understandBible_growInFaith.json';
+            fallbackFile =
+                'habit_templates/templates-en/faithBased_growing_lackOfMotivation_understandBible_growInFaith.json';
             debugPrint('🙏 Usando fallback cristiano (faithBased)');
           } else {
-            fallbackFile = 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
+            fallbackFile =
+                'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
             debugPrint('🔀 Usando fallback mixto (wellness por defecto)');
           }
           try {
             final fallbackJson = await assetBundle.loadString(fallbackFile);
-            final fallbackMap = jsonDecode(fallbackJson) as Map<String, dynamic>;
+            final fallbackMap =
+                jsonDecode(fallbackJson) as Map<String, dynamic>;
             final generated = fallbackMap['generated_habits'] as List<dynamic>?;
             habitsData = generated != null
                 ? generated.map((e) => Map<String, dynamic>.from(e)).toList()
@@ -486,9 +494,10 @@ class _AdaptiveOnboardingPageState
 
       // Si se usó Gemini, guardar fingerprint/id para reutilización
       if (templateHabits == null || templateHabits.isEmpty) {
-        final fingerprint = habitsData.isNotEmpty && habitsData.first.containsKey('fingerprint')
-            ? habitsData.first['fingerprint']
-            : null;
+        final fingerprint =
+            habitsData.isNotEmpty && habitsData.first.containsKey('fingerprint')
+                ? habitsData.first['fingerprint']
+                : null;
         if (fingerprint != null) {
           await prefs.setString('last_gemini_fingerprint', fingerprint);
           debugPrint('Fingerprint de Gemini guardado: $fingerprint');

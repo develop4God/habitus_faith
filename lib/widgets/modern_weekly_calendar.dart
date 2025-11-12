@@ -46,9 +46,9 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
 
   DateTime get _monday {
     final weekday = _focusedDate.weekday;
-    return _focusedDate.subtract(Duration(days: weekday == 7 ? 6 : weekday - 1));
+    return _focusedDate
+        .subtract(Duration(days: weekday == 7 ? 6 : weekday - 1));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                     curve: Curves.easeInOut,
                     width: 60,
                     decoration: BoxDecoration(
-                      color: isToday ? Colors.blue.shade100 : Colors.grey.shade100,
+                      color:
+                          isToday ? Colors.blue.shade100 : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                           color: isToday ? Colors.blue : Colors.transparent,

@@ -603,7 +603,8 @@ Requisitos estrictos:
       debugPrint('[Cache SAVE] Saved profile with fingerprint: $fingerprint');
 
       // Después de parsear los hábitos generados por Gemini:
-      final firestoreService = GeminiTemplateFirestoreService(FirebaseFirestore.instance);
+      final firestoreService =
+          GeminiTemplateFirestoreService(FirebaseFirestore.instance);
       await firestoreService.saveGeminiTemplate(
         fingerprint: fingerprint,
         profile: profile.toJson(),
