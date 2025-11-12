@@ -280,44 +280,41 @@ class JsonHabitsRepository implements HabitsRepository {
 
   @override
   Future<Result<Habit, HabitFailure>> completeHabit(String habitId) async {
+    debugPrint('completeHabit: inicio para habitId=$habitId');
     try {
       final habits = _loadHabits();
+      debugPrint('completeHabit: hábitos cargados: ${habits.length}');
       final index = habits.indexWhere((h) => h.id == habitId);
-
+      debugPrint('completeHabit: índice encontrado: $index');
       if (index == -1) {
-        debugPrint(
-          'JsonHabitsRepository.completeHabit: Habit not found "$habitId"',
-        );
+        debugPrint('completeHabit: hábito no encontrado "$habitId"');
         return Failure(HabitFailure.notFound('Habit not found: $habitId'));
       }
-
       final now = DateTime.now();
       final habit = habits[index];
+      debugPrint('completeHabit: estado completedToday antes: ${habit.completedToday}');
       if (habit.completedToday) {
-        debugPrint(
-          'JsonHabitsRepository.completeHabit: Habit "$habitId" already completed today',
-        );
+        debugPrint('completeHabit: hábito "$habitId" ya completado hoy');
         return Success(habit);
       }
-
       final completionRecord = CompletionRecord(
         habitId: habitId,
         completedAt: now,
       );
-
       await _saveCompletionRecord(completionRecord);
+      debugPrint('completeHabit: registro de completado guardado');
       final updatedHabit = _loadHabitWithCompletions(habit);
+      debugPrint('completeHabit: estado completedToday después: ${updatedHabit.completedToday}');
       habits[index] = updatedHabit;
-      debugPrint(
-        'JsonHabitsRepository.completeHabit: Completed habit "$habitId"',
-      );
+      debugPrint('completeHabit: hábito actualizado en la lista');
       await _saveHabits(habits);
+      debugPrint('completeHabit: hábitos guardados');
       await _updateStatistics();
-
+      debugPrint('completeHabit: estadísticas actualizadas');
       debugPrint('Happy path: completeHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
-      debugPrint('JsonHabitsRepository.completeHabit: Failure: $e');
+      debugPrint('completeHabit: error: $e');
       return Failure(HabitFailure.persistence('Failed to complete habit: $e'));
     }
   }
@@ -432,44 +429,34 @@ class JsonHabitsRepository implements HabitsRepository {
 
   @override
   Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId) async {
+    debugPrint('uncheckHabit: inicio para habitId=$habitId');
     try {
       final habits = _loadHabits();
+      debugPrint('uncheckHabit: hábitos cargados: ${habits.length}');
       final index = habits.indexWhere((h) => h.id == habitId);
-
+      debugPrint('uncheckHabit: índice encontrado: $index');
       if (index == -1) {
-        debugPrint(
-          'JsonHabitsRepository.uncheckHabit: Habit not found "$habitId"',
-        );
+        debugPrint('uncheckHabit: hábito no encontrado "$habitId"');
         return Failure(HabitFailure.notFound('Habit not found: $habitId'));
       }
-
       final habit = habits[index];
+      debugPrint('uncheckHabit: estado completedToday antes: ${habit.completedToday}');
       if (!habit.completedToday) {
-        debugPrint(
-          'JsonHabitsRepository.uncheckHabit: Habit "$habitId" not completed today',
-        );
+        debugPrint('uncheckHabit: hábito "$habitId" no completado hoy');
         return Success(habit);
       }
-
-      // Remove today's completion from history
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-
       final updatedHistory = habit.completionHistory.where((date) {
         final completionDay = DateTime(date.year, date.month, date.day);
         return completionDay != today;
       }).toList();
-
-      // Recalculate current streak
       final newCurrentStreak = _calculateCurrentStreak(updatedHistory);
-
       final updatedHabit = habit.copyWith(
         completedToday: false,
         currentStreak: newCurrentStreak,
         completionHistory: updatedHistory,
       );
-
-      // Also remove from completions storage
       final completionsData = _storage.getJson(_completionsKey) ?? {};
       final habitCompletions =
           completionsData[habitId] as Map<String, dynamic>? ?? {};
@@ -482,18 +469,17 @@ class JsonHabitsRepository implements HabitsRepository {
         completionsData[habitId] = habitCompletions;
       }
       await _storage.saveJson(_completionsKey, completionsData);
-
+      debugPrint('uncheckHabit: registro de completado eliminado');
       habits[index] = updatedHabit;
-      debugPrint(
-        'JsonHabitsRepository.uncheckHabit: Unchecked habit "$habitId"',
-      );
+      debugPrint('uncheckHabit: hábito actualizado en la lista');
       await _saveHabits(habits);
+      debugPrint('uncheckHabit: hábitos guardados');
       await _updateStatistics();
-
+      debugPrint('uncheckHabit: estadísticas actualizadas');
       debugPrint('Happy path: uncheckHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
-      debugPrint('JsonHabitsRepository.uncheckHabit: Failure: $e');
+      debugPrint('uncheckHabit: error: $e');
       return Failure(HabitFailure.persistence('Failed to uncheck habit: $e'));
     }
   }

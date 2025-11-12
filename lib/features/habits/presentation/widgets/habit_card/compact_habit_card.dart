@@ -81,6 +81,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   @override
   Widget build(BuildContext context) {
     debugPrint('CompactHabitCard.build: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}');
+    debugPrint('CompactHabitCard.build: checkbox value=${widget.habit.completedToday}, tachado=${widget.habit.completedToday}');
     final l10n = AppLocalizations.of(context)!;
     final habitColor = HabitColors.getHabitColor(widget.habit);
     final isTached = widget.habit.completedToday || _showLottieTick;
@@ -214,7 +215,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               child: Checkbox(
                                 value: widget.habit.completedToday,
                                 onChanged: (val) {
-                                  debugPrint('Checkbox tapped. Valor actual: "+widget.habit.completedToday.toString()+". Nuevo valor: $val');
+                                  debugPrint('Checkbox tapped. Valor actual: '+widget.habit.completedToday.toString()+'. Nuevo valor: $val');
                                   if (!_isCompleting) {
                                     _handleComplete();
                                     debugPrint('Llamando a _handleComplete()');

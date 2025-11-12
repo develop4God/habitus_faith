@@ -173,26 +173,47 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
           ),
         ),
         Expanded(
-          child: ListView.builder(
+          child: widget.habits.isEmpty
+              ? Center(
+            child: Text(
+              'No tienes hábitos para hoy',
+              style: TextStyle(fontSize: 18, color: Colors.grey[500]),
+            ),
+          )
+              : ListView.builder(
             itemCount: widget.habits.length,
             itemBuilder: (context, index) {
               final habit = widget.habits[index];
-              debugPrint('CompactHabitCard: renderizando hábito \x1B[32m${habit.name}\x1B[0m');
+              debugPrint('HabitsPageUI: renderizando hábito ${habit.name} con estado completedToday=${habit.completedToday}');
               return CompactHabitCard(
                 habit: habit,
                 onDelete: () {
-                  debugPrint('CompactHabitCard: eliminar hábito ${habit.name}');
+                  debugPrint('HabitsPageUI: eliminar hábito ${habit.name}');
+                  // Lógica real de borrado
                 },
                 onEdit: () {
-                  debugPrint('CompactHabitCard: editar hábito ${habit.name}');
+                  debugPrint('HabitsPageUI: editar hábito ${habit.name}');
+                  // Lógica real de edición
                 },
                 onComplete: (id) {
-                  debugPrint('CompactHabitCard: marcado hábito $id');
-                  // Aquí debe ir la lógica de marcado igual que en la vista compacta
+                  debugPrint('HabitsPageUI: marcado hábito $id');
+                  setState(() {
+                    final idx = widget.habits.indexWhere((h) => h.id == id);
+                    if (idx != -1) {
+                      widget.habits[idx] = widget.habits[idx].copyWith(completedToday: true);
+                      debugPrint('HabitsPageUI: habit ${widget.habits[idx].name} marcado como completado');
+                    }
+                  });
                 },
                 onUncheck: (id) {
-                  debugPrint('CompactHabitCard: desmarcado hábito $id');
-                  // Aquí debe ir la lógica de desmarcado igual que en la vista compacta
+                  debugPrint('HabitsPageUI: desmarcado hábito $id');
+                  setState(() {
+                    final idx = widget.habits.indexWhere((h) => h.id == id);
+                    if (idx != -1) {
+                      widget.habits[idx] = widget.habits[idx].copyWith(completedToday: false);
+                      debugPrint('HabitsPageUI: habit ${widget.habits[idx].name} desmarcado como completado');
+                    }
+                  });
                 },
               );
             },

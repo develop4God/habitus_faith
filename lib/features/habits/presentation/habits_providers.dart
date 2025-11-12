@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/providers/auth_provider.dart';
@@ -54,16 +55,17 @@ class HabitsNotifier extends AsyncNotifier<void> {
   }
 
   Future<void> completeHabit(String habitId) async {
+    debugPrint('HabitsNotifier.completeHabit: llamado para habitId=$habitId');
     state = const AsyncLoading();
-
     final repository = ref.read(habitsRepositoryProvider);
     final result = await repository.completeHabit(habitId);
-
     result.fold(
       (failure) {
+        debugPrint('HabitsNotifier.completeHabit: error: $failure');
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
+        debugPrint('HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}');
         state = const AsyncData(null);
       },
     );
@@ -80,6 +82,23 @@ class HabitsNotifier extends AsyncNotifier<void> {
         state = AsyncError(failure, StackTrace.current);
       },
       (_) {
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> uncheckHabit(String habitId) async {
+    debugPrint('HabitsNotifier.uncheckHabit: llamado para habitId=$habitId');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.uncheckHabit(habitId);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.uncheckHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint('HabitsNotifier.uncheckHabit: éxito, habit.completedToday=${habit.completedToday}');
         state = const AsyncData(null);
       },
     );
