@@ -29,7 +29,7 @@ class CompactHabitCard extends ConsumerStatefulWidget {
 }
 
 class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
-  bool _isExpanded = false;
+  final bool _isExpanded = false;
   bool _isCompleting = false;
   List<Subtask> _subtasks = [];
   bool _showLottieTick = false;
@@ -203,18 +203,21 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 ),
                               ),
                             )
-                          : Checkbox(
-                              value: widget.habit.completedToday,
-                              onChanged: (val) {
-                                if (!_isCompleting) _handleComplete();
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
+                          : Transform.scale(
+                              scale: 1.5, // Aumenta el tamaño visual del checkbox
+                              child: Checkbox(
+                                value: widget.habit.completedToday,
+                                onChanged: (val) {
+                                  if (!_isCompleting) _handleComplete();
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                activeColor: habitColor,
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+                                side: BorderSide(width: 2, color: habitColor),
                               ),
-                              activeColor: habitColor,
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                              side: BorderSide(width: 2, color: habitColor),
                             ),
                     ),
                   ),
@@ -335,18 +338,21 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 ),
                               ),
                             )
-                          : Checkbox(
-                              value: widget.habit.completedToday,
-                              onChanged: (val) {
-                                if (!_isCompleting) _handleComplete();
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
+                          : Transform.scale(
+                              scale: 1.5,
+                              child: Checkbox(
+                                value: widget.habit.completedToday,
+                                onChanged: (val) {
+                                  if (!_isCompleting) _handleComplete();
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                activeColor: habitColor,
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+                                side: BorderSide(width: 2, color: habitColor),
                               ),
-                              activeColor: habitColor,
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                              side: BorderSide(width: 2, color: habitColor),
                             ),
                     ),
                   );
@@ -435,7 +441,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Icon(Icons.add, color: Colors.purple, size: 24),
+                  const Icon(Icons.add, color: Colors.purple, size: 24),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text('Subtareas', style: TextStyle(fontSize: 16, color: Colors.purple.shade700), textAlign: TextAlign.center),
@@ -447,59 +453,43 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
             // Lista de subtareas
             Column(
               children: [
-                ..._subtasks.map((subtask) => Container(
-                      margin: const EdgeInsets.symmetric(vertical: 2),
-                      decoration: BoxDecoration(
-                        color: subtask.completed
-                            ? Colors.green.shade50
-                            : Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: Colors.purple.shade100, width: 1),
-                      ),
-                      child: ListTile(
-                        dense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 0),
-                        leading: Checkbox(
+                ..._subtasks.map((subtask) => ListTile(
+                      dense: true,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                      leading: Transform.scale(
+                        scale: 1.5,
+                        child: Checkbox(
                           value: subtask.completed,
                           onChanged: (val) {
                             setModalState(() {
                               final idx = _subtasks.indexOf(subtask);
-                              _subtasks[idx] = subtask.copyWith(
-                                  completed: val ?? false);
+                              _subtasks[idx] = subtask.copyWith(completed: val ?? false);
                             });
                           },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           activeColor: Colors.purple,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                          side: BorderSide(width: 2, color: Colors.purple),
+                          visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+                          side: const BorderSide(width: 2, color: Colors.purple),
                         ),
-                        title: Text(
-                          subtask.title,
-                          style: TextStyle(
-                            fontSize: 15,
-                            decoration: subtask.completed
-                                ? TextDecoration.lineThrough
-                                : null,
-                            color: subtask.completed
-                                ? Colors.green
-                                : Colors.black,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      ),
+                      title: Text(
+                        subtask.title,
+                        style: TextStyle(
+                          fontSize: 15,
+                          decoration: subtask.completed ? TextDecoration.lineThrough : null,
+                          color: subtask.completed ? Colors.green : Colors.black,
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete,
-                              color: Colors.redAccent, size: 20),
-                          onPressed: () {
-                            setModalState(() {
-                              _subtasks.remove(subtask);
-                            });
-                          },
-                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
+                        onPressed: () {
+                          setModalState(() {
+                            _subtasks.remove(subtask);
+                          });
+                        },
                       ),
                     )),
                 const SizedBox(height: 16),
