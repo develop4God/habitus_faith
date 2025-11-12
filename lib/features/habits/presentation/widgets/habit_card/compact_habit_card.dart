@@ -51,12 +51,14 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
       if (widget.habit.completedToday) {
         debugPrint('Desmarcando hábito: ${widget.habit.id}');
         await widget.onUncheck(widget.habit.id);
+        debugPrint('Happy path: onUncheck completado para ${widget.habit.id}');
         setState(() {
           _showLottieTick = false;
         });
       } else {
         debugPrint('Marcando hábito: ${widget.habit.id}');
         await widget.onComplete(widget.habit.id);
+        debugPrint('Happy path: onComplete completado para ${widget.habit.id}');
         setState(() {
           _showLottieTick = true;
         });
@@ -73,7 +75,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   @override
   void didUpdateWidget(covariant CompactHabitCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    debugPrint('didUpdateWidget: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}');
+    debugPrint('didUpdateWidget: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday} (anterior: ${oldWidget.habit.completedToday})');
   }
 
   @override
@@ -81,6 +83,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     debugPrint('CompactHabitCard.build: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}');
     final l10n = AppLocalizations.of(context)!;
     final habitColor = HabitColors.getHabitColor(widget.habit);
+    final isTached = widget.habit.completedToday || _showLottieTick;
+    debugPrint('CompactHabitCard.build: checkbox value=${widget.habit.completedToday}, tachado=$isTached');
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),

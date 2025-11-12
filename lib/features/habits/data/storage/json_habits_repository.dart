@@ -202,6 +202,9 @@ class JsonHabitsRepository implements HabitsRepository {
     );
     await _storage.saveJsonList(_habitsKey, jsonList);
     _emitHabits();
+    debugPrint(
+      'JsonHabitsRepository._saveHabits: Habits saved and emitted',
+    );
   }
 
   Future<void> _updateStatistics() async {
@@ -311,6 +314,7 @@ class JsonHabitsRepository implements HabitsRepository {
       await _saveHabits(habits);
       await _updateStatistics();
 
+      debugPrint('Happy path: completeHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('JsonHabitsRepository.completeHabit: Failure: $e');
@@ -486,6 +490,7 @@ class JsonHabitsRepository implements HabitsRepository {
       await _saveHabits(habits);
       await _updateStatistics();
 
+      debugPrint('Happy path: uncheckHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('JsonHabitsRepository.uncheckHabit: Failure: $e');
