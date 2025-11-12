@@ -73,10 +73,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
   @override
   void didUpdateWidget(covariant CompactHabitCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    debugPrint('didUpdateWidget: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}');
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('CompactHabitCard.build: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}');
     final l10n = AppLocalizations.of(context)!;
     final habitColor = HabitColors.getHabitColor(widget.habit);
 
@@ -208,7 +210,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               child: Checkbox(
                                 value: widget.habit.completedToday,
                                 onChanged: (val) {
-                                  if (!_isCompleting) _handleComplete();
+                                  debugPrint('Checkbox tapped. Valor actual: "+widget.habit.completedToday.toString()+". Nuevo valor: $val');
+                                  if (!_isCompleting) {
+                                    _handleComplete();
+                                    debugPrint('Llamando a _handleComplete()');
+                                  }
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
