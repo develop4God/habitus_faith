@@ -16,41 +16,58 @@ def _read_keys_from_dotenv_file(path='.env'):
     try:
         if not os.path.exists(path):
             return None
+        keys = []
         with open(path, 'r', encoding='utf-8') as f:
             for line in f:
-                line = line.strip()
-                if not line or line.startswith('#'):
+                raw = line.strip()
+                if not raw or raw.startswith('#'):
                     continue
                 # remove inline comments
-                if '#' in line:
-                    line = line.split('#', 1)[0].strip()
-                if '=' not in line:
+                if '#' in raw:
+                    raw = raw.split('#', 1)[0].strip()
+                if '=' not in raw:
                     continue
-                k, v = line.split('=', 1)
+                k, v = raw.split('=', 1)
                 k = k.strip()
-                v = v.strip().strip('\"\'')
-                if k == 'GOOGLE_API_KEYS' and v:
-                    return [s.strip().strip('"').strip("'") for s in v.split(',') if s.strip()]
-                if k == 'GOOGLE_API_KEY' and v:
-                    return [v.strip().strip('"').strip("'")]
+                v = v.strip()
+                # remove surrounding quotes
+                if v.startswith('"') and v.endswith('"'):
+                    v = v[1:-1]
+                if v.startswith("'") and v.endswith("'"):
+                    v = v[1:-1]
+                # split by comma if multiple
+                parts = [p.strip().strip('"').strip("'") for p in v.split(',') if p.strip()]
+                if k == 'GOOGLE_API_KEYS' and parts:
+                    return parts
+                if k == 'GOOGLE_API_KEY' and parts:
+                    # if a single key is provided but contains commas, return list
+                    return parts
+        return None
     except Exception:
         return None
-    return None
 
 # Support multiple API keys: either GOOGLE_API_KEYS (comma-separated) or single GOOGLE_API_KEY
 KEYS_RAW = os.environ.get("GOOGLE_API_KEYS") or os.environ.get("GOOGLE_API_KEY")
-if not KEYS_RAW:
-    # try manual .env parse as fallback
+API_KEYS = []
+if KEYS_RAW:
+    # try to split KEY_RAW by comma and strip quotes
+    API_KEYS = [k.strip().strip('"').strip("'") for k in KEYS_RAW.split(',') if k.strip()]
+else:
     parsed = _read_keys_from_dotenv_file('.env')
     if parsed:
         API_KEYS = parsed
-    else:
-        API_KEYS = []
-else:
-    API_KEYS = [k.strip() for k in KEYS_RAW.split(",") if k.strip()]
 
-if not API_KEYS:
-    print("⚠️ Warning: No GOOGLE_API_KEY or GOOGLE_API_KEYS found in environment (or .env). The script may fail when calling the model.")
+# Validate keys list: basic sanity check (contains typical Google key prefix or reasonable length)
+_valid_api_keys = [k for k in API_KEYS if (k.startswith('AIza') or len(k) > 20)]
+if not _valid_api_keys:
+    # No valid-looking keys found -> switch to offline mode
+    API_KEYS = []
+    USE_OFFLINE = True
+    print("⚠️ Warning: No valid GOOGLE_API_KEY(s) found in environment or .env. Running in OFFLINE fallback mode.")
+    print("  - Update your .env with: GOOGLE_API_KEYS=KEY1,KEY2 or GOOGLE_API_KEY=KEY1")
+else:
+    API_KEYS = _valid_api_keys
+    USE_OFFLINE = False
 
 DEFAULT_KEY_COOLDOWN = int(os.environ.get("KEY_COOLDOWN_SECONDS", "60"))
 
@@ -82,6 +99,8 @@ api_key_manager = ApiKeyManager(API_KEYS, DEFAULT_KEY_COOLDOWN)
 
 
 def run_model(prompt, model_name='gemini-2.0-flash', max_attempts=None):
+    if USE_OFFLINE:
+        raise RuntimeError('Offline mode enabled: no API keys available')
     attempts = 0
     max_attempts = max_attempts or (max(1, len(API_KEYS)) * 3)
     last_exc = None
@@ -384,10 +403,31 @@ def generate_template(scenario: dict, lang_code: str, lang_name: str, scenario_i
 
     prompt = build_prompt(pattern_id, scenario, lang_name, lang_code)
 
-    # call the model via run_model which rotates API keys if needed
-    response = run_model(prompt)
-    text = response.text.strip().replace("```json", "").replace("```", "").strip()
-    data = json.loads(text)
+    # If offline mode, use fallback sample instead of calling model
+    if USE_OFFLINE:
+        # Build a simple fallback 'raw' similar to model output but localized names may remain in English
+        sample_names = [
+            "Pray 10 min", "Walk 15 min", "Reflect 10 min", "Stretch 10 min", "Gratitude 10 min", "Call a friend 10 min"
+        ]
+        sample_cats = ["spiritual", "physical", "mental", "physical", "mental", "relational"]
+        sample_emojis = ["🙏", "🚶", "🤔", "🤸", "😊", "📞"]
+        raw = {"pattern_id": pattern_id, "habits": []}
+        for i in range(6):
+            raw['habits'].append({
+                "name": sample_names[i],
+                "category": sample_cats[i],
+                "emoji": sample_emojis[i],
+                "target_minutes": int(re.search(r"(\d+)", sample_names[i]).group(1)),
+                "difficulty": "easy"
+            })
+    else:
+        # call the model via run_model which rotates API keys if needed
+        response = run_model(prompt)
+        text = response.text.strip().replace("```json", "").replace("```", "").strip()
+        raw = json.loads(text)
+
+    # proceed with enrichment using `raw`
+    data = raw
 
     # Validación básica de estructura
     if not data.get('pattern_id') or not isinstance(data.get('habits'), list) or len(data['habits']) != 6:
