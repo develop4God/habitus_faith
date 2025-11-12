@@ -56,9 +56,12 @@ class _HabitModalContentState extends State<HabitModalContent> {
   }
 
   void _updateCompleted(bool value) {
+    debugPrint('HabitModalSheet: Checkbox tapped. Valor actual: '
+        + completed.toString() + '. Nuevo valor: ' + value.toString());
     setState(() {
       completed = value;
     });
+    debugPrint('HabitModalSheet: Estado actualizado, completed=' + completed.toString());
     widget.onCompletedChanged?.call(completed);
   }
 
@@ -80,6 +83,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('HabitModalSheet.build: habitName=${widget.habitName}, completed=$completed');
+    debugPrint('HabitModalSheet.build: checkbox value=$completed, tachado=${completed ? 'true' : 'false'}');
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -90,8 +95,12 @@ class _HabitModalContentState extends State<HabitModalContent> {
               Checkbox(
                 value: completed,
                 onChanged: (val) {
+                  debugPrint('HabitModalSheet: Checkbox onChanged llamado, valor=${val.toString()}');
                   _updateCompleted(val ?? false);
+                  debugPrint('HabitModalSheet: Después de _updateCompleted, completed=$completed');
                 },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
               ),
               const SizedBox(width: 12),
               Expanded(
