@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 
 class ModernWeeklyCalendar extends StatefulWidget {
@@ -17,13 +16,11 @@ class ModernWeeklyCalendar extends StatefulWidget {
 }
 
 class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
-  late DateTime _focusedDate;
   late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _focusedDate = widget.initialDate ?? DateTime.now();
     _pageController = PageController(initialPage: 1000);
   }
 
@@ -42,6 +39,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   }
 
   Widget _buildWeek(DateTime weekStart) {
+    debugPrint('ModernWeeklyCalendar._buildWeek: recibiendo ${widget.habits.length} hábitos');
     final daysOfWeek = List.generate(7, (i) => weekStart.add(Duration(days: i)));
     final today = DateTime.now();
 
@@ -61,6 +59,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
         ).length;
         final totalHabits = widget.habits.length;
         final progress = totalHabits > 0 ? completedHabits / totalHabits : 0.0;
+        debugPrint('ModernWeeklyCalendar._buildWeek: día ${day.day}/${day.month} - completados: $completedHabits/$totalHabits, progreso: $progress');
 
         return Expanded(
           child: Padding(
@@ -75,7 +74,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: (isToday ? const Color(0xFF2196F3) : Colors.grey.shade400).withOpacity(0.2),
+                    color: (isToday ? const Color(0xFF2196F3) : Colors.grey.shade400).withValues(alpha:0.2),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -123,6 +122,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('ModernWeeklyCalendar.build: renderizando con ${widget.habits.length} hábitos');
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
@@ -131,7 +131,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha:0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -143,8 +143,6 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
           controller: _pageController,
           onPageChanged: (page) {
             setState(() {
-              final weekOffset = page - 1000;
-              _focusedDate = DateTime.now().add(Duration(days: weekOffset * 7));
             });
           },
           itemBuilder: (context, page) {

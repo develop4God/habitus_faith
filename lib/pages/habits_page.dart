@@ -168,72 +168,48 @@ class HabitsPage extends ConsumerStatefulWidget {
 }
 
 class _HabitsPageState extends ConsumerState<HabitsPage> {
-  final Set<String> _selectedHabits = {};
   HabitCategory? _categoryFilter;
 
-  void _clearSelection() {
-    setState(() {
-      _selectedHabits.clear();
-    });
-  }
 
-  void _selectAll(List<Habit> habits) {
-    setState(() {
-      _selectedHabits.addAll(habits.map((h) => h.id));
-    });
-  }
 
-  void _setCategoryFilter(HabitCategory? category) {
-    setState(() {
-      _categoryFilter = category;
-    });
-  }
 
   List<Habit> _filterHabits(List<Habit> habits) {
+    debugPrint('HabitsPage._filterHabits: recibidos ${habits.length} hábitos');
     if (_categoryFilter == null) {
+      debugPrint('HabitsPage._filterHabits: sin filtro, retornando todos');
       return habits;
     }
-    return habits.where((h) => h.category == _categoryFilter).toList();
+    final filtrados = habits.where((h) => h.category == _categoryFilter).toList();
+    debugPrint('HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos');
+    return filtrados;
   }
 
-  Future<void> _deleteSelected(BuildContext context, WidgetRef ref) async {
-    for (final habitId in _selectedHabits) {
-      await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habitId);
-    }
-    _clearSelection();
-  }
 
-  Future<void> _duplicateHabit(
-    BuildContext context,
-    WidgetRef ref,
-    Habit habit,
-  ) async {
-    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-          name: "${habit.name} (copy)",
-          category: habit.category,
-          colorValue: habit.colorValue,
-          difficulty: habit.difficulty,
-          emoji: habit.emoji,
-        );
-    if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Hábito duplicado")));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, _) {
         final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+        debugPrint('HabitsPage.build: estado de habitsAsync: $habitsAsync');
         return habitsAsync.when(
-          data: (habits) => ModernWeeklyCalendar(
-            habits: _filterHabits(habits),
-            initialDate: DateTime.now(),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, st) => Center(child: Text('Error cargando hábitos')),
+          data: (habits) {
+            debugPrint('HabitsPage.build: data recibida con ${habits.length} hábitos');
+            final filtrados = _filterHabits(habits);
+            debugPrint('HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
+            return ModernWeeklyCalendar(
+              habits: filtrados,
+              initialDate: DateTime.now(),
+            );
+          },
+          loading: () {
+            debugPrint('HabitsPage.build: cargando hábitos...');
+            return const Center(child: CircularProgressIndicator());
+          },
+          error: (e, st) {
+            debugPrint('HabitsPage.build: error cargando hábitos: $e');
+            return const Center(child: Text('Error cargando hábitos'));
+          },
         );
       },
     );
