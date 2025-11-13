@@ -1,11 +1,11 @@
 /// Constants for habit template system
 class TemplateConstants {
-  /// Base URL for fetching templates from GitHub
+  /// Base URL for fetching templates from GitHub (updated to new repo/structure)
   static const String baseUrl =
-      'https://raw.githubusercontent.com/develop4God/habitus_faith/main/habit_templates';
+      'https://raw.githubusercontent.com/develop4God/Habits-json/refs/heads/main';
 
-  /// Metadata index file name
-  static const String metadataFile = 'metadata.json';
+  /// Main template file per language (new structure)
+  static String templateFile(String language) => 'templates-$language.json';
 
   /// Cache duration for templates
   static const Duration cacheDuration = Duration(hours: 24);
