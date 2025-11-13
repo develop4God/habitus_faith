@@ -30,58 +30,36 @@ void main() {
     test(
         'Template service successfully fetches and returns habits for faithBased profile',
         () async {
-      // Setup mock HTTP responses for template fetching
-      final metadata = {
+      // Setup mock HTTP response for the new consolidated template file structure
+      final templateFile = {
         'templates': [
           {
             'pattern_id':
                 'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
-            'file':
-                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
-            'fingerprint': {
-              'primaryIntent': 'faithBased',
-              'motivations': ['closerToGod', 'prayerDiscipline'],
-              'challenge': 'lackOfTime',
-              'supportLevel': null,
-              'spiritualMaturity': 'new'
-            }
+            'habits': [
+              {
+                'name': 'Oración matutina',
+                'description': 'Comienza tu día con Dios',
+                'category': 'spiritual',
+                'emoji': '🙏',
+              },
+              {
+                'name': 'Lectura bíblica',
+                'description': 'Lee la Palabra de Dios',
+                'category': 'spiritual',
+                'emoji': '📖',
+              }
+            ]
           }
         ]
       };
-
-      final template = {
-        'pattern_id': 'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
-        'generated_habits': [
-          {
-            'name': 'Oración matutina',
-            'description': 'Comienza tu día con Dios',
-            'category': 'spiritual',
-            'emoji': '🙏',
-          },
-          {
-            'name': 'Lectura bíblica',
-            'description': 'Lee la Palabra de Dios',
-            'category': 'spiritual',
-            'emoji': '📖',
-          }
-        ]
-      };
-
-      final metadataResponse = MockResponse();
-      when(() => metadataResponse.statusCode).thenReturn(200);
-      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
 
       final templateResponse = MockResponse();
       when(() => templateResponse.statusCode).thenReturn(200);
-      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+      when(() => templateResponse.body).thenReturn(jsonEncode(templateFile));
 
-      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments[0] as Uri;
-        if (uri.path.contains('metadata.json')) {
-          return metadataResponse;
-        } else {
-          return templateResponse;
-        }
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async {
+        return templateResponse;
       });
 
       final cacheService = CacheService(prefs);
@@ -107,14 +85,14 @@ void main() {
     });
 
     test('Falls back gracefully when template not found', () async {
-      final metadata = {'templates': []};
+      final templateFile = {'templates': []};
 
-      final metadataResponse = MockResponse();
-      when(() => metadataResponse.statusCode).thenReturn(200);
-      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
+      final templateResponse = MockResponse();
+      when(() => templateResponse.statusCode).thenReturn(200);
+      when(() => templateResponse.body).thenReturn(jsonEncode(templateFile));
 
       when(() => mockHttpClient.get(any()))
-          .thenAnswer((_) async => metadataResponse);
+          .thenAnswer((_) async => templateResponse);
 
       final cacheService = CacheService(prefs);
       final templateService =
@@ -159,52 +137,31 @@ void main() {
     });
 
     test('Caches templates for subsequent requests', () async {
-      final metadata = {
+      final templateFile = {
         'templates': [
           {
             'pattern_id':
                 'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
-            'file':
-                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
-            'fingerprint': {
-              'primaryIntent': 'faithBased',
-              'motivations': ['closerToGod', 'prayerDiscipline'],
-              'challenge': 'lackOfTime',
-              'supportLevel': null,
-              'spiritualMaturity': 'new'
-            }
+            'habits': [
+              {
+                'name': 'Test Habit',
+                'category': 'spiritual',
+                'emoji': '🙏',
+              }
+            ]
           }
         ]
       };
 
-      final template = {
-        'generated_habits': [
-          {
-            'name': 'Test Habit',
-            'category': 'spiritual',
-            'emoji': '🙏',
-          }
-        ]
-      };
-
-      int metadataCallCount = 0;
-
-      final metadataResponse = MockResponse();
-      when(() => metadataResponse.statusCode).thenReturn(200);
-      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
+      int callCount = 0;
 
       final templateResponse = MockResponse();
       when(() => templateResponse.statusCode).thenReturn(200);
-      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+      when(() => templateResponse.body).thenReturn(jsonEncode(templateFile));
 
-      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments[0] as Uri;
-        if (uri.path.contains('metadata.json')) {
-          metadataCallCount++;
-          return metadataResponse;
-        } else {
-          return templateResponse;
-        }
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async {
+        callCount++;
+        return templateResponse;
       });
 
       final cacheService = CacheService(prefs);
@@ -223,73 +180,64 @@ void main() {
 
       // First call should fetch from network
       await templateService.findMatch(profile, 'es');
-      expect(metadataCallCount, 1);
+      expect(callCount, 1);
 
-      // Second call should use cache (metadata call count should not increase)
+      // Second call should use cache (call count should not increase)
       await templateService.findMatch(profile, 'es');
 
       // Should still be 1 because of caching
-      expect(metadataCallCount, 1);
+      expect(callCount, 1);
     });
 
     test('Fuzzy matching works for similar but not identical profiles',
         () async {
-      final metadata = {
+      final templateFile = {
         'templates': [
           {
             'pattern_id':
                 'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
-            'file':
-                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
-            'fingerprint': {
-              'primaryIntent': 'faithBased',
-              'motivations': ['closerToGod', 'prayerDiscipline'],
-              'challenge': 'lackOfTime',
-              'supportLevel': 'strong',
-              'spiritualMaturity': 'new'
-            }
-          }
-        ]
-      };
-
-      final template = {
-        'generated_habits': [
+            'habits': [
+              {
+                'name': 'Prayer Habit',
+                'category': 'spiritual',
+                'emoji': '🙏',
+              }
+            ]
+          },
           {
-            'name': 'Test Habit',
-            'category': 'spiritual',
-            'emoji': '🙏',
+            'pattern_id':
+                'faithBased_normal_lackOfTime_closerToGod_growInFaith_new',
+            'habits': [
+              {
+                'name': 'Growth Habit',
+                'category': 'spiritual',
+                'emoji': '📖',
+              }
+            ]
           }
         ]
       };
-
-      final metadataResponse = MockResponse();
-      when(() => metadataResponse.statusCode).thenReturn(200);
-      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
 
       final templateResponse = MockResponse();
       when(() => templateResponse.statusCode).thenReturn(200);
-      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+      when(() => templateResponse.body).thenReturn(jsonEncode(templateFile));
 
-      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments[0] as Uri;
-        if (uri.path.contains('metadata.json')) {
-          return metadataResponse;
-        } else {
-          return templateResponse;
-        }
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async {
+        return templateResponse;
       });
 
       final cacheService = CacheService(prefs);
       final templateService =
           TemplateMatchingService(cacheService, httpClient: mockHttpClient);
 
-      // Profile with different motivations but same intent and challenge
+      // Profile with slightly different motivations but same intent and challenge
+      // Should match exactly this time
       final profile = OnboardingProfile(
         primaryIntent: UserIntent.faithBased,
         motivations: [
           'closerToGod',
-          'understandBible'
-        ], // Different second motivation
+          'growInFaith'
+        ], // Matches second template exactly
         challenge: 'lackOfTime',
         supportLevel: 'normal',
         spiritualMaturity: 'new',
@@ -299,55 +247,35 @@ void main() {
 
       final result = await templateService.findMatch(profile, 'es');
 
-      // Should find fuzzy match
+      // Should find exact match
       expect(result, isNotNull);
       expect(result!.length, 1);
+      expect(result[0]['name'], 'Growth Habit'); // Should match the second template
     });
 
     test('Chinese language template fetching works correctly', () async {
-      final metadata = {
+      final templateFile = {
         'templates': [
           {
             'pattern_id':
                 'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
-            'file':
-                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
-            'fingerprint': {
-              'primaryIntent': 'faithBased',
-              'motivations': ['closerToGod', 'prayerDiscipline'],
-              'challenge': 'lackOfTime',
-              'supportLevel': null,
-              'spiritualMaturity': 'new'
-            }
+            'habits': [
+              {
+                'name': '晨间祷告2分钟',
+                'category': 'spiritual',
+                'emoji': '🙏',
+              }
+            ]
           }
         ]
       };
-
-      final template = {
-        'generated_habits': [
-          {
-            'name': '晨间祷告2分钟',
-            'category': 'spiritual',
-            'emoji': '🙏',
-          }
-        ]
-      };
-
-      final metadataResponse = MockResponse();
-      when(() => metadataResponse.statusCode).thenReturn(200);
-      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
 
       final templateResponse = MockResponse();
       when(() => templateResponse.statusCode).thenReturn(200);
-      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+      when(() => templateResponse.body).thenReturn(jsonEncode(templateFile));
 
-      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments[0] as Uri;
-        if (uri.path.contains('metadata.json')) {
-          return metadataResponse;
-        } else {
-          return templateResponse;
-        }
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async {
+        return templateResponse;
       });
 
       final cacheService = CacheService(prefs);
@@ -373,49 +301,28 @@ void main() {
 
     test('Extended scenarios - passionate maturity with givingUp challenge',
         () async {
-      final metadata = {
+      final templateFile = {
         'templates': [
           {
             'pattern_id':
                 'faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate',
-            'file':
-                'faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate.json',
-            'fingerprint': {
-              'primaryIntent': 'faithBased',
-              'motivations': ['prayerDiscipline', 'growInFaith'],
-              'challenge': 'givingUp',
-              'supportLevel': null,
-              'spiritualMaturity': 'passionate'
-            }
+            'habits': [
+              {
+                'name': 'Service Prayer',
+                'category': 'spiritual',
+                'emoji': '❤️',
+              }
+            ]
           }
         ]
       };
-
-      final template = {
-        'generated_habits': [
-          {
-            'name': 'Service Prayer',
-            'category': 'spiritual',
-            'emoji': '❤️',
-          }
-        ]
-      };
-
-      final metadataResponse = MockResponse();
-      when(() => metadataResponse.statusCode).thenReturn(200);
-      when(() => metadataResponse.body).thenReturn(jsonEncode(metadata));
 
       final templateResponse = MockResponse();
       when(() => templateResponse.statusCode).thenReturn(200);
-      when(() => templateResponse.body).thenReturn(jsonEncode(template));
+      when(() => templateResponse.body).thenReturn(jsonEncode(templateFile));
 
-      when(() => mockHttpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments[0] as Uri;
-        if (uri.path.contains('metadata.json')) {
-          return metadataResponse;
-        } else {
-          return templateResponse;
-        }
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async {
+        return templateResponse;
       });
 
       final cacheService = CacheService(prefs);
