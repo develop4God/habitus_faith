@@ -124,12 +124,12 @@ def enrich_habit(habit, idx, pattern_id):
         minutes = MIN_DURATION_BY_CATEGORY.get(category, 5)
     # Enriquecer
     return {
-        "name": name,
+        "id": f"tpl_{pattern_id}_{idx}",
+        "nameKey": name,
         "category": category,
         "emoji": emoji,
         "target_minutes": minutes,
         "difficulty": "easy" if minutes <= 7 else "medium" if minutes <= 20 else "hard",
-        "predefined_id": f"tpl_{pattern_id}_{idx}",
         "subtasks": [],
         "recommended_time": None
     }
@@ -262,4 +262,3 @@ if __name__ == "__main__":
         generate_language_file(lang_code)
     print("\n✅ PROCESO COMPLETADO")
     print(f"📁 Archivos generados en: habit_templates/")
-

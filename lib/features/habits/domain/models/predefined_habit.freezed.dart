@@ -23,7 +23,7 @@ mixin _$PredefinedHabit {
   String get id => throw _privateConstructorUsedError;
   String get emoji => throw _privateConstructorUsedError;
   String get nameKey => throw _privateConstructorUsedError;
-  String get descriptionKey => throw _privateConstructorUsedError;
+  String? get descriptionKey => throw _privateConstructorUsedError;
   PredefinedHabitCategory get category => throw _privateConstructorUsedError;
   VerseReference? get verse => throw _privateConstructorUsedError;
   String? get suggestedTime => throw _privateConstructorUsedError;
@@ -48,7 +48,7 @@ abstract class $PredefinedHabitCopyWith<$Res> {
       {String id,
       String emoji,
       String nameKey,
-      String descriptionKey,
+      String? descriptionKey,
       PredefinedHabitCategory category,
       VerseReference? verse,
       String? suggestedTime});
@@ -95,7 +95,7 @@ class _$PredefinedHabitCopyWithImpl<$Res, $Val extends PredefinedHabit>
       descriptionKey: null == descriptionKey
           ? _value.descriptionKey
           : descriptionKey // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -138,7 +138,7 @@ abstract class _$$PredefinedHabitImplCopyWith<$Res>
       {String id,
       String emoji,
       String nameKey,
-      String descriptionKey,
+      String? descriptionKey,
       PredefinedHabitCategory category,
       VerseReference? verse,
       String? suggestedTime});
@@ -184,7 +184,7 @@ class __$$PredefinedHabitImplCopyWithImpl<$Res>
       descriptionKey: null == descriptionKey
           ? _value.descriptionKey
           : descriptionKey // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -208,7 +208,7 @@ class _$PredefinedHabitImpl implements _PredefinedHabit {
       {required this.id,
       required this.emoji,
       required this.nameKey,
-      required this.descriptionKey,
+      this.descriptionKey,
       required this.category,
       this.verse,
       this.suggestedTime});
@@ -223,7 +223,7 @@ class _$PredefinedHabitImpl implements _PredefinedHabit {
   @override
   final String nameKey;
   @override
-  final String descriptionKey;
+  final String? descriptionKey;
   @override
   final PredefinedHabitCategory category;
   @override
@@ -280,7 +280,7 @@ abstract class _PredefinedHabit implements PredefinedHabit {
       {required final String id,
       required final String emoji,
       required final String nameKey,
-      required final String descriptionKey,
+      final String? descriptionKey,
       required final PredefinedHabitCategory category,
       final VerseReference? verse,
       final String? suggestedTime}) = _$PredefinedHabitImpl;
@@ -295,7 +295,7 @@ abstract class _PredefinedHabit implements PredefinedHabit {
   @override
   String get nameKey;
   @override
-  String get descriptionKey;
+  String? get descriptionKey;
   @override
   PredefinedHabitCategory get category;
   @override

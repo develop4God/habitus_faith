@@ -13,7 +13,7 @@ class PredefinedHabit with _$PredefinedHabit {
     required String id,
     required String emoji,
     required String nameKey,
-    required String descriptionKey,
+    String? descriptionKey, // ahora opcional
     required PredefinedHabitCategory category,
     VerseReference? verse,
     String? suggestedTime, // e.g., "morning", "evening"
