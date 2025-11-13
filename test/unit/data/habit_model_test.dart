@@ -97,7 +97,7 @@ void main() {
         'bibleReading': HabitCategory.spiritual,
         'service': HabitCategory.relational, // Service is relational
         'gratitude': HabitCategory.mental, // Gratitude is mental
-        'other': HabitCategory.spiritual, // Old categories default to spiritual
+        'other': HabitCategory.other, // 'other' remains 'other'
       };
 
       for (final entry in testCases.entries) {

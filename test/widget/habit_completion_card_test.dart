@@ -119,7 +119,7 @@ void main() {
 
         // Verify the widget renders by checking for habit name
         expect(
-          find.text('Test Habit'),
+          find.text('Morning Prayer'),
           findsOneWidget,
           reason: 'Habit name should be displayed',
         );

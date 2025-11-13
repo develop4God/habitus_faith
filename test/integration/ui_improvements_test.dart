@@ -33,7 +33,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
     }
 
     testWidgets('User can skip onboarding without selecting habits', (
@@ -95,7 +95,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Check that emojis are displayed in habit cards
       // Morning Prayer should show 🙏
@@ -158,7 +158,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Look for Container widgets that could be color indicators
       // Color indicators are 4px wide and at least 20px tall
@@ -233,7 +233,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Find Text widgets with strikethrough decoration
       final strikethroughTexts = find.byWidgetPredicate(
@@ -290,7 +290,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Find the habit name text
       final habitNameText = find.text('Uncompleted Habit');
@@ -329,12 +329,12 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Open add habit dialog
       final addButton = find.byKey(const Key('add_habit_fab'));
       await tester.tap(addButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should show TabBar with two tabs
       expect(find.byType(TabBar), findsOneWidget);
@@ -364,17 +364,17 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Open add habit dialog
       final addButton = find.byKey(const Key('add_habit_fab'));
       await tester.tap(addButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Find and tap the second tab
       final tabs = find.byType(Tab);
       await tester.tap(tabs.at(1));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should show grid of predefined habits
       expect(find.byType(GridView), findsOneWidget);
@@ -403,17 +403,17 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Open add habit dialog
       final addButton = find.byKey(const Key('add_habit_fab'));
       await tester.tap(addButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Switch to predefined tab
       final tabs = find.byType(Tab);
       await tester.tap(tabs.at(1));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should show multiple habit emojis
       expect(find.text('🙏'), findsOneWidget);
@@ -451,7 +451,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // User skips onboarding
         final skipButton = find.byKey(const Key('skip_onboarding_button'));

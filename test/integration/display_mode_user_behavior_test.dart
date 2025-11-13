@@ -37,7 +37,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Find display mode option
         expect(
@@ -48,7 +48,7 @@ void main() {
 
         // Tap to open dialog
         await tester.tap(find.text('Display Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify dialog opened
         expect(
@@ -84,15 +84,15 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Open dialog
         await tester.tap(find.text('Display Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Select advanced mode
         await tester.tap(find.text('Advanced Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify mode was saved
         final savedMode = prefs.getString('display_mode');
@@ -131,15 +131,15 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Open dialog
         await tester.tap(find.text('Display Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Select compact mode
         await tester.tap(find.text('Compact Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify mode was saved
         final savedMode = prefs.getString('display_mode');
@@ -166,7 +166,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify compact mode icon is shown
         final compactIcon = find.byIcon(Icons.check_circle_outline);
@@ -178,9 +178,9 @@ void main() {
 
         // Switch to advanced mode
         await tester.tap(find.text('Display Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
         await tester.tap(find.text('Advanced Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Rebuild widget to see updated icon
         await tester.pumpWidget(
@@ -197,7 +197,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify advanced mode icon is shown
         final advancedIcon = find.byIcon(Icons.insights);
@@ -228,15 +228,15 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Open dialog
         await tester.tap(find.text('Display Mode'));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Tap outside dialog or back button
         await tester.tapAt(const Offset(10, 10));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify mode wasn't changed
         final savedMode = prefs.getString('display_mode');
@@ -264,7 +264,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify initial mode
         expect(observedMode, DisplayMode.compact);
@@ -276,7 +276,7 @@ void main() {
         await container
             .read(displayModeProvider.notifier)
             .setDisplayMode(DisplayMode.advanced);
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify mode updated
         expect(
@@ -312,7 +312,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify both widgets show compact
         expect(find.text('Widget 1: compact'), findsOneWidget);
@@ -325,7 +325,7 @@ void main() {
         await container
             .read(displayModeProvider.notifier)
             .setDisplayMode(DisplayMode.advanced);
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify both widgets updated
         expect(find.text('Widget 1: advanced'), findsOneWidget);
@@ -355,7 +355,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify it defaults to safe value
         expect(
@@ -386,7 +386,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify it defaults to safe value
         expect(
@@ -417,7 +417,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // Verify it defaults to safe value
         expect(

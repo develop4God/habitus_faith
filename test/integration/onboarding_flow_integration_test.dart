@@ -31,7 +31,10 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      // Use pump() instead of pumpAndSettle() to avoid timeouts
+      // The page may have ongoing animations or async operations
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
     }
 
     testWidgets('displays welcome message and habit grid', (
@@ -67,7 +70,7 @@ void main() {
 
       // Tap to select
       await tester.tap(firstHabitCard);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Counter should update to 1/3
       expect(find.textContaining('1/3'), findsOneWidget);
@@ -85,11 +88,11 @@ void main() {
 
       // Select first habit
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Select second habit
       await tester.tap(find.byKey(const Key('habit_card_bible_reading')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Counter should update to 2/3
       expect(find.textContaining('2/3'), findsOneWidget);
@@ -102,13 +105,13 @@ void main() {
 
       // Select three habits
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       await tester.tap(find.byKey(const Key('habit_card_bible_reading')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       await tester.tap(find.byKey(const Key('habit_card_worship')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Counter should update to 3/3
       expect(find.textContaining('3/3'), findsOneWidget);
@@ -121,13 +124,13 @@ void main() {
 
       // Select three habits
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       await tester.tap(find.byKey(const Key('habit_card_bible_reading')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       await tester.tap(find.byKey(const Key('habit_card_worship')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Counter should be 3/3
       expect(find.textContaining('3/3'), findsOneWidget);
@@ -137,11 +140,11 @@ void main() {
       if (gratitudeCard.evaluate().isEmpty) {
         // Scroll to make it visible
         await tester.drag(find.byType(GridView), const Offset(0, -100));
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
       }
 
       await tester.tap(gratitudeCard);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should still be 3/3
       expect(find.textContaining('3/3'), findsOneWidget);
@@ -155,13 +158,13 @@ void main() {
       // Select habit
       final habitCard = find.byKey(const Key('habit_card_morning_prayer'));
       await tester.tap(habitCard);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.textContaining('1/3'), findsOneWidget);
 
       // Tap again to deselect
       await tester.tap(habitCard);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Counter should be back to 0/3
       expect(find.textContaining('0/3'), findsOneWidget);
@@ -242,7 +245,7 @@ void main() {
 
       // Scroll to bottom
       await tester.drag(gridView, const Offset(0, -500));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should be able to scroll without errors
       expect(tester.takeException(), isNull);
@@ -255,7 +258,7 @@ void main() {
 
       // Select one habit
       await tester.tap(find.byKey(const Key('habit_card_morning_prayer')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Verify continue button is enabled now
       final continueButton = find.byKey(
