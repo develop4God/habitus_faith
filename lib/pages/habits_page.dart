@@ -170,17 +170,65 @@ class HabitsPage extends ConsumerStatefulWidget {
 class _HabitsPageState extends ConsumerState<HabitsPage> {
   HabitCategory? _categoryFilter;
 
+  /// Convierte un string de hora "HH:mm" a minutos desde medianoche para comparación
+  int _timeToMinutes(String? timeString) {
+    if (timeString == null || timeString.isEmpty) {
+      return 24 * 60; // Si no tiene hora, va al final (después de las 23:59)
+    }
+    try {
+      final parts = timeString.split(':');
+      if (parts.length != 2) return 24 * 60;
+      final hours = int.parse(parts[0]);
+      final minutes = int.parse(parts[1]);
+      return hours * 60 + minutes;
+    } catch (e) {
+      debugPrint('HabitsPage._timeToMinutes: error parseando hora "$timeString": $e');
+      return 24 * 60; // Error al parsear, va al final
+    }
+  }
+
+  /// Ordena hábitos cronológicamente por hora de notificación
+  List<Habit> _sortHabitsByNotificationTime(List<Habit> habits) {
+    final sorted = List<Habit>.from(habits);
+    sorted.sort((a, b) {
+      final timeA = a.notificationSettings?.eventTime;
+      final timeB = b.notificationSettings?.eventTime;
+
+      final minutesA = _timeToMinutes(timeA);
+      final minutesB = _timeToMinutes(timeB);
+
+      debugPrint('HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)');
+
+      return minutesA.compareTo(minutesB);
+    });
+
+    debugPrint('HabitsPage._sortHabitsByNotificationTime: orden final:');
+    for (var i = 0; i < sorted.length; i++) {
+      final time = sorted[i].notificationSettings?.eventTime ?? 'sin hora';
+      debugPrint('  [$i] ${sorted[i].name} - $time');
+    }
+
+    return sorted;
+  }
+
   List<Habit> _filterHabits(List<Habit> habits) {
     debugPrint('HabitsPage._filterHabits: recibidos ${habits.length} hábitos');
+
+    // Aplicar filtro de categoría si existe
+    List<Habit> filtrados;
     if (_categoryFilter == null) {
-      debugPrint('HabitsPage._filterHabits: sin filtro, retornando todos');
-      return habits;
+      debugPrint('HabitsPage._filterHabits: sin filtro de categoría');
+      filtrados = habits;
+    } else {
+      filtrados = habits.where((h) => h.category == _categoryFilter).toList();
+      debugPrint('HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría');
     }
-    final filtrados =
-        habits.where((h) => h.category == _categoryFilter).toList();
-    debugPrint(
-        'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos');
-    return filtrados;
+
+    // Ordenar cronológicamente por hora de notificación
+    final ordenados = _sortHabitsByNotificationTime(filtrados);
+    debugPrint('HabitsPage._filterHabits: hábitos ordenados cronológicamente');
+
+    return ordenados;
   }
 
   @override
