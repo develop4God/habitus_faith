@@ -208,7 +208,7 @@ def generate_template(scenario: dict, lang_code: str, lang_name: str, scenario_i
 Language: {lang_name}
 Profile: {intent}
 {context}
-Generate 6 habits with duration in the name.
+Generate 5 habits with duration in the name.
 ALLOWED CATEGORIES (use only these 4):
 - spiritual: prayer, bible reading, spiritual reflection
 - physical: exercise, walking, stretching, sleep
@@ -236,12 +236,37 @@ IMPORTANT:
 """
     response = model.generate_content(prompt)
     text = response.text.strip().replace("```json", "").replace("```", "").strip()
-    data = json.loads(text)
-    # Validar
-    assert len(data["habits"]) == 6, f"Expected 6 habits, got {len(data['habits'])}"
+    try:
+        data = json.loads(text)
+    except Exception as e:
+        print(f"❌ Error: Gemini response is not valid JSON. Raw response: {text}")
+        raise e
+    # Validar cantidad de hábitos
+    habits = data.get("habits", [])
+    if not isinstance(habits, list):
+        print(f"❌ Error: 'habits' is not a list. Raw: {habits}")
+        raise ValueError("Gemini did not return a list for 'habits'")
+    if len(habits) != 5:
+        print(f"❌ Error: Gemini did not return 5 habits. Returned: {len(habits)}. Raw: {habits}")
+        raise ValueError("Gemini did not return exactly 5 habits")
+    # Validar que cada hábito tenga los campos requeridos y no esté vacío
+    for i, h in enumerate(habits):
+        if not isinstance(h, dict):
+            print(f"❌ Error: Habit at index {i} is not a dict. Habit: {h}")
+            raise ValueError(f"Habit at index {i} is not a dict")
+        missing_fields = [field for field in ["name", "category", "emoji"] if field not in h or not h[field]]
+        if missing_fields:
+            print(f"❌ Error: Habit at index {i} missing required fields {missing_fields}. Habit: {h}")
+            raise ValueError(f"Habit at index {i} missing required fields: {missing_fields}")
     assert "pattern_id" in data
     # Enriquecer y reemplazar triviales
-    enriched = [enrich_habit(h, i, pattern_id) for i, h in enumerate(data["habits"])]
+    enriched = []
+    for i, h in enumerate(habits):
+        try:
+            enriched.append(enrich_habit(h, i, pattern_id))
+        except Exception as e:
+            print(f"❌ Error enriching habit at index {i}: {e}. Habit: {h}")
+            raise
     data["habits"] = enriched
     data["scenario_id"] = scenario_id
     data["fingerprint"] = {
@@ -299,6 +324,7 @@ def generate_language_file(lang_code: str):
         except Exception as e:
             errors += 1
             error_msg = str(e)
+            print(f"❌ Error al generar template: {error_msg}")
             if generated > 0 and errors % 5 == 0:
                 os.makedirs("habit_templates", exist_ok=True)
                 with open(output_file, 'w', encoding='utf-8') as f:
@@ -312,6 +338,7 @@ def generate_language_file(lang_code: str):
                 time.sleep(5)
             else:
                 print(f"❌ Error: {error_msg[:80]}")
+            # Continúa con el siguiente intento aunque falle
     os.makedirs("habit_templates", exist_ok=True)
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(templates_data, f, ensure_ascii=False, indent=2)

@@ -43,6 +43,7 @@ dependencies:
   fl_chart: ^0.69.0
   signature: ^5.4.1
   table_calendar: ^3.0.9
+  string_similarity: ^2.0.0
 
 dev_dependencies:
   flutter_test:
