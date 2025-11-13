@@ -459,20 +459,46 @@ class _AdaptiveOnboardingPageState
         } else {
           category = HabitCategory.spiritual;
         }
-        // Convertir array de notificaciones a HabitNotificationSettings
-        HabitNotificationSettings? notificationSettings;
-        final notifications = habitData['notifications'] as List<dynamic>?;
-        if (notifications != null && notifications.isNotEmpty) {
-          final notif = notifications.first as Map<String, dynamic>;
-          notificationSettings = HabitNotificationSettings(
-            timing: NotificationTiming.atEventTime,
-            eventTime: notif['time'] as String?,
-          );
+
+        // Safe parsing of habit fields to avoid null casts and crashes
+        // Name (required) - try several common keys and skip the habit if none found
+        String? name;
+        final rawName = habitData['name'] ?? habitData['title'] ?? habitData['label'];
+        if (rawName is String && rawName.trim().isNotEmpty) {
+          name = rawName.trim();
+        } else {
+          debugPrint('Onboarding: habit entry missing name, skipping entry: $habitData');
+          continue; // skip invalid habit entries
         }
+
+        // Emoji (optional)
+        String? emoji;
+        final rawEmoji = habitData['emoji'] ?? habitData['icon'] ?? habitData['symbol'];
+        if (rawEmoji is String && rawEmoji.isNotEmpty) {
+          emoji = rawEmoji;
+        }
+
+        // Convertir array de notificaciones a HabitNotificationSettings (si aplica)
+        HabitNotificationSettings? notificationSettings;
+        final notifications = habitData['notifications'];
+        if (notifications is List && notifications.isNotEmpty) {
+          final first = notifications.first;
+          if (first is Map<String, dynamic>) {
+            final timeVal = first['time'];
+            final timeStr = timeVal is String ? timeVal : (timeVal?.toString());
+            if (timeStr != null && timeStr.isNotEmpty) {
+              notificationSettings = HabitNotificationSettings(
+                timing: NotificationTiming.atEventTime,
+                eventTime: timeStr,
+              );
+            }
+          }
+        }
+
         await repository.createHabit(
-          name: habitData['name'] as String,
+          name: name,
           category: category,
-          emoji: habitData['emoji'] as String?,
+          emoji: emoji,
           notificationSettings: notificationSettings,
         );
         if (!mounted) return false;
