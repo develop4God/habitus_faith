@@ -35,7 +35,7 @@ void main() {
       // Assert
       expect(firestoreData['userId'], 'user-1');
       expect(firestoreData['name'], 'Test');
-      expect(firestoreData['description'], 'Test desc');
+      // Note: description field removed from Habit model
       expect(firestoreData['category'], 'spiritual');
       expect(firestoreData['completedToday'], true);
       expect(firestoreData['currentStreak'], 3);
@@ -95,9 +95,8 @@ void main() {
       final testCases = {
         'prayer': HabitCategory.spiritual,
         'bibleReading': HabitCategory.spiritual,
-        'service':
-            HabitCategory.spiritual, // Old categories default to spiritual
-        'gratitude': HabitCategory.spiritual,
+        'service': HabitCategory.relational, // Service is relational
+        'gratitude': HabitCategory.mental, // Gratitude is mental
         'other': HabitCategory.spiritual, // Old categories default to spiritual
       };
 
@@ -110,7 +109,7 @@ void main() {
         await firestore.collection('habits').doc(docId).set({
           'userId': 'user-1',
           'name': 'Test Habit',
-          'description': 'Test',
+          // Note: description field removed from Habit model
           'category': oldCategory,
           'completedToday': false,
           'currentStreak': 0,
