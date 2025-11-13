@@ -35,9 +35,9 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
             'file':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
             'fingerprint': {
               'primaryIntent': 'faithBased',
               'motivations': ['closerToGod', 'prayerDiscipline'],
@@ -50,7 +50,7 @@ void main() {
       };
 
       final template = {
-        'pattern_id': 'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+        'pattern_id': 'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
         'generated_habits': [
           {
             'name': 'Oración matutina',
@@ -92,7 +92,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -124,7 +124,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -147,7 +147,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -163,9 +163,9 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
             'file':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
             'fingerprint': {
               'primaryIntent': 'faithBased',
               'motivations': ['closerToGod', 'prayerDiscipline'],
@@ -215,7 +215,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -238,9 +238,9 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
             'file':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
             'fingerprint': {
               'primaryIntent': 'faithBased',
               'motivations': ['closerToGod', 'prayerDiscipline'],
@@ -291,7 +291,7 @@ void main() {
           'understandBible'
         ], // Different second motivation
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -309,9 +309,9 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
             'file':
-                'faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json',
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new.json',
             'fingerprint': {
               'primaryIntent': 'faithBased',
               'motivations': ['closerToGod', 'prayerDiscipline'],
@@ -358,7 +358,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -377,9 +377,9 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_passionate_givingUp_prayerDiscipline_growInFaith',
+                'faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate',
             'file':
-                'faithBased_passionate_givingUp_prayerDiscipline_growInFaith.json',
+                'faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate.json',
             'fingerprint': {
               'primaryIntent': 'faithBased',
               'motivations': ['prayerDiscipline', 'growInFaith'],
@@ -426,7 +426,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['prayerDiscipline', 'growInFaith'],
         challenge: 'givingUp',
-        supportLevel: 'weak',
+        supportLevel: 'normal',
         spiritualMaturity: 'passionate',
         commitment: 'daily',
         completedAt: DateTime.now(),

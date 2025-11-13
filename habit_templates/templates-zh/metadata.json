@@ -4,35 +4,44 @@
   "language": "zh",
   "templates": [
     {
-      "pattern_id": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline",
+      "pattern_id": "faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new",
       "file": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json",
       "fingerprint": {
         "primaryIntent": "faithBased",
-        "motivations": ["closerToGod", "prayerDiscipline"],
+        "motivations": [
+          "closerToGod",
+          "prayerDiscipline"
+        ],
         "challenge": "lackOfTime",
-        "supportLevel": null,
+        "supportLevel": "normal",
         "spiritualMaturity": "new"
       }
     },
     {
-      "pattern_id": "faithBased_passionate_givingUp_prayerDiscipline_growInFaith",
+      "pattern_id": "faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate",
       "file": "faithBased_passionate_givingUp_prayerDiscipline_growInFaith.json",
       "fingerprint": {
         "primaryIntent": "faithBased",
-        "motivations": ["prayerDiscipline", "growInFaith"],
+        "motivations": [
+          "prayerDiscipline",
+          "growInFaith"
+        ],
         "challenge": "givingUp",
-        "supportLevel": null,
+        "supportLevel": "normal",
         "spiritualMaturity": "passionate"
       }
     },
     {
-      "pattern_id": "wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress",
+      "pattern_id": "wellness_normal_lackOfMotivation_physicalHealth_reduceStress_inconsistent",
       "file": "wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json",
       "fingerprint": {
         "primaryIntent": "wellness",
-        "motivations": ["physicalHealth", "reduceStress"],
+        "motivations": [
+          "physicalHealth",
+          "reduceStress"
+        ],
         "challenge": "lackOfMotivation",
-        "supportLevel": null,
+        "supportLevel": "normal",
         "spiritualMaturity": "inconsistent"
       }
     }

@@ -1,10 +1,13 @@
 {
-  "pattern_id": "both_new_lackOfTime_closerToGod_prayerDiscipline",
+  "pattern_id": "both_normal_lackOfTime_closerToGod_prayerDiscipline_new",
   "fingerprint": {
     "primaryIntent": "both",
-    "motivations": ["closerToGod", "prayerDiscipline"],
+    "motivations": [
+      "closerToGod",
+      "prayerDiscipline"
+    ],
     "challenge": "lackOfTime",
-    "supportLevel": null,
+    "supportLevel": "normal",
     "spiritualMaturity": "new"
   },
   "generated_habits": [

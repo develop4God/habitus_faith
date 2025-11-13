@@ -1,10 +1,13 @@
 {
-  "pattern_id": "faithBased_passionate_givingUp_prayerDiscipline_growInFaith",
+  "pattern_id": "faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate",
   "fingerprint": {
     "primaryIntent": "faithBased",
-    "motivations": ["prayerDiscipline", "growInFaith"],
+    "motivations": [
+      "prayerDiscipline",
+      "growInFaith"
+    ],
     "challenge": "givingUp",
-    "supportLevel": null,
+    "supportLevel": "normal",
     "spiritualMaturity": "passionate"
   },
   "generated_habits": [

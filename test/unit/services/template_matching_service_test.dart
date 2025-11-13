@@ -34,7 +34,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline', 'growInFaith'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -42,8 +42,8 @@ void main() {
 
       final patternId = service.generatePatternId(profile);
 
-      expect(
-          patternId, 'faithBased_new_lackOfTime_closerToGod_prayerDiscipline');
+      expect(patternId,
+          'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new');
     });
 
     test('generates correct pattern ID for wellness profile', () {
@@ -51,7 +51,7 @@ void main() {
         primaryIntent: UserIntent.wellness,
         motivations: ['timeManagement', 'productivity'],
         challenge: 'lackOfMotivation',
-        supportLevel: 'weak',
+        supportLevel: 'normal',
         spiritualMaturity: null,
         commitment: 'weekly',
         completedAt: DateTime.now(),
@@ -60,7 +60,7 @@ void main() {
       final patternId = service.generatePatternId(profile);
 
       expect(patternId,
-          'wellness_timeManagement_lackOfMotivation_timeManagement_productivity');
+          'wellness_normal_lackOfMotivation_timeManagement_productivity_timeManagement');
     });
 
     test('uses only first two motivations', () {
@@ -77,7 +77,7 @@ void main() {
       final patternId = service.generatePatternId(profile);
 
       expect(patternId,
-          'faithBased_growing_dontKnowStart_closerToGod_prayerDiscipline');
+          'faithBased_normal_dontKnowStart_closerToGod_prayerDiscipline_growing');
     });
   });
 
@@ -87,7 +87,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -118,7 +118,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -193,7 +193,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -219,7 +219,7 @@ void main() {
           'understandBible'
         ], // Different motivations
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -290,7 +290,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -315,7 +315,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -341,7 +341,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -410,7 +410,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['closerToGod', 'prayerDiscipline'],
         challenge: 'lackOfTime',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'new',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -484,7 +484,7 @@ void main() {
         primaryIntent: UserIntent.faithBased,
         motivations: ['prayerDiscipline', 'growInFaith'],
         challenge: 'givingUp',
-        supportLevel: 'weak',
+        supportLevel: 'normal',
         spiritualMaturity: 'passionate',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -493,7 +493,7 @@ void main() {
       final patternId = service.generatePatternId(profile);
 
       expect(patternId,
-          'faithBased_passionate_givingUp_prayerDiscipline_growInFaith');
+          'faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate');
     });
 
     test('matches wellness profile with betterSleep and reduceStress',
@@ -512,7 +512,7 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'wellness_betterSleep_dontKnowStart_betterSleep_reduceStress',
+                'wellness_normal_dontKnowStart_betterSleep_reduceStress_betterSleep',
             'file':
                 'wellness_optimizing_dontKnowStart_betterSleep_reduceStress.json',
             'fingerprint': {
@@ -571,7 +571,7 @@ void main() {
         primaryIntent: UserIntent.both,
         motivations: ['closerToGod', 'understandBible'],
         challenge: 'givingUp',
-        supportLevel: 'strong',
+        supportLevel: 'normal',
         spiritualMaturity: 'growing',
         commitment: 'daily',
         completedAt: DateTime.now(),
@@ -579,7 +579,8 @@ void main() {
 
       final patternId = service.generatePatternId(profile);
 
-      expect(patternId, 'both_growing_givingUp_closerToGod_understandBible');
+      expect(patternId,
+          'both_normal_givingUp_closerToGod_understandBible_growing');
     });
   });
 }
