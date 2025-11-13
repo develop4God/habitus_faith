@@ -868,8 +868,8 @@ class _QuestionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Evito mostrar el título dos veces en la página 4 (supportSystem)
-    final showTitle = question.id != 'supportSystem';
+    // Evito mostrar el título dos veces en la página 4 (mainChallenge) y 5 (supportSystem)
+    final showTitle = question.id != 'supportSystem' && question.id != 'mainChallenge';
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
