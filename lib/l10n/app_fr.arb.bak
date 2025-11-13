@@ -855,6 +855,4 @@
   "@habitTracking": {
     "description": "Title for habit tracking calendar page"
   }
-,
-  "onboardingWelcomeMessage": "FR: Welcome message"
 }

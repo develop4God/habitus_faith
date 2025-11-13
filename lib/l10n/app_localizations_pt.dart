@@ -62,6 +62,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bem-vindo ao Habitus Fé';
 
   @override
+  String get onboardingWelcomeMessage => 'PT: Welcome message';
+
+  @override
   String get selectUpToThreeHabits =>
       'Selecione até 3 hábitos para começar sua jornada';
 
@@ -699,76 +702,76 @@ class AppLocalizationsPt extends AppLocalizations {
   String get home => 'Início';
 
   @override
-  String get reminderConfig => 'Reminder Configuration';
+  String get reminderConfig => 'PT: Reminder Config';
 
   @override
-  String get recurrenceConfig => 'Daily Repetitions';
+  String get recurrenceConfig => 'PT: Recurrence Config';
 
   @override
-  String get repeat => 'Repeat';
+  String get repeat => 'PT: Repeat';
 
   @override
-  String get setCycleForPlan => 'Set a cycle for your plan';
+  String get setCycleForPlan => 'PT: Set Cycle For Plan';
 
   @override
-  String get subtasks => 'Subtasks';
+  String get subtasks => 'PT: Subtasks';
 
   @override
-  String get addSubtask => 'Add subtask';
+  String get addSubtask => 'PT: Add Subtask';
 
   @override
-  String get minutesBefore => 'Minutes before';
+  String get minutesBefore => 'PT: Minutes Before';
 
   @override
-  String get interval => 'Interval';
+  String get interval => 'PT: Interval';
 
   @override
-  String get endDate => 'End date';
+  String get endDate => 'PT: End Date';
 
   @override
-  String get daily => 'Daily';
+  String get daily => 'PT: Daily';
 
   @override
-  String get weekly => 'Weekly';
+  String get weekly => 'PT: Weekly';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'PT: Monthly';
 
   @override
   String everyXDays(int count) {
-    return 'Every $count day(s)';
+    return 'PT: Every X Days';
   }
 
   @override
   String everyXWeeks(int count) {
-    return 'Every $count week(s)';
+    return 'PT: Every X Weeks';
   }
 
   @override
   String everyXMonths(int count) {
-    return 'Every $count month(s)';
+    return 'PT: Every X Months';
   }
 
   @override
-  String get noRepetition => 'No repetition';
+  String get noRepetition => 'PT: No Repetition';
 
   @override
-  String get reminder => 'Reminder';
+  String get reminder => 'PT: Reminder';
 
   @override
-  String get repetition => 'Repetition';
+  String get repetition => 'PT: Repetition';
 
   @override
-  String get eventTime => 'Event time (HH:MM)';
+  String get eventTime => 'PT: Event Time';
 
   @override
-  String get invalidMinutes => 'Please enter a valid number between 1 and 1440';
+  String get invalidMinutes => 'PT: Invalid Minutes';
 
   @override
-  String get invalidInterval => 'Interval must be at least 1';
+  String get invalidInterval => 'PT: Invalid Interval';
 
   @override
-  String get habitTracking => 'Habit Tracking';
+  String get habitTracking => 'PT: Habit Tracking';
 
   @override
   String get routine => 'Rotina';

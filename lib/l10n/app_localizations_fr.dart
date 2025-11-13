@@ -62,6 +62,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bienvenue à Habitus Foi';
 
   @override
+  String get onboardingWelcomeMessage => 'FR: Welcome message';
+
+  @override
   String get selectUpToThreeHabits =>
       'Sélectionnez jusqu\'à 3 habitudes pour commencer votre voyage';
 

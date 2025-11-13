@@ -1,29 +1,4 @@
 {
-  "pt": [
-    "reminderConfig",
-    "recurrenceConfig",
-    "repeat",
-    "setCycleForPlan",
-    "subtasks",
-    "addSubtask",
-    "minutesBefore",
-    "interval",
-    "endDate",
-    "daily",
-    "weekly",
-    "monthly",
-    "everyXDays",
-    "everyXWeeks",
-    "everyXMonths",
-    "noRepetition",
-    "reminder",
-    "repetition",
-    "eventTime",
-    "invalidMinutes",
-    "invalidInterval",
-    "habitTracking"
-  ],
-
   "zh": [
     "reminderConfig",
     "recurrenceConfig",

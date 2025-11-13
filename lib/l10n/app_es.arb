@@ -74,6 +74,10 @@
   "@welcomeToHabitusFaith": {
     "description": "Onboarding welcome title"
   },
+  "onboardingWelcomeMessage": "Te apoyaremos junto con IA 🤖 a personalizar tus primeras rutinas, según tus preferencias.",
+  "@onboardingWelcomeMessage": {
+    "description": "Onboarding welcome message"
+  },
   "selectUpToThreeHabits": "Selecciona hasta 3 hábitos para comenzar tu jornada",
   "@selectUpToThreeHabits": {
     "description": "Onboarding instruction"

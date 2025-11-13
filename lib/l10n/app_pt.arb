@@ -714,7 +714,10 @@
   "@copyHabitConfirm": {
     "description": "Confirmation message for duplicating a habit",
     "placeholders": {
-      "habitName": {"type": "String", "example": "Oração matinal"}
+      "habitName": {
+        "type": "String",
+        "example": "Oração matinal"
+      }
     }
   },
   "introMessage": "As maiores mudanças começam na constância...",
@@ -722,11 +725,17 @@
     "description": "Mensagem motivacional mostrada na landing page."
   },
   "usefulTip": "Dica útil",
-  "@usefulTip": {"description": "Título da dica educativa"},
+  "@usefulTip": {
+    "description": "Título da dica educativa"
+  },
   "habitsTip": "Deslize para ver ações nos seus hábitos",
-  "@habitsTip": {"description": "Descrição da dica educativa"},
+  "@habitsTip": {
+    "description": "Descrição da dica educativa"
+  },
   "understood": "Entendido",
-  "@understood": {"description": "Botão para fechar a dica educativa"},
+  "@understood": {
+    "description": "Botão para fechar a dica educativa"
+  },
   "bible": "Bíblia",
   "@bible": {
     "description": "Título para o AppBar da Bíblia"
@@ -742,9 +751,7 @@
   "today": "Hoje",
   "@today": {
     "description": "Rótulo para mostrar o dia atual na visualização de hábitos"
-  }
-}
-,
+  },
   "reminderConfig": "PT: Reminder Config",
   "recurrenceConfig": "PT: Recurrence Config",
   "repeat": "PT: Repeat",
@@ -766,28 +773,6 @@
   "eventTime": "PT: Event Time",
   "invalidMinutes": "PT: Invalid Minutes",
   "invalidInterval": "PT: Invalid Interval",
-  "habitTracking": "PT: Habit Tracking"
-,
-  "reminderConfig": "PT: Reminder Config",
-  "recurrenceConfig": "PT: Recurrence Config",
-  "repeat": "PT: Repeat",
-  "setCycleForPlan": "PT: Set Cycle For Plan",
-  "subtasks": "PT: Subtasks",
-  "addSubtask": "PT: Add Subtask",
-  "minutesBefore": "PT: Minutes Before",
-  "interval": "PT: Interval",
-  "endDate": "PT: End Date",
-  "daily": "PT: Daily",
-  "weekly": "PT: Weekly",
-  "monthly": "PT: Monthly",
-  "everyXDays": "PT: Every X Days",
-  "everyXWeeks": "PT: Every X Weeks",
-  "everyXMonths": "PT: Every X Months",
-  "noRepetition": "PT: No Repetition",
-  "reminder": "PT: Reminder",
-  "repetition": "PT: Repetition",
-  "eventTime": "PT: Event Time",
-  "invalidMinutes": "PT: Invalid Minutes",
-  "invalidInterval": "PT: Invalid Interval",
-  "habitTracking": "PT: Habit Tracking"
+  "habitTracking": "PT: Habit Tracking",
+  "onboardingWelcomeMessage": "PT: Welcome message"
 }
