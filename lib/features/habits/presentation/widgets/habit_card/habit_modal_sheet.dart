@@ -145,7 +145,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
     debugPrint(
         'HabitModalSheet.build: checkbox value=$completed, tachado=${completed ? 'true' : 'false'}');
     return Padding(
-      padding: MediaQuery.of(context).viewInsets, // Ajuste automático con teclado
+      padding:
+          MediaQuery.of(context).viewInsets, // Ajuste automático con teclado
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -173,7 +174,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        decoration: completed ? TextDecoration.lineThrough : null,
+                        decoration:
+                            completed ? TextDecoration.lineThrough : null,
                       ),
                     ),
                   ),
@@ -241,7 +243,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Icon(Icons.add, color: Colors.purple, size: 24),
+                            const Icon(Icons.add,
+                                color: Colors.purple, size: 24),
                             const SizedBox(width: 8),
                             Text('Subtareas',
                                 style: TextStyle(

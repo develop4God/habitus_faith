@@ -463,11 +463,15 @@ class _AdaptiveOnboardingPageState
         // Safe parsing of habit fields to avoid null casts and crashes
         // Name (required) - try several common keys and skip the habit if none found
         String? name;
-        final rawName = habitData['name'] ?? habitData['nameKey'] ?? habitData['title'] ?? habitData['label'];
+        final rawName = habitData['name'] ??
+            habitData['nameKey'] ??
+            habitData['title'] ??
+            habitData['label'];
         if (rawName is String && rawName.trim().isNotEmpty) {
           name = rawName.trim();
         } else {
-          debugPrint('Onboarding: habit entry missing name, skipping entry: $habitData');
+          debugPrint(
+              'Onboarding: habit entry missing name, skipping entry: $habitData');
           continue; // skip invalid habit entries
         }
 
@@ -869,7 +873,8 @@ class _QuestionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Evito mostrar el título dos veces en la página 4 (mainChallenge) y 5 (supportSystem)
-    final showTitle = question.id != 'supportSystem' && question.id != 'mainChallenge';
+    final showTitle =
+        question.id != 'supportSystem' && question.id != 'mainChallenge';
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(

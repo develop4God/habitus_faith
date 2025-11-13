@@ -182,7 +182,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       final minutes = int.parse(parts[1]);
       return hours * 60 + minutes;
     } catch (e) {
-      debugPrint('HabitsPage._timeToMinutes: error parseando hora "$timeString": $e');
+      debugPrint(
+          'HabitsPage._timeToMinutes: error parseando hora "$timeString": $e');
       return 24 * 60; // Error al parsear, va al final
     }
   }
@@ -197,7 +198,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       final minutesA = _timeToMinutes(timeA);
       final minutesB = _timeToMinutes(timeB);
 
-      debugPrint('HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)');
+      debugPrint(
+          'HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)');
 
       return minutesA.compareTo(minutesB);
     });
@@ -221,7 +223,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       filtrados = habits;
     } else {
       filtrados = habits.where((h) => h.category == _categoryFilter).toList();
-      debugPrint('HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría');
+      debugPrint(
+          'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría');
     }
 
     // Ordenar cronológicamente por hora de notificación
