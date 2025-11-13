@@ -59,6 +59,14 @@ FALLBACK_ACTIONS = {
     "relational": ["Llamar a un amigo 10 min", "Tiempo familiar 20 min", "Servicio 30 min"]
 }
 
+# Emojis permitidos (neutros, no religiosos ni esotéricos)
+ALLOWED_EMOJIS = [
+    "🚶", "😊", "📖", "💪", "🏃", "🏅", "🕒", "📅", "📞", "👨‍👩‍👧‍👦", "🤝", "🤸", "📝", "🗓️", "😃", "😌", "😇", "✍️", "📚", "🎯", "🧠"
+]
+
+# Si el emoji no es permitido, se reemplaza por uno neutro
+DEFAULT_EMOJI = "😊"
+
 
 def generate_random_scenario() -> dict:
     intent = random.choice(["faithBased", "wellness", "both"])
@@ -101,6 +109,44 @@ def is_trivial(name: str) -> bool:
     ln = name.lower()
     return any(term in ln for term in TRIVIAL_TERMS)
 
+def infer_notification_time(habit):
+    name = habit.get("name", "").lower()
+    category = habit.get("category", "")
+    # Lógica simple por nombre/categoría
+    if any(x in name for x in ["mañana", "morning", "matin", "manhã"]):
+        return "08:00"
+    if any(x in name for x in ["noche", "night", "soir", "noite"]):
+        return "21:00"
+    if category == "spiritual":
+        return "07:30"
+    if category == "physical":
+        return "18:00"
+    if category == "mental":
+        return "12:00"
+    if category == "relational":
+        return "19:00"
+    return "12:00"
+
+def notification_title_body(habit, lang):
+    name = habit.get("name", "")
+    # Puedes personalizar por idioma si lo deseas
+    if lang == "es":
+        return f"¡Hora de {name.split()[0].lower()}!", f"Recuerda: {name}"
+    if lang == "en":
+        return f"Time to {name.split()[0].lower()}!", f"Remember: {name}"
+    if lang == "pt":
+        return f"Hora de {name.split()[0].lower()}!", f"Lembre-se: {name}"
+    if lang == "fr":
+        return f"Heure de {name.split()[0].lower()}!", f"Rappel: {name}"
+    if lang == "zh":
+        return f"该{ name.split()[0] }了！", f"记得：{name}"
+    return f"Time for {name}", f"Don't forget: {name}"
+
+def sanitize_emoji(emoji):
+    if emoji in ALLOWED_EMOJIS:
+        return emoji
+    return DEFAULT_EMOJI
+
 def enrich_habit(habit, idx, pattern_id):
     name = habit.get("name", "").strip()
     category = habit.get("category", "other").strip()
@@ -108,21 +154,22 @@ def enrich_habit(habit, idx, pattern_id):
     # Detectar y reemplazar trivial
     if is_trivial(name):
         if "respirar" in name.lower() or "breath" in name.lower():
-            name = "Respiración guiada 5 min"
+            name = "Guided breathing 5 min"
             category = "mental"
-            emoji = "🧘"
+            emoji = DEFAULT_EMOJI
         else:
             # fallback por categoría
             fallback = random.choice(FALLBACK_ACTIONS.get(category, FALLBACK_ACTIONS["mental"]))
             name = fallback
-            emoji = "✨"
+            emoji = DEFAULT_EMOJI
     # Extraer duración
     m = re.search(r"(\d{1,3})\s*(min|mins|minutos|minutes|m)", name.lower())
     if m:
         minutes = int(m.group(1))
     else:
         minutes = MIN_DURATION_BY_CATEGORY.get(category, 5)
-    # Enriquecer
+    # Sanear emoji
+    emoji = sanitize_emoji(emoji)
     return {
         "id": f"tpl_{pattern_id}_{idx}",
         "nameKey": name,
@@ -133,6 +180,17 @@ def enrich_habit(habit, idx, pattern_id):
         "subtasks": [],
         "recommended_time": None
     }
+
+def enrich_habit_with_notification(habit, lang):
+    time = infer_notification_time(habit)
+    title, body = notification_title_body(habit, lang)
+    habit["notifications"] = [{
+        "time": time,
+        "title": title,
+        "body": body,
+        "enabled": True
+    }]
+    return habit
 
 @retry(wait=wait_exponential(min=3, max=15), stop=stop_after_attempt(5))
 def generate_template(scenario: dict, lang_code: str, lang_name: str, scenario_id: str) -> dict:
@@ -147,23 +205,31 @@ def generate_template(scenario: dict, lang_code: str, lang_name: str, scenario_i
         context = f"Espiritual: {scenario['spiritual']}\nWellness: {scenario['wellness']}\nDesafío: {scenario['challenge']}"
         pattern_id = f"both_{scenario['spiritual']}_{scenario['wellness']}_{scenario['challenge']}"
     prompt = f"""
-Idioma: {lang_name}
-Perfil: {intent}
+Language: {lang_name}
+Profile: {intent}
 {context}
-Genera 6 hábitos con duración en el nombre.
-CATEGORÍAS VÁLIDAS (usar solo estas 4):
-- spiritual: Oración, lectura bíblica, meditación espiritual
-- physical: Ejercicio, caminar, estiramientos, dormir
-- mental: Reflexión, gratitud, mindfulness, planificación
-- relational: Familia, amigos, servicio comunitario
-Responde SOLO JSON (sin markdown, sin ```):
+Generate 6 habits with duration in the name.
+ALLOWED CATEGORIES (use only these 4):
+- spiritual: prayer, bible reading, spiritual reflection
+- physical: exercise, walking, stretching, sleep
+- mental: reflection, gratitude, mindfulness, planning
+- relational: family, friends, community service
+
+IMPORTANT:
+- Use only neutral emojis (no religious, esoteric, or eastern symbols; do not use yoga, chakras, or meditation icons).
+- For wellness habits, do NOT use Christian symbols, but avoid any symbol contrary to Christian values.
+- If unsure, use a neutral emoji like 😊, 🚶, 📖, 💪, 🏃, 🏅, 🕒, 📅, 📞, 👨‍👩‍👧‍👦, 🤝, 🤸, 📝, 🗓️, 😃, 😌, 😇, ✍️, 📚, 🎯, 🧠.
+- All instructions and field names must be in English, but the habit names and descriptions must be in the target language: {lang_name}.
+- For each habit, add a field 'notifications' (array) with at least one notification. The notification time must be smart and logical for the habit type (e.g. morning for prayer, evening for reflection, after work for exercise, etc.), and the notifications for all habits should be distributed in an optimal daily order (no overlaps, covering morning, afternoon, and evening if possible).
+- Respond ONLY with JSON (no markdown, no ```):
 {{
   "pattern_id": "{pattern_id}",
   "habits": [
     {{
-      "name": "Acción + duración (ej: Orar 10 min)",
+      "name": "Action + duration (e.g. Pray 10 min)",
       "category": "spiritual|physical|mental|relational",
-      "emoji": "emoji"
+      "emoji": "emoji",
+      "notifications": [{{"time": "HH:MM", "title": "string", "body": "string", "enabled": true}}]
     }}
   ]
 }}
@@ -216,6 +282,7 @@ def generate_language_file(lang_code: str):
             continue
         try:
             template = generate_template(scenario, lang_code, lang_name, scenario_id)
+            template["habits"] = [enrich_habit_with_notification(h, lang_code) for h in template["habits"]]
             templates_data["templates"].append(template)
             existing_ids.add(scenario_id)
             generated += 1
