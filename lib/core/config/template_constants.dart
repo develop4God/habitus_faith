@@ -11,7 +11,7 @@ class TemplateConstants {
   static const Duration cacheDuration = Duration(hours: 24);
 
   /// Similarity threshold for fuzzy matching profiles
-  static const double similarityThreshold = 0.75;
+  static const double similarityThreshold = 0.85;
 
   /// Maximum number of templates to cache locally
   static const int maxCachedTemplates = 50;

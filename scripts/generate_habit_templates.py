@@ -70,13 +70,16 @@ DEFAULT_EMOJI = "😊"
 
 def generate_random_scenario() -> dict:
     intent = random.choice(["faithBased", "wellness", "both"])
+    support_levels = ["low", "normal", "high"]
+    support_level = random.choice(support_levels)
     if intent == "faithBased":
         motivations = random.sample(FAITH_MOTIVATIONS, 2)
         return {
             "intent": "faithBased",
             "motivations": motivations,
             "maturity": random.choice(FAITH_MATURITY),
-            "challenge": random.choice(CHALLENGES)
+            "challenge": random.choice(CHALLENGES),
+            "supportLevel": support_level
         }
     elif intent == "wellness":
         goals = random.sample(WELLNESS_GOALS, 2)
@@ -84,14 +87,16 @@ def generate_random_scenario() -> dict:
             "intent": "wellness",
             "goals": goals,
             "state": random.choice(WELLNESS_STATE),
-            "challenge": random.choice(CHALLENGES)
+            "challenge": random.choice(CHALLENGES),
+            "supportLevel": support_level
         }
     else:
         return {
             "intent": "both",
             "spiritual": random.choice(BOTH_SPIRITUAL),
             "wellness": random.choice(BOTH_WELLNESS),
-            "challenge": random.choice(CHALLENGES)
+            "challenge": random.choice(CHALLENGES),
+            "supportLevel": support_level
         }
 
 def generate_scenario_id(scenario: dict) -> str:
@@ -195,15 +200,31 @@ def enrich_habit_with_notification(habit, lang):
 @retry(wait=wait_exponential(min=3, max=15), stop=stop_after_attempt(5))
 def generate_template(scenario: dict, lang_code: str, lang_name: str, scenario_id: str) -> dict:
     intent = scenario["intent"]
+    support_level = scenario.get("supportLevel", "normal")
+    # Validar y asegurar que motivations/goals tengan al menos 2 elementos
+    motivations = scenario.get("motivations") or []
+    goals = scenario.get("goals") or []
+    spiritual = scenario.get("spiritual")
+    wellness = scenario.get("wellness")
+    # Rellenar si faltan elementos
     if intent == "faithBased":
-        context = f"Motivaciones: {', '.join(scenario['motivations'])}\nMadurez: {scenario['maturity']}\nDesafío: {scenario['challenge']}"
-        pattern_id = f"faith_{scenario['maturity']}_{scenario['challenge']}_{'_'.join(scenario['motivations'][:2])}"
+        while len(motivations) < 2:
+            motivations.append("general")
+        context = f"Motivaciones: {', '.join(motivations)}\nMadurez: {scenario['maturity']}\nDesafío: {scenario['challenge']}\nRed de apoyo: {support_level}"
+        pattern_id = f"faith_{scenario['maturity']}_{scenario['challenge']}_{support_level}_{'_'.join(motivations[:2])}"
     elif intent == "wellness":
-        context = f"Objetivos: {', '.join(scenario['goals'])}\nEstado: {scenario['state']}\nDesafío: {scenario['challenge']}"
-        pattern_id = f"well_{scenario['state']}_{scenario['challenge']}_{'_'.join(scenario['goals'][:2])}"
+        while len(goals) < 2:
+            goals.append("general")
+        context = f"Objetivos: {', '.join(goals)}\nEstado: {scenario['state']}\nDesafío: {scenario['challenge']}\nRed de apoyo: {support_level}"
+        pattern_id = f"well_{scenario['state']}_{scenario['challenge']}_{support_level}_{'_'.join(goals[:2])}"
     else:
-        context = f"Espiritual: {scenario['spiritual']}\nWellness: {scenario['wellness']}\nDesafío: {scenario['challenge']}"
-        pattern_id = f"both_{scenario['spiritual']}_{scenario['wellness']}_{scenario['challenge']}"
+        # both
+        if not spiritual:
+            spiritual = "general"
+        if not wellness:
+            wellness = "general"
+        context = f"Espiritual: {spiritual}\nWellness: {wellness}\nDesafío: {scenario['challenge']}\nRed de apoyo: {support_level}"
+        pattern_id = f"both_{spiritual}_{wellness}_{scenario['challenge']}_{support_level}"
     prompt = f"""
 Language: {lang_name}
 Profile: {intent}
@@ -221,6 +242,7 @@ IMPORTANT:
 - If unsure, use a neutral emoji like 😊, 🚶, 📖, 💪, 🏃, 🏅, 🕒, 📅, 📞, 👨‍👩‍👧‍👦, 🤝, 🤸, 📝, 🗓️, 😃, 😌, 😇, ✍️, 📚, 🎯, 🧠.
 - All instructions and field names must be in English, but the habit names and descriptions must be in the target language: {lang_name}.
 - For each habit, add a field 'notifications' (array) with at least one notification. The notification time must be smart and logical for the habit type (e.g. morning for prayer, evening for reflection, after work for exercise, etc.), and the notifications for all habits should be distributed in an optimal daily order (no overlaps, covering morning, afternoon, and evening if possible).
+- If support level is low, include at least two habits that encourage social connection or support (relational category).
 - Respond ONLY with JSON (no markdown, no ```):
 {{
   "pattern_id": "{pattern_id}",
@@ -241,7 +263,6 @@ IMPORTANT:
     except Exception as e:
         print(f"❌ Error: Gemini response is not valid JSON. Raw response: {text}")
         raise e
-    # Validar cantidad de hábitos
     habits = data.get("habits", [])
     if not isinstance(habits, list):
         print(f"❌ Error: 'habits' is not a list. Raw: {habits}")
@@ -249,7 +270,6 @@ IMPORTANT:
     if len(habits) != 5:
         print(f"❌ Error: Gemini did not return 5 habits. Returned: {len(habits)}. Raw: {habits}")
         raise ValueError("Gemini did not return exactly 5 habits")
-    # Validar que cada hábito tenga los campos requeridos y no esté vacío
     for i, h in enumerate(habits):
         if not isinstance(h, dict):
             print(f"❌ Error: Habit at index {i} is not a dict. Habit: {h}")
@@ -259,7 +279,6 @@ IMPORTANT:
             print(f"❌ Error: Habit at index {i} missing required fields {missing_fields}. Habit: {h}")
             raise ValueError(f"Habit at index {i} missing required fields: {missing_fields}")
     assert "pattern_id" in data
-    # Enriquecer y reemplazar triviales
     enriched = []
     for i, h in enumerate(habits):
         try:
@@ -269,10 +288,12 @@ IMPORTANT:
             raise
     data["habits"] = enriched
     data["scenario_id"] = scenario_id
+    # Ajustar fingerprint y orden
     data["fingerprint"] = {
         "primaryIntent": intent,
-        "motivations": scenario.get("motivations") or scenario.get("goals") or [scenario.get("spiritual"), scenario.get("wellness")],
+        "motivations": motivations or goals or [spiritual, wellness],
         "challenge": scenario["challenge"],
+        "supportLevel": support_level,
         "spiritualMaturity": scenario.get("maturity") or scenario.get("state")
     }
     return data

@@ -25,17 +25,15 @@ class TemplateMatchingService {
   /// Generate a pattern ID from an onboarding profile
   /// Used to match against template fingerprints
   String generatePatternId(OnboardingProfile profile) {
-    // Take first two motivations for pattern matching
+    // Orden: primaryIntent, supportLevel, challenge, motivations (2), spiritualMaturity/null
     final motivationsKey = profile.motivations.take(2).join('_');
-
-    // Use spiritualMaturity for faith-based, or first motivation for wellness
-    final maturityOrState =
-        profile.spiritualMaturity ?? profile.motivations.first;
-
+    final maturityOrState = profile.spiritualMaturity ?? profile.motivations.first;
+    // Nuevo orden: intent_supportLevel_challenge_motivations_maturityOrState
     return '${profile.primaryIntent.name}_'
-        '${maturityOrState}_'
+        '${profile.supportLevel}_'
         '${profile.challenge}_'
-        '$motivationsKey';
+        '${motivationsKey}_'
+        '${maturityOrState}';
   }
 
   /// Find a matching template for the given profile
