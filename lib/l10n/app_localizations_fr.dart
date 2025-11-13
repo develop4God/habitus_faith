@@ -703,76 +703,77 @@ class AppLocalizationsFr extends AppLocalizations {
   String get home => 'Accueil';
 
   @override
-  String get reminderConfig => 'Reminder Configuration';
+  String get reminderConfig => 'FR: Reminder Configuration';
 
   @override
-  String get recurrenceConfig => 'Daily Repetitions';
+  String get recurrenceConfig => 'FR: Daily Repetitions';
 
   @override
-  String get repeat => 'Repeat';
+  String get repeat => 'FR: Repeat';
 
   @override
-  String get setCycleForPlan => 'Set a cycle for your plan';
+  String get setCycleForPlan => 'FR: Set a cycle for your plan';
 
   @override
-  String get subtasks => 'Subtasks';
+  String get subtasks => 'FR: Subtasks';
 
   @override
-  String get addSubtask => 'Add subtask';
+  String get addSubtask => 'FR: Add subtask';
 
   @override
-  String get minutesBefore => 'Minutes before';
+  String get minutesBefore => 'FR: Minutes before';
 
   @override
-  String get interval => 'Interval';
+  String get interval => 'FR: Interval';
 
   @override
-  String get endDate => 'End date';
+  String get endDate => 'FR: End date';
 
   @override
-  String get daily => 'Daily';
+  String get daily => 'FR: Daily';
 
   @override
-  String get weekly => 'Weekly';
+  String get weekly => 'FR: Weekly';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'FR: Monthly';
 
   @override
   String everyXDays(int count) {
-    return 'Every $count day(s)';
+    return 'FR: Every $count day(s)';
   }
 
   @override
   String everyXWeeks(int count) {
-    return 'Every $count week(s)';
+    return 'FR: Every $count week(s)';
   }
 
   @override
   String everyXMonths(int count) {
-    return 'Every $count month(s)';
+    return 'FR: Every $count month(s)';
   }
 
   @override
-  String get noRepetition => 'No repetition';
+  String get noRepetition => 'FR: No repetition';
 
   @override
-  String get reminder => 'Reminder';
+  String get reminder => 'FR: Reminder';
 
   @override
-  String get repetition => 'Repetition';
+  String get repetition => 'FR: Repetition';
 
   @override
-  String get eventTime => 'Event time (HH:MM)';
+  String get eventTime => 'FR: Event time (HH:MM)';
 
   @override
-  String get invalidMinutes => 'Please enter a valid number between 1 and 1440';
+  String get invalidMinutes =>
+      'FR: Please enter a valid number between 1 and 1440';
 
   @override
-  String get invalidInterval => 'Interval must be at least 1';
+  String get invalidInterval => 'FR: Interval must be at least 1';
 
   @override
-  String get habitTracking => 'Habit Tracking';
+  String get habitTracking => 'FR: Habit Tracking';
 
   @override
   String get routine => 'Routine';
