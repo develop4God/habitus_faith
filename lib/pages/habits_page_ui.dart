@@ -152,7 +152,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
     return Column(
       children: [
         const SizedBox(height: 12),
-        Center(
+        const Center(
           child: Text(
             'Hoy',
             style: TextStyle(
@@ -222,7 +222,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         final l10n = AppLocalizations.of(context)!;
                         await showDialog(
                           context: context,
-                          builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                          builder: (ctx) =>
+                              EditHabitDialog(l10n: l10n, habit: habit),
                         );
                         // Después de cerrar el diálogo, refrescar la vista
                         setState(() {});

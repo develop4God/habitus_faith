@@ -231,7 +231,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               child: Checkbox(
                                 value: widget.habit.completedToday,
                                 onChanged: (val) {
-                                  debugPrint('Checkbox tapped. Valor actual: ${widget.habit.completedToday}. Nuevo valor: $val');
+                                  debugPrint(
+                                      'Checkbox tapped. Valor actual: ${widget.habit.completedToday}. Nuevo valor: $val');
                                   if (!_isCompleting) {
                                     _handleComplete();
                                     debugPrint('Llamando a _handleComplete()');
@@ -546,8 +547,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               width: 1,
                             ),
                           ),
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
                             children: [
                               const Icon(Icons.add,
@@ -591,8 +591,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               activeColor: Colors.purple,
                               materialTapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,
-                              visualDensity:
-                                  const VisualDensity(horizontal: 0, vertical: 0),
+                              visualDensity: const VisualDensity(
+                                  horizontal: 0, vertical: 0),
                               side: const BorderSide(
                                   width: 2, color: Colors.purple),
                             ),
@@ -604,7 +604,9 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               decoration: subtask.completed
                                   ? TextDecoration.lineThrough
                                   : null,
-                              color: subtask.completed ? Colors.green : Colors.black,
+                              color: subtask.completed
+                                  ? Colors.green
+                                  : Colors.black,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

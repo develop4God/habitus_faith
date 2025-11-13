@@ -168,8 +168,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Enter text
-      await tester.enterText(
-          find.byType(TextField), 'New Subtask Item');
+      await tester.enterText(find.byType(TextField), 'New Subtask Item');
       await tester.pumpAndSettle();
 
       // Submit by pressing enter or tapping check button
@@ -182,7 +181,7 @@ void main() {
 
     testWidgets('Notifications show real habit data', (tester) async {
       final habitWithNotifications = testHabit.copyWith(
-        notificationSettings: HabitNotificationSettings(
+        notificationSettings: const HabitNotificationSettings(
           timing: NotificationTiming.atEventTime,
           eventTime: '07:00',
         ),
@@ -278,8 +277,8 @@ void main() {
     testWidgets('Can delete subtask from modal', (tester) async {
       final habitWithSubtasks = testHabit.copyWith(
         subtasks: [
-          Subtask(id: '1', title: 'Subtask 1', completed: false),
-          Subtask(id: '2', title: 'Subtask 2', completed: false),
+          const Subtask(id: '1', title: 'Subtask 1', completed: false),
+          const Subtask(id: '2', title: 'Subtask 2', completed: false),
         ],
       );
 

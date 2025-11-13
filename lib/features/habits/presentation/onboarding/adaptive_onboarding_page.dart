@@ -463,7 +463,7 @@ class _AdaptiveOnboardingPageState
         // Safe parsing of habit fields to avoid null casts and crashes
         // Name (required) - try several common keys and skip the habit if none found
         String? name;
-        final rawName = habitData['name'] ?? habitData['title'] ?? habitData['label'];
+        final rawName = habitData['name'] ?? habitData['nameKey'] ?? habitData['title'] ?? habitData['label'];
         if (rawName is String && rawName.trim().isNotEmpty) {
           name = rawName.trim();
         } else {
@@ -473,7 +473,8 @@ class _AdaptiveOnboardingPageState
 
         // Emoji (optional)
         String? emoji;
-        final rawEmoji = habitData['emoji'] ?? habitData['icon'] ?? habitData['symbol'];
+        final rawEmoji =
+            habitData['emoji'] ?? habitData['icon'] ?? habitData['symbol'];
         if (rawEmoji is String && rawEmoji.isNotEmpty) {
           emoji = rawEmoji;
         }

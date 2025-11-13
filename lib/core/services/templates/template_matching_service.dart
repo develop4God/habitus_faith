@@ -27,13 +27,14 @@ class TemplateMatchingService {
   String generatePatternId(OnboardingProfile profile) {
     // Orden: primaryIntent, supportLevel, challenge, motivations (2), spiritualMaturity/null
     final motivationsKey = profile.motivations.take(2).join('_');
-    final maturityOrState = profile.spiritualMaturity ?? profile.motivations.first;
+    final maturityOrState =
+        profile.spiritualMaturity ?? profile.motivations.first;
     // Nuevo orden: intent_supportLevel_challenge_motivations_maturityOrState
     return '${profile.primaryIntent.name}_'
         '${profile.supportLevel}_'
         '${profile.challenge}_'
         '${motivationsKey}_'
-        '${maturityOrState}';
+        '$maturityOrState';
   }
 
   /// Find a matching template for the given profile
@@ -45,7 +46,8 @@ class TemplateMatchingService {
     try {
       // Generate pattern ID for exact match
       final patternId = generatePatternId(profile);
-      debugPrint('[TEMPLATES] Buscando template con pattern: $patternId, idioma: $language');
+      debugPrint(
+          '[TEMPLATES] Buscando template con pattern: $patternId, idioma: $language');
 
       // 1. Buscar en Firestore por fingerprint e idioma
       if (_firestore != null) {
@@ -78,16 +80,19 @@ class TemplateMatchingService {
 
       // 3. Buscar en archivo de templates por idioma en GitHub (nuevo flujo)
       final templateFile = await _fetchTemplateFile(language);
-      debugPrint('[TEMPLATES] Archivo de template descargado de GitHub para $language: ${templateFile != null}');
+      debugPrint(
+          '[TEMPLATES] Archivo de template descargado de GitHub para $language: ${templateFile != null}');
       if (templateFile != null && templateFile['templates'] != null) {
         final templates = templateFile['templates'] as List<dynamic>;
-        debugPrint('[TEMPLATES] Total de templates en archivo: ${templates.length}');
+        debugPrint(
+            '[TEMPLATES] Total de templates en archivo: ${templates.length}');
         // Coincidencia exacta primero
         final match = templates.firstWhere(
           (t) => t['pattern_id'] == patternId,
           orElse: () => null,
         );
-        debugPrint('[TEMPLATES] ¿Match encontrado en archivo GitHub?: ${match != null}');
+        debugPrint(
+            '[TEMPLATES] ¿Match encontrado en archivo GitHub?: ${match != null}');
         if (match != null && match['habits'] != null) {
           log('Template found in GitHub file: $patternId', name: 'templates');
           await _cache.set(
@@ -95,7 +100,8 @@ class TemplateMatchingService {
             match,
             ttl: TemplateConstants.cacheDuration,
           );
-          return (match['habits'] as List<dynamic>).cast<Map<String, dynamic>>();
+          return (match['habits'] as List<dynamic>)
+              .cast<Map<String, dynamic>>();
         }
         // Si no hay match exacto, buscar fuzzy
         double bestScore = 0.0;
@@ -103,26 +109,33 @@ class TemplateMatchingService {
         for (final t in templates) {
           final candidate = t['pattern_id'] as String?;
           if (candidate == null) continue;
-          final score = StringSimilarity.compareTwoStrings(patternId, candidate);
+          final score =
+              StringSimilarity.compareTwoStrings(patternId, candidate);
           if (score > bestScore) {
             bestScore = score;
             bestMatch = t as Map<String, dynamic>;
           }
         }
-        debugPrint('[TEMPLATES] Mejor score fuzzy: ${bestScore.toStringAsFixed(2)} para pattern: ${bestMatch?['pattern_id']}');
-        if (bestScore >= 0.85 && bestMatch != null && bestMatch['habits'] != null) {
-          log('Template fuzzy match in GitHub file: ${bestMatch['pattern_id']}', name: 'templates');
+        debugPrint(
+            '[TEMPLATES] Mejor score fuzzy: ${bestScore.toStringAsFixed(2)} para pattern: ${bestMatch?['pattern_id']}');
+        if (bestScore >= 0.85 &&
+            bestMatch != null &&
+            bestMatch['habits'] != null) {
+          log('Template fuzzy match in GitHub file: ${bestMatch['pattern_id']}',
+              name: 'templates');
           await _cache.set(
             cacheKey,
             bestMatch,
             ttl: TemplateConstants.cacheDuration,
           );
-          return (bestMatch['habits'] as List<dynamic>).cast<Map<String, dynamic>>();
+          return (bestMatch['habits'] as List<dynamic>)
+              .cast<Map<String, dynamic>>();
         }
       }
 
       // 4. Si no hay match, fallback a Gemini y otros métodos
-      debugPrint('[TEMPLATES] No se encontró template para pattern: $patternId');
+      debugPrint(
+          '[TEMPLATES] No se encontró template para pattern: $patternId');
       return null;
     } catch (e, stack) {
       debugPrint('[TEMPLATES] Error buscando template: $e');
@@ -142,18 +155,21 @@ class TemplateMatchingService {
         debugPrint('[TEMPLATES] Archivo template $language obtenido de cache');
         return cached;
       }
-      final url = '${TemplateConstants.baseUrl}/${TemplateConstants.templateFile(language)}';
+      final url =
+          '${TemplateConstants.baseUrl}/${TemplateConstants.templateFile(language)}';
       debugPrint('[TEMPLATES] Descargando archivo de: $url');
       final client = _httpClient ?? http.Client();
       final response = await client.get(Uri.parse(url));
       debugPrint('[TEMPLATES] Respuesta HTTP: ${response.statusCode}');
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        debugPrint('[TEMPLATES] Archivo template $language descargado y parseado correctamente');
+        debugPrint(
+            '[TEMPLATES] Archivo template $language descargado y parseado correctamente');
         await _cache.set(cacheKey, data, ttl: TemplateConstants.cacheDuration);
         return data;
       }
-      debugPrint('[TEMPLATES] Error HTTP al descargar template: ${response.statusCode}');
+      debugPrint(
+          '[TEMPLATES] Error HTTP al descargar template: ${response.statusCode}');
       return null;
     } catch (e) {
       debugPrint('[TEMPLATES] Error descargando archivo template: $e');
