@@ -115,7 +115,7 @@ void main() {
         completedAt: DateTime.now(),
       );
 
-      final cacheKey =
+      const cacheKey =
           'template_es_faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new';
       await fakeCache.set(cacheKey, {
         'pattern_id':
@@ -355,8 +355,7 @@ void main() {
         when(() => response.statusCode).thenReturn(200);
         when(() => response.body).thenReturn(jsonEncode(templateFile));
 
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => response);
+        when(() => mockHttpClient.get(any())).thenAnswer((_) async => response);
 
         final result = await service.findMatch(profile, lang);
 
