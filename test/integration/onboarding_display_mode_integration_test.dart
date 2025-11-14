@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_selection_page.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_page.dart';
+import 'package:habitus_faith/features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
@@ -35,12 +35,14 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Step 1: Verify display mode selection page is shown
       expect(
@@ -51,11 +53,11 @@ void main() {
 
       // Step 2: Select compact mode
       await tester.tap(find.byKey(const Key('compact_mode_card')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Step 3: Tap select mode button
       await tester.tap(find.byKey(const Key('select_mode_button')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Step 4: Verify navigation to onboarding page
       expect(
@@ -86,12 +88,14 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Scroll to make advanced mode card visible
       await tester.dragUntilVisible(
@@ -99,15 +103,15 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -50),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Select advanced mode
       await tester.tap(find.byKey(const Key('advanced_mode_card')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Tap select mode button
       await tester.tap(find.byKey(const Key('select_mode_button')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Verify navigation to onboarding page
       expect(
@@ -142,7 +146,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       expect(
         loadedMode,
@@ -172,7 +176,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       expect(
         loadedMode,
@@ -202,7 +206,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       expect(
         isSelected,
@@ -233,7 +237,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         expect(
           isSelected,
@@ -261,16 +265,18 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // First select compact mode
       await tester.tap(find.byKey(const Key('compact_mode_card')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Scroll to make advanced mode card visible
       await tester.dragUntilVisible(
@@ -278,15 +284,15 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -50),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Change to advanced mode
       await tester.tap(find.byKey(const Key('advanced_mode_card')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Confirm selection
       await tester.tap(find.byKey(const Key('select_mode_button')));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Verify final selection was advanced
       final savedMode = prefs.getString('display_mode');
@@ -314,12 +320,14 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en', '')],
-            routes: {'/onboarding': (context) => const OnboardingPage()},
+            routes: {
+              '/onboarding': (context) => const AdaptiveOnboardingPage()
+            },
             home: const DisplayModeSelectionPage(),
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Try to tap the button without selecting a mode
       final selectButton = tester.widget<ElevatedButton>(

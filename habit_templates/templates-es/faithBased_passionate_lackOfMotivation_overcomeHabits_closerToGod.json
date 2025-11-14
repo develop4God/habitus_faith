@@ -1,0 +1,76 @@
+{
+  "pattern_id": "faithBased_normal_lackOfMotivation_overcomeHabits_closerToGod_passionate",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": [
+      "overcomeHabits",
+      "closerToGod"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "passionate"
+  },
+  "generated_habits": [
+    {
+      "name": "Victoria diaria",
+      "description": "Celebra pequeñas victorias en tu caminar con Dios",
+      "category": "spiritual",
+      "emoji": "🏆",
+      "microHabits": [
+        {
+          "title": "Identificar un hábito negativo que evitaste hoy",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Agradecer a Dios por su fuerza en ti",
+          "durationMinutes": 2,
+          "order": 1
+        },
+        {
+          "title": "Leer Filipenses 4:13",
+          "durationMinutes": 1,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "19:00",
+          "title": "Celebra tu victoria 🏆",
+          "body": "Reconoce la obra de Dios en ti",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Servicio transformador",
+      "description": "Sirve a otros como expresión de tu fe",
+      "category": "relational",
+      "emoji": "🤝",
+      "microHabits": [
+        {
+          "title": "Orar por alguien que necesita ánimo",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Hacer una llamada o mensaje de aliento",
+          "durationMinutes": 3,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "10:00",
+          "title": "Sé las manos de Dios 🤝",
+          "body": "¿A quién puedes bendecir hoy?",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

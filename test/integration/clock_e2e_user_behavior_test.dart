@@ -22,7 +22,6 @@ void main() {
         id: 'meditation_habit',
         userId: 'real_user_001',
         name: 'Morning Meditation',
-        description: '5 minutes of mindfulness',
         category: HabitCategory.spiritual,
         clock: clock,
       );
@@ -118,7 +117,6 @@ void main() {
         id: 'exercise_habit',
         userId: 'real_user_002',
         name: 'Daily Exercise',
-        description: '15 minute workout',
         category: HabitCategory.physical,
         clock: clock,
       );
@@ -171,7 +169,6 @@ void main() {
         id: 'morning_prayer',
         userId: 'user_003',
         name: 'Morning Prayer',
-        description: 'Start day with prayer',
         category: HabitCategory.spiritual,
         clock: clock,
       );
@@ -181,7 +178,6 @@ void main() {
         id: 'evening_reading',
         userId: 'user_003',
         name: 'Evening Reading',
-        description: 'Read before bed',
         category: HabitCategory.mental,
         clock: clock,
       );
@@ -237,7 +233,6 @@ void main() {
         id: 'midnight_test',
         userId: 'user_004',
         name: 'Late Night Habit',
-        description: 'Before bed routine',
         category: HabitCategory.spiritual,
         clock: clock,
       );
@@ -269,7 +264,6 @@ void main() {
         id: 'long_term',
         userId: 'user_005',
         name: 'Daily Journal',
-        description: 'Write daily thoughts',
         category: HabitCategory.mental,
         clock: clock,
       );

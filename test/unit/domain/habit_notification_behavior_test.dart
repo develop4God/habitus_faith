@@ -10,7 +10,6 @@ void main() {
           id: 'prayer',
           userId: 'user1',
           name: 'Morning Prayer',
-          description: 'Daily prayer routine',
         );
 
         const settings = HabitNotificationSettings(
@@ -45,7 +44,6 @@ void main() {
           id: 'bible',
           userId: 'user1',
           name: 'Bible Reading',
-          description: 'Read 1 chapter',
         );
 
         const recurrence = HabitRecurrence(
@@ -66,7 +64,6 @@ void main() {
           id: 'exercise',
           userId: 'user1',
           name: 'Morning Exercise',
-          description: 'Daily workout',
         );
 
         final subtasks = [
@@ -117,7 +114,6 @@ void main() {
       });
 
       test('Notification 1 hour before midnight event', () {
-
         // Should calculate to 23:30 previous day
         const eventMinutes = 0 * 60 + 30;
         var notifMinutes = eventMinutes - 60;
@@ -176,7 +172,6 @@ void main() {
           id: 'test',
           userId: 'user1',
           name: 'Test Habit',
-          description: 'Test',
         );
 
         expect(habit.subtasks, isEmpty);
@@ -251,9 +246,8 @@ void main() {
         ];
 
         final jsonList = originalSubtasks.map((s) => s.toJson()).toList();
-        final restored = jsonList
-            .map((json) => Subtask.fromJson(json))
-            .toList();
+        final restored =
+            jsonList.map((json) => Subtask.fromJson(json)).toList();
 
         expect(restored.length, 2);
         expect(restored[0].completed, true);
@@ -283,7 +277,6 @@ void main() {
           id: 'workout',
           userId: 'user1',
           name: 'Morning Workout',
-          description: 'Daily exercise routine',
         );
 
         // Step 2: Add notification
@@ -327,7 +320,6 @@ void main() {
           id: 'prayer',
           userId: 'user1',
           name: 'Prayer',
-          description: 'Daily prayer',
         ).copyWith(
           notificationSettings: const HabitNotificationSettings(
             timing: NotificationTiming.atEventTime,

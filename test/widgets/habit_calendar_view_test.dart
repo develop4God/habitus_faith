@@ -12,7 +12,6 @@ final testHabits = [
     id: '1',
     userId: 'user1',
     name: 'Orar',
-    description: 'Orar cada mañana',
     category: HabitCategory.spiritual,
     emoji: '🙏',
     createdAt: DateTime.now(),
@@ -29,11 +28,13 @@ final testAsyncHabitsProvider = StreamProvider<List<Habit>>((ref) async* {
 });
 
 void main() {
-  testWidgets('HabitCalendarView no overflow smoke test', (WidgetTester tester) async {
+  testWidgets('HabitCalendarView no overflow smoke test',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          jsonHabitsStreamProvider.overrideWith((ref) => Stream.value(testHabits)),
+          jsonHabitsStreamProvider
+              .overrideWith((ref) => Stream.value(testHabits)),
         ],
         child: const MaterialApp(
           localizationsDelegates: [

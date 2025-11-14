@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-11",
+  "language": "fr",
+  "templates": [
+    {
+      "pattern_id": "faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new",
+      "file": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "closerToGod",
+          "prayerDiscipline"
+        ],
+        "challenge": "lackOfTime",
+        "supportLevel": "normal",
+        "spiritualMaturity": "new"
+      }
+    }
+  ]
+}

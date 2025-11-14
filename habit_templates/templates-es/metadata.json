@@ -1,0 +1,119 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-11",
+  "language": "es",
+  "templates": [
+    {
+      "pattern_id": "faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new",
+      "file": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "closerToGod",
+          "prayerDiscipline"
+        ],
+        "challenge": "lackOfTime",
+        "supportLevel": "normal",
+        "spiritualMaturity": "new"
+      }
+    },
+    {
+      "pattern_id": "faithBased_normal_lackOfMotivation_understandBible_growInFaith_growing",
+      "file": "faithBased_growing_lackOfMotivation_understandBible_growInFaith.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "understandBible",
+          "growInFaith"
+        ],
+        "challenge": "lackOfMotivation",
+        "supportLevel": "normal",
+        "spiritualMaturity": "growing"
+      }
+    },
+    {
+      "pattern_id": "faithBased_normal_dontKnowStart_overcomeHabits_closerToGod_mature",
+      "file": "faithBased_mature_dontKnowStart_overcomeHabits_closerToGod.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "overcomeHabits",
+          "closerToGod"
+        ],
+        "challenge": "dontKnowStart",
+        "supportLevel": "normal",
+        "spiritualMaturity": "mature"
+      }
+    },
+    {
+      "pattern_id": "wellness_normal_lackOfTime_timeManagement_productivity_starting",
+      "file": "wellness_starting_lackOfTime_timeManagement_productivity.json",
+      "fingerprint": {
+        "primaryIntent": "wellness",
+        "motivations": [
+          "timeManagement",
+          "productivity"
+        ],
+        "challenge": "lackOfTime",
+        "supportLevel": "normal",
+        "spiritualMaturity": "starting"
+      }
+    },
+    {
+      "pattern_id": "both_normal_lackOfTime_closerToGod_prayerDiscipline_new",
+      "file": "both_new_lackOfTime_closerToGod_prayerDiscipline.json",
+      "fingerprint": {
+        "primaryIntent": "both",
+        "motivations": [
+          "closerToGod",
+          "prayerDiscipline"
+        ],
+        "challenge": "lackOfTime",
+        "supportLevel": "normal",
+        "spiritualMaturity": "new"
+      }
+    },
+    {
+      "pattern_id": "faithBased_normal_lackOfMotivation_overcomeHabits_closerToGod_passionate",
+      "file": "faithBased_passionate_lackOfMotivation_overcomeHabits_closerToGod.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "overcomeHabits",
+          "closerToGod"
+        ],
+        "challenge": "lackOfMotivation",
+        "supportLevel": "normal",
+        "spiritualMaturity": "passionate"
+      }
+    },
+    {
+      "pattern_id": "wellness_normal_dontKnowStart_betterSleep_reduceStress_optimizing",
+      "file": "wellness_optimizing_dontKnowStart_betterSleep_reduceStress.json",
+      "fingerprint": {
+        "primaryIntent": "wellness",
+        "motivations": [
+          "betterSleep",
+          "reduceStress"
+        ],
+        "challenge": "dontKnowStart",
+        "supportLevel": "normal",
+        "spiritualMaturity": "optimizing"
+      }
+    },
+    {
+      "pattern_id": "both_normal_givingUp_closerToGod_understandBible_growing",
+      "file": "both_growing_givingUp_closerToGod_understandBible.json",
+      "fingerprint": {
+        "primaryIntent": "both",
+        "motivations": [
+          "closerToGod",
+          "understandBible"
+        ],
+        "challenge": "givingUp",
+        "supportLevel": "normal",
+        "spiritualMaturity": "growing"
+      }
+    }
+  ]
+}

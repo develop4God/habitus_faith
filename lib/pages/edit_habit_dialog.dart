@@ -22,7 +22,6 @@ class EditHabitDialog extends ConsumerStatefulWidget {
 
 class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   late TextEditingController nameCtrl;
-  late TextEditingController descCtrl;
   late TextEditingController emojiCtrl;
   late TextEditingController eventTimeCtrl;
   late HabitCategory selectedCategory;
@@ -37,18 +36,22 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   void initState() {
     super.initState();
     nameCtrl = TextEditingController(text: widget.habit.name);
-    descCtrl = TextEditingController(text: widget.habit.description);
     emojiCtrl = TextEditingController(text: widget.habit.emoji ?? '');
     eventTimeCtrl = TextEditingController(
       text: widget.habit.notificationSettings?.eventTime ?? '',
     );
-    eventTime = widget.habit.notificationSettings?.eventTime != null && widget.habit.notificationSettings!.eventTime!.contains(':')
+    eventTime = widget.habit.notificationSettings?.eventTime != null &&
+            widget.habit.notificationSettings!.eventTime!.contains(':')
         ? TimeOfDay(
-            hour: int.parse(widget.habit.notificationSettings!.eventTime!.split(':')[0]),
-            minute: int.parse(widget.habit.notificationSettings!.eventTime!.split(':')[1]),
+            hour: int.parse(
+                widget.habit.notificationSettings!.eventTime!.split(':')[0]),
+            minute: int.parse(
+                widget.habit.notificationSettings!.eventTime!.split(':')[1]),
           )
         : null;
-    selectedColor = widget.habit.colorValue != null ? Color(widget.habit.colorValue!) : null;
+    selectedColor = widget.habit.colorValue != null
+        ? Color(widget.habit.colorValue!)
+        : null;
     // subtasks siempre tiene valor por defecto
     subtasks = List<Subtask>.from(widget.habit.subtasks);
     selectedCategory = widget.habit.category;
@@ -60,7 +63,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   @override
   void dispose() {
     nameCtrl.dispose();
-    descCtrl.dispose();
     emojiCtrl.dispose();
     eventTimeCtrl.dispose();
     super.dispose();
@@ -70,7 +72,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
-          description: descCtrl.text,
           category: selectedCategory,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
@@ -133,15 +134,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 controller: nameCtrl,
                 decoration: InputDecoration(
                   labelText: l10n.name,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: descCtrl,
-                decoration: InputDecoration(
-                  labelText: l10n.description,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
               ),
               const SizedBox(height: 12),
@@ -149,16 +143,18 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 controller: emojiCtrl,
                 decoration: InputDecoration(
                   labelText: l10n.emoji,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
                 maxLength: 2,
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitCategory>(
-                initialValue: selectedCategory,
+                value: selectedCategory,
                 decoration: InputDecoration(
                   labelText: l10n.category,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
                 items: HabitCategory.values.map((category) {
                   return DropdownMenuItem(
@@ -189,10 +185,11 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitDifficulty>(
-                initialValue: selectedDifficulty,
+                value: selectedDifficulty,
                 decoration: InputDecoration(
                   labelText: l10n.difficulty,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
                 items: HabitDifficulty.values.map((difficulty) {
                   return DropdownMenuItem(
@@ -209,67 +206,57 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 },
               ),
               const SizedBox(height: 12),
-              // Color picker simple
-              Row(
-                children: [
-                  Text(l10n.color),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () async {
-                      final color = await showDialog<Color>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(l10n.color),
-                          content: Wrap(
-                            spacing: 8,
-                            children: HabitColors.categoryColors.values
-                                .map(
-                                  (color) => GestureDetector(
-                                    onTap: () =>
-                                        Navigator.of(context).pop(color),
-                                    child: Container(
-                                      width: 32,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                        color: color,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: selectedColor == color
-                                              ? Colors.black
-                                              : Colors.transparent,
-                                          width: 2,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      );
-                      if (color != null) {
+              // Color picker moderno y agradable
+              SizedBox(
+                height: 56,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: HabitColors.categoryColors.values.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (context, idx) {
+                    final color =
+                        HabitColors.categoryColors.values.elementAt(idx);
+                    final isSelected = selectedColor == color;
+                    return GestureDetector(
+                      onTap: () {
                         setState(() {
                           selectedColor = color;
                         });
-                      }
-                    },
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: habitColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black, width: 2),
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: isSelected ? 48 : 40,
+                        height: isSelected ? 48 : 40,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color:
+                                isSelected ? Colors.black : Colors.transparent,
+                            width: isSelected ? 3 : 1,
+                          ),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                      color: color.withOpacity(0.4),
+                                      blurRadius: 8)
+                                ]
+                              : [],
+                        ),
+                        child: isSelected
+                            ? const Icon(Icons.check,
+                                color: Colors.white, size: 24)
+                            : null,
                       ),
-                    ),
-                  ),
-                  if (selectedColor != null)
-                    IconButton(
-                      icon: const Icon(Icons.clear, size: 18),
-                      onPressed: () => setState(() => selectedColor = null),
-                    ),
-                ],
+                    );
+                  },
+                ),
               ),
+              if (selectedColor != null)
+                IconButton(
+                  icon: const Icon(Icons.clear, size: 18),
+                  onPressed: () => setState(() => selectedColor = null),
+                ),
               const SizedBox(height: 20),
               // Event time for notifications
               Row(
@@ -280,7 +267,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        side: BorderSide(color: Colors.blueAccent, width: 2),
+                        side: const BorderSide(
+                            color: Colors.blueAccent, width: 2),
                         backgroundColor: Colors.blue.shade50,
                         foregroundColor: Colors.blue.shade900,
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -293,9 +281,11 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         if (picked != null) {
                           setState(() {
                             eventTime = picked;
-                            eventTimeCtrl.text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+                            eventTimeCtrl.text =
+                                '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
                             if (notificationSettings != null) {
-                              notificationSettings = notificationSettings!.copyWith(
+                              notificationSettings =
+                                  notificationSettings!.copyWith(
                                 eventTime: eventTimeCtrl.text,
                               );
                             }
@@ -305,12 +295,15 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.access_time, color: Colors.blueAccent),
+                          const Icon(Icons.access_time,
+                              color: Colors.blueAccent),
                           const SizedBox(width: 8),
-                          Text(eventTime != null
-                              ? eventTime!.format(context)
-                              : 'Seleccionar hora',
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          Text(
+                            eventTime != null
+                                ? eventTime!.format(context)
+                                : 'Seleccionar hora',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ],
                       ),
@@ -321,15 +314,19 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               const SizedBox(height: 12),
               // Notification configuration button
               ListTile(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
                 tileColor: Colors.blue.shade50,
-                leading: const Icon(Icons.notifications, color: Colors.blueAccent),
-                title: Text(l10n.reminder, style: const TextStyle(fontWeight: FontWeight.bold)),
+                leading:
+                    const Icon(Icons.notifications, color: Colors.blueAccent),
+                title: Text(l10n.reminder,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(
                   notificationSettings?.timing.displayName ?? 'Sin aviso',
                   style: const TextStyle(color: Colors.blueGrey),
                 ),
-                trailing: const Icon(Icons.chevron_right, color: Colors.blueAccent),
+                trailing:
+                    const Icon(Icons.chevron_right, color: Colors.blueAccent),
                 onTap: () async {
                   final result = await showDialog<HabitNotificationSettings>(
                     context: context,
@@ -350,10 +347,12 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               const SizedBox(height: 12),
               // Recurrence configuration button
               ListTile(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
                 tileColor: Colors.green.shade50,
                 leading: const Icon(Icons.repeat, color: Colors.green),
-                title: Text(l10n.repetition, style: const TextStyle(fontWeight: FontWeight.bold)),
+                title: Text(l10n.repetition,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(
                   recurrence?.enabled == true
                       ? '${recurrence!.frequency.displayName} (Cada ${recurrence!.interval} ${_getFrequencyUnit(recurrence!.frequency)})'
@@ -388,8 +387,10 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 addButtonStyle: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 ),
               ),
               Row(

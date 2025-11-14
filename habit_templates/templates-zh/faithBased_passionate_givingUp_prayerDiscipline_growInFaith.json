@@ -1,0 +1,76 @@
+{
+  "pattern_id": "faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": [
+      "prayerDiscipline",
+      "growInFaith"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "normal",
+    "spiritualMaturity": "passionate"
+  },
+  "generated_habits": [
+    {
+      "name": "服侍祷告",
+      "description": "为他人代祷，活出神的爱",
+      "category": "spiritual",
+      "emoji": "❤️",
+      "microHabits": [
+        {
+          "title": "为3个需要帮助的人祷告",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "发送鼓励信息给一个人",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "09:00",
+          "title": "爱的行动 ❤️",
+          "body": "今天为谁祷告？",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "使命默想",
+      "description": "思考如何在日常生活中活出信仰",
+      "category": "spiritual",
+      "emoji": "🌟",
+      "microHabits": [
+        {
+          "title": "阅读马太福音5:13-16",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "计划今天如何成为别人的光和盐",
+          "durationMinutes": 2,
+          "order": 1
+        },
+        {
+          "title": "祷告求神赐智慧和勇气",
+          "durationMinutes": 2,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:00",
+          "title": "使命反思 🌟",
+          "body": "今天如何活出信仰？",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

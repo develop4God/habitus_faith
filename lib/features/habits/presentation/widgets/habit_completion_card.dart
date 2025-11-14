@@ -158,22 +158,6 @@ class _HabitCompletionCardState extends State<HabitCompletionCard>
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    // Description
-                                    if (widget.habit.description.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 4.0,
-                                        ),
-                                        child: Text(
-                                          widget.habit.description,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
                                     // Streak
                                     if (widget.habit.currentStreak > 0)
                                       Padding(

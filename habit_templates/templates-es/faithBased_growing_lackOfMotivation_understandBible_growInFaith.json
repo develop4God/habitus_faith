@@ -1,0 +1,71 @@
+{
+  "pattern_id": "faithBased_normal_lackOfMotivation_understandBible_growInFaith_growing",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": [
+      "understandBible",
+      "growInFaith"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "growing"
+  },
+  "generated_habits": [
+    {
+      "name": "Estudio bíblico de 5 minutos",
+      "description": "Profundiza en la Palabra con un plan de lectura estructurado",
+      "category": "spiritual",
+      "emoji": "📚",
+      "microHabits": [
+        {
+          "title": "Leer 1 Corintios 13 completo",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "Anotar una lección clave del pasaje",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "08:00",
+          "title": "¡Hora de crecer! 📚",
+          "body": "Tu estudio bíblico te espera",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Reflexión diaria",
+      "description": "Reflexiona sobre cómo aplicar lo aprendido en tu vida",
+      "category": "spiritual",
+      "emoji": "✍️",
+      "microHabits": [
+        {
+          "title": "Escribir cómo aplicar el mensaje bíblico hoy",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "Orar por sabiduría para vivirlo",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:00",
+          "title": "Reflexión del día ✍️",
+          "body": "¿Qué aprendiste hoy?",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

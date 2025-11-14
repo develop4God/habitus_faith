@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-11",
+  "language": "zh",
+  "templates": [
+    {
+      "pattern_id": "faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new",
+      "file": "faithBased_new_lackOfTime_closerToGod_prayerDiscipline.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "closerToGod",
+          "prayerDiscipline"
+        ],
+        "challenge": "lackOfTime",
+        "supportLevel": "normal",
+        "spiritualMaturity": "new"
+      }
+    },
+    {
+      "pattern_id": "faithBased_normal_givingUp_prayerDiscipline_growInFaith_passionate",
+      "file": "faithBased_passionate_givingUp_prayerDiscipline_growInFaith.json",
+      "fingerprint": {
+        "primaryIntent": "faithBased",
+        "motivations": [
+          "prayerDiscipline",
+          "growInFaith"
+        ],
+        "challenge": "givingUp",
+        "supportLevel": "normal",
+        "spiritualMaturity": "passionate"
+      }
+    },
+    {
+      "pattern_id": "wellness_normal_lackOfMotivation_physicalHealth_reduceStress_inconsistent",
+      "file": "wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json",
+      "fingerprint": {
+        "primaryIntent": "wellness",
+        "motivations": [
+          "physicalHealth",
+          "reduceStress"
+        ],
+        "challenge": "lackOfMotivation",
+        "supportLevel": "normal",
+        "spiritualMaturity": "inconsistent"
+      }
+    }
+  ]
+}

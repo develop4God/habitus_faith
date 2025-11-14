@@ -62,6 +62,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Welcome to Habitus Faith';
 
   @override
+  String get onboardingWelcomeMessage =>
+      'We\'ll help you with AI 🤖 to personalize your first routines, according to your preferences.';
+
+  @override
   String get selectUpToThreeHabits =>
       'Select up to 3 habits to start your journey';
 

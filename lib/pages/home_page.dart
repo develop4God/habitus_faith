@@ -76,8 +76,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Hero section con transición de hábitos
               Container(
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   vertical: 32,
                   horizontal: 24,
                 ),

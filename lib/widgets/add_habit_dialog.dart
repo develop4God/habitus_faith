@@ -28,7 +28,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
 
   // Campos del hábito
   final nameCtrl = TextEditingController();
-  final descCtrl = TextEditingController();
   final emojiCtrl = TextEditingController();
   HabitCategory selectedCategory = HabitCategory.mental;
   HabitDifficulty selectedDifficulty = HabitDifficulty.medium;
@@ -40,8 +39,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(
+    _tabController = TabController(
       length: 2,
       vsync: this,
       initialIndex: widget.initialTab,
@@ -57,7 +55,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     _tabController.dispose();
     _gradientController.dispose();
     nameCtrl.dispose();
-    descCtrl.dispose();
     emojiCtrl.dispose();
     super.dispose();
   }
@@ -107,7 +104,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   // Wizard steps para agregar hábito manual
   final List<String> _steps = [
     'name', // obligatorio
-    'desc', // opcional
     'emoji', // opcional
     'category', // opcional
     'difficulty', // opcional
@@ -134,8 +130,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     final navigator = Navigator.of(context);
     await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
           name: nameCtrl.text,
-          description: descCtrl.text,
-          category: selectedCategory,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
           difficulty: selectedDifficulty,
@@ -163,8 +157,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 Container(
                   decoration: BoxDecoration(
                     gradient: _getHeaderGradient(),
-                    borderRadius:
-                        const BorderRadius.vertical(
+                    borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(32),
                     ),
                   ),
@@ -189,8 +182,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                           splashRadius: 26,
                           tooltip: MaterialLocalizations.of(
                             context,
-                          )
-                              .closeButtonTooltip,
+                          ).closeButtonTooltip,
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
@@ -311,14 +303,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                           )
                                           .addHabit(
                                             name: habitName,
-                                            description:
-                                                PredefinedHabitTranslations
-                                                    .getTranslatedDescription(
-                                                        widget.l10n,
-                                                        habit.descriptionKey),
-                                            category: PredefinedHabitCategoryX(
-                                                    habit.category)
-                                                .toDomainCategory(),
                                             emoji: habit
                                                 .emoji, // Asegura que el emoji se guarde
                                           );
@@ -355,8 +339,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                           children: [
                                             Text(
                                               habit.emoji,
-                                              style:
-                                                  const TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 44,
                                               ),
                                             ),
@@ -405,9 +388,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         stepLabel = widget.l10n.name;
         isRequired = true;
         break;
-      case 'desc':
-        stepLabel = widget.l10n.description;
-        break;
       case 'emoji':
         stepLabel = widget.l10n.emoji;
         break;
@@ -446,24 +426,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           },
         );
         break;
-      case 'desc':
-        stepWidget = TextField(
-          key: const Key('habit_description_input'),
-          controller: descCtrl,
-          maxLength: 120,
-          decoration: InputDecoration(
-            labelText: '${widget.l10n.description} (${widget.l10n.optional})',
-            border: const OutlineInputBorder(),
-            hintText: widget.l10n.previewHabitDescription,
-            counterText: '${descCtrl.text.length}/120',
-            helperText:
-                descCtrl.text.length == 120 ? widget.l10n.maxThreeHabits : null,
-          ),
-          maxLines: 2,
-          onChanged: (value) => setState(() {}),
-          onSubmitted: (_) => _nextStep(),
-        );
-        break;
       case 'emoji':
         stepWidget = TextField(
           controller: emojiCtrl,
@@ -482,7 +444,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         break;
       case 'category':
         stepWidget = DropdownButtonFormField<HabitCategory>(
-          initialValue: selectedCategory,
+          value: selectedCategory,
           decoration: InputDecoration(
             labelText: '${widget.l10n.category} (${widget.l10n.optional})',
             border: const OutlineInputBorder(),
@@ -688,15 +650,6 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      descCtrl.text.isNotEmpty
-                          ? descCtrl.text
-                          : widget.l10n.previewHabitDescription,
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

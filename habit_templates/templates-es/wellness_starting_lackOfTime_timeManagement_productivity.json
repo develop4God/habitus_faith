@@ -1,0 +1,71 @@
+{
+  "pattern_id": "wellness_normal_lackOfTime_timeManagement_productivity_starting",
+  "fingerprint": {
+    "primaryIntent": "wellness",
+    "motivations": [
+      "timeManagement",
+      "productivity"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "normal",
+    "spiritualMaturity": "starting"
+  },
+  "generated_habits": [
+    {
+      "name": "Planificación matutina",
+      "description": "Organiza tu día en 3 minutos para ser más productivo",
+      "category": "mental",
+      "emoji": "📅",
+      "microHabits": [
+        {
+          "title": "Escribir las 3 tareas más importantes del día",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Asignar tiempo específico a cada tarea",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "07:30",
+          "title": "Planifica tu día 📅",
+          "body": "3 minutos para organizar tu éxito",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Revisión nocturna",
+      "description": "Reflexiona sobre tu día y prepárate para mañana",
+      "category": "mental",
+      "emoji": "✅",
+      "microHabits": [
+        {
+          "title": "Marcar tareas completadas del día",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "Anotar una lección aprendida",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:30",
+          "title": "Revisa tu progreso ✅",
+          "body": "¿Qué lograste hoy?",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

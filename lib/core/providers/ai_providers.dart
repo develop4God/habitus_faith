@@ -60,7 +60,8 @@ IRateLimitService rateLimitService(Ref ref) {
 Future<IGeminiService> geminiService(Ref ref) async {
   // Espera a que dotenv esté inicializado antes de acceder a la API key
   if (!EnvConfig.isDotenvInitialized) {
-    throw Exception('Dotenv no está inicializado. Asegúrate de llamar dotenv.load() en main.dart antes de usar geminiServiceProvider.');
+    throw Exception(
+        'Dotenv no está inicializado. Asegúrate de llamar dotenv.load() en main.dart antes de usar geminiServiceProvider.');
   }
   final bibleService = await ref.watch(bibleDbServiceProvider.future);
 

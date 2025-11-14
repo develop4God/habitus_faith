@@ -1,0 +1,746 @@
+{
+  "@@locale": "zh",
+  "appTitle": "信仰习惯",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "start": "开始",
+  "@start": {
+    "description": "Start button text"
+  },
+  "readBible": "阅读圣经",
+  "@readBible": {
+    "description": "Read Bible button text"
+  },
+  "myHabits": "我的习惯",
+  "@myHabits": {
+    "description": "Title for habits page"
+  },
+  "noHabits": "还没有习惯",
+  "@noHabits": {
+    "description": "Empty state message when user has no habits"
+  },
+  "streak": "连续",
+  "@streak": {
+    "description": "Streak label"
+  },
+  "days": "天",
+  "@days": {
+    "description": "Days unit"
+  },
+  "best": "最佳",
+  "@best": {
+    "description": "Best streak label"
+  },
+  "addHabit": "添加习惯",
+  "@addHabit": {
+    "description": "Add habit button text"
+  },
+  "deleteHabit": "删除习惯",
+  "@deleteHabit": {
+    "description": "Delete habit dialog title"
+  },
+  "deleteHabitConfirm": "确定要删除\"{habitName}\"吗？",
+  "@deleteHabitConfirm": {
+    "description": "Delete habit confirmation message",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "delete": "删除",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "name": "名称",
+  "@name": {
+    "description": "Name field label"
+  },
+  "description": "描述",
+  "@description": {
+    "description": "Description field label"
+  },
+  "add": "添加",
+  "@add": {
+    "description": "Add button text"
+  },
+  "welcomeToHabitusFaith": "欢迎来到信仰习惯",
+  "@welcomeToHabitusFaith": {
+    "description": "Onboarding welcome title"
+  },
+  "selectUpToThreeHabits": "选择最多3个习惯开始您的旅程",
+  "@selectUpToThreeHabits": {
+    "description": "Onboarding instruction"
+  },
+  "continueButton": "继续",
+  "@continueButton": {
+    "description": "Continue button text"
+  },
+  "selectAtLeastOne": "请至少选择一个习惯",
+  "@selectAtLeastOne": {
+    "description": "Error message when no habits selected"
+  },
+  "maxThreeHabits": "您最多可以选择3个习惯",
+  "@maxThreeHabits": {
+    "description": "Error message when trying to select more than 3"
+  },
+  "spiritual": "灵性",
+  "@spiritual": {
+    "description": "Spiritual category"
+  },
+  "physical": "身体",
+  "@physical": {
+    "description": "Physical category"
+  },
+  "mental": "心理",
+  "@mental": {
+    "description": "Mental category"
+  },
+  "relational": "关系",
+  "@relational": {
+    "description": "Relational category"
+  },
+  "habitCompleted": "习惯完成！🎉",
+  "@habitCompleted": {
+    "description": "Success message when habit is completed"
+  },
+  "tapToComplete": "点击完成",
+  "@tapToComplete": {
+    "description": "Instruction to tap to complete habit"
+  },
+  "completed": "已完成",
+  "@completed": {
+    "description": "Completed status"
+  },
+  "currentStreak": "当前连续",
+  "@currentStreak": {
+    "description": "Current streak label"
+  },
+  "longestStreak": "最长连续",
+  "@longestStreak": {
+    "description": "Longest streak label"
+  },
+  "thisWeek": "本周",
+  "@thisWeek": {
+    "description": "This week label for calendar"
+  },
+  "predefinedHabit_morningPrayer_name": "晨祷",
+  "@predefinedHabit_morningPrayer_name": {
+    "description": "Name of morning prayer habit"
+  },
+  "predefinedHabit_morningPrayer_description": "以祷告和感恩开始您的一天",
+  "@predefinedHabit_morningPrayer_description": {
+    "description": "Description of morning prayer habit"
+  },
+  "predefinedHabit_bibleReading_name": "读经",
+  "@predefinedHabit_bibleReading_name": {
+    "description": "Name of bible reading habit"
+  },
+  "predefinedHabit_bibleReading_description": "每天阅读和默想神的话语",
+  "@predefinedHabit_bibleReading_description": {
+    "description": "Description of bible reading habit"
+  },
+  "predefinedHabit_worship_name": "敬拜",
+  "@predefinedHabit_worship_name": {
+    "description": "Name of worship habit"
+  },
+  "predefinedHabit_worship_description": "花时间敬拜和赞美",
+  "@predefinedHabit_worship_description": {
+    "description": "Description of worship habit"
+  },
+  "predefinedHabit_gratitude_name": "感恩日记",
+  "@predefinedHabit_gratitude_name": {
+    "description": "Name of gratitude habit"
+  },
+  "predefinedHabit_gratitude_description": "写下您感恩的事情",
+  "@predefinedHabit_gratitude_description": {
+    "description": "Description of gratitude habit"
+  },
+  "predefinedHabit_exercise_name": "锻炼",
+  "@predefinedHabit_exercise_name": {
+    "description": "Name of exercise habit"
+  },
+  "predefinedHabit_exercise_description": "照顾您的身体，神的殿",
+  "@predefinedHabit_exercise_description": {
+    "description": "Description of exercise habit"
+  },
+  "predefinedHabit_healthyEating_name": "健康饮食",
+  "@predefinedHabit_healthyEating_name": {
+    "description": "Name of healthy eating habit"
+  },
+  "predefinedHabit_healthyEating_description": "用健康食物滋养您的身体",
+  "@predefinedHabit_healthyEating_description": {
+    "description": "Description of healthy eating habit"
+  },
+  "predefinedHabit_sleep_name": "优质睡眠",
+  "@predefinedHabit_sleep_name": {
+    "description": "Name of sleep habit"
+  },
+  "predefinedHabit_sleep_description": "好好休息以恢复精力",
+  "@predefinedHabit_sleep_description": {
+    "description": "Description of sleep habit"
+  },
+  "predefinedHabit_meditation_name": "冥想",
+  "@predefinedHabit_meditation_name": {
+    "description": "Name of meditation habit"
+  },
+  "predefinedHabit_meditation_description": "练习正念和反思",
+  "@predefinedHabit_meditation_description": {
+    "description": "Description of meditation habit"
+  },
+  "predefinedHabit_learning_name": "学习",
+  "@predefinedHabit_learning_name": {
+    "description": "Name of learning habit"
+  },
+  "predefinedHabit_learning_description": "在知识和智慧中成长",
+  "@predefinedHabit_learning_description": {
+    "description": "Description of learning habit"
+  },
+  "predefinedHabit_creativity_name": "创意时间",
+  "@predefinedHabit_creativity_name": {
+    "description": "Name of creativity habit"
+  },
+  "predefinedHabit_creativity_description": "通过创意活动表达自己",
+  "@predefinedHabit_creativity_description": {
+    "description": "Description of creativity habit"
+  },
+  "predefinedHabit_familyTime_name": "家庭时光",
+  "@predefinedHabit_familyTime_name": {
+    "description": "Name of family time habit"
+  },
+  "predefinedHabit_familyTime_description": "与亲人共度美好时光",
+  "@predefinedHabit_familyTime_description": {
+    "description": "Description of family time habit"
+  },
+  "predefinedHabit_service_name": "服务行动",
+  "@predefinedHabit_service_name": {
+    "description": "Name of service habit"
+  },
+  "predefinedHabit_service_description": "以爱和同情服务他人",
+  "@predefinedHabit_service_description": {
+    "description": "Description of service habit"
+  },
+  "onboardingErrorMessage": "Failed to save habits. Please try again.",
+  "@onboardingErrorMessage": {
+    "description": "Error message shown when onboarding fails"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Button label for retrying an operation"
+  },
+  "selected": "Selected",
+  "@selected": {
+    "description": "Accessibility label indicating an item is selected"
+  },
+  "category": "类别",
+  "@category": {
+    "description": "Category label"
+  },
+  "difficulty": "难度",
+  "@difficulty": {
+    "description": "Difficulty label"
+  },
+  "emoji": "表情符号",
+  "@emoji": {
+    "description": "Emoji label"
+  },
+  "color": "颜色",
+  "@color": {
+    "description": "Color label"
+  },
+  "optional": "可选",
+  "@optional": {
+    "description": "Optional label"
+  },
+  "edit": "编辑",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "uncheck": "取消勾选",
+  "@uncheck": {
+    "description": "Uncheck button text"
+  },
+  "save": "保存",
+  "@save": {
+    "description": "Save button text"
+  },
+  "editHabit": "编辑习惯",
+  "@editHabit": {
+    "description": "Edit habit dialog title"
+  },
+  "defaultColor": "默认",
+  "@defaultColor": {
+    "description": "Default color option label"
+  },
+  "statistics": "统计",
+  "@statistics": {
+    "description": "Statistics/Progress page title"
+  },
+  "settings": "设置",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "language": "语言",
+  "@language": {
+    "description": "Language settings option"
+  },
+  "notifications": "通知",
+  "@notifications": {
+    "description": "Notifications settings option"
+  },
+  "notificationSettings": "通知设置",
+  "@notificationSettings": {
+    "description": "Notification settings title"
+  },
+  "languageSettings": "语言设置",
+  "@languageSettings": {
+    "description": "Language settings title"
+  },
+  "selectLanguage": "选择语言",
+  "@selectLanguage": {
+    "description": "Select language instruction"
+  },
+  "languageInfo": "应用程序将使用所选语言显示所有文本和界面元素。",
+  "@languageInfo": {
+    "description": "Language information text"
+  },
+  "notificationsEnabled": "通知已启用",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  "notificationsDisabled": "通知已禁用",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  "notificationTimeUpdated": "通知时间已更新为",
+  "@notificationTimeUpdated": {
+    "description": "Notification time updated message"
+  },
+  "enableNotifications": "启用通知",
+  "@enableNotifications": {
+    "description": "Enable notifications option"
+  },
+  "notificationsOn": "通知已开启",
+  "@notificationsOn": {
+    "description": "Notifications on label"
+  },
+  "notificationsOff": "通知已关闭",
+  "@notificationsOff": {
+    "description": "Notifications off label"
+  },
+  "receiveReminderNotifications": "接收每日提醒通知",
+  "@receiveReminderNotifications": {
+    "description": "Receive reminder notifications description"
+  },
+  "notificationTime": "通知时间",
+  "@notificationTime": {
+    "description": "Notification time label"
+  },
+  "selectNotificationTime": "选择通知时间",
+  "@selectNotificationTime": {
+    "description": "Select notification time instruction"
+  },
+  "currentTime": "当前时间",
+  "@currentTime": {
+    "description": "Current time label"
+  },
+  "notificationInfo": "您将在所选时间收到每日提醒以完成您的习惯。",
+  "@notificationInfo": {
+    "description": "Notification information text"
+  },
+  "highRiskWarning": "今天有高风险放弃这个习惯！",
+  "@highRiskWarning": {
+    "description": "Warning message for high abandonment risk"
+  },
+  "riskPercentage": "{percent}% 放弃的概率",
+  "@riskPercentage": {
+    "description": "Display abandonment risk percentage",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  "completeNow": "立即完成",
+  "@completeNow": {
+    "description": "Button text to complete habit immediately"
+  },
+  "generateMicroHabits": "生成微习惯",
+  "@generateMicroHabits": {
+    "description": "微习惯生成器页面标题"
+  },
+  "aiGeneratedHabits": "AI生成的习惯",
+  "@aiGeneratedHabits": {
+    "description": "AI生成习惯部分的标题"
+  },
+  "yourGoal": "你的目标",
+  "@yourGoal": {
+    "description": "用户目标输入字段的标签"
+  },
+  "goalHint": "你想改进什么？（例如：更持续地祷告）",
+  "@goalHint": {
+    "description": "目标输入字段的提示文本"
+  },
+  "goalRequired": "请输入你的目标",
+  "@goalRequired": {
+    "description": "目标为空时的验证消息"
+  },
+  "goalTooShort": "目标至少需要10个字符",
+  "@goalTooShort": {
+    "description": "目标太短时的验证消息"
+  },
+  "goalTooLong": "目标不能超过200个字符",
+  "@goalTooLong": {
+    "description": "目标太长时的验证消息"
+  },
+  "failurePattern": "你通常什么时候失败？（可选）",
+  "@failurePattern": {
+    "description": "失败模式输入字段的标签"
+  },
+  "failurePatternHint": "例如：在忙碌的早晨我会忘记",
+  "@failurePatternHint": {
+    "description": "失败模式输入的提示文本"
+  },
+  "generateHabits": "生成习惯",
+  "@generateHabits": {
+    "description": "生成习惯的按钮文本"
+  },
+  "generating": "生成中...",
+  "@generating": {
+    "description": "生成时的加载状态文本"
+  },
+  "generatingHabits": "正在为你生成个性化微习惯...",
+  "@generatingHabits": {
+    "description": "生成习惯时的加载消息"
+  },
+  "generatedHabitsTitle": "你的个性化微习惯",
+  "@generatedHabitsTitle": {
+    "description": "生成习惯结果页面的标题"
+  },
+  "selectHabitsToAdd": "选择要添加到跟踪的习惯：",
+  "@selectHabitsToAdd": {
+    "description": "选择习惯的说明"
+  },
+  "saveSelected": "保存选中的",
+  "@saveSelected": {
+    "description": "保存选中习惯的按钮"
+  },
+  "saving": "保存中...",
+  "@saving": {
+    "description": "保存习惯时的加载文本"
+  },
+  "habitsAdded": "成功添加了{count}个习惯！",
+  "@habitsAdded": {
+    "description": "添加习惯后的成功消息",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "estimatedTime": "约{minutes}分钟",
+  "@estimatedTime": {
+    "description": "完成习惯的预估时间",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "bibleVerse": "圣经经文",
+  "@bibleVerse": {
+    "description": "圣经经文部分的标签"
+  },
+  "purpose": "目的",
+  "@purpose": {
+    "description": "习惯目的的标签"
+  },
+  "remaining": "剩余{count}次",
+  "@remaining": {
+    "description": "剩余生成次数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "monthlyLimit": "每月限制：{limit}次生成",
+  "@monthlyLimit": {
+    "description": "关于每月生成限制的信息",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "rateLimitReached": "已达到每月限制。请下个月再试。",
+  "@rateLimitReached": {
+    "description": "超出速率限制时的错误消息"
+  },
+  "generationFailed": "生成习惯失败。请重试。",
+  "@generationFailed": {
+    "description": "生成失败的通用错误消息"
+  },
+  "apiTimeout": "请求超时。请检查你的连接并重试。",
+  "@apiTimeout": {
+    "description": "API超时的错误消息"
+  },
+  "invalidInput": "输入无效。请检查你的目标并重试。",
+  "@invalidInput": {
+    "description": "输入无效的错误消息"
+  },
+  "noHabitsSelected": "请至少选择一个习惯来保存",
+  "@noHabitsSelected": {
+    "description": "尝试保存但未选择习惯时的错误"
+  },
+  "tryAgain": "重试",
+  "@tryAgain": {
+    "description": "错误后重试的按钮"
+  },
+  "generationsRemaining": "本月剩余{count}次生成",
+  "@generationsRemaining": {
+    "description": "显示剩余多少次生成",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "poweredByGemini": "由Gemini AI驱动",
+  "@poweredByGemini": {
+    "description": "AI服务的归属"
+  },
+  "abandonmentNudgeTitle": "减少习惯\"{habitName}\"?",
+  "@abandonmentNudgeTitle": {
+    "description": "Title for abandonment prediction nudge notification",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "晨祷"
+      }
+    }
+  },
+  "abandonmentNudgeBody": "减少到{minutes}分钟？我们注意到您可能会放弃这个习惯",
+  "@abandonmentNudgeBody": {
+    "description": "Body text for abandonment prediction nudge notification",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "copiedToClipboard": "已复制到剪贴板",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "经文已保存",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
+  },
+  "loadingBooks": "正在加载书卷...",
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "selectBook": "选择书卷",
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "selectBookAndChapter": "选择书卷和章节",
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "habitsCompleted": "已完成的习惯：",
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "habitsCompletedCount": "{completed} / {total}",
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "error": "错误: {message}",
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "连接失败"
+      }
+    }
+  },
+  "chooseYourExperience": "选择您的体验",
+  "displayModeDescription": "选择您想如何使用 Habitus Faith",
+  "compactMode": "紧凑模式",
+  "compactModeDescription": "每日习惯跟踪的基本功能",
+  "compactModeFeature1": "简洁的极简界面",
+  "compactModeFeature2": "快速习惯跟踪",
+  "compactModeFeature3": "基础统计",
+  "advancedMode": "高级模式",
+  "advancedModeDescription": "具有见解和分析的完整体验",
+  "advancedModeFeature1": "详细的习惯分析",
+  "advancedModeFeature2": "AI驱动的见解",
+  "advancedModeFeature3": "高级自定义",
+  "changeAnytime": "您可以随时在偏好设置中更改此设置",
+  "selectMode": "选择模式",
+  "displayMode": "显示模式",
+  "displayModeUpdated": "显示模式已更新为 {mode}",
+  "compactModeSubtitle": "紧凑列表 - 点击查看详情",
+  "advancedModeSubtitle": "完整跟踪可见",
+  "addManually": "手动添加",
+  "@addManually": {
+    "description": "手动添加习惯的选项"
+  },
+  "createCustomHabit": "创建一个自定义习惯",
+  "@createCustomHabit": {
+    "description": "手动创建习惯的描述"
+  },
+  "generateWithAI": "使用AI生成",
+  "@generateWithAI": {
+    "description": "使用AI生成习惯的选项"
+  },
+  "aiCustomHabits": "使用AI的自定义习惯",
+  "@aiCustomHabits": {
+    "description": "AI生成习惯的描述"
+  },
+  "previewHabitName": "习惯名称",
+  "@previewHabitName": {
+    "description": "预览中习惯名称的占位符文本"
+  },
+  "previewHabitDescription": "习惯描述",
+  "@previewHabitDescription": {
+    "description": "预览中习惯描述的占位符文本"
+  },
+  "total": "总计",
+  "@total": {
+    "description": "统计数据的总计标签"
+  },
+  "mlPredictionFailed": "无法计算放弃风险",
+  "mlModelNotLoaded": "预测模型不可用。请重启应用。",
+  "mlInsufficientData": "预测需要至少{days}天的数据",
+  "backgroundSyncFailed": "同步失败：{reason}",
+  "backgroundSyncNetwork": "没有网络连接。更改将在在线时同步。",
+  "backgroundSyncPermission": "后台同步已禁用。请在设置中启用。",
+  "workmanagerActive": "后台同步活动中",
+  "workmanagerRestricted": "后台同步可能受电池优化限制",
+  "workmanagerDisabled": "系统设置中已禁用后台同步",
+  "patternWeekend": "您倾向于跳过周末。尝试设置提醒？",
+  "patternEvening": "晚上完成率较低。考虑早晨的习惯？",
+  "optimalTimeFound": "您最佳完成时间是{time}",
+  "networkTimeout": "请求超时。检查您的连接。",
+  "firebasePermissionDenied": "访问被拒绝。请重新登录。",
+  "errorUnknown": "发生意外错误。请重试。",
+  "devBannerTitle": "开发工具",
+  "devBannerLastSync": "最后同步：{time}",
+  "devBannerMlStatus": "机器学习模型：{status}",
+  "devBannerWorkmanager": "后台：{status}",
+  "devBannerFastTime": "时间：{multiplier}倍（模拟：{date}）",
+  "riskLevelLow": "低风险",
+  "riskLevelMedium": "中风险",
+  "riskLevelHigh": "高风险",
+  "predictorRunning": "正在分析习惯...",
+  "predictorComplete": "分析完成",
+  "syncInProgress": "同步中...",
+  "syncComplete": "同步完成",
+  "mlModelLoaded": "已加载",
+  "mlModelLoading": "加载中...",
+  "mlModelError": "错误",
+  "chooseHabitType": "你想添加哪种类型的习惯？",
+  "@chooseHabitType": {
+    "description": "添加习惯时选择类型的文本"
+  },
+  "chooseFromPredefined": "选择一个预设习惯",
+  "@chooseFromPredefined": {
+    "description": "选择预设习惯的文本"
+  },
+  "manual": "手动",
+  "@manual": {
+    "description": "手动习惯选项（短标签）"
+  },
+  "custom": "自定义",
+  "@custom": {
+    "description": "自定义习惯选项（短标签）"
+  },
+  "defaultHabit": "预设",
+  "@defaultHabit": {
+    "description": "预设习惯选项（短标签）"
+  },
+  "addHabitDiscoverySubtitle": "选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。",
+  "@addHabitDiscoverySubtitle": {
+    "description": "添加习惯发现对话框的说明性副标题"
+  },
+  "requiredFieldLabel": "必填",
+  "@requiredFieldLabel": {
+    "description": "用于指示字段为必填项的标签"
+  },
+  "back": "返回",
+  "@back": {
+    "description": "返回上一步的按钮"
+  },
+  "selectAll": "全选",
+  "@selectAll": {
+    "description": "在习惯页面选择所有习惯的按钮"
+  },
+  "copy": "复制",
+  "@copy": {
+    "description": "用于习惯复制的文本（滑动操作）"
+  },
+  "introMessage": "最大的改变始于坚持...",
+  "@introMessage": {
+    "description": "在欢迎页显示的激励语。"
+  },
+  "copyHabit": "您想要复制此任务吗？",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "您确定要复制\"{habitName}\"吗？",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {"type": "String", "example": "晨祷"}
+    }
+  },
+  "usefulTip": "实用提示",
+  "@usefulTip": {"description": "教育提示标题"},
+  "habitsTip": "滑动以查看您的习惯操作",
+  "@habitsTip": {"description": "教育提示描述"},
+  "understood": "明白了",
+  "@understood": {"description": "关闭教育提示的按钮"},
+  "bible": "圣经",
+  "@bible": {
+    "description": "圣经页面的标题"
+  },
+  "home": "首页",
+  "@home": {
+    "description": "主页标签"
+  },
+  "routine": "常规",
+  "@routine": {
+    "description": "导航栏中常规选项的标签"
+  },
+  "today": "今天",
+  "@today": {
+    "description": "用于在习惯视图中显示当天的标签"
+  }
+}

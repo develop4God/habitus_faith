@@ -1,0 +1,71 @@
+{
+  "pattern_id": "both_normal_lackOfTime_closerToGod_prayerDiscipline_new",
+  "fingerprint": {
+    "primaryIntent": "both",
+    "motivations": [
+      "closerToGod",
+      "prayerDiscipline"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "normal",
+    "spiritualMaturity": "new"
+  },
+  "generated_habits": [
+    {
+      "name": "Oración y estiramiento",
+      "description": "Combina conexión con Dios y cuidado físico",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "microHabits": [
+        {
+          "title": "Orar dando gracias por tu cuerpo y salud",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "Hacer 3 estiramientos suaves",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "07:00",
+          "title": "Cuerpo y alma 🙏",
+          "body": "Comienza con oración y movimiento",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Lectura antes de dormir",
+      "description": "Lee la Biblia y relájate para dormir mejor",
+      "category": "spiritual",
+      "emoji": "📖",
+      "microHabits": [
+        {
+          "title": "Leer Proverbios del día (ej: Prov 11 si es día 11)",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Respiraciones profundas para relajarte",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "22:00",
+          "title": "Prepárate para descansar 📖",
+          "body": "Biblia + relajación",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

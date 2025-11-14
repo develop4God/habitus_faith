@@ -65,21 +65,19 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> addHabit({
     required String name,
-    required String description,
     HabitCategory category = HabitCategory.mental,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
     String? emoji,
   }) async {
     debugPrint(
-      'JsonHabitsNotifier.addHabit: start -> name:$name desc:$description',
+      'JsonHabitsNotifier.addHabit: start -> name:$name',
     );
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
     final result = await repository.createHabit(
       name: name,
-      description: description,
       category: category,
       colorValue: colorValue,
       difficulty: difficulty,
@@ -101,7 +99,6 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
   Future<void> updateHabit({
     required String habitId,
     String? name,
-    String? description,
     HabitCategory? category,
     String? emoji,
     int? colorValue,
@@ -117,7 +114,6 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     final result = await repository.updateHabit(
       habitId: habitId,
       name: name,
-      description: description,
       category: category,
       emoji: emoji,
       colorValue: colorValue,
@@ -172,72 +168,100 @@ class HabitsPage extends ConsumerStatefulWidget {
 }
 
 class _HabitsPageState extends ConsumerState<HabitsPage> {
-  final Set<String> _selectedHabits = {};
   HabitCategory? _categoryFilter;
 
-  void _clearSelection() {
-    setState(() {
-      _selectedHabits.clear();
-    });
+  /// Convierte un string de hora "HH:mm" a minutos desde medianoche para comparación
+  int _timeToMinutes(String? timeString) {
+    if (timeString == null || timeString.isEmpty) {
+      return 24 * 60; // Si no tiene hora, va al final (después de las 23:59)
+    }
+    try {
+      final parts = timeString.split(':');
+      if (parts.length != 2) return 24 * 60;
+      final hours = int.parse(parts[0]);
+      final minutes = int.parse(parts[1]);
+      return hours * 60 + minutes;
+    } catch (e) {
+      debugPrint(
+          'HabitsPage._timeToMinutes: error parseando hora "$timeString": $e');
+      return 24 * 60; // Error al parsear, va al final
+    }
   }
 
-  void _selectAll(List<Habit> habits) {
-    setState(() {
-      _selectedHabits.addAll(habits.map((h) => h.id));
-    });
-  }
+  /// Ordena hábitos cronológicamente por hora de notificación
+  List<Habit> _sortHabitsByNotificationTime(List<Habit> habits) {
+    final sorted = List<Habit>.from(habits);
+    sorted.sort((a, b) {
+      final timeA = a.notificationSettings?.eventTime;
+      final timeB = b.notificationSettings?.eventTime;
 
-  void _setCategoryFilter(HabitCategory? category) {
-    setState(() {
-      _categoryFilter = category;
+      final minutesA = _timeToMinutes(timeA);
+      final minutesB = _timeToMinutes(timeB);
+
+      debugPrint(
+          'HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)');
+
+      return minutesA.compareTo(minutesB);
     });
+
+    debugPrint('HabitsPage._sortHabitsByNotificationTime: orden final:');
+    for (var i = 0; i < sorted.length; i++) {
+      final time = sorted[i].notificationSettings?.eventTime ?? 'sin hora';
+      debugPrint('  [$i] ${sorted[i].name} - $time');
+    }
+
+    return sorted;
   }
 
   List<Habit> _filterHabits(List<Habit> habits) {
+    debugPrint('HabitsPage._filterHabits: recibidos ${habits.length} hábitos');
+
+    // Aplicar filtro de categoría si existe
+    List<Habit> filtrados;
     if (_categoryFilter == null) {
-      return habits;
+      debugPrint('HabitsPage._filterHabits: sin filtro de categoría');
+      filtrados = habits;
+    } else {
+      filtrados = habits.where((h) => h.category == _categoryFilter).toList();
+      debugPrint(
+          'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría');
     }
-    return habits.where((h) => h.category == _categoryFilter).toList();
-  }
 
-  Future<void> _deleteSelected(BuildContext context, WidgetRef ref) async {
-    for (final habitId in _selectedHabits) {
-      await ref.read(jsonHabitsNotifierProvider.notifier).deleteHabit(habitId);
-    }
-    _clearSelection();
-  }
+    // Ordenar cronológicamente por hora de notificación
+    final ordenados = _sortHabitsByNotificationTime(filtrados);
+    debugPrint('HabitsPage._filterHabits: hábitos ordenados cronológicamente');
 
-  Future<void> _duplicateHabit(
-    BuildContext context,
-    WidgetRef ref,
-    Habit habit,
-  ) async {
-    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
-          name: "${habit.name} (copy)",
-          description: habit.description,
-          category: habit.category,
-          colorValue: habit.colorValue,
-          difficulty: habit.difficulty,
-          emoji: habit.emoji,
-        );
-    if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Hábito duplicado")));
-    }
+    return ordenados;
   }
 
   @override
   Widget build(BuildContext context) {
-    return HabitsPageUI(
-      selectedHabits: _selectedHabits,
-      clearSelection: _clearSelection,
-      selectAll: _selectAll,
-      deleteSelected: _deleteSelected,
-      duplicateHabit: _duplicateHabit,
-      categoryFilter: _categoryFilter,
-      onCategoryFilterChanged: _setCategoryFilter,
-      filterHabits: _filterHabits,
+    return Consumer(
+      builder: (context, ref, _) {
+        final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+        debugPrint('HabitsPage.build: estado de habitsAsync: $habitsAsync');
+        return habitsAsync.when(
+          data: (habits) {
+            debugPrint(
+                'HabitsPage.build: data recibida con ${habits.length} hábitos');
+            final filtrados = _filterHabits(habits);
+            debugPrint(
+                'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
+            return ModernWeeklyCalendar(
+              habits: filtrados,
+              initialDate: DateTime.now(),
+            );
+          },
+          loading: () {
+            debugPrint('HabitsPage.build: cargando hábitos...');
+            return const Center(child: CircularProgressIndicator());
+          },
+          error: (e, st) {
+            debugPrint('HabitsPage.build: error cargando hábitos: $e');
+            return const Center(child: Text('Error cargando hábitos'));
+          },
+        );
+      },
     );
   }
 }

@@ -95,9 +95,6 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
 
       await ref.read(habitsRepositoryProvider).createHabit(
             name: microHabit.action,
-            description: microHabit.verseText != null
-                ? '${microHabit.purpose}\n\n${microHabit.verse}: ${microHabit.verseText}'
-                : '${microHabit.purpose}\n\n${microHabit.verse}',
             category: category,
             emoji: emoji,
           );
@@ -514,7 +511,7 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: DropdownButtonFormField<HabitCategory>(
-                        initialValue: _selectedCategory,
+                        value: _selectedCategory,
                         decoration: InputDecoration(
                           labelText: l10n.category,
                           border: OutlineInputBorder(

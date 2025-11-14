@@ -1,0 +1,71 @@
+{
+  "pattern_id": "faithBased_normal_lackOfMotivation_understandBible_growInFaith_growing",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": [
+      "understandBible",
+      "growInFaith"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "growing"
+  },
+  "generated_habits": [
+    {
+      "name": "5-Minute Bible Study",
+      "description": "Deepen your understanding with structured reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "microHabits": [
+        {
+          "title": "Read 1 Corinthians 13 in full",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "Write down one key lesson from the passage",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "08:00",
+          "title": "Time to grow! 📚",
+          "body": "Your Bible study awaits",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Daily Reflection",
+      "description": "Reflect on how to apply what you learned",
+      "category": "spiritual",
+      "emoji": "✍️",
+      "microHabits": [
+        {
+          "title": "Write how to apply the biblical message today",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "Pray for wisdom to live it out",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:00",
+          "title": "Daily Reflection ✍️",
+          "body": "What did you learn today?",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

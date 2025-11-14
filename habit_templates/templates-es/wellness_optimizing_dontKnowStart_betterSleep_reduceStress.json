@@ -1,0 +1,81 @@
+{
+  "pattern_id": "wellness_normal_dontKnowStart_betterSleep_reduceStress_optimizing",
+  "fingerprint": {
+    "primaryIntent": "wellness",
+    "motivations": [
+      "betterSleep",
+      "reduceStress"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "normal",
+    "spiritualMaturity": "optimizing"
+  },
+  "generated_habits": [
+    {
+      "name": "Rutina nocturna relajante",
+      "description": "Prepara tu mente y cuerpo para un sueño reparador",
+      "category": "physical",
+      "emoji": "🌙",
+      "microHabits": [
+        {
+          "title": "PASO 1: Apagar pantallas 30 min antes de dormir",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "PASO 2: Hacer 5 respiraciones profundas",
+          "durationMinutes": 2,
+          "order": 1
+        },
+        {
+          "title": "PASO 3: Escribir 3 cosas por las que estás agradecido",
+          "durationMinutes": 2,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:30",
+          "title": "Prepárate para descansar 🌙",
+          "body": "Comienza tu rutina nocturna",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Mindfulness matutino",
+      "description": "Empieza el día con calma y enfoque",
+      "category": "mental",
+      "emoji": "☀️",
+      "microHabits": [
+        {
+          "title": "PASO 1: Sentarse en posición cómoda",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "PASO 2: Respirar conscientemente por 3 minutos",
+          "durationMinutes": 3,
+          "order": 1
+        },
+        {
+          "title": "PASO 3: Establecer una intención para el día",
+          "durationMinutes": 1,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "07:00",
+          "title": "Momento de calma ☀️",
+          "body": "5 minutos de mindfulness",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

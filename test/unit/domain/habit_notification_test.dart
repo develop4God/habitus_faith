@@ -94,7 +94,6 @@ void main() {
         id: 'test-habit',
         userId: 'test-user',
         name: 'Morning Devotional',
-        description: 'Daily morning prayer and meditation',
         category: HabitCategory.spiritual,
       );
 

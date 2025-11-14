@@ -3,6 +3,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:flutter/foundation.dart';
+
 /// Integration test for abandonment predictor with real TFLite model
 /// Tests the new predictRisk(Habit) interface with complete end-to-end flow
 void main() {
@@ -32,7 +33,6 @@ void main() {
         id: 'low_risk_habit',
         userId: 'user1',
         name: 'Daily Bible Reading',
-        description: 'Read Bible every morning',
         category: HabitCategory.spiritual, // category.index = 0
         reminderTime: '07:00',
         createdAt: now.subtract(const Duration(days: 30)),
@@ -64,7 +64,6 @@ void main() {
         id: 'high_risk_habit',
         userId: 'user1',
         name: 'Evening Exercise',
-        description: 'Exercise 3 times per week',
         category: HabitCategory.physical, // category.index = 1
         reminderTime: '18:00',
         createdAt: now.subtract(const Duration(days: 30)),
@@ -98,7 +97,6 @@ void main() {
         id: 'medium_risk_habit',
         userId: 'user1',
         name: 'Daily Reading',
-        description: 'Read for 20 minutes',
         category: HabitCategory.mental, // category.index = 2
         reminderTime: '17:00',
         createdAt: now.subtract(const Duration(days: 20)),
@@ -126,7 +124,6 @@ void main() {
         id: 'new_habit',
         userId: 'user1',
         name: 'New Prayer Habit',
-        description: 'Just started today',
         category: HabitCategory.spiritual,
         reminderTime: '09:00',
         createdAt: now,
@@ -156,7 +153,6 @@ void main() {
         id: 'relational_habit',
         userId: 'user1',
         name: 'Family Time',
-        description: 'Spend quality time with family',
         category: HabitCategory.relational, // category.index = 3
         reminderTime: '18:30',
         createdAt: now.subtract(const Duration(days: 15)),
@@ -188,7 +184,6 @@ void main() {
         id: 'performance_test',
         userId: 'user1',
         name: 'Performance Test Habit',
-        description: 'Testing prediction speed',
         category: HabitCategory.spiritual,
         reminderTime: '12:00',
         createdAt: now.subtract(const Duration(days: 30)),
@@ -221,7 +216,6 @@ void main() {
         id: 'nudge_decline_habit',
         userId: 'user1',
         name: 'Evening Meditation',
-        description: 'Meditate before bed',
         category: HabitCategory.mental,
         reminderTime: '21:00',
         createdAt: now.subtract(const Duration(days: 30)),
@@ -261,7 +255,6 @@ void main() {
         id: 'nudge_accept_habit',
         userId: 'user1',
         name: 'Late Night Workout',
-        description: 'Exercise before sleep',
         category: HabitCategory.physical,
         reminderTime: '22:00',
         createdAt: now.subtract(const Duration(days: 30)),
@@ -309,7 +302,6 @@ void main() {
         id: 'tensor_order_test',
         userId: 'user1',
         name: 'Order Test Habit',
-        description: 'Verifying feature order',
         category: HabitCategory.mental, // index = 2
         reminderTime: '14:00',
         createdAt: now.subtract(const Duration(days: 30)),

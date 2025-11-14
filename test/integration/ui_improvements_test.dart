@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/onboarding_page.dart';
+import 'package:habitus_faith/features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
 import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
@@ -15,7 +15,7 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    Future<void> pumpOnboardingPage(WidgetTester tester) async {
+    Future<void> pumpAdaptiveOnboardingPage(WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
@@ -28,18 +28,18 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', ''), Locale('es', '')],
-            home: OnboardingPage(),
+            home: AdaptiveOnboardingPage(),
           ),
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
     }
 
     testWidgets('User can skip onboarding without selecting habits', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Find skip button
       final skipButton = find.byKey(const Key('skip_onboarding_button'));
@@ -53,7 +53,7 @@ void main() {
     testWidgets('Skip button is visible alongside continue button', (
       WidgetTester tester,
     ) async {
-      await pumpOnboardingPage(tester);
+      await pumpAdaptiveOnboardingPage(tester);
 
       // Both buttons should be visible
       final skipButton = find.byKey(const Key('skip_onboarding_button'));
@@ -90,12 +90,12 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', ''), Locale('es', '')],
-            home: OnboardingPage(),
+            home: AdaptiveOnboardingPage(),
           ),
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Check that emojis are displayed in habit cards
       // Morning Prayer should show 🙏
@@ -158,7 +158,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Look for Container widgets that could be color indicators
       // Color indicators are 4px wide and at least 20px tall
@@ -233,7 +233,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Find Text widgets with strikethrough decoration
       final strikethroughTexts = find.byWidgetPredicate(
@@ -290,7 +290,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Find the habit name text
       final habitNameText = find.text('Uncompleted Habit');
@@ -329,12 +329,12 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Open add habit dialog
       final addButton = find.byKey(const Key('add_habit_fab'));
       await tester.tap(addButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should show TabBar with two tabs
       expect(find.byType(TabBar), findsOneWidget);
@@ -364,17 +364,17 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Open add habit dialog
       final addButton = find.byKey(const Key('add_habit_fab'));
       await tester.tap(addButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Find and tap the second tab
       final tabs = find.byType(Tab);
       await tester.tap(tabs.at(1));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should show grid of predefined habits
       expect(find.byType(GridView), findsOneWidget);
@@ -403,17 +403,17 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Open add habit dialog
       final addButton = find.byKey(const Key('add_habit_fab'));
       await tester.tap(addButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Switch to predefined tab
       final tabs = find.byType(Tab);
       await tester.tap(tabs.at(1));
-      await tester.pumpAndSettle();
+      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
       // Should show multiple habit emojis
       expect(find.text('🙏'), findsOneWidget);
@@ -444,14 +444,14 @@ void main() {
               ],
               supportedLocales: const [Locale('en', ''), Locale('es', '')],
               routes: {
-                '/': (context) => const OnboardingPage(),
+                '/': (context) => const AdaptiveOnboardingPage(),
                 '/home': (context) => const HabitsPage(),
               },
             ),
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
 
         // User skips onboarding
         final skipButton = find.byKey(const Key('skip_onboarding_button'));

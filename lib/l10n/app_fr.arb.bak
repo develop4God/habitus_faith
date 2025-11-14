@@ -1,0 +1,858 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Habitus Foi",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "start": "Commencer",
+  "@start": {
+    "description": "Start button text"
+  },
+  "readBible": "Bible",
+  "@readBible": {
+    "description": "Read Bible button text"
+  },
+  "myHabits": "Mes Habitudes",
+  "@myHabits": {
+    "description": "Title for habits page"
+  },
+  "noHabits": "Pas encore d'habitudes",
+  "@noHabits": {
+    "description": "Empty state message when user has no habits"
+  },
+  "streak": "Série",
+  "@streak": {
+    "description": "Streak label"
+  },
+  "days": "jours",
+  "@days": {
+    "description": "Days unit"
+  },
+  "best": "Meilleur",
+  "@best": {
+    "description": "Best streak label"
+  },
+  "addHabit": "Ajouter Habitude",
+  "@addHabit": {
+    "description": "Add habit button text"
+  },
+  "deleteHabit": "Supprimer Habitude",
+  "@deleteHabit": {
+    "description": "Delete habit dialog title"
+  },
+  "deleteHabitConfirm": "Êtes-vous sûr de vouloir supprimer \"{habitName}\"?",
+  "@deleteHabitConfirm": {
+    "description": "Delete habit confirmation message",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
+  },
+  "cancel": "Annuler",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "delete": "Supprimer",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "name": "Nom",
+  "@name": {
+    "description": "Name field label"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description field label"
+  },
+  "add": "Ajouter",
+  "@add": {
+    "description": "Add button text"
+  },
+  "welcomeToHabitusFaith": "Bienvenue à Habitus Foi",
+  "@welcomeToHabitusFaith": {
+    "description": "Onboarding welcome title"
+  },
+  "selectUpToThreeHabits": "Sélectionnez jusqu'à 3 habitudes pour commencer votre voyage",
+  "@selectUpToThreeHabits": {
+    "description": "Onboarding instruction"
+  },
+  "continueButton": "Continuer",
+  "@continueButton": {
+    "description": "Continue button text"
+  },
+  "selectAtLeastOne": "Veuillez sélectionner au moins une habitude",
+  "@selectAtLeastOne": {
+    "description": "Error message when no habits selected"
+  },
+  "maxThreeHabits": "Vous pouvez sélectionner jusqu'à 3 habitudes",
+  "@maxThreeHabits": {
+    "description": "Error message when trying to select more than 3"
+  },
+  "spiritual": "Spirituel",
+  "@spiritual": {
+    "description": "Spiritual category"
+  },
+  "physical": "Physique",
+  "@physical": {
+    "description": "Physical category"
+  },
+  "mental": "Mental",
+  "@mental": {
+    "description": "Mental category"
+  },
+  "relational": "Relationnel",
+  "@relational": {
+    "description": "Relational category"
+  },
+  "habitCompleted": "Habitude terminée! 🎉",
+  "@habitCompleted": {
+    "description": "Success message when habit is completed"
+  },
+  "tapToComplete": "Appuyez pour terminer",
+  "@tapToComplete": {
+    "description": "Instruction to tap to complete habit"
+  },
+  "completed": "Terminé",
+  "@completed": {
+    "description": "Completed status"
+  },
+  "currentStreak": "Série Actuelle",
+  "@currentStreak": {
+    "description": "Current streak label"
+  },
+  "longestStreak": "Meilleure Série",
+  "@longestStreak": {
+    "description": "Longest streak label"
+  },
+  "thisWeek": "Cette Semaine",
+  "@thisWeek": {
+    "description": "This week label for calendar"
+  },
+  "predefinedHabit_morningPrayer_name": "Prière Matinale",
+  "@predefinedHabit_morningPrayer_name": {
+    "description": "Name of morning prayer habit"
+  },
+  "predefinedHabit_morningPrayer_description": "Commencez votre journée avec la prière et la gratitude",
+  "@predefinedHabit_morningPrayer_description": {
+    "description": "Description of morning prayer habit"
+  },
+  "predefinedHabit_bibleReading_name": "Lecture Biblique",
+  "@predefinedHabit_bibleReading_name": {
+    "description": "Name of bible reading habit"
+  },
+  "predefinedHabit_bibleReading_description": "Lisez et méditez la Parole de Dieu quotidiennement",
+  "@predefinedHabit_bibleReading_description": {
+    "description": "Description of bible reading habit"
+  },
+  "predefinedHabit_worship_name": "Adoration",
+  "@predefinedHabit_worship_name": {
+    "description": "Name of worship habit"
+  },
+  "predefinedHabit_worship_description": "Passez du temps en adoration et louange",
+  "@predefinedHabit_worship_description": {
+    "description": "Description of worship habit"
+  },
+  "predefinedHabit_gratitude_name": "Journal de Gratitude",
+  "@predefinedHabit_gratitude_name": {
+    "description": "Name of gratitude habit"
+  },
+  "predefinedHabit_gratitude_description": "Écrivez ce dont vous êtes reconnaissant",
+  "@predefinedHabit_gratitude_description": {
+    "description": "Description of gratitude habit"
+  },
+  "predefinedHabit_exercise_name": "Exercice",
+  "@predefinedHabit_exercise_name": {
+    "description": "Name of exercise habit"
+  },
+  "predefinedHabit_exercise_description": "Prenez soin de votre corps, temple de Dieu",
+  "@predefinedHabit_exercise_description": {
+    "description": "Description of exercise habit"
+  },
+  "predefinedHabit_healthyEating_name": "Alimentation Saine",
+  "@predefinedHabit_healthyEating_name": {
+    "description": "Name of healthy eating habit"
+  },
+  "predefinedHabit_healthyEating_description": "Nourrissez votre corps avec des aliments sains",
+  "@predefinedHabit_healthyEating_description": {
+    "description": "Description of healthy eating habit"
+  },
+  "predefinedHabit_sleep_name": "Sommeil de Qualité",
+  "@predefinedHabit_sleep_name": {
+    "description": "Name of sleep habit"
+  },
+  "predefinedHabit_sleep_description": "Dormez bien pour vous ressourcer",
+  "@predefinedHabit_sleep_description": {
+    "description": "Description of sleep habit"
+  },
+  "predefinedHabit_meditation_name": "Méditation",
+  "@predefinedHabit_meditation_name": {
+    "description": "Name of meditation habit"
+  },
+  "predefinedHabit_meditation_description": "Pratiquez la pleine conscience et la réflexion",
+  "@predefinedHabit_meditation_description": {
+    "description": "Description of meditation habit"
+  },
+  "predefinedHabit_learning_name": "Apprentissage",
+  "@predefinedHabit_learning_name": {
+    "description": "Name of learning habit"
+  },
+  "predefinedHabit_learning_description": "Grandissez en connaissance et sagesse",
+  "@predefinedHabit_learning_description": {
+    "description": "Description of learning habit"
+  },
+  "predefinedHabit_creativity_name": "Temps Créatif",
+  "@predefinedHabit_creativity_name": {
+    "description": "Name of creativity habit"
+  },
+  "predefinedHabit_creativity_description": "Exprimez-vous à travers des activités créatives",
+  "@predefinedHabit_creativity_description": {
+    "description": "Description of creativity habit"
+  },
+  "predefinedHabit_familyTime_name": "Temps en Famille",
+  "@predefinedHabit_familyTime_name": {
+    "description": "Name of family time habit"
+  },
+  "predefinedHabit_familyTime_description": "Passez du temps de qualité avec vos proches",
+  "@predefinedHabit_familyTime_description": {
+    "description": "Description of family time habit"
+  },
+  "predefinedHabit_service_name": "Actes de Service",
+  "@predefinedHabit_service_name": {
+    "description": "Name of service habit"
+  },
+  "predefinedHabit_service_description": "Servez les autres avec amour et compassion",
+  "@predefinedHabit_service_description": {
+    "description": "Description of service habit"
+  },
+  "onboardingErrorMessage": "Échec de la sauvegarde des habitudes. Veuillez réessayer.",
+  "@onboardingErrorMessage": {
+    "description": "Error message shown when onboarding fails"
+  },
+  "retry": "Réessayer",
+  "@retry": {
+    "description": "Button label for retrying an operation"
+  },
+  "selected": "Sélectionné",
+  "@selected": {
+    "description": "Accessibility label indicating an item is selected"
+  },
+  "category": "Catégorie",
+  "@category": {
+    "description": "Category label"
+  },
+  "difficulty": "Difficulté",
+  "@difficulty": {
+    "description": "Difficulty label"
+  },
+  "emoji": "Emoji",
+  "@emoji": {
+    "description": "Emoji label"
+  },
+  "color": "Couleur",
+  "@color": {
+    "description": "Color label"
+  },
+  "optional": "optionnel",
+  "@optional": {
+    "description": "Optional label"
+  },
+  "edit": "Modifier",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "uncheck": "Décocher",
+  "@uncheck": {
+    "description": "Uncheck button text"
+  },
+  "save": "Enregistrer",
+  "@save": {
+    "description": "Save button text"
+  },
+  "editHabit": "Modifier l'Habitude",
+  "@editHabit": {
+    "description": "Edit habit dialog title"
+  },
+  "defaultColor": "Par défaut",
+  "@defaultColor": {
+    "description": "Default color option label"
+  },
+  "statistics": "Statistiques",
+  "@statistics": {
+    "description": "Statistics/Progress page title"
+  },
+  "settings": "Paramètres",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "language": "Langue",
+  "@language": {
+    "description": "Language settings option"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications settings option"
+  },
+  "notificationSettings": "Paramètres de Notification",
+  "@notificationSettings": {
+    "description": "Notification settings title"
+  },
+  "languageSettings": "Paramètres de Langue",
+  "@languageSettings": {
+    "description": "Language settings title"
+  },
+  "selectLanguage": "Sélectionner la Langue",
+  "@selectLanguage": {
+    "description": "Select language instruction"
+  },
+  "languageInfo": "L'application utilisera la langue sélectionnée pour tous les textes et éléments d'interface.",
+  "@languageInfo": {
+    "description": "Language information text"
+  },
+  "notificationsEnabled": "Notifications activées",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  "notificationsDisabled": "Notifications désactivées",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  "notificationTimeUpdated": "Heure de notification mise à jour à",
+  "@notificationTimeUpdated": {
+    "description": "Notification time updated message"
+  },
+  "enableNotifications": "Activer les Notifications",
+  "@enableNotifications": {
+    "description": "Enable notifications option"
+  },
+  "notificationsOn": "Notifications Activées",
+  "@notificationsOn": {
+    "description": "Notifications on label"
+  },
+  "notificationsOff": "Notifications Désactivées",
+  "@notificationsOff": {
+    "description": "Notifications off label"
+  },
+  "receiveReminderNotifications": "Recevoir des notifications de rappel quotidien",
+  "@receiveReminderNotifications": {
+    "description": "Receive reminder notifications description"
+  },
+  "notificationTime": "Heure de Notification",
+  "@notificationTime": {
+    "description": "Notification time label"
+  },
+  "selectNotificationTime": "Sélectionner l'heure de notification",
+  "@selectNotificationTime": {
+    "description": "Select notification time instruction"
+  },
+  "currentTime": "Heure actuelle",
+  "@currentTime": {
+    "description": "Current time label"
+  },
+  "notificationInfo": "Vous recevrez un rappel quotidien à l'heure sélectionnée pour compléter vos habitudes.",
+  "@notificationInfo": {
+    "description": "Notification information text"
+  },
+  "highRiskWarning": "Risque élevé d'abandonner cette habitude aujourd'hui !",
+  "@highRiskWarning": {
+    "description": "Warning message for high abandonment risk"
+  },
+  "riskPercentage": "{percent}% de probabilité d'abandon",
+  "@riskPercentage": {
+    "description": "Display abandonment risk percentage",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  "completeNow": "Terminer Maintenant",
+  "@completeNow": {
+    "description": "Button text to complete habit immediately"
+  },
+  "abandonmentNudgeTitle": "Réduire l'habitude \"{habitName}\"?",
+  "@abandonmentNudgeTitle": {
+    "description": "Title for abandonment prediction nudge notification",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Prière du Matin"
+      }
+    }
+  },
+  "abandonmentNudgeBody": "Réduire à {minutes}min? Nous avons remarqué que vous pourriez abandonner cette habitude",
+  "@abandonmentNudgeBody": {
+    "description": "Body text for abandonment prediction nudge notification",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "copiedToClipboard": "Copié dans le presse-papiers",
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "versesSaved": "Versets sauvegardés",
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
+  },
+  "loadingBooks": "Chargement des livres...",
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "selectBook": "Sélectionner un Livre",
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "selectBookAndChapter": "Sélectionnez un livre et un chapitre",
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "habitsCompleted": "Habitudes complétées:",
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "habitsCompletedCount": "{completed} sur {total}",
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "error": "Erreur: {message}",
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Connexion échouée"
+      }
+    }
+  },
+  "generateMicroHabits": "Générer des Micro-Habitudes",
+  "@generateMicroHabits": {
+    "description": "Titre de la page de génération de micro-habitudes"
+  },
+  "aiGeneratedHabits": "Habitudes Générées par IA",
+  "@aiGeneratedHabits": {
+    "description": "Titre pour la section des habitudes générées par IA"
+  },
+  "yourGoal": "Votre Objectif",
+  "@yourGoal": {
+    "description": "Étiquette pour le champ de saisie d'objectif de l'utilisateur"
+  },
+  "goalHint": "Que souhaitez-vous améliorer? (ex: Prier plus régulièrement)",
+  "@goalHint": {
+    "description": "Texte d'aide pour le champ d'objectif"
+  },
+  "goalRequired": "Veuillez saisir votre objectif",
+  "@goalRequired": {
+    "description": "Message de validation lorsque l'objectif est vide"
+  },
+  "goalTooShort": "L'objectif doit contenir au moins 10 caractères",
+  "@goalTooShort": {
+    "description": "Message de validation lorsque l'objectif est trop court"
+  },
+  "goalTooLong": "L'objectif ne peut pas dépasser 200 caractères",
+  "@goalTooLong": {
+    "description": "Message de validation lorsque l'objectif est trop long"
+  },
+  "failurePattern": "Quand échouez-vous généralement? (Facultatif)",
+  "@failurePattern": {
+    "description": "Étiquette pour le champ de modèle d'échec"
+  },
+  "failurePatternHint": "ex: J'oublie pendant les matins occupés",
+  "@failurePatternHint": {
+    "description": "Texte d'aide pour le modèle d'échec"
+  },
+  "generateHabits": "Générer des Habitudes",
+  "@generateHabits": {
+    "description": "Texte du bouton pour générer des habitudes"
+  },
+  "generating": "Génération...",
+  "@generating": {
+    "description": "Texte d'état de chargement pendant la génération"
+  },
+  "generatingHabits": "Génération de micro-habitudes personnalisées pour vous...",
+  "@generatingHabits": {
+    "description": "Message de chargement pendant la génération des habitudes"
+  },
+  "generatedHabitsTitle": "Vos Micro-Habitudes Personnalisées",
+  "@generatedHabitsTitle": {
+    "description": "Titre pour la page des résultats des habitudes générées"
+  },
+  "selectHabitsToAdd": "Sélectionnez les habitudes à ajouter à votre suivi:",
+  "@selectHabitsToAdd": {
+    "description": "Instructions pour sélectionner les habitudes"
+  },
+  "saveSelected": "Enregistrer la Sélection",
+  "@saveSelected": {
+    "description": "Bouton pour enregistrer les habitudes sélectionnées"
+  },
+  "saving": "Enregistrement...",
+  "@saving": {
+    "description": "Texte de chargement pendant l'enregistrement des habitudes"
+  },
+  "habitsAdded": "{count} habitude(s) ajoutée(s) avec succès!",
+  "@habitsAdded": {
+    "description": "Message de succès après l'ajout d'habitudes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "estimatedTime": "~{minutes} min",
+  "@estimatedTime": {
+    "description": "Temps estimé pour compléter l'habitude",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "bibleVerse": "Verset Biblique",
+  "@bibleVerse": {
+    "description": "Étiquette pour la section du verset biblique"
+  },
+  "purpose": "Objectif",
+  "@purpose": {
+    "description": "Étiquette pour l'objectif de l'habitude"
+  },
+  "remaining": "{count} restant(s)",
+  "@remaining": {
+    "description": "Nombre de générations restantes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "monthlyLimit": "Limite mensuelle: {limit} générations",
+  "@monthlyLimit": {
+    "description": "Information sur la limite mensuelle de générations",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "rateLimitReached": "Limite mensuelle atteinte. Réessayez le mois prochain.",
+  "@rateLimitReached": {
+    "description": "Message d'erreur lorsque la limite de taux est dépassée"
+  },
+  "generationFailed": "Échec de la génération d'habitudes. Veuillez réessayer.",
+  "@generationFailed": {
+    "description": "Message d'erreur générique pour l'échec de la génération"
+  },
+  "apiTimeout": "Délai d'attente dépassé. Vérifiez votre connexion et réessayez.",
+  "@apiTimeout": {
+    "description": "Message d'erreur pour le délai d'attente de l'API"
+  },
+  "invalidInput": "Entrée invalide. Vérifiez votre objectif et réessayez.",
+  "@invalidInput": {
+    "description": "Message d'erreur pour une entrée invalide"
+  },
+  "noHabitsSelected": "Veuillez sélectionner au moins une habitude à enregistrer",
+  "@noHabitsSelected": {
+    "description": "Erreur lors de la tentative d'enregistrement sans sélectionner d'habitudes"
+  },
+  "tryAgain": "Réessayer",
+  "@tryAgain": {
+    "description": "Bouton pour réessayer après une erreur"
+  },
+  "generationsRemaining": "{count} génération(s) restante(s) ce mois",
+  "@generationsRemaining": {
+    "description": "Affiche combien de générations restent",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "poweredByGemini": "Propulsé par Gemini AI",
+  "@poweredByGemini": {
+    "description": "Attribution pour le service IA"
+  },
+  "chooseYourExperience": "Choisissez votre expérience",
+  "displayModeDescription": "Sélectionnez comment vous souhaitez utiliser Habitus Faith",
+  "compactMode": "Mode compact",
+  "compactModeDescription": "Fonctionnalités essentielles pour le suivi quotidien des habitudes",
+  "compactModeFeature1": "Interface épurée et minimaliste",
+  "compactModeFeature2": "Suivi rapide des habitudes",
+  "compactModeFeature3": "Statistiques de base",
+  "advancedMode": "Mode avancé",
+  "advancedModeDescription": "Expérience complète avec analyses et perspectives",
+  "advancedModeFeature1": "Analyses détaillées des habitudes",
+  "advancedModeFeature2": "Informations alimentées par l'IA",
+  "advancedModeFeature3": "Personnalisation avancée",
+  "changeAnytime": "Vous pouvez modifier ce paramètre à tout moment dans les préférences",
+  "selectMode": "Sélectionner le mode",
+  "displayMode": "Mode d'affichage",
+  "displayModeUpdated": "Mode d'affichage mis à jour vers {mode}",
+  "compactModeSubtitle": "Liste compacte - appuyez pour les détails",
+  "advancedModeSubtitle": "Suivi complet visible",
+  "addManually": "Ajouter Manuellement",
+  "@addManually": {
+    "description": "Option pour ajouter une habitude manuellement"
+  },
+  "createCustomHabit": "Créer une habitude personnalisée",
+  "@createCustomHabit": {
+    "description": "Description pour la création manuelle d'habitude"
+  },
+  "generateWithAI": "Générer avec IA",
+  "@generateWithAI": {
+    "description": "Option pour générer des habitudes avec IA"
+  },
+  "aiCustomHabits": "Habitudes personnalisées avec IA",
+  "@aiCustomHabits": {
+    "description": "Description pour les habitudes générées par IA"
+  },
+  "previewHabitName": "Nom de l'habitude",
+  "@previewHabitName": {
+    "description": "Texte placeholder pour le nom de l'habitude dans l'aperçu"
+  },
+  "previewHabitDescription": "Description de l'habitude",
+  "@previewHabitDescription": {
+    "description": "Texte placeholder pour la description de l'habitude dans l'aperçu"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Étiquette total pour les statistiques"
+  },
+  "mlPredictionFailed": "Impossible de calculer le risque d'abandon",
+  "mlModelNotLoaded": "Modèle de prédiction indisponible. Veuillez redémarrer l'application.",
+  "mlInsufficientData": "Besoin d'au moins {days} jours de données pour les prédictions",
+  "backgroundSyncFailed": "Échec de la synchronisation: {reason}",
+  "backgroundSyncNetwork": "Pas de connexion Internet. Les modifications seront synchronisées en ligne.",
+  "backgroundSyncPermission": "Synchronisation en arrière-plan désactivée. Activer dans les paramètres.",
+  "workmanagerActive": "Synchronisation en arrière-plan active",
+  "workmanagerRestricted": "La synchronisation en arrière-plan peut être limitée par l'optimisation de la batterie",
+  "workmanagerDisabled": "Synchronisation en arrière-plan désactivée dans les paramètres système",
+  "patternWeekend": "Vous avez tendance à sauter les week-ends. Essayer de définir un rappel?",
+  "patternEvening": "Le taux de complétion le soir est faible. Envisager des habitudes matinales?",
+  "optimalTimeFound": "Votre meilleur moment de complétion est {time}",
+  "networkTimeout": "Délai d'attente dépassé. Vérifiez votre connexion.",
+  "firebasePermissionDenied": "Accès refusé. Veuillez vous reconnecter.",
+  "errorUnknown": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+  "devBannerTitle": "Outils de Développement",
+  "devBannerLastSync": "Dernière synchro: {time}",
+  "devBannerMlStatus": "Modèle ML: {status}",
+  "devBannerWorkmanager": "Arrière-plan: {status}",
+  "devBannerFastTime": "Temps: {multiplier}x (Simulé: {date})",
+  "riskLevelLow": "Risque faible",
+  "riskLevelMedium": "Risque moyen",
+  "riskLevelHigh": "Risque élevé",
+  "predictorRunning": "Analyse des habitudes...",
+  "predictorComplete": "Analyse terminée",
+  "syncInProgress": "Synchronisation...",
+  "syncComplete": "Synchronisation terminée",
+  "mlModelLoaded": "Chargé",
+  "mlModelLoading": "Chargement...",
+  "mlModelError": "Erreur",
+  "chooseHabitType": "Quel type d'habitude souhaitez-vous ajouter ?",
+  "@chooseHabitType": {
+    "description": "Texte pour choisir le type d'habitude à ajouter"
+  },
+  "chooseFromPredefined": "Choisissez une habitude prédéfinie",
+  "@chooseFromPredefined": {
+    "description": "Texte pour choisir parmi les habitudes prédéfinies"
+  },
+  "manual": "Manuel",
+  "@manual": {
+    "description": "Option d'habitude manuelle (étiquette courte)"
+  },
+  "custom": "Personnalisé",
+  "@custom": {
+    "description": "Option d'habitude personnalisée (étiquette courte)"
+  },
+  "defaultHabit": "Prédéfini",
+  "@defaultHabit": {
+    "description": "Option d'habitude prédéfinie (étiquette courte)"
+  },
+  "addHabitDiscoverySubtitle": "Choisissez comment ajouter votre nouvelle habitude : créez-en une personnalisée ou sélectionnez une habitude prédéfinie pour commencer plus rapidement.",
+  "@addHabitDiscoverySubtitle": {
+    "description": "Sous-titre explicatif pour la boîte de dialogue de découverte d'ajout d'habitude"
+  },
+  "requiredFieldLabel": "Obligatoire",
+  "@requiredFieldLabel": {
+    "description": "Étiquette pour indiquer qu'un champ est obligatoire"
+  },
+  "back": "Retour",
+  "@back": {
+    "description": "Bouton pour revenir à l'étape précédente dans la boîte de dialogue"
+  },
+  "selectAll": "Tout sélectionner",
+  "@selectAll": {
+    "description": "Bouton pour sélectionner toutes les habitudes sur la page des habitudes"
+  },
+  "copy": "Dupliquer",
+  "@copy": {
+    "description": "Texte pour dupliquer une habitude (action swipe)"
+  },
+  "copyHabit": "Voulez-vous dupliquer la tâche ?",
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "copyHabitConfirm": "Êtes-vous sûr de vouloir dupliquer \"{habitName}\" ?",
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Prière du matin"
+      }
+    }
+  },
+  "introMessage": "Les plus grands changements commencent par la constance...",
+  "@introMessage": {
+    "description": "Message d'introduction motivant affiché sur la page d'accueil."
+  },
+  "usefulTip": "Astuce utile",
+  "@usefulTip": {
+    "description": "Titre du conseil éducatif"
+  },
+  "habitsTip": "Faites glisser pour voir les actions sur vos habitudes",
+  "@habitsTip": {
+    "description": "Description du conseil éducatif"
+  },
+  "understood": "Compris",
+  "@understood": {
+    "description": "Bouton pour fermer le conseil éducatif"
+  },
+  "bible": "Bible",
+  "@bible": {
+    "description": "Bible title for AppBar"
+  },
+  "home": "Accueil",
+  "@home": {
+    "description": "Libellé de l'onglet d'accueil"
+  },
+  "routine": "Routine",
+  "@routine": {
+    "description": "Libellé pour l'option routine dans la barre de navigation"
+  },
+  "today": "Aujourd'hui",
+  "@today": {
+    "description": "Libellé pour afficher le jour actuel dans la vue des habitudes"
+  },
+  "reminderConfig": "FR: Reminder Configuration",
+  "@reminderConfig": {
+    "description": "Reminder configuration dialog title"
+  },
+  "recurrenceConfig": "FR: Daily Repetitions",
+  "@recurrenceConfig": {
+    "description": "Recurrence configuration dialog title"
+  },
+  "repeat": "FR: Repeat",
+  "@repeat": {
+    "description": "Repeat toggle label"
+  },
+  "setCycleForPlan": "FR: Set a cycle for your plan",
+  "@setCycleForPlan": {
+    "description": "Subtitle for repeat toggle"
+  },
+  "subtasks": "FR: Subtasks",
+  "@subtasks": {
+    "description": "Subtasks section label"
+  },
+  "addSubtask": "FR: Add subtask",
+  "@addSubtask": {
+    "description": "Add subtask hint text"
+  },
+  "minutesBefore": "FR: Minutes before",
+  "@minutesBefore": {
+    "description": "Custom minutes before label"
+  },
+  "interval": "FR: Interval",
+  "@interval": {
+    "description": "Interval label for recurrence"
+  },
+  "endDate": "FR: End date",
+  "@endDate": {
+    "description": "End date label for recurrence"
+  },
+  "daily": "FR: Daily",
+  "@daily": {
+    "description": "Daily frequency option"
+  },
+  "weekly": "FR: Weekly",
+  "@weekly": {
+    "description": "Weekly frequency option"
+  },
+  "monthly": "FR: Monthly",
+  "@monthly": {
+    "description": "Monthly frequency option"
+  },
+  "everyXDays": "FR: Every {count} day(s)",
+  "@everyXDays": {
+    "description": "Every X days text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXWeeks": "FR: Every {count} week(s)",
+  "@everyXWeeks": {
+    "description": "Every X weeks text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXMonths": "FR: Every {count} month(s)",
+  "@everyXMonths": {
+    "description": "Every X months text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noRepetition": "FR: No repetition",
+  "@noRepetition": {
+    "description": "No repetition text"
+  },
+  "reminder": "FR: Reminder",
+  "@reminder": {
+    "description": "Reminder label"
+  },
+  "repetition": "FR: Repetition",
+  "@repetition": {
+    "description": "Repetition label"
+  },
+  "eventTime": "FR: Event time (HH:MM)",
+  "@eventTime": {
+    "description": "Event time label"
+  },
+  "invalidMinutes": "FR: Please enter a valid number between 1 and 1440",
+  "@invalidMinutes": {
+    "description": "Validation message for invalid custom minutes"
+  },
+  "invalidInterval": "FR: Interval must be at least 1",
+  "@invalidInterval": {
+    "description": "Validation message for invalid interval"
+  },
+  "habitTracking": "FR: Habit Tracking",
+  "@habitTracking": {
+    "description": "Title for habit tracking calendar page"
+  }
+}

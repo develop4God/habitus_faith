@@ -1,0 +1,71 @@
+{
+  "pattern_id": "wellness_normal_lackOfMotivation_physicalHealth_reduceStress_inconsistent",
+  "fingerprint": {
+    "primaryIntent": "wellness",
+    "motivations": [
+      "physicalHealth",
+      "reduceStress"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "inconsistent"
+  },
+  "generated_habits": [
+    {
+      "name": "快速伸展运动",
+      "description": "简单的身体活动来减压和提升能量",
+      "category": "physical",
+      "emoji": "🧘",
+      "microHabits": [
+        {
+          "title": "做5次深呼吸",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "伸展颈部和肩膀",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "14:00",
+          "title": "放松时刻 🧘",
+          "body": "花3分钟放松身心",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "感恩时刻",
+      "description": "通过感恩来改善心态和减少压力",
+      "category": "mental",
+      "emoji": "🌈",
+      "microHabits": [
+        {
+          "title": "写下今天的3件好事",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "为明天设定一个小目标",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:30",
+          "title": "感恩日记 🌈",
+          "body": "记录今天的美好",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

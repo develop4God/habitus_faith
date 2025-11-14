@@ -39,11 +39,11 @@ abstract class HabitsRepository {
   /// Create a new habit
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
-    required String description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
+    HabitNotificationSettings? notificationSettings,
   });
 
   /// Complete a habit for today
@@ -53,7 +53,6 @@ abstract class HabitsRepository {
   Future<Result<Habit, HabitFailure>> updateHabit({
     required String habitId,
     String? name,
-    String? description,
     HabitCategory? category,
     String? emoji,
     int? colorValue,

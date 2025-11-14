@@ -1,0 +1,112 @@
+{
+  "pattern_id": "faithBased_normal_dontKnowStart_overcomeHabits_closerToGod_mature",
+  "fingerprint": {
+    "primaryIntent": "faithBased",
+    "motivations": [
+      "overcomeHabits",
+      "closerToGod"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "normal",
+    "spiritualMaturity": "mature"
+  },
+  "generated_habits": [
+    {
+      "name": "Ayuno de redes sociales",
+      "description": "Desconéctate de distracciones y conéctate con Dios",
+      "category": "spiritual",
+      "emoji": "📵",
+      "microHabits": [
+        {
+          "title": "Cerrar todas las apps de redes sociales",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "Leer Filipenses 4:8 sobre pensamientos puros",
+          "durationMinutes": 3,
+          "order": 1
+        },
+        {
+          "title": "Orar por fortaleza contra tentaciones",
+          "durationMinutes": 2,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "09:00",
+          "title": "Ayuno digital 📵",
+          "body": "Tiempo de desconectar y conectar con Dios",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Meditación profunda",
+      "description": "Medita en la presencia de Dios y en su Palabra",
+      "category": "spiritual",
+      "emoji": "🧘",
+      "microHabits": [
+        {
+          "title": "Leer Salmo 119:105 sobre la guía de Dios",
+          "durationMinutes": 3,
+          "order": 0
+        },
+        {
+          "title": "Silencio: escuchar a Dios en quietud",
+          "durationMinutes": 5,
+          "order": 1
+        },
+        {
+          "title": "Anotar impresiones recibidas",
+          "durationMinutes": 2,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "22:00",
+          "title": "Meditación nocturna 🧘",
+          "body": "Termina el día en la presencia de Dios",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Confesión y gratitud",
+      "description": "Practica la transparencia con Dios cada día",
+      "category": "spiritual",
+      "emoji": "💭",
+      "microHabits": [
+        {
+          "title": "Confesar un área de lucha a Dios",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Agradecer por su gracia y perdón",
+          "durationMinutes": 2,
+          "order": 1
+        },
+        {
+          "title": "Pedir sabiduría para vencer mañana",
+          "durationMinutes": 1,
+          "order": 2
+        }
+      ],
+      "notifications": [
+        {
+          "time": "23:00",
+          "title": "Tiempo de honestidad 💭",
+          "body": "Sé transparente con Dios",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

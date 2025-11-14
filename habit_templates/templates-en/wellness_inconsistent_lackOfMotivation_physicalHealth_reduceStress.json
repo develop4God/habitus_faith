@@ -1,0 +1,71 @@
+{
+  "pattern_id": "wellness_normal_lackOfMotivation_physicalHealth_reduceStress_inconsistent",
+  "fingerprint": {
+    "primaryIntent": "wellness",
+    "motivations": [
+      "physicalHealth",
+      "reduceStress"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "inconsistent"
+  },
+  "generated_habits": [
+    {
+      "name": "Quick Stretch Break",
+      "description": "Simple movement to reduce stress and boost energy",
+      "category": "physical",
+      "emoji": "🧘",
+      "microHabits": [
+        {
+          "title": "Take 5 deep breaths",
+          "durationMinutes": 1,
+          "order": 0
+        },
+        {
+          "title": "Stretch neck and shoulders",
+          "durationMinutes": 2,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "14:00",
+          "title": "Relaxation Break 🧘",
+          "body": "Take 3 minutes to relax",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Gratitude Moment",
+      "description": "Improve mindset and reduce stress through gratitude",
+      "category": "mental",
+      "emoji": "🌈",
+      "microHabits": [
+        {
+          "title": "Write down 3 good things from today",
+          "durationMinutes": 2,
+          "order": 0
+        },
+        {
+          "title": "Set one small goal for tomorrow",
+          "durationMinutes": 1,
+          "order": 1
+        }
+      ],
+      "notifications": [
+        {
+          "time": "21:30",
+          "title": "Gratitude Journal 🌈",
+          "body": "Record today's blessings",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-11",
+    "version": "1.0"
+  }
+}

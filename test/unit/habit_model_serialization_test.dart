@@ -10,7 +10,6 @@ void main() {
         id: 'test-id-1',
         userId: 'user-1',
         name: 'Morning Prayer',
-        description: 'Start the day with prayer',
         category: HabitCategory.spiritual,
         colorValue: 0xFF9333EA,
         difficulty: HabitDifficulty.medium,
@@ -87,7 +86,6 @@ void main() {
         id: 'test-id-1',
         userId: 'user-1',
         name: 'Bible Reading',
-        description: 'Read one chapter',
         category: HabitCategory.spiritual,
         colorValue: 0xFF2563EB,
         difficulty: HabitDifficulty.easy,
@@ -101,7 +99,7 @@ void main() {
       expect(deserializedHabit.id, originalHabit.id);
       expect(deserializedHabit.userId, originalHabit.userId);
       expect(deserializedHabit.name, originalHabit.name);
-      expect(deserializedHabit.description, originalHabit.description);
+      // Note: description field removed from Habit model
       expect(deserializedHabit.category, originalHabit.category);
       expect(deserializedHabit.colorValue, originalHabit.colorValue);
       expect(deserializedHabit.difficulty, originalHabit.difficulty);

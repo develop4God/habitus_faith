@@ -24,7 +24,6 @@ void main() {
       // Act
       final result = await repository.createHabit(
         name: 'Prayer',
-        description: 'Daily prayer',
       );
 
       // Assert
@@ -34,7 +33,7 @@ void main() {
           expect(habit.id, 'test-id-0');
           expect(habit.userId, 'test-user');
           expect(habit.name, 'Prayer');
-          expect(habit.description, 'Daily prayer');
+          // Note: description field removed from Habit model
         },
       );
 
@@ -54,7 +53,6 @@ void main() {
       // Act
       final result = await repo.createHabit(
         name: 'Prayer',
-        description: 'Daily prayer',
       );
 
       // Assert
@@ -72,7 +70,6 @@ void main() {
       // Arrange
       final createResult = await repository.createHabit(
         name: 'Morning Prayer',
-        description: 'Pray in the morning',
       );
 
       final habitId = createResult.fold(
@@ -129,7 +126,6 @@ void main() {
       // Arrange
       final createResult = await repository.createHabit(
         name: 'To Delete',
-        description: 'Will be deleted',
       );
 
       final habitId = createResult.fold(
@@ -160,7 +156,6 @@ void main() {
       // Arrange
       await repository.createHabit(
         name: 'Habit 1',
-        description: 'User 1 habit',
       );
 
       // Create habit for different user
@@ -169,7 +164,7 @@ void main() {
         userId: 'other-user',
         idGenerator: () => 'other-id',
       );
-      await otherRepo.createHabit(name: 'Habit 2', description: 'User 2 habit');
+      await otherRepo.createHabit(name: 'Habit 2');
 
       // Act
       final stream = repository.watchHabits();

@@ -743,4 +743,6 @@
   "@today": {
     "description": "用于在习惯视图中显示当天的标签"
   }
+,
+  "onboardingWelcomeMessage": "ZH: Welcome message"
 }
