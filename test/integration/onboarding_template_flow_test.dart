@@ -250,7 +250,8 @@ void main() {
       // Should find exact match
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result[0]['name'], 'Growth Habit'); // Should match the second template
+      expect(result[0]['name'],
+          'Growth Habit'); // Should match the second template
     });
 
     test('Chinese language template fetching works correctly', () async {

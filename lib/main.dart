@@ -21,6 +21,7 @@ import 'features/habits/data/storage/json_storage_service.dart';
 import 'features/habits/data/storage/json_habits_repository.dart';
 import 'features/habits/data/storage/storage_providers.dart';
 import 'l10n/app_localizations.dart';
+import 'dev_tools/fast_time_banner.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -85,39 +86,41 @@ class MyApp extends ConsumerWidget {
     // Initialize notification service
     ref.watch(notificationInitProvider);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: currentLocale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('es', ''),
-        Locale('fr', ''),
-        Locale('pt', ''),
-        Locale('zh', ''),
-      ],
-      routes: {
-        '/home': (context) => const HomePage(),
-        '/onboarding': (context) => const AdaptiveOnboardingPage(),
-        '/habits': (context) =>
-            const HomePage(), // ← Agregado para solucionar el error de ruta
-      },
-      home: authInit.when(
-        data: (_) {
-          if (onboardingComplete) {
-            return const LandingPage();
-          }
-          return const AdaptiveOnboardingPage();
+    return WithFastTimeBanner(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: currentLocale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''),
+          Locale('es', ''),
+          Locale('fr', ''),
+          Locale('pt', ''),
+          Locale('zh', ''),
+        ],
+        routes: {
+          '/home': (context) => const HomePage(),
+          '/onboarding': (context) => const AdaptiveOnboardingPage(),
+          '/habits': (context) =>
+              const HomePage(), // ← Agregado para solucionar el error de ruta
         },
-        loading: () =>
-            const Scaffold(body: Center(child: CircularProgressIndicator())),
-        error: (error, stack) =>
-            Scaffold(body: Center(child: Text('Error: $error'))),
+        home: authInit.when(
+          data: (_) {
+            if (onboardingComplete) {
+              return const LandingPage();
+            }
+            return const AdaptiveOnboardingPage();
+          },
+          loading: () =>
+              const Scaffold(body: Center(child: CircularProgressIndicator())),
+          error: (error, stack) =>
+              Scaffold(body: Center(child: Text('Error: $error'))),
+        ),
       ),
     );
   }

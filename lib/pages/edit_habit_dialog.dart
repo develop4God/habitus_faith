@@ -111,8 +111,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = widget.l10n;
-    final habitColor =
-        selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -238,7 +236,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                      color: color.withOpacity(0.4),
+                                      color:
+                                          color.withValues(alpha: 0.4),
                                       blurRadius: 8)
                                 ]
                               : [],

@@ -250,6 +250,18 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
             return ModernWeeklyCalendar(
               habits: filtrados,
               initialDate: DateTime.now(),
+              onComplete: (habitId) async {
+                debugPrint('HabitsPage: completando hábito $habitId');
+                await ref
+                    .read(jsonHabitsNotifierProvider.notifier)
+                    .completeHabit(habitId);
+              },
+              onUncheck: (habitId) async {
+                debugPrint('HabitsPage: desmarcando hábito $habitId');
+                await ref
+                    .read(jsonHabitsNotifierProvider.notifier)
+                    .uncheckHabit(habitId);
+              },
             );
           },
           loading: () {

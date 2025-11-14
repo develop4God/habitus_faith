@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/language_provider.dart';
+import 'package:habitus_faith/core/providers/clock_provider.dart';
+import 'package:habitus_faith/core/services/time/clock.dart';
 import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
 import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
@@ -18,6 +21,8 @@ class SettingsPage extends ConsumerWidget {
     final currentLanguage =
         ref.watch(appLanguageProvider.notifier).currentLanguage;
     final currentMode = ref.watch(displayModeProvider);
+    final clock = ref.watch(clockProvider);
+    const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
 
     return Scaffold(
       appBar: AppBar(
@@ -82,6 +87,63 @@ class SettingsPage extends ConsumerWidget {
                 _showDisplayModeDialog(context, ref, l10n, currentMode),
           ),
           const Divider(),
+          // Developer Settings Section (only visible in debug mode)
+          if (kDebugMode) ...[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Developer Settings',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+            ListTile(
+              // ignore: prefer_const_constructors
+              leading: Icon(
+                fastTimeEnabled ? Icons.fast_forward : Icons.schedule,
+                color: fastTimeEnabled ? Colors.orange : Colors.grey,
+              ),
+              title: const Text('Time Acceleration'),
+              // ignore: prefer_const_constructors
+              subtitle: Text(
+                fastTimeEnabled
+                    ? 'ENABLED: 288x speed (1 week in 35 min)'
+                    : 'Disabled (use --dart-define=FAST_TIME=true)',
+              ),
+              trailing: fastTimeEnabled
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '288x',
+                        style: TextStyle(
+                          color: Colors.orange.shade900,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+            if (fastTimeEnabled && clock is DebugClock)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Current simulated time: ${clock.now()}',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.orange,
+                      ),
+                ),
+              ),
+            const Divider(),
+          ],
         ],
       ),
     );

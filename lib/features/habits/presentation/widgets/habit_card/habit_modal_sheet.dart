@@ -24,11 +24,16 @@ class HabitModalSheet {
       backgroundColor: Colors.white, // Fondo blanco detrás del modal
       enableDrag: true,
       isDismissible: true,
-      builder: (ctx) => Container(
-        constraints: maxHeight != null
-            ? BoxConstraints(maxHeight: maxHeight)
-            : const BoxConstraints(maxHeight: 480),
-        child: child,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
+        ),
+        child: Container(
+          constraints: maxHeight != null
+              ? BoxConstraints(maxHeight: maxHeight)
+              : const BoxConstraints(maxHeight: 480),
+          child: child,
+        ),
       ),
     );
   }
@@ -77,10 +82,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
     debugPrint(
         'HabitModalContent.didUpdateWidget: INICIO - completed=$completed, widget.initialCompleted=${widget.initialCompleted}, oldWidget.initialCompleted=${oldWidget.initialCompleted}');
     if (completed != widget.initialCompleted) {
-      debugPrint('HabitModalContent.didUpdateWidget: completed cambiado de ' +
-          completed.toString() +
-          " a " +
-          widget.initialCompleted.toString());
+      debugPrint(
+          'HabitModalContent.didUpdateWidget: completed cambiado de $completed a ${widget.initialCompleted}');
       setState(() {
         completed = widget.initialCompleted;
         debugPrint(
@@ -144,15 +147,12 @@ class _HabitModalContentState extends State<HabitModalContent> {
         'HabitModalSheet.build: habitName={widget.habitName}, completed=$completed');
     debugPrint(
         'HabitModalSheet.build: checkbox value=$completed, tachado=${completed ? 'true' : 'false'}');
-    return Padding(
-      padding:
-          MediaQuery.of(context).viewInsets, // Ajuste automático con teclado
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
               Row(
                 children: [
                   Checkbox(
@@ -268,7 +268,6 @@ class _HabitModalContentState extends State<HabitModalContent> {
             ],
           ),
         ),
-      ),
     );
   }
 }
