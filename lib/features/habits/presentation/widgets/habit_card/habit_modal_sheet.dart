@@ -153,121 +153,118 @@ class _HabitModalContentState extends State<HabitModalContent> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: completed,
-                    onChanged: (val) {
-                      debugPrint(
-                          'HabitModalSheet: Checkbox onChanged llamado, valor=${val.toString()}');
-                      _updateCompleted(val ?? false);
-                      debugPrint(
-                          'HabitModalSheet: Después de _updateCompleted, completed=$completed');
-                    },
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      widget.habitName,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        decoration:
-                            completed ? TextDecoration.lineThrough : null,
-                      ),
+            Row(
+              children: [
+                Checkbox(
+                  value: completed,
+                  onChanged: (val) {
+                    debugPrint(
+                        'HabitModalSheet: Checkbox onChanged llamado, valor=${val.toString()}');
+                    _updateCompleted(val ?? false);
+                    debugPrint(
+                        'HabitModalSheet: Después de _updateCompleted, completed=$completed');
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    widget.habitName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      decoration: completed ? TextDecoration.lineThrough : null,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              // Subtareas: barra tipo botón que se transforma en campo de texto
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: showInput
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _subtaskController,
-                                autofocus: true,
-                                decoration: InputDecoration(
-                                  hintText: 'Nueva subtarea...',
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16)),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                ),
-                                onSubmitted: (text) {
-                                  if (text.trim().isNotEmpty) {
-                                    _addSubtask(text.trim());
-                                  }
-                                },
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            // Subtareas: barra tipo botón que se transforma en campo de texto
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: showInput
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _subtaskController,
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                hintText: 'Nueva subtarea...',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16)),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              icon: const Icon(Icons.check,
-                                  color: Colors.purple, size: 28),
-                              onPressed: () {
-                                final text = _subtaskController.text.trim();
-                                if (text.isNotEmpty) {
-                                  _addSubtask(text);
+                              onSubmitted: (text) {
+                                if (text.trim().isNotEmpty) {
+                                  _addSubtask(text.trim());
                                 }
                               },
                             ),
-                          ],
-                        ),
-                      )
-                    : ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey.shade100,
-                          foregroundColor: Colors.purple.shade700,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                                color: Colors.purple.shade100, width: 1),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            showInput = true;
-                          });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(Icons.add,
-                                color: Colors.purple, size: 24),
-                            const SizedBox(width: 8),
-                            Text('Subtareas',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.purple.shade700)),
-                            const Spacer(),
-                          ],
-                        ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.check,
+                                color: Colors.purple, size: 28),
+                            onPressed: () {
+                              final text = _subtaskController.text.trim();
+                              if (text.isNotEmpty) {
+                                _addSubtask(text);
+                              }
+                            },
+                          ),
+                        ],
                       ),
-              ),
-              const SizedBox(height: 12),
-              ...subtasks.map((s) => ListTile(
-                    title: Text(s),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
+                    )
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade100,
+                        foregroundColor: Colors.purple.shade700,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                              color: Colors.purple.shade100, width: 1),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                      ),
                       onPressed: () {
-                        _removeSubtask(s);
+                        setState(() {
+                          showInput = true;
+                        });
                       },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.add, color: Colors.purple, size: 24),
+                          const SizedBox(width: 8),
+                          Text('Subtareas',
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.purple.shade700)),
+                          const Spacer(),
+                        ],
+                      ),
                     ),
-                  )),
-            ],
-          ),
+            ),
+            const SizedBox(height: 12),
+            ...subtasks.map((s) => ListTile(
+                  title: Text(s),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      _removeSubtask(s);
+                    },
+                  ),
+                )),
+          ],
         ),
+      ),
     );
   }
 }

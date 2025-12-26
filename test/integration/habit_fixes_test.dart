@@ -206,8 +206,7 @@ void main() {
     test('DebugClock rejects invalid multipliers', () {
       expect(() => DebugClock(daySpeedMultiplier: 0), throwsArgumentError);
       expect(() => DebugClock(daySpeedMultiplier: -1), throwsArgumentError);
-      expect(
-          () => DebugClock(daySpeedMultiplier: 1001), throwsArgumentError);
+      expect(() => DebugClock(daySpeedMultiplier: 1001), throwsArgumentError);
     });
   });
 

@@ -236,8 +236,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                      color:
-                                          color.withValues(alpha: 0.4),
+                                      color: color.withValues(alpha: 0.4),
                                       blurRadius: 8)
                                 ]
                               : [],
