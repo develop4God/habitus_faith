@@ -9,7 +9,7 @@ import java.util.Properties
 import java.io.FileInputStream
 
 val keystoreProperties = Properties().apply {
-    val keystorePropertiesFile = rootProject.file("../key.properties")
+    val keystorePropertiesFile = project.file("../key.properties")
     if (keystorePropertiesFile.exists()) {
         load(FileInputStream(keystorePropertiesFile))
     }
@@ -40,10 +40,15 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(keystoreProperties["storeFile"])
-            storePassword = keystoreProperties["storePassword"] as String?
-            keyAlias = keystoreProperties["keyAlias"] as String?
-            keyPassword = keystoreProperties["keyPassword"] as String?
+            val storeFilePath = keystoreProperties.getProperty("storeFile")
+            if (storeFilePath != null && storeFilePath.isNotBlank()) {
+                storeFile = project.file(storeFilePath)
+            } else {
+                throw GradleException("storeFile no está definido o está vacío en key.properties")
+            }
+            storePassword = keystoreProperties.getProperty("storePassword") ?: ""
+            keyAlias = keystoreProperties.getProperty("keyAlias") ?: ""
+            keyPassword = keystoreProperties.getProperty("keyPassword") ?: ""
         }
     }
     buildTypes {
