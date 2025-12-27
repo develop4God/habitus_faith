@@ -58,8 +58,8 @@ google-services.json
 .settings/
 
 # Almacenes de llaves (Keystores)
-*.jks
 *.keystore
+upload-keystore.jks
 *.p12
 *.pem
 
