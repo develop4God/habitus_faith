@@ -17,13 +17,13 @@
 [![Firebase](https://img.shields.io/badge/firebase-enabled-orange)]()
 [![AI](https://img.shields.io/badge/AI-Gemini%201.5-purple)]()
 
-> **Make faith your best daily habit** - Track spiritual growth with intelligent habit generation, Bible verse enrichment, and personalized AI coaching.
+> **Make faith your best daily habit** – Track spiritual growth with intelligent habit generation, Bible verse enrichment, and personalized AI coaching.
 
-## 🌟 What Makes Us Different
+### 🌟 What Makes Us Different
 
-### 🤖 AI-Powered Micro-Habits Generator
-- Gemini 1.5 Flash Integration
-- Smart category inference (Spiritual, Physical, Mental, Relational)
+#### 🤖 AI-Powered Micro-Habits Generator
+- Gemini 1.5 Flash integration
+- Automatic smart category (Spiritual, Physical, Mental, Relational)
 - Bible verse enrichment
 - Multi-language support
 - Rate-limited for sustainability
@@ -33,42 +33,46 @@
 User Goal: "Pray more consistently"
 ↓
 AI Generates 3 Habits:
-1. 🙏 Pray 3min after waking up before checking your phone  
+1. 🙏 Pray 3min after waking before your phone  
    📖 Psalms 5:3: "In the morning, LORD, you hear my voice..."
    💡 Begin your day prioritizing God
 
-2. 🙏 Write a gratitude prayer before sleeping  
+2. 🙏 Write a gratitude prayer before going to bed  
    📖 1 Thessalonians 5:18: "Give thanks in all circumstances..."
    💡 Cultivate a grateful heart
 
-3. 🙏 Read a Psalm during lunch  
+3. 🙏 Read a Psalm at lunchtime  
    📖 Psalms 119:105: "Your word is a lamp to my feet..."
-   💡 Nourish your spirit during the day
+   💡 Feed your spirit midday
 ```
 
-### 📊 Intelligent Habit Tracking
-- Streak monitoring, calendar heatmap
-- Same-day protection against duplicates
+#### 📊 Intelligent Habit Tracking
+- Automatic streak monitoring, calendar heatmap, longest record
+- Same-day protection (no duplicate completions)
 - Offline support
 
-### 📖 Integrated Bible Reader
+#### 📖 Integrated Bible Reader
 - 4 Spanish versions
-- Smart verse lookup, supports abbreviations and numbered books
+- Smart verse lookup and abbreviations (Gn, Ex, Sal, Mt, Ro, Ap)
+- Numbered books (1-3 John, 1-2 Corinthians, etc.)
 
-### 🔒 Security & Privacy
-- Anonymous authentication, user-scoped data
+#### 🔒 Security & Privacy
+- Anonymous authentication; no personal data required
+- User-scoped data
 - Input sanitization, atomic rate limiting
 
-### 🌍 Internationalization
-- 78 test suite across all languages
-- No hardcoded strings; all UI elements localized
+#### 🌍 Internationalization
+- 78 test suite for all languages
+- No hardcoded strings; every UI is localized
 
-## 🚀 Quick Start
+---
+
+### 🚀 Quick Start
 
 **Prerequisites:**  
 - Flutter SDK 3.0+  
 - Firebase account  
-- Gemini API key (optional for AI features)
+- Gemini API key (optional for AI)
 
 **Install dependencies:**  
 ```bash
@@ -76,7 +80,7 @@ flutter pub get
 ```
 
 **Configure environment:**  
-Create `.env` in root:  
+Create `.env` in the project root:  
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-1.5-flash
@@ -90,7 +94,7 @@ flutter test
 
 **Setup Firebase:**  
 1. Go to Firebase Console  
-2. Select project  
+2. Select your project  
 3. Enable Authentication → Anonymous  
 4. Create Firestore DB → Production mode
 
@@ -99,13 +103,15 @@ flutter test
 flutter run
 ```
 
-## 📚 Features
+---
+
+### 📚 Core Features
 - AI micro-habits generator
 - Custom and trackable habits
 - Bible reader
-- Streak and progress visualization
+- Streak and progress visualizations
 
-## 🏗️ Architecture
+### 🏗️ Architecture
 - **Frontend:** Flutter
 - **State Management:** Riverpod
 - **Backend:** Firebase
@@ -113,51 +119,52 @@ flutter run
 - **i18n:** flutter_localizations
 - **Testing:** flutter_test
 
-## 📈 Roadmap
-- v1.1: Push notifications, reports
-- v2.0: ML-based predictions, wearables integration
+### 📈 Roadmap
+- v1.1: Push notifications, weekly reports
+- v2.0: ML-based predictions, wearables integration, group challenges
 
-## 🤝 Contributing
-
+### 🤝 Contributing
 1. Fork repository  
-2. Feature branch  
+2. Create your branch  
 3. Add tests  
 4. Ensure all tests pass  
 5. Format and analyze code  
 6. Pull request
 
-## 📄 License / Licencia
+---
 
-**English**
+### 📄 License
 
 This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
 
 You are free to:
 
-- **Share** — copy and redistribute the material in any medium or format  
-- **Adapt** — remix, transform, and build upon the material  
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
 
 Under the following terms:
 
-- **Attribution (BY)** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.  
-- **NonCommercial (NC)** — You may not use the material for commercial purposes.  
+- **Attribution (BY):** You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- **NonCommercial (NC):** You may not use the material for commercial purposes.
 
 For the full license text, see the LICENSE file or visit:  
 - [Summary](https://creativecommons.org/licenses/by-nc/4.0/)  
 - [Legal Code](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
 
+© 2024 develop4God
+
 ---
 
-## 🙏 Acknowledgments
-- Flutter, Riverpod, Firebase, Gemini, Open Source
+### 🙏 Acknowledgments
+Flutter, Riverpod, Firebase, Gemini, and the open source community
 
-## 📞 Support
+### 📞 Support
 - Email: support@develop4god.com  
 - Docs: [docs/README.md](docs/README.md)  
 - Issues: [GitHub Issues](https://github.com/develop4God/habitus_faith/issues)  
 - Discussions: [GitHub Discussions](https://github.com/develop4God/habitus_faith/discussions)
 
-## ⚡ Quick Commands
+### ⚡ Quick Commands
 ```bash
 flutter pub get
 flutter gen-l10n
@@ -195,11 +202,11 @@ flutter clean && flutter pub get
 [![Firebase](https://img.shields.io/badge/firebase-enabled-orange)]()
 [![AI](https://img.shields.io/badge/AI-Gemini%201.5-purple)]()
 
-> **Haz que la fe sea tu mejor hábito diario** - Monitorea tu crecimiento espiritual con generación inteligente de hábitos, enriquecimiento de versículos bíblicos y coaching personalizado por IA.
+> **Haz que la fe sea tu mejor hábito diario** – Monitorea tu crecimiento espiritual con generación inteligente de hábitos, enriquecimiento de versículos bíblicos y coaching personalizado por IA.
 
-## 🌟 ¿Qué nos hace diferentes?
+### 🌟 ¿Qué nos hace diferentes?
 
-### 🤖 Generador IA de Micro-Hábitos
+#### 🤖 Generador IA de Micro-Hábitos
 - Integración Gemini 1.5 Flash
 - Inferencia automática de categoría (Espiritual, Física, Mental, Relacional)
 - Enriquecimiento con versículos bíblicos
@@ -210,10 +217,10 @@ flutter clean && flutter pub get
 ```
 Meta: "Orar más consistentemente"
 ↓
-IA genera 3 hábitos:
+La IA genera 3 hábitos:
 1. 🙏 Orar 3min al despertar antes de mirar el teléfono  
    📖 Salmos 5:3: "Oh Jehová, de mañana oirás mi voz..."
-   💡 Empezar el día poniendo a Dios como prioridad
+   💡 Comenzar el día poniendo a Dios como prioridad
 
 2. 🙏 Escribir una oración de gratitud antes de dormir  
    📖 1 Tesalonicenses 5:18: "Dad gracias en todo..."
@@ -224,66 +231,72 @@ IA genera 3 hábitos:
    💡 Nutrir el espíritu a mitad del día
 ```
 
-### 📊 Seguimiento Inteligente de Hábitos
-- Monitoreo de rachas y mapa de calor
-- Protección de duplicados el mismo día
+#### 📊 Seguimiento Inteligente de Hábitos
+- Monitoreo automático de rachas, mapa de calor, récord más largo
+- Protección el mismo día (sin registros duplicados)
 - Soporte offline
 
-### 📖 Lector Bíblico Integrado
+#### 📖 Lector Bíblico Integrado
 - 4 versiones en español
-- Búsqueda inteligente de versículos, admite abreviaturas y libros numerados
+- Búsqueda inteligente de versículos y abreviaturas (Gn, Ex, Sal, Mt, Ro, Ap)
+- Libros numerados (1-3 Juan, 1-2 Corintios, etc.)
 
-### 🔒 Seguridad y Privacidad
-- Autenticación anónima, datos aislados por usuario
+#### 🔒 Seguridad y Privacidad
+- Autenticación anónima, sin datos personales
+- Datos aislados por usuario
 - Sanitización de entradas, límite atómico de uso
 
-### 🌍 Internacionalización
-- 78 tests en todos los idiomas
-- Sin textos fijos; toda la interfaz traducida
+#### 🌍 Internacionalización
+- Suite de 78 tests en todos los idiomas
+- Sin textos codificados; toda la interfaz traducida
 
-## 🚀 Inicio rápido
+---
+
+### 🚀 Inicio Rápido
 
 **Prerrequisitos:**  
 - Flutter SDK 3.0+  
 - Cuenta de Firebase  
-- Clave de API Gemini (opcional para IA)
+- Clave API Gemini (opcional para IA)
 
-**Instala dependencias:**  
+**Instalar dependencias:**  
 ```bash
 flutter pub get
 ```
 
-**Configura el entorno:**  
-Crea el archivo `.env` en la raíz:  
+**Configurar el entorno:**  
+Crea el archivo `.env` en la raíz del proyecto:  
 ```env
 GEMINI_API_KEY=tu_clave_api_gemini_aquí
 GEMINI_MODEL=gemini-1.5-flash
 ```
 
-**Ejecuta tests:**  
+**Ejecutar tests:**  
 ```bash
 flutter test
 # Resultado: ✅ 78 tests exitosos
 ```
 
-**Configura Firebase:**  
-1. Ve a Firebase Console  
-2. Selecciona el proyecto  
-3. Activa Autenticación → Anónimo  
+**Configurar Firebase:**  
+1. Ve a la consola de Firebase  
+2. Selecciona tu proyecto  
+3. Activa Autenticación → Anónima  
 4. Crea Firestore DB → Modo producción
 
-**Ejecuta la app:**  
+**Ejecutar la app:**  
 ```bash
 flutter run
 ```
 
-## 📚 Funcionalidades
+---
+
+### 📚 Funcionalidades
 - Generador IA de micro-hábitos
 - Hábitos personalizables y rastreables
 - Lector bíblico
 - Visualización de rachas y progreso
 
-## 🏗️ Arquitectura
+### 🏗️ Arquitectura
 - **Frontend:** Flutter
 - **Gestión de estado:** Riverpod
 - **Backend:** Firebase
@@ -291,51 +304,52 @@ flutter run
 - **Internacionalización:** flutter_localizations
 - **Testing:** flutter_test
 
-## 📈 Próximos pasos
-- v1.1: Notificaciones, reportes
-- v2.0: Predicciones con ML, integración con wearables
+### 📈 Roadmap
+- v1.1: Notificaciones push, reportes semanales
+- v2.0: Predicción con ML, integración con wearables, retos de grupo
 
-## 🤝 Contribuye
-
+### 🤝 Cómo contribuir
 1. Haz un fork  
 2. Crea tu rama  
 3. Agrega tests  
 4. Verifica que todo pase  
-5. Formatea y analiza código  
+5. Formatea y analiza la app  
 6. Pull request
 
-## 📄 License / Licencia
+---
 
-**Español**
+### 📄 Licencia
 
 Este trabajo está licenciado bajo la Licencia Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0).
 
 Puedes:
 
-- **Compartir** — copiar y redistribuir el material en cualquier medio o formato  
-- **Adaptar** — remezclar, transformar y construir sobre el material  
+- **Compartir** — copiar y redistribuir el material en cualquier medio o formato
+- **Adaptar** — remezclar, transformar y construir sobre el material
 
 Bajo las siguientes condiciones:
 
-- **Atribución (BY)** — Debes dar crédito adecuado, proporcionar un enlace a la licencia e indicar si se realizaron cambios.  
-- **NoComercial (NC)** — No puedes utilizar el material con fines comerciales.  
+- **Atribución (BY):** Debes dar crédito, proporcionar un enlace a la licencia e indicar si realizaste cambios.
+- **NoComercial (NC):** No puedes utilizar el material con fines comerciales.
 
-Para leer el texto completo de la licencia, ver el archivo LICENSE o visitar:  
+Para leer el texto completo de la licencia, véase el archivo LICENSE o visita:  
 - [Resumen](https://creativecommons.org/licenses/by-nc/4.0/deed.es)  
 - [Código Legal](https://creativecommons.org/licenses/by-nc/4.0/legalcode.es)
 
-© 2025 develop4God
+© 2024 develop4God
 
-## 🙏 Agradecimientos
-- Flutter, Riverpod, Firebase, Gemini, Comunidad open source
+---
 
-## 📞 Soporte
-- Email: @develop4god@gmail.com  
+### 🙏 Agradecimientos
+Flutter, Riverpod, Firebase, Gemini y la comunidad open source.
+
+### 📞 Soporte
+- Email: support@develop4god.com  
 - Docs: [docs/README.md](docs/README.md)  
 - Issues: [GitHub Issues](https://github.com/develop4God/habitus_faith/issues)  
 - Discusiones: [GitHub Discussions](https://github.com/develop4God/habitus_faith/discussions)
 
-## ⚡ Comandos rápidos
+### ⚡ Comandos rápidos
 ```bash
 flutter pub get
 flutter gen-l10n
@@ -353,7 +367,7 @@ flutter clean && flutter pub get
 *Haz que la fe sea tu mejor hábito diario* ✨  
 
 **Versión**: 1.0.0  
-**Última actualización**: Octubre 2024  
+**Última actualización**: Octubre 2025  
 **Estado**: ✅ Listo para producción
 
 </details>
