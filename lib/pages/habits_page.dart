@@ -240,38 +240,57 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       builder: (context, ref, _) {
         final habitsAsync = ref.watch(jsonHabitsStreamProvider);
         debugPrint('HabitsPage.build: estado de habitsAsync: $habitsAsync');
-        return habitsAsync.when(
-          data: (habits) {
-            debugPrint(
-                'HabitsPage.build: data recibida con ${habits.length} hábitos');
-            final filtrados = _filterHabits(habits);
-            debugPrint(
-                'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
-            return ModernWeeklyCalendar(
-              habits: filtrados,
-              initialDate: DateTime.now(),
-              onComplete: (habitId) async {
-                debugPrint('HabitsPage: completando hábito $habitId');
-                await ref
-                    .read(jsonHabitsNotifierProvider.notifier)
-                    .completeHabit(habitId);
-              },
-              onUncheck: (habitId) async {
-                debugPrint('HabitsPage: desmarcando hábito $habitId');
-                await ref
-                    .read(jsonHabitsNotifierProvider.notifier)
-                    .uncheckHabit(habitId);
-              },
-            );
-          },
-          loading: () {
-            debugPrint('HabitsPage.build: cargando hábitos...');
-            return const Center(child: CircularProgressIndicator());
-          },
-          error: (e, st) {
-            debugPrint('HabitsPage.build: error cargando hábitos: $e');
-            return const Center(child: Text('Error cargando hábitos'));
-          },
+        return Scaffold(
+          body: habitsAsync.when(
+            data: (habits) {
+              debugPrint(
+                  'HabitsPage.build: data recibida con ${habits.length} hábitos');
+              final filtrados = _filterHabits(habits);
+              debugPrint(
+                  'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
+              return ModernWeeklyCalendar(
+                habits: filtrados,
+                initialDate: DateTime.now(),
+                onComplete: (habitId) async {
+                  debugPrint('HabitsPage: completando hábito $habitId');
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .completeHabit(habitId);
+                },
+                onUncheck: (habitId) async {
+                  debugPrint('HabitsPage: desmarcando hábito $habitId');
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .uncheckHabit(habitId);
+                },
+              );
+            },
+            loading: () {
+              debugPrint('HabitsPage.build: cargando hábitos...');
+              return const Center(child: CircularProgressIndicator());
+            },
+            error: (e, st) {
+              debugPrint('HabitsPage.build: error cargando hábitos: $e');
+              return const Center(child: Text('Error cargando hábitos'));
+            },
+          ),
+          floatingActionButton: Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return FloatingActionButton(
+                key: const Key('add_habit_fab'),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AddHabitDiscoveryDialog(l10n: l10n),
+                  );
+                },
+                backgroundColor: Colors.purple,
+                child: const Icon(Icons.add, color: Colors.white),
+                tooltip: l10n.addHabit,
+              );
+            },
+          ),
         );
       },
     );
