@@ -148,38 +148,44 @@ class SettingsPage extends ConsumerWidget {
               ),
             const Divider(),
           ],
+          // Botón para exportar estadísticas
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.download),
+              label: const Text('Exportar estadísticas (JSON)'),
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                final statsJson = prefs.getString('user_statistics');
+                if (statsJson == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('No hay estadísticas para exportar.')),
+                  );
+                  return;
+                }
+                try {
+                  final downloadsDir = await getExternalStorageDirectory();
+                  final now =
+                      DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+                  final file = File(
+                      '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$now.json');
+                  await file.writeAsString(statsJson);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text('Estadísticas exportadas en: \n${file.path}')),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error al exportar: $e')),
+                  );
+                }
+              },
+            ),
+          ),
         ],
-      ),
-      // Botón para exportar estadísticas
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: ElevatedButton.icon(
-          icon: const Icon(Icons.download),
-          label: const Text('Exportar estadísticas (JSON)'),
-          onPressed: () async {
-            final prefs = await SharedPreferences.getInstance();
-            final statsJson = prefs.getString('user_statistics');
-            if (statsJson == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('No hay estadísticas para exportar.')),
-              );
-              return;
-            }
-            try {
-              final downloadsDir = await getExternalStorageDirectory();
-              final now = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-              final file = File('${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$now.json');
-              await file.writeAsString(statsJson);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Estadísticas exportadas en: \n${file.path}')),
-              );
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error al exportar: $e')),
-              );
-            }
-          },
-        ),
       ),
     );
   }
