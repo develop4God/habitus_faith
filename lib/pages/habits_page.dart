@@ -286,8 +286,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                   );
                 },
                 backgroundColor: Colors.purple,
-                child: const Icon(Icons.add, color: Colors.white),
                 tooltip: l10n.addHabit,
+                child: const Icon(Icons.add, color: Colors.white),
               );
             },
           ),
