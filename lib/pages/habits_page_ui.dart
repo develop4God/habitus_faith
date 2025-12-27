@@ -7,11 +7,15 @@ import '../l10n/app_localizations.dart';
 class ModernWeeklyCalendar extends StatefulWidget {
   final List<Habit> habits;
   final DateTime? initialDate;
+  final Function(String habitId)? onComplete;
+  final Function(String habitId)? onUncheck;
 
   const ModernWeeklyCalendar({
     super.key,
     required this.habits,
     this.initialDate,
+    this.onComplete,
+    this.onUncheck,
   });
 
   @override
@@ -228,31 +232,17 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         // Después de cerrar el diálogo, refrescar la vista
                         setState(() {});
                       },
-                      onComplete: (id) {
+                      onComplete: (id) async {
                         debugPrint('HabitsPageUI: marcado hábito $id');
-                        setState(() {
-                          final idx =
-                              widget.habits.indexWhere((h) => h.id == id);
-                          if (idx != -1) {
-                            widget.habits[idx] = widget.habits[idx]
-                                .copyWith(completedToday: true);
-                            debugPrint(
-                                'HabitsPageUI: habit ${widget.habits[idx].name} marcado como completado');
-                          }
-                        });
+                        if (widget.onComplete != null) {
+                          await widget.onComplete!(id);
+                        }
                       },
-                      onUncheck: (id) {
+                      onUncheck: (id) async {
                         debugPrint('HabitsPageUI: desmarcado hábito $id');
-                        setState(() {
-                          final idx =
-                              widget.habits.indexWhere((h) => h.id == id);
-                          if (idx != -1) {
-                            widget.habits[idx] = widget.habits[idx]
-                                .copyWith(completedToday: false);
-                            debugPrint(
-                                'HabitsPageUI: habit ${widget.habits[idx].name} desmarcado como completado');
-                          }
-                        });
+                        if (widget.onUncheck != null) {
+                          await widget.onUncheck!(id);
+                        }
                       },
                     );
                   },

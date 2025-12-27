@@ -12,8 +12,8 @@ class CompactHabitCard extends ConsumerStatefulWidget {
   final Habit habit;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
-  final Function(String) onComplete;
-  final Function(String) onUncheck;
+  final Future<void> Function(String) onComplete;
+  final Future<void> Function(String) onUncheck;
 
   const CompactHabitCard({
     super.key,

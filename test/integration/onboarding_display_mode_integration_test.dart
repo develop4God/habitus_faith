@@ -42,7 +42,8 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Step 1: Verify display mode selection page is shown
       expect(
@@ -53,11 +54,13 @@ void main() {
 
       // Step 2: Select compact mode
       await tester.tap(find.byKey(const Key('compact_mode_card')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Step 3: Tap select mode button
       await tester.tap(find.byKey(const Key('select_mode_button')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Step 4: Verify navigation to onboarding page
       expect(
@@ -95,7 +98,8 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Scroll to make advanced mode card visible
       await tester.dragUntilVisible(
@@ -103,15 +107,18 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -50),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Select advanced mode
       await tester.tap(find.byKey(const Key('advanced_mode_card')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Tap select mode button
       await tester.tap(find.byKey(const Key('select_mode_button')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Verify navigation to onboarding page
       expect(
@@ -146,7 +153,8 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(
         loadedMode,
@@ -176,7 +184,8 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(
         loadedMode,
@@ -206,7 +215,8 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(
         isSelected,
@@ -237,7 +247,8 @@ void main() {
             ),
           ),
         );
-        await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
 
         expect(
           isSelected,
@@ -272,11 +283,13 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // First select compact mode
       await tester.tap(find.byKey(const Key('compact_mode_card')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Scroll to make advanced mode card visible
       await tester.dragUntilVisible(
@@ -284,15 +297,18 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -50),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Change to advanced mode
       await tester.tap(find.byKey(const Key('advanced_mode_card')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Confirm selection
       await tester.tap(find.byKey(const Key('select_mode_button')));
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Verify final selection was advanced
       final savedMode = prefs.getString('display_mode');
@@ -327,7 +343,8 @@ void main() {
           ),
         ),
       );
-      await tester.pump(); await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Try to tap the button without selecting a mode
       final selectButton = tester.widget<ElevatedButton>(
