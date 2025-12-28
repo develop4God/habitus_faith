@@ -6,7 +6,7 @@ gradle-wrapper.jar
 /local.properties
 GeneratedPluginRegistrant.java
 .cxx/
-google-services.json
+app/google-services.json
 
 # Archivos y carpetas generados por Flutter y el entorno de desarrollo
 .flutter-plugins

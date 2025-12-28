@@ -74,7 +74,7 @@
   "@welcomeToHabitusFaith": {
     "description": "Onboarding welcome title"
   },
-  "onboardingWelcomeMessage": "Te apoyaremos junto con IA 🤖 a personalizar tus primeras rutinas, según tus preferencias.",
+  "onboardingWelcomeMessage": "Te apoyaremos a personalizar tus primeras rutinas, según tus preferencias.",
   "@onboardingWelcomeMessage": {
     "description": "Onboarding welcome message"
   },
@@ -400,9 +400,9 @@
   "@generateMicroHabits": {
     "description": "Título de la página generadora de micro-hábitos"
   },
-  "aiGeneratedHabits": "Hábitos Generados por IA",
+  "aiGeneratedHabits": "Hábitos Generados Automáticamente",
   "@aiGeneratedHabits": {
-    "description": "Título para la sección de hábitos generados por IA"
+    "description": "Título para la sección de hábitos generados automáticamente"
   },
   "yourGoal": "Tu Meta",
   "@yourGoal": {
@@ -604,7 +604,7 @@
   "advancedMode": "Modo avanzado",
   "advancedModeDescription": "Experiencia completa con análisis y perspectivas",
   "advancedModeFeature1": "Análisis detallados de hábitos",
-  "advancedModeFeature2": "Información impulsada por IA",
+  "advancedModeFeature2": "Información avanzada y perspectivas personalizadas.",
   "advancedModeFeature3": "Personalización avanzada",
   "changeAnytime": "Puedes cambiar esta configuración en cualquier momento en las preferencias",
   "selectMode": "Seleccionar modo",
@@ -620,13 +620,13 @@
   "@createCustomHabit": {
     "description": "Descripción para creación manual de hábito"
   },
-  "generateWithAI": "Generar con IA",
+  "generateWithAI": "Generar automáticamente",
   "@generateWithAI": {
-    "description": "Opción para generar hábitos con IA"
+    "description": "Opción para generar hábitos automáticamente"
   },
-  "aiCustomHabits": "Hábitos personalizados con IA",
+  "aiCustomHabits": "Hábitos personalizados automáticamente",
   "@aiCustomHabits": {
-    "description": "Descripción para hábitos generados por IA"
+    "description": "Descripción para hábitos generados automáticamente"
   },
   "previewHabitName": "Nombre del hábito",
   "@previewHabitName": {

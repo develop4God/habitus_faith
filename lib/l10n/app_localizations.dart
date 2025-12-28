@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// Onboarding welcome message
   ///
   /// In en, this message translates to:
-  /// **'We\'ll help you with AI 🤖 to personalize your first routines, according to your preferences.'**
+  /// **'We\'ll help you personalize your first routines, according to your preferences.'**
   String get onboardingWelcomeMessage;
 
   /// Onboarding instruction
@@ -716,10 +716,10 @@ abstract class AppLocalizations {
   /// **'Generate Micro-Habits'**
   String get generateMicroHabits;
 
-  /// Title for AI-generated habits section
+  /// Title for automatically generated habits section
   ///
   /// In en, this message translates to:
-  /// **'AI-Generated Habits'**
+  /// **'Automatically Generated Habits'**
   String get aiGeneratedHabits;
 
   /// Label for user goal input field
@@ -953,13 +953,13 @@ abstract class AppLocalizations {
   /// Second feature of advanced mode
   ///
   /// In en, this message translates to:
-  /// **'AI-powered insights'**
+  /// **'Advanced and personalized insights.'**
   String get advancedModeFeature2;
 
   /// Third feature of advanced mode
   ///
   /// In en, this message translates to:
-  /// **'Advanced customization'**
+  /// **'Third feature of advanced mode'**
   String get advancedModeFeature3;
 
   /// Message informing users they can change mode later
@@ -1010,16 +1010,16 @@ abstract class AppLocalizations {
   /// **'Create a custom habit'**
   String get createCustomHabit;
 
-  /// Option to generate habits with AI
+  /// Option to generate habits automatically
   ///
   /// In en, this message translates to:
-  /// **'Generate with AI'**
+  /// **'Generate automatically'**
   String get generateWithAI;
 
-  /// Description for AI-generated habits
+  /// Description for automatically generated habits
   ///
   /// In en, this message translates to:
-  /// **'Custom habits with AI'**
+  /// **'Automatically customized habits'**
   String get aiCustomHabits;
 
   /// Placeholder text for habit name in preview

@@ -345,7 +345,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get generateMicroHabits => 'Générer des Micro-Habitudes';
 
   @override
-  String get aiGeneratedHabits => 'Habitudes Générées par IA';
+  String get aiGeneratedHabits => 'Habitudes Générées Automatiquement';
 
   @override
   String get yourGoal => 'Votre Objectif';
@@ -483,7 +483,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get advancedModeFeature1 => 'Analyses détaillées des habitudes';
 
   @override
-  String get advancedModeFeature2 => 'Informations alimentées par l\'IA';
+  String get advancedModeFeature2 => 'Informations avancées et personnalisées.';
 
   @override
   String get advancedModeFeature3 => 'Personnalisation avancée';
@@ -516,10 +516,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createCustomHabit => 'Créer une habitude personnalisée';
 
   @override
-  String get generateWithAI => 'Générer avec IA';
+  String get generateWithAI => 'Générer automatiquement';
 
   @override
-  String get aiCustomHabits => 'Habitudes personnalisées avec IA';
+  String get aiCustomHabits => 'Habitudes personnalisées automatiquement';
 
   @override
   String get previewHabitName => 'Nom de l\'habitude';

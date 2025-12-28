@@ -444,9 +444,9 @@
   "@generateMicroHabits": {
     "description": "Titre de la page de génération de micro-habitudes"
   },
-  "aiGeneratedHabits": "Habitudes Générées par IA",
+  "aiGeneratedHabits": "Habitudes Générées Automatiquement",
   "@aiGeneratedHabits": {
-    "description": "Titre pour la section des habitudes générées par IA"
+    "description": "Titre pour la section des habitudes générées automatiquement"
   },
   "yourGoal": "Votre Objectif",
   "@yourGoal": {
@@ -600,7 +600,7 @@
   "advancedMode": "Mode avancé",
   "advancedModeDescription": "Expérience complète avec analyses et perspectives",
   "advancedModeFeature1": "Analyses détaillées des habitudes",
-  "advancedModeFeature2": "Informations alimentées par l'IA",
+  "advancedModeFeature2": "Informations avancées et personnalisées.",
   "advancedModeFeature3": "Personnalisation avancée",
   "changeAnytime": "Vous pouvez modifier ce paramètre à tout moment dans les préférences",
   "selectMode": "Sélectionner le mode",
@@ -616,13 +616,13 @@
   "@createCustomHabit": {
     "description": "Description pour la création manuelle d'habitude"
   },
-  "generateWithAI": "Générer avec IA",
+  "generateWithAI": "Générer automatiquement",
   "@generateWithAI": {
-    "description": "Option pour générer des habitudes avec IA"
+    "description": "Option pour générer des habitudes automatiquement"
   },
-  "aiCustomHabits": "Habitudes personnalisées avec IA",
+  "aiCustomHabits": "Habitudes personnalisées automatiquement",
   "@aiCustomHabits": {
-    "description": "Description pour les habitudes générées par IA"
+    "description": "Description pour les habitudes générées automatiquement"
   },
   "previewHabitName": "Nom de l'habitude",
   "@previewHabitName": {
