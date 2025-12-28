@@ -62,7 +62,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeToHabitusFaith => '欢迎来到信仰习惯';
 
   @override
-  String get onboardingWelcomeMessage => 'ZH: Welcome message';
+  String get onboardingWelcomeMessage => '我们将根据您的偏好帮助您个性化您的首批习惯。';
 
   @override
   String get selectUpToThreeHabits => '选择最多3个习惯开始您的旅程';
@@ -328,7 +328,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generateMicroHabits => '生成微习惯';
 
   @override
-  String get aiGeneratedHabits => 'AI生成的习惯';
+  String get aiGeneratedHabits => '自动生成的习惯';
 
   @override
   String get yourGoal => '你的目标';
@@ -455,7 +455,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get advancedModeFeature1 => '详细的习惯分析';
 
   @override
-  String get advancedModeFeature2 => 'AI驱动的见解';
+  String get advancedModeFeature2 => '高级和个性化见解。';
 
   @override
   String get advancedModeFeature3 => '高级自定义';
@@ -487,10 +487,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createCustomHabit => '创建一个自定义习惯';
 
   @override
-  String get generateWithAI => '使用AI生成';
+  String get generateWithAI => '自动生成';
 
   @override
-  String get aiCustomHabits => '使用AI的自定义习惯';
+  String get aiCustomHabits => '自动个性化习惯';
 
   @override
   String get previewHabitName => '习惯名称';

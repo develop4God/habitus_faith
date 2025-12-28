@@ -74,7 +74,7 @@
   "@welcomeToHabitusFaith": {
     "description": "Onboarding welcome title"
   },
-  "onboardingWelcomeMessage": "We'll help you with AI 🤖 to personalize your first routines, according to your preferences.",
+  "onboardingWelcomeMessage": "We'll help you personalize your first routines, according to your preferences.",
   "@onboardingWelcomeMessage": {
     "description": "Onboarding welcome message"
   },
@@ -448,9 +448,9 @@
   "@generateMicroHabits": {
     "description": "Title for micro-habits generator page"
   },
-  "aiGeneratedHabits": "AI-Generated Habits",
+  "aiGeneratedHabits": "Automatically Generated Habits",
   "@aiGeneratedHabits": {
-    "description": "Title for AI-generated habits section"
+    "description": "Title for automatically generated habits section"
   },
   "yourGoal": "Your Goal",
   "@yourGoal": {
@@ -634,11 +634,11 @@
   "@advancedModeFeature1": {
     "description": "First feature of advanced mode"
   },
-  "advancedModeFeature2": "AI-powered insights",
+  "advancedModeFeature2": "Advanced and personalized insights.",
   "@advancedModeFeature2": {
     "description": "Second feature of advanced mode"
   },
-  "advancedModeFeature3": "Advanced customization",
+  "advancedModeFeature3": "Third feature of advanced mode",
   "@advancedModeFeature3": {
     "description": "Third feature of advanced mode"
   },
@@ -680,13 +680,13 @@
   "@createCustomHabit": {
     "description": "Description for manual habit creation"
   },
-  "generateWithAI": "Generate with AI",
+  "generateWithAI": "Generate automatically",
   "@generateWithAI": {
-    "description": "Option to generate habits with AI"
+    "description": "Option to generate habits automatically"
   },
-  "aiCustomHabits": "Custom habits with AI",
+  "aiCustomHabits": "Automatically customized habits",
   "@aiCustomHabits": {
-    "description": "Description for AI-generated habits"
+    "description": "Description for automatically generated habits"
   },
   "previewHabitName": "Habit name",
   "@previewHabitName": {
