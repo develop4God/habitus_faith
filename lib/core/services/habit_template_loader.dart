@@ -24,12 +24,13 @@ class HabitTemplateLoader {
 
       _logger.i('✅ Template loaded successfully: ${template['template_id']}');
       return template;
-    } on FlutterError catch (e) {
-      _logger.w('Template not found for fingerprint: $fingerprint');
-      _logger.d('Error: $e');
-      return null;
     } catch (e) {
-      _logger.e('Error loading template: $e');
+      // Template not found (asset doesn't exist) or JSON parse error
+      if (e.toString().contains('Unable to load asset')) {
+        _logger.w('Template not found for fingerprint: $fingerprint');
+      } else {
+        _logger.e('Error loading template: $e');
+      }
       return null;
     }
   }

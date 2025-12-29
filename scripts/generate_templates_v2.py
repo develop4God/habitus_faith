@@ -287,7 +287,7 @@ def generate_fingerprint(profile: Dict) -> str:
     }
     """
     intent = profile["intent"]
-    maturity = profile.get("maturity", "")  # Empty string for wellness (no maturity)
+    maturity = profile.get("maturity") or ""  # Empty string for wellness (no maturity), handle None
     # DO NOT sort motivations (Dart doesn't sort)
     motivations = "_".join(profile["motivations"])
     challenge = profile["challenge"]
