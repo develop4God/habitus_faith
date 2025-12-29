@@ -1,0 +1,68 @@
+{
+  "template_id": "wellness_none_givingUp_weak_physicalHealth_timeManagement",
+  "fingerprint": "-1061232405",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "wellness",
+    "motivations": [
+      "physicalHealth",
+      "timeManagement"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "weak",
+    "spiritualMaturity": null
+  },
+  "habits": [
+    {
+      "id": "ph01",
+      "nameKey": "daily_walk",
+      "category": "physical",
+      "emoji": "🚶",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "daily_walk",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph15",
+      "nameKey": "evening_walk",
+      "category": "physical",
+      "emoji": "🌆",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "evening_walk",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "mn06",
+      "nameKey": "planning_review",
+      "category": "mental",
+      "emoji": "📅",
+      "target_minutes": 7,
+      "verse_key": null,
+      "notification_key": "planning_review",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "mn03",
+      "nameKey": "deep_work_focus",
+      "category": "mental",
+      "emoji": "🎯",
+      "target_minutes": 22,
+      "verse_key": null,
+      "notification_key": "deep_work_focus",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "rl01",
+      "nameKey": "call_friend_family",
+      "category": "relational",
+      "emoji": "📞",
+      "target_minutes": 7,
+      "verse_key": null,
+      "notification_key": "call_friend_family",
+      "time_of_day": "evening"
+    }
+  ]
+}

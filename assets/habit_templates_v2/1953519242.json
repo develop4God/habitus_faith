@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_passionate_dontKnowStart_strong_understandBible",
+  "fingerprint": "1953519242",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "understandBible"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "strong",
+    "spiritualMaturity": "passionate"
+  },
+  "habits": [
+    {
+      "id": "sp13",
+      "nameKey": "devotional_reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "target_minutes": 14,
+      "verse_key": null,
+      "notification_key": "devotional_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 31,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 21,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp18",
+      "nameKey": "christian_podcast",
+      "category": "spiritual",
+      "emoji": "🎧",
+      "target_minutes": 21,
+      "verse_key": null,
+      "notification_key": "christian_podcast",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 17,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "template_id": "wellness_none_lackOfTime_weak_physicalHealth_reduceStress",
+  "fingerprint": "-1284142650",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "wellness",
+    "motivations": [
+      "physicalHealth",
+      "reduceStress"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "weak",
+    "spiritualMaturity": null
+  },
+  "habits": [
+    {
+      "id": "ph03",
+      "nameKey": "yoga_stretching",
+      "category": "physical",
+      "emoji": "🧘",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "yoga_stretching",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph05",
+      "nameKey": "hydration_routine",
+      "category": "physical",
+      "emoji": "💧",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "hydration_routine",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "mn07",
+      "nameKey": "breathing_exercises",
+      "category": "mental",
+      "emoji": "🌬️",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "breathing_exercises",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "mn01",
+      "nameKey": "mindfulness_meditation",
+      "category": "mental",
+      "emoji": "🧘",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "mindfulness_meditation",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "rl01",
+      "nameKey": "call_friend_family",
+      "category": "relational",
+      "emoji": "📞",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "call_friend_family",
+      "time_of_day": "evening"
+    }
+  ]
+}

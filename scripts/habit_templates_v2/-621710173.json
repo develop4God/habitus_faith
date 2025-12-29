@@ -1,0 +1,78 @@
+{
+  "template_id": "both_new_lackOfMotivation_weak_prayerDiscipline_reduceStress",
+  "fingerprint": "-621710173",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "prayerDiscipline",
+      "reduceStress"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "weak",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph11",
+      "nameKey": "dance_movement",
+      "category": "physical",
+      "emoji": "💃",
+      "target_minutes": 20,
+      "verse_key": null,
+      "notification_key": "dance_movement",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph15",
+      "nameKey": "evening_walk",
+      "category": "physical",
+      "emoji": "🌆",
+      "target_minutes": 20,
+      "verse_key": null,
+      "notification_key": "evening_walk",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "mn07",
+      "nameKey": "breathing_exercises",
+      "category": "mental",
+      "emoji": "🌬️",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "breathing_exercises",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "rl02",
+      "nameKey": "quality_time_loved_ones",
+      "category": "relational",
+      "emoji": "❤️",
+      "target_minutes": 30,
+      "verse_key": null,
+      "notification_key": "quality_time_loved_ones",
+      "time_of_day": "evening"
+    }
+  ]
+}

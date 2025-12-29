@@ -1,0 +1,68 @@
+{
+  "template_id": "wellness_none_lackOfMotivation_normal_betterSleep_reduceStress",
+  "fingerprint": "1573340472",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "wellness",
+    "motivations": [
+      "reduceStress",
+      "betterSleep"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": null
+  },
+  "habits": [
+    {
+      "id": "ph15",
+      "nameKey": "evening_walk",
+      "category": "physical",
+      "emoji": "🌆",
+      "target_minutes": 20,
+      "verse_key": null,
+      "notification_key": "evening_walk",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "ph11",
+      "nameKey": "dance_movement",
+      "category": "physical",
+      "emoji": "💃",
+      "target_minutes": 20,
+      "verse_key": null,
+      "notification_key": "dance_movement",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph14",
+      "nameKey": "outdoor_nature",
+      "category": "physical",
+      "emoji": "🌳",
+      "target_minutes": 30,
+      "verse_key": null,
+      "notification_key": "outdoor_nature",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "mn07",
+      "nameKey": "breathing_exercises",
+      "category": "mental",
+      "emoji": "🌬️",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "breathing_exercises",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "mn02",
+      "nameKey": "journaling",
+      "category": "mental",
+      "emoji": "📝",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "journaling",
+      "time_of_day": "evening"
+    }
+  ]
+}

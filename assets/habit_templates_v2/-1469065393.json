@@ -1,0 +1,68 @@
+{
+  "template_id": "both_passionate_dontKnowStart_strong_closerToGod_reduceStress",
+  "fingerprint": "-1469065393",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "closerToGod",
+      "reduceStress"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "strong",
+    "spiritualMaturity": "passionate"
+  },
+  "habits": [
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 21,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 17,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp15",
+      "nameKey": "praise_thanksgiving",
+      "category": "spiritual",
+      "emoji": "🎉",
+      "target_minutes": 14,
+      "verse_key": "psalms_100_4",
+      "notification_key": "praise_thanksgiving",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph01",
+      "nameKey": "daily_walk",
+      "category": "physical",
+      "emoji": "🚶",
+      "target_minutes": 14,
+      "verse_key": null,
+      "notification_key": "daily_walk",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph03",
+      "nameKey": "yoga_stretching",
+      "category": "physical",
+      "emoji": "🧘",
+      "target_minutes": 14,
+      "verse_key": null,
+      "notification_key": "yoga_stretching",
+      "time_of_day": "morning"
+    }
+  ]
+}

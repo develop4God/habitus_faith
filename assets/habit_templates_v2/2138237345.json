@@ -1,0 +1,68 @@
+{
+  "template_id": "both_new_lackOfMotivation_normal_betterSleep_prayerDiscipline",
+  "fingerprint": "2138237345",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "prayerDiscipline",
+      "betterSleep"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp10",
+      "nameKey": "prayer_walk",
+      "category": "spiritual",
+      "emoji": "🚶‍♂️",
+      "target_minutes": 20,
+      "verse_key": "psalms_23_1",
+      "notification_key": "prayer_walk",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph15",
+      "nameKey": "evening_walk",
+      "category": "physical",
+      "emoji": "🌆",
+      "target_minutes": 20,
+      "verse_key": null,
+      "notification_key": "evening_walk",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "ph04",
+      "nameKey": "healthy_breakfast",
+      "category": "physical",
+      "emoji": "🥗",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "healthy_breakfast",
+      "time_of_day": "morning"
+    }
+  ]
+}

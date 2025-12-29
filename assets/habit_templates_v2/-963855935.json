@@ -1,0 +1,78 @@
+{
+  "template_id": "both_new_givingUp_weak_growInFaith_timeManagement",
+  "fingerprint": "-963855935",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "growInFaith",
+      "timeManagement"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "weak",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp09",
+      "nameKey": "bible_study_group",
+      "category": "spiritual",
+      "emoji": "👥",
+      "target_minutes": 15,
+      "verse_key": "hebrews_10_25",
+      "notification_key": "bible_study_group",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp19",
+      "nameKey": "family_devotion",
+      "category": "spiritual",
+      "emoji": "👨‍👩‍👧‍👦",
+      "target_minutes": 7,
+      "verse_key": "deuteronomy_6_7",
+      "notification_key": "family_devotion",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "ph01",
+      "nameKey": "daily_walk",
+      "category": "physical",
+      "emoji": "🚶",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "daily_walk",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph15",
+      "nameKey": "evening_walk",
+      "category": "physical",
+      "emoji": "🌆",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "evening_walk",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "mn06",
+      "nameKey": "planning_review",
+      "category": "mental",
+      "emoji": "📅",
+      "target_minutes": 7,
+      "verse_key": null,
+      "notification_key": "planning_review",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "rl01",
+      "nameKey": "call_friend_family",
+      "category": "relational",
+      "emoji": "📞",
+      "target_minutes": 7,
+      "verse_key": null,
+      "notification_key": "call_friend_family",
+      "time_of_day": "evening"
+    }
+  ]
+}

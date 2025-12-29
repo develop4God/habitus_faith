@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_new_lackOfTime_normal_prayerDiscipline",
+  "fingerprint": "-613118183",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "prayerDiscipline"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "normal",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp07",
+      "nameKey": "fasting",
+      "category": "spiritual",
+      "emoji": "🍽️",
+      "target_minutes": 15,
+      "verse_key": "matthew_6_16",
+      "notification_key": "fasting",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp13",
+      "nameKey": "devotional_reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "devotional_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 7,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    }
+  ]
+}
