@@ -7,6 +7,7 @@ import os
 from typing import List, Dict, Tuple, Optional
 from habit_catalog import HABIT_CATALOG, get_habits_for_intent
 import hashlib
+import argparse
 
 # ==================== TEMPLATE MATRIX ====================
 # 60 strategic profile combinations to generate
@@ -302,33 +303,33 @@ def generate_template(profile: Dict) -> Dict:
 
 # ==================== BATCH GENERATOR ====================
 
-def generate_all_templates(output_dir: str = "habit_templates_v2"):
-    """Generate all 60 templates"""
+def generate_all_templates(output_dir: str = "habit_templates_v2", max_templates: int = 60):
+    """Generate up to max_templates templates"""
     os.makedirs(output_dir, exist_ok=True)
-
     generated = 0
     for intent, profiles in TEMPLATE_MATRIX.items():
         for profile in profiles:
+            if generated >= max_templates:
+                break
             profile["intent"] = intent
             template = generate_template(profile)
-
-            # Save template
             filename = f"{template['template_id']}.json"
             filepath = os.path.join(output_dir, filename)
-
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(template, f, indent=2, ensure_ascii=False)
-
             generated += 1
-            print(f"✅ [{generated:02d}/60] {template['template_id']}")
-
+            print(f"✅ [{generated:02d}/{max_templates}] {template['template_id']}")
+        if generated >= max_templates:
+            break
     print(f"\n🎉 Generated {generated} templates in {output_dir}/")
     print(f"📊 Size: {sum(os.path.getsize(os.path.join(output_dir, f)) for f in os.listdir(output_dir)) // 1024}KB")
 
 # ==================== MAIN ====================
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Habit Template Generator v2 (Rule-Based)")
+    parser.add_argument('--max', type=int, default=60, help='Maximum number of templates to generate (for UAT)')
+    args = parser.parse_args()
     print("🚀 Habit Template Generator v2 (Rule-Based)")
     print("="*60)
-    generate_all_templates()
-
+    generate_all_templates(max_templates=args.max)
