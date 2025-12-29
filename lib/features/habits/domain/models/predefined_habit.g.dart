@@ -12,7 +12,7 @@ _$PredefinedHabitImpl _$$PredefinedHabitImplFromJson(
       id: json['id'] as String,
       emoji: json['emoji'] as String,
       nameKey: json['nameKey'] as String,
-      descriptionKey: json['descriptionKey'] as String?, // ahora opcional
+      descriptionKey: json['descriptionKey'] as String?,
       category: $enumDecode(_$PredefinedHabitCategoryEnumMap, json['category']),
       verse: json['verse'] == null
           ? null

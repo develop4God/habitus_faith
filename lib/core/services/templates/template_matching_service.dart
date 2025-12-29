@@ -15,18 +15,23 @@ class TemplateMatchingService {
   final ICacheService _cache;
   final http.Client? _httpClient;
   final FirebaseFirestore? _firestore;
+  final TemplateScoringEngine _scoringEngine;
 
   TemplateMatchingService(
     this._cache, {
     http.Client? httpClient,
     FirebaseFirestore? firestore,
+    TemplateScoringEngine? scoringEngine,
   })  : _httpClient = httpClient,
-        _firestore = firestore;
+        _firestore = firestore,
+        _scoringEngine = scoringEngine ?? TemplateScoringEngine();
 
   /// Generate a pattern ID from an onboarding profile
   /// Used to match against template fingerprints
   @Deprecated('Use findMatchWithScoring instead for better matching accuracy')
   String generatePatternId(OnboardingProfile profile) {
+    debugPrint(
+        '[TEMPLATES] WARNING: Using deprecated generatePatternId(). Migrate to findMatchWithScoring()');
     // Orden: primaryIntent, supportLevel, challenge, motivations (2), spiritualMaturity/null
     final motivationsKey = profile.motivations.take(2).join('_');
     final maturityOrState =
@@ -192,7 +197,6 @@ class TemplateMatchingService {
 
       // Convert profile to vector
       final userVector = UserProfileVector.fromProfile(profile);
-      final scoringEngine = TemplateScoringEngine();
 
       // Load templates from GitHub/cache
       final templateFile = await _fetchTemplateFile(language);
@@ -215,7 +219,7 @@ class TemplateMatchingService {
         try {
           final templateMetadata = TemplateMetadata.fromPatternId(patternId);
           final score =
-              scoringEngine.calculateScore(userVector, templateMetadata);
+              _scoringEngine.calculateScore(userVector, templateMetadata);
 
           _logScoreBreakdown(patternId, score);
 
