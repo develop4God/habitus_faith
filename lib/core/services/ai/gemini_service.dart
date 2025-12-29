@@ -16,6 +16,7 @@ import '../../config/ai_config.dart';
 import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
 import 'gemini_template_firestore_service.dart';
+import '../habit_template_loader.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
@@ -528,8 +529,15 @@ Requisitos estrictos:
     _logger?.i(
         'Generating habits from profile - Intent: ${profile.primaryIntent}');
 
-    // A. Buscar en cache por fingerprint exacto
+    // A. Buscar en assets por fingerprint exacto (template precacheado)
     final fingerprint = profile.cacheFingerprint;
+    final template = await HabitTemplateLoader.loadTemplate(fingerprint);
+    if (template != null && HabitTemplateLoader.validateTemplate(template)) {
+      debugPrint('[Template HIT] Exact match for fingerprint: $fingerprint');
+      return HabitTemplateLoader.parseHabits(template);
+    }
+
+    // A. Buscar en cache por fingerprint exacto
     final cached =
         await _cache.get<List<Map<String, dynamic>>>('profile_$fingerprint');
     if (cached != null) {
