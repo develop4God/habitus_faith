@@ -13,8 +13,12 @@ enum MatchConfidence {
 
   /// Create confidence from score
   static MatchConfidence fromScore(double score) {
-    if (score >= 0.90) return MatchConfidence.excellent;
-    if (score >= 0.75) return MatchConfidence.good;
+    if (score >= TemplateScoringEngine.excellentMatchThreshold) {
+      return MatchConfidence.excellent;
+    }
+    if (score >= TemplateScoringEngine.goodMatchThreshold) {
+      return MatchConfidence.good;
+    }
     return MatchConfidence.low;
   }
 }
@@ -67,24 +71,36 @@ class TemplateMetadata {
 
   /// Parse from pattern ID string
   /// Format: intent_supportLevel_challenge_motivation1_motivation2_maturity
+  ///
+  /// Throws [ArgumentError] if pattern ID has invalid format
+  /// Throws [FormatException] if intent name is not valid
   factory TemplateMetadata.fromPatternId(String patternId) {
-    final parts = patternId.split('_');
-    if (parts.length < 5) {
-      throw ArgumentError('Invalid pattern ID format: $patternId');
+    if (patternId.isEmpty) {
+      throw ArgumentError('Pattern ID cannot be empty');
     }
 
-    // Parse intent
-    final intent = UserIntent.values.firstWhere(
-      (e) => e.name == parts[0],
-      orElse: () => UserIntent.faithBased,
-    );
+    final parts = patternId.split('_');
+    if (parts.length < 5) {
+      throw ArgumentError(
+          'Invalid pattern ID format: $patternId. Expected at least 5 parts (intent_supportLevel_challenge_motivation1_motivation2), got ${parts.length}');
+    }
+
+    // Parse intent - explicit validation without fallback
+    final intentName = parts[0];
+    final validIntents = UserIntent.values.map((e) => e.name).toSet();
+    if (!validIntents.contains(intentName)) {
+      throw FormatException(
+          'Invalid intent "$intentName" in pattern ID: $patternId. Valid values: ${validIntents.join(", ")}');
+    }
+
+    final intent = UserIntent.values.firstWhere((e) => e.name == intentName);
 
     // Extract motivations (positions 3 and 4)
     final motivations = <String>[];
     if (parts.length > 3) motivations.add(parts[3]);
     if (parts.length > 4) motivations.add(parts[4]);
 
-    // Spiritual maturity is the last part
+    // Spiritual maturity is the last part (optional)
     final maturity = parts.length > 5 ? parts[5] : null;
 
     return TemplateMetadata(
@@ -121,7 +137,25 @@ class TemplateMatchScore {
 }
 
 /// Scoring engine that calculates similarity between user profiles and templates
+///
+/// Uses weighted dimensional scoring to match user profiles against habit templates.
+/// Weights: Intent (40%), Support Level (20%), Challenge (20%), Motivations (15%), Maturity (5%)
+///
+/// Example:
+/// ```dart
+/// final engine = TemplateScoringEngine();
+/// final score = engine.calculateScore(userVector, templateMetadata);
+/// if (score.totalScore >= TemplateScoringEngine.goodMatchThreshold) {
+///   // Use this template
+/// }
+/// ```
 class TemplateScoringEngine {
+  /// Threshold for good match quality (75%)
+  static const double goodMatchThreshold = 0.75;
+
+  /// Threshold for excellent match quality (90%)
+  static const double excellentMatchThreshold = 0.90;
+
   /// Scoring weights (must sum to 1.0)
   final double intentWeight;
   final double supportLevelWeight;
@@ -129,24 +163,52 @@ class TemplateScoringEngine {
   final double motivationsWeight;
   final double spiritualMaturityWeight;
 
-  /// Support level similarity map
+  /// Support level similarity map (symmetric matrix)
+  /// Maps spiritual maturity/support progression levels to similarity scores
+  /// Rationale: Adjacent levels in spiritual growth are more similar than distant ones
   static const Map<String, Map<String, double>> _supportLevelSimilarity = {
-    'strong': {'strong': 1.0, 'growing': 0.7, 'inconsistent': 0.3},
-    'growing': {'strong': 0.7, 'growing': 1.0, 'inconsistent': 0.6},
-    'inconsistent': {'strong': 0.3, 'growing': 0.6, 'inconsistent': 1.0},
+    'strong': {
+      'strong': 1.0,
+      'normal': 0.8,
+      'growing': 0.7,
+      'inconsistent': 0.3
+    },
     'normal': {
-      'normal': 1.0,
       'strong': 0.8,
+      'normal': 1.0,
       'growing': 0.8,
       'inconsistent': 0.5
     },
+    'growing': {
+      'strong': 0.7,
+      'normal': 0.8,
+      'growing': 1.0,
+      'inconsistent': 0.6
+    },
+    'inconsistent': {
+      'strong': 0.3,
+      'normal': 0.5,
+      'growing': 0.6,
+      'inconsistent': 1.0
+    },
   };
 
-  /// Related challenges by domain
+  /// Related challenges grouped by impact domain
+  /// Used to identify related challenges that share common solutions
+  ///
+  /// Time domain: Challenges related to time management and scheduling
+  /// Motivation domain: Challenges related to internal drive and perseverance
+  /// Knowledge domain: Challenges related to understanding and direction
+  /// Emotional domain: Challenges related to stress and mental wellbeing
+  /// Consistency domain: Challenges related to building and maintaining routines
+  /// Spiritual domain: Challenges related to faith practices and growth
   static const Map<String, List<String>> _challengeDomains = {
     'time': ['lackOfTime', 'dontKnowStart'],
     'motivation': ['lackOfMotivation', 'givingUp'],
     'knowledge': ['dontKnowStart', 'lackOfMotivation'],
+    'emotional': ['stressAnxiety', 'burnout', 'overwhelmed'],
+    'consistency': ['discipline', 'lackOfRoutine', 'givingUp'],
+    'spiritual': ['lackOfFaith', 'spiritualDryness', 'doubt'],
   };
 
   /// Spiritual maturity progression
@@ -176,6 +238,18 @@ class TemplateScoringEngine {
   }
 
   /// Calculate match score between user profile and template
+  ///
+  /// Returns a [TemplateMatchScore] containing:
+  /// - totalScore: Weighted sum of all dimension scores (0.0 to 1.0)
+  /// - dimensionScores: Individual scores for each dimension
+  /// - confidence: Match quality level based on total score
+  /// - patternId: The template's pattern identifier
+  ///
+  /// Example:
+  /// ```dart
+  /// final score = engine.calculateScore(userVector, templateMetadata);
+  /// print('Total: ${score.totalScore}, Intent: ${score.dimensionScores['intent']}');
+  /// ```
   TemplateMatchScore calculateScore(
     UserProfileVector user,
     TemplateMetadata template,

@@ -217,18 +217,7 @@ class TemplateMatchingService {
           final score =
               scoringEngine.calculateScore(userVector, templateMetadata);
 
-          debugPrint(
-              '[SCORING] Pattern: $patternId, Score: ${score.totalScore.toStringAsFixed(3)}');
-          debugPrint(
-              '[SCORING]   - Intent: ${score.dimensionScores['intent']?.toStringAsFixed(2)}');
-          debugPrint(
-              '[SCORING]   - Support: ${score.dimensionScores['supportLevel']?.toStringAsFixed(2)}');
-          debugPrint(
-              '[SCORING]   - Challenge: ${score.dimensionScores['challenge']?.toStringAsFixed(2)}');
-          debugPrint(
-              '[SCORING]   - Motivations: ${score.dimensionScores['motivations']?.toStringAsFixed(2)}');
-          debugPrint(
-              '[SCORING]   - Maturity: ${score.dimensionScores['spiritualMaturity']?.toStringAsFixed(2)}');
+          _logScoreBreakdown(patternId, score);
 
           if (score.totalScore > bestScore) {
             bestScore = score.totalScore;
@@ -240,17 +229,19 @@ class TemplateMatchingService {
         }
       }
 
-      // Return best match if score >= 0.75
-      if (bestMatch != null && bestScore >= 0.75) {
+      // Return best match if score >= threshold
+      if (bestMatch != null &&
+          bestScore >= TemplateScoringEngine.goodMatchThreshold) {
         debugPrint('[SCORING] Best match found: ${bestMatch.patternId}');
         debugPrint(
             '[SCORING] Final score: ${bestScore.toStringAsFixed(3)} (${bestMatch.confidence.name})');
 
         // Find and return the template habits
-        final matchedTemplate = templates.firstWhere(
-          (t) => t['pattern_id'] == bestMatch!.patternId,
-          orElse: () => null,
-        );
+        final matchedTemplate =
+            templates.cast<Map<String, dynamic>?>().firstWhere(
+                  (t) => t?['pattern_id'] == bestMatch!.patternId,
+                  orElse: () => null,
+                );
 
         if (matchedTemplate != null && matchedTemplate['habits'] != null) {
           log('Template matched with scoring: ${bestMatch.patternId}, score: ${bestScore.toStringAsFixed(3)}',
@@ -271,7 +262,7 @@ class TemplateMatchingService {
       }
 
       debugPrint(
-          '[SCORING] No match found with score >= 0.75 (best: ${bestScore.toStringAsFixed(3)})');
+          '[SCORING] No match found with score >= ${TemplateScoringEngine.goodMatchThreshold} (best: ${bestScore.toStringAsFixed(3)})');
       return null; // Fallback to Gemini
     } catch (e, stack) {
       debugPrint('[SCORING] Error in scoring-based matching: $e');
@@ -280,5 +271,17 @@ class TemplateMatchingService {
           name: 'templates', error: e);
       return null;
     }
+  }
+
+  /// Log score breakdown for debugging
+  void _logScoreBreakdown(String patternId, TemplateMatchScore score) {
+    debugPrint(
+        '[SCORING] Pattern: $patternId, Score: ${score.totalScore.toStringAsFixed(3)}');
+    score.dimensionScores.forEach((dimension, value) {
+      final capitalizedDimension =
+          dimension[0].toUpperCase() + dimension.substring(1);
+      debugPrint(
+          '[SCORING]   - $capitalizedDimension: ${value.toStringAsFixed(2)}');
+    });
   }
 }

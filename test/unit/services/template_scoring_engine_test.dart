@@ -434,4 +434,95 @@ void main() {
       );
     });
   });
+
+  group('Error handling in parsing', () {
+    test('invalid intent name throws FormatException', () {
+      expect(
+        () => TemplateMetadata.fromPatternId(
+            'invalidIntent_normal_lackOfTime_closerToGod_prayerDiscipline_new'),
+        throwsFormatException,
+      );
+    });
+
+    test('pattern ID with less than 5 parts throws ArgumentError', () {
+      expect(
+        () => TemplateMetadata.fromPatternId('faithBased_normal_lackOfTime'),
+        throwsArgumentError,
+      );
+    });
+
+    test('empty pattern ID throws ArgumentError', () {
+      expect(
+        () => TemplateMetadata.fromPatternId(''),
+        throwsArgumentError,
+      );
+    });
+  });
+
+  group('Performance', () {
+    test('scores 100 templates in under 50ms', () {
+      final engine = TemplateScoringEngine();
+      const user = UserProfileVector(
+        primaryIntent: UserIntent.faithBased,
+        supportLevel: 'normal',
+        challenge: 'lackOfTime',
+        motivations: ['closerToGod', 'prayerDiscipline'],
+        spiritualMaturity: 'new',
+      );
+
+      // Generate 100 varied templates
+      final templates = List.generate(100, (i) {
+        final intents = ['faithBased', 'wellness', 'both'];
+        final supports = ['strong', 'normal', 'growing', 'inconsistent'];
+        final challenges = [
+          'lackOfTime',
+          'lackOfMotivation',
+          'givingUp',
+          'dontKnowStart'
+        ];
+        final motivations = ['closerToGod', 'prayerDiscipline', 'growInFaith'];
+        final maturities = ['new', 'growing', 'passionate'];
+
+        final intent = intents[i % intents.length];
+        final support = supports[i % supports.length];
+        final challenge = challenges[i % challenges.length];
+        final motivation1 = motivations[i % motivations.length];
+        final motivation2 = motivations[(i + 1) % motivations.length];
+        final maturity = maturities[i % maturities.length];
+
+        return TemplateMetadata.fromPatternId(
+          '${intent}_${support}_${challenge}_${motivation1}_${motivation2}_$maturity',
+        );
+      });
+
+      // Measure scoring time
+      final stopwatch = Stopwatch()..start();
+      for (final template in templates) {
+        engine.calculateScore(user, template);
+      }
+      stopwatch.stop();
+
+      expect(stopwatch.elapsedMilliseconds, lessThan(50),
+          reason:
+              'Scoring 100 templates took ${stopwatch.elapsedMilliseconds}ms, expected < 50ms');
+    });
+  });
+
+  group('Threshold constants', () {
+    test('constants are defined correctly', () {
+      expect(TemplateScoringEngine.goodMatchThreshold, equals(0.75));
+      expect(TemplateScoringEngine.excellentMatchThreshold, equals(0.90));
+    });
+
+    test('MatchConfidence uses threshold constants', () {
+      expect(
+          MatchConfidence.fromScore(
+              TemplateScoringEngine.excellentMatchThreshold),
+          equals(MatchConfidence.excellent));
+      expect(
+          MatchConfidence.fromScore(TemplateScoringEngine.goodMatchThreshold),
+          equals(MatchConfidence.good));
+      expect(MatchConfidence.fromScore(0.74), equals(MatchConfidence.low));
+    });
+  });
 }
