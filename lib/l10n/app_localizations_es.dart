@@ -779,4 +779,139 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get today => 'Hoy';
+
+  @override
+  String get morning_prayer => 'Oración Matutina';
+
+  @override
+  String get bible_reading => 'Lectura Bíblica';
+
+  @override
+  String get evening_prayer => 'Oración Nocturna';
+
+  @override
+  String get worship_music => 'Música de Adoración';
+
+  @override
+  String get gratitude_journal => 'Diario de Gratitud';
+
+  @override
+  String get scripture_meditation => 'Meditación en la Escritura';
+
+  @override
+  String get fasting => 'Ayuno';
+
+  @override
+  String get serve_others => 'Servir a Otros';
+
+  @override
+  String get bible_study_group => 'Grupo de Estudio Bíblico';
+
+  @override
+  String get prayer_walk => 'Caminata de Oración';
+
+  @override
+  String get scripture_memorization => 'Memorización de Escrituras';
+
+  @override
+  String get intercessory_prayer => 'Oración Intercesora';
+
+  @override
+  String get devotional_reading => 'Lectura Devocional';
+
+  @override
+  String get confession_repentance => 'Confesión y Arrepentimiento';
+
+  @override
+  String get praise_thanksgiving => 'Alabanza y Acción de Gracias';
+
+  @override
+  String get sabbath_rest => 'Descanso del Sabbath';
+
+  @override
+  String get digital_detox_prayer => 'Desintoxicación Digital y Oración';
+
+  @override
+  String get christian_podcast => 'Podcast Cristiano';
+
+  @override
+  String get family_devotion => 'Devocional Familiar';
+
+  @override
+  String get spiritual_reading => 'Lectura Espiritual';
+
+  @override
+  String get daily_walk => 'Caminata Diaria';
+
+  @override
+  String get morning_exercise => 'Ejercicio Matutino';
+
+  @override
+  String get yoga_stretching => 'Yoga/Estiramiento';
+
+  @override
+  String get healthy_breakfast => 'Desayuno Saludable';
+
+  @override
+  String get hydration_routine => 'Rutina de Hidratación';
+
+  @override
+  String get running_jogging => 'Correr/Trotar';
+
+  @override
+  String get strength_training => 'Entrenamiento de Fuerza';
+
+  @override
+  String get bike_cycling => 'Ciclismo';
+
+  @override
+  String get healthy_meal_prep => 'Preparación de Comidas Saludables';
+
+  @override
+  String get swimming => 'Natación';
+
+  @override
+  String get dance_movement => 'Baile/Movimiento';
+
+  @override
+  String get sports_recreation => 'Deportes/Recreación';
+
+  @override
+  String get posture_breaks => 'Pausas de Postura';
+
+  @override
+  String get outdoor_nature => 'Tiempo al Aire Libre/Naturaleza';
+
+  @override
+  String get evening_walk => 'Caminata Nocturna';
+
+  @override
+  String get mindfulness_meditation => 'Meditación Consciente';
+
+  @override
+  String get journaling => 'Llevar un Diario';
+
+  @override
+  String get deep_work_focus => 'Trabajo Profundo/Concentración';
+
+  @override
+  String get reading_learning => 'Lectura/Aprendizaje';
+
+  @override
+  String get digital_detox => 'Desintoxicación Digital';
+
+  @override
+  String get planning_review => 'Planificación y Revisión';
+
+  @override
+  String get breathing_exercises => 'Ejercicios de Respiración';
+
+  @override
+  String get creative_hobby => 'Pasatiempo Creativo';
+
+  @override
+  String get call_friend_family => 'Llamar Amigo/Familia';
+
+  @override
+  String get quality_time_loved_ones => 'Tiempo de Calidad con Seres Queridos';
 }

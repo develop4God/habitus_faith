@@ -4,10 +4,18 @@
 
 import json
 import os
+import logging
 from typing import List, Dict, Tuple, Optional
 from habit_catalog import HABIT_CATALOG, get_habits_for_intent
 import hashlib
 import argparse
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # ==================== TEMPLATE MATRIX ====================
 # 60 strategic profile combinations to generate
@@ -146,20 +154,25 @@ class HabitSelector:
     def select_habits(self, profile: Dict, count: int = 5) -> List[Dict]:
         """Main selection pipeline"""
         intent = profile.get("intent", "faithBased")
+        logger.info(f"Selecting habits for intent={intent}, maturity={profile.get('maturity')}, count={count}")
 
         # Step 1: Get appropriate pool
         pool = get_habits_for_intent(intent)
+        logger.debug(f"Initial pool size: {len(pool)}")
 
         # Step 2: Filter by maturity
         maturity = profile.get("maturity")
         filtered = self.scorer.filter_by_maturity(pool, maturity)
+        logger.debug(f"After maturity filter: {len(filtered)}")
 
         # Step 3: Score all habits
         scored = [(self.scorer.score_habit(h, profile), h) for h in filtered]
         scored.sort(reverse=True, key=lambda x: x[0])
+        logger.debug(f"Top 3 scored habits: {[(h['id'], s) for s, h in scored[:3]]}")
 
         # Step 4: Smart selection by category
         selected = self._smart_select(scored, profile, count)
+        logger.info(f"Selected {len(selected)} habits: {[h['id'] for h in selected]}")
 
         # Step 5: Adjust durations
         adjusted = self._adjust_durations(selected, profile)
@@ -174,8 +187,9 @@ class HabitSelector:
         used_ids = set()
 
         if intent == "faithBased":
-            # 4-5 spiritual + 0-1 support (physical/mental)
-            spiritual = [h for s, h in scored_habits if h["category"] == "spiritual"][:5]
+            # 4-5 spiritual + 0-1 support (relational if weak support)
+            max_spiritual = count - 1 if profile.get("supportLevel") == "weak" else count
+            spiritual = [h for s, h in scored_habits if h["category"] == "spiritual" and h["id"] not in used_ids][:max_spiritual]
             selected.extend(spiritual)
             used_ids.update(h["id"] for h in spiritual)
 
@@ -186,27 +200,36 @@ class HabitSelector:
 
         elif intent == "wellness":
             # 3 physical + 2 mental + (1 relational if weak support)
-            physical = [h for s, h in scored_habits if h["category"] == "physical"][:3]
-            mental = [h for s, h in scored_habits if h["category"] == "mental"][:2]
+            needs_relational = profile.get("supportLevel") == "weak"
+            max_physical = 3 if not needs_relational else 2
+            max_mental = 2 if not needs_relational else 2
+
+            physical = [h for s, h in scored_habits if h["category"] == "physical" and h["id"] not in used_ids][:max_physical]
+            mental = [h for s, h in scored_habits if h["category"] == "mental" and h["id"] not in used_ids][:max_mental]
             selected.extend(physical)
             selected.extend(mental)
             used_ids.update(h["id"] for h in selected)
 
-            if profile.get("supportLevel") == "weak":
+            if needs_relational and len(selected) < count:
                 relational = [h for s, h in scored_habits if h["category"] == "relational" and h["id"] not in used_ids][:1]
                 selected.extend(relational)
 
         else:  # both
             # 3 spiritual + 2 physical + 1 mental (+ relational if weak support)
-            spiritual = [h for s, h in scored_habits if h["category"] == "spiritual"][:3]
-            physical = [h for s, h in scored_habits if h["category"] == "physical"][:2]
-            mental = [h for s, h in scored_habits if h["category"] == "mental"][:1]
+            needs_relational = profile.get("supportLevel") == "weak"
+            max_spiritual = 3 if not needs_relational else 2
+            max_physical = 2 if not needs_relational else 2
+            max_mental = 1
+
+            spiritual = [h for s, h in scored_habits if h["category"] == "spiritual" and h["id"] not in used_ids][:max_spiritual]
+            physical = [h for s, h in scored_habits if h["category"] == "physical" and h["id"] not in used_ids][:max_physical]
+            mental = [h for s, h in scored_habits if h["category"] == "mental" and h["id"] not in used_ids][:max_mental]
             selected.extend(spiritual)
             selected.extend(physical)
             selected.extend(mental)
             used_ids.update(h["id"] for h in selected)
 
-            if profile.get("supportLevel") == "weak" and len(selected) < count:
+            if needs_relational and len(selected) < count:
                 relational = [h for s, h in scored_habits if h["category"] == "relational" and h["id"] not in used_ids][:1]
                 selected.extend(relational)
 
@@ -255,14 +278,61 @@ def generate_template_id(profile: Dict) -> str:
     return f"{intent}_{maturity}_{challenge}_{support}_{motivations}"
 
 def generate_fingerprint(profile: Dict) -> str:
-    """Generate cache fingerprint (matches OnboardingProfile.cacheFingerprint)"""
+    """Generate cache fingerprint matching Dart's OnboardingProfile.cacheFingerprint exactly
+
+    CRITICAL: Must match onboarding_models.dart line 77-80:
+    String get cacheFingerprint {
+      final key = '${primaryIntent.name}_${spiritualMaturity}_${motivations.join('_')}_$challenge';
+      return key.hashCode.toString();
+    }
+    """
     intent = profile["intent"]
-    maturity = profile.get("maturity", "")
-    motivations = "_".join(sorted(profile["motivations"]))
+    maturity = profile.get("maturity", "")  # Empty string for wellness (no maturity)
+    # DO NOT sort motivations (Dart doesn't sort)
+    motivations = "_".join(profile["motivations"])
     challenge = profile["challenge"]
 
     key = f"{intent}_{maturity}_{motivations}_{challenge}"
-    return str(hash(key) & 0x7FFFFFFF)[:12]  # Positive hash, 12 chars
+
+    # Simulate Dart's String.hashCode (Jenkins hash function)
+    # Source: https://api.dart.dev/stable/dart-core/String/hashCode.html
+    h = 0
+    for char in key:
+        h = (h + ord(char)) & 0xFFFFFFFF
+        h = (h + (h << 10)) & 0xFFFFFFFF
+        h = (h ^ (h >> 6)) & 0xFFFFFFFF
+    h = (h + (h << 3)) & 0xFFFFFFFF
+    h = (h ^ (h >> 11)) & 0xFFFFFFFF
+    h = (h + (h << 15)) & 0xFFFFFFFF
+
+    # Convert to signed 32-bit integer (Dart hashCode is signed)
+    if h >= 0x80000000:
+        h = h - 0x100000000
+
+    return str(h)
+
+def validate_template(template: Dict) -> bool:
+    """Ensure template has required structure and minimum quality"""
+    required_fields = ["template_id", "fingerprint", "version", "profile", "habits"]
+
+    # Check required fields
+    if not all(k in template for k in required_fields):
+        logger.error(f"Template missing required fields: {set(required_fields) - set(template.keys())}")
+        return False
+
+    # Check minimum habits count
+    if len(template["habits"]) < 3:
+        logger.error(f"Template has only {len(template['habits'])} habits (minimum 3)")
+        return False
+
+    # Validate each habit has required fields
+    habit_required = ["id", "nameKey", "category", "emoji", "target_minutes", "notification_key"]
+    for habit in template["habits"]:
+        if not all(k in habit for k in habit_required):
+            logger.error(f"Habit {habit.get('id', 'unknown')} missing fields: {set(habit_required) - set(habit.keys())}")
+            return False
+
+    return True
 
 def generate_template(profile: Dict) -> Dict:
     """Generate single template from profile"""
@@ -307,22 +377,53 @@ def generate_all_templates(output_dir: str = "habit_templates_v2", max_templates
     """Generate up to max_templates templates"""
     os.makedirs(output_dir, exist_ok=True)
     generated = 0
+    failed = 0
+
+    logger.info(f"Starting template generation (max: {max_templates})")
+
     for intent, profiles in TEMPLATE_MATRIX.items():
         for profile in profiles:
             if generated >= max_templates:
                 break
+
             profile["intent"] = intent
-            template = generate_template(profile)
-            filename = f"{template['template_id']}.json"
-            filepath = os.path.join(output_dir, filename)
-            with open(filepath, 'w', encoding='utf-8') as f:
-                json.dump(template, f, indent=2, ensure_ascii=False)
-            generated += 1
-            print(f"✅ [{generated:02d}/{max_templates}] {template['template_id']}")
+
+            try:
+                template = generate_template(profile)
+
+                # Validate template
+                if not validate_template(template):
+                    logger.error(f"Validation failed for profile: {profile}")
+                    failed += 1
+                    continue
+
+                # Save template using fingerprint as filename
+                filename = f"{template['fingerprint']}.json"
+                filepath = os.path.join(output_dir, filename)
+
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    json.dump(template, f, indent=2, ensure_ascii=False)
+
+                generated += 1
+                logger.info(f"✅ [{generated:02d}/{max_templates}] {template['template_id']} -> {filename}")
+
+            except Exception as e:
+                logger.error(f"Failed to generate template for {profile}: {e}")
+                failed += 1
+                continue
+
         if generated >= max_templates:
             break
-    print(f"\n🎉 Generated {generated} templates in {output_dir}/")
-    print(f"📊 Size: {sum(os.path.getsize(os.path.join(output_dir, f)) for f in os.listdir(output_dir)) // 1024}KB")
+
+    # Summary
+    total_size = sum(os.path.getsize(os.path.join(output_dir, f)) for f in os.listdir(output_dir)) // 1024
+    logger.info(f"\n{'='*60}")
+    logger.info(f"🎉 Generated {generated} templates in {output_dir}/")
+    logger.info(f"❌ Failed: {failed}")
+    logger.info(f"📊 Total size: {total_size}KB")
+    logger.info(f"{'='*60}")
+
+    return generated, failed
 
 # ==================== MAIN ====================
 

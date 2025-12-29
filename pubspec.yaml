@@ -75,6 +75,7 @@ flutter:
     - assets/ml_models/predictor.tflite
     - assets/ml_models/scaler_params.json
     - assets/ml_models/model_metadata.json
+    - assets/habit_templates_v2/
     - .env
   fonts:
     - family: DancingScript
