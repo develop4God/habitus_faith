@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_new_lackOfMotivation_weak_growInFaith",
+  "fingerprint": "656016131",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "growInFaith"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "weak",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp09",
+      "nameKey": "bible_study_group",
+      "category": "spiritual",
+      "emoji": "👥",
+      "target_minutes": 30,
+      "verse_key": "hebrews_10_25",
+      "notification_key": "bible_study_group",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp04",
+      "nameKey": "worship_music",
+      "category": "spiritual",
+      "emoji": "🎵",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "worship_music",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp19",
+      "nameKey": "family_devotion",
+      "category": "spiritual",
+      "emoji": "👨‍👩‍👧‍👦",
+      "target_minutes": 14,
+      "verse_key": "deuteronomy_6_7",
+      "notification_key": "family_devotion",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    }
+  ]
+}
