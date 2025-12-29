@@ -1,0 +1,67 @@
+{
+  "template_id": "wellness_none_lackOfTime_strong_productivity",
+  "fingerprint": "988008299",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "wellness",
+    "motivations": [
+      "productivity"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "strong",
+    "spiritualMaturity": null
+  },
+  "habits": [
+    {
+      "id": "ph13",
+      "nameKey": "posture_breaks",
+      "category": "physical",
+      "emoji": "🪑",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "posture_breaks",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph04",
+      "nameKey": "healthy_breakfast",
+      "category": "physical",
+      "emoji": "🥗",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "healthy_breakfast",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph05",
+      "nameKey": "hydration_routine",
+      "category": "physical",
+      "emoji": "💧",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "hydration_routine",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "mn02",
+      "nameKey": "journaling",
+      "category": "mental",
+      "emoji": "📝",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "journaling",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "mn06",
+      "nameKey": "planning_review",
+      "category": "mental",
+      "emoji": "📅",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "planning_review",
+      "time_of_day": "evening"
+    }
+  ]
+}

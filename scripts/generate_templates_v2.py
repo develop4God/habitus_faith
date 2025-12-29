@@ -277,14 +277,19 @@ def generate_template_id(profile: Dict) -> str:
 
     return f"{intent}_{maturity}_{challenge}_{support}_{motivations}"
 
+import subprocess
+import tempfile
+
 def generate_fingerprint(profile: Dict) -> str:
     """Generate cache fingerprint matching Dart's OnboardingProfile.cacheFingerprint exactly
 
-    CRITICAL: Must match onboarding_models.dart line 77-80:
+    CRITICAL: Must match onboarding_models.dart:
     String get cacheFingerprint {
-      final key = '${primaryIntent.name}_${spiritualMaturity}_${motivations.join('_')}_$challenge';
+      final key = '${primaryIntent.name}_${spiritualMaturity ?? ''}_${motivations.join('_')}_$challenge';
       return key.hashCode.toString();
     }
+    
+    Uses Dart directly to compute the hash to ensure 100% accuracy across Dart versions.
     """
     intent = profile["intent"]
     maturity = profile.get("maturity") or ""  # Empty string for wellness (no maturity), handle None
@@ -294,22 +299,27 @@ def generate_fingerprint(profile: Dict) -> str:
 
     key = f"{intent}_{maturity}_{motivations}_{challenge}"
 
-    # Simulate Dart's String.hashCode (Jenkins hash function)
-    # Source: https://api.dart.dev/stable/dart-core/String/hashCode.html
-    h = 0
-    for char in key:
-        h = (h + ord(char)) & 0xFFFFFFFF
-        h = (h + (h << 10)) & 0xFFFFFFFF
-        h = (h ^ (h >> 6)) & 0xFFFFFFFF
-    h = (h + (h << 3)) & 0xFFFFFFFF
-    h = (h ^ (h >> 11)) & 0xFFFFFFFF
-    h = (h + (h << 15)) & 0xFFFFFFFF
-
-    # Convert to signed 32-bit integer (Dart hashCode is signed)
-    if h >= 0x80000000:
-        h = h - 0x100000000
-
-    return str(h)
+    # Call Dart to get the actual hashCode using a temp file
+    dart_code = f"void main() {{ print('{key}'.hashCode); }}"
+    
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.dart', delete=False) as f:
+        f.write(dart_code)
+        temp_path = f.name
+    
+    try:
+        result = subprocess.run(
+            ['dart', temp_path],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode != 0:
+            raise RuntimeError(f"Dart hashCode calculation failed: {result.stderr}")
+        
+        fingerprint = result.stdout.strip()
+        return fingerprint
+    finally:
+        os.unlink(temp_path)
 
 def validate_template(template: Dict) -> bool:
     """Ensure template has required structure and minimum quality"""

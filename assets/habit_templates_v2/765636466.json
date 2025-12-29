@@ -1,0 +1,68 @@
+{
+  "template_id": "faithBased_passionate_givingUp_normal_closerToGod_growInFaith",
+  "fingerprint": "765636466",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "closerToGod",
+      "growInFaith"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "normal",
+    "spiritualMaturity": "passionate"
+  },
+  "habits": [
+    {
+      "id": "sp04",
+      "nameKey": "worship_music",
+      "category": "spiritual",
+      "emoji": "🎵",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "worship_music",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp15",
+      "nameKey": "praise_thanksgiving",
+      "category": "spiritual",
+      "emoji": "🎉",
+      "target_minutes": 10,
+      "verse_key": "psalms_100_4",
+      "notification_key": "praise_thanksgiving",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp19",
+      "nameKey": "family_devotion",
+      "category": "spiritual",
+      "emoji": "👨‍👩‍👧‍👦",
+      "target_minutes": 20,
+      "verse_key": "deuteronomy_6_7",
+      "notification_key": "family_devotion",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp08",
+      "nameKey": "serve_others",
+      "category": "spiritual",
+      "emoji": "🤝",
+      "target_minutes": 30,
+      "verse_key": "matthew_25_40",
+      "notification_key": "serve_others",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 22,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    }
+  ]
+}
