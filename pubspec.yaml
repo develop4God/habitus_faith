@@ -69,7 +69,6 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-
     - assets/lottie/animation.json
     - assets/lottie/
     - assets/biblia/

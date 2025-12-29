@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
+
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/data/storage/storage_providers.dart';
+import '../widgets/add_habit_discovery_dialog.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
 // New providers for JSON-based habits
