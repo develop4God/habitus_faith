@@ -62,7 +62,13 @@ class HabitTemplateLoader {
 
   /// Validate that a template has the expected structure
   static bool validateTemplate(Map<String, dynamic> template) {
-    final requiredFields = ['template_id', 'fingerprint', 'version', 'profile', 'habits'];
+    final requiredFields = [
+      'template_id',
+      'fingerprint',
+      'version',
+      'profile',
+      'habits'
+    ];
 
     for (final field in requiredFields) {
       if (!template.containsKey(field)) {
@@ -84,4 +90,3 @@ class HabitTemplateLoader {
     return true;
   }
 }
-
