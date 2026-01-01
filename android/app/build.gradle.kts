@@ -10,7 +10,7 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
     // ¡Añade esta línea para el plugin de Crashlytics!
-    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.crashlytics") version "2.9.9"
 }
 
 // INICIO DEL BLOQUE DE CARGA DE PROPIEDADES
