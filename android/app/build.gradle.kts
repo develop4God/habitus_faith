@@ -24,7 +24,7 @@ if (keystorePropertiesFile.exists()) {
 // FIN DEL BLOQUE DE CARGA DE PROPIEDADES
 
 android {
-    namespace = "com.develop4god.devocional_nuevo"
+    namespace = "com.develop4god.habitus_faith"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "28.2.13676358"
 
