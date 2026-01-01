@@ -1,18 +1,19 @@
-// --------- IMPORTS NECESARIOS ---------
+// INICIO DE LOS IMPORTS AÑADIDOS/CORREGIDOS
 import java.util.Properties
-// --------------------------------------
+
+// FIN DE LOS IMPORTS (eliminado FileInputStream no usado)
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // El plugin de Flutter debe ir después de android/kotlin
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
-    // Si usas Crashlytics/Firebase, agrega:
-    // id("com.google.firebase.crashlytics")
+    // ¡Añade esta línea para el plugin de Crashlytics!
+    id("com.google.firebase.crashlytics")
 }
 
-// --------- BLOQUE DE CARGA DE PROPIEDADES ---------
+// INICIO DEL BLOQUE DE CARGA DE PROPIEDADES
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
@@ -20,12 +21,12 @@ if (keystorePropertiesFile.exists()) {
         keystoreProperties.load(it)
     }
 }
-// --------------------------------------------------
+// FIN DEL BLOQUE DE CARGA DE PROPIEDADES
 
 android {
-    namespace = "com.develop4God.habitus_faith"
+    namespace = "com.develop4god.devocional_nuevo"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -37,8 +38,13 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    // Habilitar BuildConfig para permitir campos personalizados usados por plugins
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
-        applicationId = "com.develop4God.habitus_faith"
+        applicationId = "com.develop4god.devocional_nuevo"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -47,7 +53,8 @@ android {
     }
 
     signingConfigs {
-        // Solo crea release si hay variables de entorno O key.properties presentes
+
+
         if (
             System.getenv("KEYSTORE_PATH") != null ||
             keystoreProperties.getProperty("storeFile") != null
@@ -56,28 +63,32 @@ android {
                 storeFile = file(
                     System.getenv("KEYSTORE_PATH") ?: keystoreProperties.getProperty("storeFile")
                 )
-                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: keystoreProperties.getProperty("storePassword")
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                    ?: keystoreProperties.getProperty("storePassword")
                 keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties.getProperty("keyAlias")
-                keyPassword = System.getenv("KEY_PASSWORD") ?: keystoreProperties.getProperty("keyPassword")
+                keyPassword =
+                    System.getenv("KEY_PASSWORD") ?: keystoreProperties.getProperty("keyPassword")
             }
         }
     }
 
+    // ✅ CORRECCIÓN: Usar lint en lugar de lintOptions
     lint {
         abortOnError = false
         checkReleaseBuilds = false
         baseline = file("lint-baseline.xml")
+        // ✅ CORRECCIÓN: Usar nueva sintaxis para disable
         disable += listOf("InvalidPackage", "PrivateApi")
     }
 
     buildTypes {
         release {
-            // Solo usa signingConfig release si fue creado
             if (signingConfigs.findByName("release") != null) {
                 signingConfig = signingConfigs.getByName("release")
             }
-            isMinifyEnabled = false // pon true si quieres ProGuard para release firmado
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+
         }
         debug {
             signingConfig = signingConfigs.getByName("debug")
@@ -86,7 +97,7 @@ android {
         }
     }
 
-    // Opcional: Evita errores con recursos duplicados de dependencias
+    // ✅ CORRECCIÓN: Usar packaging en lugar de packagingOptions
     packaging {
         resources {
             excludes.addAll(
@@ -115,10 +126,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
-    // Si usas Crashlytics (Firebase crash reporting), descomenta la línea abajo
-    // implementation("com.google.firebase:firebase-crashlytics")
-}
-
-flutter {
-    source = "../.."
+    // ¡Añade esta línea para la dependencia de Crashlytics!
+    implementation("com.google.firebase:firebase-crashlytics")
 }
