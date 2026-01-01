@@ -44,7 +44,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.develop4god.devocional_nuevo"
+        applicationId = "com.develop4God.habitus_faith"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
