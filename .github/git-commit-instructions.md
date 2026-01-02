@@ -1,0 +1,2 @@
+Include references to the updated files and methods in your commit message. This makes it easy to understand what was changed and helps with double-checking the modifications
+Always list the files and methods/functions you changed, and briefly describe the purpose of the commit. This ensures clarity and makes review and verification easier.

@@ -16,6 +16,7 @@ import '../../config/ai_config.dart';
 import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
 import 'gemini_template_firestore_service.dart';
+import '../habit_template_loader.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
@@ -528,8 +529,15 @@ Requisitos estrictos:
     _logger?.i(
         'Generating habits from profile - Intent: ${profile.primaryIntent}');
 
-    // A. Buscar en cache por fingerprint exacto
+    // A. Buscar en assets por fingerprint exacto (template precacheado)
     final fingerprint = profile.cacheFingerprint;
+    final template = await HabitTemplateLoader.loadTemplate(fingerprint);
+    if (template != null && HabitTemplateLoader.validateTemplate(template)) {
+      debugPrint('[Template HIT] Exact match for fingerprint: $fingerprint');
+      return HabitTemplateLoader.parseHabits(template);
+    }
+
+    // A. Buscar en cache por fingerprint exacto
     final cached =
         await _cache.get<List<Map<String, dynamic>>>('profile_$fingerprint');
     if (cached != null) {
@@ -729,7 +737,15 @@ Responde SOLO con JSON válido (sin markdown, sin ```json):
     "category": "spiritual" | "physical" | "mental" | "relational",
     "emoji": "emoji apropiado",
     "scheduledTime": "HH:mm" (opcional, basado en momento óptimo) o null,
-    "tasks": ["subtarea 1", "subtarea 2"] (opcional, para hábitos complejos)
+    "tasks": ["subtarea 1", "subtarea 2"] (opcional, para hábitos complejos),
+    "notifications": [
+      {
+        "time": "HH:mm" (formato 24h, ej: "07:00"),
+        "title": "Título motivacional del recordatorio",
+        "body": "Mensaje alentador breve",
+        "enabled": true
+      }
+    ]
   }
 ]
 
@@ -737,6 +753,9 @@ Requisitos:
 - Hábitos deben ser ESPECÍFICOS y MEDIBLES
 - Incluir tiempo estimado en el nombre si relevante
 - Las descripciones deben motivar y explicar el beneficio
+- IMPORTANTE: Cada hábito DEBE incluir al menos una notificación con horario específico
+- Los recordatorios deben ser en momentos apropiados del día (mañana: 07:00-09:00, tarde: 12:00-14:00, noche: 20:00-22:00)
+- Títulos de notificaciones deben ser breves y motivadores
 - Tono: motivacional, práctico, esperanzador
 - Respetar el contexto del usuario (${profile.primaryIntent.name})
 ''';
@@ -797,6 +816,7 @@ Requisitos:
           'category': _parseCategory(habitData['category'] as String),
           'emoji': habitData['emoji'] as String,
           'reminderTime': habitData['scheduledTime'] as String?,
+          'notifications': habitData['notifications'] as List?,
           'createdAt': DateTime.now().toIso8601String(),
           'completedToday': false,
           'currentStreak': 0,

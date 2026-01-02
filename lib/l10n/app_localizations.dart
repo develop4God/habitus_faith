@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// Onboarding welcome message
   ///
   /// In en, this message translates to:
-  /// **'We\'ll help you with AI 🤖 to personalize your first routines, according to your preferences.'**
+  /// **'We\'ll help you personalize your first routines, according to your preferences.'**
   String get onboardingWelcomeMessage;
 
   /// Onboarding instruction
@@ -716,10 +716,10 @@ abstract class AppLocalizations {
   /// **'Generate Micro-Habits'**
   String get generateMicroHabits;
 
-  /// Title for AI-generated habits section
+  /// Title for automatically generated habits section
   ///
   /// In en, this message translates to:
-  /// **'AI-Generated Habits'**
+  /// **'Automatically Generated Habits'**
   String get aiGeneratedHabits;
 
   /// Label for user goal input field
@@ -953,13 +953,13 @@ abstract class AppLocalizations {
   /// Second feature of advanced mode
   ///
   /// In en, this message translates to:
-  /// **'AI-powered insights'**
+  /// **'Advanced and personalized insights.'**
   String get advancedModeFeature2;
 
   /// Third feature of advanced mode
   ///
   /// In en, this message translates to:
-  /// **'Advanced customization'**
+  /// **'Third feature of advanced mode'**
   String get advancedModeFeature3;
 
   /// Message informing users they can change mode later
@@ -1010,16 +1010,16 @@ abstract class AppLocalizations {
   /// **'Create a custom habit'**
   String get createCustomHabit;
 
-  /// Option to generate habits with AI
+  /// Option to generate habits automatically
   ///
   /// In en, this message translates to:
-  /// **'Generate with AI'**
+  /// **'Generate automatically'**
   String get generateWithAI;
 
-  /// Description for AI-generated habits
+  /// Description for automatically generated habits
   ///
   /// In en, this message translates to:
-  /// **'Custom habits with AI'**
+  /// **'Automatically customized habits'**
   String get aiCustomHabits;
 
   /// Placeholder text for habit name in preview
@@ -1471,6 +1471,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today'**
   String get today;
+
+  /// No description provided for @morning_prayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning Prayer'**
+  String get morning_prayer;
+
+  /// No description provided for @bible_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Bible Reading'**
+  String get bible_reading;
+
+  /// No description provided for @evening_prayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening Prayer'**
+  String get evening_prayer;
+
+  /// No description provided for @worship_music.
+  ///
+  /// In en, this message translates to:
+  /// **'Worship Music'**
+  String get worship_music;
+
+  /// No description provided for @gratitude_journal.
+  ///
+  /// In en, this message translates to:
+  /// **'Gratitude Journal'**
+  String get gratitude_journal;
+
+  /// No description provided for @scripture_meditation.
+  ///
+  /// In en, this message translates to:
+  /// **'Scripture Meditation'**
+  String get scripture_meditation;
+
+  /// No description provided for @fasting.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get fasting;
+
+  /// No description provided for @serve_others.
+  ///
+  /// In en, this message translates to:
+  /// **'Serve Others'**
+  String get serve_others;
+
+  /// No description provided for @bible_study_group.
+  ///
+  /// In en, this message translates to:
+  /// **'Bible Study Group'**
+  String get bible_study_group;
+
+  /// No description provided for @prayer_walk.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Walk'**
+  String get prayer_walk;
+
+  /// No description provided for @scripture_memorization.
+  ///
+  /// In en, this message translates to:
+  /// **'Scripture Memorization'**
+  String get scripture_memorization;
+
+  /// No description provided for @intercessory_prayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Intercessory Prayer'**
+  String get intercessory_prayer;
+
+  /// No description provided for @devotional_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Devotional Reading'**
+  String get devotional_reading;
+
+  /// No description provided for @confession_repentance.
+  ///
+  /// In en, this message translates to:
+  /// **'Confession & Repentance'**
+  String get confession_repentance;
+
+  /// No description provided for @praise_thanksgiving.
+  ///
+  /// In en, this message translates to:
+  /// **'Praise & Thanksgiving'**
+  String get praise_thanksgiving;
+
+  /// No description provided for @sabbath_rest.
+  ///
+  /// In en, this message translates to:
+  /// **'Sabbath Rest'**
+  String get sabbath_rest;
+
+  /// No description provided for @digital_detox_prayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital Detox & Prayer'**
+  String get digital_detox_prayer;
+
+  /// No description provided for @christian_podcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Christian Podcast'**
+  String get christian_podcast;
+
+  /// No description provided for @family_devotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Devotion'**
+  String get family_devotion;
+
+  /// No description provided for @spiritual_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Spiritual Reading'**
+  String get spiritual_reading;
+
+  /// No description provided for @daily_walk.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Walk'**
+  String get daily_walk;
+
+  /// No description provided for @morning_exercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning Exercise'**
+  String get morning_exercise;
+
+  /// No description provided for @yoga_stretching.
+  ///
+  /// In en, this message translates to:
+  /// **'Yoga/Stretching'**
+  String get yoga_stretching;
+
+  /// No description provided for @healthy_breakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy Breakfast'**
+  String get healthy_breakfast;
+
+  /// No description provided for @hydration_routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration Routine'**
+  String get hydration_routine;
+
+  /// No description provided for @running_jogging.
+  ///
+  /// In en, this message translates to:
+  /// **'Running/Jogging'**
+  String get running_jogging;
+
+  /// No description provided for @strength_training.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength Training'**
+  String get strength_training;
+
+  /// No description provided for @bike_cycling.
+  ///
+  /// In en, this message translates to:
+  /// **'Biking/Cycling'**
+  String get bike_cycling;
+
+  /// No description provided for @healthy_meal_prep.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy Meal Prep'**
+  String get healthy_meal_prep;
+
+  /// No description provided for @swimming.
+  ///
+  /// In en, this message translates to:
+  /// **'Swimming'**
+  String get swimming;
+
+  /// No description provided for @dance_movement.
+  ///
+  /// In en, this message translates to:
+  /// **'Dance/Movement'**
+  String get dance_movement;
+
+  /// No description provided for @sports_recreation.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports/Recreation'**
+  String get sports_recreation;
+
+  /// No description provided for @posture_breaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Posture Breaks'**
+  String get posture_breaks;
+
+  /// No description provided for @outdoor_nature.
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoor/Nature Time'**
+  String get outdoor_nature;
+
+  /// No description provided for @evening_walk.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening Walk'**
+  String get evening_walk;
+
+  /// No description provided for @mindfulness_meditation.
+  ///
+  /// In en, this message translates to:
+  /// **'Mindfulness Meditation'**
+  String get mindfulness_meditation;
+
+  /// No description provided for @journaling.
+  ///
+  /// In en, this message translates to:
+  /// **'Journaling'**
+  String get journaling;
+
+  /// No description provided for @deep_work_focus.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Work/Focus'**
+  String get deep_work_focus;
+
+  /// No description provided for @reading_learning.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading/Learning'**
+  String get reading_learning;
+
+  /// No description provided for @digital_detox.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital Detox'**
+  String get digital_detox;
+
+  /// No description provided for @planning_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning & Review'**
+  String get planning_review;
+
+  /// No description provided for @breathing_exercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing Exercises'**
+  String get breathing_exercises;
+
+  /// No description provided for @creative_hobby.
+  ///
+  /// In en, this message translates to:
+  /// **'Creative Hobby'**
+  String get creative_hobby;
+
+  /// No description provided for @call_friend_family.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Friend/Family'**
+  String get call_friend_family;
+
+  /// No description provided for @quality_time_loved_ones.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality Time with Loved Ones'**
+  String get quality_time_loved_ones;
 }
 
 class _AppLocalizationsDelegate

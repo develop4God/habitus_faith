@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_mature_dontKnowStart_strong_growInFaith",
+  "fingerprint": "857090507",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "growInFaith"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "strong",
+    "spiritualMaturity": "mature"
+  },
+  "habits": [
+    {
+      "id": "sp13",
+      "nameKey": "devotional_reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "devotional_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 21,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 10,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp15",
+      "nameKey": "praise_thanksgiving",
+      "category": "spiritual",
+      "emoji": "🎉",
+      "target_minutes": 10,
+      "verse_key": "psalms_100_4",
+      "notification_key": "praise_thanksgiving",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp18",
+      "nameKey": "christian_podcast",
+      "category": "spiritual",
+      "emoji": "🎧",
+      "target_minutes": 14,
+      "verse_key": null,
+      "notification_key": "christian_podcast",
+      "time_of_day": "flexible"
+    }
+  ]
+}

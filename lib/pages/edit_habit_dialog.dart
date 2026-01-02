@@ -111,8 +111,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = widget.l10n;
-    final habitColor =
-        selectedColor ?? HabitColors.categoryColors[selectedCategory]!;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -150,7 +148,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitCategory>(
-                value: selectedCategory,
+                initialValue: selectedCategory,
                 decoration: InputDecoration(
                   labelText: l10n.category,
                   border: OutlineInputBorder(
@@ -185,7 +183,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitDifficulty>(
-                value: selectedDifficulty,
+                initialValue: selectedDifficulty,
                 decoration: InputDecoration(
                   labelText: l10n.difficulty,
                   border: OutlineInputBorder(
@@ -238,7 +236,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                      color: color.withOpacity(0.4),
+                                      color: color.withValues(alpha: 0.4),
                                       blurRadius: 8)
                                 ]
                               : [],

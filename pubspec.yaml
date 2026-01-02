@@ -1,6 +1,6 @@
 name: habitus_faith
 description: App para llevar hábitos cristianos y fortalecer tu fe día a día.
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -71,13 +71,13 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-
     - assets/lottie/animation.json
     - assets/lottie/
     - assets/biblia/
     - assets/ml_models/predictor.tflite
     - assets/ml_models/scaler_params.json
     - assets/ml_models/model_metadata.json
+    - assets/habit_templates_v2/
     - .env
   fonts:
     - family: DancingScript
