@@ -10,5 +10,7 @@ part 'template_providers.g.dart';
 @riverpod
 TemplateMatchingService templateMatchingService(Ref ref) {
   final cache = ref.watch(cacheServiceProvider);
+  // TemplateScoringEngine will use default instance via optional parameter
+  // Can be overridden in tests by passing custom scoringEngine
   return TemplateMatchingService(cache);
 }

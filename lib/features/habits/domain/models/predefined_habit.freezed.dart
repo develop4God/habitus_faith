@@ -23,7 +23,8 @@ mixin _$PredefinedHabit {
   String get id => throw _privateConstructorUsedError;
   String get emoji => throw _privateConstructorUsedError;
   String get nameKey => throw _privateConstructorUsedError;
-  String? get descriptionKey => throw _privateConstructorUsedError;
+  String? get descriptionKey =>
+      throw _privateConstructorUsedError; // ahora opcional
   PredefinedHabitCategory get category => throw _privateConstructorUsedError;
   VerseReference? get verse => throw _privateConstructorUsedError;
   String? get suggestedTime => throw _privateConstructorUsedError;
@@ -74,7 +75,7 @@ class _$PredefinedHabitCopyWithImpl<$Res, $Val extends PredefinedHabit>
     Object? id = null,
     Object? emoji = null,
     Object? nameKey = null,
-    Object? descriptionKey = null,
+    Object? descriptionKey = freezed,
     Object? category = null,
     Object? verse = freezed,
     Object? suggestedTime = freezed,
@@ -92,7 +93,7 @@ class _$PredefinedHabitCopyWithImpl<$Res, $Val extends PredefinedHabit>
           ? _value.nameKey
           : nameKey // ignore: cast_nullable_to_non_nullable
               as String,
-      descriptionKey: null == descriptionKey
+      descriptionKey: freezed == descriptionKey
           ? _value.descriptionKey
           : descriptionKey // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -163,7 +164,7 @@ class __$$PredefinedHabitImplCopyWithImpl<$Res>
     Object? id = null,
     Object? emoji = null,
     Object? nameKey = null,
-    Object? descriptionKey = null,
+    Object? descriptionKey = freezed,
     Object? category = null,
     Object? verse = freezed,
     Object? suggestedTime = freezed,
@@ -181,7 +182,7 @@ class __$$PredefinedHabitImplCopyWithImpl<$Res>
           ? _value.nameKey
           : nameKey // ignore: cast_nullable_to_non_nullable
               as String,
-      descriptionKey: null == descriptionKey
+      descriptionKey: freezed == descriptionKey
           ? _value.descriptionKey
           : descriptionKey // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -224,6 +225,7 @@ class _$PredefinedHabitImpl implements _PredefinedHabit {
   final String nameKey;
   @override
   final String? descriptionKey;
+// ahora opcional
   @override
   final PredefinedHabitCategory category;
   @override
@@ -295,7 +297,7 @@ abstract class _PredefinedHabit implements PredefinedHabit {
   @override
   String get nameKey;
   @override
-  String? get descriptionKey;
+  String? get descriptionKey; // ahora opcional
   @override
   PredefinedHabitCategory get category;
   @override

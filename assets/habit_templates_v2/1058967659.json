@@ -1,0 +1,68 @@
+{
+  "template_id": "both_growing_givingUp_normal_productivity_understandBible",
+  "fingerprint": "1058967659",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "understandBible",
+      "productivity"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "normal",
+    "spiritualMaturity": "growing"
+  },
+  "habits": [
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 7,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp09",
+      "nameKey": "bible_study_group",
+      "category": "spiritual",
+      "emoji": "👥",
+      "target_minutes": 30,
+      "verse_key": "hebrews_10_25",
+      "notification_key": "bible_study_group",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp13",
+      "nameKey": "devotional_reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "devotional_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph04",
+      "nameKey": "healthy_breakfast",
+      "category": "physical",
+      "emoji": "🥗",
+      "target_minutes": 7,
+      "verse_key": null,
+      "notification_key": "healthy_breakfast",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph01",
+      "nameKey": "daily_walk",
+      "category": "physical",
+      "emoji": "🚶",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "daily_walk",
+      "time_of_day": "morning"
+    }
+  ]
+}

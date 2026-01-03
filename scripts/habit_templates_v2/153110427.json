@@ -1,0 +1,68 @@
+{
+  "template_id": "wellness_none_lackOfTime_normal_betterSleep_physicalHealth",
+  "fingerprint": "153110427",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "wellness",
+    "motivations": [
+      "betterSleep",
+      "physicalHealth"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "normal",
+    "spiritualMaturity": null
+  },
+  "habits": [
+    {
+      "id": "ph05",
+      "nameKey": "hydration_routine",
+      "category": "physical",
+      "emoji": "💧",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "hydration_routine",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph13",
+      "nameKey": "posture_breaks",
+      "category": "physical",
+      "emoji": "🪑",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "posture_breaks",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph04",
+      "nameKey": "healthy_breakfast",
+      "category": "physical",
+      "emoji": "🥗",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "healthy_breakfast",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "mn05",
+      "nameKey": "digital_detox",
+      "category": "mental",
+      "emoji": "📵",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "digital_detox",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "mn07",
+      "nameKey": "breathing_exercises",
+      "category": "mental",
+      "emoji": "🌬️",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "breathing_exercises",
+      "time_of_day": "flexible"
+    }
+  ]
+}

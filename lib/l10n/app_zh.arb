@@ -376,9 +376,9 @@
   "@generateMicroHabits": {
     "description": "微习惯生成器页面标题"
   },
-  "aiGeneratedHabits": "AI生成的习惯",
+  "aiGeneratedHabits": "自动生成的习惯",
   "@aiGeneratedHabits": {
-    "description": "AI生成习惯部分的标题"
+    "description": "自动生成习惯部分的标题"
   },
   "yourGoal": "你的目标",
   "@yourGoal": {
@@ -600,7 +600,7 @@
   "advancedMode": "高级模式",
   "advancedModeDescription": "具有见解和分析的完整体验",
   "advancedModeFeature1": "详细的习惯分析",
-  "advancedModeFeature2": "AI驱动的见解",
+  "advancedModeFeature2": "高级和个性化见解。",
   "advancedModeFeature3": "高级自定义",
   "changeAnytime": "您可以随时在偏好设置中更改此设置",
   "selectMode": "选择模式",
@@ -616,13 +616,13 @@
   "@createCustomHabit": {
     "description": "手动创建习惯的描述"
   },
-  "generateWithAI": "使用AI生成",
+  "generateWithAI": "自动生成",
   "@generateWithAI": {
-    "description": "使用AI生成习惯的选项"
+    "description": "自动生成习惯的选项"
   },
-  "aiCustomHabits": "使用AI的自定义习惯",
+  "aiCustomHabits": "自动个性化习惯",
   "@aiCustomHabits": {
-    "description": "AI生成习惯的描述"
+    "description": "自动生成习惯的描述"
   },
   "previewHabitName": "习惯名称",
   "@previewHabitName": {
@@ -744,5 +744,5 @@
     "description": "用于在习惯视图中显示当天的标签"
   }
 ,
-  "onboardingWelcomeMessage": "ZH: Welcome message"
+  "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。"
 }

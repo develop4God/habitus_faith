@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_growing_givingUp_weak_prayerDiscipline",
+  "fingerprint": "372095037",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "prayerDiscipline"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "weak",
+    "spiritualMaturity": "growing"
+  },
+  "habits": [
+    {
+      "id": "sp09",
+      "nameKey": "bible_study_group",
+      "category": "spiritual",
+      "emoji": "👥",
+      "target_minutes": 30,
+      "verse_key": "hebrews_10_25",
+      "notification_key": "bible_study_group",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp19",
+      "nameKey": "family_devotion",
+      "category": "spiritual",
+      "emoji": "👨‍👩‍👧‍👦",
+      "target_minutes": 10,
+      "verse_key": "deuteronomy_6_7",
+      "notification_key": "family_devotion",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 7,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    }
+  ]
+}

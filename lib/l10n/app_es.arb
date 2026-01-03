@@ -74,7 +74,7 @@
   "@welcomeToHabitusFaith": {
     "description": "Onboarding welcome title"
   },
-  "onboardingWelcomeMessage": "Te apoyaremos junto con IA 🤖 a personalizar tus primeras rutinas, según tus preferencias.",
+  "onboardingWelcomeMessage": "Te apoyaremos a personalizar tus primeras rutinas, según tus preferencias.",
   "@onboardingWelcomeMessage": {
     "description": "Onboarding welcome message"
   },
@@ -400,9 +400,9 @@
   "@generateMicroHabits": {
     "description": "Título de la página generadora de micro-hábitos"
   },
-  "aiGeneratedHabits": "Hábitos Generados por IA",
+  "aiGeneratedHabits": "Hábitos Generados Automáticamente",
   "@aiGeneratedHabits": {
-    "description": "Título para la sección de hábitos generados por IA"
+    "description": "Título para la sección de hábitos generados automáticamente"
   },
   "yourGoal": "Tu Meta",
   "@yourGoal": {
@@ -604,7 +604,7 @@
   "advancedMode": "Modo avanzado",
   "advancedModeDescription": "Experiencia completa con análisis y perspectivas",
   "advancedModeFeature1": "Análisis detallados de hábitos",
-  "advancedModeFeature2": "Información impulsada por IA",
+  "advancedModeFeature2": "Información avanzada y perspectivas personalizadas.",
   "advancedModeFeature3": "Personalización avanzada",
   "changeAnytime": "Puedes cambiar esta configuración en cualquier momento en las preferencias",
   "selectMode": "Seleccionar modo",
@@ -620,13 +620,13 @@
   "@createCustomHabit": {
     "description": "Descripción para creación manual de hábito"
   },
-  "generateWithAI": "Generar con IA",
+  "generateWithAI": "Generar automáticamente",
   "@generateWithAI": {
-    "description": "Opción para generar hábitos con IA"
+    "description": "Opción para generar hábitos automáticamente"
   },
-  "aiCustomHabits": "Hábitos personalizados con IA",
+  "aiCustomHabits": "Hábitos personalizados automáticamente",
   "@aiCustomHabits": {
-    "description": "Descripción para hábitos generados por IA"
+    "description": "Descripción para hábitos generados automáticamente"
   },
   "previewHabitName": "Nombre del hábito",
   "@previewHabitName": {
@@ -849,5 +849,50 @@
   "today": "Hoy",
   "@today": {
     "description": "Etiqueta para mostrar el día actual en la vista de hábitos"
-  }
+  },
+  "morning_prayer": "Oración Matutina",
+  "bible_reading": "Lectura Bíblica",
+  "evening_prayer": "Oración Nocturna",
+  "worship_music": "Música de Adoración",
+  "gratitude_journal": "Diario de Gratitud",
+  "scripture_meditation": "Meditación en la Escritura",
+  "fasting": "Ayuno",
+  "serve_others": "Servir a Otros",
+  "bible_study_group": "Grupo de Estudio Bíblico",
+  "prayer_walk": "Caminata de Oración",
+  "scripture_memorization": "Memorización de Escrituras",
+  "intercessory_prayer": "Oración Intercesora",
+  "devotional_reading": "Lectura Devocional",
+  "confession_repentance": "Confesión y Arrepentimiento",
+  "praise_thanksgiving": "Alabanza y Acción de Gracias",
+  "sabbath_rest": "Descanso del Sabbath",
+  "digital_detox_prayer": "Desintoxicación Digital y Oración",
+  "christian_podcast": "Podcast Cristiano",
+  "family_devotion": "Devocional Familiar",
+  "spiritual_reading": "Lectura Espiritual",
+  "daily_walk": "Caminata Diaria",
+  "morning_exercise": "Ejercicio Matutino",
+  "yoga_stretching": "Yoga/Estiramiento",
+  "healthy_breakfast": "Desayuno Saludable",
+  "hydration_routine": "Rutina de Hidratación",
+  "running_jogging": "Correr/Trotar",
+  "strength_training": "Entrenamiento de Fuerza",
+  "bike_cycling": "Ciclismo",
+  "healthy_meal_prep": "Preparación de Comidas Saludables",
+  "swimming": "Natación",
+  "dance_movement": "Baile/Movimiento",
+  "sports_recreation": "Deportes/Recreación",
+  "posture_breaks": "Pausas de Postura",
+  "outdoor_nature": "Tiempo al Aire Libre/Naturaleza",
+  "evening_walk": "Caminata Nocturna",
+  "mindfulness_meditation": "Meditación Consciente",
+  "journaling": "Llevar un Diario",
+  "deep_work_focus": "Trabajo Profundo/Concentración",
+  "reading_learning": "Lectura/Aprendizaje",
+  "digital_detox": "Desintoxicación Digital",
+  "planning_review": "Planificación y Revisión",
+  "breathing_exercises": "Ejercicios de Respiración",
+  "creative_hobby": "Pasatiempo Creativo",
+  "call_friend_family": "Llamar Amigo/Familia",
+  "quality_time_loved_ones": "Tiempo de Calidad con Seres Queridos"
 }
