@@ -29,7 +29,7 @@ android {
     }
 
     signingConfigs {
-        val keyProperties = new java.util.Properties()
+        val keyProperties = java.util.Properties()
         val keyPropertiesFile = rootProject.file("key.properties")
         if (keyPropertiesFile.exists()) {
             keyProperties.load(java.io.FileInputStream(keyPropertiesFile))
