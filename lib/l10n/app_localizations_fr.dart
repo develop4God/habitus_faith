@@ -62,7 +62,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bienvenue à Habitus Foi';
 
   @override
-  String get onboardingWelcomeMessage => 'FR: Welcome message';
+  String get onboardingWelcomeMessage =>
+      'We\'ll help you personalize your first routines, according to your preferences.';
 
   @override
   String get selectUpToThreeHabits =>
@@ -776,7 +777,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get invalidInterval => 'FR: Interval must be at least 1';
 
   @override
-  String get habitTracking => 'FR: Habit Tracking';
+  String get habitTracking => 'Suivi des Habitudes';
 
   @override
   String get routine => 'Routine';
@@ -785,137 +786,137 @@ class AppLocalizationsFr extends AppLocalizations {
   String get today => 'Aujourd\'hui';
 
   @override
-  String get morning_prayer => 'Morning Prayer';
+  String get morning_prayer => 'Prière du Matin';
 
   @override
-  String get bible_reading => 'Bible Reading';
+  String get bible_reading => 'Lecture Biblique';
 
   @override
-  String get evening_prayer => 'Evening Prayer';
+  String get evening_prayer => 'Prière du Soir';
 
   @override
-  String get worship_music => 'Worship Music';
+  String get worship_music => 'Musique de Louange';
 
   @override
-  String get gratitude_journal => 'Gratitude Journal';
+  String get gratitude_journal => 'Journal de Gratitude';
 
   @override
-  String get scripture_meditation => 'Scripture Meditation';
+  String get scripture_meditation => 'Méditation Scripturaire';
 
   @override
-  String get fasting => 'Fasting';
+  String get fasting => 'Jeûne';
 
   @override
-  String get serve_others => 'Serve Others';
+  String get serve_others => 'Servir les Autres';
 
   @override
-  String get bible_study_group => 'Bible Study Group';
+  String get bible_study_group => 'Groupe d\'Étude Biblique';
 
   @override
-  String get prayer_walk => 'Prayer Walk';
+  String get prayer_walk => 'Marche de Prière';
 
   @override
-  String get scripture_memorization => 'Scripture Memorization';
+  String get scripture_memorization => 'Mémorisation des Écritures';
 
   @override
-  String get intercessory_prayer => 'Intercessory Prayer';
+  String get intercessory_prayer => 'Prière d\'Intercession';
 
   @override
-  String get devotional_reading => 'Devotional Reading';
+  String get devotional_reading => 'Lecture Dévotionnelle';
 
   @override
-  String get confession_repentance => 'Confession & Repentance';
+  String get confession_repentance => 'Confession et Repentance';
 
   @override
-  String get praise_thanksgiving => 'Praise & Thanksgiving';
+  String get praise_thanksgiving => 'Louange et Action de Grâces';
 
   @override
-  String get sabbath_rest => 'Sabbath Rest';
+  String get sabbath_rest => 'Repos du Sabbat';
 
   @override
-  String get digital_detox_prayer => 'Digital Detox & Prayer';
+  String get digital_detox_prayer => 'Détox Numérique et Prière';
 
   @override
-  String get christian_podcast => 'Christian Podcast';
+  String get christian_podcast => 'Podcast Chrétien';
 
   @override
-  String get family_devotion => 'Family Devotion';
+  String get family_devotion => 'Dévotion Familiale';
 
   @override
-  String get spiritual_reading => 'Spiritual Reading';
+  String get spiritual_reading => 'Lecture Spirituelle';
 
   @override
-  String get daily_walk => 'Daily Walk';
+  String get daily_walk => 'Marche Quotidienne';
 
   @override
-  String get morning_exercise => 'Morning Exercise';
+  String get morning_exercise => 'Exercice Matinal';
 
   @override
-  String get yoga_stretching => 'Yoga/Stretching';
+  String get yoga_stretching => 'Étirements';
 
   @override
-  String get healthy_breakfast => 'Healthy Breakfast';
+  String get healthy_breakfast => 'Petit-déjeuner Sain';
 
   @override
-  String get hydration_routine => 'Hydration Routine';
+  String get hydration_routine => 'Routine d\'Hydratation';
 
   @override
-  String get running_jogging => 'Running/Jogging';
+  String get running_jogging => 'Course à Pied';
 
   @override
-  String get strength_training => 'Strength Training';
+  String get strength_training => 'Musculation';
 
   @override
-  String get bike_cycling => 'Biking/Cycling';
+  String get bike_cycling => 'Cyclisme';
 
   @override
-  String get healthy_meal_prep => 'Healthy Meal Prep';
+  String get healthy_meal_prep => 'Préparation de Repas Sains';
 
   @override
-  String get swimming => 'Swimming';
+  String get swimming => 'Natation';
 
   @override
-  String get dance_movement => 'Dance/Movement';
+  String get dance_movement => 'Danse/Mouvement';
 
   @override
-  String get sports_recreation => 'Sports/Recreation';
+  String get sports_recreation => 'Sports/Loisirs';
 
   @override
-  String get posture_breaks => 'Posture Breaks';
+  String get posture_breaks => 'Pauses Posturales';
 
   @override
-  String get outdoor_nature => 'Outdoor/Nature Time';
+  String get outdoor_nature => 'Temps en Plein Air/Nature';
 
   @override
-  String get evening_walk => 'Evening Walk';
+  String get evening_walk => 'Marche du Soir';
 
   @override
-  String get mindfulness_meditation => 'Mindfulness Meditation';
+  String get mindfulness_meditation => 'Méditation de Pleine Conscience';
 
   @override
-  String get journaling => 'Journaling';
+  String get journaling => 'Tenir un Journal';
 
   @override
-  String get deep_work_focus => 'Deep Work/Focus';
+  String get deep_work_focus => 'Travail Profond/Concentration';
 
   @override
-  String get reading_learning => 'Reading/Learning';
+  String get reading_learning => 'Lecture/Apprentissage';
 
   @override
-  String get digital_detox => 'Digital Detox';
+  String get digital_detox => 'Détox Numérique';
 
   @override
-  String get planning_review => 'Planning & Review';
+  String get planning_review => 'Planification et Révision';
 
   @override
-  String get breathing_exercises => 'Breathing Exercises';
+  String get breathing_exercises => 'Exercices de Respiration';
 
   @override
-  String get creative_hobby => 'Creative Hobby';
+  String get creative_hobby => 'Loisir Créatif';
 
   @override
-  String get call_friend_family => 'Call Friend/Family';
+  String get call_friend_family => 'Appeler un Ami/la Famille';
 
   @override
-  String get quality_time_loved_ones => 'Quality Time with Loved Ones';
+  String get quality_time_loved_ones => 'Temps de Qualité avec les Proches';
 }

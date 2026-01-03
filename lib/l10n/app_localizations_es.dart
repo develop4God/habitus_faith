@@ -847,7 +847,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get morning_exercise => 'Ejercicio Matutino';
 
   @override
-  String get yoga_stretching => 'Yoga/Estiramiento';
+  String get yoga_stretching => 'Estiramiento';
 
   @override
   String get healthy_breakfast => 'Desayuno Saludable';

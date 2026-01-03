@@ -62,7 +62,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeToHabitusFaith => '欢迎来到信仰习惯';
 
   @override
-  String get onboardingWelcomeMessage => '我们将根据您的偏好帮助您个性化您的首批习惯。';
+  String get onboardingWelcomeMessage =>
+      'We\'ll help you personalize your first routines, according to your preferences.';
 
   @override
   String get selectUpToThreeHabits => '选择最多3个习惯开始您的旅程';
@@ -662,76 +663,76 @@ class AppLocalizationsZh extends AppLocalizations {
   String get home => '首页';
 
   @override
-  String get reminderConfig => 'Reminder Configuration';
+  String get reminderConfig => '提醒配置';
 
   @override
-  String get recurrenceConfig => 'Daily Repetitions';
+  String get recurrenceConfig => '每日重复';
 
   @override
-  String get repeat => 'Repeat';
+  String get repeat => '重复';
 
   @override
-  String get setCycleForPlan => 'Set a cycle for your plan';
+  String get setCycleForPlan => '为您的计划设置周期';
 
   @override
-  String get subtasks => 'Subtasks';
+  String get subtasks => '子任务';
 
   @override
-  String get addSubtask => 'Add subtask';
+  String get addSubtask => '添加子任务';
 
   @override
-  String get minutesBefore => 'Minutes before';
+  String get minutesBefore => '提前分钟数';
 
   @override
-  String get interval => 'Interval';
+  String get interval => '间隔';
 
   @override
-  String get endDate => 'End date';
+  String get endDate => '结束日期';
 
   @override
-  String get daily => 'Daily';
+  String get daily => '每天';
 
   @override
-  String get weekly => 'Weekly';
+  String get weekly => '每周';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => '每月';
 
   @override
   String everyXDays(int count) {
-    return 'Every $count day(s)';
+    return '每$count天';
   }
 
   @override
   String everyXWeeks(int count) {
-    return 'Every $count week(s)';
+    return '每$count周';
   }
 
   @override
   String everyXMonths(int count) {
-    return 'Every $count month(s)';
+    return '每$count月';
   }
 
   @override
-  String get noRepetition => 'No repetition';
+  String get noRepetition => '不重复';
 
   @override
-  String get reminder => 'Reminder';
+  String get reminder => '提醒';
 
   @override
-  String get repetition => 'Repetition';
+  String get repetition => '重复';
 
   @override
-  String get eventTime => 'Event time (HH:MM)';
+  String get eventTime => '事件时间（HH:MM）';
 
   @override
-  String get invalidMinutes => 'Please enter a valid number between 1 and 1440';
+  String get invalidMinutes => '请输入1到1440之间的有效数字';
 
   @override
-  String get invalidInterval => 'Interval must be at least 1';
+  String get invalidInterval => '间隔必须至少为1';
 
   @override
-  String get habitTracking => 'Habit Tracking';
+  String get habitTracking => '习惯跟踪';
 
   @override
   String get routine => '常规';
@@ -740,137 +741,137 @@ class AppLocalizationsZh extends AppLocalizations {
   String get today => '今天';
 
   @override
-  String get morning_prayer => 'Morning Prayer';
+  String get morning_prayer => '晨祷';
 
   @override
-  String get bible_reading => 'Bible Reading';
+  String get bible_reading => '圣经阅读';
 
   @override
-  String get evening_prayer => 'Evening Prayer';
+  String get evening_prayer => '晚祷';
 
   @override
-  String get worship_music => 'Worship Music';
+  String get worship_music => '敬拜音乐';
 
   @override
-  String get gratitude_journal => 'Gratitude Journal';
+  String get gratitude_journal => '感恩日记';
 
   @override
-  String get scripture_meditation => 'Scripture Meditation';
+  String get scripture_meditation => '经文默想';
 
   @override
-  String get fasting => 'Fasting';
+  String get fasting => '禁食';
 
   @override
-  String get serve_others => 'Serve Others';
+  String get serve_others => '服侍他人';
 
   @override
-  String get bible_study_group => 'Bible Study Group';
+  String get bible_study_group => '圣经学习小组';
 
   @override
-  String get prayer_walk => 'Prayer Walk';
+  String get prayer_walk => '祷告散步';
 
   @override
-  String get scripture_memorization => 'Scripture Memorization';
+  String get scripture_memorization => '经文背诵';
 
   @override
-  String get intercessory_prayer => 'Intercessory Prayer';
+  String get intercessory_prayer => '代祷';
 
   @override
-  String get devotional_reading => 'Devotional Reading';
+  String get devotional_reading => '灵修阅读';
 
   @override
-  String get confession_repentance => 'Confession & Repentance';
+  String get confession_repentance => '认罪与悔改';
 
   @override
-  String get praise_thanksgiving => 'Praise & Thanksgiving';
+  String get praise_thanksgiving => '赞美与感恩';
 
   @override
-  String get sabbath_rest => 'Sabbath Rest';
+  String get sabbath_rest => '安息日休息';
 
   @override
-  String get digital_detox_prayer => 'Digital Detox & Prayer';
+  String get digital_detox_prayer => '数字排毒与祷告';
 
   @override
-  String get christian_podcast => 'Christian Podcast';
+  String get christian_podcast => '基督教播客';
 
   @override
-  String get family_devotion => 'Family Devotion';
+  String get family_devotion => '家庭灵修';
 
   @override
-  String get spiritual_reading => 'Spiritual Reading';
+  String get spiritual_reading => '属灵阅读';
 
   @override
-  String get daily_walk => 'Daily Walk';
+  String get daily_walk => '每日散步';
 
   @override
-  String get morning_exercise => 'Morning Exercise';
+  String get morning_exercise => '晨练';
 
   @override
-  String get yoga_stretching => 'Yoga/Stretching';
+  String get yoga_stretching => '伸展运动';
 
   @override
-  String get healthy_breakfast => 'Healthy Breakfast';
+  String get healthy_breakfast => '健康早餐';
 
   @override
-  String get hydration_routine => 'Hydration Routine';
+  String get hydration_routine => '补水习惯';
 
   @override
-  String get running_jogging => 'Running/Jogging';
+  String get running_jogging => '跑步/慢跑';
 
   @override
-  String get strength_training => 'Strength Training';
+  String get strength_training => '力量训练';
 
   @override
-  String get bike_cycling => 'Biking/Cycling';
+  String get bike_cycling => '骑自行车';
 
   @override
-  String get healthy_meal_prep => 'Healthy Meal Prep';
+  String get healthy_meal_prep => '健康膳食准备';
 
   @override
-  String get swimming => 'Swimming';
+  String get swimming => '游泳';
 
   @override
-  String get dance_movement => 'Dance/Movement';
+  String get dance_movement => '舞蹈/运动';
 
   @override
-  String get sports_recreation => 'Sports/Recreation';
+  String get sports_recreation => '体育/娱乐';
 
   @override
-  String get posture_breaks => 'Posture Breaks';
+  String get posture_breaks => '姿势休息';
 
   @override
-  String get outdoor_nature => 'Outdoor/Nature Time';
+  String get outdoor_nature => '户外/自然时光';
 
   @override
-  String get evening_walk => 'Evening Walk';
+  String get evening_walk => '晚间散步';
 
   @override
-  String get mindfulness_meditation => 'Mindfulness Meditation';
+  String get mindfulness_meditation => '正念冥想';
 
   @override
-  String get journaling => 'Journaling';
+  String get journaling => '写日记';
 
   @override
-  String get deep_work_focus => 'Deep Work/Focus';
+  String get deep_work_focus => '深度工作/专注';
 
   @override
-  String get reading_learning => 'Reading/Learning';
+  String get reading_learning => '阅读/学习';
 
   @override
-  String get digital_detox => 'Digital Detox';
+  String get digital_detox => '数字排毒';
 
   @override
-  String get planning_review => 'Planning & Review';
+  String get planning_review => '计划与回顾';
 
   @override
-  String get breathing_exercises => 'Breathing Exercises';
+  String get breathing_exercises => '呼吸练习';
 
   @override
-  String get creative_hobby => 'Creative Hobby';
+  String get creative_hobby => '创意爱好';
 
   @override
-  String get call_friend_family => 'Call Friend/Family';
+  String get call_friend_family => '联系朋友/家人';
 
   @override
-  String get quality_time_loved_ones => 'Quality Time with Loved Ones';
+  String get quality_time_loved_ones => '与亲人共度美好时光';
 }

@@ -839,7 +839,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get morning_exercise => 'Morning Exercise';
 
   @override
-  String get yoga_stretching => 'Yoga/Stretching';
+  String get yoga_stretching => 'Stretching';
 
   @override
   String get healthy_breakfast => 'Healthy Breakfast';

@@ -165,7 +165,7 @@ const wellnessGoalsQuestion = OnboardingQuestion(
     ),
     QuestionOption(
       id: 'reduceStress',
-      emoji: '🧘',
+      emoji: '😌',
       text: 'Reducir estrés y ansiedad',
     ),
     QuestionOption(

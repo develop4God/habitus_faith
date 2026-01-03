@@ -15,7 +15,7 @@
       "name": "Quick Stretch Break",
       "description": "Simple movement to reduce stress and boost energy",
       "category": "physical",
-      "emoji": "🧘",
+      "emoji": "🧠",
       "microHabits": [
         {
           "title": "Take 5 deep breaths",
@@ -31,7 +31,7 @@
       "notifications": [
         {
           "time": "14:00",
-          "title": "Relaxation Break 🧘",
+          "title": "Relaxation Break 🧠",
           "body": "Take 3 minutes to relax",
           "enabled": true
         }

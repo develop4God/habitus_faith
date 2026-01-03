@@ -90,7 +90,7 @@ HABIT_CATALOG = {
             "id": "sp06",
             "nameKey": "scripture_meditation",
             "category": "spiritual",
-            "emoji": "🧘‍♂️",
+            "emoji": "📿",
             "base_duration": 15,
             "maturity_multiplier": {"new": 0.7, "growing": 1.0, "mature": 2.0, "passionate": 3.0},
             "tags": ["meditation", "scripture", "contemplation"],

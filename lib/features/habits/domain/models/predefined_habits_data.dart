@@ -80,7 +80,7 @@ final List<PredefinedHabit> predefinedHabits = [
   // ===== MENTAL (3) =====
   const PredefinedHabit(
     id: 'meditation',
-    emoji: '🧘',
+    emoji: '🧠',
     nameKey: 'predefinedHabit_meditation_name',
     descriptionKey: 'predefinedHabit_meditation_description',
     category: PredefinedHabitCategory.mental,
