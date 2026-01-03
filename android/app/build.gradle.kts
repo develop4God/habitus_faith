@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -29,10 +32,10 @@ android {
     }
 
     signingConfigs {
-        val keyProperties = java.util.Properties()
+        val keyProperties = Properties()
         val keyPropertiesFile = rootProject.file("key.properties")
         if (keyPropertiesFile.exists()) {
-            keyProperties.load(java.io.FileInputStream(keyPropertiesFile))
+            keyProperties.load(FileInputStream(keyPropertiesFile))
         }
         create("release") {
             storeFile = file(keyProperties["storeFile"] ?: "upload-keystore.jks")
