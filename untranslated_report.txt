@@ -1,13 +1,1 @@
-{
-  "fr": [
-    "onboardingWelcomeMessage"
-  ],
-
-  "pt": [
-    "onboardingWelcomeMessage"
-  ],
-
-  "zh": [
-    "onboardingWelcomeMessage"
-  ]
-}
+{}

@@ -603,6 +603,7 @@
   "advancedModeFeature2": "Informations avancées et personnalisées.",
   "advancedModeFeature3": "Personnalisation avancée",
   "changeAnytime": "Vous pouvez modifier ce paramètre à tout moment dans les préférences",
+  "onboardingWelcomeMessage": "Nous vous aiderons à personnaliser vos premières routines selon vos préférences.",
   "selectMode": "Sélectionner le mode",
   "displayMode": "Mode d'affichage",
   "displayModeUpdated": "Mode d'affichage mis à jour vers {mode}",

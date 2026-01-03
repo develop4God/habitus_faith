@@ -63,7 +63,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get onboardingWelcomeMessage =>
-      'We\'ll help you personalize your first routines, according to your preferences.';
+      'Vamos ajudá-lo a personalizar suas primeiras rotinas de acordo com suas preferências.';
 
   @override
   String get selectUpToThreeHabits =>

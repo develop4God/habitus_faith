@@ -63,7 +63,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get onboardingWelcomeMessage =>
-      'We\'ll help you personalize your first routines, according to your preferences.';
+      'Nous vous aiderons à personnaliser vos premières routines selon vos préférences.';
 
   @override
   String get selectUpToThreeHabits =>

@@ -62,8 +62,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeToHabitusFaith => '欢迎来到信仰习惯';
 
   @override
-  String get onboardingWelcomeMessage =>
-      'We\'ll help you personalize your first routines, according to your preferences.';
+  String get onboardingWelcomeMessage => '我们将根据您的偏好帮助您个性化您的首批习惯。';
 
   @override
   String get selectUpToThreeHabits => '选择最多3个习惯开始您的旅程';

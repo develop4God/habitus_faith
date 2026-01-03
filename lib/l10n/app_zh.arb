@@ -603,6 +603,7 @@
   "advancedModeFeature2": "高级和个性化见解。",
   "advancedModeFeature3": "高级自定义",
   "changeAnytime": "您可以随时在偏好设置中更改此设置",
+  "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。",
   "selectMode": "选择模式",
   "displayMode": "显示模式",
   "displayModeUpdated": "显示模式已更新为 {mode}",
