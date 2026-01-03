@@ -603,6 +603,7 @@
   "advancedModeFeature2": "Insights avançados e personalizados.",
   "advancedModeFeature3": "Personalização avançada",
   "changeAnytime": "Você pode alterar esta configuração a qualquer momento nas preferências",
+  "onboardingWelcomeMessage": "Vamos ajudá-lo a personalizar suas primeiras rotinas de acordo com suas preferências.",
   "selectMode": "Selecionar modo",
   "displayMode": "Modo de exibição",
   "displayModeUpdated": "Modo de exibição atualizado para {mode}",
@@ -752,27 +753,152 @@
   "@today": {
     "description": "Rótulo para mostrar o dia atual na visualização de hábitos"
   },
-  "reminderConfig": "PT: Reminder Config",
-  "recurrenceConfig": "PT: Recurrence Config",
-  "repeat": "PT: Repeat",
-  "setCycleForPlan": "PT: Set Cycle For Plan",
-  "subtasks": "PT: Subtasks",
-  "addSubtask": "PT: Add Subtask",
-  "minutesBefore": "PT: Minutes Before",
-  "interval": "PT: Interval",
-  "endDate": "PT: End Date",
-  "daily": "PT: Daily",
-  "weekly": "PT: Weekly",
-  "monthly": "PT: Monthly",
-  "everyXDays": "PT: Every X Days",
-  "everyXWeeks": "PT: Every X Weeks",
-  "everyXMonths": "PT: Every X Months",
-  "noRepetition": "PT: No Repetition",
-  "reminder": "PT: Reminder",
-  "repetition": "PT: Repetition",
-  "eventTime": "PT: Event Time",
-  "invalidMinutes": "PT: Invalid Minutes",
-  "invalidInterval": "PT: Invalid Interval",
-  "habitTracking": "PT: Habit Tracking",
-  "onboardingWelcomeMessage": "PT: Welcome message"
+  "reminderConfig": "Configuração de Lembrete",
+  "@reminderConfig": {
+    "description": "Reminder configuration dialog title"
+  },
+  "recurrenceConfig": "Repetições Diárias",
+  "@recurrenceConfig": {
+    "description": "Recurrence configuration dialog title"
+  },
+  "repeat": "Repetir",
+  "@repeat": {
+    "description": "Repeat toggle label"
+  },
+  "setCycleForPlan": "Definir um ciclo para seu plano",
+  "@setCycleForPlan": {
+    "description": "Subtitle for repeat toggle"
+  },
+  "subtasks": "Subtarefas",
+  "@subtasks": {
+    "description": "Subtasks section label"
+  },
+  "addSubtask": "Adicionar subtarefa",
+  "@addSubtask": {
+    "description": "Add subtask hint text"
+  },
+  "minutesBefore": "Minutos antes",
+  "@minutesBefore": {
+    "description": "Custom minutes before label"
+  },
+  "interval": "Intervalo",
+  "@interval": {
+    "description": "Interval label for recurrence"
+  },
+  "endDate": "Data de término",
+  "@endDate": {
+    "description": "End date label for recurrence"
+  },
+  "daily": "Diário",
+  "@daily": {
+    "description": "Daily frequency option"
+  },
+  "weekly": "Semanal",
+  "@weekly": {
+    "description": "Weekly frequency option"
+  },
+  "monthly": "Mensal",
+  "@monthly": {
+    "description": "Monthly frequency option"
+  },
+  "everyXDays": "A cada {count} dia(s)",
+  "@everyXDays": {
+    "description": "Every X days text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXWeeks": "A cada {count} semana(s)",
+  "@everyXWeeks": {
+    "description": "Every X weeks text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXMonths": "A cada {count} mês(es)",
+  "@everyXMonths": {
+    "description": "Every X months text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noRepetition": "Sem repetição",
+  "@noRepetition": {
+    "description": "No repetition text"
+  },
+  "reminder": "Lembrete",
+  "@reminder": {
+    "description": "Reminder label"
+  },
+  "repetition": "Repetição",
+  "@repetition": {
+    "description": "Repetition label"
+  },
+  "eventTime": "Hora do evento (HH:MM)",
+  "@eventTime": {
+    "description": "Event time label"
+  },
+  "invalidMinutes": "Por favor, insira um número válido entre 1 e 1440",
+  "@invalidMinutes": {
+    "description": "Validation message for invalid custom minutes"
+  },
+  "invalidInterval": "O intervalo deve ser pelo menos 1",
+  "@invalidInterval": {
+    "description": "Validation message for invalid interval"
+  },
+  "habitTracking": "Rastreamento de Hábitos",
+  "@habitTracking": {
+    "description": "Title for habit tracking calendar page"
+  },
+  "morning_prayer": "Oração Matinal",
+  "bible_reading": "Leitura Bíblica",
+  "evening_prayer": "Oração Noturna",
+  "worship_music": "Música de Adoração",
+  "gratitude_journal": "Diário de Gratidão",
+  "scripture_meditation": "Meditação nas Escrituras",
+  "fasting": "Jejum",
+  "serve_others": "Servir aos Outros",
+  "bible_study_group": "Grupo de Estudo Bíblico",
+  "prayer_walk": "Caminhada de Oração",
+  "scripture_memorization": "Memorização das Escrituras",
+  "intercessory_prayer": "Oração Intercessória",
+  "devotional_reading": "Leitura Devocional",
+  "confession_repentance": "Confissão e Arrependimento",
+  "praise_thanksgiving": "Louvor e Ação de Graças",
+  "sabbath_rest": "Descanso do Sábado",
+  "digital_detox_prayer": "Desintoxicação Digital e Oração",
+  "christian_podcast": "Podcast Cristão",
+  "family_devotion": "Devoção Familiar",
+  "spiritual_reading": "Leitura Espiritual",
+  "daily_walk": "Caminhada Diária",
+  "morning_exercise": "Exercício Matinal",
+  "yoga_stretching": "Alongamento",
+  "healthy_breakfast": "Café da Manhã Saudável",
+  "hydration_routine": "Rotina de Hidratação",
+  "running_jogging": "Corrida/Jogging",
+  "strength_training": "Treinamento de Força",
+  "bike_cycling": "Ciclismo",
+  "healthy_meal_prep": "Preparação de Refeições Saudáveis",
+  "swimming": "Natação",
+  "dance_movement": "Dança/Movimento",
+  "sports_recreation": "Esportes/Recreação",
+  "posture_breaks": "Pausas para Postura",
+  "outdoor_nature": "Tempo ao Ar Livre/Natureza",
+  "evening_walk": "Caminhada Noturna",
+  "mindfulness_meditation": "Meditação de Atenção Plena",
+  "journaling": "Escrever Diário",
+  "deep_work_focus": "Trabalho Profundo/Foco",
+  "reading_learning": "Leitura/Aprendizado",
+  "digital_detox": "Desintoxicação Digital",
+  "planning_review": "Planejamento e Revisão",
+  "breathing_exercises": "Exercícios de Respiração",
+  "creative_hobby": "Hobby Criativo",
+  "call_friend_family": "Ligar para Amigo/Família",
+  "quality_time_loved_ones": "Tempo de Qualidade com Entes Queridos"
 }

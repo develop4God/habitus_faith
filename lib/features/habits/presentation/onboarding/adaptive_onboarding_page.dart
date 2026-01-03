@@ -401,7 +401,7 @@ class _AdaptiveOnboardingPageState
           if (intent == UserIntent.wellness) {
             fallbackFile =
                 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
-            debugPrint('🧘 Usando fallback secular (wellness)');
+            debugPrint('💪 Usando fallback secular (wellness)');
           } else if (intent == UserIntent.faithBased) {
             fallbackFile =
                 'habit_templates/templates-en/faithBased_growing_lackOfMotivation_understandBible_growInFaith.json';

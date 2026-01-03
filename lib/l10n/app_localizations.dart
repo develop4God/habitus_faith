@@ -1607,7 +1607,7 @@ abstract class AppLocalizations {
   /// No description provided for @yoga_stretching.
   ///
   /// In en, this message translates to:
-  /// **'Yoga/Stretching'**
+  /// **'Stretching'**
   String get yoga_stretching;
 
   /// No description provided for @healthy_breakfast.

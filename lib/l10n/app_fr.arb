@@ -603,6 +603,7 @@
   "advancedModeFeature2": "Informations avancées et personnalisées.",
   "advancedModeFeature3": "Personnalisation avancée",
   "changeAnytime": "Vous pouvez modifier ce paramètre à tout moment dans les préférences",
+  "onboardingWelcomeMessage": "Nous vous aiderons à personnaliser vos premières routines selon vos préférences.",
   "selectMode": "Sélectionner le mode",
   "displayMode": "Mode d'affichage",
   "displayModeUpdated": "Mode d'affichage mis à jour vers {mode}",
@@ -851,10 +852,61 @@
   "@invalidInterval": {
     "description": "Validation message for invalid interval"
   },
-  "habitTracking": "FR: Habit Tracking",
+  "habitTracking": "Suivi des Habitudes",
   "@habitTracking": {
     "description": "Title for habit tracking calendar page"
-  }
-,
-  "onboardingWelcomeMessage": "FR: Welcome message"
+  },
+  "routine": "Routine",
+  "@routine": {
+    "description": "Label for routine option in navigation bar"
+  },
+  "today": "Aujourd'hui",
+  "@today": {
+    "description": "Label to show the current day in the habits view"
+  },
+  "morning_prayer": "Prière du Matin",
+  "bible_reading": "Lecture Biblique",
+  "evening_prayer": "Prière du Soir",
+  "worship_music": "Musique de Louange",
+  "gratitude_journal": "Journal de Gratitude",
+  "scripture_meditation": "Méditation Scripturaire",
+  "fasting": "Jeûne",
+  "serve_others": "Servir les Autres",
+  "bible_study_group": "Groupe d'Étude Biblique",
+  "prayer_walk": "Marche de Prière",
+  "scripture_memorization": "Mémorisation des Écritures",
+  "intercessory_prayer": "Prière d'Intercession",
+  "devotional_reading": "Lecture Dévotionnelle",
+  "confession_repentance": "Confession et Repentance",
+  "praise_thanksgiving": "Louange et Action de Grâces",
+  "sabbath_rest": "Repos du Sabbat",
+  "digital_detox_prayer": "Détox Numérique et Prière",
+  "christian_podcast": "Podcast Chrétien",
+  "family_devotion": "Dévotion Familiale",
+  "spiritual_reading": "Lecture Spirituelle",
+  "daily_walk": "Marche Quotidienne",
+  "morning_exercise": "Exercice Matinal",
+  "yoga_stretching": "Étirements",
+  "healthy_breakfast": "Petit-déjeuner Sain",
+  "hydration_routine": "Routine d'Hydratation",
+  "running_jogging": "Course à Pied",
+  "strength_training": "Musculation",
+  "bike_cycling": "Cyclisme",
+  "healthy_meal_prep": "Préparation de Repas Sains",
+  "swimming": "Natation",
+  "dance_movement": "Danse/Mouvement",
+  "sports_recreation": "Sports/Loisirs",
+  "posture_breaks": "Pauses Posturales",
+  "outdoor_nature": "Temps en Plein Air/Nature",
+  "evening_walk": "Marche du Soir",
+  "mindfulness_meditation": "Méditation de Pleine Conscience",
+  "journaling": "Tenir un Journal",
+  "deep_work_focus": "Travail Profond/Concentration",
+  "reading_learning": "Lecture/Apprentissage",
+  "digital_detox": "Détox Numérique",
+  "planning_review": "Planification et Révision",
+  "breathing_exercises": "Exercices de Respiration",
+  "creative_hobby": "Loisir Créatif",
+  "call_friend_family": "Appeler un Ami/la Famille",
+  "quality_time_loved_ones": "Temps de Qualité avec les Proches"
 }
