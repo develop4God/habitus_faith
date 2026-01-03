@@ -9,6 +9,7 @@ class ModernWeeklyCalendar extends StatefulWidget {
   final DateTime? initialDate;
   final Function(String habitId)? onComplete;
   final Function(String habitId)? onUncheck;
+  final Function(String habitId)? onDelete;
 
   const ModernWeeklyCalendar({
     super.key,
@@ -16,6 +17,7 @@ class ModernWeeklyCalendar extends StatefulWidget {
     this.initialDate,
     this.onComplete,
     this.onUncheck,
+    this.onDelete,
   });
 
   @override
@@ -216,10 +218,35 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         'HabitsPageUI: renderizando hábito ${habit.name} con estado completedToday=${habit.completedToday}');
                     return CompactHabitCard(
                       habit: habit,
-                      onDelete: () {
+                      onDelete: () async {
                         debugPrint(
                             'HabitsPageUI: eliminar hábito ${habit.name}');
-                        // Lógica real de borrado
+                        // Show confirmation dialog
+                        final l10n = AppLocalizations.of(context)!;
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text(l10n.deleteHabit),
+                            content: Text(l10n.deleteHabitConfirm(habit.name)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(false),
+                                child: Text(l10n.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(true),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.red,
+                                ),
+                                child: Text(l10n.delete),
+                              ),
+                            ],
+                          ),
+                        );
+                        
+                        if (confirmed == true && widget.onDelete != null) {
+                          await widget.onDelete!(habit.id);
+                        }
                       },
                       onEdit: () async {
                         debugPrint('HabitsPageUI: editar hábito ${habit.name}');
