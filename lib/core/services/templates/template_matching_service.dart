@@ -7,6 +7,7 @@ import 'package:string_similarity/string_similarity.dart';
 import '../../config/template_constants.dart';
 import '../cache/cache_service.dart';
 import '../../../features/habits/presentation/onboarding/onboarding_models.dart';
+import 'template_scoring_engine.dart';
 
 /// Service for matching onboarding profiles to pre-generated habit templates
 /// Not a singleton - designed for easy testing with dependency injection
@@ -14,17 +15,23 @@ class TemplateMatchingService {
   final ICacheService _cache;
   final http.Client? _httpClient;
   final FirebaseFirestore? _firestore;
+  final TemplateScoringEngine _scoringEngine;
 
   TemplateMatchingService(
     this._cache, {
     http.Client? httpClient,
     FirebaseFirestore? firestore,
+    TemplateScoringEngine? scoringEngine,
   })  : _httpClient = httpClient,
-        _firestore = firestore;
+        _firestore = firestore,
+        _scoringEngine = scoringEngine ?? TemplateScoringEngine();
 
   /// Generate a pattern ID from an onboarding profile
   /// Used to match against template fingerprints
+  @Deprecated('Use findMatchWithScoring instead for better matching accuracy')
   String generatePatternId(OnboardingProfile profile) {
+    debugPrint(
+        '[TEMPLATES] WARNING: Using deprecated generatePatternId(). Migrate to findMatchWithScoring()');
     // Orden: primaryIntent, supportLevel, challenge, motivations (2), spiritualMaturity/null
     final motivationsKey = profile.motivations.take(2).join('_');
     final maturityOrState =
@@ -175,5 +182,110 @@ class TemplateMatchingService {
       debugPrint('[TEMPLATES] Error descargando archivo template: $e');
       return null;
     }
+  }
+
+  /// Find a matching template using weighted scoring system
+  /// Returns the generated_habits array from the template, or null if no match
+  /// This method provides better matching accuracy than the deprecated findMatch
+  Future<List<Map<String, dynamic>>?> findMatchWithScoring(
+    OnboardingProfile profile,
+    String language,
+  ) async {
+    try {
+      debugPrint(
+          '[SCORING] Starting template matching for language: $language');
+
+      // Convert profile to vector
+      final userVector = UserProfileVector.fromProfile(profile);
+
+      // Load templates from GitHub/cache
+      final templateFile = await _fetchTemplateFile(language);
+      if (templateFile == null || templateFile['templates'] == null) {
+        debugPrint('[SCORING] No template file found for language: $language');
+        return null;
+      }
+
+      final templates = templateFile['templates'] as List<dynamic>;
+      debugPrint('[SCORING] Loaded ${templates.length} templates');
+
+      // Score each template
+      TemplateMatchScore? bestMatch;
+      double bestScore = 0.0;
+
+      for (final templateData in templates) {
+        final patternId = templateData['pattern_id'] as String?;
+        if (patternId == null) continue;
+
+        try {
+          final templateMetadata = TemplateMetadata.fromPatternId(patternId);
+          final score =
+              _scoringEngine.calculateScore(userVector, templateMetadata);
+
+          _logScoreBreakdown(patternId, score);
+
+          if (score.totalScore > bestScore) {
+            bestScore = score.totalScore;
+            bestMatch = score;
+          }
+        } catch (e) {
+          debugPrint('[SCORING] Error scoring template $patternId: $e');
+          continue;
+        }
+      }
+
+      // Return best match if score >= threshold
+      if (bestMatch != null &&
+          bestScore >= TemplateScoringEngine.goodMatchThreshold) {
+        debugPrint('[SCORING] Best match found: ${bestMatch.patternId}');
+        debugPrint(
+            '[SCORING] Final score: ${bestScore.toStringAsFixed(3)} (${bestMatch.confidence.name})');
+
+        // Find and return the template habits
+        final matchedTemplate =
+            templates.cast<Map<String, dynamic>?>().firstWhere(
+                  (t) => t?['pattern_id'] == bestMatch!.patternId,
+                  orElse: () => null,
+                );
+
+        if (matchedTemplate != null && matchedTemplate['habits'] != null) {
+          log('Template matched with scoring: ${bestMatch.patternId}, score: ${bestScore.toStringAsFixed(3)}',
+              name: 'templates');
+
+          // Cache the result
+          final cacheKey =
+              'template_scoring_${language}_${bestMatch.patternId}';
+          await _cache.set(
+            cacheKey,
+            matchedTemplate,
+            ttl: TemplateConstants.cacheDuration,
+          );
+
+          return (matchedTemplate['habits'] as List<dynamic>)
+              .cast<Map<String, dynamic>>();
+        }
+      }
+
+      debugPrint(
+          '[SCORING] No match found with score >= ${TemplateScoringEngine.goodMatchThreshold} (best: ${bestScore.toStringAsFixed(3)})');
+      return null; // Fallback to Gemini
+    } catch (e, stack) {
+      debugPrint('[SCORING] Error in scoring-based matching: $e');
+      debugPrint('[SCORING] Stack: $stack');
+      log('Error in scoring-based template matching: $e',
+          name: 'templates', error: e);
+      return null;
+    }
+  }
+
+  /// Log score breakdown for debugging
+  void _logScoreBreakdown(String patternId, TemplateMatchScore score) {
+    debugPrint(
+        '[SCORING] Pattern: $patternId, Score: ${score.totalScore.toStringAsFixed(3)}');
+    score.dimensionScores.forEach((dimension, value) {
+      final capitalizedDimension =
+          dimension[0].toUpperCase() + dimension.substring(1);
+      debugPrint(
+          '[SCORING]   - $capitalizedDimension: ${value.toStringAsFixed(2)}');
+    });
   }
 }

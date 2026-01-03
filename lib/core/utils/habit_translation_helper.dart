@@ -123,8 +123,8 @@ class HabitTranslationHelper {
   /// Translate a notification key to localized string
   ///
   /// For now, notification keys match habit name keys
-  static String translateNotification(BuildContext context, String notificationKey) {
+  static String translateNotification(
+      BuildContext context, String notificationKey) {
     return translateHabitName(context, notificationKey);
   }
 }
-

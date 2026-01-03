@@ -1,6 +1,6 @@
 name: habitus_faith
 description: App para llevar hábitos cristianos y fortalecer tu fe día a día.
-version: 1.0.1+2
+version: 1.0.2+5
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -44,6 +44,8 @@ dependencies:
   signature: ^5.4.1
   table_calendar: ^3.0.9
   string_similarity: ^2.0.0
+  firebase_analytics: ^11.3.3
+  firebase_crashlytics: ^4.1.3
 
 dev_dependencies:
   flutter_test:

@@ -1,18 +1,11 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
-}
-
-import java.util.Properties
-import java.io.FileInputStream
-
-val keystoreProperties = Properties().apply {
-    val keystorePropertiesFile = project.file("../key.properties")
-    if (keystorePropertiesFile.exists()) {
-        load(FileInputStream(keystorePropertiesFile))
-    }
 }
 
 android {
@@ -39,18 +32,19 @@ android {
     }
 
     signingConfigs {
+        val keyProperties = Properties()
+        val keyPropertiesFile = rootProject.file("key.properties")
+        if (keyPropertiesFile.exists()) {
+            keyProperties.load(FileInputStream(keyPropertiesFile))
+        }
         create("release") {
-            val storeFilePath = keystoreProperties.getProperty("storeFile")
-            if (storeFilePath != null && storeFilePath.isNotBlank()) {
-                storeFile = project.file(storeFilePath)
-            } else {
-                throw GradleException("storeFile no está definido o está vacío en key.properties")
-            }
-            storePassword = keystoreProperties.getProperty("storePassword") ?: ""
-            keyAlias = keystoreProperties.getProperty("keyAlias") ?: ""
-            keyPassword = keystoreProperties.getProperty("keyPassword") ?: ""
+            storeFile = file(keyProperties["storeFile"] ?: "upload-keystore.jks")
+            storePassword = keyProperties["storePassword"] as String?
+            keyAlias = keyProperties["keyAlias"] as String?
+            keyPassword = keyProperties["keyPassword"] as String?
         }
     }
+
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")

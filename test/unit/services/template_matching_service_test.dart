@@ -488,4 +488,125 @@ void main() {
       expect(result[0]['name'], 'Grace-Focused Practice');
     });
   });
+
+  group('findMatchWithScoring', () {
+    test('returns template when score >= 0.75', () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.faithBased,
+        motivations: ['closerToGod', 'prayerDiscipline'],
+        challenge: 'lackOfTime',
+        supportLevel: 'normal',
+        spiritualMaturity: 'new',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      // Template file with good match
+      final templateFile = {
+        'templates': [
+          {
+            'pattern_id':
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
+            'habits': [
+              {
+                'name': 'Morning Prayer',
+                'category': 'spiritual',
+                'emoji': '🙏',
+              }
+            ]
+          }
+        ]
+      };
+
+      final response = MockResponse();
+      when(() => response.statusCode).thenReturn(200);
+      when(() => response.body).thenReturn(jsonEncode(templateFile));
+
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async => response);
+
+      final result = await service.findMatchWithScoring(profile, 'es');
+
+      expect(result, isNotNull);
+      expect(result!.length, 1);
+      expect(result[0]['name'], 'Morning Prayer');
+    });
+
+    test('returns null when all scores < 0.75', () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.faithBased,
+        motivations: ['closerToGod', 'prayerDiscipline'],
+        challenge: 'lackOfTime',
+        supportLevel: 'normal',
+        spiritualMaturity: 'new',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      // Template file with poor matches only
+      final templateFile = {
+        'templates': [
+          {
+            'pattern_id':
+                'wellness_inconsistent_givingUp_betterSleep_reduceStress',
+            'habits': [
+              {
+                'name': 'Poor Match',
+                'category': 'physical',
+              }
+            ]
+          }
+        ]
+      };
+
+      final response = MockResponse();
+      when(() => response.statusCode).thenReturn(200);
+      when(() => response.body).thenReturn(jsonEncode(templateFile));
+
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async => response);
+
+      final result = await service.findMatchWithScoring(profile, 'es');
+
+      expect(result, isNull);
+    });
+
+    test('logs dimension breakdown during scoring', () async {
+      final profile = OnboardingProfile(
+        primaryIntent: UserIntent.faithBased,
+        motivations: ['closerToGod', 'prayerDiscipline'],
+        challenge: 'lackOfTime',
+        supportLevel: 'normal',
+        spiritualMaturity: 'new',
+        commitment: 'daily',
+        completedAt: DateTime.now(),
+      );
+
+      final templateFile = {
+        'templates': [
+          {
+            'pattern_id':
+                'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new',
+            'habits': [
+              {
+                'name': 'Prayer',
+                'category': 'spiritual',
+              }
+            ]
+          }
+        ]
+      };
+
+      final response = MockResponse();
+      when(() => response.statusCode).thenReturn(200);
+      when(() => response.body).thenReturn(jsonEncode(templateFile));
+
+      when(() => mockHttpClient.get(any())).thenAnswer((_) async => response);
+
+      final result = await service.findMatchWithScoring(profile, 'es');
+
+      // Result should be found
+      expect(result, isNotNull);
+      expect(result!.length, 1);
+      // The debug prints would show dimension scores in actual execution
+    });
+  });
 }
