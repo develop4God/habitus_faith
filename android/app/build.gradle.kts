@@ -28,9 +28,23 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        val keyProperties = new java.util.Properties()
+        val keyPropertiesFile = rootProject.file("key.properties")
+        if (keyPropertiesFile.exists()) {
+            keyProperties.load(java.io.FileInputStream(keyPropertiesFile))
+        }
+        create("release") {
+            storeFile = file(keyProperties["storeFile"] ?: "upload-keystore.jks")
+            storePassword = keyProperties["storePassword"] as String?
+            keyAlias = keyProperties["keyAlias"] as String?
+            keyPassword = keyProperties["keyPassword"] as String?
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
