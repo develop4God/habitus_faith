@@ -4,6 +4,7 @@
 /// Range: 3-12 points
 /// - Minimum: 1 goal (2) + 5-10min (1) + new (1) = 3
 /// - Maximum: 3 goals (6) + 20+min (3) + consistent (3) = 12
+library;
 
 enum ScoreLevel {
   basic, // 3-5 points
