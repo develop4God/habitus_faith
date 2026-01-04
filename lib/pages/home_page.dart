@@ -55,6 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final habits = habitsAsync.asData?.value ?? [];
     final completedHabits = habits.where((h) => h.completedToday).length;
     final totalHabits = habits.length;
+    final previewHabits = habits.take(5).toList();
 
     final List<Widget> pages = [
       // Modern, minimalist home page with focus on tracking
@@ -316,14 +317,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                         height: 120,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: habits.take(5).length,
+                          itemCount: previewHabits.length,
                           itemBuilder: (context, index) {
-                            final habit = habits[index];
+                            final habit = previewHabits[index];
                             final isCompleted = habit.completedToday;
                             return Container(
                               width: 140,
                               margin: EdgeInsets.only(
-                                right: index < habits.take(5).length - 1 ? 12 : 0,
+                                right: index < previewHabits.length - 1 ? 12 : 0,
                               ),
                               child: Card(
                                 elevation: 0,
