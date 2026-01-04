@@ -927,4 +927,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completeWithNote => 'Complete & Add Note';
+
+  @override
+  String get addEmoji => 'Add Emoji';
+
+  @override
+  String get hideEmojis => 'Hide Emojis';
 }

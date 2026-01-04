@@ -116,7 +116,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                           widget.habitName,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer
-                                .withValues(alpha: 0.7),
+                                .withAlpha((0.7 * 255).toInt()),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -164,7 +164,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                       });
                     },
                     icon: Icon(_showEmojiPicker ? Icons.close : Icons.emoji_emotions),
-                    label: Text(_showEmojiPicker ? 'Hide Emojis' : 'Add Emoji'),
+                    label: Text(_showEmojiPicker ? l10n.hideEmojis : l10n.addEmoji),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -179,7 +179,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                        color: theme.colorScheme.surfaceContainerHighest.withAlpha((0.3 * 255).toInt()),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Wrap(

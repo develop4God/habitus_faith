@@ -257,4 +257,14 @@ class FirestoreHabitsRepository implements HabitsRepository {
     // Not implemented for Firestore - would require additional query
     return null;
   }
+
+  @override
+  Future<Result<void, HabitFailure>> updateHabitNote(
+    String habitId,
+    String? note,
+  ) async {
+    // Not implemented for Firestore - would require additional collection/schema
+    // This feature is primarily for local JSON storage
+    return const Success(null);
+  }
 }

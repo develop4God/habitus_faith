@@ -56,6 +56,12 @@ abstract class HabitsRepository {
     String? note,
   );
 
+  /// Update the note for today's completion record
+  Future<Result<void, HabitFailure>> updateHabitNote(
+    String habitId,
+    String? note,
+  );
+
   /// Update an existing habit
   Future<Result<Habit, HabitFailure>> updateHabit({
     required String habitId,

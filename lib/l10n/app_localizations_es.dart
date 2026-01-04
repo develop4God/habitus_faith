@@ -935,4 +935,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get completeWithNote => 'Completar y Agregar Nota';
+
+  @override
+  String get addEmoji => 'Agregar Emoji';
+
+  @override
+  String get hideEmojis => 'Ocultar Emojis';
 }

@@ -343,6 +343,56 @@ class JsonHabitsRepository implements HabitsRepository {
     await _storage.saveJson(_completionsKey, completionsData);
   }
 
+  @override
+  Future<Result<void, HabitFailure>> updateHabitNote(
+    String habitId,
+    String? note,
+  ) async {
+    debugPrint('updateHabitNote: inicio para habitId=$habitId, note=$note');
+    try {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final todayKey =
+          '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+
+      final completionsData = _storage.getJson(_completionsKey) ?? {};
+      final habitCompletions =
+          completionsData[habitId] as Map<String, dynamic>? ?? {};
+
+      if (!habitCompletions.containsKey(todayKey)) {
+        debugPrint('updateHabitNote: no completion found for today');
+        return Failure(HabitFailure.notFound('No completion found for today'));
+      }
+
+      final existingRecord = CompletionRecord.fromJson(
+        habitCompletions[todayKey] as Map<String, dynamic>,
+      );
+
+      final updatedRecord = CompletionRecord(
+        habitId: existingRecord.habitId,
+        completedAt: existingRecord.completedAt,
+        notes: note,
+        hourOfDay: existingRecord.hourOfDay,
+        dayOfWeek: existingRecord.dayOfWeek,
+        streakAtTime: existingRecord.streakAtTime,
+        failuresLast7Days: existingRecord.failuresLast7Days,
+        hoursFromReminder: existingRecord.hoursFromReminder,
+        completed: existingRecord.completed,
+      );
+
+      habitCompletions[todayKey] = updatedRecord.toJson();
+      completionsData[habitId] = habitCompletions;
+      await _storage.saveJson(_completionsKey, completionsData);
+
+      debugPrint('updateHabitNote: note updated successfully');
+      _emitHabits(); // Emit to trigger UI update
+      return const Success(null);
+    } catch (e) {
+      debugPrint('updateHabitNote: error: $e');
+      return Failure(HabitFailure.persistence('Failed to update note: $e'));
+    }
+  }
+
   /// Record completion/abandonment data to Firestore for ML training
   /// This method enriches completion records with ML features for the training pipeline
   @override

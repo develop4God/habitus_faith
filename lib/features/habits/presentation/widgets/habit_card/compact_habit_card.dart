@@ -95,15 +95,17 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
 
     if (note != null && mounted) {
-      // Complete the habit with the note
       final notifier = ref.read(jsonHabitsNotifierProvider.notifier);
       if (!widget.habit.completedToday) {
+        // Complete the habit with the note
         await notifier.completeHabitWithNote(widget.habit.id, note);
       } else {
-        // If already completed, we need to update the existing completion record
-        // For simplicity, we'll re-complete with the new note
-        await notifier.uncheckHabit(widget.habit.id);
-        await notifier.completeHabitWithNote(widget.habit.id, note);
+        // Update existing completion record's note
+        final result = await repository.updateHabitNote(widget.habit.id, note);
+        result.fold(
+          (failure) => debugPrint('Failed to update note: $failure'),
+          (_) => debugPrint('Note updated successfully'),
+        );
       }
     }
   }

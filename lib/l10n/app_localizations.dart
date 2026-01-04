@@ -1783,6 +1783,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete & Add Note'**
   String get completeWithNote;
+
+  /// Add emoji button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Emoji'**
+  String get addEmoji;
+
+  /// Hide emoji picker button text
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Emojis'**
+  String get hideEmojis;
 }
 
 class _AppLocalizationsDelegate

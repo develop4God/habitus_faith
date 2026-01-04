@@ -894,4 +894,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get completeWithNote => '完成并添加笔记';
+
+  @override
+  String get addEmoji => '添加表情符号';
+
+  @override
+  String get hideEmojis => '隐藏表情符号';
 }

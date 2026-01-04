@@ -1118,5 +1118,13 @@
   "completeWithNote": "Complete & Add Note",
   "@completeWithNote": {
     "description": "Complete habit with note button text"
+  },
+  "addEmoji": "Add Emoji",
+  "@addEmoji": {
+    "description": "Add emoji button text"
+  },
+  "hideEmojis": "Hide Emojis",
+  "@hideEmojis": {
+    "description": "Hide emoji picker button text"
   }
 }

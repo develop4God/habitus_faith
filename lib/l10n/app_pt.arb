@@ -781,5 +781,7 @@
   "noteAdded": "Nota adicionada",
   "addNoteDialog": "Adicionar uma Nota",
   "completeWithNote": "Concluir e Adicionar Nota",
+  "addEmoji": "Adicionar Emoji",
+  "hideEmojis": "Ocultar Emojis",
   "onboardingWelcomeMessage": "PT: Welcome message"
 }

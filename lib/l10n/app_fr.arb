@@ -862,5 +862,7 @@
   "noteAdded": "Note ajoutée",
   "addNoteDialog": "Ajouter une Note",
   "completeWithNote": "Compléter et Ajouter une Note",
+  "addEmoji": "Ajouter Emoji",
+  "hideEmojis": "Masquer les Emojis",
   "onboardingWelcomeMessage": "FR: Welcome message"
 }

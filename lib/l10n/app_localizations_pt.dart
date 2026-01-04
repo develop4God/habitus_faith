@@ -934,4 +934,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get completeWithNote => 'Concluir e Adicionar Nota';
+
+  @override
+  String get addEmoji => 'Adicionar Emoji';
+
+  @override
+  String get hideEmojis => 'Ocultar Emojis';
 }

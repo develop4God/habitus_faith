@@ -901,5 +901,7 @@
   "shareNote": "Compartir",
   "noteAdded": "Nota agregada",
   "addNoteDialog": "Agregar una Nota",
-  "completeWithNote": "Completar y Agregar Nota"
+  "completeWithNote": "Completar y Agregar Nota",
+  "addEmoji": "Agregar Emoji",
+  "hideEmojis": "Ocultar Emojis"
 }

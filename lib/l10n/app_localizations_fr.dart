@@ -939,4 +939,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get completeWithNote => 'Compléter et Ajouter une Note';
+
+  @override
+  String get addEmoji => 'Ajouter Emoji';
+
+  @override
+  String get hideEmojis => 'Masquer les Emojis';
 }
