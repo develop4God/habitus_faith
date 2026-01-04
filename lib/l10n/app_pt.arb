@@ -901,4 +901,9 @@
   "creative_hobby": "Hobby Criativo",
   "call_friend_family": "Ligar para Amigo/Família",
   "quality_time_loved_ones": "Tempo de Qualidade com Entes Queridos"
+,
+  "onboardingSelectAtLeastOneGoal": "Por favor, selecione pelo menos um objetivo",
+  "onboardingPreparingHabits": "Preparando seus hábitos...",
+  "onboardingKeepAtLeastOneHabit": "Você deve manter pelo menos um hábito",
+  "onboardingCouldNotCreateHabits": "Não foi possível criar os hábitos. Por favor, tente novamente."
 }

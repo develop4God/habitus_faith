@@ -873,4 +873,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => '与亲人共度美好时光';
+
+  @override
+  String get onboardingSelectAtLeastOneGoal => '请至少选择一个目标';
+
+  @override
+  String get onboardingPreparingHabits => '正在准备您的习惯...';
+
+  @override
+  String get onboardingKeepAtLeastOneHabit => '您必须至少保留一个习惯';
+
+  @override
+  String get onboardingCouldNotCreateHabits => '无法创建习惯。请重试。';
 }

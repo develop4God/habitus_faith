@@ -892,4 +892,9 @@
   "creative_hobby": "创意爱好",
   "call_friend_family": "联系朋友/家人",
   "quality_time_loved_ones": "与亲人共度美好时光"
+,
+  "onboardingSelectAtLeastOneGoal": "请至少选择一个目标",
+  "onboardingPreparingHabits": "正在准备您的习惯...",
+  "onboardingKeepAtLeastOneHabit": "您必须至少保留一个习惯",
+  "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。"
 }

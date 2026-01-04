@@ -919,4 +919,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Temps de Qualité avec les Proches';
+
+  @override
+  String get onboardingSelectAtLeastOneGoal =>
+      'Veuillez sélectionner au moins un objectif';
+
+  @override
+  String get onboardingPreparingHabits => 'Préparation de vos habitudes...';
+
+  @override
+  String get onboardingKeepAtLeastOneHabit =>
+      'Vous devez conserver au moins une habitude';
+
+  @override
+  String get onboardingCouldNotCreateHabits =>
+      'Impossible de créer les habitudes. Veuillez réessayer.';
 }

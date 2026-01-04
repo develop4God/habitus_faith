@@ -915,4 +915,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Tempo de Qualidade com Entes Queridos';
+
+  @override
+  String get onboardingSelectAtLeastOneGoal =>
+      'Por favor, selecione pelo menos um objetivo';
+
+  @override
+  String get onboardingPreparingHabits => 'Preparando seus hábitos...';
+
+  @override
+  String get onboardingKeepAtLeastOneHabit =>
+      'Você deve manter pelo menos um hábito';
+
+  @override
+  String get onboardingCouldNotCreateHabits =>
+      'Não foi possível criar os hábitos. Por favor, tente novamente.';
 }
