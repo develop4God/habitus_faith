@@ -25,6 +25,12 @@ extension StringExtensions on String {
   /// Capitalize first letter
   String capitalize() {
     if (isEmpty) return this;
-    return '${this[0].toUpperCase()}${substring(1)}';
+    if (length == 1) return toUpperCase();
+    try {
+      return '${this[0].toUpperCase()}${substring(1)}';
+    } catch (e) {
+      // Return original string if any error occurs
+      return this;
+    }
   }
 }

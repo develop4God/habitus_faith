@@ -50,6 +50,26 @@ void main() {
       expect('a'.capitalize(), equals('A'));
     });
 
+    test('capitalize handles edge cases safely', () {
+      // Test single character
+      expect('x'.capitalize(), equals('X'));
+      
+      // Test empty string
+      expect(''.capitalize(), equals(''));
+      
+      // Test already capitalized
+      expect('Hello'.capitalize(), equals('Hello'));
+      
+      // Test all caps
+      expect('HELLO'.capitalize(), equals('HELLO'));
+      
+      // Test with numbers
+      expect('1test'.capitalize(), equals('1test'));
+      
+      // Test with special characters
+      expect('!hello'.capitalize(), equals('!hello'));
+    });
+
     test('handles underscore replacement in translation key', () {
       final result = 'bible.search_book_placeholder'.tr();
       expect(result, equals('Search book placeholder'));

@@ -538,7 +538,7 @@ class _DevotionalDiscoveryPageState
 
     // Fallback: try to extract everything before the quote
     final quoteIndex = versiculo.indexOf('"');
-    if (quoteIndex > 0) {
+    if (quoteIndex > 0 && quoteIndex <= versiculo.length) {
       return versiculo.substring(0, quoteIndex).trim();
     }
 
@@ -550,7 +550,12 @@ class _DevotionalDiscoveryPageState
     // Extract text between quotes
     final quoteStart = versiculo.indexOf('"');
     final quoteEnd = versiculo.lastIndexOf('"');
-    if (quoteStart != -1 && quoteEnd != -1 && quoteEnd > quoteStart) {
+    
+    // Validate indices are within bounds and in correct order
+    if (quoteStart != -1 && quoteEnd != -1 && 
+        quoteEnd > quoteStart && 
+        quoteStart + 1 < versiculo.length && 
+        quoteEnd <= versiculo.length) {
       return versiculo.substring(quoteStart + 1, quoteEnd);
     }
     return versiculo;
