@@ -724,6 +724,28 @@
   "@introMessage": {
     "description": "Message d'introduction motivant affiché sur la page d'accueil."
   },
+  "todaysVerse": "Verset du Jour",
+  "@todaysVerse": {
+    "description": "Titre de la section du verset biblique du jour"
+  },
+  "todaysHabits": "Habitudes d'Aujourd'hui",
+  "@todaysHabits": {
+    "description": "Titre de la section des habitudes du jour"
+  },
+  "allHabitsCompleted": "🎉 Toutes les habitudes complétées aujourd'hui!",
+  "@allHabitsCompleted": {
+    "description": "Message de succès lorsque toutes les habitudes sont complétées"
+  },
+  "dayStreak": "Série de {count} jours",
+  "@dayStreak": {
+    "description": "Affiche la série actuelle d'une habitude",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
   "usefulTip": "Astuce utile",
   "@usefulTip": {
     "description": "Titre du conseil éducatif"

@@ -688,6 +688,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get introMessage => 'Los mayores cambios, inician en la constancia...';
 
   @override
+  String get todaysVerse => 'Versículo del Día';
+
+  @override
+  String get todaysHabits => 'Hábitos de Hoy';
+
+  @override
+  String get allHabitsCompleted => '🎉 ¡Todos los hábitos completados hoy!';
+
+  @override
+  String dayStreak(int count) {
+    return 'Racha de $count días';
+  }
+
+  @override
   String get usefulTip => 'Tip útil';
 
   @override

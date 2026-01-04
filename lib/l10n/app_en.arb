@@ -921,6 +921,28 @@
   "@introMessage": {
     "description": "Intro message shown on landing page as a motivational quote."
   },
+  "todaysVerse": "Today's Verse",
+  "@todaysVerse": {
+    "description": "Title for today's Bible verse section on home page"
+  },
+  "todaysHabits": "Today's Habits",
+  "@todaysHabits": {
+    "description": "Title for today's habits section on home page"
+  },
+  "allHabitsCompleted": "🎉 All habits completed today!",
+  "@allHabitsCompleted": {
+    "description": "Success message when all habits are completed"
+  },
+  "dayStreak": "{count} day streak",
+  "@dayStreak": {
+    "description": "Shows the current streak for a habit",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
   "usefulTip": "Useful tip",
   "@usefulTip": {"description": "Educational tip title"},
   "habitsTip": "Swipe to see actions on your habits",
