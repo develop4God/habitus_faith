@@ -775,4 +775,9 @@
   "invalidInterval": "PT: Invalid Interval",
   "habitTracking": "PT: Habit Tracking",
   "onboardingWelcomeMessage": "PT: Welcome message"
+,
+  "onboardingSelectAtLeastOneGoal": "Por favor, selecione pelo menos um objetivo",
+  "onboardingPreparingHabits": "Preparando seus hábitos...",
+  "onboardingKeepAtLeastOneHabit": "Você deve manter pelo menos um hábito",
+  "onboardingCouldNotCreateHabits": "Não foi possível criar os hábitos. Por favor, tente novamente."
 }

@@ -745,4 +745,9 @@
   }
 ,
   "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。"
+,
+  "onboardingSelectAtLeastOneGoal": "请至少选择一个目标",
+  "onboardingPreparingHabits": "正在准备您的习惯...",
+  "onboardingKeepAtLeastOneHabit": "您必须至少保留一个习惯",
+  "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。"
 }

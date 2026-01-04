@@ -25,70 +25,70 @@ class SimpleTemplateSelector {
   /// Template lookup table: (intent, level) -> habit IDs
   /// 
   /// All IDs must exist in predefined_habits_data.dart
-  static final Map<(String, ScoreLevel), List<String>> templates = {
+  static const Map<(String, ScoreLevel), List<String>> templates = {
     // Faith-based paths
-    ('faithBased', ScoreLevel.basic): [HabitTemplateId.morningPrayer.id],
+    ('faithBased', ScoreLevel.basic): ['morning_prayer'],
     ('faithBased', ScoreLevel.intermediate): [
-      HabitTemplateId.morningPrayer.id,
-      HabitTemplateId.bibleReading.id
+      'morning_prayer',
+      'bible_reading'
     ],
     ('faithBased', ScoreLevel.advanced): [
-      HabitTemplateId.morningPrayer.id,
-      HabitTemplateId.bibleReading.id,
-      HabitTemplateId.gratitude.id
+      'morning_prayer',
+      'bible_reading',
+      'gratitude'
     ],
 
     // Wellness paths
-    ('wellness', ScoreLevel.basic): [HabitTemplateId.exercise.id],
+    ('wellness', ScoreLevel.basic): ['exercise'],
     ('wellness', ScoreLevel.intermediate): [
-      HabitTemplateId.exercise.id,
-      HabitTemplateId.sleep.id
+      'exercise',
+      'sleep'
     ],
     ('wellness', ScoreLevel.advanced): [
-      HabitTemplateId.exercise.id,
-      HabitTemplateId.sleep.id,
-      HabitTemplateId.healthyEating.id
+      'exercise',
+      'sleep',
+      'healthy_eating'
     ],
 
     // Mixed/Study/Peace paths (consolidated)
-    ('mixed', ScoreLevel.basic): [HabitTemplateId.meditation.id],
+    ('mixed', ScoreLevel.basic): ['meditation'],
     ('mixed', ScoreLevel.intermediate): [
-      HabitTemplateId.meditation.id,
-      HabitTemplateId.learning.id
+      'meditation',
+      'learning'
     ],
     ('mixed', ScoreLevel.advanced): [
-      HabitTemplateId.meditation.id,
-      HabitTemplateId.learning.id,
-      HabitTemplateId.gratitude.id
+      'meditation',
+      'learning',
+      'gratitude'
     ],
 
     // Study specific
-    ('study', ScoreLevel.basic): [HabitTemplateId.learning.id],
+    ('study', ScoreLevel.basic): ['learning'],
     ('study', ScoreLevel.intermediate): [
-      HabitTemplateId.learning.id,
-      HabitTemplateId.bibleReading.id
+      'learning',
+      'bible_reading'
     ],
     ('study', ScoreLevel.advanced): [
-      HabitTemplateId.learning.id,
-      HabitTemplateId.bibleReading.id,
-      HabitTemplateId.creativity.id
+      'learning',
+      'bible_reading',
+      'creativity'
     ],
 
     // Peace specific
-    ('peace', ScoreLevel.basic): [HabitTemplateId.meditation.id],
+    ('peace', ScoreLevel.basic): ['meditation'],
     ('peace', ScoreLevel.intermediate): [
-      HabitTemplateId.meditation.id,
-      HabitTemplateId.gratitude.id
+      'meditation',
+      'gratitude'
     ],
     ('peace', ScoreLevel.advanced): [
-      HabitTemplateId.meditation.id,
-      HabitTemplateId.gratitude.id,
-      HabitTemplateId.worship.id
+      'meditation',
+      'gratitude',
+      'worship'
     ],
   };
 
   /// Universal fallback when lookup fails
-  static final List<String> fallbackTemplates = [HabitTemplateId.morningPrayer.id];
+  static const List<String> fallbackTemplates = ['morning_prayer'];
 
   /// Select habit templates based on onboarding score
   /// 
@@ -139,5 +139,30 @@ class SimpleTemplateSelector {
     }
 
     return missing.toSet().toList(); // Remove duplicates
+  }
+
+  /// Validate that all template IDs match enum values
+  /// 
+  /// Returns list of template IDs that don't have corresponding enum values
+  static List<String> validateTemplateEnumMapping() {
+    final enumIds = HabitTemplateId.values.map((e) => e.id).toSet();
+    final invalid = <String>[];
+
+    for (final habitList in templates.values) {
+      for (final habitId in habitList) {
+        if (!enumIds.contains(habitId)) {
+          invalid.add(habitId);
+        }
+      }
+    }
+
+    // Also check fallback
+    for (final habitId in fallbackTemplates) {
+      if (!enumIds.contains(habitId)) {
+        invalid.add(habitId);
+      }
+    }
+
+    return invalid.toSet().toList();
   }
 }

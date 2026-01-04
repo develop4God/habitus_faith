@@ -857,4 +857,9 @@
   }
 ,
   "onboardingWelcomeMessage": "FR: Welcome message"
+,
+  "onboardingSelectAtLeastOneGoal": "Veuillez sélectionner au moins un objectif",
+  "onboardingPreparingHabits": "Préparation de vos habitudes...",
+  "onboardingKeepAtLeastOneHabit": "Vous devez conserver au moins une habitude",
+  "onboardingCouldNotCreateHabits": "Impossible de créer les habitudes. Veuillez réessayer."
 }

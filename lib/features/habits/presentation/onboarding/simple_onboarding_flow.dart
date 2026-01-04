@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import '../../domain/services/simple_onboarding_scoring.dart';
+import '../../domain/config/onboarding_config.dart';
 import 'habit_preview_page.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// Provider for current question in simple onboarding
 final simpleOnboardingQuestionProvider = StateProvider<int>((ref) => 0);
@@ -63,7 +65,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           currentGoals.where((g) => g != goal).toList();
     } else {
       // Add goal (max 3)
-      if (currentGoals.length < 3) {
+      if (currentGoals.length < OnboardingConfig.maxGoals) {
         ref.read(selectedGoalsProvider.notifier).state = [
           ...currentGoals,
           goal
@@ -77,7 +79,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
     ref.read(timeCommitmentProvider.notifier).state = time;
 
     final currentQ = ref.read(simpleOnboardingQuestionProvider);
-    _autoAdvanceTimer = Timer(const Duration(milliseconds: 300), () {
+    _autoAdvanceTimer = Timer(OnboardingConfig.autoAdvanceDelay, () {
       if (mounted && ref.read(simpleOnboardingQuestionProvider) == currentQ) {
         _nextQuestion();
       }
@@ -89,7 +91,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
     ref.read(experienceLevelProvider.notifier).state = level;
 
     final currentQ = ref.read(simpleOnboardingQuestionProvider);
-    _autoAdvanceTimer = Timer(const Duration(milliseconds: 300), () {
+    _autoAdvanceTimer = Timer(OnboardingConfig.autoAdvanceDelay, () {
       if (mounted && ref.read(simpleOnboardingQuestionProvider) == currentQ) {
         _showLoadingAndNavigate();
       }
@@ -103,10 +105,12 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
     if (currentQuestion == 0) {
       final goals = ref.read(selectedGoalsProvider);
       if (goals.isEmpty) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Por favor selecciona al menos un objetivo'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(l10n?.onboardingSelectAtLeastOneGoal ?? 
+                        'Por favor selecciona al menos un objetivo'),
+            duration: const Duration(seconds: 2),
           ),
         );
         return;
@@ -122,6 +126,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
   }
 
   Future<void> _showLoadingAndNavigate() async {
+    final l10n = AppLocalizations.of(context);
+    
     // Show loading animation
     await showDialog(
       context: context,
@@ -151,9 +157,9 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                 repeat: true,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Preparando tus hábitos...',
-                style: TextStyle(
+              Text(
+                l10n?.onboardingPreparingHabits ?? 'Preparando tus hábitos...',
+                style: const TextStyle(
                   fontSize: 18,
                   color: Color(0xff6366f1),
                   fontWeight: FontWeight.bold,
@@ -178,7 +184,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
     );
 
     // Small delay for UX
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(OnboardingConfig.loadingDialogDelay);
 
     if (mounted) {
       Navigator.of(context).pop(); // Close loading dialog

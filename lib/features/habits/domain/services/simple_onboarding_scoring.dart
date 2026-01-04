@@ -6,6 +6,8 @@
 /// - Maximum: 3 goals (6) + 20+min (3) + consistent (3) = 12
 library;
 
+import '../config/onboarding_config.dart';
+
 enum ScoreLevel {
   basic, // 4-6 points
   intermediate, // 7-9 points
@@ -135,9 +137,9 @@ class SimpleOnboardingScoring {
 
   /// Classify total score into level
   static ScoreLevel _getScoreLevel(int totalScore) {
-    if (totalScore >= 10) {
+    if (totalScore >= OnboardingConfig.scoreAdvancedThreshold) {
       return ScoreLevel.advanced;
-    } else if (totalScore >= 7) {
+    } else if (totalScore >= OnboardingConfig.scoreIntermediateThreshold) {
       return ScoreLevel.intermediate;
     } else {
       return ScoreLevel.basic;

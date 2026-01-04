@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/services/simple_onboarding_scoring.dart';
 import '../../domain/services/simple_template_selector.dart';
+import '../../domain/config/onboarding_config.dart';
 import '../../domain/models/predefined_habits_data.dart'
     as predefined_data;
 import '../../data/storage/storage_providers.dart';
@@ -37,12 +38,14 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
   }
 
   void _removeHabit(String habitId) {
-    if (_selectedHabitIds.length <= 1) {
+    if (_selectedHabitIds.length <= OnboardingConfig.minHabits) {
       // Minimum 1 habit enforcement
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debes mantener al menos un hábito'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(l10n?.onboardingKeepAtLeastOneHabit ?? 
+                      'Debes mantener al menos un hábito'),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -112,10 +115,12 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       debugPrint('Failed to create habits: $e\n$stackTrace');
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('No pudimos crear los hábitos. Intenta de nuevo.'),
-            duration: Duration(seconds: 4),
+          SnackBar(
+            content: Text(l10n?.onboardingCouldNotCreateHabits ?? 
+                        'No pudimos crear los hábitos. Intenta de nuevo.'),
+            duration: const Duration(seconds: 4),
           ),
         );
       }
