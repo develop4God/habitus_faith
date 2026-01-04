@@ -5,8 +5,10 @@ class AiConfig {
 
   // ========== Gemini API Configuration ==========
 
-  /// Gemini model name (Roadmap: "gemini-1.5-flash")
-  static const String defaultModel = 'gemini-1.5-flash';
+  /// Gemini model name
+  /// Using gemini-1.5-flash-latest for stable API compatibility
+  /// See: https://ai.google.dev/gemini-api/docs/models/gemini
+  static const String defaultModel = 'gemini-1.5-flash-latest';
 
   /// API request timeout in seconds (Roadmap: <30 seconds)
   static const Duration requestTimeout = Duration(seconds: 30);

@@ -51,12 +51,12 @@ class EnvConfig {
   }
 
   /// Get Gemini model name from environment
-  /// Defaults to gemini-1.5-flash if not specified
+  /// Defaults to gemini-1.5-flash-latest if not specified
   static String get geminiModel =>
       dotenv.env['GEMINI_MODEL'] ??
       const String.fromEnvironment(
         'GEMINI_MODEL',
-        defaultValue: 'gemini-1.5-flash',
+        defaultValue: 'gemini-1.5-flash-latest',
       );
 }
 
