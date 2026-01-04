@@ -116,7 +116,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                           widget.habitName,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer
-                                .withAlpha((0.7 * 255).toInt()),
+                                .withAlpha(179),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -179,7 +179,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceContainerHighest.withAlpha((0.3 * 255).toInt()),
+                        color: theme.colorScheme.surfaceContainerHighest.withAlpha(77),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Wrap(
