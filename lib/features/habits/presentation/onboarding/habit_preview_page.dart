@@ -108,12 +108,14 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
         // Navigate to habits page
         Navigator.of(context).pushReplacementNamed('/habits');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrint('Failed to create habits: $e\n$stackTrace');
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al crear hábitos: $e'),
-            duration: const Duration(seconds: 3),
+          const SnackBar(
+            content: Text('No pudimos crear los hábitos. Intenta de nuevo.'),
+            duration: Duration(seconds: 4),
           ),
         );
       }

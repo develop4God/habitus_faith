@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
@@ -35,6 +36,7 @@ class SimpleOnboardingFlow extends ConsumerStatefulWidget {
 class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
     with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
+  Timer? _autoAdvanceTimer;
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
   @override
   void dispose() {
+    _autoAdvanceTimer?.cancel();
     _progressController.dispose();
     super.dispose();
   }
@@ -70,22 +73,24 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
   }
 
   void _handleTimeSelection(TimeCommitment time) {
+    _autoAdvanceTimer?.cancel();
     ref.read(timeCommitmentProvider.notifier).state = time;
 
-    // Auto-advance after 300ms
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
+    final currentQ = ref.read(simpleOnboardingQuestionProvider);
+    _autoAdvanceTimer = Timer(const Duration(milliseconds: 300), () {
+      if (mounted && ref.read(simpleOnboardingQuestionProvider) == currentQ) {
         _nextQuestion();
       }
     });
   }
 
   void _handleLevelSelection(ExperienceLevel level) {
+    _autoAdvanceTimer?.cancel();
     ref.read(experienceLevelProvider.notifier).state = level;
 
-    // Auto-advance to preview after 300ms
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
+    final currentQ = ref.read(simpleOnboardingQuestionProvider);
+    _autoAdvanceTimer = Timer(const Duration(milliseconds: 300), () {
+      if (mounted && ref.read(simpleOnboardingQuestionProvider) == currentQ) {
         _showLoadingAndNavigate();
       }
     });

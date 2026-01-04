@@ -1,5 +1,22 @@
 import 'simple_onboarding_scoring.dart';
 
+/// Enum for habit template IDs to ensure type safety
+enum HabitTemplateId {
+  morningPrayer('morning_prayer'),
+  bibleReading('bible_reading'),
+  gratitude('gratitude'),
+  exercise('exercise'),
+  sleep('sleep'),
+  healthyEating('healthy_eating'),
+  meditation('meditation'),
+  learning('learning'),
+  creativity('creativity'),
+  worship('worship');
+
+  const HabitTemplateId(this.id);
+  final String id;
+}
+
 /// O(1) template selector for simple onboarding V2
 /// 
 /// Maps (primaryIntent, ScoreLevel) combinations to predefined habit IDs
@@ -8,43 +25,70 @@ class SimpleTemplateSelector {
   /// Template lookup table: (intent, level) -> habit IDs
   /// 
   /// All IDs must exist in predefined_habits_data.dart
-  static const Map<(String, ScoreLevel), List<String>> templates = {
+  static final Map<(String, ScoreLevel), List<String>> templates = {
     // Faith-based paths
-    ('faithBased', ScoreLevel.basic): ['morning_prayer'],
-    ('faithBased', ScoreLevel.intermediate): ['morning_prayer', 'bible_reading'],
+    ('faithBased', ScoreLevel.basic): [HabitTemplateId.morningPrayer.id],
+    ('faithBased', ScoreLevel.intermediate): [
+      HabitTemplateId.morningPrayer.id,
+      HabitTemplateId.bibleReading.id
+    ],
     ('faithBased', ScoreLevel.advanced): [
-      'morning_prayer',
-      'bible_reading',
-      'gratitude'
+      HabitTemplateId.morningPrayer.id,
+      HabitTemplateId.bibleReading.id,
+      HabitTemplateId.gratitude.id
     ],
 
     // Wellness paths
-    ('wellness', ScoreLevel.basic): ['exercise'],
-    ('wellness', ScoreLevel.intermediate): ['exercise', 'sleep'],
-    ('wellness', ScoreLevel.advanced): ['exercise', 'sleep', 'healthy_eating'],
+    ('wellness', ScoreLevel.basic): [HabitTemplateId.exercise.id],
+    ('wellness', ScoreLevel.intermediate): [
+      HabitTemplateId.exercise.id,
+      HabitTemplateId.sleep.id
+    ],
+    ('wellness', ScoreLevel.advanced): [
+      HabitTemplateId.exercise.id,
+      HabitTemplateId.sleep.id,
+      HabitTemplateId.healthyEating.id
+    ],
 
     // Mixed/Study/Peace paths (consolidated)
-    ('mixed', ScoreLevel.basic): ['meditation'],
-    ('mixed', ScoreLevel.intermediate): ['meditation', 'learning'],
-    ('mixed', ScoreLevel.advanced): ['meditation', 'learning', 'gratitude'],
+    ('mixed', ScoreLevel.basic): [HabitTemplateId.meditation.id],
+    ('mixed', ScoreLevel.intermediate): [
+      HabitTemplateId.meditation.id,
+      HabitTemplateId.learning.id
+    ],
+    ('mixed', ScoreLevel.advanced): [
+      HabitTemplateId.meditation.id,
+      HabitTemplateId.learning.id,
+      HabitTemplateId.gratitude.id
+    ],
 
     // Study specific
-    ('study', ScoreLevel.basic): ['learning'],
-    ('study', ScoreLevel.intermediate): ['learning', 'bible_reading'],
+    ('study', ScoreLevel.basic): [HabitTemplateId.learning.id],
+    ('study', ScoreLevel.intermediate): [
+      HabitTemplateId.learning.id,
+      HabitTemplateId.bibleReading.id
+    ],
     ('study', ScoreLevel.advanced): [
-      'learning',
-      'bible_reading',
-      'creativity'
+      HabitTemplateId.learning.id,
+      HabitTemplateId.bibleReading.id,
+      HabitTemplateId.creativity.id
     ],
 
     // Peace specific
-    ('peace', ScoreLevel.basic): ['meditation'],
-    ('peace', ScoreLevel.intermediate): ['meditation', 'gratitude'],
-    ('peace', ScoreLevel.advanced): ['meditation', 'gratitude', 'worship'],
+    ('peace', ScoreLevel.basic): [HabitTemplateId.meditation.id],
+    ('peace', ScoreLevel.intermediate): [
+      HabitTemplateId.meditation.id,
+      HabitTemplateId.gratitude.id
+    ],
+    ('peace', ScoreLevel.advanced): [
+      HabitTemplateId.meditation.id,
+      HabitTemplateId.gratitude.id,
+      HabitTemplateId.worship.id
+    ],
   };
 
   /// Universal fallback when lookup fails
-  static const List<String> fallbackTemplates = ['morning_prayer'];
+  static final List<String> fallbackTemplates = [HabitTemplateId.morningPrayer.id];
 
   /// Select habit templates based on onboarding score
   /// 
