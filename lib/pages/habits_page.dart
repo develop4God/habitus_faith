@@ -29,19 +29,23 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
   JsonHabitsNotifier(this.ref) : super(const AsyncValue.data(null));
 
   Future<void> completeHabit(String habitId) async {
-    debugPrint('JsonHabitsNotifier.completeHabit: start -> $habitId');
+    return completeHabitWithNote(habitId, null);
+  }
+
+  Future<void> completeHabitWithNote(String habitId, String? note) async {
+    debugPrint('JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
-    final result = await repository.completeHabit(habitId);
+    final result = await repository.completeHabitWithNote(habitId, note);
 
     result.fold(
       (failure) {
-        debugPrint('JsonHabitsNotifier.completeHabit: failure -> $failure');
+        debugPrint('JsonHabitsNotifier.completeHabitWithNote: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
-        debugPrint('JsonHabitsNotifier.completeHabit: success -> ${habit.id}');
+        debugPrint('JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );

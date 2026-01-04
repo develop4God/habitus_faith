@@ -854,7 +854,13 @@
   "habitTracking": "FR: Habit Tracking",
   "@habitTracking": {
     "description": "Title for habit tracking calendar page"
-  }
-,
+  },
+  "addNote": "Ajouter une Note",
+  "noteHint": "Comment ça s'est passé ? Partagez vos pensées...",
+  "viewNote": "Voir la Note",
+  "shareNote": "Partager",
+  "noteAdded": "Note ajoutée",
+  "addNoteDialog": "Ajouter une Note",
+  "completeWithNote": "Compléter et Ajouter une Note",
   "onboardingWelcomeMessage": "FR: Welcome message"
 }

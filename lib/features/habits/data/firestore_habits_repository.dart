@@ -3,6 +3,7 @@ import '../domain/habit.dart';
 import '../domain/habits_repository.dart';
 import '../domain/failures.dart';
 import '../domain/models/habit_notification.dart';
+import '../domain/models/completion_record.dart';
 import 'habit_model.dart';
 
 class FirestoreHabitsRepository implements HabitsRepository {
@@ -73,6 +74,14 @@ class FirestoreHabitsRepository implements HabitsRepository {
 
   @override
   Future<Result<Habit, HabitFailure>> completeHabit(String habitId) async {
+    return completeHabitWithNote(habitId, null);
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> completeHabitWithNote(
+    String habitId,
+    String? note,
+  ) async {
     try {
       if (userId == null) {
         return const Failure(UserNotAuthenticatedFailure());
@@ -91,6 +100,10 @@ class FirestoreHabitsRepository implements HabitsRepository {
           .collection('habits')
           .doc(habitId)
           .update(HabitModel.toFirestore(updatedHabit));
+
+      // Note: Firestore implementation doesn't store notes in CompletionRecord yet
+      // This would require additional Firestore collection schema changes
+      // For now, notes are only stored in JSON implementation
 
       return Success(updatedHabit);
     } on FirebaseException catch (e) {
@@ -237,5 +250,11 @@ class FirestoreHabitsRepository implements HabitsRepository {
     // Firestore implementation - not currently used but required by interface
     // Data collection happens via GitHubMLStorage in JsonHabitsRepository
     return;
+  }
+
+  @override
+  CompletionRecord? getTodayCompletionRecord(String habitId) {
+    // Not implemented for Firestore - would require additional query
+    return null;
   }
 }

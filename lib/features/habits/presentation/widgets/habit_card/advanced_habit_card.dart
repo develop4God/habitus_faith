@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/habit.dart';
+import '../../../data/storage/storage_providers.dart';
 import '../mini_calendar_heatmap.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
+import '../../../../../widgets/add_note_dialog.dart';
+import '../../../../../pages/habits_page.dart';
 
 /// Advanced habit card with full tracking info always visible
 /// Shows all details inline: name, description, stats, calendar, actions
@@ -48,6 +51,30 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
         setState(() {
           _isCompleting = false;
         });
+      }
+    }
+  }
+
+  Future<void> _handleAddNote() async {
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
+    
+    final note = await showAddNoteDialog(
+      context: context,
+      habitName: widget.habit.name,
+      existingNote: existingRecord?.notes,
+    );
+
+    if (note != null && mounted) {
+      // Complete the habit with the note
+      final notifier = ref.read(jsonHabitsNotifierProvider.notifier);
+      if (!widget.habit.completedToday) {
+        await notifier.completeHabitWithNote(widget.habit.id, note);
+      } else {
+        // If already completed, we need to update the existing completion record
+        // For simplicity, we'll re-complete with the new note
+        await notifier.uncheckHabit(widget.habit.id);
+        await notifier.completeHabitWithNote(widget.habit.id, note);
       }
     }
   }
@@ -202,6 +229,12 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // Add note button - shown when habit is completed
+                if (widget.habit.completedToday)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _buildNoteButton(habitColor),
+                  ),
                 PopupMenuButton<String>(
                   icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
                   onSelected: (value) {
@@ -287,6 +320,26 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildNoteButton(Color habitColor) {
+    final l10n = AppLocalizations.of(context)!;
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
+    final hasNote = existingRecord?.notes?.isNotEmpty ?? false;
+
+    return FilledButton.tonalIcon(
+      onPressed: _handleAddNote,
+      icon: Icon(
+        hasNote ? Icons.edit_note : Icons.note_add,
+        size: 20,
+      ),
+      label: Text(hasNote ? l10n.viewNote : l10n.addNote),
+      style: FilledButton.styleFrom(
+        backgroundColor: habitColor.withAlpha(40),
+        foregroundColor: habitColor,
+      ),
     );
   }
 }

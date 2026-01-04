@@ -774,5 +774,12 @@
   "invalidMinutes": "PT: Invalid Minutes",
   "invalidInterval": "PT: Invalid Interval",
   "habitTracking": "PT: Habit Tracking",
+  "addNote": "Adicionar Nota",
+  "noteHint": "Como foi? Compartilhe seus pensamentos...",
+  "viewNote": "Ver Nota",
+  "shareNote": "Compartilhar",
+  "noteAdded": "Nota adicionada",
+  "addNoteDialog": "Adicionar uma Nota",
+  "completeWithNote": "Concluir e Adicionar Nota",
   "onboardingWelcomeMessage": "PT: Welcome message"
 }

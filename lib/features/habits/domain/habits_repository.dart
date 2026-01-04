@@ -49,6 +49,12 @@ abstract class HabitsRepository {
   /// Complete a habit for today
   Future<Result<Habit, HabitFailure>> completeHabit(String habitId);
 
+  /// Complete a habit for today with an optional note
+  Future<Result<Habit, HabitFailure>> completeHabitWithNote(
+    String habitId,
+    String? note,
+  );
+
   /// Update an existing habit
   Future<Result<Habit, HabitFailure>> updateHabit({
     required String habitId,
@@ -70,4 +76,7 @@ abstract class HabitsRepository {
 
   /// Record completion/abandonment data for ML training
   Future<void> recordCompletionForML(String habitId, bool completed);
+
+  /// Get today's completion record for a habit (including notes)
+  CompletionRecord? getTodayCompletionRecord(String habitId);
 }

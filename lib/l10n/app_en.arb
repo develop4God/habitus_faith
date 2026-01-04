@@ -1090,5 +1090,33 @@
   "breathing_exercises": "Breathing Exercises",
   "creative_hobby": "Creative Hobby",
   "call_friend_family": "Call Friend/Family",
-  "quality_time_loved_ones": "Quality Time with Loved Ones"
+  "quality_time_loved_ones": "Quality Time with Loved Ones",
+  "addNote": "Add Note",
+  "@addNote": {
+    "description": "Add note button text"
+  },
+  "noteHint": "How did it go? Share your thoughts...",
+  "@noteHint": {
+    "description": "Placeholder text for note input field"
+  },
+  "viewNote": "View Note",
+  "@viewNote": {
+    "description": "View note button text"
+  },
+  "shareNote": "Share",
+  "@shareNote": {
+    "description": "Share note button text"
+  },
+  "noteAdded": "Note added",
+  "@noteAdded": {
+    "description": "Note added confirmation message"
+  },
+  "addNoteDialog": "Add a Note",
+  "@addNoteDialog": {
+    "description": "Add note dialog title"
+  },
+  "completeWithNote": "Complete & Add Note",
+  "@completeWithNote": {
+    "description": "Complete habit with note button text"
+  }
 }

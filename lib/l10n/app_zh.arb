@@ -742,7 +742,13 @@
   "today": "今天",
   "@today": {
     "description": "用于在习惯视图中显示当天的标签"
-  }
-,
+  },
+  "addNote": "添加笔记",
+  "noteHint": "进展如何？分享您的想法...",
+  "viewNote": "查看笔记",
+  "shareNote": "分享",
+  "noteAdded": "笔记已添加",
+  "addNoteDialog": "添加笔记",
+  "completeWithNote": "完成并添加笔记",
   "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。"
 }
