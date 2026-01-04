@@ -1,0 +1,68 @@
+{
+  "template_id": "faithBased_growing_lackOfTime_normal_closerToGod_prayerDiscipline",
+  "fingerprint": "470114878",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "closerToGod",
+      "prayerDiscipline"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "normal",
+    "spiritualMaturity": "growing"
+  },
+  "habits": [
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 10,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 10,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp12",
+      "nameKey": "intercessory_prayer",
+      "category": "spiritual",
+      "emoji": "🙌",
+      "target_minutes": 15,
+      "verse_key": "1_timothy_2_1",
+      "notification_key": "intercessory_prayer",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp05",
+      "nameKey": "gratitude_journal",
+      "category": "spiritual",
+      "emoji": "✍️",
+      "target_minutes": 10,
+      "verse_key": "1_thessalonians_5_18",
+      "notification_key": "gratitude_journal",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp07",
+      "nameKey": "fasting",
+      "category": "spiritual",
+      "emoji": "🍽️",
+      "target_minutes": 15,
+      "verse_key": "matthew_6_16",
+      "notification_key": "fasting",
+      "time_of_day": "flexible"
+    }
+  ]
+}

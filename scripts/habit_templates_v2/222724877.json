@@ -1,0 +1,68 @@
+{
+  "template_id": "both_new_lackOfTime_normal_prayerDiscipline_reduceStress",
+  "fingerprint": "222724877",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "prayerDiscipline",
+      "reduceStress"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "normal",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp07",
+      "nameKey": "fasting",
+      "category": "spiritual",
+      "emoji": "🍽️",
+      "target_minutes": 15,
+      "verse_key": "matthew_6_16",
+      "notification_key": "fasting",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph03",
+      "nameKey": "yoga_stretching",
+      "category": "physical",
+      "emoji": "🧘",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "yoga_stretching",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph01",
+      "nameKey": "daily_walk",
+      "category": "physical",
+      "emoji": "🚶",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "daily_walk",
+      "time_of_day": "morning"
+    }
+  ]
+}

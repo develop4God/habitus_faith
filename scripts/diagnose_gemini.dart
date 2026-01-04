@@ -23,14 +23,14 @@ void main() async {
     print('⚠️  Warning: API key doesn\'t start with "AIza" (expected format)');
   }
 
-  // 2. Test different model names
+  // 2. Test different model names (ordered by likelihood of working)
   final modelsToTest = [
-    'gemini-1.5-flash',
-    'gemini-1.5-flash-latest',
-    'gemini-1.5-pro',
-    'gemini-1.5-pro-latest',
-    'gemini-pro',
-    'models/gemini-1.5-flash',
+    'gemini-1.5-flash',           // Most common, try first
+    'gemini-1.5-pro',             // Pro version
+    'gemini-pro',                 // Legacy name
+    'gemini-1.5-flash-latest',    // Versioned variant
+    'gemini-1.5-pro-latest',      // Pro latest
+    'models/gemini-1.5-flash',    // With prefix (shouldn't work but test anyway)
     'models/gemini-1.5-flash-latest',
   ];
 

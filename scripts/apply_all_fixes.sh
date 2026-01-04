@@ -64,9 +64,11 @@ echo ""
 
 # Step 4: Get dependencies
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "STEP 4: Getting Dependencies"
+echo "STEP 4: Getting Dependencies (Updated Packages)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Updating google_generative_ai to 0.4.6..."
 flutter pub get
+flutter pub upgrade google_generative_ai
 echo "✅ Dependencies updated"
 echo ""
 

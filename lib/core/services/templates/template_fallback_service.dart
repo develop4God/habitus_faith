@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import '../../../features/habits/presentation/onboarding/onboarding_models.dart';
 import '../templates/template_scoring_engine.dart';
@@ -23,18 +22,9 @@ class TemplateFallbackService {
     try {
       _logger.i('🔍 Searching for similar template (threshold: $threshold)');
 
-      // Load manifest of all available templates
-      final manifestJson =
-          await rootBundle.loadString('AssetManifest.json');
-      final manifest = json.decode(manifestJson) as Map<String, dynamic>;
-
-      // Filter template files
-      final templateFiles = manifest.keys
-          .where((key) => key.startsWith('assets/habit_templates_v2/'))
-          .where((key) => key.endsWith('.json'))
-          .toList();
-
-      _logger.d('Found ${templateFiles.length} templates to evaluate');
+      // Get list of available template fingerprints
+      final fingerprints = await _getAvailableTemplateFingerprints();
+      _logger.d('Found [1m${fingerprints.length}[0m templates to evaluate');
 
       // Initialize scoring engine
       final scoringEngine = TemplateScoringEngine();
@@ -45,9 +35,9 @@ class TemplateFallbackService {
       String? bestPatternId;
 
       // Evaluate each template
-      for (final templatePath in templateFiles) {
+      for (final fingerprint in fingerprints) {
         try {
-          final template = await _loadTemplate(templatePath);
+          final template = await HabitTemplateLoader.loadTemplate(fingerprint);
           if (template == null) continue;
 
           // Get pattern from template metadata
@@ -71,7 +61,7 @@ class TemplateFallbackService {
             );
           }
         } catch (e) {
-          _logger.w('Error evaluating template $templatePath: $e');
+          _logger.w('Error evaluating template $fingerprint: $e');
           continue;
         }
       }
@@ -93,15 +83,13 @@ class TemplateFallbackService {
     }
   }
 
-  /// Load a template from asset path
-  static Future<Map<String, dynamic>?> _loadTemplate(String path) async {
-    try {
-      final jsonString = await rootBundle.loadString(path);
-      return json.decode(jsonString) as Map<String, dynamic>;
-    } catch (e) {
-      _logger.w('Failed to load template $path: $e');
-      return null;
-    }
+  /// Get list of available template fingerprints
+  /// This should be updated when templates are regenerated
+  static Future<List<String>> _getAvailableTemplateFingerprints() async {
+    // TODO: Generate a manifest of available templates during build
+    // For now, return empty list and let the system fall back to Gemini
+    _logger.w('Template fingerprint list not available - falling back to Gemini');
+    return <String>[];
   }
 
   /// Build pattern ID from profile data
@@ -120,4 +108,3 @@ class TemplateFallbackService {
     return '${intent}_${maturity}_${challenge}_${support}_$motivationsPart';
   }
 }
-

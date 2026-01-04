@@ -113,14 +113,17 @@ TEMPLATE_MATRIX = {
         {"motivations": ["physicalHealth", "timeManagement"], "challenge": "givingUp", "supportLevel": "weak"},
         {"motivations": ["physicalHealth", "timeManagement"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"motivations": ["timeManagement", "reduceStress"], "challenge": "dontKnowStart", "supportLevel": "weak"},
+        {"motivations": ["timeManagement", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
 
-        # Triple motivation templates - THE MISSING ONE + others (6)
+        # Triple motivation templates - THE MISSING ONES + others (8)
         {"motivations": ["physicalHealth", "reduceStress", "betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
         {"motivations": ["physicalHealth", "reduceStress", "betterSleep"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"motivations": ["physicalHealth", "reduceStress", "betterSleep"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+        {"motivations": ["timeManagement", "physicalHealth", "reduceStress"], "challenge": "givingUp", "supportLevel": "weak"},
         {"motivations": ["physicalHealth", "timeManagement", "productivity"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"motivations": ["productivity", "reduceStress", "betterSleep"], "challenge": "stressAnxiety", "supportLevel": "weak"},
         {"motivations": ["timeManagement", "productivity", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"motivations": ["timeManagement", "productivity", "physicalHealth"], "challenge": "lackOfTime", "supportLevel": "normal"},
     ],
     "both": [
         # new maturity (12 templates - expanded)
