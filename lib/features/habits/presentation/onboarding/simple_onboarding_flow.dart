@@ -158,75 +158,87 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
   }
 
   Future<void> _showLoadingAndNavigate() async {
-    final l10n = AppLocalizations.of(context);
-    
-    // Show loading animation
-    await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset(
-                'assets/lottie/gears.json',
-                width: 120,
-                height: 120,
-                repeat: true,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                l10n?.onboardingPreparingHabits ?? 'Preparando tus hábitos...',
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Color(0xff6366f1),
-                  fontWeight: FontWeight.bold,
+    debugPrint('🟢 Onboarding V2: Completed 3rd question, preparing habit preview...');
+    try {
+      final l10n = AppLocalizations.of(context);
+      debugPrint('🟢 Showing loading dialog...');
+      // Show loading animation (do not await)
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lottie/gears.json',
+                  width: 120,
+                  height: 120,
+                  repeat: true,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n?.onboardingPreparingHabits ?? 'Preparando tus hábitos...',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Color(0xff6366f1),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
-
-    // Calculate score
-    final goals = ref.read(selectedGoalsProvider);
-    final time = ref.read(timeCommitmentProvider)!;
-    final level = ref.read(experienceLevelProvider)!;
-
-    final score = SimpleOnboardingScoring.calculateScore(
-      goals: goals,
-      timeCommitment: time,
-      experienceLevel: level,
-    );
-
-    // Small delay for UX
-    await Future.delayed(OnboardingConfig.loadingDialogDelay);
-
-    if (mounted) {
-      Navigator.of(context).pop(); // Close loading dialog
-
-      // Navigate to preview
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => HabitPreviewPage(score: score),
         ),
       );
+      debugPrint('🟢 Loading dialog shown. Calculating score...');
+      // Calculate score
+      final goals = ref.read(selectedGoalsProvider);
+      final time = ref.read(timeCommitmentProvider)!;
+      final level = ref.read(experienceLevelProvider)!;
+      debugPrint('🟢 Providers: goals=$goals, time=$time, level=$level');
+      final score = SimpleOnboardingScoring.calculateScore(
+        goals: goals,
+        timeCommitment: time,
+        experienceLevel: level,
+      );
+      debugPrint('🟢 Score calculated: $score');
+      // Small delay for UX
+      await Future.delayed(OnboardingConfig.loadingDialogDelay);
+      if (mounted) {
+        debugPrint('🟢 Closing loading dialog...');
+        Navigator.of(context).pop(); // Close loading dialog
+        debugPrint('🟢 Navigating to HabitPreviewPage...');
+        // Navigate to preview
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => HabitPreviewPage(score: score),
+          ),
+        );
+      }
+    } catch (e, stack) {
+      debugPrint('🔴 Error in _showLoadingAndNavigate: $e');
+      debugPrint('🔴 Stacktrace: $stack');
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
