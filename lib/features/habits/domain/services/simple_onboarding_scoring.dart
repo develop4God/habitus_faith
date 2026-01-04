@@ -1,15 +1,15 @@
 /// Simple onboarding scoring service for V2 flow
 /// 
 /// Formula: score = (goals.length * 2) + timeValue + levelValue
-/// Range: 3-12 points
-/// - Minimum: 1 goal (2) + 5-10min (1) + new (1) = 3
+/// Range: 4-12 points
+/// - Minimum: 1 goal (2) + 5-10min (1) + new (1) = 4
 /// - Maximum: 3 goals (6) + 20+min (3) + consistent (3) = 12
 library;
 
 enum ScoreLevel {
-  basic, // 3-5 points
-  intermediate, // 6-8 points
-  advanced, // 9+ points
+  basic, // 4-6 points
+  intermediate, // 7-9 points
+  advanced, // 10+ points
 }
 
 enum GoalType {
@@ -135,9 +135,9 @@ class SimpleOnboardingScoring {
 
   /// Classify total score into level
   static ScoreLevel _getScoreLevel(int totalScore) {
-    if (totalScore >= 9) {
+    if (totalScore >= 10) {
       return ScoreLevel.advanced;
-    } else if (totalScore >= 6) {
+    } else if (totalScore >= 7) {
       return ScoreLevel.intermediate;
     } else {
       return ScoreLevel.basic;

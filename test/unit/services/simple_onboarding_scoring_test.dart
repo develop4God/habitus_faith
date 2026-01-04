@@ -4,7 +4,7 @@ import 'package:habitus_faith/features/habits/domain/services/simple_onboarding_
 void main() {
   group('SimpleOnboardingScoring', () {
     group('calculateScore', () {
-      test('minimum score (3): 1 goal + short time + newbie', () {
+      test('minimum score (4): 1 goal + short time + newbie', () {
         final score = SimpleOnboardingScoring.calculateScore(
           goals: [GoalType.faith],
           timeCommitment: TimeCommitment.short,
@@ -28,7 +28,7 @@ void main() {
         expect(score.primaryIntent, equals('faithBased')); // Faith has priority
       });
 
-      test('intermediate score (7): 2 goals + medium time + growing', () {
+      test('intermediate score (8): 2 goals + medium time + growing', () {
         final score = SimpleOnboardingScoring.calculateScore(
           goals: [GoalType.wellness, GoalType.study],
           timeCommitment: TimeCommitment.medium,
@@ -41,8 +41,8 @@ void main() {
             score.primaryIntent, equals('wellness')); // Wellness has priority
       });
 
-      test('score level boundaries: basic (3-5)', () {
-        // Score = 5
+      test('score level boundaries: basic (4-6)', () {
+        // Score = 6
         final score = SimpleOnboardingScoring.calculateScore(
           goals: [GoalType.peace],
           timeCommitment: TimeCommitment.medium,
@@ -50,10 +50,10 @@ void main() {
         );
 
         expect(score.totalScore, equals(6)); // 1*2 + 2 + 2 = 6
-        expect(score.level, equals(ScoreLevel.intermediate));
+        expect(score.level, equals(ScoreLevel.basic));
       });
 
-      test('score level boundaries: intermediate (6-8)', () {
+      test('score level boundaries: intermediate (7-9)', () {
         // Score = 8
         final score = SimpleOnboardingScoring.calculateScore(
           goals: [GoalType.faith, GoalType.wellness],
@@ -65,8 +65,8 @@ void main() {
         expect(score.level, equals(ScoreLevel.intermediate));
       });
 
-      test('score level boundaries: advanced (9+)', () {
-        // Score = 9
+      test('score level boundaries: advanced (10+)', () {
+        // Score = 10
         final score = SimpleOnboardingScoring.calculateScore(
           goals: [GoalType.faith, GoalType.wellness],
           timeCommitment: TimeCommitment.long,
@@ -224,7 +224,7 @@ void main() {
       });
     });
 
-    group('all score combinations (3-12 range)', () {
+    group('all score combinations (4-12 range)', () {
       test('score range validation', () {
         final scores = <int>[];
 
