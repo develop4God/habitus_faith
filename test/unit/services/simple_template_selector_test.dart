@@ -9,7 +9,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 4,
           level: ScoreLevel.basic,
-          primaryIntent: 'faithBased',
+          primaryIntent: PrimaryIntent.faithBased,
           goals: [GoalType.faith],
           timeCommitment: TimeCommitment.short,
           experienceLevel: ExperienceLevel.newbie,
@@ -24,7 +24,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 7,
           level: ScoreLevel.intermediate,
-          primaryIntent: 'faithBased',
+          primaryIntent: PrimaryIntent.faithBased,
           goals: [GoalType.faith, GoalType.study],
           timeCommitment: TimeCommitment.medium,
           experienceLevel: ExperienceLevel.growing,
@@ -39,7 +39,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 10,
           level: ScoreLevel.advanced,
-          primaryIntent: 'faithBased',
+          primaryIntent: PrimaryIntent.faithBased,
           goals: [GoalType.faith, GoalType.wellness],
           timeCommitment: TimeCommitment.long,
           experienceLevel: ExperienceLevel.consistent,
@@ -55,7 +55,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 4,
           level: ScoreLevel.basic,
-          primaryIntent: 'wellness',
+          primaryIntent: PrimaryIntent.wellness,
           goals: [GoalType.wellness],
           timeCommitment: TimeCommitment.short,
           experienceLevel: ExperienceLevel.newbie,
@@ -70,7 +70,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 7,
           level: ScoreLevel.intermediate,
-          primaryIntent: 'wellness',
+          primaryIntent: PrimaryIntent.wellness,
           goals: [GoalType.wellness, GoalType.peace],
           timeCommitment: TimeCommitment.medium,
           experienceLevel: ExperienceLevel.growing,
@@ -85,7 +85,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 10,
           level: ScoreLevel.advanced,
-          primaryIntent: 'wellness',
+          primaryIntent: PrimaryIntent.wellness,
           goals: [GoalType.wellness, GoalType.study],
           timeCommitment: TimeCommitment.long,
           experienceLevel: ExperienceLevel.consistent,
@@ -100,7 +100,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 5,
           level: ScoreLevel.basic,
-          primaryIntent: 'mixed',
+          primaryIntent: PrimaryIntent.mixed,
           goals: [GoalType.peace],
           timeCommitment: TimeCommitment.medium,
           experienceLevel: ExperienceLevel.newbie,
@@ -115,7 +115,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 4,
           level: ScoreLevel.basic,
-          primaryIntent: 'study',
+          primaryIntent: PrimaryIntent.study,
           goals: [GoalType.study],
           timeCommitment: TimeCommitment.short,
           experienceLevel: ExperienceLevel.newbie,
@@ -130,7 +130,7 @@ void main() {
         final score = OnboardingScore(
           totalScore: 7,
           level: ScoreLevel.intermediate,
-          primaryIntent: 'peace',
+          primaryIntent: PrimaryIntent.peace,
           goals: [GoalType.peace],
           timeCommitment: TimeCommitment.medium,
           experienceLevel: ExperienceLevel.growing,
@@ -143,19 +143,25 @@ void main() {
     });
 
     group('fallback behavior', () {
-      test('unknown intent -> fallback to morning_prayer', () {
-        final score = OnboardingScore(
-          totalScore: 7,
-          level: ScoreLevel.intermediate,
-          primaryIntent: 'unknown_intent',
-          goals: [GoalType.faith],
-          timeCommitment: TimeCommitment.medium,
-          experienceLevel: ExperienceLevel.growing,
-        );
+      test('all intents have valid template mappings', () {
+        // Test that each PrimaryIntent enum value has at least one template
+        for (final intent in PrimaryIntent.values) {
+          for (final level in ScoreLevel.values) {
+            final score = OnboardingScore(
+              totalScore: 7,
+              level: level,
+              primaryIntent: intent,
+              goals: [GoalType.faith],
+              timeCommitment: TimeCommitment.medium,
+              experienceLevel: ExperienceLevel.growing,
+            );
 
-        final templates = SimpleTemplateSelector.selectTemplates(score);
+            final templates = SimpleTemplateSelector.selectTemplates(score);
 
-        expect(templates, equals(['morning_prayer']));
+            // Should return valid templates (not null or empty)
+            expect(templates, isNotEmpty);
+          }
+        }
       });
     });
 
@@ -169,10 +175,10 @@ void main() {
 
         // Verify some key combinations exist
         expect(
-            combinations.contains(('faithBased', ScoreLevel.basic)), isTrue);
-        expect(combinations.contains(('wellness', ScoreLevel.intermediate)),
+            combinations.contains((PrimaryIntent.faithBased, ScoreLevel.basic)), isTrue);
+        expect(combinations.contains((PrimaryIntent.wellness, ScoreLevel.intermediate)),
             isTrue);
-        expect(combinations.contains(('study', ScoreLevel.advanced)), isTrue);
+        expect(combinations.contains((PrimaryIntent.study, ScoreLevel.advanced)), isTrue);
       });
     });
 
@@ -213,11 +219,11 @@ void main() {
     group('O(1) lookup verification', () {
       test('all 15 template combinations return valid results', () {
         final intents = [
-          'faithBased',
-          'wellness',
-          'mixed',
-          'study',
-          'peace'
+          PrimaryIntent.faithBased,
+          PrimaryIntent.wellness,
+          PrimaryIntent.mixed,
+          PrimaryIntent.study,
+          PrimaryIntent.peace
         ];
         final levels = [
           ScoreLevel.basic,

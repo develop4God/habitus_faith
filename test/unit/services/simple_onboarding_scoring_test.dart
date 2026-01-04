@@ -13,7 +13,7 @@ void main() {
 
         expect(score.totalScore, equals(4)); // 1*2 + 1 + 1 = 4
         expect(score.level, equals(ScoreLevel.basic));
-        expect(score.primaryIntent, equals('faithBased'));
+        expect(score.primaryIntent, equals(PrimaryIntent.faithBased));
       });
 
       test('maximum score (12): 3 goals + long time + consistent', () {
@@ -25,7 +25,7 @@ void main() {
 
         expect(score.totalScore, equals(12)); // 3*2 + 3 + 3 = 12
         expect(score.level, equals(ScoreLevel.advanced));
-        expect(score.primaryIntent, equals('faithBased')); // Faith has priority
+        expect(score.primaryIntent, equals(PrimaryIntent.faithBased)); // Faith has priority
       });
 
       test('intermediate score (8): 2 goals + medium time + growing', () {
@@ -38,7 +38,7 @@ void main() {
         expect(score.totalScore, equals(8)); // 2*2 + 2 + 2 = 8
         expect(score.level, equals(ScoreLevel.intermediate));
         expect(
-            score.primaryIntent, equals('wellness')); // Wellness has priority
+            score.primaryIntent, equals(PrimaryIntent.wellness)); // Wellness has priority
       });
 
       test('score level boundaries: basic (4-6)', () {
@@ -86,7 +86,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('faithBased'));
+        expect(score.primaryIntent, equals(PrimaryIntent.faithBased));
       });
 
       test('single goal: wellness -> wellness', () {
@@ -96,7 +96,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('wellness'));
+        expect(score.primaryIntent, equals(PrimaryIntent.wellness));
       });
 
       test('single goal: study -> study', () {
@@ -106,7 +106,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('study'));
+        expect(score.primaryIntent, equals(PrimaryIntent.study));
       });
 
       test('single goal: peace -> peace', () {
@@ -116,7 +116,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('peace'));
+        expect(score.primaryIntent, equals(PrimaryIntent.peace));
       });
 
       test('multiple goals with faith: faith has priority', () {
@@ -126,7 +126,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('faithBased'));
+        expect(score.primaryIntent, equals(PrimaryIntent.faithBased));
       });
 
       test('multiple goals without faith: wellness has priority', () {
@@ -136,7 +136,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('wellness'));
+        expect(score.primaryIntent, equals(PrimaryIntent.wellness));
       });
 
       test('multiple goals: study + peace -> mixed', () {
@@ -146,7 +146,7 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.primaryIntent, equals('mixed'));
+        expect(score.primaryIntent, equals(PrimaryIntent.mixed));
       });
     });
 

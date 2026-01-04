@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import '../../domain/services/simple_onboarding_scoring.dart';
 import '../../domain/config/onboarding_config.dart';
+import '../../domain/habit.dart';
+import '../../data/storage/storage_providers.dart';
 import 'habit_preview_page.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -123,6 +125,36 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
     // Animate progress
     _progressController.forward(from: 0);
+  }
+
+  Future<void> _skipOnboarding() async {
+    try {
+      // Create single default habit
+      final habitsRepository = ref.read(jsonHabitsRepositoryProvider);
+      await habitsRepository.createHabit(
+        name: 'Oración matutina',
+        category: HabitCategory.spiritual,
+        emoji: '🙏',
+      );
+
+      // Mark onboarding as complete
+      final storage = ref.read(jsonStorageServiceProvider);
+      await storage.setBool('onboarding_complete', true);
+
+      if (mounted) {
+        // Navigate to habits page
+        Navigator.of(context).pushReplacementNamed('/habits');
+      }
+    } catch (e) {
+      debugPrint('Failed to skip onboarding: $e');
+      // Still mark as complete and navigate
+      final storage = ref.read(jsonStorageServiceProvider);
+      await storage.setBool('onboarding_complete', true);
+      
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed('/habits');
+      }
+    }
   }
 
   Future<void> _showLoadingAndNavigate() async {
@@ -336,6 +368,21 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          
+          // Skip button
+          Center(
+            child: TextButton(
+              onPressed: _skipOnboarding,
+              child: const Text(
+                'Saltar por ahora',
+                style: TextStyle(
+                  color: Color(0xff64748b),
+                  fontSize: 14,
                 ),
               ),
             ),

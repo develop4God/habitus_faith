@@ -135,7 +135,7 @@ void main() {
       test('templates map is const (compile-time constant)', () {
         // This test verifies that templates is const by checking
         // that it can be used in const contexts
-        const testKey = ('faithBased', ScoreLevel.basic);
+        const testKey = (PrimaryIntent.faithBased, ScoreLevel.basic);
         const templates = SimpleTemplateSelector.templates;
 
         expect(templates.containsKey(testKey), isTrue);

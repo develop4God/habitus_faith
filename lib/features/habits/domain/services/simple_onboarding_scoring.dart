@@ -14,6 +14,15 @@ enum ScoreLevel {
   advanced, // 10+ points
 }
 
+/// Primary intent categorization for habit selection
+enum PrimaryIntent {
+  faithBased, // Faith-focused habits
+  wellness, // Health and fitness habits
+  study, // Learning and education habits
+  peace, // Mental wellness and peace habits
+  mixed, // Multiple categories
+}
+
 enum GoalType {
   faith, // 🙏 Fe
   wellness, // 💪 Salud
@@ -37,7 +46,7 @@ enum ExperienceLevel {
 class OnboardingScore {
   final int totalScore;
   final ScoreLevel level;
-  final String primaryIntent;
+  final PrimaryIntent primaryIntent;
   final List<GoalType> goals;
   final TimeCommitment timeCommitment;
   final ExperienceLevel experienceLevel;
@@ -152,34 +161,34 @@ class SimpleOnboardingScoring {
   /// 1. 🙏 Fe (faithBased)
   /// 2. 💪 Salud (wellness)
   /// 3. Other (mixed)
-  static String _determinePrimaryIntent(List<GoalType> goals) {
+  static PrimaryIntent _determinePrimaryIntent(List<GoalType> goals) {
     // If only one goal, use that directly
     if (goals.length == 1) {
-      return _goalTypeToIntent(goals.first);
+      return _goalTypeToPrimaryIntent(goals.first);
     }
 
     // Multiple goals: apply priority
     if (goals.contains(GoalType.faith)) {
-      return 'faithBased';
+      return PrimaryIntent.faithBased;
     }
     if (goals.contains(GoalType.wellness)) {
-      return 'wellness';
+      return PrimaryIntent.wellness;
     }
     // If study or peace (or both), return mixed
-    return 'mixed';
+    return PrimaryIntent.mixed;
   }
 
-  /// Convert goal type to intent string
-  static String _goalTypeToIntent(GoalType goal) {
+  /// Convert goal type to primary intent
+  static PrimaryIntent _goalTypeToPrimaryIntent(GoalType goal) {
     switch (goal) {
       case GoalType.faith:
-        return 'faithBased';
+        return PrimaryIntent.faithBased;
       case GoalType.wellness:
-        return 'wellness';
+        return PrimaryIntent.wellness;
       case GoalType.study:
-        return 'study';
+        return PrimaryIntent.study;
       case GoalType.peace:
-        return 'peace';
+        return PrimaryIntent.peace;
     }
   }
 }

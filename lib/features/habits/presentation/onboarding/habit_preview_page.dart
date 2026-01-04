@@ -56,17 +56,20 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
     });
   }
 
-  void _addHabit() {
+  void _addHabit() async {
     final l10n = AppLocalizations.of(context);
     if (l10n == null) return;
     
-    showDialog(
+    final newHabitId = await showDialog<String>(
       context: context,
       builder: (context) => AddHabitDialog(l10n: l10n),
-    ).then((result) {
-      // If user created a habit from the dialog, we could add it here
-      // For now, this opens the full add habit dialog
-    });
+    );
+    
+    if (newHabitId != null && mounted) {
+      setState(() {
+        _selectedHabitIds.add(newHabitId);
+      });
+    }
   }
 
   Future<void> _startWithHabits() async {

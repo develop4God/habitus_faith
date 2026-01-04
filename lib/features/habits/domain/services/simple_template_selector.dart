@@ -20,67 +20,67 @@ enum HabitTemplateId {
 /// O(1) template selector for simple onboarding V2
 /// 
 /// Maps (primaryIntent, ScoreLevel) combinations to predefined habit IDs
-/// Total: 9 combinations (3 intents × 3 levels)
+/// Total: 15 combinations (5 intents × 3 levels)
 class SimpleTemplateSelector {
   /// Template lookup table: (intent, level) -> habit IDs
   /// 
   /// All IDs must exist in predefined_habits_data.dart
-  static const Map<(String, ScoreLevel), List<String>> templates = {
+  static const Map<(PrimaryIntent, ScoreLevel), List<String>> templates = {
     // Faith-based paths
-    ('faithBased', ScoreLevel.basic): ['morning_prayer'],
-    ('faithBased', ScoreLevel.intermediate): [
+    (PrimaryIntent.faithBased, ScoreLevel.basic): ['morning_prayer'],
+    (PrimaryIntent.faithBased, ScoreLevel.intermediate): [
       'morning_prayer',
       'bible_reading'
     ],
-    ('faithBased', ScoreLevel.advanced): [
+    (PrimaryIntent.faithBased, ScoreLevel.advanced): [
       'morning_prayer',
       'bible_reading',
       'gratitude'
     ],
 
     // Wellness paths
-    ('wellness', ScoreLevel.basic): ['exercise'],
-    ('wellness', ScoreLevel.intermediate): [
+    (PrimaryIntent.wellness, ScoreLevel.basic): ['exercise'],
+    (PrimaryIntent.wellness, ScoreLevel.intermediate): [
       'exercise',
       'sleep'
     ],
-    ('wellness', ScoreLevel.advanced): [
+    (PrimaryIntent.wellness, ScoreLevel.advanced): [
       'exercise',
       'sleep',
       'healthy_eating'
     ],
 
     // Mixed/Study/Peace paths (consolidated)
-    ('mixed', ScoreLevel.basic): ['meditation'],
-    ('mixed', ScoreLevel.intermediate): [
+    (PrimaryIntent.mixed, ScoreLevel.basic): ['meditation'],
+    (PrimaryIntent.mixed, ScoreLevel.intermediate): [
       'meditation',
       'learning'
     ],
-    ('mixed', ScoreLevel.advanced): [
+    (PrimaryIntent.mixed, ScoreLevel.advanced): [
       'meditation',
       'learning',
       'gratitude'
     ],
 
     // Study specific
-    ('study', ScoreLevel.basic): ['learning'],
-    ('study', ScoreLevel.intermediate): [
+    (PrimaryIntent.study, ScoreLevel.basic): ['learning'],
+    (PrimaryIntent.study, ScoreLevel.intermediate): [
       'learning',
       'bible_reading'
     ],
-    ('study', ScoreLevel.advanced): [
+    (PrimaryIntent.study, ScoreLevel.advanced): [
       'learning',
       'bible_reading',
       'creativity'
     ],
 
     // Peace specific
-    ('peace', ScoreLevel.basic): ['meditation'],
-    ('peace', ScoreLevel.intermediate): [
+    (PrimaryIntent.peace, ScoreLevel.basic): ['meditation'],
+    (PrimaryIntent.peace, ScoreLevel.intermediate): [
       'meditation',
       'gratitude'
     ],
-    ('peace', ScoreLevel.advanced): [
+    (PrimaryIntent.peace, ScoreLevel.advanced): [
       'meditation',
       'gratitude',
       'worship'
@@ -111,7 +111,7 @@ class SimpleTemplateSelector {
   }
 
   /// Get all template combinations (for testing)
-  static List<(String, ScoreLevel)> getAllCombinations() {
+  static List<(PrimaryIntent, ScoreLevel)> getAllCombinations() {
     return templates.keys.toList();
   }
 
