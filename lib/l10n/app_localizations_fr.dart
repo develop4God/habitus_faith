@@ -918,4 +918,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Quality Time with Loved Ones';
+
+  @override
+  String get addNote => 'Ajouter une Note';
+
+  @override
+  String get noteHint => 'Comment ça s\'est passé ? Partagez vos pensées...';
+
+  @override
+  String get viewNote => 'Voir la Note';
+
+  @override
+  String get shareNote => 'Partager';
+
+  @override
+  String get noteAdded => 'Note ajoutée';
+
+  @override
+  String get addNoteDialog => 'Ajouter une Note';
+
+  @override
+  String get completeWithNote => 'Compléter et Ajouter une Note';
 }

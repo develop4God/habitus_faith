@@ -873,4 +873,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Quality Time with Loved Ones';
+
+  @override
+  String get addNote => '添加笔记';
+
+  @override
+  String get noteHint => '进展如何？分享您的想法...';
+
+  @override
+  String get viewNote => '查看笔记';
+
+  @override
+  String get shareNote => '分享';
+
+  @override
+  String get noteAdded => '笔记已添加';
+
+  @override
+  String get addNoteDialog => '添加笔记';
+
+  @override
+  String get completeWithNote => '完成并添加笔记';
 }

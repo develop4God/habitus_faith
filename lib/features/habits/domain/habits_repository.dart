@@ -1,6 +1,7 @@
 import 'habit.dart';
 import 'failures.dart';
 import 'models/habit_notification.dart';
+import 'models/completion_record.dart';
 
 /// Result type for typed errors
 sealed class Result<T, F> {

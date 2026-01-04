@@ -913,4 +913,25 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Quality Time with Loved Ones';
+
+  @override
+  String get addNote => 'Adicionar Nota';
+
+  @override
+  String get noteHint => 'Como foi? Compartilhe seus pensamentos...';
+
+  @override
+  String get viewNote => 'Ver Nota';
+
+  @override
+  String get shareNote => 'Compartilhar';
+
+  @override
+  String get noteAdded => 'Nota adicionada';
+
+  @override
+  String get addNoteDialog => 'Adicionar uma Nota';
+
+  @override
+  String get completeWithNote => 'Concluir e Adicionar Nota';
 }

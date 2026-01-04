@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -1741,6 +1741,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quality Time with Loved Ones'**
   String get quality_time_loved_ones;
+
+  /// Add note button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Note'**
+  String get addNote;
+
+  /// Placeholder text for note input field
+  ///
+  /// In en, this message translates to:
+  /// **'How did it go? Share your thoughts...'**
+  String get noteHint;
+
+  /// View note button text
+  ///
+  /// In en, this message translates to:
+  /// **'View Note'**
+  String get viewNote;
+
+  /// Share note button text
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareNote;
+
+  /// Note added confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Note added'**
+  String get noteAdded;
+
+  /// Add note dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Note'**
+  String get addNoteDialog;
+
+  /// Complete habit with note button text
+  ///
+  /// In en, this message translates to:
+  /// **'Complete & Add Note'**
+  String get completeWithNote;
 }
 
 class _AppLocalizationsDelegate
@@ -1776,9 +1818,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
