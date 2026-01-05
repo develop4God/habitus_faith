@@ -430,6 +430,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               ),
             ],
           ),
+          // Espaciador invisible para evitar que las opciones se mezclen con la navegación del sistema
+          const SizedBox(height: 32),
         ],
       ),
     );
