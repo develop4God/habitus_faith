@@ -747,6 +747,40 @@
       }
     }
   },
+  "startJourney": "Comienza tu viaje hoy",
+  "@startJourney": {
+    "description": "Mensaje mostrado cuando el usuario no tiene hábitos"
+  },
+  "buildConsistency": "¡Construyamos consistencia hoy! 💪",
+  "@buildConsistency": {
+    "description": "Mensaje motivacional cuando no hay hábitos completados"
+  },
+  "greatProgress": "¡Gran progreso! ¡Sigue así! 🔥",
+  "@greatProgress": {
+    "description": "Mensaje motivacional cuando algunos hábitos están completados"
+  },
+  "habitsRemaining": "{count, plural, =1{1 hábito restante hoy} other{{count} hábitos restantes hoy}}",
+  "@habitsRemaining": {
+    "description": "Muestra cuántos hábitos quedan por completar",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreakCard": "Racha\nMás Larga",
+  "@longestStreakCard": {
+    "description": "Etiqueta para tarjeta de racha más larga en página de inicio"
+  },
+  "weeklyConsistencyCard": "Consistencia\nSemanal",
+  "@weeklyConsistencyCard": {
+    "description": "Etiqueta para tarjeta de consistencia semanal en página de inicio"
+  },
+  "swipeToComplete": "Toca o desliza a la izquierda para completar",
+  "@swipeToComplete": {
+    "description": "Texto de ayuda que muestra cómo completar hábitos"
+  },
   "usefulTip": "Tip útil",
   "@usefulTip": {"description": "Título del tip educativo"},
   "habitsTip": "Desliza para ver acciones en tus hábitos",

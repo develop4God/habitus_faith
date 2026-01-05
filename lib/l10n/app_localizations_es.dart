@@ -702,6 +702,35 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get startJourney => 'Comienza tu viaje hoy';
+
+  @override
+  String get buildConsistency => '¡Construyamos consistencia hoy! 💪';
+
+  @override
+  String get greatProgress => '¡Gran progreso! ¡Sigue así! 🔥';
+
+  @override
+  String habitsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hábitos restantes hoy',
+      one: '1 hábito restante hoy',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get longestStreakCard => 'Racha\nMás Larga';
+
+  @override
+  String get weeklyConsistencyCard => 'Consistencia\nSemanal';
+
+  @override
+  String get swipeToComplete => 'Toca o desliza a la izquierda para completar';
+
+  @override
   String get usefulTip => 'Tip útil';
 
   @override
