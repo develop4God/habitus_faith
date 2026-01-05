@@ -102,7 +102,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get currentStreak => 'Série Actuelle';
 
   @override
-  String get longestStreak => 'Série la\nPlus Longue';
+  String get longestStreak => 'Meilleure Série';
 
   @override
   String get thisWeek => 'Cette Semaine';
@@ -725,7 +725,10 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get weeklyConsistency => 'Constance\nHebdomadaire';
+  String get longestStreakCard => 'Série la\nPlus Longue';
+
+  @override
+  String get weeklyConsistencyCard => 'Constance\nHebdomadaire';
 
   @override
   String get swipeToComplete =>

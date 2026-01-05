@@ -284,10 +284,10 @@ abstract class AppLocalizations {
   /// **'Current Streak'**
   String get currentStreak;
 
-  /// Label for longest streak card
+  /// Longest streak label
   ///
   /// In en, this message translates to:
-  /// **'Longest\nStreak'**
+  /// **'Longest Streak'**
   String get longestStreak;
 
   /// This week label for calendar
@@ -1346,11 +1346,17 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 habit remaining today} other{{count} habits remaining today}}'**
   String habitsRemaining(int count);
 
-  /// Label for weekly consistency percentage
+  /// Label for longest streak card on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Longest\nStreak'**
+  String get longestStreakCard;
+
+  /// Label for weekly consistency card on home page
   ///
   /// In en, this message translates to:
   /// **'Weekly\nConsistency'**
-  String get weeklyConsistency;
+  String get weeklyConsistencyCard;
 
   /// Hint text showing users how to complete habits
   ///

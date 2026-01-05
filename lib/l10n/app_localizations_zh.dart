@@ -101,7 +101,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currentStreak => '当前连续';
 
   @override
-  String get longestStreak => '最长\n连续';
+  String get longestStreak => '最长连续';
 
   @override
   String get thisWeek => '本周';
@@ -681,7 +681,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get weeklyConsistency => '每周\n一致性';
+  String get longestStreakCard => '最长\n连续';
+
+  @override
+  String get weeklyConsistencyCard => '每周\n一致性';
 
   @override
   String get swipeToComplete => '点击或向左滑动以完成';

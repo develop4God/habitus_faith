@@ -965,13 +965,13 @@
       }
     }
   },
-  "longestStreak": "Longest\nStreak",
-  "@longestStreak": {
-    "description": "Label for longest streak card"
+  "longestStreakCard": "Longest\nStreak",
+  "@longestStreakCard": {
+    "description": "Label for longest streak card on home page"
   },
-  "weeklyConsistency": "Weekly\nConsistency",
-  "@weeklyConsistency": {
-    "description": "Label for weekly consistency percentage"
+  "weeklyConsistencyCard": "Weekly\nConsistency",
+  "@weeklyConsistencyCard": {
+    "description": "Label for weekly consistency card on home page"
   },
   "swipeToComplete": "Tap or swipe left to complete",
   "@swipeToComplete": {

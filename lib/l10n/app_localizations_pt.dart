@@ -102,7 +102,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get currentStreak => 'Sequência Atual';
 
   @override
-  String get longestStreak => 'Sequência\nMais Longa';
+  String get longestStreak => 'Melhor Sequência';
 
   @override
   String get thisWeek => 'Esta Semana';
@@ -721,7 +721,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get weeklyConsistency => 'Consistência\nSemanal';
+  String get longestStreakCard => 'Sequência\nMais Longa';
+
+  @override
+  String get weeklyConsistencyCard => 'Consistência\nSemanal';
 
   @override
   String get swipeToComplete =>

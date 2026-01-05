@@ -769,13 +769,13 @@
       }
     }
   },
-  "longestStreak": "Racha\nMás Larga",
-  "@longestStreak": {
-    "description": "Etiqueta para tarjeta de racha más larga"
+  "longestStreakCard": "Racha\nMás Larga",
+  "@longestStreakCard": {
+    "description": "Etiqueta para tarjeta de racha más larga en página de inicio"
   },
-  "weeklyConsistency": "Consistencia\nSemanal",
-  "@weeklyConsistency": {
-    "description": "Etiqueta para porcentaje de consistencia semanal"
+  "weeklyConsistencyCard": "Consistencia\nSemanal",
+  "@weeklyConsistencyCard": {
+    "description": "Etiqueta para tarjeta de consistencia semanal en página de inicio"
   },
   "swipeToComplete": "Toca o desliza a la izquierda para completar",
   "@swipeToComplete": {

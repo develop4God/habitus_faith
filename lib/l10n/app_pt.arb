@@ -768,13 +768,13 @@
       }
     }
   },
-  "longestStreak": "Sequência\nMais Longa",
-  "@longestStreak": {
-    "description": "Etiqueta para cartão de sequência mais longa"
+  "longestStreakCard": "Sequência\nMais Longa",
+  "@longestStreakCard": {
+    "description": "Etiqueta para cartão de sequência mais longa na página inicial"
   },
-  "weeklyConsistency": "Consistência\nSemanal",
-  "@weeklyConsistency": {
-    "description": "Etiqueta para porcentagem de consistência semanal"
+  "weeklyConsistencyCard": "Consistência\nSemanal",
+  "@weeklyConsistencyCard": {
+    "description": "Etiqueta para cartão de consistência semanal na página inicial"
   },
   "swipeToComplete": "Toque ou deslize para a esquerda para concluir",
   "@swipeToComplete": {

@@ -103,7 +103,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get currentStreak => 'Racha Actual';
 
   @override
-  String get longestStreak => 'Racha\nMás Larga';
+  String get longestStreak => 'Mejor Racha';
 
   @override
   String get thisWeek => 'Esta Semana';
@@ -722,7 +722,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get weeklyConsistency => 'Consistencia\nSemanal';
+  String get longestStreakCard => 'Racha\nMás Larga';
+
+  @override
+  String get weeklyConsistencyCard => 'Consistencia\nSemanal';
 
   @override
   String get swipeToComplete => 'Toca o desliza a la izquierda para completar';

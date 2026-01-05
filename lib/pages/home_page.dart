@@ -64,11 +64,16 @@ class _HomePageState extends ConsumerState<HomePage> {
     int actualCompletions = 0;
     
     for (final habit in habits) {
+      // Calculate days this habit has existed in the 7-day window
+      final habitStart = habit.createdAt.isAfter(sevenDaysAgo) ? habit.createdAt : sevenDaysAgo;
+      final daysSinceCreation = today.difference(habitStart).inDays + 1;
+      final daysInWindow = daysSinceCreation.clamp(0, 7);
+      
       final relevantCompletions = habit.completionHistory.where((date) => 
         date.isAfter(sevenDaysAgo) && date.isBefore(tomorrowStart)
       ).length;
       actualCompletions += relevantCompletions;
-      totalPossibleCompletions += 7; // 7 days
+      totalPossibleCompletions += daysInWindow;
     }
     
     final weeklyConsistency = totalPossibleCompletions > 0 
@@ -277,9 +282,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                       child: InkWell(
-                        onTap: isCompleted ? null : () {
+                        onTap: isCompleted ? null : () async {
                           final notifier = ref.read(habitsNotifierProvider.notifier);
-                          notifier.completeHabit(habit.id);
+                          await notifier.completeHabit(habit.id);
                         },
                         borderRadius: BorderRadius.circular(16),
                         child: Card(
@@ -445,7 +450,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  l10n.longestStreak,
+                                  l10n.longestStreakCard,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.orange.shade700,
@@ -486,7 +491,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  l10n.weeklyConsistency,
+                                  l10n.weeklyConsistencyCard,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.blue.shade700,

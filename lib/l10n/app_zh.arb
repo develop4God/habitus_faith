@@ -754,13 +754,13 @@
       }
     }
   },
-  "longestStreak": "最长\n连续",
-  "@longestStreak": {
-    "description": "最长连续卡片的标签"
+  "longestStreakCard": "最长\n连续",
+  "@longestStreakCard": {
+    "description": "主页上最长连续卡片的标签"
   },
-  "weeklyConsistency": "每周\n一致性",
-  "@weeklyConsistency": {
-    "description": "每周一致性百分比的标签"
+  "weeklyConsistencyCard": "每周\n一致性",
+  "@weeklyConsistencyCard": {
+    "description": "主页上每周一致性卡片的标签"
   },
   "swipeToComplete": "点击或向左滑动以完成",
   "@swipeToComplete": {
