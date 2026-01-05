@@ -142,6 +142,50 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                   ),
                 ),
 
+                // Actions Row moved above the TextField
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: _noteController,
+                    builder: (context, value, child) {
+                      final hasText = value.text.trim().isNotEmpty;
+                      if (!hasText) return const SizedBox.shrink();
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: OutlinedButton.icon(
+                              onPressed: _shareNote,
+                              icon: const Icon(Icons.share, size: 18),
+                              label: Text(l10n.shareNote),
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(0, 40),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Flexible(
+                            child: FilledButton.icon(
+                              onPressed: () {
+                                final note = _noteController.text.trim();
+                                widget.onSave?.call(note);
+                                Navigator.of(context).pop(note);
+                              },
+                              icon: const Icon(Icons.check, size: 18),
+                              label: Text(l10n.add),
+                              style: FilledButton.styleFrom(
+                                minimumSize: const Size(0, 40),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+
                 // Note input
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -216,33 +260,6 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                           ),
                         ),
                       ],
-                    ],
-                  ),
-                ),
-
-                // Actions
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Share button
-                      OutlinedButton.icon(
-                        onPressed: _shareNote,
-                        icon: const Icon(Icons.share, size: 18),
-                        label: Text(l10n.shareNote),
-                      ),
-
-                      // Save button
-                      FilledButton.icon(
-                        onPressed: () {
-                          final note = _noteController.text.trim();
-                          widget.onSave?.call(note);
-                          Navigator.of(context).pop(note);
-                        },
-                        icon: const Icon(Icons.check, size: 18),
-                        label: Text(l10n.add),
-                      ),
                     ],
                   ),
                 ),
