@@ -111,8 +111,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       await storage.setBool('onboarding_complete', true);
 
       if (mounted) {
-        // Navigate to habits page
-        Navigator.of(context).pushReplacementNamed('/habits');
+        // Navigate to root to trigger home logic (LandingPage -> HomePage)
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
       }
     } catch (e, stackTrace) {
       debugPrint('Failed to create habits: $e\n$stackTrace');
