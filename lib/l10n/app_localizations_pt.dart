@@ -62,7 +62,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bem-vindo ao Habitus Fé';
 
   @override
-  String get onboardingWelcomeMessage => 'PT: Welcome message';
+  String get onboardingWelcomeMessage =>
+      'Vamos ajudá-lo a personalizar suas primeiras rotinas, de acordo com suas preferências.';
 
   @override
   String get selectUpToThreeHabits =>

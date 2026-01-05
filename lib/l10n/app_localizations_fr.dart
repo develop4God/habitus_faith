@@ -62,7 +62,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bienvenue à Habitus Foi';
 
   @override
-  String get onboardingWelcomeMessage => 'FR: Welcome message';
+  String get onboardingWelcomeMessage =>
+      'Nous vous aiderons à personnaliser vos premières routines, selon vos préférences.';
 
   @override
   String get selectUpToThreeHabits =>
@@ -751,74 +752,74 @@ class AppLocalizationsFr extends AppLocalizations {
   String get home => 'Accueil';
 
   @override
-  String get reminderConfig => 'FR: Reminder Configuration';
+  String get reminderConfig => 'Configuration du Rappel';
 
   @override
-  String get recurrenceConfig => 'FR: Daily Repetitions';
+  String get recurrenceConfig => 'Répétitions Quotidiennes';
 
   @override
-  String get repeat => 'FR: Repeat';
+  String get repeat => 'Répéter';
 
   @override
-  String get setCycleForPlan => 'FR: Set a cycle for your plan';
+  String get setCycleForPlan => 'Définir un cycle pour votre plan';
 
   @override
-  String get subtasks => 'FR: Subtasks';
+  String get subtasks => 'Sous-tâches';
 
   @override
-  String get addSubtask => 'FR: Add subtask';
+  String get addSubtask => 'Ajouter une sous-tâche';
 
   @override
-  String get minutesBefore => 'FR: Minutes before';
+  String get minutesBefore => 'Minutes avant';
 
   @override
-  String get interval => 'FR: Interval';
+  String get interval => 'Intervalle';
 
   @override
-  String get endDate => 'FR: End date';
+  String get endDate => 'Date de fin';
 
   @override
-  String get daily => 'FR: Daily';
+  String get daily => 'Quotidien';
 
   @override
-  String get weekly => 'FR: Weekly';
+  String get weekly => 'Hebdomadaire';
 
   @override
-  String get monthly => 'FR: Monthly';
+  String get monthly => 'Mensuel';
 
   @override
   String everyXDays(int count) {
-    return 'FR: Every $count day(s)';
+    return 'Tous les $count jour(s)';
   }
 
   @override
   String everyXWeeks(int count) {
-    return 'FR: Every $count week(s)';
+    return 'Toutes les $count semaine(s)';
   }
 
   @override
   String everyXMonths(int count) {
-    return 'FR: Every $count month(s)';
+    return 'Tous les $count mois';
   }
 
   @override
-  String get noRepetition => 'FR: No repetition';
+  String get noRepetition => 'Sans répétition';
 
   @override
-  String get reminder => 'FR: Reminder';
+  String get reminder => 'Rappel';
 
   @override
-  String get repetition => 'FR: Repetition';
+  String get repetition => 'Répétition';
 
   @override
-  String get eventTime => 'FR: Event time (HH:MM)';
+  String get eventTime => 'Heure de l\'événement (HH:MM)';
 
   @override
   String get invalidMinutes =>
-      'FR: Please enter a valid number between 1 and 1440';
+      'Veuillez entrer un nombre valide entre 1 et 1440';
 
   @override
-  String get invalidInterval => 'FR: Interval must be at least 1';
+  String get invalidInterval => 'L\'intervalle doit être d\'au moins 1';
 
   @override
   String get habitTracking => 'Suivi des Habitudes';

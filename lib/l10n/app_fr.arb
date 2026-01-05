@@ -603,7 +603,7 @@
   "advancedModeFeature2": "Informations avancées et personnalisées.",
   "advancedModeFeature3": "Personnalisation avancée",
   "changeAnytime": "Vous pouvez modifier ce paramètre à tout moment dans les préférences",
-  "onboardingWelcomeMessage": "FR: Welcome message",
+  "onboardingWelcomeMessage": "Nous vous aiderons à personnaliser vos premières routines, selon vos préférences.",
   "selectMode": "Sélectionner le mode",
   "displayMode": "Mode d'affichage",
   "displayModeUpdated": "Mode d'affichage mis à jour vers {mode}",
@@ -809,55 +809,55 @@
   "@today": {
     "description": "Label to show the current day in the habits view"
   },
-  "reminderConfig": "FR: Reminder Configuration",
+  "reminderConfig": "Configuration du Rappel",
   "@reminderConfig": {
     "description": "Reminder configuration dialog title"
   },
-  "recurrenceConfig": "FR: Daily Repetitions",
+  "recurrenceConfig": "Répétitions Quotidiennes",
   "@recurrenceConfig": {
     "description": "Recurrence configuration dialog title"
   },
-  "repeat": "FR: Repeat",
+  "repeat": "Répéter",
   "@repeat": {
     "description": "Repeat toggle label"
   },
-  "setCycleForPlan": "FR: Set a cycle for your plan",
+  "setCycleForPlan": "Définir un cycle pour votre plan",
   "@setCycleForPlan": {
     "description": "Subtitle for repeat toggle"
   },
-  "subtasks": "FR: Subtasks",
+  "subtasks": "Sous-tâches",
   "@subtasks": {
     "description": "Subtasks section label"
   },
-  "addSubtask": "FR: Add subtask",
+  "addSubtask": "Ajouter une sous-tâche",
   "@addSubtask": {
     "description": "Add subtask hint text"
   },
-  "minutesBefore": "FR: Minutes before",
+  "minutesBefore": "Minutes avant",
   "@minutesBefore": {
     "description": "Custom minutes before label"
   },
-  "interval": "FR: Interval",
+  "interval": "Intervalle",
   "@interval": {
     "description": "Interval label for recurrence"
   },
-  "endDate": "FR: End date",
+  "endDate": "Date de fin",
   "@endDate": {
     "description": "End date label for recurrence"
   },
-  "daily": "FR: Daily",
+  "daily": "Quotidien",
   "@daily": {
     "description": "Daily frequency option"
   },
-  "weekly": "FR: Weekly",
+  "weekly": "Hebdomadaire",
   "@weekly": {
     "description": "Weekly frequency option"
   },
-  "monthly": "FR: Monthly",
+  "monthly": "Mensuel",
   "@monthly": {
     "description": "Monthly frequency option"
   },
-  "everyXDays": "FR: Every {count} day(s)",
+  "everyXDays": "Tous les {count} jour(s)",
   "@everyXDays": {
     "description": "Every X days text",
     "placeholders": {
@@ -866,7 +866,7 @@
       }
     }
   },
-  "everyXWeeks": "FR: Every {count} week(s)",
+  "everyXWeeks": "Toutes les {count} semaine(s)",
   "@everyXWeeks": {
     "description": "Every X weeks text",
     "placeholders": {
@@ -875,7 +875,7 @@
       }
     }
   },
-  "everyXMonths": "FR: Every {count} month(s)",
+  "everyXMonths": "Tous les {count} mois",
   "@everyXMonths": {
     "description": "Every X months text",
     "placeholders": {
@@ -884,27 +884,27 @@
       }
     }
   },
-  "noRepetition": "FR: No repetition",
+  "noRepetition": "Sans répétition",
   "@noRepetition": {
     "description": "No repetition text"
   },
-  "reminder": "FR: Reminder",
+  "reminder": "Rappel",
   "@reminder": {
     "description": "Reminder label"
   },
-  "repetition": "FR: Repetition",
+  "repetition": "Répétition",
   "@repetition": {
     "description": "Repetition label"
   },
-  "eventTime": "FR: Event time (HH:MM)",
+  "eventTime": "Heure de l'événement (HH:MM)",
   "@eventTime": {
     "description": "Event time label"
   },
-  "invalidMinutes": "FR: Please enter a valid number between 1 and 1440",
+  "invalidMinutes": "Veuillez entrer un nombre valide entre 1 et 1440",
   "@invalidMinutes": {
     "description": "Validation message for invalid custom minutes"
   },
-  "invalidInterval": "FR: Interval must be at least 1",
+  "invalidInterval": "L'intervalle doit être d'au moins 1",
   "@invalidInterval": {
     "description": "Validation message for invalid interval"
   },
@@ -971,229 +971,229 @@
   "onboardingKeepAtLeastOneHabit": "Vous devez conserver au moins une habitude",
   "onboardingCouldNotCreateHabits": "Impossible de créer les habitudes. Veuillez réessayer.",
   "@onboardingWelcomeMessage": {
-    "description": "PENDING"
+    "description": "Onboarding welcome message"
   },
   "@chooseYourExperience": {
-    "description": "PENDING"
+    "description": "Title for display mode selection screen"
   },
   "@displayModeDescription": {
-    "description": "PENDING"
+    "description": "Description text for display mode selection"
   },
   "@compactMode": {
-    "description": "PENDING"
+    "description": "Title for compact display mode"
   },
   "@compactModeDescription": {
-    "description": "PENDING"
+    "description": "Description of compact display mode"
   },
   "@compactModeFeature1": {
-    "description": "PENDING"
+    "description": "First feature of compact mode"
   },
   "@compactModeFeature2": {
-    "description": "PENDING"
+    "description": "Second feature of compact mode"
   },
   "@compactModeFeature3": {
-    "description": "PENDING"
+    "description": "Third feature of compact mode"
   },
   "@advancedMode": {
-    "description": "PENDING"
+    "description": "Title for advanced display mode"
   },
   "@advancedModeDescription": {
-    "description": "PENDING"
+    "description": "Description of advanced display mode"
   },
   "@advancedModeFeature1": {
-    "description": "PENDING"
+    "description": "First feature of advanced mode"
   },
   "@advancedModeFeature2": {
-    "description": "PENDING"
+    "description": "Second feature of advanced mode"
   },
   "@advancedModeFeature3": {
-    "description": "PENDING"
+    "description": "Third feature of advanced mode"
   },
   "@changeAnytime": {
-    "description": "PENDING"
+    "description": "Message informing users they can change mode later"
   },
   "@selectMode": {
-    "description": "PENDING"
+    "description": "Button text to confirm mode selection"
   },
   "@displayMode": {
-    "description": "PENDING"
+    "description": "Display mode setting title"
   },
   "@displayModeUpdated": {
-    "description": "PENDING",
+    "description": "Confirmation message when display mode is changed",
     "placeholders": {
       "mode": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Compact"
       }
     }
   },
   "@compactModeSubtitle": {
-    "description": "PENDING"
+    "description": "Subtitle for compact mode in settings"
   },
   "@advancedModeSubtitle": {
-    "description": "PENDING"
+    "description": "Subtitle for advanced mode in settings"
   },
   "@mlPredictionFailed": {
-    "description": "PENDING"
+    "description": "Error message when ML prediction fails"
   },
   "@mlModelNotLoaded": {
-    "description": "PENDING"
+    "description": "Error when ML model is not loaded"
   },
   "@mlInsufficientData": {
-    "description": "PENDING",
+    "description": "Error when not enough data for predictions",
     "placeholders": {
       "days": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "7"
       }
     }
   },
   "@backgroundSyncFailed": {
-    "description": "PENDING",
+    "description": "Background sync failure message",
     "placeholders": {
       "reason": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Network error"
       }
     }
   },
   "@backgroundSyncNetwork": {
-    "description": "PENDING"
+    "description": "Sync failed due to network"
   },
   "@backgroundSyncPermission": {
-    "description": "PENDING"
+    "description": "Sync disabled due to permissions"
   },
   "@workmanagerActive": {
-    "description": "PENDING"
+    "description": "WorkManager is active"
   },
   "@workmanagerRestricted": {
-    "description": "PENDING"
+    "description": "WorkManager restricted warning"
   },
   "@workmanagerDisabled": {
-    "description": "PENDING"
+    "description": "WorkManager disabled"
   },
   "@patternWeekend": {
-    "description": "PENDING"
+    "description": "Weekend pattern detected message"
   },
   "@patternEvening": {
-    "description": "PENDING"
+    "description": "Evening pattern detected message"
   },
   "@optimalTimeFound": {
-    "description": "PENDING",
+    "description": "Optimal time found message",
     "placeholders": {
       "time": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "8:00 AM"
       }
     }
   },
   "@networkTimeout": {
-    "description": "PENDING"
+    "description": "Network timeout error"
   },
   "@firebasePermissionDenied": {
-    "description": "PENDING"
+    "description": "Firebase permission denied"
   },
   "@errorUnknown": {
-    "description": "PENDING"
+    "description": "Generic unknown error"
   },
   "@devBannerTitle": {
-    "description": "PENDING"
+    "description": "Dev tools banner title"
   },
   "@devBannerLastSync": {
-    "description": "PENDING",
+    "description": "Last sync time in dev banner",
     "placeholders": {
       "time": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "2m ago"
       }
     }
   },
   "@devBannerMlStatus": {
-    "description": "PENDING",
+    "description": "ML model status in dev banner",
     "placeholders": {
       "status": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Loaded"
       }
     }
   },
   "@devBannerWorkmanager": {
-    "description": "PENDING",
+    "description": "WorkManager status in dev banner",
     "placeholders": {
       "status": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Active"
       }
     }
   },
   "@devBannerFastTime": {
-    "description": "PENDING",
+    "description": "Fast time mode in dev banner",
     "placeholders": {
       "multiplier": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "288"
       },
       "date": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Nov 7, 2025"
       }
     }
   },
   "@riskLevelLow": {
-    "description": "PENDING"
+    "description": "Low abandonment risk level"
   },
   "@riskLevelMedium": {
-    "description": "PENDING"
+    "description": "Medium abandonment risk level"
   },
   "@riskLevelHigh": {
-    "description": "PENDING"
+    "description": "High abandonment risk level"
   },
   "@predictorRunning": {
-    "description": "PENDING"
+    "description": "Predictor is running"
   },
   "@predictorComplete": {
-    "description": "PENDING"
+    "description": "Predictor completed"
   },
   "@syncInProgress": {
-    "description": "PENDING"
+    "description": "Sync in progress"
   },
   "@syncComplete": {
-    "description": "PENDING"
+    "description": "Sync completed successfully"
   },
   "@mlModelLoaded": {
-    "description": "PENDING"
+    "description": "ML model loaded status"
   },
   "@mlModelLoading": {
-    "description": "PENDING"
+    "description": "ML model loading status"
   },
   "@mlModelError": {
-    "description": "PENDING"
+    "description": "ML model error status"
   },
   "@addNote": {
-    "description": "PENDING"
+    "description": "Add note button text"
   },
   "@noteHint": {
-    "description": "PENDING"
+    "description": "Hint text for note input"
   },
   "@viewNote": {
-    "description": "PENDING"
+    "description": "View note button text"
   },
   "@shareNote": {
-    "description": "PENDING"
+    "description": "Share note button text"
   },
   "@noteAdded": {
-    "description": "PENDING"
+    "description": "Note added success message"
   },
   "@addNoteDialog": {
-    "description": "PENDING"
+    "description": "Add note dialog title"
   },
   "@completeWithNote": {
-    "description": "PENDING"
+    "description": "Complete with note button text"
   },
   "@addEmoji": {
-    "description": "PENDING"
+    "description": "Add emoji button text"
   },
   "@hideEmojis": {
-    "description": "PENDING"
+    "description": "Hide emojis button text"
   }
 }

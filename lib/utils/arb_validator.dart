@@ -19,8 +19,8 @@ void main(List<String> args) async {
   final noEncontrados = <String>[];
 
   for (final lang in languages) {
-    final referencePath = 'lib/l10n/app_en.arb'; // Usar inglés como template
-    final targetPath = 'lib/l10n/app_${lang}.arb';
+    const referencePath = 'lib/l10n/app_en.arb'; // Usar inglés como template
+    final targetPath = 'lib/l10n/app_$lang.arb';
 
     final referenceFile = File(referencePath);
     final targetFile = File(targetPath);
@@ -82,13 +82,13 @@ void main(List<String> args) async {
       stdout.writeln('✅ All keys are present and complete.');
     } else {
       if (missingKeys.isNotEmpty) {
-        stdout.writeln('❌ Missing keys in app_${lang}.arb:');
+        stdout.writeln('❌ Missing keys in app_$lang.arb:');
         for (final k in missingKeys) {
           stdout.writeln('  - $k');
         }
       }
       if (incompleteKeys.isNotEmpty) {
-        stdout.writeln('⚠️ Incomplete or empty keys in app_${lang}.arb:');
+        stdout.writeln('⚠️ Incomplete or empty keys in app_$lang.arb:');
         for (final k in incompleteKeys) {
           stdout.writeln('  - $k');
         }
@@ -97,14 +97,14 @@ void main(List<String> args) async {
 
     // Save the updated target file with missing keys
     await targetFile.writeAsString(
-      JsonEncoder.withIndent('  ').convert(targetJson),
+      const JsonEncoder.withIndent('  ').convert(targetJson),
     );
     if (pendingCount > 0) {
       stdout.writeln(
-        '✅ app_${lang}.arb updated: $pendingCount new keys added as "PENDING".',
+        '✅ app_$lang.arb updated: $pendingCount new keys added as "PENDING".',
       );
     } else {
-      stdout.writeln('ℹ️ No new keys added. app_${lang}.arb was already complete.');
+      stdout.writeln('ℹ️ No new keys added. app_$lang.arb was already complete.');
     }
     stdout.writeln('');
   }
