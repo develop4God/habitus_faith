@@ -809,7 +809,7 @@
   "completeWithNote": "完成并添加笔记",
   "addEmoji": "添加表情符号",
   "hideEmojis": "隐藏表情符号",
-  "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。"
+  "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。",
   "reminderConfig": "提醒配置",
   "@reminderConfig": {
     "description": "Reminder configuration dialog title"

@@ -976,6 +976,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hideEmojis => 'Hide Emojis';
+
+  @override
   String get onboardingSelectAtLeastOneGoal =>
       'Please select at least one goal';
 

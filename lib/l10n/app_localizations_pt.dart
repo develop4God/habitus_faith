@@ -62,8 +62,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bem-vindo ao Habitus Fé';
 
   @override
-  String get onboardingWelcomeMessage =>
-      'Vamos ajudá-lo a personalizar suas primeiras rotinas de acordo com suas preferências.';
+  String get onboardingWelcomeMessage => 'PT: Welcome message';
 
   @override
   String get selectUpToThreeHabits =>
@@ -961,20 +960,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get quality_time_loved_ones => 'Tempo de Qualidade com Entes Queridos';
 
   @override
-  String get onboardingSelectAtLeastOneGoal =>
-      'Por favor, selecione pelo menos um objetivo';
-
-  @override
-  String get onboardingPreparingHabits => 'Preparando seus hábitos...';
-
-  @override
-  String get onboardingKeepAtLeastOneHabit =>
-      'Você deve manter pelo menos um hábito';
-
-  @override
-  String get quality_time_loved_ones => 'Quality Time with Loved Ones';
-
-  @override
   String get addNote => 'Adicionar Nota';
 
   @override
@@ -1000,6 +985,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hideEmojis => 'Ocultar Emojis';
+
+  @override
+  String get onboardingSelectAtLeastOneGoal =>
+      'Por favor, selecione pelo menos um objetivo';
+
+  @override
+  String get onboardingPreparingHabits => 'Preparando seus hábitos...';
+
+  @override
+  String get onboardingKeepAtLeastOneHabit =>
+      'Você deve manter pelo menos um hábito';
+
+  @override
   String get onboardingCouldNotCreateHabits =>
       'Não foi possível criar os hábitos. Por favor, tente novamente.';
 }

@@ -840,7 +840,7 @@
   "completeWithNote": "Concluir e Adicionar Nota",
   "addEmoji": "Adicionar Emoji",
   "hideEmojis": "Ocultar Emojis",
-  "onboardingWelcomeMessage": "PT: Welcome message"
+  "onboardingWelcomeMessage": "PT: Welcome message",
   "reminderConfig": "Configuração de Lembrete",
   "@reminderConfig": {
     "description": "Reminder configuration dialog title"

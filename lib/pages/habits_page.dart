@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:habitus_faith/features/habits/domain/models/habit_notification.dart';
+import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 
 import '../features/habits/domain/habit.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
+import '../widgets/add_note_dialog.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
 // New providers for JSON-based habits
@@ -259,9 +262,33 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                 initialDate: DateTime.now(),
                 onComplete: (habitId) async {
                   debugPrint('HabitsPage: completando hábito $habitId');
+                  final l10n = AppLocalizations.of(context)!;
+                  final habit = filtrados.firstWhere((h) => h.id == habitId, orElse: () => Habit(
+                    id: habitId,
+                    name: l10n.addNote,
+                    category: HabitCategory.mental,
+                    colorValue: null,
+                    difficulty: HabitDifficulty.medium,
+                    emoji: '',
+                    notificationSettings: null,
+                    recurrence: null,
+                    subtasks: [],
+                    completedToday: false,
+                    currentStreak: 0,
+                    longestStreak: 0,
+                    lastCompletedAt: null,
+                    completionHistory: [],
+                    userId: 'local_user',
+                    createdAt: DateTime.now(),
+                  ));
+                  String habitName = habit.name;
+                  final note = await showAddNoteDialog(
+                    context: context,
+                    habitName: habitName,
+                  );
                   await ref
-                      .read(habitsNotifierProvider.notifier)
-                      .completeHabit(habitId);
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .completeHabitWithNote(habitId, note);
                 },
                 onUncheck: (habitId) async {
                   debugPrint('HabitsPage: desmarcando hábito $habitId');

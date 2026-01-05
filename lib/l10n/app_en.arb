@@ -1182,7 +1182,7 @@
   "hideEmojis": "Hide Emojis",
   "@hideEmojis": {
     "description": "Hide emoji picker button text"
-  }
+  },
   "quality_time_loved_ones": "Quality Time with Loved Ones"
 ,
   "onboardingSelectAtLeastOneGoal": "Please select at least one goal",
