@@ -12,6 +12,7 @@ import '../providers/devotional_providers.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../utils/date_format_utils.dart';
+import '../widgets/unified_habit_list.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -341,185 +342,23 @@ class _HomePageState extends ConsumerState<HomePage> {
               if (totalHabits > 0 && remainingHabits > 0)
                 const SizedBox(height: 12),
 
-              // B. TODAY'S HABITS (PRIMARY ACTIONS) - One-gesture completion with animation
-              if (habits.isNotEmpty)
-                ...habits.map((habit) {
-                  final isCompleted = habit.completedToday;
-                  return AnimatedScale(
-                    scale: isCompleted ? 0.98 : 1.0,
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 6),
-                      child: Dismissible(
-                        key: Key('habit_${habit.id}'),
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (direction) async {
-                          if (direction == DismissDirection.endToStart) {
-                            HapticFeedback.mediumImpact();
-                            final notifier = ref.read(habitsNotifierProvider.notifier);
-                            await notifier.deleteHabit(habit.id);
-                          }
-                          return false; // Don't actually dismiss
-                        },
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade400,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                        ),
-                        child: InkWell(
-                          onTap: () async {
-                            HapticFeedback.lightImpact();
-                            final notifier = ref.read(habitsNotifierProvider.notifier);
-                            if (isCompleted) {
-                              await notifier.uncheckHabit(habit.id);
-                            } else {
-                              await notifier.completeHabit(habit.id);
-                            }
-                          },
-                          borderRadius: BorderRadius.circular(16),
-                          child: Card(
-                            elevation: 0,
-                            color: isCompleted
-                                ? Colors.green.shade50
-                                : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(
-                                color: isCompleted
-                                    ? Colors.green.shade300
-                                    : Colors.grey.shade300,
-                                width: isCompleted ? 2 : 1,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                children: [
-                                  // Habit icon
-                                  Container(
-                                    width: 48,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      color: isCompleted
-                                          ? Colors.green.shade100
-                                          : Colors.grey.shade100,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        habit.emoji ?? '✓',
-                                        style: const TextStyle(fontSize: 24),
-                                      ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(width: 16),
-
-                                  // Habit info
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          habit.name,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: isCompleted
-                                                ? Colors.green.shade900
-                                                : Colors.grey.shade900,
-                                            decoration: isCompleted
-                                                ? TextDecoration.lineThrough
-                                                : null,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.local_fire_department,
-                                              size: 14,
-                                              color: habit.currentStreak > 0
-                                                  ? Colors.orange.shade600
-                                                  : Colors.grey.shade400,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              l10n.dayStreak(
-                                                  habit.currentStreak),
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey.shade600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Completion indicator
-                                  if (isCompleted)
-                                    Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green.shade600,
-                                      size: 32,
-                                    )
-                                  else
-                                    Container(
-                                      width: 32,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.grey.shade400,
-                                          width: 2,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-
-              // Swipe hint for first-time users
-              if (habits.isNotEmpty && habits.any((h) => !h.completedToday))
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.swipe_left,
-                          size: 16, color: Colors.grey.shade500),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.swipeToComplete,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
+              UnifiedHabitList(
+                habits: habits,
+                onComplete: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.completeHabit(habitId);
+                },
+                onUncheck: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.uncheckHabit(habitId);
+                },
+                onDelete: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.deleteHabit(habitId);
+                },
+                showSwipeHint: true,
+              ),
 
               const SizedBox(height: 20),
 
