@@ -688,6 +688,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get introMessage => 'As maiores mudanças começam na constância...';
 
   @override
+  String get todaysVerse => 'Versículo do Dia';
+
+  @override
+  String get todaysHabits => 'Hábitos de Hoje';
+
+  @override
+  String get allHabitsCompleted => '🎉 Todos os hábitos concluídos hoje!';
+
+  @override
+  String dayStreak(int count) {
+    return 'Sequência de $count dias';
+  }
+
+  @override
   String get usefulTip => 'Dica útil';
 
   @override

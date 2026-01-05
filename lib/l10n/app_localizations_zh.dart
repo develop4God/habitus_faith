@@ -647,6 +647,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get introMessage => '最大的改变始于坚持...';
 
   @override
+  String get todaysVerse => '今日经文';
+
+  @override
+  String get todaysHabits => '今日习惯';
+
+  @override
+  String get allHabitsCompleted => '🎉 今天所有习惯已完成！';
+
+  @override
+  String dayStreak(int count) {
+    return '$count天连续';
+  }
+
+  @override
   String get usefulTip => '实用提示';
 
   @override

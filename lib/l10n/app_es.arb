@@ -725,6 +725,28 @@
   "@introMessage": {
     "description": "Mensaje motivacional mostrado en la landing page."
   },
+  "todaysVerse": "Versículo del Día",
+  "@todaysVerse": {
+    "description": "Título para la sección del versículo bíblico del día"
+  },
+  "todaysHabits": "Hábitos de Hoy",
+  "@todaysHabits": {
+    "description": "Título para la sección de hábitos de hoy"
+  },
+  "allHabitsCompleted": "🎉 ¡Todos los hábitos completados hoy!",
+  "@allHabitsCompleted": {
+    "description": "Mensaje de éxito cuando se completan todos los hábitos"
+  },
+  "dayStreak": "Racha de {count} días",
+  "@dayStreak": {
+    "description": "Muestra la racha actual de un hábito",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
   "usefulTip": "Tip útil",
   "@usefulTip": {"description": "Título del tip educativo"},
   "habitsTip": "Desliza para ver acciones en tus hábitos",

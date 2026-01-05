@@ -691,6 +691,21 @@ class AppLocalizationsFr extends AppLocalizations {
       'Les plus grands changements commencent par la constance...';
 
   @override
+  String get todaysVerse => 'Verset du Jour';
+
+  @override
+  String get todaysHabits => 'Habitudes d\'Aujourd\'hui';
+
+  @override
+  String get allHabitsCompleted =>
+      '🎉 Toutes les habitudes complétées aujourd\'hui!';
+
+  @override
+  String dayStreak(int count) {
+    return 'Série de $count jours';
+  }
+
+  @override
   String get usefulTip => 'Astuce utile';
 
   @override

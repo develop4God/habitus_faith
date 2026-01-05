@@ -711,6 +711,28 @@
   "@introMessage": {
     "description": "在欢迎页显示的激励语。"
   },
+  "todaysVerse": "今日经文",
+  "@todaysVerse": {
+    "description": "今日圣经经文部分的标题"
+  },
+  "todaysHabits": "今日习惯",
+  "@todaysHabits": {
+    "description": "今日习惯部分的标题"
+  },
+  "allHabitsCompleted": "🎉 今天所有习惯已完成！",
+  "@allHabitsCompleted": {
+    "description": "所有习惯完成时的成功消息"
+  },
+  "dayStreak": "{count}天连续",
+  "@dayStreak": {
+    "description": "显示习惯的当前连续天数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
   "copyHabit": "您想要复制此任务吗？",
   "@copyHabit": {
     "description": "Dialog title for duplicating a habit"

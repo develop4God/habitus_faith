@@ -680,6 +680,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get introMessage => 'The greatest changes begin with consistency...';
 
   @override
+  String get todaysVerse => 'Today\'s Verse';
+
+  @override
+  String get todaysHabits => 'Today\'s Habits';
+
+  @override
+  String get allHabitsCompleted => '🎉 All habits completed today!';
+
+  @override
+  String dayStreak(int count) {
+    return '$count day streak';
+  }
+
+  @override
   String get usefulTip => 'Useful tip';
 
   @override

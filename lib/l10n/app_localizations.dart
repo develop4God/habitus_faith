@@ -1298,6 +1298,30 @@ abstract class AppLocalizations {
   /// **'The greatest changes begin with consistency...'**
   String get introMessage;
 
+  /// Title for today's Bible verse section on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Verse'**
+  String get todaysVerse;
+
+  /// Title for today's habits section on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Habits'**
+  String get todaysHabits;
+
+  /// Success message when all habits are completed
+  ///
+  /// In en, this message translates to:
+  /// **'🎉 All habits completed today!'**
+  String get allHabitsCompleted;
+
+  /// Shows the current streak for a habit
+  ///
+  /// In en, this message translates to:
+  /// **'{count} day streak'**
+  String dayStreak(int count);
+
   /// Educational tip title
   ///
   /// In en, this message translates to:
