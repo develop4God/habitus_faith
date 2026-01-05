@@ -23,6 +23,7 @@ import 'features/habits/data/storage/json_habits_repository.dart';
 import 'features/habits/data/storage/storage_providers.dart';
 import 'l10n/app_localizations.dart';
 import 'dev_tools/fast_time_banner.dart';
+import 'features/developer/developer_debug_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -114,8 +115,8 @@ class MyApp extends ConsumerWidget {
                 ? const SimpleOnboardingFlow()
                 : const AdaptiveOnboardingPage();
           },
-          '/habits': (context) =>
-              const HomePage(), // ← Agregado para solucionar el error de ruta
+          '/habits': (context) => const HomePage(),
+          '/devtools': (context) => const DeveloperDebugPage(),
         },
         home: authInit.when(
           data: (_) {

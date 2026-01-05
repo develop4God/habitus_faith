@@ -7,6 +7,7 @@ import '../../domain/config/onboarding_config.dart';
 import '../../domain/habit.dart';
 import '../../data/storage/storage_providers.dart';
 import 'habit_preview_page.dart';
+import 'intro_onboarding_page.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Provider for current question in simple onboarding
@@ -41,6 +42,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
     with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
   Timer? _autoAdvanceTimer;
+  bool _showIntro = true;
 
   @override
   void initState() {
@@ -244,6 +246,15 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
   @override
   Widget build(BuildContext context) {
+    if (_showIntro) {
+      return IntroOnboardingPage(
+        onStart: () {
+          setState(() {
+            _showIntro = false;
+          });
+        },
+      );
+    }
     final currentQuestion = ref.watch(simpleOnboardingQuestionProvider);
 
     return Scaffold(
