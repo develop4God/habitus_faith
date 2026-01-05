@@ -81,7 +81,6 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
 
     try {
       final habitsRepository = ref.read(jsonHabitsRepositoryProvider);
-      final storage = ref.read(jsonStorageServiceProvider);
       final l10n = AppLocalizations.of(context);
 
       // Create habits from selected IDs
@@ -109,12 +108,12 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
         );
       }
 
-      // Mark onboarding as complete
-      await storage.setBool('onboarding_complete', true);
+      // Mark onboarding as complete using provider (ensures invalidation)
+      await ref.read(completeOnboardingProvider)();
 
       if (mounted) {
-        // Navigate to root to trigger home logic (LandingPage -> HomePage)
-        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        // Navigate to home page to avoid onboarding loop
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
       }
     } catch (e, stackTrace) {
       debugPrint('Failed to create habits: $e\n$stackTrace');
