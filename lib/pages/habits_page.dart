@@ -266,6 +266,12 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                       .read(jsonHabitsNotifierProvider.notifier)
                       .uncheckHabit(habitId);
                 },
+                onDelete: (habitId) async {
+                  debugPrint('HabitsPage: eliminando hábito $habitId');
+                  await ref
+                      .read(jsonHabitsNotifierProvider.notifier)
+                      .deleteHabit(habitId);
+                },
               );
             },
             loading: () {

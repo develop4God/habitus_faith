@@ -17,11 +17,13 @@ import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
 import 'core/services/ml/model_updater.dart';
 import 'features/habits/presentation/onboarding/adaptive_onboarding_page.dart';
+import 'features/habits/presentation/onboarding/simple_onboarding_flow.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
 import 'features/habits/data/storage/json_habits_repository.dart';
 import 'features/habits/data/storage/storage_providers.dart';
 import 'l10n/app_localizations.dart';
 import 'dev_tools/fast_time_banner.dart';
+import 'features/developer/developer_debug_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -105,16 +107,28 @@ class MyApp extends ConsumerWidget {
         ],
         routes: {
           '/home': (context) => const HomePage(),
-          '/onboarding': (context) => const AdaptiveOnboardingPage(),
-          '/habits': (context) =>
-              const HomePage(), // ← Agregado para solucionar el error de ruta
+          '/onboarding': (context) {
+            // Check V2 preference
+            final prefs = ref.read(sharedPreferencesProvider);
+            final useV2 = prefs.getBool('use_onboarding_v2') ?? true;
+            return useV2
+                ? const SimpleOnboardingFlow()
+                : const AdaptiveOnboardingPage();
+          },
+          '/habits': (context) => const HomePage(),
+          '/devtools': (context) => const DeveloperDebugPage(),
         },
         home: authInit.when(
           data: (_) {
             if (onboardingComplete) {
               return const LandingPage();
             }
-            return const AdaptiveOnboardingPage();
+            // Check V2 preference for initial onboarding
+            final prefs = ref.read(sharedPreferencesProvider);
+            final useV2 = prefs.getBool('use_onboarding_v2') ?? true;
+            return useV2
+                ? const SimpleOnboardingFlow()
+                : const AdaptiveOnboardingPage();
           },
           loading: () =>
               const Scaffold(body: Center(child: CircularProgressIndicator())),

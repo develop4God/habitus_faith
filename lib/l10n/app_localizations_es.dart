@@ -847,7 +847,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get morning_exercise => 'Ejercicio Matutino';
 
   @override
-  String get yoga_stretching => 'Yoga/Estiramiento';
+  String get yoga_stretching => 'Estiramiento';
 
   @override
   String get healthy_breakfast => 'Desayuno Saludable';
@@ -914,4 +914,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Tiempo de Calidad con Seres Queridos';
+
+  @override
+  String get onboardingSelectAtLeastOneGoal =>
+      'Por favor selecciona al menos un objetivo';
+
+  @override
+  String get onboardingPreparingHabits => 'Preparando tus hábitos...';
+
+  @override
+  String get onboardingKeepAtLeastOneHabit =>
+      'Debes mantener al menos un hábito';
+
+  @override
+  String get onboardingCouldNotCreateHabits =>
+      'No pudimos crear los hábitos. Intenta de nuevo.';
 }

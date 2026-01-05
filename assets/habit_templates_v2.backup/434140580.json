@@ -1,0 +1,68 @@
+{
+  "template_id": "both_growing_dontKnowStart_normal_physicalHealth_prayerDiscipline",
+  "fingerprint": "434140580",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "prayerDiscipline",
+      "physicalHealth"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "normal",
+    "spiritualMaturity": "growing"
+  },
+  "habits": [
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 7,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 7,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 10,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph01",
+      "nameKey": "daily_walk",
+      "category": "physical",
+      "emoji": "🚶",
+      "target_minutes": 14,
+      "verse_key": null,
+      "notification_key": "daily_walk",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph05",
+      "nameKey": "hydration_routine",
+      "category": "physical",
+      "emoji": "💧",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "hydration_routine",
+      "time_of_day": "flexible"
+    }
+  ]
+}

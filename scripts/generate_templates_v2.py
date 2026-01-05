@@ -22,78 +22,148 @@ logger = logging.getLogger(__name__)
 
 TEMPLATE_MATRIX = {
     "faithBased": [
-        # new maturity (12 templates)
+        # new maturity (15 templates - expanded)
         {"maturity": "new", "motivations": ["closerToGod"], "challenge": "lackOfTime", "supportLevel": "weak"},
-        {"maturity": "new", "motivations": ["prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "normal"},
-        {"maturity": "new", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
-        {"maturity": "new", "motivations": ["understandBible"], "challenge": "dontKnowStart", "supportLevel": "normal"},
-        {"maturity": "new", "motivations": ["growInFaith"], "challenge": "dontKnowStart", "supportLevel": "weak"},
+        {"maturity": "new", "motivations": ["closerToGod"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
         {"maturity": "new", "motivations": ["closerToGod"], "challenge": "givingUp", "supportLevel": "weak"},
-        {"maturity": "new", "motivations": ["prayerDiscipline", "understandBible"], "challenge": "givingUp", "supportLevel": "normal"},
-        {"maturity": "new", "motivations": ["growInFaith", "closerToGod"], "challenge": "lackOfTime", "supportLevel": "strong"},
-        {"maturity": "new", "motivations": ["understandBible"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
-        {"maturity": "new", "motivations": ["overcomeHabits"], "challenge": "givingUp", "supportLevel": "weak"},
+        {"maturity": "new", "motivations": ["closerToGod"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "new", "motivations": ["prayerDiscipline"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"maturity": "new", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["understandBible"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["understandBible"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["growInFaith"], "challenge": "dontKnowStart", "supportLevel": "weak"},
         {"maturity": "new", "motivations": ["growInFaith"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
-        # growing maturity (4 templates)
+        {"maturity": "new", "motivations": ["growInFaith", "closerToGod"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"maturity": "new", "motivations": ["prayerDiscipline", "understandBible"], "challenge": "givingUp", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["overcomeHabits"], "challenge": "givingUp", "supportLevel": "weak"},
+        # growing maturity (8 templates - expanded)
         {"maturity": "growing", "motivations": ["understandBible", "growInFaith"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"maturity": "growing", "motivations": ["understandBible", "growInFaith"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "growing", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"maturity": "growing", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
         {"maturity": "growing", "motivations": ["prayerDiscipline"], "challenge": "givingUp", "supportLevel": "weak"},
+        {"maturity": "growing", "motivations": ["prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "growing", "motivations": ["overcomeHabits", "closerToGod"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
-        # mature maturity (4 templates)
+        {"maturity": "growing", "motivations": ["overcomeHabits", "closerToGod"], "challenge": "givingUp", "supportLevel": "weak"},
+        # mature maturity (7 templates - expanded)
         {"maturity": "mature", "motivations": ["understandBible", "growInFaith"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"maturity": "mature", "motivations": ["understandBible", "growInFaith"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
         {"maturity": "mature", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"maturity": "mature", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "strong"},
         {"maturity": "mature", "motivations": ["overcomeHabits"], "challenge": "givingUp", "supportLevel": "normal"},
         {"maturity": "mature", "motivations": ["growInFaith"], "challenge": "dontKnowStart", "supportLevel": "strong"},
-        # passionate maturity (4 templates)
+        {"maturity": "mature", "motivations": ["growInFaith"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        # passionate maturity (6 templates - expanded)
         {"maturity": "passionate", "motivations": ["closerToGod", "prayerDiscipline", "understandBible"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"maturity": "passionate", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"maturity": "passionate", "motivations": ["closerToGod", "prayerDiscipline"], "challenge": "lackOfTime", "supportLevel": "strong"},
         {"maturity": "passionate", "motivations": ["growInFaith", "overcomeHabits"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
         {"maturity": "passionate", "motivations": ["understandBible"], "challenge": "dontKnowStart", "supportLevel": "strong"},
         {"maturity": "passionate", "motivations": ["closerToGod", "growInFaith"], "challenge": "givingUp", "supportLevel": "normal"}
     ],
     "wellness": [
-        # 12 templates covering main motivation combinations
+        # Expanded to 36 templates covering all realistic combinations
+        # Single motivation templates (6 x 3 challenges = 18)
         {"motivations": ["physicalHealth"], "challenge": "lackOfTime", "supportLevel": "normal"},
-        {"motivations": ["physicalHealth", "reduceStress"], "challenge": "lackOfTime", "supportLevel": "weak"},
-        {"motivations": ["timeManagement"], "challenge": "dontKnowStart", "supportLevel": "normal"},
-        {"motivations": ["timeManagement", "productivity"], "challenge": "dontKnowStart", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth"], "challenge": "lackOfTime", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth"], "challenge": "givingUp", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"motivations": ["physicalHealth"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+
+        {"motivations": ["reduceStress"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"motivations": ["reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
-        {"motivations": ["reduceStress", "betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
-        {"motivations": ["productivity"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"motivations": ["reduceStress"], "challenge": "givingUp", "supportLevel": "weak"},
+
+        {"motivations": ["betterSleep"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"motivations": ["betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
         {"motivations": ["betterSleep"], "challenge": "givingUp", "supportLevel": "weak"},
-        {"motivations": ["physicalHealth", "timeManagement"], "challenge": "givingUp", "supportLevel": "weak"},
+
+        {"motivations": ["timeManagement"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"motivations": ["timeManagement"], "challenge": "lackOfTime", "supportLevel": "weak"},
+        {"motivations": ["timeManagement"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+
+        {"motivations": ["productivity"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"motivations": ["productivity"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"motivations": ["productivity"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+
+        # Double motivation templates (common combinations - 18)
+        {"motivations": ["physicalHealth", "reduceStress"], "challenge": "lackOfTime", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"motivations": ["physicalHealth", "reduceStress"], "challenge": "givingUp", "supportLevel": "weak"},
+
+        {"motivations": ["physicalHealth", "betterSleep"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"motivations": ["physicalHealth", "betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth", "betterSleep"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+
+        {"motivations": ["reduceStress", "betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"motivations": ["reduceStress", "betterSleep"], "challenge": "lackOfTime", "supportLevel": "weak"},
+        {"motivations": ["reduceStress", "betterSleep"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+
+        {"motivations": ["timeManagement", "productivity"], "challenge": "dontKnowStart", "supportLevel": "weak"},
+        {"motivations": ["timeManagement", "productivity"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"motivations": ["timeManagement", "productivity"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+
         {"motivations": ["productivity", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
-        {"motivations": ["betterSleep", "physicalHealth"], "challenge": "lackOfTime", "supportLevel": "normal"},
-        {"motivations": ["timeManagement", "reduceStress"], "challenge": "dontKnowStart", "supportLevel": "weak"}
+        {"motivations": ["productivity", "reduceStress"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"motivations": ["productivity", "reduceStress"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+
+        {"motivations": ["physicalHealth", "timeManagement"], "challenge": "givingUp", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth", "timeManagement"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"motivations": ["timeManagement", "reduceStress"], "challenge": "dontKnowStart", "supportLevel": "weak"},
+        {"motivations": ["timeManagement", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+
+        # Triple motivation templates - THE MISSING ONES + others (8)
+        {"motivations": ["physicalHealth", "reduceStress", "betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth", "reduceStress", "betterSleep"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"motivations": ["physicalHealth", "reduceStress", "betterSleep"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+        {"motivations": ["timeManagement", "physicalHealth", "reduceStress"], "challenge": "givingUp", "supportLevel": "weak"},
+        {"motivations": ["physicalHealth", "timeManagement", "productivity"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"motivations": ["productivity", "reduceStress", "betterSleep"], "challenge": "stressAnxiety", "supportLevel": "weak"},
+        {"motivations": ["timeManagement", "productivity", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"motivations": ["timeManagement", "productivity", "physicalHealth"], "challenge": "lackOfTime", "supportLevel": "normal"},
     ],
     "both": [
-        # 24 templates balancing spiritual + wellness
-        # new maturity (8 templates)
+        # new maturity (12 templates - expanded)
         {"maturity": "new", "motivations": ["closerToGod", "physicalHealth"], "challenge": "lackOfTime", "supportLevel": "weak"},
+        {"maturity": "new", "motivations": ["closerToGod", "physicalHealth"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"maturity": "new", "motivations": ["closerToGod", "physicalHealth"], "challenge": "givingUp", "supportLevel": "weak"},
         {"maturity": "new", "motivations": ["prayerDiscipline", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"maturity": "new", "motivations": ["prayerDiscipline", "reduceStress"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "new", "motivations": ["understandBible", "timeManagement"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"maturity": "new", "motivations": ["understandBible", "timeManagement"], "challenge": "lackOfTime", "supportLevel": "weak"},
         {"maturity": "new", "motivations": ["growInFaith", "physicalHealth"], "challenge": "givingUp", "supportLevel": "weak"},
         {"maturity": "new", "motivations": ["closerToGod", "productivity"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "new", "motivations": ["prayerDiscipline", "betterSleep"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
         {"maturity": "new", "motivations": ["understandBible", "reduceStress"], "challenge": "dontKnowStart", "supportLevel": "weak"},
         {"maturity": "new", "motivations": ["growInFaith", "timeManagement"], "challenge": "givingUp", "supportLevel": "weak"},
-        # growing maturity (8 templates)
+        # growing maturity (12 templates - expanded)
         {"maturity": "growing", "motivations": ["closerToGod", "physicalHealth"], "challenge": "lackOfTime", "supportLevel": "normal"},
+        {"maturity": "growing", "motivations": ["closerToGod", "physicalHealth"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"maturity": "growing", "motivations": ["closerToGod", "physicalHealth"], "challenge": "stressAnxiety", "supportLevel": "weak"},
         {"maturity": "growing", "motivations": ["prayerDiscipline", "productivity"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
+        {"maturity": "growing", "motivations": ["prayerDiscipline", "productivity"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "growing", "motivations": ["understandBible", "reduceStress"], "challenge": "dontKnowStart", "supportLevel": "normal"},
+        {"maturity": "growing", "motivations": ["understandBible", "reduceStress"], "challenge": "stressAnxiety", "supportLevel": "weak"},
         {"maturity": "growing", "motivations": ["overcomeHabits", "timeManagement"], "challenge": "givingUp", "supportLevel": "weak"},
         {"maturity": "growing", "motivations": ["growInFaith", "betterSleep"], "challenge": "lackOfTime", "supportLevel": "normal"},
         {"maturity": "growing", "motivations": ["closerToGod", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "weak"},
         {"maturity": "growing", "motivations": ["prayerDiscipline", "physicalHealth"], "challenge": "dontKnowStart", "supportLevel": "normal"},
         {"maturity": "growing", "motivations": ["understandBible", "productivity"], "challenge": "givingUp", "supportLevel": "normal"},
-        # mature maturity (4 templates)
+        # mature maturity (6 templates - expanded)
         {"maturity": "mature", "motivations": ["closerToGod", "physicalHealth", "productivity"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"maturity": "mature", "motivations": ["closerToGod", "physicalHealth"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
         {"maturity": "mature", "motivations": ["understandBible", "reduceStress"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"maturity": "mature", "motivations": ["understandBible", "reduceStress"], "challenge": "lackOfTime", "supportLevel": "strong"},
         {"maturity": "mature", "motivations": ["growInFaith", "timeManagement"], "challenge": "dontKnowStart", "supportLevel": "strong"},
         {"maturity": "mature", "motivations": ["overcomeHabits", "betterSleep"], "challenge": "givingUp", "supportLevel": "weak"},
-        # passionate maturity (4 templates)
+        # passionate maturity (6 templates - expanded)
         {"maturity": "passionate", "motivations": ["closerToGod", "prayerDiscipline", "physicalHealth"], "challenge": "lackOfTime", "supportLevel": "strong"},
+        {"maturity": "passionate", "motivations": ["closerToGod", "prayerDiscipline", "physicalHealth"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
         {"maturity": "passionate", "motivations": ["understandBible", "growInFaith", "productivity"], "challenge": "lackOfMotivation", "supportLevel": "normal"},
+        {"maturity": "passionate", "motivations": ["understandBible", "growInFaith", "productivity"], "challenge": "lackOfTime", "supportLevel": "strong"},
         {"maturity": "passionate", "motivations": ["closerToGod", "reduceStress"], "challenge": "dontKnowStart", "supportLevel": "strong"},
         {"maturity": "passionate", "motivations": ["growInFaith", "timeManagement"], "challenge": "givingUp", "supportLevel": "normal"}
     ]
@@ -383,7 +453,7 @@ def generate_template(profile: Dict) -> Dict:
 
 # ==================== BATCH GENERATOR ====================
 
-def generate_all_templates(output_dir: str = "habit_templates_v2", max_templates: int = 60):
+def generate_all_templates(output_dir: str = "habit_templates_v2", max_templates: int = 120):
     """Generate up to max_templates templates"""
     os.makedirs(output_dir, exist_ok=True)
     generated = 0
@@ -439,7 +509,7 @@ def generate_all_templates(output_dir: str = "habit_templates_v2", max_templates
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Habit Template Generator v2 (Rule-Based)")
-    parser.add_argument('--max', type=int, default=60, help='Maximum number of templates to generate (for UAT)')
+    parser.add_argument('--max', type=int, default=120, help='Maximum number of templates to generate')
     args = parser.parse_args()
     print("🚀 Habit Template Generator v2 (Rule-Based)")
     print("="*60)

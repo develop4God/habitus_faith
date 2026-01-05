@@ -1068,7 +1068,7 @@
   "spiritual_reading": "Spiritual Reading",
   "daily_walk": "Daily Walk",
   "morning_exercise": "Morning Exercise",
-  "yoga_stretching": "Yoga/Stretching",
+  "yoga_stretching": "Stretching",
   "healthy_breakfast": "Healthy Breakfast",
   "hydration_routine": "Hydration Routine",
   "running_jogging": "Running/Jogging",
@@ -1091,4 +1091,9 @@
   "creative_hobby": "Creative Hobby",
   "call_friend_family": "Call Friend/Family",
   "quality_time_loved_ones": "Quality Time with Loved Ones"
+,
+  "onboardingSelectAtLeastOneGoal": "Please select at least one goal",
+  "onboardingPreparingHabits": "Preparing your habits...",
+  "onboardingKeepAtLeastOneHabit": "You must keep at least one habit",
+  "onboardingCouldNotCreateHabits": "Could not create habits. Please try again."
 }

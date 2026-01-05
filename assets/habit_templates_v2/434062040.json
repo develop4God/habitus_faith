@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_new_dontKnowStart_normal_closerToGod",
+  "fingerprint": "434062040",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "closerToGod"
+    ],
+    "challenge": "dontKnowStart",
+    "supportLevel": "normal",
+    "spiritualMaturity": "new"
+  },
+  "habits": [
+    {
+      "id": "sp01",
+      "nameKey": "morning_prayer",
+      "category": "spiritual",
+      "emoji": "🙏",
+      "target_minutes": 5,
+      "verse_key": "psalms_5_3",
+      "notification_key": "morning_prayer",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 5,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp15",
+      "nameKey": "praise_thanksgiving",
+      "category": "spiritual",
+      "emoji": "🎉",
+      "target_minutes": 7,
+      "verse_key": "psalms_100_4",
+      "notification_key": "praise_thanksgiving",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp04",
+      "nameKey": "worship_music",
+      "category": "spiritual",
+      "emoji": "🎵",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "worship_music",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 5,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    }
+  ]
+}

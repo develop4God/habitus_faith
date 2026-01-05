@@ -1607,7 +1607,7 @@ abstract class AppLocalizations {
   /// No description provided for @yoga_stretching.
   ///
   /// In en, this message translates to:
-  /// **'Yoga/Stretching'**
+  /// **'Stretching'**
   String get yoga_stretching;
 
   /// No description provided for @healthy_breakfast.
@@ -1741,6 +1741,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quality Time with Loved Ones'**
   String get quality_time_loved_ones;
+
+  /// No description provided for @onboardingSelectAtLeastOneGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one goal'**
+  String get onboardingSelectAtLeastOneGoal;
+
+  /// No description provided for @onboardingPreparingHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing your habits...'**
+  String get onboardingPreparingHabits;
+
+  /// No description provided for @onboardingKeepAtLeastOneHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'You must keep at least one habit'**
+  String get onboardingKeepAtLeastOneHabit;
+
+  /// No description provided for @onboardingCouldNotCreateHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create habits. Please try again.'**
+  String get onboardingCouldNotCreateHabits;
 }
 
 class _AppLocalizationsDelegate
