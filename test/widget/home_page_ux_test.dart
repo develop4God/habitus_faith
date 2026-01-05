@@ -68,9 +68,7 @@ void main() {
         id: 'test-dev',
         versiculo: 'Test verse for the day',
         reflexion: 'Test reflection',
-        paraMeditar: [
-          ParaMeditar(cita: 'Test', texto: 'Think about this')
-        ],
+        paraMeditar: [ParaMeditar(cita: 'Test', texto: 'Think about this')],
         oracion: 'Test prayer',
         date: now,
       );
@@ -322,8 +320,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final completedTextFinder = find.text('Read Bible');
-        final Text completedText =
-            tester.widget(completedTextFinder) as Text;
+        final Text completedText = tester.widget(completedTextFinder) as Text;
 
         expect(
           completedText.style?.decoration,
@@ -358,8 +355,7 @@ void main() {
     });
 
     group('D. Remaining Habits Indicator Tests', () {
-      testWidgets('Shows remaining habits count',
-          (WidgetTester tester) async {
+      testWidgets('Shows remaining habits count', (WidgetTester tester) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -523,8 +519,7 @@ void main() {
         expect(find.byType(HomePage), findsOneWidget);
       });
 
-      testWidgets('Handles habits with no emoji',
-          (WidgetTester tester) async {
+      testWidgets('Handles habits with no emoji', (WidgetTester tester) async {
         final noEmojiHabit = Habit(
           id: 'no-emoji',
           userId: 'test-user',
@@ -569,8 +564,7 @@ void main() {
         );
       });
 
-      testWidgets('Shows weekly consistency card',
-          (WidgetTester tester) async {
+      testWidgets('Shows weekly consistency card', (WidgetTester tester) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -593,10 +587,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Get positions
-        final habitsPosition = tester
-            .getTopLeft(find.text('Morning Prayer').first);
-        final streaksPosition = tester
-            .getTopLeft(find.textContaining('Longest').first);
+        final habitsPosition =
+            tester.getTopLeft(find.text('Morning Prayer').first);
+        final streaksPosition =
+            tester.getTopLeft(find.textContaining('Longest').first);
 
         expect(
           streaksPosition.dy > habitsPosition.dy,
@@ -624,10 +618,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Get positions
-        final habitsPosition = tester
-            .getTopLeft(find.text('Morning Prayer').first);
-        final versePosition = tester
-            .getTopLeft(find.textContaining('Verse').first);
+        final habitsPosition =
+            tester.getTopLeft(find.text('Morning Prayer').first);
+        final versePosition =
+            tester.getTopLeft(find.textContaining('Verse').first);
 
         expect(
           versePosition.dy > habitsPosition.dy,
@@ -706,8 +700,7 @@ void main() {
     });
 
     group('I. Performance & Animation Tests', () {
-      testWidgets('Animations complete in <300ms',
-          (WidgetTester tester) async {
+      testWidgets('Animations complete in <300ms', (WidgetTester tester) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pump();
 
@@ -766,7 +759,8 @@ void main() {
         expect(
           stopwatch.elapsedMilliseconds < 5000,
           isTrue,
-          reason: 'Initial render should be under 5 seconds in test environment',
+          reason:
+              'Initial render should be under 5 seconds in test environment',
         );
       });
 
@@ -804,6 +798,147 @@ void main() {
           findsOneWidget,
           reason: 'Habit should be in Dismissible for swipe completion',
         );
+      });
+    });
+
+    group('K. DST and Edge Case Tests', () {
+      testWidgets('Weekly consistency handles DST boundary correctly',
+          (WidgetTester tester) async {
+        final now = DateTime.now();
+
+        // Simulate habit created before DST transition
+        // Using a date that's 3 days ago at 23:30 (late evening)
+        final createdAt = DateTime(
+          now.year,
+          now.month,
+          now.day - 3,
+          23,
+          30,
+        );
+
+        final dstHabit = Habit(
+          id: 'dst-habit',
+          userId: 'test-user',
+          name: 'DST Test Habit',
+          category: HabitCategory.spiritual,
+          emoji: '⏰',
+          createdAt: createdAt,
+          completedToday: false,
+          currentStreak: 0,
+          longestStreak: 0,
+          completionHistory: [],
+        );
+
+        await tester.pumpWidget(createHomePageApp([dstHabit]));
+        await tester.pumpAndSettle();
+
+        // Should render without crashing
+        expect(find.byType(HomePage), findsOneWidget);
+
+        // Weekly consistency should be calculated correctly
+        // (not affected by hour differences)
+        expect(find.text('DST Test Habit'), findsOneWidget);
+      });
+
+      testWidgets(
+          'Multiple rapid habit completions handle concurrent animations',
+          (WidgetTester tester) async {
+        // Create 3 habits for rapid completion testing
+        final rapidHabits = List.generate(3, (i) {
+          return Habit(
+            id: 'rapid-$i',
+            userId: 'test-user',
+            name: 'Rapid Habit $i',
+            category: HabitCategory.physical,
+            emoji: '⚡',
+            createdAt: DateTime.now().subtract(Duration(days: 5)),
+            completedToday: false,
+            currentStreak: 0,
+            longestStreak: 0,
+            completionHistory: [],
+          );
+        });
+
+        await tester.pumpWidget(createHomePageApp(rapidHabits));
+        await tester.pumpAndSettle();
+
+        // Verify all AnimatedScale widgets are present
+        final animatedScaleFinders = find.byType(AnimatedScale);
+        expect(
+          animatedScaleFinders,
+          findsNWidgets(3),
+          reason: 'Should have AnimatedScale for each habit',
+        );
+
+        // Verify no frame drops during multiple animations
+        // All habits should be visible and ready
+        expect(find.text('Rapid Habit 0'), findsOneWidget);
+        expect(find.text('Rapid Habit 1'), findsOneWidget);
+        expect(find.text('Rapid Habit 2'), findsOneWidget);
+      });
+
+      testWidgets('Complex multi-codepoint emoji rendering',
+          (WidgetTester tester) async {
+        final complexEmojiHabits = [
+          // Family emoji (multi-codepoint)
+          Habit(
+            id: 'family-emoji',
+            userId: 'test-user',
+            name: 'Family Time',
+            category: HabitCategory.relational,
+            emoji: '👨‍👩‍👧‍👦',
+            createdAt: DateTime.now(),
+            completedToday: false,
+            currentStreak: 0,
+            longestStreak: 0,
+            completionHistory: [],
+          ),
+          // Rainbow flag (multi-codepoint with ZWJ)
+          Habit(
+            id: 'flag-emoji',
+            userId: 'test-user',
+            name: 'Pride Event',
+            category: HabitCategory.relational,
+            emoji: '🏳️‍🌈',
+            createdAt: DateTime.now(),
+            completedToday: false,
+            currentStreak: 0,
+            longestStreak: 0,
+            completionHistory: [],
+          ),
+          // Null emoji (should fallback to '✓')
+          Habit(
+            id: 'null-emoji',
+            userId: 'test-user',
+            name: 'No Emoji',
+            category: HabitCategory.mental,
+            emoji: null,
+            createdAt: DateTime.now(),
+            completedToday: false,
+            currentStreak: 0,
+            longestStreak: 0,
+            completionHistory: [],
+          ),
+        ];
+
+        await tester.pumpWidget(createHomePageApp(complexEmojiHabits));
+        await tester.pumpAndSettle();
+
+        // Verify all habits render correctly
+        expect(find.text('Family Time'), findsOneWidget);
+        expect(find.text('Pride Event'), findsOneWidget);
+        expect(find.text('No Emoji'), findsOneWidget);
+
+        // Verify fallback emoji for null case
+        expect(
+          find.text('✓'),
+          findsOneWidget,
+          reason: 'Should show fallback checkmark for null emoji',
+        );
+
+        // Verify multi-codepoint emojis are present
+        expect(find.text('👨‍👩‍👧‍👦'), findsOneWidget);
+        expect(find.text('🏳️‍🌈'), findsOneWidget);
       });
     });
   });

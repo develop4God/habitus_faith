@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
 
@@ -59,17 +60,27 @@ class _HomePageState extends ConsumerState<HomePage> {
         totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
     // Calculate weekly consistency (last 7 days)
-    final sevenDaysAgo = today.subtract(const Duration(days: 7));
-    final tomorrowStart = today.add(const Duration(days: 1));
+    // Normalize dates to midnight to avoid DST issues
+    final normalizedToday = DateTime(today.year, today.month, today.day);
+    final sevenDaysAgo = normalizedToday.subtract(const Duration(days: 7));
+    final tomorrowStart = normalizedToday.add(const Duration(days: 1));
     int totalPossibleCompletions = 0;
     int actualCompletions = 0;
 
     for (final habit in habits) {
+      // Normalize habit creation date to midnight
+      final normalizedHabitCreated = DateTime(
+        habit.createdAt.year,
+        habit.createdAt.month,
+        habit.createdAt.day,
+      );
+
       // Calculate days this habit has existed in the 7-day window
-      final habitStart = habit.createdAt.isAfter(sevenDaysAgo)
-          ? habit.createdAt
+      final habitStart = normalizedHabitCreated.isAfter(sevenDaysAgo)
+          ? normalizedHabitCreated
           : sevenDaysAgo;
-      final daysSinceCreation = today.difference(habitStart).inDays + 1;
+      final daysSinceCreation =
+          normalizedToday.difference(habitStart).inDays + 1;
       final daysInWindow = daysSinceCreation.clamp(0, 7);
 
       final relevantCompletions = habit.completionHistory
@@ -296,6 +307,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             : DismissDirection.endToStart,
                         confirmDismiss: (direction) async {
                           if (!isCompleted) {
+                            HapticFeedback.lightImpact();
                             final notifier =
                                 ref.read(habitsNotifierProvider.notifier);
                             await notifier.completeHabit(habit.id);
@@ -319,6 +331,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           onTap: isCompleted
                               ? null
                               : () async {
+                                  HapticFeedback.lightImpact();
                                   final notifier =
                                       ref.read(habitsNotifierProvider.notifier);
                                   await notifier.completeHabit(habit.id);
