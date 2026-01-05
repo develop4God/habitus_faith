@@ -943,6 +943,40 @@
       }
     }
   },
+  "startJourney": "Start your journey today",
+  "@startJourney": {
+    "description": "Message shown when user has no habits yet"
+  },
+  "buildConsistency": "Let's build consistency today! 💪",
+  "@buildConsistency": {
+    "description": "Motivational message when no habits are completed"
+  },
+  "greatProgress": "Great progress! Keep it going! 🔥",
+  "@greatProgress": {
+    "description": "Motivational message when some habits are completed"
+  },
+  "habitsRemaining": "{count, plural, =1{1 habit remaining today} other{{count} habits remaining today}}",
+  "@habitsRemaining": {
+    "description": "Shows how many habits remain to be completed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreak": "Longest\nStreak",
+  "@longestStreak": {
+    "description": "Label for longest streak card"
+  },
+  "weeklyConsistency": "Weekly\nConsistency",
+  "@weeklyConsistency": {
+    "description": "Label for weekly consistency percentage"
+  },
+  "swipeToComplete": "Tap or swipe left to complete",
+  "@swipeToComplete": {
+    "description": "Hint text showing users how to complete habits"
+  },
   "usefulTip": "Useful tip",
   "@usefulTip": {"description": "Educational tip title"},
   "habitsTip": "Swipe to see actions on your habits",

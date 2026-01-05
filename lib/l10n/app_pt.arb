@@ -746,6 +746,40 @@
       }
     }
   },
+  "startJourney": "Comece sua jornada hoje",
+  "@startJourney": {
+    "description": "Mensagem mostrada quando o usuário não tem hábitos"
+  },
+  "buildConsistency": "Vamos construir consistência hoje! 💪",
+  "@buildConsistency": {
+    "description": "Mensagem motivacional quando nenhum hábito está concluído"
+  },
+  "greatProgress": "Ótimo progresso! Continue assim! 🔥",
+  "@greatProgress": {
+    "description": "Mensagem motivacional quando alguns hábitos estão concluídos"
+  },
+  "habitsRemaining": "{count, plural, =1{1 hábito restante hoje} other{{count} hábitos restantes hoje}}",
+  "@habitsRemaining": {
+    "description": "Mostra quantos hábitos restam para concluir",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreak": "Sequência\nMais Longa",
+  "@longestStreak": {
+    "description": "Etiqueta para cartão de sequência mais longa"
+  },
+  "weeklyConsistency": "Consistência\nSemanal",
+  "@weeklyConsistency": {
+    "description": "Etiqueta para porcentagem de consistência semanal"
+  },
+  "swipeToComplete": "Toque ou deslize para a esquerda para concluir",
+  "@swipeToComplete": {
+    "description": "Texto de ajuda mostrando como concluir hábitos"
+  },
   "usefulTip": "Dica útil",
   "@usefulTip": {
     "description": "Título da dica educativa"

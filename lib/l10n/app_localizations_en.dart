@@ -103,7 +103,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentStreak => 'Current Streak';
 
   @override
-  String get longestStreak => 'Longest Streak';
+  String get longestStreak => 'Longest\nStreak';
 
   @override
   String get thisWeek => 'This Week';
@@ -692,6 +692,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String dayStreak(int count) {
     return '$count day streak';
   }
+
+  @override
+  String get startJourney => 'Start your journey today';
+
+  @override
+  String get buildConsistency => 'Let\'s build consistency today! 💪';
+
+  @override
+  String get greatProgress => 'Great progress! Keep it going! 🔥';
+
+  @override
+  String habitsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count habits remaining today',
+      one: '1 habit remaining today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get weeklyConsistency => 'Weekly\nConsistency';
+
+  @override
+  String get swipeToComplete => 'Tap or swipe left to complete';
 
   @override
   String get usefulTip => 'Useful tip';

@@ -103,7 +103,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get currentStreak => 'Racha Actual';
 
   @override
-  String get longestStreak => 'Mejor Racha';
+  String get longestStreak => 'Racha\nMás Larga';
 
   @override
   String get thisWeek => 'Esta Semana';
@@ -700,6 +700,32 @@ class AppLocalizationsEs extends AppLocalizations {
   String dayStreak(int count) {
     return 'Racha de $count días';
   }
+
+  @override
+  String get startJourney => 'Comienza tu viaje hoy';
+
+  @override
+  String get buildConsistency => '¡Construyamos consistencia hoy! 💪';
+
+  @override
+  String get greatProgress => '¡Gran progreso! ¡Sigue así! 🔥';
+
+  @override
+  String habitsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hábitos restantes hoy',
+      one: '1 hábito restante hoy',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get weeklyConsistency => 'Consistencia\nSemanal';
+
+  @override
+  String get swipeToComplete => 'Toca o desliza a la izquierda para completar';
 
   @override
   String get usefulTip => 'Tip útil';

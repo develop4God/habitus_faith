@@ -58,14 +58,14 @@ class _HomePageState extends ConsumerState<HomePage> {
     final completionPercentage = totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
     
     // Calculate weekly consistency (last 7 days)
-    final now = DateTime.now();
-    final sevenDaysAgo = now.subtract(const Duration(days: 7));
+    final sevenDaysAgo = today.subtract(const Duration(days: 7));
+    final tomorrowStart = today.add(const Duration(days: 1));
     int totalPossibleCompletions = 0;
     int actualCompletions = 0;
     
     for (final habit in habits) {
       final relevantCompletions = habit.completionHistory.where((date) => 
-        date.isAfter(sevenDaysAgo) && date.isBefore(now.add(const Duration(days: 1)))
+        date.isAfter(sevenDaysAgo) && date.isBefore(tomorrowStart)
       ).length;
       actualCompletions += relevantCompletions;
       totalPossibleCompletions += 7; // 7 days
@@ -176,7 +176,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         // Motivational micro-copy (dynamic)
                         if (totalHabits == 0)
                           Text(
-                            'Start your journey today',
+                            l10n.startJourney,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade700,
@@ -202,7 +202,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           )
                         else if (completedHabits == 0)
                           Text(
-                            'Let\'s build consistency today! 💪',
+                            l10n.buildConsistency,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.blue.shade700,
@@ -212,7 +212,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           )
                         else
                           Text(
-                            'Great progress! Keep it going! 🔥',
+                            l10n.greatProgress,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.blue.shade700,
@@ -233,9 +233,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    remainingHabits == 1 
-                        ? '1 habit remaining today'
-                        : '$remainingHabits habits remaining today',
+                    l10n.habitsRemaining(remainingHabits),
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -400,7 +398,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
                       const SizedBox(width: 8),
                       Text(
-                        'Tap or swipe left to complete',
+                        l10n.swipeToComplete,
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey.shade500,
@@ -447,7 +445,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Longest\nStreak',
+                                  l10n.longestStreak,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.orange.shade700,
@@ -488,7 +486,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Weekly\nConsistency',
+                                  l10n.weeklyConsistency,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.blue.shade700,

@@ -101,7 +101,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get currentStreak => '当前连续';
 
   @override
-  String get longestStreak => '最长连续';
+  String get longestStreak => '最长\n连续';
 
   @override
   String get thisWeek => '本周';
@@ -659,6 +659,32 @@ class AppLocalizationsZh extends AppLocalizations {
   String dayStreak(int count) {
     return '$count天连续';
   }
+
+  @override
+  String get startJourney => '今天开始您的旅程';
+
+  @override
+  String get buildConsistency => '今天让我们建立一致性！💪';
+
+  @override
+  String get greatProgress => '进展很好！继续保持！🔥';
+
+  @override
+  String habitsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '今天还剩$count个习惯',
+      one: '今天还剩1个习惯',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get weeklyConsistency => '每周\n一致性';
+
+  @override
+  String get swipeToComplete => '点击或向左滑动以完成';
 
   @override
   String get usefulTip => '实用提示';

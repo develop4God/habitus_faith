@@ -746,6 +746,40 @@
       }
     }
   },
+  "startJourney": "Commencez votre voyage aujourd'hui",
+  "@startJourney": {
+    "description": "Message affiché lorsque l'utilisateur n'a pas encore d'habitudes"
+  },
+  "buildConsistency": "Construisons la constance aujourd'hui! 💪",
+  "@buildConsistency": {
+    "description": "Message motivationnel lorsqu'aucune habitude n'est complétée"
+  },
+  "greatProgress": "Excellent progrès! Continuez! 🔥",
+  "@greatProgress": {
+    "description": "Message motivationnel lorsque certaines habitudes sont complétées"
+  },
+  "habitsRemaining": "{count, plural, =1{1 habitude restante aujourd'hui} other{{count} habitudes restantes aujourd'hui}}",
+  "@habitsRemaining": {
+    "description": "Affiche combien d'habitudes restent à compléter",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreak": "Série la\nPlus Longue",
+  "@longestStreak": {
+    "description": "Étiquette pour la carte de série la plus longue"
+  },
+  "weeklyConsistency": "Constance\nHebdomadaire",
+  "@weeklyConsistency": {
+    "description": "Étiquette pour le pourcentage de constance hebdomadaire"
+  },
+  "swipeToComplete": "Appuyez ou glissez vers la gauche pour compléter",
+  "@swipeToComplete": {
+    "description": "Texte d'aide montrant comment compléter les habitudes"
+  },
   "usefulTip": "Astuce utile",
   "@usefulTip": {
     "description": "Titre du conseil éducatif"
