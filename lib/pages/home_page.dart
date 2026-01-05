@@ -289,21 +289,22 @@ class _HomePageState extends ConsumerState<HomePage> {
                             textAlign: TextAlign.center,
                           )
                         else if (completedHabits == totalHabits)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.celebration,
-                                  color: Colors.green.shade600, size: 20),
-                              const SizedBox(width: 8),
-                              Text(
-                                l10n.allHabitsCompleted,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.green.shade700,
-                                  fontWeight: FontWeight.w600,
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 8),
+                                Text(
+                                  l10n.allHabitsCompleted,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.green.shade700,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           )
                         else if (completedHabits == 0)
                           Text(
