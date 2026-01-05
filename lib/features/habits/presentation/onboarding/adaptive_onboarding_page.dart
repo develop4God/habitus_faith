@@ -376,7 +376,8 @@ class _AdaptiveOnboardingPageState
 
       // Try to fetch template first
       final templateService = ref.read(templateMatchingServiceProvider);
-      final templateHabits = await templateService.findMatchWithScoring(profile, language);
+      final templateHabits =
+          await templateService.findMatchWithScoring(profile, language);
       List<Map<String, dynamic>> habitsData;
       debugPrint(
           '🔎 Buscando template en Firestore, cache, GitHub o Gemini...');

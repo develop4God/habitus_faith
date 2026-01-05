@@ -725,6 +725,62 @@
   "@introMessage": {
     "description": "Message d'introduction motivant affiché sur la page d'accueil."
   },
+  "todaysVerse": "Verset du Jour",
+  "@todaysVerse": {
+    "description": "Titre de la section du verset biblique du jour"
+  },
+  "todaysHabits": "Habitudes d'Aujourd'hui",
+  "@todaysHabits": {
+    "description": "Titre de la section des habitudes du jour"
+  },
+  "allHabitsCompleted": "🎉 Toutes les habitudes complétées aujourd'hui!",
+  "@allHabitsCompleted": {
+    "description": "Message de succès lorsque toutes les habitudes sont complétées"
+  },
+  "dayStreak": "Série de {count} jours",
+  "@dayStreak": {
+    "description": "Affiche la série actuelle d'une habitude",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "startJourney": "Commencez votre voyage aujourd'hui",
+  "@startJourney": {
+    "description": "Message affiché lorsque l'utilisateur n'a pas encore d'habitudes"
+  },
+  "buildConsistency": "Construisons la constance aujourd'hui! 💪",
+  "@buildConsistency": {
+    "description": "Message motivationnel lorsqu'aucune habitude n'est complétée"
+  },
+  "greatProgress": "Excellent progrès! Continuez! 🔥",
+  "@greatProgress": {
+    "description": "Message motivationnel lorsque certaines habitudes sont complétées"
+  },
+  "habitsRemaining": "{count, plural, =1{1 habitude restante aujourd'hui} other{{count} habitudes restantes aujourd'hui}}",
+  "@habitsRemaining": {
+    "description": "Affiche combien d'habitudes restent à compléter",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreakCard": "Série la\nPlus Longue",
+  "@longestStreakCard": {
+    "description": "Étiquette pour la carte de série la plus longue sur la page d'accueil"
+  },
+  "weeklyConsistencyCard": "Constance\nHebdomadaire",
+  "@weeklyConsistencyCard": {
+    "description": "Étiquette pour la carte de constance hebdomadaire sur la page d'accueil"
+  },
+  "swipeToComplete": "Appuyez ou glissez vers la gauche pour compléter",
+  "@swipeToComplete": {
+    "description": "Texte d'aide montrant comment compléter les habitudes"
+  },
   "usefulTip": "Astuce utile",
   "@usefulTip": {
     "description": "Titre du conseil éducatif"

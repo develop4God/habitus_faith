@@ -10,6 +10,8 @@ import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../core/models/devocional_model.dart';
+import '../utils/date_format_utils.dart';
+import '../widgets/unified_habit_list.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -31,7 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final today = DateTime.now();
-    final formattedDate = '${today.day}/${today.month}/${today.year}';
+    final formattedDate = formatDevotionalDate(today, context);
 
     // Devocional de hoy
     final devotionalState = ref.watch(devotionalProvider);
@@ -55,176 +57,461 @@ class _HomePageState extends ConsumerState<HomePage> {
     final habits = habitsAsync.asData?.value ?? [];
     final completedHabits = habits.where((h) => h.completedToday).length;
     final totalHabits = habits.length;
+    final remainingHabits = totalHabits - completedHabits;
+    final completionPercentage =
+        totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
+
+    // Calculate weekly consistency (last 7 days)
+    // Normalize dates to midnight to avoid DST issues
+    final normalizedToday = DateTime(today.year, today.month, today.day);
+    final sevenDaysAgo = normalizedToday.subtract(const Duration(days: 7));
+    final tomorrowStart = normalizedToday.add(const Duration(days: 1));
+    int totalPossibleCompletions = 0;
+    int actualCompletions = 0;
+
+    for (final habit in habits) {
+      // Normalize habit creation date to midnight
+      final normalizedHabitCreated = DateTime(
+        habit.createdAt.year,
+        habit.createdAt.month,
+        habit.createdAt.day,
+      );
+
+      // Calculate days this habit has existed in the 7-day window
+      final habitStart = normalizedHabitCreated.isAfter(sevenDaysAgo)
+          ? normalizedHabitCreated
+          : sevenDaysAgo;
+      final daysSinceCreation =
+          normalizedToday.difference(habitStart).inDays + 1;
+      final daysInWindow = daysSinceCreation.clamp(0, 7);
+
+      final relevantCompletions = habit.completionHistory.where((date) {
+        // Normalize completion date to midnight for DST-safe comparison
+        final normalizedDate = DateTime(date.year, date.month, date.day);
+        return !normalizedDate.isBefore(sevenDaysAgo) &&
+            normalizedDate.isBefore(tomorrowStart);
+      }).length;
+      actualCompletions += relevantCompletions;
+      totalPossibleCompletions += daysInWindow;
+    }
+
+    final weeklyConsistency = totalPossibleCompletions > 0
+        ? (actualCompletions / totalPossibleCompletions * 100).round()
+        : 0;
+
+    // Calculate longest streak across all habits
+    final longestStreak = habits.isNotEmpty
+        ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
+        : 0;
 
     final List<Widget> pages = [
-      // Home principal con hero, versículo y resumen
+      // UX-optimized home: Progress → Habits → Streaks → Inspiration
       Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              const Icon(Icons.home, size: 28),
-              const SizedBox(width: 12),
-              Text(l10n.appTitle),
-            ],
-          ),
-          elevation: 2,
-        ),
+        backgroundColor: Colors.grey.shade50,
         body: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Hero section con transición de hábitos
+              const SizedBox(height: 32),
+
+              // Modern hero section with sun icon, intro message, and date
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 32,
-                  horizontal: 24,
-                ),
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.orange.shade200,
                       Colors.deepOrange.shade400,
+                      Colors.orange.shade300,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(32),
-                    bottomRight: Radius.circular(32),
-                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.deepOrange.shade200.withAlpha(128),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l10n.introMessage,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.wb_sunny_outlined,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            l10n.introMessage,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     Text(
                       formattedDate,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium?.copyWith(color: Colors.white70),
-                    ),
-                    const SizedBox(height: 16),
-                    if (habits.isNotEmpty)
-                      SizedBox(
-                        height: 80,
-                        child: PageView.builder(
-                          itemCount: habits.length,
-                          controller: PageController(viewportFraction: 0.7),
-                          itemBuilder: (context, index) {
-                            final habit = habits[index];
-                            return Hero(
-                              tag: 'habit_${habit.id}',
-                              child: Card(
-                                color: Colors.white,
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 8,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        habit.emoji ?? '✓',
-                                        style: const TextStyle(fontSize: 28),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          habit.name,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      if (habit.completedToday)
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Colors.green,
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
                       ),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              // Versículo del día (del devocional)
-              if (todayDevocional.versiculo.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Card(
-                    color: Colors.yellow.shade50,
-                    elevation: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        todayDevocional.versiculo,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.orange.shade900,
-                                  fontSize: 16,
-                                ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ),
-              // Resumen de hábitos para hoy
+
+              const SizedBox(height: 20),
+
+              // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  l10n.habitsCompleted,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Card(
                   elevation: 2,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22),
+                    side: BorderSide(
+                      color: completedHabits == totalHabits && totalHabits > 0
+                          ? Colors.green.shade300
+                          : Colors.blue.shade300,
+                      width: 2,
+                    ),
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(26),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          l10n.habitsCompletedCount(
-                            completedHabits,
-                            totalHabits,
+                        // Circular progress indicator (ring) - ANIMATED
+                        TweenAnimationBuilder<double>(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeInOut,
+                          tween: Tween<double>(
+                            begin: 0,
+                            end: totalHabits > 0
+                                ? completedHabits / totalHabits
+                                : 0,
                           ),
-                          style: Theme.of(context).textTheme.titleLarge,
+                          builder: (context, value, _) => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const StatisticsPage(),
+                                ),
+                              );
+                            },
+                            child: SizedBox(
+                              width: 160,
+                              height: 160,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 160,
+                                    height: 160,
+                                    child: CircularProgressIndicator(
+                                      value: value,
+                                      strokeWidth: 13,
+                                      backgroundColor: Colors.grey.shade200,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        completedHabits == totalHabits &&
+                                                totalHabits > 0
+                                            ? Colors.green.shade400
+                                            : Colors.blue.shade400,
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TweenAnimationBuilder<int>(
+                                        duration:
+                                            const Duration(milliseconds: 250),
+                                        curve: Curves.easeInOut,
+                                        tween: IntTween(
+                                          begin: 0,
+                                          end: completionPercentage,
+                                        ),
+                                        builder: (context, value, _) => Text(
+                                          '$value%',
+                                          style: TextStyle(
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                completedHabits == totalHabits &&
+                                                        totalHabits > 0
+                                                    ? Colors.green.shade700
+                                                    : Colors.blue.shade700,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        l10n.habitsCompletedCount(
+                                            completedHabits, totalHabits),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.grey.shade600,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Resumen de tus hábitos para hoy.',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+
+                        const SizedBox(height: 18),
+
+                        // Motivational micro-copy (dynamic)
+                        if (totalHabits == 0)
+                          Text(
+                            l10n.startJourney,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        else if (completedHabits == totalHabits)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.celebration,
+                                  color: Colors.green.shade600, size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                l10n.allHabitsCompleted,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.green.shade700,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          )
+                        else if (completedHabits == 0)
+                          Text(
+                            l10n.buildConsistency,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        else
+                          Text(
+                            l10n.greatProgress,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                       ],
                     ),
                   ),
                 ),
               ),
+
+              const SizedBox(height: 24),
+
+              // C. REMAINING HABITS INDICATOR
+              if (totalHabits > 0 && remainingHabits > 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    l10n.habitsRemaining(remainingHabits),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+
+              if (totalHabits > 0 && remainingHabits > 0)
+                const SizedBox(height: 12),
+
+              // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
+              UnifiedHabitList(
+                habits: habits,
+                onComplete: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.completeHabit(habitId);
+                },
+                onUncheck: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.uncheckHabit(habitId);
+                },
+                onDelete: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.deleteHabit(habitId);
+                },
+                showSwipeHint: true,
+              ),
+
+              const SizedBox(height: 20),
+
+              // D. STREAKS & MOMENTUM (SECONDARY)
+              if (habits.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 0,
+                          color: Colors.orange.shade50,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(color: Colors.orange.shade200),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.local_fire_department,
+                                  color: Colors.orange.shade600,
+                                  size: 28,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '$longestStreak',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange.shade900,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n.longestStreakCard,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange.shade700,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Card(
+                          elevation: 0,
+                          color: Colors.blue.shade50,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(color: Colors.blue.shade200),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.trending_up,
+                                  color: Colors.blue.shade600,
+                                  size: 28,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '$weeklyConsistency%',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue.shade900,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n.weeklyConsistencyCard,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.blue.shade700,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              const SizedBox(height: 20),
+
+              // E. INSPIRATIONAL CONTENT (TERTIARY)
+              if (todayDevocional.versiculo.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Card(
+                    elevation: 0,
+                    color: Colors.amber.shade50,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: Colors.amber.shade200),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        dividerColor: Colors.transparent,
+                      ),
+                      child: ExpansionTile(
+                        tilePadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        childrenPadding:
+                            const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        leading: Icon(
+                          Icons.auto_stories,
+                          color: Colors.amber.shade700,
+                          size: 24,
+                        ),
+                        title: Text(
+                          l10n.todaysVerse,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.amber.shade900,
+                          ),
+                        ),
+                        children: [
+                          Text(
+                            todayDevocional.versiculo,
+                            style: TextStyle(
+                              color: Colors.amber.shade900,
+                              fontSize: 14,
+                              height: 1.5,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
               const SizedBox(height: 32),
             ],
           ),

@@ -4,7 +4,7 @@ import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/predefined_habits_data.dart';
 import '../features/habits/domain/models/predefined_habit.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
-import '../pages/habits_page.dart';
+import '../features/habits/presentation/habits_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/predefined_habit_translations.dart';
 import 'dart:math';
@@ -128,7 +128,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
 
   Future<void> _saveHabit() async {
     final navigator = Navigator.of(context);
-    await ref.read(jsonHabitsNotifierProvider.notifier).addHabit(
+    await ref.read(habitsNotifierProvider.notifier).addHabit(
           name: nameCtrl.text,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
@@ -299,7 +299,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                     onTap: () async {
                                       await ref
                                           .read(
-                                            jsonHabitsNotifierProvider.notifier,
+                                            habitsNotifierProvider.notifier,
                                           )
                                           .addHabit(
                                             name: habitName,

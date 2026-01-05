@@ -7,7 +7,6 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
 Future<void> pumpSimpleOnboardingFlow(WidgetTester tester) async {
   final prefs = await SharedPreferences.getInstance();
 
@@ -32,7 +31,6 @@ Future<void> pumpSimpleOnboardingFlow(WidgetTester tester) async {
 
 void main() {
   group('Simple Onboarding Flow Integration Tests', () {
-
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });

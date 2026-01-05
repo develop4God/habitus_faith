@@ -1298,6 +1298,72 @@ abstract class AppLocalizations {
   /// **'The greatest changes begin with consistency...'**
   String get introMessage;
 
+  /// Title for today's Bible verse section on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Verse'**
+  String get todaysVerse;
+
+  /// Title for today's habits section on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Habits'**
+  String get todaysHabits;
+
+  /// Success message when all habits are completed
+  ///
+  /// In en, this message translates to:
+  /// **'🎉 All habits completed today!'**
+  String get allHabitsCompleted;
+
+  /// Shows the current streak for a habit
+  ///
+  /// In en, this message translates to:
+  /// **'{count} day streak'**
+  String dayStreak(int count);
+
+  /// Message shown when user has no habits yet
+  ///
+  /// In en, this message translates to:
+  /// **'Start your journey today'**
+  String get startJourney;
+
+  /// Motivational message when no habits are completed
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s build consistency today! 💪'**
+  String get buildConsistency;
+
+  /// Motivational message when some habits are completed
+  ///
+  /// In en, this message translates to:
+  /// **'Great progress! Keep it going! 🔥'**
+  String get greatProgress;
+
+  /// Shows how many habits remain to be completed
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 habit remaining today} other{{count} habits remaining today}}'**
+  String habitsRemaining(int count);
+
+  /// Label for longest streak card on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Longest\nStreak'**
+  String get longestStreakCard;
+
+  /// Label for weekly consistency card on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly\nConsistency'**
+  String get weeklyConsistencyCard;
+
+  /// Hint text showing users how to complete habits
+  ///
+  /// In en, this message translates to:
+  /// **'Tap or swipe left to complete'**
+  String get swipeToComplete;
+
   /// Educational tip title
   ///
   /// In en, this message translates to:

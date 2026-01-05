@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:habitus_faith/pages/habits_page.dart';
+import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import 'package:habitus_faith/widgets/habit_calendar_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
@@ -33,8 +33,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          jsonHabitsStreamProvider
-              .overrideWith((ref) => Stream.value(testHabits)),
+          habitsStreamProvider.overrideWith((ref) => Stream.value(testHabits)),
         ],
         child: const MaterialApp(
           localizationsDelegates: [

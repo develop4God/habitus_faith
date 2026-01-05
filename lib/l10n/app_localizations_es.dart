@@ -688,6 +688,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get introMessage => 'Los mayores cambios, inician en la constancia...';
 
   @override
+  String get todaysVerse => 'Versículo del Día';
+
+  @override
+  String get todaysHabits => 'Hábitos de Hoy';
+
+  @override
+  String get allHabitsCompleted => '🎉 ¡Todos los hábitos completados hoy!';
+
+  @override
+  String dayStreak(int count) {
+    return 'Racha de $count días';
+  }
+
+  @override
+  String get startJourney => 'Comienza tu viaje hoy';
+
+  @override
+  String get buildConsistency => '¡Construyamos consistencia hoy! 💪';
+
+  @override
+  String get greatProgress => '¡Gran progreso! ¡Sigue así! 🔥';
+
+  @override
+  String habitsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hábitos restantes hoy',
+      one: '1 hábito restante hoy',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get longestStreakCard => 'Racha\nMás Larga';
+
+  @override
+  String get weeklyConsistencyCard => 'Consistencia\nSemanal';
+
+  @override
+  String get swipeToComplete => 'Toca o desliza a la izquierda para completar';
+
+  @override
   String get usefulTip => 'Tip útil';
 
   @override

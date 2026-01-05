@@ -104,7 +104,8 @@ class SettingsPage extends ConsumerWidget {
                       if (navigator.mounted) {
                         messenger.showSnackBar(
                           const SnackBar(
-                              content: Text('No hay estadísticas para exportar.')),
+                              content:
+                                  Text('No hay estadísticas para exportar.')),
                         );
                       }
                       return;
@@ -119,8 +120,8 @@ class SettingsPage extends ConsumerWidget {
                       if (navigator.mounted) {
                         messenger.showSnackBar(
                           SnackBar(
-                              content:
-                                  Text('Estadísticas exportadas en: \n${file.path}')),
+                              content: Text(
+                                  'Estadísticas exportadas en: \n${file.path}')),
                         );
                       }
                     } catch (e) {

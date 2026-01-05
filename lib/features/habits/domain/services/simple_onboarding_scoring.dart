@@ -1,5 +1,5 @@
 /// Simple onboarding scoring service for V2 flow
-/// 
+///
 /// Formula: score = (goals.length * 2) + timeValue + levelValue
 /// Range: 4-12 points
 /// - Minimum: 1 goal (2) + 5-10min (1) + new (1) = 4
@@ -76,13 +76,13 @@ class OnboardingScore {
 /// Service for scoring simple onboarding answers
 class SimpleOnboardingScoring {
   /// Calculate score from user answers
-  /// 
+  ///
   /// [goals] - Selected goals (1-3 required)
   /// [timeCommitment] - Daily time commitment
   /// [experienceLevel] - Current experience level
-  /// 
+  ///
   /// Returns [OnboardingScore] with total score (3-12) and level classification
-  /// 
+  ///
   /// Throws [ArgumentError] if goals is empty or has more than 3 items
   static OnboardingScore calculateScore({
     required List<GoalType> goals,
@@ -156,7 +156,7 @@ class SimpleOnboardingScoring {
   }
 
   /// Determine primary intent from selected goals
-  /// 
+  ///
   /// Priority:
   /// 1. 🙏 Fe (faithBased)
   /// 2. 💪 Salud (wellness)
