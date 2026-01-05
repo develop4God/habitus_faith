@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import '../features/habits/domain/habit.dart';
-import '../features/habits/presentation/widgets/habit_card/compact_habit_card.dart';
 import 'edit_habit_dialog.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/unified_habit_list.dart';
 
 class ModernWeeklyCalendar extends StatefulWidget {
   final List<Habit> habits;
   final DateTime? initialDate;
   final Function(String habitId)? onComplete;
   final Function(String habitId)? onUncheck;
+  final Function(String habitId)? onDelete;
 
   const ModernWeeklyCalendar({
     super.key,
@@ -16,6 +17,7 @@ class ModernWeeklyCalendar extends StatefulWidget {
     this.initialDate,
     this.onComplete,
     this.onUncheck,
+    this.onDelete,
   });
 
   @override
@@ -201,52 +203,36 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
           ),
         ),
         Expanded(
-          child: widget.habits.isEmpty
-              ? Center(
-                  child: Text(
-                    'No tienes hábitos para hoy',
-                    style: TextStyle(fontSize: 18, color: Colors.grey[500]),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: widget.habits.length,
-                  itemBuilder: (context, index) {
-                    final habit = widget.habits[index];
-                    debugPrint(
-                        'HabitsPageUI: renderizando hábito ${habit.name} con estado completedToday=${habit.completedToday}');
-                    return CompactHabitCard(
-                      habit: habit,
-                      onDelete: () {
-                        debugPrint(
-                            'HabitsPageUI: eliminar hábito ${habit.name}');
-                        // Lógica real de borrado
-                      },
-                      onEdit: () async {
-                        debugPrint('HabitsPageUI: editar hábito ${habit.name}');
-                        final l10n = AppLocalizations.of(context)!;
-                        await showDialog(
-                          context: context,
-                          builder: (ctx) =>
-                              EditHabitDialog(l10n: l10n, habit: habit),
-                        );
-                        // Después de cerrar el diálogo, refrescar la vista
-                        setState(() {});
-                      },
-                      onComplete: (id) async {
-                        debugPrint('HabitsPageUI: marcado hábito $id');
-                        if (widget.onComplete != null) {
-                          await widget.onComplete!(id);
-                        }
-                      },
-                      onUncheck: (id) async {
-                        debugPrint('HabitsPageUI: desmarcado hábito $id');
-                        if (widget.onUncheck != null) {
-                          await widget.onUncheck!(id);
-                        }
-                      },
-                    );
-                  },
-                ),
+          child: UnifiedHabitList(
+            habits: widget.habits,
+            onComplete: (habitId) async {
+              debugPrint('HabitsPageUI: marcado hábito $habitId');
+              if (widget.onComplete != null) {
+                await widget.onComplete!(habitId);
+              }
+            },
+            onUncheck: (habitId) async {
+              debugPrint('HabitsPageUI: desmarcado hábito $habitId');
+              if (widget.onUncheck != null) {
+                await widget.onUncheck!(habitId);
+              }
+            },
+            onDelete: (habitId) async {
+              debugPrint('HabitsPageUI: eliminando hábito $habitId');
+              if (widget.onDelete != null) {
+                await widget.onDelete!(habitId);
+              }
+            },
+            onEdit: (habit) async {
+              debugPrint('HabitsPageUI: editar hábito ${habit.name}');
+              final l10n = AppLocalizations.of(context)!;
+              await showDialog(
+                context: context,
+                builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+              );
+            },
+            showSwipeHint: false,
+          ),
         ),
       ],
     );

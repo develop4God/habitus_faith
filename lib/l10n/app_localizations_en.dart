@@ -680,6 +680,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get introMessage => 'The greatest changes begin with consistency...';
 
   @override
+  String get todaysVerse => 'Today\'s Verse';
+
+  @override
+  String get todaysHabits => 'Today\'s Habits';
+
+  @override
+  String get allHabitsCompleted => '🎉 All habits completed today!';
+
+  @override
+  String dayStreak(int count) {
+    return '$count day streak';
+  }
+
+  @override
+  String get startJourney => 'Start your journey today';
+
+  @override
+  String get buildConsistency => 'Let\'s build consistency today! 💪';
+
+  @override
+  String get greatProgress => 'Great progress! Keep it going! 🔥';
+
+  @override
+  String habitsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count habits remaining today',
+      one: '1 habit remaining today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get longestStreakCard => 'Longest\nStreak';
+
+  @override
+  String get weeklyConsistencyCard => 'Weekly\nConsistency';
+
+  @override
+  String get swipeToComplete => 'Tap or swipe left to complete';
+
+  @override
   String get usefulTip => 'Useful tip';
 
   @override
@@ -839,7 +882,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get morning_exercise => 'Morning Exercise';
 
   @override
-  String get yoga_stretching => 'Yoga/Stretching';
+  String get yoga_stretching => 'Stretching';
 
   @override
   String get healthy_breakfast => 'Healthy Breakfast';
@@ -933,4 +976,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hideEmojis => 'Hide Emojis';
+  String get onboardingSelectAtLeastOneGoal =>
+      'Please select at least one goal';
+
+  @override
+  String get onboardingPreparingHabits => 'Preparing your habits...';
+
+  @override
+  String get onboardingKeepAtLeastOneHabit =>
+      'You must keep at least one habit';
+
+  @override
+  String get onboardingCouldNotCreateHabits =>
+      'Could not create habits. Please try again.';
 }

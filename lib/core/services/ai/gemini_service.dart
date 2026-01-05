@@ -17,6 +17,7 @@ import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
 import 'gemini_template_firestore_service.dart';
 import '../habit_template_loader.dart';
+import '../templates/template_fallback_service.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
@@ -537,7 +538,21 @@ Requisitos estrictos:
       return HabitTemplateLoader.parseHabits(template);
     }
 
-    // A. Buscar en cache por fingerprint exacto
+    // A.2 Buscar template similar usando scoring engine (threshold ≥0.75)
+    debugPrint('[Template MISS] Exact fingerprint not found: $fingerprint');
+    debugPrint('[Template FALLBACK] Searching for similar templates...');
+    final similarTemplate = await TemplateFallbackService.findSimilarTemplate(
+      profile,
+      threshold: 0.75,
+    );
+    if (similarTemplate != null &&
+        HabitTemplateLoader.validateTemplate(similarTemplate)) {
+      debugPrint(
+          '[Template HIT] Similar template found (score ≥0.75) for profile');
+      return HabitTemplateLoader.parseHabits(similarTemplate);
+    }
+
+    // B. Buscar en cache por fingerprint exacto
     final cached =
         await _cache.get<List<Map<String, dynamic>>>('profile_$fingerprint');
     if (cached != null) {
@@ -629,6 +644,27 @@ Requisitos estrictos:
         'Request timed out. Please try again.',
       );
     } catch (e) {
+      final errorMessage = e.toString();
+
+      // Check for model not found errors
+      if (errorMessage.contains('not found') ||
+          errorMessage.contains('not supported')) {
+        _logger?.e('Gemini model configuration error. '
+            'Model may not be available or API version mismatch. '
+            'Error: $errorMessage');
+        throw GeminiException(
+            'AI model configuration error. Please check app settings. '
+            'Try updating the app or contact support.');
+      }
+
+      // Check for API key issues
+      if (errorMessage.contains('API_KEY') ||
+          errorMessage.contains('INVALID_ARGUMENT')) {
+        _logger?.e('Gemini API key error: $errorMessage');
+        throw GeminiException(
+            'AI service authentication failed. Please check configuration.');
+      }
+
       _logger?.e('Error during profile-based habit generation', error: e);
       if (e is GeminiException) rethrow;
       throw GeminiException('Failed to generate habits: $e');

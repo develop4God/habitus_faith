@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
-import '../pages/habits_page.dart';
+import '../features/habits/presentation/habits_providers.dart';
 
 class NotificationsListPage extends ConsumerWidget {
   const NotificationsListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+    final habitsAsync = ref.watch(habitsStreamProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,

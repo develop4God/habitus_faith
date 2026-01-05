@@ -1,0 +1,69 @@
+{
+  "template_id": "both_passionate_lackOfTime_strong_growInFaith_understandBible",
+  "fingerprint": "159823409",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "both",
+    "motivations": [
+      "understandBible",
+      "growInFaith",
+      "productivity"
+    ],
+    "challenge": "lackOfTime",
+    "supportLevel": "strong",
+    "spiritualMaturity": "passionate"
+  },
+  "habits": [
+    {
+      "id": "sp13",
+      "nameKey": "devotional_reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "devotional_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 15,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp11",
+      "nameKey": "scripture_memorization",
+      "category": "spiritual",
+      "emoji": "🧠",
+      "target_minutes": 15,
+      "verse_key": "psalms_119_11",
+      "notification_key": "scripture_memorization",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "ph13",
+      "nameKey": "posture_breaks",
+      "category": "physical",
+      "emoji": "🪑",
+      "target_minutes": 5,
+      "verse_key": null,
+      "notification_key": "posture_breaks",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "ph04",
+      "nameKey": "healthy_breakfast",
+      "category": "physical",
+      "emoji": "🥗",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "healthy_breakfast",
+      "time_of_day": "morning"
+    }
+  ]
+}

@@ -921,6 +921,62 @@
   "@introMessage": {
     "description": "Intro message shown on landing page as a motivational quote."
   },
+  "todaysVerse": "Today's Verse",
+  "@todaysVerse": {
+    "description": "Title for today's Bible verse section on home page"
+  },
+  "todaysHabits": "Today's Habits",
+  "@todaysHabits": {
+    "description": "Title for today's habits section on home page"
+  },
+  "allHabitsCompleted": "🎉 All habits completed today!",
+  "@allHabitsCompleted": {
+    "description": "Success message when all habits are completed"
+  },
+  "dayStreak": "{count} day streak",
+  "@dayStreak": {
+    "description": "Shows the current streak for a habit",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "startJourney": "Start your journey today",
+  "@startJourney": {
+    "description": "Message shown when user has no habits yet"
+  },
+  "buildConsistency": "Let's build consistency today! 💪",
+  "@buildConsistency": {
+    "description": "Motivational message when no habits are completed"
+  },
+  "greatProgress": "Great progress! Keep it going! 🔥",
+  "@greatProgress": {
+    "description": "Motivational message when some habits are completed"
+  },
+  "habitsRemaining": "{count, plural, =1{1 habit remaining today} other{{count} habits remaining today}}",
+  "@habitsRemaining": {
+    "description": "Shows how many habits remain to be completed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreakCard": "Longest\nStreak",
+  "@longestStreakCard": {
+    "description": "Label for longest streak card on home page"
+  },
+  "weeklyConsistencyCard": "Weekly\nConsistency",
+  "@weeklyConsistencyCard": {
+    "description": "Label for weekly consistency card on home page"
+  },
+  "swipeToComplete": "Tap or swipe left to complete",
+  "@swipeToComplete": {
+    "description": "Hint text showing users how to complete habits"
+  },
   "usefulTip": "Useful tip",
   "@usefulTip": {"description": "Educational tip title"},
   "habitsTip": "Swipe to see actions on your habits",
@@ -1068,7 +1124,7 @@
   "spiritual_reading": "Spiritual Reading",
   "daily_walk": "Daily Walk",
   "morning_exercise": "Morning Exercise",
-  "yoga_stretching": "Yoga/Stretching",
+  "yoga_stretching": "Stretching",
   "healthy_breakfast": "Healthy Breakfast",
   "hydration_routine": "Hydration Routine",
   "running_jogging": "Running/Jogging",
@@ -1127,4 +1183,10 @@
   "@hideEmojis": {
     "description": "Hide emoji picker button text"
   }
+  "quality_time_loved_ones": "Quality Time with Loved Ones"
+,
+  "onboardingSelectAtLeastOneGoal": "Please select at least one goal",
+  "onboardingPreparingHabits": "Preparing your habits...",
+  "onboardingKeepAtLeastOneHabit": "You must keep at least one habit",
+  "onboardingCouldNotCreateHabits": "Could not create habits. Please try again."
 }

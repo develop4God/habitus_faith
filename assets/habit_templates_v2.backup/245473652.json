@@ -1,0 +1,67 @@
+{
+  "template_id": "faithBased_mature_givingUp_normal_overcomeHabits",
+  "fingerprint": "245473652",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "overcomeHabits"
+    ],
+    "challenge": "givingUp",
+    "supportLevel": "normal",
+    "spiritualMaturity": "mature"
+  },
+  "habits": [
+    {
+      "id": "sp04",
+      "nameKey": "worship_music",
+      "category": "spiritual",
+      "emoji": "🎵",
+      "target_minutes": 11,
+      "verse_key": null,
+      "notification_key": "worship_music",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 15,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp03",
+      "nameKey": "evening_prayer",
+      "category": "spiritual",
+      "emoji": "🌙",
+      "target_minutes": 7,
+      "verse_key": "psalms_4_8",
+      "notification_key": "evening_prayer",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp09",
+      "nameKey": "bible_study_group",
+      "category": "spiritual",
+      "emoji": "👥",
+      "target_minutes": 45,
+      "verse_key": "hebrews_10_25",
+      "notification_key": "bible_study_group",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp14",
+      "nameKey": "confession_repentance",
+      "category": "spiritual",
+      "emoji": "💔",
+      "target_minutes": 7,
+      "verse_key": "1_john_1_9",
+      "notification_key": "confession_repentance",
+      "time_of_day": "evening"
+    }
+  ]
+}

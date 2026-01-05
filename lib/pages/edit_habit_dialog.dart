@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
+import '../features/habits/presentation/habits_providers.dart';
 import '../core/providers/notification_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/reminder_config_dialog.dart';
 import '../widgets/recurrence_config_dialog.dart';
 import '../widgets/subtasks_section.dart';
-import 'habits_page.dart';
 
 class EditHabitDialog extends ConsumerStatefulWidget {
   final AppLocalizations l10n;
@@ -69,7 +69,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   }
 
   Future<void> _save() async {
-    await ref.read(jsonHabitsNotifierProvider.notifier).updateHabit(
+    await ref.read(habitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
           category: selectedCategory,
@@ -148,7 +148,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitCategory>(
-                value: selectedCategory,
+                initialValue: selectedCategory,
                 decoration: InputDecoration(
                   labelText: l10n.category,
                   border: OutlineInputBorder(
@@ -183,7 +183,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitDifficulty>(
-                value: selectedDifficulty,
+                initialValue: selectedDifficulty,
                 decoration: InputDecoration(
                   labelText: l10n.difficulty,
                   border: OutlineInputBorder(

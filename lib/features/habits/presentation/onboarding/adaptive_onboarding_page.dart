@@ -264,7 +264,14 @@ class _AdaptiveOnboardingPageState
             ),
           ),
         );
-    await navigator.push<String>(
+    // Remove blocking log and allow flow to continue
+    // debugPrint('Onboarding completed: user is in preparing habits state, no further actions.');
+    // Do NOT generate habits, do NOT navigate away, do NOT close dialog.
+    // The dialog will remain open indefinitely.
+    // Instead, proceed as normal
+
+    // Do not await here, let the navigation and habit generation happen
+    navigator.push<String>(
       MaterialPageRoute(
         builder: (context) => CommitmentScreen(
           userIntent: intent,
@@ -369,7 +376,8 @@ class _AdaptiveOnboardingPageState
 
       // Try to fetch template first
       final templateService = ref.read(templateMatchingServiceProvider);
-      final templateHabits = await templateService.findMatchWithScoring(profile, language);
+      final templateHabits =
+          await templateService.findMatchWithScoring(profile, language);
       List<Map<String, dynamic>> habitsData;
       debugPrint(
           '🔎 Buscando template en Firestore, cache, GitHub o Gemini...');
@@ -401,7 +409,7 @@ class _AdaptiveOnboardingPageState
           if (intent == UserIntent.wellness) {
             fallbackFile =
                 'habit_templates/templates-en/wellness_inconsistent_lackOfMotivation_physicalHealth_reduceStress.json';
-            debugPrint('🧘 Usando fallback secular (wellness)');
+            debugPrint('💪 Usando fallback secular (wellness)');
           } else if (intent == UserIntent.faithBased) {
             fallbackFile =
                 'habit_templates/templates-en/faithBased_growing_lackOfMotivation_understandBible_growInFaith.json';

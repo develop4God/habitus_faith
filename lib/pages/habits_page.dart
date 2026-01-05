@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 
 import '../features/habits/domain/habit.dart';
-import '../features/habits/domain/models/habit_notification.dart';
-import '../features/habits/data/storage/storage_providers.dart';
+import '../features/habits/presentation/habits_providers.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
@@ -245,7 +244,7 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, _) {
-        final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+        final habitsAsync = ref.watch(habitsStreamProvider);
         debugPrint('HabitsPage.build: estado de habitsAsync: $habitsAsync');
         return Scaffold(
           body: habitsAsync.when(
@@ -261,14 +260,20 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                 onComplete: (habitId) async {
                   debugPrint('HabitsPage: completando hábito $habitId');
                   await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
+                      .read(habitsNotifierProvider.notifier)
                       .completeHabit(habitId);
                 },
                 onUncheck: (habitId) async {
                   debugPrint('HabitsPage: desmarcando hábito $habitId');
                   await ref
-                      .read(jsonHabitsNotifierProvider.notifier)
+                      .read(habitsNotifierProvider.notifier)
                       .uncheckHabit(habitId);
+                },
+                onDelete: (habitId) async {
+                  debugPrint('HabitsPage: eliminando hábito $habitId');
+                  await ref
+                      .read(habitsNotifierProvider.notifier)
+                      .deleteHabit(habitId);
                 },
               );
             },

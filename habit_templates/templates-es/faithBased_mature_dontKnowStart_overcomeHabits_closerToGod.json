@@ -46,7 +46,7 @@
       "name": "Meditación profunda",
       "description": "Medita en la presencia de Dios y en su Palabra",
       "category": "spiritual",
-      "emoji": "🧘",
+      "emoji": "🧠",
       "microHabits": [
         {
           "title": "Leer Salmo 119:105 sobre la guía de Dios",
@@ -67,7 +67,7 @@
       "notifications": [
         {
           "time": "22:00",
-          "title": "Meditación nocturna 🧘",
+          "title": "Meditación nocturna 🧠",
           "body": "Termina el día en la presencia de Dios",
           "enabled": true
         }

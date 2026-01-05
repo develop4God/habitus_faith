@@ -603,6 +603,7 @@
   "advancedModeFeature2": "高级和个性化见解。",
   "advancedModeFeature3": "高级自定义",
   "changeAnytime": "您可以随时在偏好设置中更改此设置",
+  "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。",
   "selectMode": "选择模式",
   "displayMode": "显示模式",
   "displayModeUpdated": "显示模式已更新为 {mode}",
@@ -710,6 +711,62 @@
   "@introMessage": {
     "description": "在欢迎页显示的激励语。"
   },
+  "todaysVerse": "今日经文",
+  "@todaysVerse": {
+    "description": "今日圣经经文部分的标题"
+  },
+  "todaysHabits": "今日习惯",
+  "@todaysHabits": {
+    "description": "今日习惯部分的标题"
+  },
+  "allHabitsCompleted": "🎉 今天所有习惯已完成！",
+  "@allHabitsCompleted": {
+    "description": "所有习惯完成时的成功消息"
+  },
+  "dayStreak": "{count}天连续",
+  "@dayStreak": {
+    "description": "显示习惯的当前连续天数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "startJourney": "今天开始您的旅程",
+  "@startJourney": {
+    "description": "用户没有习惯时显示的消息"
+  },
+  "buildConsistency": "今天让我们建立一致性！💪",
+  "@buildConsistency": {
+    "description": "没有完成习惯时的激励消息"
+  },
+  "greatProgress": "进展很好！继续保持！🔥",
+  "@greatProgress": {
+    "description": "部分习惯完成时的激励消息"
+  },
+  "habitsRemaining": "{count, plural, =1{今天还剩1个习惯} other{今天还剩{count}个习惯}}",
+  "@habitsRemaining": {
+    "description": "显示还剩多少习惯需要完成",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "longestStreakCard": "最长\n连续",
+  "@longestStreakCard": {
+    "description": "主页上最长连续卡片的标签"
+  },
+  "weeklyConsistencyCard": "每周\n一致性",
+  "@weeklyConsistencyCard": {
+    "description": "主页上每周一致性卡片的标签"
+  },
+  "swipeToComplete": "点击或向左滑动以完成",
+  "@swipeToComplete": {
+    "description": "显示如何完成习惯的提示文本"
+  },
   "copyHabit": "您想要复制此任务吗？",
   "@copyHabit": {
     "description": "Dialog title for duplicating a habit"
@@ -753,4 +810,157 @@
   "addEmoji": "添加表情符号",
   "hideEmojis": "隐藏表情符号",
   "onboardingWelcomeMessage": "我们将根据您的偏好帮助您个性化您的首批习惯。"
+  "reminderConfig": "提醒配置",
+  "@reminderConfig": {
+    "description": "Reminder configuration dialog title"
+  },
+  "recurrenceConfig": "每日重复",
+  "@recurrenceConfig": {
+    "description": "Recurrence configuration dialog title"
+  },
+  "repeat": "重复",
+  "@repeat": {
+    "description": "Repeat toggle label"
+  },
+  "setCycleForPlan": "为您的计划设置周期",
+  "@setCycleForPlan": {
+    "description": "Subtitle for repeat toggle"
+  },
+  "subtasks": "子任务",
+  "@subtasks": {
+    "description": "Subtasks section label"
+  },
+  "addSubtask": "添加子任务",
+  "@addSubtask": {
+    "description": "Add subtask hint text"
+  },
+  "minutesBefore": "提前分钟数",
+  "@minutesBefore": {
+    "description": "Custom minutes before label"
+  },
+  "interval": "间隔",
+  "@interval": {
+    "description": "Interval label for recurrence"
+  },
+  "endDate": "结束日期",
+  "@endDate": {
+    "description": "End date label for recurrence"
+  },
+  "daily": "每天",
+  "@daily": {
+    "description": "Daily frequency option"
+  },
+  "weekly": "每周",
+  "@weekly": {
+    "description": "Weekly frequency option"
+  },
+  "monthly": "每月",
+  "@monthly": {
+    "description": "Monthly frequency option"
+  },
+  "everyXDays": "每{count}天",
+  "@everyXDays": {
+    "description": "Every X days text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXWeeks": "每{count}周",
+  "@everyXWeeks": {
+    "description": "Every X weeks text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "everyXMonths": "每{count}月",
+  "@everyXMonths": {
+    "description": "Every X months text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noRepetition": "不重复",
+  "@noRepetition": {
+    "description": "No repetition text"
+  },
+  "reminder": "提醒",
+  "@reminder": {
+    "description": "Reminder label"
+  },
+  "repetition": "重复",
+  "@repetition": {
+    "description": "Repetition label"
+  },
+  "eventTime": "事件时间（HH:MM）",
+  "@eventTime": {
+    "description": "Event time label"
+  },
+  "invalidMinutes": "请输入1到1440之间的有效数字",
+  "@invalidMinutes": {
+    "description": "Validation message for invalid custom minutes"
+  },
+  "invalidInterval": "间隔必须至少为1",
+  "@invalidInterval": {
+    "description": "Validation message for invalid interval"
+  },
+  "habitTracking": "习惯跟踪",
+  "@habitTracking": {
+    "description": "Title for habit tracking calendar page"
+  },
+  "morning_prayer": "晨祷",
+  "bible_reading": "圣经阅读",
+  "evening_prayer": "晚祷",
+  "worship_music": "敬拜音乐",
+  "gratitude_journal": "感恩日记",
+  "scripture_meditation": "经文默想",
+  "fasting": "禁食",
+  "serve_others": "服侍他人",
+  "bible_study_group": "圣经学习小组",
+  "prayer_walk": "祷告散步",
+  "scripture_memorization": "经文背诵",
+  "intercessory_prayer": "代祷",
+  "devotional_reading": "灵修阅读",
+  "confession_repentance": "认罪与悔改",
+  "praise_thanksgiving": "赞美与感恩",
+  "sabbath_rest": "安息日休息",
+  "digital_detox_prayer": "数字排毒与祷告",
+  "christian_podcast": "基督教播客",
+  "family_devotion": "家庭灵修",
+  "spiritual_reading": "属灵阅读",
+  "daily_walk": "每日散步",
+  "morning_exercise": "晨练",
+  "yoga_stretching": "伸展运动",
+  "healthy_breakfast": "健康早餐",
+  "hydration_routine": "补水习惯",
+  "running_jogging": "跑步/慢跑",
+  "strength_training": "力量训练",
+  "bike_cycling": "骑自行车",
+  "healthy_meal_prep": "健康膳食准备",
+  "swimming": "游泳",
+  "dance_movement": "舞蹈/运动",
+  "sports_recreation": "体育/娱乐",
+  "posture_breaks": "姿势休息",
+  "outdoor_nature": "户外/自然时光",
+  "evening_walk": "晚间散步",
+  "mindfulness_meditation": "正念冥想",
+  "journaling": "写日记",
+  "deep_work_focus": "深度工作/专注",
+  "reading_learning": "阅读/学习",
+  "digital_detox": "数字排毒",
+  "planning_review": "计划与回顾",
+  "breathing_exercises": "呼吸练习",
+  "creative_hobby": "创意爱好",
+  "call_friend_family": "联系朋友/家人",
+  "quality_time_loved_ones": "与亲人共度美好时光"
+,
+  "onboardingSelectAtLeastOneGoal": "请至少选择一个目标",
+  "onboardingPreparingHabits": "正在准备您的习惯...",
+  "onboardingKeepAtLeastOneHabit": "您必须至少保留一个习惯",
+  "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。"
 }

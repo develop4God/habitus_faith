@@ -1,0 +1,68 @@
+{
+  "template_id": "faithBased_growing_lackOfMotivation_normal_growInFaith_understandBible",
+  "fingerprint": "552843534",
+  "version": "2.0",
+  "generated_by": "rule_engine",
+  "profile": {
+    "intent": "faithBased",
+    "motivations": [
+      "understandBible",
+      "growInFaith"
+    ],
+    "challenge": "lackOfMotivation",
+    "supportLevel": "normal",
+    "spiritualMaturity": "growing"
+  },
+  "habits": [
+    {
+      "id": "sp09",
+      "nameKey": "bible_study_group",
+      "category": "spiritual",
+      "emoji": "👥",
+      "target_minutes": 60,
+      "verse_key": "hebrews_10_25",
+      "notification_key": "bible_study_group",
+      "time_of_day": "evening"
+    },
+    {
+      "id": "sp04",
+      "nameKey": "worship_music",
+      "category": "spiritual",
+      "emoji": "🎵",
+      "target_minutes": 15,
+      "verse_key": null,
+      "notification_key": "worship_music",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp18",
+      "nameKey": "christian_podcast",
+      "category": "spiritual",
+      "emoji": "🎧",
+      "target_minutes": 20,
+      "verse_key": null,
+      "notification_key": "christian_podcast",
+      "time_of_day": "flexible"
+    },
+    {
+      "id": "sp13",
+      "nameKey": "devotional_reading",
+      "category": "spiritual",
+      "emoji": "📚",
+      "target_minutes": 10,
+      "verse_key": null,
+      "notification_key": "devotional_reading",
+      "time_of_day": "morning"
+    },
+    {
+      "id": "sp02",
+      "nameKey": "bible_reading",
+      "category": "spiritual",
+      "emoji": "📖",
+      "target_minutes": 15,
+      "verse_key": "psalms_119_105",
+      "notification_key": "bible_reading",
+      "time_of_day": "morning"
+    }
+  ]
+}

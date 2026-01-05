@@ -46,6 +46,13 @@ class JsonHabitsRepository implements HabitsRepository {
         });
       },
     );
+    // Emisión inicial forzada
+    Future.microtask(() {
+      if (!_habitsController.isClosed) {
+        final habits = _loadHabits();
+        _habitsController.add(habits);
+      }
+    });
   }
 
   void _emitHabits() {
