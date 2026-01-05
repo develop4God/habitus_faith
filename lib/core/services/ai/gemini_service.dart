@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'package:logger/logger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../features/habits/domain/models/micro_habit.dart';
 import '../../../features/habits/domain/models/generation_request.dart';
@@ -16,8 +14,6 @@ import '../../config/ai_config.dart';
 import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
 import 'gemini_template_firestore_service.dart';
-import '../habit_template_loader.dart';
-import '../templates/template_fallback_service.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
@@ -38,7 +34,6 @@ class GeminiService implements IGeminiService {
   final ICacheService _cache;
   final IRateLimitService _rateLimit;
   final BibleDbService? _bibleService;
-  final Logger? _logger;
 
   GeminiService({
     required String apiKey,
@@ -46,34 +41,25 @@ class GeminiService implements IGeminiService {
     required ICacheService cache,
     required IRateLimitService rateLimit,
     BibleDbService? bibleService,
-    Logger? logger,
   })  : _cache = cache,
         _rateLimit = rateLimit,
         _bibleService = bibleService,
-        _logger = logger,
         _model = GenerativeModel(model: modelName, apiKey: apiKey);
 
   @override
   Future<List<MicroHabit>> generateMicroHabits(
     GenerationRequest request,
   ) async {
-    _logger?.i('Starting habit generation for goal: "${request.userGoal}"');
-
     // 1. Sanitize inputs to prevent prompt injection
     final sanitizedGoal = _sanitizeInput(request.userGoal, 'userGoal');
     final sanitizedPattern = request.failurePattern != null
         ? _sanitizeInput(request.failurePattern!, 'failurePattern')
         : null;
 
-    _logger?.d(
-      'Input sanitized - Goal length: ${sanitizedGoal.length}, Pattern: ${sanitizedPattern != null ? "provided" : "none"}',
-    );
-
     // 2. Check rate limit and wait if needed
     await _rateLimit.waitIfNeeded();
 
     if (!_rateLimit.canMakeRequest()) {
-      _logger?.w('Rate limit exceeded - remaining: 0');
       throw RateLimitExceededException(
         'Monthly limit of ${AiConfig.monthlyRequestLimit} requests reached. '
         'Limit will reset next month.',
@@ -82,18 +68,14 @@ class GeminiService implements IGeminiService {
 
     _rateLimit.recordRequest();
 
-    final remaining = _rateLimit.getRemainingRequests();
-    _logger?.i('Rate limit check passed - remaining: $remaining');
+    _rateLimit.getRemainingRequests();
 
     // 3. Check cache (7 day expiry)
     final cacheKey = request.toCacheKey();
     final cached = await _cache.get<List<MicroHabit>>(cacheKey);
     if (cached != null) {
-      _logger?.i('Cache hit for key: $cacheKey');
       return cached;
     }
-
-    _logger?.d('Cache miss - calling Gemini API');
 
     // 4. Build prompt with sanitized inputs
     final prompt = _buildPrompt(
@@ -105,16 +87,11 @@ class GeminiService implements IGeminiService {
 
     // 5. Call Gemini API with timeout
     try {
-      _logger?.d('Sending request to Gemini API...');
       final response = await _model.generateContent(
           [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
 
-      _logger?.i('Received response from Gemini API');
-
       // 6. Parse and validate JSON response
       final habits = _parseResponse(response.text, request.languageCode);
-
-      _logger?.i('Successfully parsed ${habits.length} habits');
 
       // 7. Enrich with verse text if Bible service available
       final enrichedHabits = await _enrichWithVerseText(habits);
@@ -122,18 +99,12 @@ class GeminiService implements IGeminiService {
       // 8. Cache result
       await _cache.set(cacheKey, enrichedHabits, ttl: AiConfig.cacheTtl);
 
-      _logger?.i('Habits cached successfully');
-
       return enrichedHabits;
     } on TimeoutException {
-      _logger?.e(
-        'API request timed out after ${AiConfig.requestTimeout.inSeconds}s',
-      );
       throw GeminiException(
         'Request timed out after ${AiConfig.requestTimeout.inSeconds} seconds. Please try again.',
       );
     } catch (e) {
-      _logger?.e('Error during habit generation', error: e);
       if (e is GeminiException) rethrow;
       throw GeminiException('Failed to generate habits: $e');
     }
@@ -278,25 +249,19 @@ Requisitos estrictos:
   /// Enrich habits with full verse text from Bible database
   Future<List<MicroHabit>> _enrichWithVerseText(List<MicroHabit> habits) async {
     if (_bibleService == null) {
-      _logger?.d('Bible service not available - skipping verse enrichment');
       return habits;
     }
-
-    _logger?.i('Enriching ${habits.length} habits with verse text');
 
     return Future.wait(
       habits.map((habit) async {
         try {
           final verseData = await _parseAndFetchVerse(habit.verse);
           if (verseData != null) {
-            _logger?.d('Successfully fetched verse: ${habit.verse}');
             return habit.copyWith(verseText: verseData['text'] as String?);
           } else {
-            _logger?.w('Verse not found in database: ${habit.verse}');
             return habit;
           }
         } catch (e) {
-          _logger?.w('Failed to fetch verse "${habit.verse}": $e');
           return habit; // Keep original without text
         }
       }),
@@ -312,7 +277,6 @@ Requisitos estrictos:
     final match = regex.firstMatch(verseRef);
 
     if (match == null) {
-      _logger?.w('Invalid verse format: $verseRef');
       return null;
     }
 
@@ -328,7 +292,6 @@ Requisitos estrictos:
     // Map Spanish book names to book numbers (simplified mapping)
     final bookNumber = _getBookNumber(bookName ?? '');
     if (bookNumber == null) {
-      _logger?.w('Unknown book name: $bookName');
       return null;
     }
 
@@ -527,48 +490,8 @@ Requisitos estrictos:
   Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
       OnboardingProfile profile, String userId,
       {String language = 'es', bool isOnboarding = false}) async {
-    _logger?.i(
-        'Generating habits from profile - Intent: ${profile.primaryIntent}');
-
-    // A. Buscar en assets por fingerprint exacto (template precacheado)
-    final fingerprint = profile.cacheFingerprint;
-    final template = await HabitTemplateLoader.loadTemplate(fingerprint);
-    if (template != null && HabitTemplateLoader.validateTemplate(template)) {
-      debugPrint('[Template HIT] Exact match for fingerprint: $fingerprint');
-      return HabitTemplateLoader.parseHabits(template);
-    }
-
-    // A.2 Buscar template similar usando scoring engine (threshold ≥0.75)
-    debugPrint('[Template MISS] Exact fingerprint not found: $fingerprint');
-    debugPrint('[Template FALLBACK] Searching for similar templates...');
-    final similarTemplate = await TemplateFallbackService.findSimilarTemplate(
-      profile,
-      threshold: 0.75,
-    );
-    if (similarTemplate != null &&
-        HabitTemplateLoader.validateTemplate(similarTemplate)) {
-      debugPrint(
-          '[Template HIT] Similar template found (score ≥0.75) for profile');
-      return HabitTemplateLoader.parseHabits(similarTemplate);
-    }
-
-    // B. Buscar en cache por fingerprint exacto
-    final cached =
-        await _cache.get<List<Map<String, dynamic>>>('profile_$fingerprint');
-    if (cached != null) {
-      debugPrint('[Cache HIT] Exact match for fingerprint: $fingerprint');
-      return cached;
-    }
-
-    // B. Buscar perfiles similares (similarity >85%)
-    final similarProfile = await _findSimilarCachedProfile(profile);
-    if (similarProfile != null) {
-      debugPrint('[Cache HIT] Similar profile match (85%+ similarity)');
-      return similarProfile;
-    }
-
-    // C. Cache MISS - llamar a Gemini
-    debugPrint('[Cache MISS] Calling Gemini API');
+    // Solo flujo moderno: descarga remota y Gemini
+    // Eliminar referencias a fingerprint, Logger, plantillas locales
 
     // Check rate limit
     await _rateLimit.waitIfNeeded();
@@ -581,27 +504,17 @@ Requisitos estrictos:
 
     // Build intent-aware prompt
     final prompt = _buildProfilePrompt(profile);
-    final promptTokens = (prompt.length / 4).ceil();
-    debugPrint(
-        '[IA] userId: $userId | Prompt tokens estimados: $promptTokens | Prompt length: ${prompt.length} | Onboarding: $isOnboarding');
+    (prompt.length / 4).ceil();
 
     try {
-      _logger?.d('Sending profile-based request to Gemini API...');
       final response = await _model.generateContent(
           [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
 
       final responseText = response.text ?? '';
-      final responseTokens = (responseText.length / 4).ceil();
-      debugPrint(
-          '[IA] userId: $userId | Response tokens estimados: $responseTokens | Response length: ${responseText.length} | Onboarding: $isOnboarding');
-
-      _logger?.i('Received response from Gemini API');
+      (responseText.length / 4).ceil();
 
       // Parse and return habit data
       final habits = _parseHabitsResponse(response.text, profile, userId);
-      _logger?.i('Successfully parsed ${habits.length} habits from profile');
-      debugPrint(
-          '[IA] userId: $userId | Hábitos generados: ${habits.length} | Tokens totales estimados: ${promptTokens + responseTokens} | Onboarding: $isOnboarding');
 
       // D. Guardar con metadata del perfil para similarity matching
       // Serializar correctamente el campo 'category' como String
@@ -621,15 +534,14 @@ Requisitos estrictos:
         'isOnboarding': isOnboarding,
       };
       final prefs = await SharedPreferences.getInstance();
-      final cachedKey = 'profile_$fingerprint';
+      final cachedKey = 'profile_${profile.primaryIntent}_${profile.completedAt.toIso8601String()}';
       await prefs.setString(cachedKey, jsonEncode(cacheData));
-      debugPrint('[Cache SAVE] Saved profile with fingerprint: $fingerprint');
 
       // Después de parsear los hábitos generados por Gemini:
       final firestoreService =
           GeminiTemplateFirestoreService(FirebaseFirestore.instance);
       await firestoreService.saveGeminiTemplate(
-        fingerprint: fingerprint,
+        fingerprint: '${profile.primaryIntent}_${profile.completedAt.toIso8601String()}',
         profile: profile.toJson(),
         habits: habitsForCache,
         language: language,
@@ -638,8 +550,6 @@ Requisitos estrictos:
 
       return habits;
     } on TimeoutException {
-      _logger?.e(
-          'API request timed out after ${AiConfig.requestTimeout.inSeconds}s');
       throw GeminiException(
         'Request timed out. Please try again.',
       );
@@ -649,9 +559,6 @@ Requisitos estrictos:
       // Check for model not found errors
       if (errorMessage.contains('not found') ||
           errorMessage.contains('not supported')) {
-        _logger?.e('Gemini model configuration error. '
-            'Model may not be available or API version mismatch. '
-            'Error: $errorMessage');
         throw GeminiException(
             'AI model configuration error. Please check app settings. '
             'Try updating the app or contact support.');
@@ -660,38 +567,15 @@ Requisitos estrictos:
       // Check for API key issues
       if (errorMessage.contains('API_KEY') ||
           errorMessage.contains('INVALID_ARGUMENT')) {
-        _logger?.e('Gemini API key error: $errorMessage');
         throw GeminiException(
             'AI service authentication failed. Please check configuration.');
       }
 
-      _logger?.e('Error during profile-based habit generation', error: e);
       if (e is GeminiException) rethrow;
       throw GeminiException('Failed to generate habits: $e');
     }
   }
 
-  Future<List<Map<String, dynamic>>?> _findSimilarCachedProfile(
-    OnboardingProfile profile,
-  ) async {
-    // Buscar en SharedPreferences todos los perfiles cacheados
-    final prefs = await SharedPreferences.getInstance();
-    final keys = prefs.getKeys().where((k) => k.startsWith('profile_'));
-    for (final key in keys) {
-      try {
-        final cachedData = prefs.getString(key);
-        if (cachedData == null) continue;
-        final data = jsonDecode(cachedData);
-        final cachedProfile = OnboardingProfile.fromJson(data['profile']);
-        if (profile.similarityTo(cachedProfile) >= 0.85) {
-          return (data['habits'] as List).cast<Map<String, dynamic>>();
-        }
-      } catch (e) {
-        // Skip invalid cache entries
-      }
-    }
-    return null;
-  }
 
   /// Build prompt based on user intent
   String _buildProfilePrompt(OnboardingProfile profile) {
