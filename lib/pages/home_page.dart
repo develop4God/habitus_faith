@@ -83,10 +83,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           normalizedToday.difference(habitStart).inDays + 1;
       final daysInWindow = daysSinceCreation.clamp(0, 7);
 
-      final relevantCompletions = habit.completionHistory
-          .where((date) =>
-              date.isAfter(sevenDaysAgo) && date.isBefore(tomorrowStart))
-          .length;
+      final relevantCompletions = habit.completionHistory.where((date) {
+        // Normalize completion date to midnight for DST-safe comparison
+        final normalizedDate = DateTime(date.year, date.month, date.day);
+        return !normalizedDate.isBefore(sevenDaysAgo) &&
+            normalizedDate.isBefore(tomorrowStart);
+      }).length;
       actualCompletions += relevantCompletions;
       totalPossibleCompletions += daysInWindow;
     }
