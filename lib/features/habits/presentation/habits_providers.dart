@@ -1,23 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
-import '../../../core/providers/auth_provider.dart';
-import '../../../core/providers/firestore_provider.dart';
 import '../domain/habit.dart';
-import '../domain/habits_repository.dart';
-import '../data/firestore_habits_repository.dart';
+import '../data/storage/storage_providers.dart';
 
 /// Repository provider with injectable ID generator
-final habitsRepositoryProvider = Provider<HabitsRepository>((ref) {
-  final firestore = ref.watch(firestoreProvider);
-  final userId = ref.watch(userIdProvider);
-
-  return FirestoreHabitsRepository(
-    firestore: firestore,
-    userId: userId,
-    idGenerator: () => const Uuid().v4(),
-  );
-});
+final habitsRepositoryProvider = jsonHabitsRepositoryProvider;
 
 /// Stream provider for reading habits
 final habitsStreamProvider = StreamProvider<List<Habit>>((ref) {
