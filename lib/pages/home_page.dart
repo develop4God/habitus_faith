@@ -11,6 +11,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../core/models/devocional_model.dart';
+import '../utils/date_format_utils.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -32,6 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final today = DateTime.now();
+    final formattedDate = formatDevotionalDate(today, context);
 
     // Devocional de hoy
     final devotionalState = ref.watch(devotionalProvider);
@@ -105,24 +107,72 @@ class _HomePageState extends ConsumerState<HomePage> {
     final List<Widget> pages = [
       // UX-optimized home: Progress → Habits → Streaks → Inspiration
       Scaffold(
-        appBar: AppBar(
-          title: Text(
-            l10n.appTitle,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.deepOrange.shade700,
-          elevation: 0,
-        ),
         backgroundColor: Colors.grey.shade50,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const SizedBox(height: 32),
+
+              // Modern hero section with sun icon, intro message, and date
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.deepOrange.shade400,
+                      Colors.orange.shade300,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.deepOrange.shade200.withAlpha(128),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.wb_sunny_outlined,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            l10n.introMessage,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               const SizedBox(height: 20),
 
               // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
