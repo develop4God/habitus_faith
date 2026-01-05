@@ -84,174 +84,171 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 400),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 400,
-                  maxHeight: MediaQuery.of(context).size.height * 0.8,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Header
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  l10n.addNoteDialog,
-                                  style: theme.textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  widget.habitName,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onPrimaryContainer
-                                        .withAlpha(179),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              widget.onCancel?.call();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 400,
+          maxHeight: MediaQuery.of(context).size.height * 0.8,
+        ),
+        child: Scrollbar(
+          thumbVisibility: true,
+          interactive: true,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-
-                    // Note input
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextField(
-                            controller: _noteController,
-                            maxLines: 4,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              hintText: l10n.noteHint,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              filled: true,
-                              fillColor: theme.colorScheme.surface,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-
-                          // Emoji toggle button
-                          OutlinedButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _showEmojiPicker = !_showEmojiPicker;
-                              });
-                            },
-                            icon: Icon(_showEmojiPicker ? Icons.close : Icons.emoji_emotions),
-                            label: Text(_showEmojiPicker ? l10n.hideEmojis : l10n.addEmoji),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.addNoteDialog,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-
-                          // Emoji picker
-                          if (_showEmojiPicker) ...[
-                            const SizedBox(height: 12),
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.surfaceContainerHighest.withAlpha(77),
-                                borderRadius: BorderRadius.circular(12),
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.habitName,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onPrimaryContainer
+                                    .withAlpha(179),
                               ),
-                              child: Wrap(
-                                alignment: WrapAlignment.center,
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: _emojis.map((emoji) {
-                                  return InkWell(
-                                    onTap: () => _insertEmoji(emoji),
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Container(
-                                      width: 44,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: theme.colorScheme.surface,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          emoji,
-                                          style: const TextStyle(fontSize: 24),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
-                        ],
+                        ),
                       ),
-                    ),
-
-                    // Actions
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Share button
-                          OutlinedButton.icon(
-                            onPressed: _shareNote,
-                            icon: const Icon(Icons.share, size: 18),
-                            label: Text(l10n.shareNote),
-                          ),
-
-                          // Save button
-                          FilledButton.icon(
-                            onPressed: () {
-                              final note = _noteController.text.trim();
-                              widget.onSave?.call(note);
-                              Navigator.of(context).pop(note);
-                            },
-                            icon: const Icon(Icons.check, size: 18),
-                            label: Text(l10n.add),
-                          ),
-                        ],
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          widget.onCancel?.call();
+                          Navigator.of(context).pop();
+                        },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+
+                // Note input
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextField(
+                        controller: _noteController,
+                        maxLines: 4,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: l10n.noteHint,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: theme.colorScheme.surface,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Emoji toggle button
+                      OutlinedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _showEmojiPicker = !_showEmojiPicker;
+                          });
+                        },
+                        icon: Icon(_showEmojiPicker ? Icons.close : Icons.emoji_emotions),
+                        label: Text(_showEmojiPicker ? l10n.hideEmojis : l10n.addEmoji),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+
+                      // Emoji picker
+                      if (_showEmojiPicker) ...[
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surfaceContainerHighest.withAlpha(77),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: _emojis.map((emoji) {
+                              return InkWell(
+                                onTap: () => _insertEmoji(emoji),
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  width: 44,
+                                  height: 44,
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      emoji,
+                                      style: const TextStyle(fontSize: 24),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+
+                // Actions
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Share button
+                      OutlinedButton.icon(
+                        onPressed: _shareNote,
+                        icon: const Icon(Icons.share, size: 18),
+                        label: Text(l10n.shareNote),
+                      ),
+
+                      // Save button
+                      FilledButton.icon(
+                        onPressed: () {
+                          final note = _noteController.text.trim();
+                          widget.onSave?.call(note);
+                          Navigator.of(context).pop(note);
+                        },
+                        icon: const Icon(Icons.check, size: 18),
+                        label: Text(l10n.add),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
