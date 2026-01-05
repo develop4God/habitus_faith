@@ -1808,6 +1808,60 @@ abstract class AppLocalizations {
   /// **'Quality Time with Loved Ones'**
   String get quality_time_loved_ones;
 
+  /// Add note button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Note'**
+  String get addNote;
+
+  /// Placeholder text for note input field
+  ///
+  /// In en, this message translates to:
+  /// **'How did it go? Share your thoughts...'**
+  String get noteHint;
+
+  /// View note button text
+  ///
+  /// In en, this message translates to:
+  /// **'View Note'**
+  String get viewNote;
+
+  /// Share note button text
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareNote;
+
+  /// Note added confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Note added'**
+  String get noteAdded;
+
+  /// Add note dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Note'**
+  String get addNoteDialog;
+
+  /// Complete habit with note button text
+  ///
+  /// In en, this message translates to:
+  /// **'Complete & Add Note'**
+  String get completeWithNote;
+
+  /// Add emoji button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Emoji'**
+  String get addEmoji;
+
+  /// Hide emoji picker button text
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Emojis'**
+  String get hideEmojis;
+
   /// No description provided for @onboardingSelectAtLeastOneGoal.
   ///
   /// In en, this message translates to:

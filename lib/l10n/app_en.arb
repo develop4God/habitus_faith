@@ -914,7 +914,10 @@
   "@copyHabitConfirm": {
     "description": "Confirmation message for duplicating a habit",
     "placeholders": {
-      "habitName": {"type": "String", "example": "Morning Prayer"}
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
     }
   },
   "introMessage": "The greatest changes begin with consistency...",
@@ -978,11 +981,17 @@
     "description": "Hint text showing users how to complete habits"
   },
   "usefulTip": "Useful tip",
-  "@usefulTip": {"description": "Educational tip title"},
+  "@usefulTip": {
+    "description": "Educational tip title"
+  },
   "habitsTip": "Swipe to see actions on your habits",
-  "@habitsTip": {"description": "Educational tip description"},
+  "@habitsTip": {
+    "description": "Educational tip description"
+  },
   "understood": "Understood",
-  "@understood": {"description": "Button to close the educational tip"},
+  "@understood": {
+    "description": "Button to close the educational tip"
+  },
   "bible": "Bible",
   "@bible": {
     "description": "Bible title for AppBar"
@@ -1146,8 +1155,43 @@
   "breathing_exercises": "Breathing Exercises",
   "creative_hobby": "Creative Hobby",
   "call_friend_family": "Call Friend/Family",
-  "quality_time_loved_ones": "Quality Time with Loved Ones"
-,
+  "quality_time_loved_ones": "Quality Time with Loved Ones",
+  "addNote": "Add Note",
+  "@addNote": {
+    "description": "Add note button text"
+  },
+  "noteHint": "How did it go? Share your thoughts...",
+  "@noteHint": {
+    "description": "Placeholder text for note input field"
+  },
+  "viewNote": "View Note",
+  "@viewNote": {
+    "description": "View note button text"
+  },
+  "shareNote": "Share",
+  "@shareNote": {
+    "description": "Share note button text"
+  },
+  "noteAdded": "Note added",
+  "@noteAdded": {
+    "description": "Note added confirmation message"
+  },
+  "addNoteDialog": "Add a Note",
+  "@addNoteDialog": {
+    "description": "Add note dialog title"
+  },
+  "completeWithNote": "Complete & Add Note",
+  "@completeWithNote": {
+    "description": "Complete habit with note button text"
+  },
+  "addEmoji": "Add Emoji",
+  "@addEmoji": {
+    "description": "Add emoji button text"
+  },
+  "hideEmojis": "Hide Emojis",
+  "@hideEmojis": {
+    "description": "Hide emoji picker button text"
+  },
   "onboardingSelectAtLeastOneGoal": "Please select at least one goal",
   "onboardingPreparingHabits": "Preparing your habits...",
   "onboardingKeepAtLeastOneHabit": "You must keep at least one habit",

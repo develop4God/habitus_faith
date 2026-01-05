@@ -62,8 +62,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeToHabitusFaith => 'Bienvenue à Habitus Foi';
 
   @override
-  String get onboardingWelcomeMessage =>
-      'Nous vous aiderons à personnaliser vos premières routines selon vos préférences.';
+  String get onboardingWelcomeMessage => 'FR: Welcome message';
 
   @override
   String get selectUpToThreeHabits =>
@@ -964,6 +963,33 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get quality_time_loved_ones => 'Temps de Qualité avec les Proches';
+
+  @override
+  String get addNote => 'Ajouter une Note';
+
+  @override
+  String get noteHint => 'Comment ça s\'est passé ? Partagez vos pensées...';
+
+  @override
+  String get viewNote => 'Voir la Note';
+
+  @override
+  String get shareNote => 'Partager';
+
+  @override
+  String get noteAdded => 'Note ajoutée';
+
+  @override
+  String get addNoteDialog => 'Ajouter une Note';
+
+  @override
+  String get completeWithNote => 'Compléter et Ajouter une Note';
+
+  @override
+  String get addEmoji => 'Ajouter Emoji';
+
+  @override
+  String get hideEmojis => 'Masquer les Emojis';
 
   @override
   String get onboardingSelectAtLeastOneGoal =>

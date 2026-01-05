@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habit_modal_sheet.dart';
 import '../../../domain/habit.dart';
 import '../../../domain/models/habit_notification.dart';
+import '../../../data/storage/storage_providers.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
+import '../../../../../widgets/add_note_dialog.dart';
+import '../../../../../pages/habits_page.dart';
 
 /// Compact habit card with tap-to-expand details
 /// Shows only essential info: name, emoji, streak, completion button
@@ -77,6 +80,32 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         setState(() {
           _isCompleting = false;
         });
+      }
+    }
+  }
+
+  Future<void> _handleAddNote() async {
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
+    
+    final note = await showAddNoteDialog(
+      context: context,
+      habitName: widget.habit.name,
+      existingNote: existingRecord?.notes,
+    );
+
+    if (note != null && mounted) {
+      final notifier = ref.read(jsonHabitsNotifierProvider.notifier);
+      if (!widget.habit.completedToday) {
+        // Complete the habit with the note
+        await notifier.completeHabitWithNote(widget.habit.id, note);
+      } else {
+        // Update existing completion record's note
+        final result = await repository.updateHabitNote(widget.habit.id, note);
+        result.fold(
+          (failure) => debugPrint('Failed to update note: $failure'),
+          (_) => debugPrint('Note updated successfully'),
+        );
       }
     }
   }
@@ -649,6 +678,13 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               ],
             ),
           ],
+          // Add note button - shown when habit is completed
+          if (widget.habit.completedToday) ...[
+            const SizedBox(height: 16),
+            Center(
+              child: _buildNoteButton(habitColor, setModalState),
+            ),
+          ],
           // Action buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -729,5 +765,36 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
       case RecurrenceFrequency.monthly:
         return 'mes';
     }
+  }
+
+  Widget _buildNoteButton(Color habitColor, StateSetter setModalState) {
+    final l10n = AppLocalizations.of(context)!;
+    final repository = ref.read(jsonHabitsRepositoryProvider);
+    final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
+    final hasNote = existingRecord?.notes?.isNotEmpty ?? false;
+
+    return ElevatedButton.icon(
+      onPressed: () async {
+        Navigator.of(context).pop(); // Close modal first
+        await _handleAddNote();
+      },
+      icon: Icon(
+        hasNote ? Icons.edit_note : Icons.note_add,
+        size: 20,
+      ),
+      label: Text(
+        hasNote ? l10n.viewNote : l10n.addNote,
+        style: const TextStyle(fontSize: 16),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: habitColor.withAlpha(40),
+        foregroundColor: habitColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+        elevation: 1,
+      ),
+    );
   }
 }

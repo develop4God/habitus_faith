@@ -775,15 +775,24 @@
   "@copyHabitConfirm": {
     "description": "Confirmation message for duplicating a habit",
     "placeholders": {
-      "habitName": {"type": "String", "example": "晨祷"}
+      "habitName": {
+        "type": "String",
+        "example": "晨祷"
+      }
     }
   },
   "usefulTip": "实用提示",
-  "@usefulTip": {"description": "教育提示标题"},
+  "@usefulTip": {
+    "description": "教育提示标题"
+  },
   "habitsTip": "滑动以查看您的习惯操作",
-  "@habitsTip": {"description": "教育提示描述"},
+  "@habitsTip": {
+    "description": "教育提示描述"
+  },
   "understood": "明白了",
-  "@understood": {"description": "关闭教育提示的按钮"},
+  "@understood": {
+    "description": "关闭教育提示的按钮"
+  },
   "bible": "圣经",
   "@bible": {
     "description": "圣经页面的标题"
@@ -800,6 +809,15 @@
   "@today": {
     "description": "用于在习惯视图中显示当天的标签"
   },
+  "addNote": "添加笔记",
+  "noteHint": "进展如何？分享您的想法...",
+  "viewNote": "查看笔记",
+  "shareNote": "分享",
+  "noteAdded": "笔记已添加",
+  "addNoteDialog": "添加笔记",
+  "completeWithNote": "完成并添加笔记",
+  "addEmoji": "添加表情符号",
+  "hideEmojis": "隐藏表情符号",
   "reminderConfig": "提醒配置",
   "@reminderConfig": {
     "description": "Reminder configuration dialog title"
@@ -947,10 +965,235 @@
   "breathing_exercises": "呼吸练习",
   "creative_hobby": "创意爱好",
   "call_friend_family": "联系朋友/家人",
-  "quality_time_loved_ones": "与亲人共度美好时光"
-,
+  "quality_time_loved_ones": "与亲人共度美好时光",
   "onboardingSelectAtLeastOneGoal": "请至少选择一个目标",
   "onboardingPreparingHabits": "正在准备您的习惯...",
   "onboardingKeepAtLeastOneHabit": "您必须至少保留一个习惯",
-  "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。"
+  "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。",
+  "@onboardingWelcomeMessage": {
+    "description": "PENDING"
+  },
+  "@chooseYourExperience": {
+    "description": "PENDING"
+  },
+  "@displayModeDescription": {
+    "description": "PENDING"
+  },
+  "@compactMode": {
+    "description": "PENDING"
+  },
+  "@compactModeDescription": {
+    "description": "PENDING"
+  },
+  "@compactModeFeature1": {
+    "description": "PENDING"
+  },
+  "@compactModeFeature2": {
+    "description": "PENDING"
+  },
+  "@compactModeFeature3": {
+    "description": "PENDING"
+  },
+  "@advancedMode": {
+    "description": "PENDING"
+  },
+  "@advancedModeDescription": {
+    "description": "PENDING"
+  },
+  "@advancedModeFeature1": {
+    "description": "PENDING"
+  },
+  "@advancedModeFeature2": {
+    "description": "PENDING"
+  },
+  "@advancedModeFeature3": {
+    "description": "PENDING"
+  },
+  "@changeAnytime": {
+    "description": "PENDING"
+  },
+  "@selectMode": {
+    "description": "PENDING"
+  },
+  "@displayMode": {
+    "description": "PENDING"
+  },
+  "@displayModeUpdated": {
+    "description": "PENDING",
+    "placeholders": {
+      "mode": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@compactModeSubtitle": {
+    "description": "PENDING"
+  },
+  "@advancedModeSubtitle": {
+    "description": "PENDING"
+  },
+  "@mlPredictionFailed": {
+    "description": "PENDING"
+  },
+  "@mlModelNotLoaded": {
+    "description": "PENDING"
+  },
+  "@mlInsufficientData": {
+    "description": "PENDING",
+    "placeholders": {
+      "days": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@backgroundSyncFailed": {
+    "description": "PENDING",
+    "placeholders": {
+      "reason": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@backgroundSyncNetwork": {
+    "description": "PENDING"
+  },
+  "@backgroundSyncPermission": {
+    "description": "PENDING"
+  },
+  "@workmanagerActive": {
+    "description": "PENDING"
+  },
+  "@workmanagerRestricted": {
+    "description": "PENDING"
+  },
+  "@workmanagerDisabled": {
+    "description": "PENDING"
+  },
+  "@patternWeekend": {
+    "description": "PENDING"
+  },
+  "@patternEvening": {
+    "description": "PENDING"
+  },
+  "@optimalTimeFound": {
+    "description": "PENDING",
+    "placeholders": {
+      "time": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@networkTimeout": {
+    "description": "PENDING"
+  },
+  "@firebasePermissionDenied": {
+    "description": "PENDING"
+  },
+  "@errorUnknown": {
+    "description": "PENDING"
+  },
+  "@devBannerTitle": {
+    "description": "PENDING"
+  },
+  "@devBannerLastSync": {
+    "description": "PENDING",
+    "placeholders": {
+      "time": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@devBannerMlStatus": {
+    "description": "PENDING",
+    "placeholders": {
+      "status": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@devBannerWorkmanager": {
+    "description": "PENDING",
+    "placeholders": {
+      "status": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@devBannerFastTime": {
+    "description": "PENDING",
+    "placeholders": {
+      "multiplier": {
+        "type": "PENDING",
+        "example": "PENDING"
+      },
+      "date": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@riskLevelLow": {
+    "description": "PENDING"
+  },
+  "@riskLevelMedium": {
+    "description": "PENDING"
+  },
+  "@riskLevelHigh": {
+    "description": "PENDING"
+  },
+  "@predictorRunning": {
+    "description": "PENDING"
+  },
+  "@predictorComplete": {
+    "description": "PENDING"
+  },
+  "@syncInProgress": {
+    "description": "PENDING"
+  },
+  "@syncComplete": {
+    "description": "PENDING"
+  },
+  "@mlModelLoaded": {
+    "description": "PENDING"
+  },
+  "@mlModelLoading": {
+    "description": "PENDING"
+  },
+  "@mlModelError": {
+    "description": "PENDING"
+  },
+  "@addNote": {
+    "description": "PENDING"
+  },
+  "@noteHint": {
+    "description": "PENDING"
+  },
+  "@viewNote": {
+    "description": "PENDING"
+  },
+  "@shareNote": {
+    "description": "PENDING"
+  },
+  "@noteAdded": {
+    "description": "PENDING"
+  },
+  "@addNoteDialog": {
+    "description": "PENDING"
+  },
+  "@completeWithNote": {
+    "description": "PENDING"
+  },
+  "@addEmoji": {
+    "description": "PENDING"
+  },
+  "@hideEmojis": {
+    "description": "PENDING"
+  }
 }

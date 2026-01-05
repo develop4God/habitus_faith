@@ -918,6 +918,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get quality_time_loved_ones => '与亲人共度美好时光';
 
   @override
+  String get addNote => '添加笔记';
+
+  @override
+  String get noteHint => '进展如何？分享您的想法...';
+
+  @override
+  String get viewNote => '查看笔记';
+
+  @override
+  String get shareNote => '分享';
+
+  @override
+  String get noteAdded => '笔记已添加';
+
+  @override
+  String get addNoteDialog => '添加笔记';
+
+  @override
+  String get completeWithNote => '完成并添加笔记';
+
+  @override
+  String get addEmoji => '添加表情符号';
+
+  @override
+  String get hideEmojis => '隐藏表情符号';
+
+  @override
   String get onboardingSelectAtLeastOneGoal => '请至少选择一个目标';
 
   @override

@@ -70,7 +70,6 @@ Future<IGeminiService> geminiService(Ref ref) async {
     modelName: EnvConfig.geminiModel,
     cache: ref.watch(cacheServiceProvider),
     rateLimit: ref.watch(rateLimitServiceProvider),
-    logger: ref.watch(loggerProvider),
     bibleService: bibleService, // NOW ACTIVE!
   );
 }

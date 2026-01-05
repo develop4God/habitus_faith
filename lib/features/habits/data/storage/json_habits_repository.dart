@@ -287,44 +287,53 @@ class JsonHabitsRepository implements HabitsRepository {
 
   @override
   Future<Result<Habit, HabitFailure>> completeHabit(String habitId) async {
-    debugPrint('completeHabit: inicio para habitId=$habitId');
+    return completeHabitWithNote(habitId, null);
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> completeHabitWithNote(
+    String habitId,
+    String? note,
+  ) async {
+    debugPrint('completeHabitWithNote: inicio para habitId=$habitId, note=$note');
     try {
       final habits = _loadHabits();
-      debugPrint('completeHabit: hábitos cargados: ${habits.length}');
+      debugPrint('completeHabitWithNote: hábitos cargados: ${habits.length}');
       final index = habits.indexWhere((h) => h.id == habitId);
-      debugPrint('completeHabit: índice encontrado: $index');
+      debugPrint('completeHabitWithNote: índice encontrado: $index');
       if (index == -1) {
-        debugPrint('completeHabit: hábito no encontrado "$habitId"');
+        debugPrint('completeHabitWithNote: hábito no encontrado "$habitId"');
         return Failure(HabitFailure.notFound('Habit not found: $habitId'));
       }
       final now = DateTime.now();
       final habit = habits[index];
       debugPrint(
-          'completeHabit: estado completedToday antes: ${habit.completedToday}');
+          'completeHabitWithNote: estado completedToday antes: ${habit.completedToday}');
       if (habit.completedToday) {
-        debugPrint('completeHabit: hábito "$habitId" ya completado hoy');
+        debugPrint('completeHabitWithNote: hábito "$habitId" ya completado hoy');
         return Success(habit);
       }
       final completionRecord = CompletionRecord(
         habitId: habitId,
         completedAt: now,
+        notes: note,
       );
       await _saveCompletionRecord(completionRecord);
-      debugPrint('completeHabit: registro de completado guardado');
+      debugPrint('completeHabitWithNote: registro de completado guardado');
       final updatedHabit = _loadHabitWithCompletions(habit);
       debugPrint(
-          'completeHabit: estado completedToday después: ${updatedHabit.completedToday}');
+          'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}');
       habits[index] = updatedHabit;
-      debugPrint('completeHabit: hábito actualizado en la lista');
+      debugPrint('completeHabitWithNote: hábito actualizado en la lista');
       await _saveHabits(habits);
-      debugPrint('completeHabit: hábitos guardados');
+      debugPrint('completeHabitWithNote: hábitos guardados');
       await _updateStatistics();
-      debugPrint('completeHabit: estadísticas actualizadas');
+      debugPrint('completeHabitWithNote: estadísticas actualizadas');
       debugPrint(
-          'Happy path: completeHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
+          'Happy path: completeHabitWithNote retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
-      debugPrint('completeHabit: error: $e');
+      debugPrint('completeHabitWithNote: error: $e');
       return Failure(HabitFailure.persistence('Failed to complete habit: $e'));
     }
   }
@@ -339,6 +348,56 @@ class JsonHabitsRepository implements HabitsRepository {
       'JsonHabitsRepository._saveCompletionRecord: Saved completion for habit "${record.habitId}" on "${record.dateKey}"',
     );
     await _storage.saveJson(_completionsKey, completionsData);
+  }
+
+  @override
+  Future<Result<void, HabitFailure>> updateHabitNote(
+    String habitId,
+    String? note,
+  ) async {
+    debugPrint('updateHabitNote: inicio para habitId=$habitId, note=$note');
+    try {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final todayKey =
+          '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+
+      final completionsData = _storage.getJson(_completionsKey) ?? {};
+      final habitCompletions =
+          completionsData[habitId] as Map<String, dynamic>? ?? {};
+
+      if (!habitCompletions.containsKey(todayKey)) {
+        debugPrint('updateHabitNote: no completion found for today');
+        return Failure(HabitFailure.notFound('No completion found for today'));
+      }
+
+      final existingRecord = CompletionRecord.fromJson(
+        habitCompletions[todayKey] as Map<String, dynamic>,
+      );
+
+      final updatedRecord = CompletionRecord(
+        habitId: existingRecord.habitId,
+        completedAt: existingRecord.completedAt,
+        notes: note,
+        hourOfDay: existingRecord.hourOfDay,
+        dayOfWeek: existingRecord.dayOfWeek,
+        streakAtTime: existingRecord.streakAtTime,
+        failuresLast7Days: existingRecord.failuresLast7Days,
+        hoursFromReminder: existingRecord.hoursFromReminder,
+        completed: existingRecord.completed,
+      );
+
+      habitCompletions[todayKey] = updatedRecord.toJson();
+      completionsData[habitId] = habitCompletions;
+      await _storage.saveJson(_completionsKey, completionsData);
+
+      debugPrint('updateHabitNote: note updated successfully');
+      _emitHabits(); // Emit to trigger UI update
+      return const Success(null);
+    } catch (e) {
+      debugPrint('updateHabitNote: error: $e');
+      return Failure(HabitFailure.persistence('Failed to update note: $e'));
+    }
   }
 
   /// Record completion/abandonment data to Firestore for ML training
@@ -515,5 +574,31 @@ class JsonHabitsRepository implements HabitsRepository {
   void dispose() {
     _habitsController.close();
     debugPrint('JsonHabitsRepository.dispose: habitsController closed');
+  }
+
+  @override
+  CompletionRecord? getTodayCompletionRecord(String habitId) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final todayKey =
+        '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+
+    final completionsData = _storage.getJson(_completionsKey) ?? {};
+    final habitCompletions = completionsData[habitId] as Map<String, dynamic>?;
+
+    if (habitCompletions == null || !habitCompletions.containsKey(todayKey)) {
+      return null;
+    }
+
+    try {
+      return CompletionRecord.fromJson(
+        habitCompletions[todayKey] as Map<String, dynamic>,
+      );
+    } catch (e) {
+      debugPrint(
+        'JsonHabitsRepository.getTodayCompletionRecord: Error parsing today\'s completion: $e',
+      );
+      return null;
+    }
   }
 }

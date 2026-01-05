@@ -959,6 +959,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get quality_time_loved_ones => 'Tiempo de Calidad con Seres Queridos';
 
   @override
+  String get addNote => 'Agregar Nota';
+
+  @override
+  String get noteHint => '¿Cómo te fue? Comparte tus pensamientos...';
+
+  @override
+  String get viewNote => 'Ver Nota';
+
+  @override
+  String get shareNote => 'Compartir';
+
+  @override
+  String get noteAdded => 'Nota agregada';
+
+  @override
+  String get addNoteDialog => 'Agregar una Nota';
+
+  @override
+  String get completeWithNote => 'Completar y Agregar Nota';
+
+  @override
+  String get addEmoji => 'Agregar Emoji';
+
+  @override
+  String get hideEmojis => 'Ocultar Emojis';
+
+  @override
   String get onboardingSelectAtLeastOneGoal =>
       'Por favor selecciona al menos un objetivo';
 

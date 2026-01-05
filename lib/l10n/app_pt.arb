@@ -603,7 +603,7 @@
   "advancedModeFeature2": "Insights avançados e personalizados.",
   "advancedModeFeature3": "Personalização avançada",
   "changeAnytime": "Você pode alterar esta configuração a qualquer momento nas preferências",
-  "onboardingWelcomeMessage": "Vamos ajudá-lo a personalizar suas primeiras rotinas de acordo com suas preferências.",
+  "onboardingWelcomeMessage": "PT: Welcome message",
   "selectMode": "Selecionar modo",
   "displayMode": "Modo de exibição",
   "displayModeUpdated": "Modo de exibição atualizado para {mode}",
@@ -810,54 +810,72 @@
     "description": "Rótulo para mostrar o dia atual na visualização de hábitos"
   },
   "reminderConfig": "Configuração de Lembrete",
+  "recurrenceConfig": "Repetições Diárias",
+  "repeat": "Repetir",
+  "setCycleForPlan": "Definir um ciclo para seu plano",
+  "subtasks": "Subtarefas",
+  "addSubtask": "Adicionar subtarefa",
+  "minutesBefore": "Minutos antes",
+  "interval": "Intervalo",
+  "endDate": "Data de término",
+  "daily": "Diário",
+  "weekly": "Semanal",
+  "monthly": "Mensal",
+  "everyXDays": "A cada {count} dia(s)",
+  "everyXWeeks": "A cada {count} semana(s)",
+  "everyXMonths": "A cada {count} mês(es)",
+  "noRepetition": "Sem repetição",
+  "reminder": "Lembrete",
+  "repetition": "Repetição",
+  "eventTime": "Hora do evento (HH:MM)",
+  "invalidMinutes": "Por favor, insira um número válido entre 1 e 1440",
+  "invalidInterval": "O intervalo deve ser pelo menos 1",
+  "habitTracking": "Rastreamento de Hábitos",
+  "addNote": "Adicionar Nota",
+  "noteHint": "Como foi? Compartilhe seus pensamentos...",
+  "viewNote": "Ver Nota",
+  "shareNote": "Compartilhar",
+  "noteAdded": "Nota adicionada",
+  "addNoteDialog": "Adicionar uma Nota",
+  "completeWithNote": "Concluir e Adicionar Nota",
+  "addEmoji": "Adicionar Emoji",
+  "hideEmojis": "Ocultar Emojis",
   "@reminderConfig": {
     "description": "Reminder configuration dialog title"
   },
-  "recurrenceConfig": "Repetições Diárias",
   "@recurrenceConfig": {
     "description": "Recurrence configuration dialog title"
   },
-  "repeat": "Repetir",
   "@repeat": {
     "description": "Repeat toggle label"
   },
-  "setCycleForPlan": "Definir um ciclo para seu plano",
   "@setCycleForPlan": {
     "description": "Subtitle for repeat toggle"
   },
-  "subtasks": "Subtarefas",
   "@subtasks": {
     "description": "Subtasks section label"
   },
-  "addSubtask": "Adicionar subtarefa",
   "@addSubtask": {
     "description": "Add subtask hint text"
   },
-  "minutesBefore": "Minutos antes",
   "@minutesBefore": {
     "description": "Custom minutes before label"
   },
-  "interval": "Intervalo",
   "@interval": {
     "description": "Interval label for recurrence"
   },
-  "endDate": "Data de término",
   "@endDate": {
     "description": "End date label for recurrence"
   },
-  "daily": "Diário",
   "@daily": {
     "description": "Daily frequency option"
   },
-  "weekly": "Semanal",
   "@weekly": {
     "description": "Weekly frequency option"
   },
-  "monthly": "Mensal",
   "@monthly": {
     "description": "Monthly frequency option"
   },
-  "everyXDays": "A cada {count} dia(s)",
   "@everyXDays": {
     "description": "Every X days text",
     "placeholders": {
@@ -866,7 +884,6 @@
       }
     }
   },
-  "everyXWeeks": "A cada {count} semana(s)",
   "@everyXWeeks": {
     "description": "Every X weeks text",
     "placeholders": {
@@ -875,7 +892,6 @@
       }
     }
   },
-  "everyXMonths": "A cada {count} mês(es)",
   "@everyXMonths": {
     "description": "Every X months text",
     "placeholders": {
@@ -884,31 +900,24 @@
       }
     }
   },
-  "noRepetition": "Sem repetição",
   "@noRepetition": {
     "description": "No repetition text"
   },
-  "reminder": "Lembrete",
   "@reminder": {
     "description": "Reminder label"
   },
-  "repetition": "Repetição",
   "@repetition": {
     "description": "Repetition label"
   },
-  "eventTime": "Hora do evento (HH:MM)",
   "@eventTime": {
     "description": "Event time label"
   },
-  "invalidMinutes": "Por favor, insira um número válido entre 1 e 1440",
   "@invalidMinutes": {
     "description": "Validation message for invalid custom minutes"
   },
-  "invalidInterval": "O intervalo deve ser pelo menos 1",
   "@invalidInterval": {
     "description": "Validation message for invalid interval"
   },
-  "habitTracking": "Rastreamento de Hábitos",
   "@habitTracking": {
     "description": "Title for habit tracking calendar page"
   },
@@ -956,10 +965,235 @@
   "breathing_exercises": "Exercícios de Respiração",
   "creative_hobby": "Hobby Criativo",
   "call_friend_family": "Ligar para Amigo/Família",
-  "quality_time_loved_ones": "Tempo de Qualidade com Entes Queridos"
-,
+  "quality_time_loved_ones": "Tempo de Qualidade com Entes Queridos",
   "onboardingSelectAtLeastOneGoal": "Por favor, selecione pelo menos um objetivo",
   "onboardingPreparingHabits": "Preparando seus hábitos...",
   "onboardingKeepAtLeastOneHabit": "Você deve manter pelo menos um hábito",
-  "onboardingCouldNotCreateHabits": "Não foi possível criar os hábitos. Por favor, tente novamente."
+  "onboardingCouldNotCreateHabits": "Não foi possível criar os hábitos. Por favor, tente novamente.",
+  "@onboardingWelcomeMessage": {
+    "description": "PENDING"
+  },
+  "@chooseYourExperience": {
+    "description": "PENDING"
+  },
+  "@displayModeDescription": {
+    "description": "PENDING"
+  },
+  "@compactMode": {
+    "description": "PENDING"
+  },
+  "@compactModeDescription": {
+    "description": "PENDING"
+  },
+  "@compactModeFeature1": {
+    "description": "PENDING"
+  },
+  "@compactModeFeature2": {
+    "description": "PENDING"
+  },
+  "@compactModeFeature3": {
+    "description": "PENDING"
+  },
+  "@advancedMode": {
+    "description": "PENDING"
+  },
+  "@advancedModeDescription": {
+    "description": "PENDING"
+  },
+  "@advancedModeFeature1": {
+    "description": "PENDING"
+  },
+  "@advancedModeFeature2": {
+    "description": "PENDING"
+  },
+  "@advancedModeFeature3": {
+    "description": "PENDING"
+  },
+  "@changeAnytime": {
+    "description": "PENDING"
+  },
+  "@selectMode": {
+    "description": "PENDING"
+  },
+  "@displayMode": {
+    "description": "PENDING"
+  },
+  "@displayModeUpdated": {
+    "description": "PENDING",
+    "placeholders": {
+      "mode": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@compactModeSubtitle": {
+    "description": "PENDING"
+  },
+  "@advancedModeSubtitle": {
+    "description": "PENDING"
+  },
+  "@mlPredictionFailed": {
+    "description": "PENDING"
+  },
+  "@mlModelNotLoaded": {
+    "description": "PENDING"
+  },
+  "@mlInsufficientData": {
+    "description": "PENDING",
+    "placeholders": {
+      "days": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@backgroundSyncFailed": {
+    "description": "PENDING",
+    "placeholders": {
+      "reason": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@backgroundSyncNetwork": {
+    "description": "PENDING"
+  },
+  "@backgroundSyncPermission": {
+    "description": "PENDING"
+  },
+  "@workmanagerActive": {
+    "description": "PENDING"
+  },
+  "@workmanagerRestricted": {
+    "description": "PENDING"
+  },
+  "@workmanagerDisabled": {
+    "description": "PENDING"
+  },
+  "@patternWeekend": {
+    "description": "PENDING"
+  },
+  "@patternEvening": {
+    "description": "PENDING"
+  },
+  "@optimalTimeFound": {
+    "description": "PENDING",
+    "placeholders": {
+      "time": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@networkTimeout": {
+    "description": "PENDING"
+  },
+  "@firebasePermissionDenied": {
+    "description": "PENDING"
+  },
+  "@errorUnknown": {
+    "description": "PENDING"
+  },
+  "@devBannerTitle": {
+    "description": "PENDING"
+  },
+  "@devBannerLastSync": {
+    "description": "PENDING",
+    "placeholders": {
+      "time": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@devBannerMlStatus": {
+    "description": "PENDING",
+    "placeholders": {
+      "status": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@devBannerWorkmanager": {
+    "description": "PENDING",
+    "placeholders": {
+      "status": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@devBannerFastTime": {
+    "description": "PENDING",
+    "placeholders": {
+      "multiplier": {
+        "type": "PENDING",
+        "example": "PENDING"
+      },
+      "date": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "@riskLevelLow": {
+    "description": "PENDING"
+  },
+  "@riskLevelMedium": {
+    "description": "PENDING"
+  },
+  "@riskLevelHigh": {
+    "description": "PENDING"
+  },
+  "@predictorRunning": {
+    "description": "PENDING"
+  },
+  "@predictorComplete": {
+    "description": "PENDING"
+  },
+  "@syncInProgress": {
+    "description": "PENDING"
+  },
+  "@syncComplete": {
+    "description": "PENDING"
+  },
+  "@mlModelLoaded": {
+    "description": "PENDING"
+  },
+  "@mlModelLoading": {
+    "description": "PENDING"
+  },
+  "@mlModelError": {
+    "description": "PENDING"
+  },
+  "@addNote": {
+    "description": "PENDING"
+  },
+  "@noteHint": {
+    "description": "PENDING"
+  },
+  "@viewNote": {
+    "description": "PENDING"
+  },
+  "@shareNote": {
+    "description": "PENDING"
+  },
+  "@noteAdded": {
+    "description": "PENDING"
+  },
+  "@addNoteDialog": {
+    "description": "PENDING"
+  },
+  "@completeWithNote": {
+    "description": "PENDING"
+  },
+  "@addEmoji": {
+    "description": "PENDING"
+  },
+  "@hideEmojis": {
+    "description": "PENDING"
+  }
 }
