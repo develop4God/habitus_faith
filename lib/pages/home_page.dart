@@ -204,64 +204,73 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ? completedHabits / totalHabits
                                 : 0,
                           ),
-                          builder: (context, value, _) => SizedBox(
-                            width: 160,
-                            height: 160,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 160,
-                                  height: 160,
-                                  child: CircularProgressIndicator(
-                                    value: value,
-                                    strokeWidth: 13,
-                                    backgroundColor: Colors.grey.shade200,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      completedHabits == totalHabits &&
-                                              totalHabits > 0
-                                          ? Colors.green.shade400
-                                          : Colors.blue.shade400,
+                          builder: (context, value, _) => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const StatisticsPage(),
+                                ),
+                              );
+                            },
+                            child: SizedBox(
+                              width: 160,
+                              height: 160,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 160,
+                                    height: 160,
+                                    child: CircularProgressIndicator(
+                                      value: value,
+                                      strokeWidth: 13,
+                                      backgroundColor: Colors.grey.shade200,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        completedHabits == totalHabits &&
+                                                totalHabits > 0
+                                            ? Colors.green.shade400
+                                            : Colors.blue.shade400,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    TweenAnimationBuilder<int>(
-                                      duration:
-                                          const Duration(milliseconds: 250),
-                                      curve: Curves.easeInOut,
-                                      tween: IntTween(
-                                        begin: 0,
-                                        end: completionPercentage,
-                                      ),
-                                      builder: (context, value, _) => Text(
-                                        '$value%',
-                                        style: TextStyle(
-                                          fontSize: 42,
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              completedHabits == totalHabits &&
-                                                      totalHabits > 0
-                                                  ? Colors.green.shade700
-                                                  : Colors.blue.shade700,
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TweenAnimationBuilder<int>(
+                                        duration:
+                                            const Duration(milliseconds: 250),
+                                        curve: Curves.easeInOut,
+                                        tween: IntTween(
+                                          begin: 0,
+                                          end: completionPercentage,
+                                        ),
+                                        builder: (context, value, _) => Text(
+                                          '$value%',
+                                          style: TextStyle(
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                completedHabits == totalHabits &&
+                                                        totalHabits > 0
+                                                    ? Colors.green.shade700
+                                                    : Colors.blue.shade700,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      l10n.habitsCompletedCount(
-                                          completedHabits, totalHabits),
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.grey.shade600,
-                                        fontWeight: FontWeight.w500,
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        l10n.habitsCompletedCount(
+                                            completedHabits, totalHabits),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.grey.shade600,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
