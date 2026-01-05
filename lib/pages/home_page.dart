@@ -304,15 +304,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                           horizontal: 20, vertical: 6),
                       child: Dismissible(
                         key: Key('habit_${habit.id}'),
-                        direction: isCompleted
-                            ? DismissDirection.none
-                            : DismissDirection.endToStart,
+                        direction: DismissDirection.endToStart,
                         confirmDismiss: (direction) async {
-                          if (!isCompleted) {
-                            HapticFeedback.lightImpact();
-                            final notifier =
-                                ref.read(habitsNotifierProvider.notifier);
-                            await notifier.completeHabit(habit.id);
+                          if (direction == DismissDirection.endToStart) {
+                            HapticFeedback.mediumImpact();
+                            final notifier = ref.read(habitsNotifierProvider.notifier);
+                            await notifier.deleteHabit(habit.id);
                           }
                           return false; // Don't actually dismiss
                         },
@@ -320,24 +317,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
                           decoration: BoxDecoration(
-                            color: Colors.green.shade400,
+                            color: Colors.red.shade400,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
-                            Icons.check_circle,
+                            Icons.delete,
                             color: Colors.white,
                             size: 28,
                           ),
                         ),
                         child: InkWell(
-                          onTap: isCompleted
-                              ? null
-                              : () async {
-                                  HapticFeedback.lightImpact();
-                                  final notifier =
-                                      ref.read(habitsNotifierProvider.notifier);
-                                  await notifier.completeHabit(habit.id);
-                                },
+                          onTap: () async {
+                            HapticFeedback.lightImpact();
+                            final notifier = ref.read(habitsNotifierProvider.notifier);
+                            if (isCompleted) {
+                              await notifier.uncheckHabit(habit.id);
+                            } else {
+                              await notifier.completeHabit(habit.id);
+                            }
+                          },
                           borderRadius: BorderRadius.circular(16),
                           child: Card(
                             elevation: 0,
