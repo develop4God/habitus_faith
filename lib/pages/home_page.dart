@@ -55,33 +55,37 @@ class _HomePageState extends ConsumerState<HomePage> {
     final completedHabits = habits.where((h) => h.completedToday).length;
     final totalHabits = habits.length;
     final remainingHabits = totalHabits - completedHabits;
-    final completionPercentage = totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
-    
+    final completionPercentage =
+        totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
+
     // Calculate weekly consistency (last 7 days)
     final sevenDaysAgo = today.subtract(const Duration(days: 7));
     final tomorrowStart = today.add(const Duration(days: 1));
     int totalPossibleCompletions = 0;
     int actualCompletions = 0;
-    
+
     for (final habit in habits) {
       // Calculate days this habit has existed in the 7-day window
-      final habitStart = habit.createdAt.isAfter(sevenDaysAgo) ? habit.createdAt : sevenDaysAgo;
+      final habitStart = habit.createdAt.isAfter(sevenDaysAgo)
+          ? habit.createdAt
+          : sevenDaysAgo;
       final daysSinceCreation = today.difference(habitStart).inDays + 1;
       final daysInWindow = daysSinceCreation.clamp(0, 7);
-      
-      final relevantCompletions = habit.completionHistory.where((date) => 
-        date.isAfter(sevenDaysAgo) && date.isBefore(tomorrowStart)
-      ).length;
+
+      final relevantCompletions = habit.completionHistory
+          .where((date) =>
+              date.isAfter(sevenDaysAgo) && date.isBefore(tomorrowStart))
+          .length;
       actualCompletions += relevantCompletions;
       totalPossibleCompletions += daysInWindow;
     }
-    
-    final weeklyConsistency = totalPossibleCompletions > 0 
-        ? (actualCompletions / totalPossibleCompletions * 100).round() 
+
+    final weeklyConsistency = totalPossibleCompletions > 0
+        ? (actualCompletions / totalPossibleCompletions * 100).round()
         : 0;
-    
+
     // Calculate longest streak across all habits
-    final longestStreak = habits.isNotEmpty 
+    final longestStreak = habits.isNotEmpty
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
@@ -107,7 +111,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 20),
-              
+
               // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -133,7 +137,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                           curve: Curves.easeInOut,
                           tween: Tween<double>(
                             begin: 0,
-                            end: totalHabits > 0 ? completedHabits / totalHabits : 0,
+                            end: totalHabits > 0
+                                ? completedHabits / totalHabits
+                                : 0,
                           ),
                           builder: (context, value, _) => SizedBox(
                             width: 160,
@@ -149,7 +155,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     strokeWidth: 13,
                                     backgroundColor: Colors.grey.shade200,
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                      completedHabits == totalHabits && totalHabits > 0
+                                      completedHabits == totalHabits &&
+                                              totalHabits > 0
                                           ? Colors.green.shade400
                                           : Colors.blue.shade400,
                                     ),
@@ -159,7 +166,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     TweenAnimationBuilder<int>(
-                                      duration: const Duration(milliseconds: 250),
+                                      duration:
+                                          const Duration(milliseconds: 250),
                                       curve: Curves.easeInOut,
                                       tween: IntTween(
                                         begin: 0,
@@ -170,15 +178,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         style: TextStyle(
                                           fontSize: 42,
                                           fontWeight: FontWeight.bold,
-                                          color: completedHabits == totalHabits && totalHabits > 0
-                                              ? Colors.green.shade700
-                                              : Colors.blue.shade700,
+                                          color:
+                                              completedHabits == totalHabits &&
+                                                      totalHabits > 0
+                                                  ? Colors.green.shade700
+                                                  : Colors.blue.shade700,
                                         ),
                                       ),
                                     ),
                                     const SizedBox(height: 6),
                                     Text(
-                                      l10n.habitsCompletedCount(completedHabits, totalHabits),
+                                      l10n.habitsCompletedCount(
+                                          completedHabits, totalHabits),
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.grey.shade600,
@@ -191,9 +202,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 18),
-                        
+
                         // Motivational micro-copy (dynamic)
                         if (totalHabits == 0)
                           Text(
@@ -209,7 +220,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.celebration, color: Colors.green.shade600, size: 20),
+                              Icon(Icons.celebration,
+                                  color: Colors.green.shade600, size: 20),
                               const SizedBox(width: 8),
                               Text(
                                 l10n.allHabitsCompleted,
@@ -246,9 +258,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // C. REMAINING HABITS INDICATOR
               if (totalHabits > 0 && remainingHabits > 0)
                 Padding(
@@ -262,10 +274,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                 ),
-              
+
               if (totalHabits > 0 && remainingHabits > 0)
                 const SizedBox(height: 12),
-              
+
               // B. TODAY'S HABITS (PRIMARY ACTIONS) - One-gesture completion with animation
               if (habits.isNotEmpty)
                 ...habits.map((habit) {
@@ -275,153 +287,164 @@ class _HomePageState extends ConsumerState<HomePage> {
                     duration: const Duration(milliseconds: 150),
                     curve: Curves.easeInOut,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 6),
                       child: Dismissible(
                         key: Key('habit_${habit.id}'),
-                      direction: isCompleted 
-                          ? DismissDirection.none 
-                          : DismissDirection.endToStart,
-                      confirmDismiss: (direction) async {
-                        if (!isCompleted) {
-                          final notifier = ref.read(habitsNotifierProvider.notifier);
-                          await notifier.completeHabit(habit.id);
-                        }
-                        return false; // Don't actually dismiss
-                      },
-                      background: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade400,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(
-                          Icons.check_circle,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: isCompleted ? null : () async {
-                          final notifier = ref.read(habitsNotifierProvider.notifier);
-                          await notifier.completeHabit(habit.id);
+                        direction: isCompleted
+                            ? DismissDirection.none
+                            : DismissDirection.endToStart,
+                        confirmDismiss: (direction) async {
+                          if (!isCompleted) {
+                            final notifier =
+                                ref.read(habitsNotifierProvider.notifier);
+                            await notifier.completeHabit(habit.id);
+                          }
+                          return false; // Don't actually dismiss
                         },
-                        borderRadius: BorderRadius.circular(16),
-                        child: Card(
-                          elevation: 0,
-                          color: isCompleted ? Colors.green.shade50 : Colors.white,
-                          shape: RoundedRectangleBorder(
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade400,
                             borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: isCompleted 
-                                  ? Colors.green.shade300 
-                                  : Colors.grey.shade300,
-                              width: isCompleted ? 2 : 1,
-                            ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                // Habit icon
-                                Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    color: isCompleted 
-                                        ? Colors.green.shade100 
-                                        : Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      habit.emoji ?? '✓',
-                                      style: const TextStyle(fontSize: 24),
+                          child: const Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        child: InkWell(
+                          onTap: isCompleted
+                              ? null
+                              : () async {
+                                  final notifier =
+                                      ref.read(habitsNotifierProvider.notifier);
+                                  await notifier.completeHabit(habit.id);
+                                },
+                          borderRadius: BorderRadius.circular(16),
+                          child: Card(
+                            elevation: 0,
+                            color: isCompleted
+                                ? Colors.green.shade50
+                                : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: isCompleted
+                                    ? Colors.green.shade300
+                                    : Colors.grey.shade300,
+                                width: isCompleted ? 2 : 1,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  // Habit icon
+                                  Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: isCompleted
+                                          ? Colors.green.shade100
+                                          : Colors.grey.shade100,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        habit.emoji ?? '✓',
+                                        style: const TextStyle(fontSize: 24),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                
-                                const SizedBox(width: 16),
-                                
-                                // Habit info
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        habit.name,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: isCompleted 
-                                              ? Colors.green.shade900 
-                                              : Colors.grey.shade900,
-                                          decoration: isCompleted 
-                                              ? TextDecoration.lineThrough 
-                                              : null,
+
+                                  const SizedBox(width: 16),
+
+                                  // Habit info
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          habit.name,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: isCompleted
+                                                ? Colors.green.shade900
+                                                : Colors.grey.shade900,
+                                            decoration: isCompleted
+                                                ? TextDecoration.lineThrough
+                                                : null,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.local_fire_department,
+                                              size: 14,
+                                              color: habit.currentStreak > 0
+                                                  ? Colors.orange.shade600
+                                                  : Colors.grey.shade400,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              l10n.dayStreak(
+                                                  habit.currentStreak),
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.grey.shade600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Completion indicator
+                                  if (isCompleted)
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green.shade600,
+                                      size: 32,
+                                    )
+                                  else
+                                    Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.grey.shade400,
+                                          width: 2,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.local_fire_department,
-                                            size: 14,
-                                            color: habit.currentStreak > 0 
-                                                ? Colors.orange.shade600 
-                                                : Colors.grey.shade400,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            l10n.dayStreak(habit.currentStreak),
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.grey.shade600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                
-                                // Completion indicator
-                                if (isCompleted)
-                                  Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green.shade600,
-                                    size: 32,
-                                  )
-                                else
-                                  Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.grey.shade400,
-                                        width: 2,
-                                      ),
                                     ),
-                                  ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
+                  );
                 }),
-              
+
               // Swipe hint for first-time users
               if (habits.isNotEmpty && habits.any((h) => !h.completedToday))
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
+                      Icon(Icons.swipe_left,
+                          size: 16, color: Colors.grey.shade500),
                       const SizedBox(width: 8),
                       Text(
                         l10n.swipeToComplete,
@@ -434,9 +457,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ],
                   ),
                 ),
-              
+
               const SizedBox(height: 20),
-              
+
               // D. STREAKS & MOMENTUM (SECONDARY)
               if (habits.isNotEmpty)
                 Padding(
@@ -527,9 +550,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ],
                   ),
                 ),
-              
+
               const SizedBox(height: 20),
-              
+
               // E. INSPIRATIONAL CONTENT (TERTIARY)
               if (todayDevocional.versiculo.isNotEmpty)
                 Padding(
@@ -546,8 +569,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                         dividerColor: Colors.transparent,
                       ),
                       child: ExpansionTile(
-                        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        tilePadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        childrenPadding:
+                            const EdgeInsets.fromLTRB(16, 0, 16, 16),
                         leading: Icon(
                           Icons.auto_stories,
                           color: Colors.amber.shade700,
@@ -576,7 +601,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                 ),
-              
+
               const SizedBox(height: 32),
             ],
           ),
