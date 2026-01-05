@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
@@ -118,22 +119,24 @@ class MyApp extends ConsumerWidget {
           '/habits': (context) => const HomePage(),
           '/devtools': (context) => const DeveloperDebugPage(),
         },
-        home: authInit.when(
-          data: (_) {
-            if (onboardingComplete) {
-              return const LandingPage();
-            }
-            // Check V2 preference for initial onboarding
-            final prefs = ref.read(sharedPreferencesProvider);
-            final useV2 = prefs.getBool('use_onboarding_v2') ?? true;
-            return useV2
-                ? const SimpleOnboardingFlow()
-                : const AdaptiveOnboardingPage();
-          },
-          loading: () =>
-              const Scaffold(body: Center(child: CircularProgressIndicator())),
-          error: (error, stack) =>
-              Scaffold(body: Center(child: Text('Error: $error'))),
+        home: UpgradeAlert(
+          child: authInit.when(
+            data: (_) {
+              if (onboardingComplete) {
+                return const LandingPage();
+              }
+              // Check V2 preference for initial onboarding
+              final prefs = ref.read(sharedPreferencesProvider);
+              final useV2 = prefs.getBool('use_onboarding_v2') ?? true;
+              return useV2
+                  ? const SimpleOnboardingFlow()
+                  : const AdaptiveOnboardingPage();
+            },
+            loading: () =>
+                const Scaffold(body: Center(child: CircularProgressIndicator())),
+            error: (error, stack) =>
+                Scaffold(body: Center(child: Text('Error: $error'))),
+          ),
         ),
       ),
     );
