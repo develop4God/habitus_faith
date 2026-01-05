@@ -7,8 +7,7 @@ void main() {
   group('SimpleOnboardingFixes', () {
     group('Template Enum Validation', () {
       test('all template IDs match HabitTemplateId enum values', () {
-        final invalidIds =
-            SimpleTemplateSelector.validateTemplateEnumMapping();
+        final invalidIds = SimpleTemplateSelector.validateTemplateEnumMapping();
 
         expect(
           invalidIds,
@@ -19,8 +18,7 @@ void main() {
       });
 
       test('fallback templates use valid enum IDs', () {
-        final invalidIds =
-            SimpleTemplateSelector.validateTemplateEnumMapping();
+        final invalidIds = SimpleTemplateSelector.validateTemplateEnumMapping();
 
         expect(invalidIds, isEmpty);
       });
@@ -171,8 +169,7 @@ void main() {
           expect(
             habitList.length,
             equals(uniqueHabits.length),
-            reason:
-                'Template ${entry.key} should not have duplicate habit IDs',
+            reason: 'Template ${entry.key} should not have duplicate habit IDs',
           );
         }
       });

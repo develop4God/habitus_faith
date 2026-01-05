@@ -30,7 +30,8 @@ class UnifiedHabitList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint('🟢 UnifiedHabitList.build: Recibidos ${habits.length} hábitos: ${habits.map((h) => h.name).toList()}');
+    debugPrint(
+        '🟢 UnifiedHabitList.build: Recibidos ${habits.length} hábitos: ${habits.map((h) => h.name).toList()}');
     if (habits.isEmpty) {
       final l10n = AppLocalizations.of(context)!;
       return Center(
@@ -465,4 +466,3 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     );
   }
 }
-

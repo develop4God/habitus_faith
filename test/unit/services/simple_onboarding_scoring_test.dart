@@ -25,7 +25,8 @@ void main() {
 
         expect(score.totalScore, equals(12)); // 3*2 + 3 + 3 = 12
         expect(score.level, equals(ScoreLevel.advanced));
-        expect(score.primaryIntent, equals(PrimaryIntent.faithBased)); // Faith has priority
+        expect(score.primaryIntent,
+            equals(PrimaryIntent.faithBased)); // Faith has priority
       });
 
       test('intermediate score (8): 2 goals + medium time + growing', () {
@@ -37,8 +38,8 @@ void main() {
 
         expect(score.totalScore, equals(8)); // 2*2 + 2 + 2 = 8
         expect(score.level, equals(ScoreLevel.intermediate));
-        expect(
-            score.primaryIntent, equals(PrimaryIntent.wellness)); // Wellness has priority
+        expect(score.primaryIntent,
+            equals(PrimaryIntent.wellness)); // Wellness has priority
       });
 
       test('score level boundaries: basic (4-6)', () {
@@ -208,8 +209,8 @@ void main() {
           experienceLevel: ExperienceLevel.growing,
         );
 
-        expect(score.getScoreLevelLabel(),
-            equals('Creciendo · Ritmo sostenible'));
+        expect(
+            score.getScoreLevelLabel(), equals('Creciendo · Ritmo sostenible'));
       });
 
       test('advanced level label', () {
@@ -248,10 +249,8 @@ void main() {
 
         // Verify we have scores in the expected range
         expect(scores.every((s) => s >= 4 && s <= 12), isTrue);
-        expect(scores.reduce((a, b) => a < b ? a : b),
-            equals(4)); // Min score
-        expect(scores.reduce((a, b) => a > b ? a : b),
-            equals(12)); // Max score
+        expect(scores.reduce((a, b) => a < b ? a : b), equals(4)); // Min score
+        expect(scores.reduce((a, b) => a > b ? a : b), equals(12)); // Max score
       });
     });
   });

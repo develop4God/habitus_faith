@@ -8,7 +8,7 @@ import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 /// Widget tests for real user behavior and edge cases
-/// 
+///
 /// Tests cover:
 /// - Race conditions (rapid taps, double tap)
 /// - Timer cancellation on disposal
@@ -66,7 +66,7 @@ void main() {
         await pumpOnboardingFlow(tester);
 
         final feFinder = find.text('Fe');
-        
+
         // Select
         await tester.tap(feFinder);
         await tester.pump();
@@ -113,7 +113,7 @@ void main() {
 
         // Dispose widget
         await tester.pumpWidget(const MaterialApp(home: Scaffold()));
-        
+
         // Wait for timer duration
         await tester.pump(const Duration(milliseconds: 400));
 
@@ -122,8 +122,7 @@ void main() {
     });
 
     group('State Consistency', () {
-      testWidgets('max goals limit is enforced',
-          (WidgetTester tester) async {
+      testWidgets('max goals limit is enforced', (WidgetTester tester) async {
         await pumpOnboardingFlow(tester);
 
         // Select 3 goals
@@ -181,8 +180,7 @@ void main() {
         expect(find.text('¿Qué quieres mejorar?'), findsOneWidget);
       });
 
-      testWidgets('can recover from error state',
-          (WidgetTester tester) async {
+      testWidgets('can recover from error state', (WidgetTester tester) async {
         await pumpOnboardingFlow(tester);
 
         // Trigger error
@@ -218,7 +216,7 @@ void main() {
 
         // Dispose widget by replacing it
         await tester.pumpWidget(const MaterialApp(home: Scaffold()));
-        
+
         // Wait for timer duration
         await tester.pump(const Duration(milliseconds: 400));
 
@@ -240,17 +238,16 @@ void main() {
         final navigator = tester.state<NavigatorState>(find.byType(Navigator));
         navigator.pop();
         await tester.pump();
-        
+
         // Wait for timer duration
         await tester.pump(const Duration(milliseconds: 400));
-        
+
         // No crashes should occur
       });
     });
 
     group('Edge Cases', () {
-      testWidgets('initial state is valid',
-          (WidgetTester tester) async {
+      testWidgets('initial state is valid', (WidgetTester tester) async {
         await pumpOnboardingFlow(tester);
 
         expect(find.byIcon(Icons.check_circle), findsNothing);
@@ -289,7 +286,7 @@ void main() {
 
         // Should be on Q2 (use specific text)
         expect(find.text('¿Cuánto tiempo diario?'), findsOneWidget);
-        
+
         // Progress indicator should exist
         expect(find.byType(AnimatedContainer), findsAtLeastNWidgets(1));
       });

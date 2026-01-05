@@ -33,14 +33,16 @@ void main() {
           name: 'Test Habit 1',
           createdAt: DateTime.now(),
           category: HabitCategory.spiritual,
-          emoji: '🙏', userId: '',
+          emoji: '🙏',
+          userId: '',
         ),
         Habit(
           id: '2',
           name: 'Test Habit 2',
           createdAt: DateTime.now(),
           category: HabitCategory.physical,
-          emoji: '💪', userId: '',
+          emoji: '💪',
+          userId: '',
         ),
       ];
 
@@ -72,7 +74,8 @@ void main() {
           id: '1',
           name: 'Test Habit',
           createdAt: DateTime.now(),
-          category: HabitCategory.spiritual, userId: '',
+          category: HabitCategory.spiritual,
+          userId: '',
         ),
       ];
 
@@ -102,7 +105,8 @@ void main() {
           id: '1',
           name: 'Test Habit',
           createdAt: DateTime.now(),
-          category: HabitCategory.spiritual, userId: '',
+          category: HabitCategory.spiritual,
+          userId: '',
         ),
       ];
 
@@ -132,13 +136,15 @@ void main() {
           id: '1',
           name: 'Test Habit 1',
           createdAt: DateTime.now(),
-          category: HabitCategory.spiritual, userId: '',
+          category: HabitCategory.spiritual,
+          userId: '',
         ),
         Habit(
           id: '2',
           name: 'Test Habit 2',
           createdAt: DateTime.now(),
-          category: HabitCategory.physical, userId: '',
+          category: HabitCategory.physical,
+          userId: '',
         ),
       ];
 
@@ -162,4 +168,3 @@ void main() {
     });
   });
 }
-

@@ -6,7 +6,7 @@ void main() {
   group('SimpleTemplateSelector', () {
     group('selectTemplates', () {
       test('faithBased + basic -> prayer_5min equivalent', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 4,
           level: ScoreLevel.basic,
           primaryIntent: PrimaryIntent.faithBased,
@@ -21,7 +21,7 @@ void main() {
       });
 
       test('faithBased + intermediate -> prayer + bible', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 7,
           level: ScoreLevel.intermediate,
           primaryIntent: PrimaryIntent.faithBased,
@@ -36,7 +36,7 @@ void main() {
       });
 
       test('faithBased + advanced -> prayer + bible + gratitude', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 10,
           level: ScoreLevel.advanced,
           primaryIntent: PrimaryIntent.faithBased,
@@ -47,12 +47,12 @@ void main() {
 
         final templates = SimpleTemplateSelector.selectTemplates(score);
 
-        expect(
-            templates, equals(['morning_prayer', 'bible_reading', 'gratitude']));
+        expect(templates,
+            equals(['morning_prayer', 'bible_reading', 'gratitude']));
       });
 
       test('wellness + basic -> exercise', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 4,
           level: ScoreLevel.basic,
           primaryIntent: PrimaryIntent.wellness,
@@ -67,7 +67,7 @@ void main() {
       });
 
       test('wellness + intermediate -> exercise + sleep', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 7,
           level: ScoreLevel.intermediate,
           primaryIntent: PrimaryIntent.wellness,
@@ -82,7 +82,7 @@ void main() {
       });
 
       test('wellness + advanced -> exercise + sleep + healthy_eating', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 10,
           level: ScoreLevel.advanced,
           primaryIntent: PrimaryIntent.wellness,
@@ -97,7 +97,7 @@ void main() {
       });
 
       test('mixed + basic -> meditation', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 5,
           level: ScoreLevel.basic,
           primaryIntent: PrimaryIntent.mixed,
@@ -112,7 +112,7 @@ void main() {
       });
 
       test('study + basic -> learning', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 4,
           level: ScoreLevel.basic,
           primaryIntent: PrimaryIntent.study,
@@ -127,7 +127,7 @@ void main() {
       });
 
       test('peace + intermediate -> meditation + gratitude', () {
-        final score = OnboardingScore(
+        const score = OnboardingScore(
           totalScore: 7,
           level: ScoreLevel.intermediate,
           primaryIntent: PrimaryIntent.peace,
@@ -175,10 +175,15 @@ void main() {
 
         // Verify some key combinations exist
         expect(
-            combinations.contains((PrimaryIntent.faithBased, ScoreLevel.basic)), isTrue);
-        expect(combinations.contains((PrimaryIntent.wellness, ScoreLevel.intermediate)),
+            combinations.contains((PrimaryIntent.faithBased, ScoreLevel.basic)),
             isTrue);
-        expect(combinations.contains((PrimaryIntent.study, ScoreLevel.advanced)), isTrue);
+        expect(
+            combinations
+                .contains((PrimaryIntent.wellness, ScoreLevel.intermediate)),
+            isTrue);
+        expect(
+            combinations.contains((PrimaryIntent.study, ScoreLevel.advanced)),
+            isTrue);
       });
     });
 

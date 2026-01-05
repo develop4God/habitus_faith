@@ -93,14 +93,14 @@ void main() {
               );
           }),
         ],
-        child: MaterialApp(
-          localizationsDelegates: const [
+        child: const MaterialApp(
+          localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: const [Locale('en', '')],
-          home: const HomePage(),
+          supportedLocales: [Locale('en', '')],
+          home: HomePage(),
         ),
       );
     }
@@ -851,7 +851,7 @@ void main() {
             name: 'Rapid Habit $i',
             category: HabitCategory.physical,
             emoji: '⚡',
-            createdAt: DateTime.now().subtract(Duration(days: 5)),
+            createdAt: DateTime.now().subtract(const Duration(days: 5)),
             completedToday: false,
             currentStreak: 0,
             longestStreak: 0,
