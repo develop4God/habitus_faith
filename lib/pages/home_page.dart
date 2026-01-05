@@ -108,75 +108,91 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const SizedBox(height: 20),
               
-              // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator
+              // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Card(
-                  elevation: 0,
+                  elevation: 2,
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(22),
                     side: BorderSide(
                       color: completedHabits == totalHabits && totalHabits > 0
-                          ? Colors.green.shade200
-                          : Colors.blue.shade200,
+                          ? Colors.green.shade300
+                          : Colors.blue.shade300,
                       width: 2,
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(26),
                     child: Column(
                       children: [
-                        // Circular progress indicator (ring)
-                        SizedBox(
-                          width: 140,
-                          height: 140,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                width: 140,
-                                height: 140,
-                                child: CircularProgressIndicator(
-                                  value: totalHabits > 0 ? completedHabits / totalHabits : 0,
-                                  strokeWidth: 12,
-                                  backgroundColor: Colors.grey.shade200,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    completedHabits == totalHabits && totalHabits > 0
-                                        ? Colors.green.shade400
-                                        : Colors.blue.shade400,
+                        // Circular progress indicator (ring) - ANIMATED
+                        TweenAnimationBuilder<double>(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeInOut,
+                          tween: Tween<double>(
+                            begin: 0,
+                            end: totalHabits > 0 ? completedHabits / totalHabits : 0,
+                          ),
+                          builder: (context, value, _) => SizedBox(
+                            width: 160,
+                            height: 160,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 160,
+                                  height: 160,
+                                  child: CircularProgressIndicator(
+                                    value: value,
+                                    strokeWidth: 13,
+                                    backgroundColor: Colors.grey.shade200,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      completedHabits == totalHabits && totalHabits > 0
+                                          ? Colors.green.shade400
+                                          : Colors.blue.shade400,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    '$completionPercentage%',
-                                    style: TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
-                                      color: completedHabits == totalHabits && totalHabits > 0
-                                          ? Colors.green.shade700
-                                          : Colors.blue.shade700,
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TweenAnimationBuilder<int>(
+                                      duration: const Duration(milliseconds: 250),
+                                      curve: Curves.easeInOut,
+                                      tween: IntTween(
+                                        begin: 0,
+                                        end: completionPercentage,
+                                      ),
+                                      builder: (context, value, _) => Text(
+                                        '$value%',
+                                        style: TextStyle(
+                                          fontSize: 42,
+                                          fontWeight: FontWeight.bold,
+                                          color: completedHabits == totalHabits && totalHabits > 0
+                                              ? Colors.green.shade700
+                                              : Colors.blue.shade700,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    l10n.habitsCompletedCount(completedHabits, totalHabits),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
-                                      fontWeight: FontWeight.w500,
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      l10n.habitsCompletedCount(completedHabits, totalHabits),
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey.shade600,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 18),
                         
                         // Motivational micro-copy (dynamic)
                         if (totalHabits == 0)
@@ -250,14 +266,18 @@ class _HomePageState extends ConsumerState<HomePage> {
               if (totalHabits > 0 && remainingHabits > 0)
                 const SizedBox(height: 12),
               
-              // B. TODAY'S HABITS (PRIMARY ACTIONS) - One-gesture completion
+              // B. TODAY'S HABITS (PRIMARY ACTIONS) - One-gesture completion with animation
               if (habits.isNotEmpty)
                 ...habits.map((habit) {
                   final isCompleted = habit.completedToday;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                    child: Dismissible(
-                      key: Key('habit_${habit.id}'),
+                  return AnimatedScale(
+                    scale: isCompleted ? 0.98 : 1.0,
+                    duration: const Duration(milliseconds: 150),
+                    curve: Curves.easeInOut,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                      child: Dismissible(
+                        key: Key('habit_${habit.id}'),
                       direction: isCompleted 
                           ? DismissDirection.none 
                           : DismissDirection.endToStart,
@@ -390,7 +410,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                     ),
-                  );
+                  ),
+                );
                 }),
               
               // Swipe hint for first-time users
