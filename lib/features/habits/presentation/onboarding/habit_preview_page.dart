@@ -33,8 +33,10 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
   @override
   void initState() {
     super.initState();
-    // Get initial template selections
-    _selectedHabitIds = SimpleTemplateSelector.selectTemplates(widget.score);
+    // Get initial template selections as a modifiable list
+    _selectedHabitIds = List<String>.from(
+      SimpleTemplateSelector.selectTemplates(widget.score),
+    );
   }
 
   void _removeHabit(String habitId) {
@@ -221,65 +223,89 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
 
   List<Widget> _buildHabitCards() {
     final l10n = AppLocalizations.of(context);
-    
     return _selectedHabitIds.map((habitId) {
       final predefinedHabit = predefined_data.predefinedHabits.firstWhere(
         (h) => h.id == habitId,
         orElse: () => predefined_data.predefinedHabits.first,
       );
-
       final nameKey = predefinedHabit.nameKey;
       final name = l10n != null
           ? PredefinedHabitTranslations.getTranslatedName(l10n, nameKey)
           : habitId;
-
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: Container(
-          padding: const EdgeInsets.all(16),
+      return Dismissible(
+        key: ValueKey(habitId),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.red.shade100,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: const Color(0xffe2e8f0),
-              width: 1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(Icons.delete, color: Colors.red.shade700),
+              const SizedBox(width: 8),
+              Text(
+                l10n?.deleteHabit ?? 'Eliminar',
+                style: TextStyle(
+                  color: Colors.red.shade700,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-          child: Row(
-            children: [
-              // Emoji
-              Text(
-                predefinedHabit.emoji,
-                style: const TextStyle(fontSize: 32),
+        ),
+        onDismissed: (_) => _removeHabit(habitId),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: const Color(0xffe2e8f0),
+                width: 1,
               ),
-              const SizedBox(width: 16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(10), // ~0.04*255
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                // Emoji
+                Text(
+                  predefinedHabit.emoji,
+                  style: const TextStyle(fontSize: 32),
+                ),
+                const SizedBox(width: 16),
 
-              // Habit name
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xff1e293b),
+                // Habit name
+                Expanded(
+                  child: Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff1e293b),
+                    ),
                   ),
                 ),
-              ),
 
-              // Remove button
-              IconButton(
-                icon: const Icon(Icons.close, color: Color(0xff64748b)),
-                onPressed: () => _removeHabit(habitId),
-                tooltip: 'Quitar hábito',
-              ),
-            ],
+                // Remove button (still available for accessibility)
+                IconButton(
+                  icon: const Icon(Icons.close, color: Color(0xff64748b)),
+                  onPressed: () => _removeHabit(habitId),
+                  tooltip: l10n?.deleteHabit ?? 'Eliminar',
+                ),
+              ],
+            ),
           ),
         ),
       );
