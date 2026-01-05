@@ -3,15 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/services/simple_onboarding_scoring.dart';
 import '../../domain/services/simple_template_selector.dart';
 import '../../domain/config/onboarding_config.dart';
-import '../../domain/models/predefined_habits_data.dart'
-    as predefined_data;
+import '../../domain/models/predefined_habits_data.dart' as predefined_data;
 import '../../data/storage/storage_providers.dart';
 import '../../../../widgets/add_habit_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../utils/predefined_habit_translations.dart';
 
 /// Preview page for selected habits before committing
-/// 
+///
 /// Shows:
 /// - Score level label
 /// - Selected habits with remove button
@@ -45,8 +44,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n?.onboardingKeepAtLeastOneHabit ?? 
-                      'Debes mantener al menos un hábito'),
+          content: Text(l10n?.onboardingKeepAtLeastOneHabit ??
+              'Debes mantener al menos un hábito'),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -61,12 +60,12 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
   void _addHabit() async {
     final l10n = AppLocalizations.of(context);
     if (l10n == null) return;
-    
+
     final newHabitId = await showDialog<String>(
       context: context,
       builder: (context) => AddHabitDialog(l10n: l10n),
     );
-    
+
     if (newHabitId != null && mounted) {
       setState(() {
         _selectedHabitIds.add(newHabitId);
@@ -113,7 +112,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
 
       if (mounted) {
         // Navigate to home page to avoid onboarding loop
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (route) => false);
       }
     } catch (e, stackTrace) {
       debugPrint('Failed to create habits: $e\n$stackTrace');
@@ -122,8 +122,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n?.onboardingCouldNotCreateHabits ?? 
-                        'No pudimos crear los hábitos. Intenta de nuevo.'),
+            content: Text(l10n?.onboardingCouldNotCreateHabits ??
+                'No pudimos crear los hábitos. Intenta de nuevo.'),
             duration: const Duration(seconds: 4),
           ),
         );

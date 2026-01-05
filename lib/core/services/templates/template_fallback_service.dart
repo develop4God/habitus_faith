@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:logger/logger.dart';
 import '../../../features/habits/presentation/onboarding/onboarding_models.dart';
 import '../templates/template_scoring_engine.dart';
@@ -88,7 +87,8 @@ class TemplateFallbackService {
   static Future<List<String>> _getAvailableTemplateFingerprints() async {
     // TODO: Generate a manifest of available templates during build
     // For now, return empty list and let the system fall back to Gemini
-    _logger.w('Template fingerprint list not available - falling back to Gemini');
+    _logger
+        .w('Template fingerprint list not available - falling back to Gemini');
     return <String>[];
   }
 
@@ -99,11 +99,11 @@ class TemplateFallbackService {
     final maturity = profileData['spiritualMaturity'] ?? '';
     final challenge = profileData['challenge'] ?? 'dontKnowStart';
     final support = profileData['supportLevel'] ?? 'normal';
-    final motivations = (profileData['motivations'] as List?)?.cast<String>() ?? [];
+    final motivations =
+        (profileData['motivations'] as List?)?.cast<String>() ?? [];
 
     // Take up to 2 motivations for pattern
-    final motivationsPart =
-        motivations.take(2).join('_');
+    final motivationsPart = motivations.take(2).join('_');
 
     return '${intent}_${maturity}_${challenge}_${support}_$motivationsPart';
   }

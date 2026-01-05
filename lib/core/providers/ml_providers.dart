@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ml/abandonment_predictor.dart';
-import '../../pages/habits_page.dart';
+import '../../features/habits/presentation/habits_providers.dart';
 import 'clock_provider.dart';
 
 /// Provider for AbandonmentPredictor singleton
@@ -32,7 +32,7 @@ final habitRiskProvider = FutureProvider.family<double, String>((
   habitId,
 ) async {
   // Watch habits stream to get current habit state
-  final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+  final habitsAsync = ref.watch(habitsStreamProvider);
 
   return habitsAsync.when(
     data: (habits) async {

@@ -17,15 +17,13 @@ final simpleOnboardingQuestionProvider = StateProvider<int>((ref) => 0);
 final selectedGoalsProvider = StateProvider<List<GoalType>>((ref) => []);
 
 /// Provider for time commitment
-final timeCommitmentProvider =
-    StateProvider<TimeCommitment?>((ref) => null);
+final timeCommitmentProvider = StateProvider<TimeCommitment?>((ref) => null);
 
 /// Provider for experience level
-final experienceLevelProvider =
-    StateProvider<ExperienceLevel?>((ref) => null);
+final experienceLevelProvider = StateProvider<ExperienceLevel?>((ref) => null);
 
 /// Simple 3-question onboarding flow
-/// 
+///
 /// Screens:
 /// 1. Multi-select goals (max 3)
 /// 2. Single-select time commitment (auto-advance)
@@ -112,8 +110,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n?.onboardingSelectAtLeastOneGoal ?? 
-                        'Por favor selecciona al menos un objetivo'),
+            content: Text(l10n?.onboardingSelectAtLeastOneGoal ??
+                'Por favor selecciona al menos un objetivo'),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -152,7 +150,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
       // Still mark as complete and navigate
       final storage = ref.read(jsonStorageServiceProvider);
       await storage.setBool('onboarding_complete', true);
-      
+
       if (mounted) {
         Navigator.of(context).pushReplacementNamed('/habits');
       }
@@ -160,7 +158,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
   }
 
   Future<void> _showLoadingAndNavigate() async {
-    debugPrint('🟢 Onboarding V2: Completed 3rd question, preparing habit preview...');
+    debugPrint(
+        '🟢 Onboarding V2: Completed 3rd question, preparing habit preview...');
     try {
       final l10n = AppLocalizations.of(context);
       debugPrint('🟢 Showing loading dialog...');
@@ -194,7 +193,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  l10n?.onboardingPreparingHabits ?? 'Preparando tus hábitos...',
+                  l10n?.onboardingPreparingHabits ??
+                      'Preparando tus hábitos...',
                   style: const TextStyle(
                     fontSize: 18,
                     color: Color(0xff6366f1),
@@ -396,7 +396,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Skip button
           Center(
             child: TextButton(
@@ -431,9 +431,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xff6366f1)
-                : const Color(0xffe2e8f0),
+            color:
+                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -547,9 +546,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xff6366f1)
-                : const Color(0xffe2e8f0),
+            color:
+                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -678,9 +676,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xff6366f1)
-                : const Color(0xffe2e8f0),
+            color:
+                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected

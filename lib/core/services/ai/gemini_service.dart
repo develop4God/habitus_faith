@@ -649,15 +649,12 @@ Requisitos estrictos:
       // Check for model not found errors
       if (errorMessage.contains('not found') ||
           errorMessage.contains('not supported')) {
-        _logger?.e(
-          'Gemini model configuration error. '
-          'Model may not be available or API version mismatch. '
-          'Error: $errorMessage'
-        );
+        _logger?.e('Gemini model configuration error. '
+            'Model may not be available or API version mismatch. '
+            'Error: $errorMessage');
         throw GeminiException(
-          'AI model configuration error. Please check app settings. '
-          'Try updating the app or contact support.'
-        );
+            'AI model configuration error. Please check app settings. '
+            'Try updating the app or contact support.');
       }
 
       // Check for API key issues
@@ -665,8 +662,7 @@ Requisitos estrictos:
           errorMessage.contains('INVALID_ARGUMENT')) {
         _logger?.e('Gemini API key error: $errorMessage');
         throw GeminiException(
-          'AI service authentication failed. Please check configuration.'
-        );
+            'AI service authentication failed. Please check configuration.');
       }
 
       _logger?.e('Error during profile-based habit generation', error: e);

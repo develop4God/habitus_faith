@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/habit.dart';
+import '../domain/models/habit_notification.dart';
 import '../data/storage/storage_providers.dart';
 
 /// Repository provider with injectable ID generator
@@ -22,20 +23,29 @@ class HabitsNotifier extends AsyncNotifier<void> {
   Future<void> addHabit({
     required String name,
     HabitCategory category = HabitCategory.mental,
+    int? colorValue,
+    HabitDifficulty difficulty = HabitDifficulty.medium,
+    String? emoji,
   }) async {
+    debugPrint('HabitsNotifier.addHabit: start -> name:$name');
     state = const AsyncLoading();
 
     final repository = ref.read(habitsRepositoryProvider);
     final result = await repository.createHabit(
       name: name,
       category: category,
+      colorValue: colorValue,
+      difficulty: difficulty,
+      emoji: emoji,
     );
 
     result.fold(
       (failure) {
+        debugPrint('HabitsNotifier.addHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
+        debugPrint('HabitsNotifier.addHabit: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );
@@ -60,6 +70,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
   }
 
   Future<void> deleteHabit(String habitId) async {
+    debugPrint('HabitsNotifier.deleteHabit: start -> $habitId');
     state = const AsyncLoading();
 
     final repository = ref.read(habitsRepositoryProvider);
@@ -67,9 +78,50 @@ class HabitsNotifier extends AsyncNotifier<void> {
 
     result.fold(
       (failure) {
+        debugPrint('HabitsNotifier.deleteHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
       (_) {
+        debugPrint('HabitsNotifier.deleteHabit: success -> $habitId');
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> updateHabit({
+    required String habitId,
+    String? name,
+    HabitCategory? category,
+    String? emoji,
+    int? colorValue,
+    HabitDifficulty? difficulty,
+    HabitNotificationSettings? notificationSettings,
+    HabitRecurrence? recurrence,
+    List<Subtask>? subtasks,
+  }) async {
+    debugPrint('HabitsNotifier.updateHabit: start -> $habitId');
+    state = const AsyncLoading();
+
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.updateHabit(
+      habitId: habitId,
+      name: name,
+      category: category,
+      emoji: emoji,
+      colorValue: colorValue,
+      difficulty: difficulty,
+      notificationSettings: notificationSettings,
+      recurrence: recurrence,
+      subtasks: subtasks,
+    );
+
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.updateHabit: failure -> $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint('HabitsNotifier.updateHabit: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );

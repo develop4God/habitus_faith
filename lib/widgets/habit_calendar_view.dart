@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
-import '../pages/habits_page.dart';
+import '../features/habits/presentation/habits_providers.dart';
 import '../l10n/app_localizations.dart';
 
 /// Calendar widget to track habit completion
@@ -24,7 +24,7 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final habitsAsync = ref.watch(jsonHabitsStreamProvider);
+    final habitsAsync = ref.watch(habitsStreamProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -47,7 +47,7 @@ void main() async {
       // Try a simple generation
       final response = await model.generateContent([
         Content.text('Say "Hello" in one word only.')
-      ]).timeout(Duration(seconds: 10));
+      ]).timeout(const Duration(seconds: 10));
 
       final text = response.text ?? '';
       print('  ✅ SUCCESS - Response: ${text.trim()}');
