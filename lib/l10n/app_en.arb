@@ -914,7 +914,10 @@
   "@copyHabitConfirm": {
     "description": "Confirmation message for duplicating a habit",
     "placeholders": {
-      "habitName": {"type": "String", "example": "Morning Prayer"}
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
     }
   },
   "introMessage": "The greatest changes begin with consistency...",
@@ -978,11 +981,17 @@
     "description": "Hint text showing users how to complete habits"
   },
   "usefulTip": "Useful tip",
-  "@usefulTip": {"description": "Educational tip title"},
+  "@usefulTip": {
+    "description": "Educational tip title"
+  },
   "habitsTip": "Swipe to see actions on your habits",
-  "@habitsTip": {"description": "Educational tip description"},
+  "@habitsTip": {
+    "description": "Educational tip description"
+  },
   "understood": "Understood",
-  "@understood": {"description": "Button to close the educational tip"},
+  "@understood": {
+    "description": "Button to close the educational tip"
+  },
   "bible": "Bible",
   "@bible": {
     "description": "Bible title for AppBar"
@@ -1183,8 +1192,6 @@
   "@hideEmojis": {
     "description": "Hide emoji picker button text"
   },
-  "quality_time_loved_ones": "Quality Time with Loved Ones"
-,
   "onboardingSelectAtLeastOneGoal": "Please select at least one goal",
   "onboardingPreparingHabits": "Preparing your habits...",
   "onboardingKeepAtLeastOneHabit": "You must keep at least one habit",
