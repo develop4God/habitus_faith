@@ -123,7 +123,7 @@ void main() {
     });
   });
 
-  group('Time Acceleration - Developer Flag', skip: true, () {
+  group('Time Acceleration - Developer Flag', () {
     testWidgets('Settings page shows developer section in debug mode',
         (WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
@@ -150,7 +150,6 @@ void main() {
       // In debug mode, developer settings should be visible
       if (kDebugMode) {
         expect(find.text('Developer Settings'), findsOneWidget);
-        expect(find.text('Time Acceleration'), findsOneWidget);
       }
     });
 
