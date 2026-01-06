@@ -330,45 +330,45 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     habitId: widget.habit.id,
                                     notificationSettings: null,
                                   );
-                                  if (!mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('${l10n.reminderConfig}: ${l10n.notificationsDisabled}'),
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                } else {
-                                  // Open time picker to set notification
-                                  debugPrint('⏰ Bell tap (open time picker) for habitId=${widget.habit.id}');
-                                  final picked = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-                                  if (picked != null) {
-                                    debugPrint('🔔 Bell configuration set for habitId=${widget.habit.id}, hour=${picked.hour}, minute=${picked.minute}');
-                                    final settings = HabitNotificationSettings(
-                                      timing: NotificationTiming.atEventTime,
-                                      eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
-                                    );
-                                    await notifier.updateHabit(
-                                      habitId: widget.habit.id,
-                                      notificationSettings: settings,
-                                    );
-                                    if (!mounted) return;
+                                  if (!context.mounted) return;
+                                   ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                       content: Text('${l10n.reminderConfig}: ${l10n.notificationsDisabled}'),
+                                       duration: const Duration(seconds: 2),
+                                     ),
+                                   );
+                                 } else {
+                                   // Open time picker to set notification
+                                   debugPrint('⏰ Bell tap (open time picker) for habitId=${widget.habit.id}');
+                                   final picked = await showTimePicker(
+                                     context: context,
+                                     initialTime: TimeOfDay.now(),
+                                   );
+                                   if (picked != null) {
+                                     debugPrint('🔔 Bell configuration set for habitId=${widget.habit.id}, hour=${picked.hour}, minute=${picked.minute}');
+                                     final settings = HabitNotificationSettings(
+                                       timing: NotificationTiming.atEventTime,
+                                       eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+                                     );
+                                     await notifier.updateHabit(
+                                       habitId: widget.habit.id,
+                                       notificationSettings: settings,
+                                     );
+                                    if (!context.mounted) return;
                                     final formatted = picked.format(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('${l10n.reminderConfig}: $formatted'),
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
-                                  } else {
-                                    debugPrint('🔕 Bell configuration cancelled for habitId=${widget.habit.id}');
-                                  }
-                                }
-                              },
-                            );
-                          },
+                                     ScaffoldMessenger.of(context).showSnackBar(
+                                       SnackBar(
+                                         content: Text('${l10n.reminderConfig}: $formatted'),
+                                         duration: const Duration(seconds: 2),
+                                       ),
+                                     );
+                                   } else {
+                                     debugPrint('🔕 Bell configuration cancelled for habitId=${widget.habit.id}');
+                                   }
+                                 }
+                               },
+                             );
+                           },
                         ),
                         // Checkbox
                         InkWell(
@@ -498,7 +498,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   onPressed: widget.onEdit != null
                       ? () async {
                           await widget.onEdit!(habit);
-                          if (!mounted) return;
+                          if (!context.mounted) return;
                           Navigator.of(context).pop();
                         }
                       : null,
