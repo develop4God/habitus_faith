@@ -534,14 +534,16 @@ Requisitos estrictos:
         'isOnboarding': isOnboarding,
       };
       final prefs = await SharedPreferences.getInstance();
-      final cachedKey = 'profile_${profile.primaryIntent}_${profile.completedAt.toIso8601String()}';
+      final cachedKey =
+          'profile_${profile.primaryIntent}_${profile.completedAt.toIso8601String()}';
       await prefs.setString(cachedKey, jsonEncode(cacheData));
 
       // Después de parsear los hábitos generados por Gemini:
       final firestoreService =
           GeminiTemplateFirestoreService(FirebaseFirestore.instance);
       await firestoreService.saveGeminiTemplate(
-        fingerprint: '${profile.primaryIntent}_${profile.completedAt.toIso8601String()}',
+        fingerprint:
+            '${profile.primaryIntent}_${profile.completedAt.toIso8601String()}',
         profile: profile.toJson(),
         habits: habitsForCache,
         language: language,
@@ -575,7 +577,6 @@ Requisitos estrictos:
       throw GeminiException('Failed to generate habits: $e');
     }
   }
-
 
   /// Build prompt based on user intent
   String _buildProfilePrompt(OnboardingProfile profile) {

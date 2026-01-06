@@ -250,11 +250,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           style: TextStyle(
                                             fontSize: 42,
                                             fontWeight: FontWeight.bold,
-                                            color:
-                                                completedHabits == totalHabits &&
-                                                        totalHabits > 0
-                                                    ? Colors.green.shade700
-                                                    : Colors.blue.shade700,
+                                            color: completedHabits ==
+                                                        totalHabits &&
+                                                    totalHabits > 0
+                                                ? Colors.green.shade700
+                                                : Colors.blue.shade700,
                                           ),
                                         ),
                                       ),
