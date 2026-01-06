@@ -42,6 +42,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
     HabitNotificationSettings? notificationSettings,
+    int? targetMinutes, // Added to match interface
   }) async {
     try {
       if (userId == null) {
@@ -57,6 +58,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
         colorValue: colorValue,
         difficulty: difficulty,
         notificationSettings: notificationSettings,
+        targetMinutes: targetMinutes, // Pass to Habit.create if supported
       );
 
       await firestore
