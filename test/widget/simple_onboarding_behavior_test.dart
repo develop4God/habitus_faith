@@ -15,7 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 /// - State consistency with max limits
 /// - Error validation
 void main() {
-  group('SimpleOnboardingFlow - User Behavior Tests', skip: 'Tests require updated UI expectations for refactored onboarding flow', () {
+  group('SimpleOnboardingFlow - User Behavior Tests', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
@@ -23,6 +23,7 @@ void main() {
     Future<void> pumpOnboardingFlow(
       WidgetTester tester, {
       Size viewSize = const Size(800, 1200),
+      bool skipIntro = true,
     }) async {
       final prefs = await SharedPreferences.getInstance();
 
@@ -37,14 +38,26 @@ void main() {
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', ''), Locale('es', '')],
+            locale: Locale('es', ''),
             home: SimpleOnboardingFlow(),
           ),
         ),
       );
 
       await tester.pump();
+      
+      // Skip intro page if needed
+      if (skipIntro) {
+        final startButton = find.text('Comenzar');
+        if (tester.any(startButton)) {
+          await tester.tap(startButton);
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 500));
+        }
+      }
     }
 
     tearDown(() {

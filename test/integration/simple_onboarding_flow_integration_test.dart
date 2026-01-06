@@ -7,8 +7,12 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-Future<void> pumpSimpleOnboardingFlow(WidgetTester tester) async {
+Future<void> pumpSimpleOnboardingFlow(WidgetTester tester, {bool skipIntro = true}) async {
   final prefs = await SharedPreferences.getInstance();
+
+  // Set larger viewport to prevent overflow
+  tester.view.physicalSize = const Size(1080, 1920);
+  tester.view.devicePixelRatio = 1.0;
 
   await tester.pumpWidget(
     ProviderScope(
@@ -18,21 +22,45 @@ Future<void> pumpSimpleOnboardingFlow(WidgetTester tester) async {
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: [Locale('en', ''), Locale('es', '')],
+        locale: Locale('es', ''),
         home: SimpleOnboardingFlow(),
       ),
     ),
   );
 
   await tester.pump();
-  await tester.pump(const Duration(milliseconds: 100));
+  
+  // Skip intro page if needed
+  if (skipIntro) {
+    final startButton = find.text('Comenzar');
+    if (tester.any(startButton)) {
+      await tester.tap(startButton);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+  }
 }
 
 void main() {
-  group('Simple Onboarding Flow Integration Tests', skip: 'Tests require updated UI expectations for refactored onboarding flow', () {
+  group('Simple Onboarding Flow Integration Tests', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
+    });
+    
+    tearDown(() {
+      TestWidgetsFlutterBinding.ensureInitialized()
+          .platformDispatcher
+          .views
+          .first
+          .resetPhysicalSize();
+      TestWidgetsFlutterBinding.ensureInitialized()
+          .platformDispatcher
+          .views
+          .first
+          .resetDevicePixelRatio();
     });
 
     testWidgets('Q1: displays goals question with 4 options',
@@ -58,14 +86,13 @@ void main() {
         (WidgetTester tester) async {
       await pumpSimpleOnboardingFlow(tester);
 
-      // Try to continue without selecting
-      await tester.tap(find.text('Continuar'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
-
-      // Should show snackbar error
-      expect(find.text('Por favor selecciona al menos un objetivo'),
-          findsOneWidget);
+      // Continue button should be disabled when no goals selected
+      final continueButton = find.text('Continuar');
+      final button = tester.widget<ElevatedButton>(find.ancestor(
+        of: continueButton,
+        matching: find.byType(ElevatedButton),
+      ));
+      expect(button.onPressed, isNull);
     });
 
     testWidgets('Q1: can select up to 3 goals', (WidgetTester tester) async {
