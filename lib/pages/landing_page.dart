@@ -69,7 +69,7 @@ class _LandingPageState extends State<LandingPage>
             ),
           ),
           Positioned(
-            bottom: 40,
+            bottom: 60,
             left: 0,
             right: 0,
             child: FadeTransition(
@@ -116,17 +116,17 @@ class _LandingPageState extends State<LandingPage>
                           shadows: [
                             const Shadow(
                               offset: Offset(2.0, 2.0),
-                              blurRadius: 8.0,
+                              blurRadius: 4.0,
                               color: Colors.black45,
                             ),
                             const Shadow(
                               offset: Offset(0, 0),
-                              blurRadius: 20.0,
+                              blurRadius: 10.0,
                               color: Color(0xFF32CD32),
                             ),
                             Shadow(
                               offset: const Offset(0, 0),
-                              blurRadius: 4.0,
+                              blurRadius: 3.0,
                               color: Colors.white.withAlpha(
                                 128,
                               ), // Sombra blanca suave
@@ -163,17 +163,17 @@ class _LandingPageState extends State<LandingPage>
                               shadows: [
                                 const Shadow(
                                   offset: Offset(2.0, 2.0),
-                                  blurRadius: 8.0,
+                                  blurRadius: 3.0,
                                   color: Colors.black45,
                                 ),
                                 const Shadow(
                                   offset: Offset(0, 0),
-                                  blurRadius: 15.0,
+                                  blurRadius: 3.0,
                                   color: Color(0xFFFFD700),
                                 ),
                                 Shadow(
                                   offset: const Offset(0, 0),
-                                  blurRadius: 7.0,
+                                  blurRadius: 3.0,
                                   color: Colors.black.withAlpha(
                                     100,
                                   ), // Sombra oscura más sutil
