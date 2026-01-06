@@ -12,6 +12,7 @@ import '../features/habits/presentation/habits_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../utils/date_format_utils.dart';
 import '../widgets/unified_habit_list.dart';
+import 'edit_habit_dialog.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -364,6 +365,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                 onDelete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.deleteHabit(habitId);
+                },
+                onEdit: (habit) async {
+                  final l10n = AppLocalizations.of(context)!;
+                  await showDialog(
+                    context: context,
+                    builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                  );
                 },
                 showSwipeHint: true,
               ),
