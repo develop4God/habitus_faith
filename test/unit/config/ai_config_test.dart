@@ -4,7 +4,7 @@ import 'package:habitus_faith/core/config/ai_config.dart';
 void main() {
   group('AiConfig Constants', () {
     test('Gemini API configuration matches roadmap', () {
-      expect(AiConfig.defaultModel, equals('gemini-1.5-flash'));
+      expect(AiConfig.defaultModel, equals('gemini-2.0-flash'));
       expect(AiConfig.requestTimeout, equals(const Duration(seconds: 30)));
       expect(AiConfig.habitsPerGeneration, equals(3));
     });

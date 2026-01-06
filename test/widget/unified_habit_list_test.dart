@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/widgets/unified_habit_list.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   group('UnifiedHabitList Widget Tests', () {
@@ -16,6 +18,12 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
                 onComplete: (_) async {},
@@ -29,8 +37,8 @@ void main() {
 
       await tester.pump();
 
-      // Should show empty state
-      expect(find.text('¡Comienza tu viaje de hábitos!'), findsOneWidget);
+      // Should show empty state (English locale)
+      expect(find.text('Start your journey today'), findsOneWidget);
     });
 
     testWidgets('should display habit cards when habits exist', (tester) async {
@@ -61,6 +69,12 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
                 onComplete: (_) async {},
@@ -100,6 +114,12 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
                 onComplete: (_) async {},
@@ -137,6 +157,12 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
                 onComplete: (_) async {},
@@ -181,6 +207,12 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
                 onComplete: (_) async {},
