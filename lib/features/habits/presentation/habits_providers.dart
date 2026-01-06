@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/habit.dart';
 import '../domain/models/habit_notification.dart';
 import '../data/storage/storage_providers.dart';
+import '../../../core/services/notifications/notification_service.dart';
 
 /// Repository provider with injectable ID generator
 final habitsRepositoryProvider = jsonHabitsRepositoryProvider;
@@ -120,9 +121,19 @@ class HabitsNotifier extends AsyncNotifier<void> {
         debugPrint('HabitsNotifier.updateHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-      (habit) {
+      (habit) async {
         debugPrint('HabitsNotifier.updateHabit: success -> ${habit.id}');
         state = const AsyncData(null);
+        // Schedule notification if notificationSettings is set
+        if (notificationSettings != null &&
+            notificationSettings.timing == NotificationTiming.atEventTime &&
+            notificationSettings.eventTime != null) {
+          await NotificationService().scheduleHabitNotification(
+            habitId: habit.id,
+            habitName: habit.name,
+            eventTime: notificationSettings.eventTime!,
+          );
+        }
       },
     );
   }

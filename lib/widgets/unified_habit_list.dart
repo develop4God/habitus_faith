@@ -290,40 +290,53 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                     Row(
                       children: [
                         // Notification bell button (left of checkbox)
-                        IconButton(
-                          icon: Icon(
-                            widget.habit.notificationSettings != null &&
-                                    widget.habit.notificationSettings!.timing != NotificationTiming.none
-                                ? Icons.notifications_active
-                                : Icons.notifications_none,
-                            color: widget.habit.notificationSettings != null &&
-                                    widget.habit.notificationSettings!.timing != NotificationTiming.none
-                                ? Colors.orange
-                                : Colors.grey,
-                          ),
-                          tooltip: l10n.reminderConfig,
-                          onPressed: () async {
-                            final picked = await showTimePicker(
-                              context: context,
-                              initialTime: widget.habit.notificationSettings?.eventTime != null && widget.habit.notificationSettings!.eventTime!.contains(':')
-                                  ? TimeOfDay(
-                                      hour: int.parse(widget.habit.notificationSettings!.eventTime!.split(':')[0]),
-                                      minute: int.parse(widget.habit.notificationSettings!.eventTime!.split(':')[1]),
-                                    )
-                                  : TimeOfDay.now(),
+                        StatefulBuilder(
+                          builder: (context, setBellState) {
+                            final isActive = widget.habit.notificationSettings != null &&
+                                widget.habit.notificationSettings!.timing == NotificationTiming.atEventTime &&
+                                widget.habit.notificationSettings!.eventTime != null;
+                            return IconButton(
+                              icon: Icon(
+                                isActive ? Icons.notifications_active : Icons.notifications_none,
+                                color: isActive ? Colors.orange : Colors.grey,
+                              ),
+                              tooltip: l10n.reminderConfig,
+                              onPressed: () async {
+                                debugPrint('🔔 Bell tapped. isActive=$isActive, habitId=${widget.habit.id}');
+                                if (isActive) {
+                                  // Turn off notification
+                                  debugPrint('🔕 Bell untap (turn off notification) for habitId=${widget.habit.id}');
+                                  if (widget.onEdit != null) {
+                                    await widget.onEdit!(
+                                      widget.habit.copyWith(notificationSettings: null),
+                                    );
+                                    setBellState(() {});
+                                  }
+                                } else {
+                                  // Open time picker to set notification
+                                  debugPrint('⏰ Bell tap (open time picker) for habitId=${widget.habit.id}');
+                                  final picked = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  );
+                                  if (picked != null) {
+                                    debugPrint('🔔 Bell configuration set for habitId=${widget.habit.id}, hour=${picked.hour}, minute=${picked.minute}');
+                                    final settings = HabitNotificationSettings(
+                                      timing: NotificationTiming.atEventTime,
+                                      eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+                                    );
+                                    if (widget.onEdit != null) {
+                                      await widget.onEdit!(
+                                        widget.habit.copyWith(notificationSettings: settings, recurrence: null),
+                                      );
+                                      setBellState(() {});
+                                    }
+                                  } else {
+                                    debugPrint('🔕 Bell configuration cancelled for habitId=${widget.habit.id}');
+                                  }
+                                }
+                              },
                             );
-                            if (picked != null) {
-                              final settings = HabitNotificationSettings(
-                                timing: NotificationTiming.atEventTime,
-                                eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
-                              );
-                              if (widget.onEdit != null) {
-                                await widget.onEdit!(
-                                  widget.habit.copyWith(notificationSettings: settings),
-                                );
-                                setState(() {});
-                              }
-                            }
                           },
                         ),
                         // Checkbox
