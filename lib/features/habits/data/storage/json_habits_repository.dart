@@ -258,6 +258,7 @@ class JsonHabitsRepository implements HabitsRepository {
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
     HabitNotificationSettings? notificationSettings,
+    int? targetMinutes,
   }) async {
     try {
       final habits = _loadHabits();
@@ -270,6 +271,7 @@ class JsonHabitsRepository implements HabitsRepository {
         colorValue: colorValue,
         difficulty: difficulty,
         notificationSettings: notificationSettings,
+        targetMinutes: targetMinutes,
       );
 
       habits.add(newHabit);

@@ -45,6 +45,7 @@ abstract class HabitsRepository {
     int? colorValue,
     HabitDifficulty difficulty = HabitDifficulty.medium,
     HabitNotificationSettings? notificationSettings,
+    int? targetMinutes,
   });
 
   /// Complete a habit for today

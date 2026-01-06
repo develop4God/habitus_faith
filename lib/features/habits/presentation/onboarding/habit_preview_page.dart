@@ -82,6 +82,22 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       final habitsRepository = ref.read(jsonHabitsRepositoryProvider);
       final l10n = AppLocalizations.of(context);
 
+      // Get total time commitment from onboarding score
+      int totalMinutes;
+      switch (widget.score.timeCommitment) {
+        case TimeCommitment.short:
+          totalMinutes = 10;
+          break;
+        case TimeCommitment.medium:
+          totalMinutes = 20;
+          break;
+        case TimeCommitment.long:
+          totalMinutes = 30;
+          break;
+      }
+      final numHabits = _selectedHabitIds.length;
+      final perHabitMinutes = (totalMinutes / numHabits).round();
+
       // Create habits from selected IDs
       for (final habitId in _selectedHabitIds) {
         final predefinedHabit = predefined_data.predefinedHabits.firstWhere(
@@ -104,6 +120,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
           name: name,
           category: category,
           emoji: predefinedHabit.emoji,
+          targetMinutes: perHabitMinutes,
         );
       }
 
