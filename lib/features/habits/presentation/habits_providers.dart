@@ -124,7 +124,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
       (habit) async {
         debugPrint('HabitsNotifier.updateHabit: success -> ${habit.id}');
         state = const AsyncData(null);
-        // Schedule notification if notificationSettings is set
+        // Schedule or cancel notification
         if (notificationSettings != null &&
             notificationSettings.timing == NotificationTiming.atEventTime &&
             notificationSettings.eventTime != null) {
@@ -133,6 +133,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
             habitName: habit.name,
             eventTime: notificationSettings.eventTime!,
           );
+        } else if (notificationSettings == null) {
+          await NotificationService().cancelHabitNotification(habit.id);
         }
       },
     );

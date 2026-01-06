@@ -39,6 +39,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
   }
 
   void _removeHabit(String habitId) {
+    debugPrint('🗑️ Removing habit: $habitId');
     if (_selectedHabitIds.length <= OnboardingConfig.minHabits) {
       // Minimum 1 habit enforcement
       final l10n = AppLocalizations.of(context);
@@ -55,9 +56,11 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
     setState(() {
       _selectedHabitIds.remove(habitId);
     });
+    debugPrint('✅ Habit removed: $habitId');
   }
 
   void _addHabit() async {
+    debugPrint('➕ Add habit dialog opened');
     final l10n = AppLocalizations.of(context);
     if (l10n == null) return;
 
@@ -70,10 +73,14 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       setState(() {
         _selectedHabitIds.add(newHabitId);
       });
+      debugPrint('✅ Habit added: $newHabitId');
+    } else {
+      debugPrint('❌ Add habit cancelled or failed');
     }
   }
 
   Future<void> _startWithHabits() async {
+    debugPrint('🚀 Starting onboarding with habits: $_selectedHabitIds');
     setState(() {
       _isLoading = true;
     });
@@ -97,6 +104,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       }
       final numHabits = _selectedHabitIds.length;
       final perHabitMinutes = (totalMinutes / numHabits).round();
+      debugPrint('⏱️ Total minutes: $totalMinutes, Habits: $numHabits, Per habit: $perHabitMinutes');
 
       // Create habits from selected IDs
       for (final habitId in _selectedHabitIds) {
@@ -116,6 +124,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
             predefined_data.PredefinedHabitCategoryX(predefinedHabit.category)
                 .toDomainCategory();
 
+        debugPrint('📝 Creating habit: $habitId, name: $name, category: $category, emoji: ${predefinedHabit.emoji}, minutes: $perHabitMinutes');
         await habitsRepository.createHabit(
           name: name,
           category: category,
@@ -126,6 +135,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
 
       // Mark onboarding as complete using provider (ensures invalidation)
       await ref.read(completeOnboardingProvider)();
+      debugPrint('🏁 Onboarding complete, navigating to home');
 
       if (mounted) {
         // Navigate to home page to avoid onboarding loop
@@ -133,7 +143,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
             .pushNamedAndRemoveUntil('/home', (route) => false);
       }
     } catch (e, stackTrace) {
-      debugPrint('Failed to create habits: $e\n$stackTrace');
+      debugPrint('❌ Failed to create habits: $e\n$stackTrace');
 
       if (mounted) {
         final l10n = AppLocalizations.of(context);
@@ -188,7 +198,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
                           const Row(
                             children: [
                               Text(
-                                '📦',
+                                '🚀',
                                 style: TextStyle(fontSize: 32),
                               ),
                               SizedBox(width: 12),

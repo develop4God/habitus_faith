@@ -240,6 +240,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   child: _buildExpandedContent(context, l10n, habitColor),
                   maxHeight: 480,
                 );
+                if (!mounted) return;
                 setState(() {});
               },
               borderRadius: BorderRadius.circular(16),
@@ -329,6 +330,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     habitId: widget.habit.id,
                                     notificationSettings: null,
                                   );
+                                  if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text('${l10n.reminderConfig}: ${l10n.notificationsDisabled}'),
@@ -352,6 +354,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                       habitId: widget.habit.id,
                                       notificationSettings: settings,
                                     );
+                                    if (!mounted) return;
                                     final formatted = picked.format(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -495,6 +498,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   onPressed: widget.onEdit != null
                       ? () async {
                           await widget.onEdit!(habit);
+                          if (!mounted) return;
                           Navigator.of(context).pop();
                         }
                       : null,
