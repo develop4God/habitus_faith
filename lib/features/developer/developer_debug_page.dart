@@ -5,6 +5,8 @@ import 'package:habitus_faith/core/providers/clock_provider.dart';
 import 'package:habitus_faith/core/services/time/clock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/notification_bell_button.dart';
+
 /// A page for developer/debug tools, only visible in debug mode.
 class DeveloperDebugPage extends ConsumerWidget {
   const DeveloperDebugPage({super.key});
@@ -118,6 +120,41 @@ class DeveloperDebugPage extends ConsumerWidget {
                   ),
                 );
               }
+            },
+          ),
+          const Divider(),
+          // Bell button for notification test/demo
+          ListTile(
+            leading: const Icon(Icons.notifications, color: Colors.orange),
+            title: const Text('Test Notification Bell'),
+            subtitle: const Text('Open notification config dialog'),
+            onTap: () async {
+              // Show the NotificationBellButton in a dialog for demo
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Notification Bell Demo'),
+                  content: NotificationBellButton(
+                    initialSettings: null,
+                    eventTime: '08:00',
+                    onSettingsChanged: (settings) {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(
+                          'Notification set: '
+                          '${settings?.timing.displayName ?? 'None'} @ ${settings?.eventTime ?? ''}'
+                        )),
+                      );
+                    },
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
           // Add more developer tools here as needed

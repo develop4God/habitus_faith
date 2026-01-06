@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
+import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dart';
 import '../l10n/app_localizations.dart';
@@ -285,46 +286,88 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         ],
                       ),
                     ),
-                    // Checkbox más grande
-                    InkWell(
-                      onTap: _isCompleting ? null : _handleComplete,
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        padding: const EdgeInsets.all(4),
-                        child: _isCompleting
-                            ? SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    habitColor,
+                    // Checkbox más grande y notification bell juntos
+                    Row(
+                      children: [
+                        // Notification bell button (left of checkbox)
+                        IconButton(
+                          icon: Icon(
+                            widget.habit.notificationSettings != null &&
+                                    widget.habit.notificationSettings!.timing != NotificationTiming.none
+                                ? Icons.notifications_active
+                                : Icons.notifications_none,
+                            color: widget.habit.notificationSettings != null &&
+                                    widget.habit.notificationSettings!.timing != NotificationTiming.none
+                                ? Colors.orange
+                                : Colors.grey,
+                          ),
+                          tooltip: l10n.reminderConfig,
+                          onPressed: () async {
+                            final picked = await showTimePicker(
+                              context: context,
+                              initialTime: widget.habit.notificationSettings?.eventTime != null && widget.habit.notificationSettings!.eventTime!.contains(':')
+                                  ? TimeOfDay(
+                                      hour: int.parse(widget.habit.notificationSettings!.eventTime!.split(':')[0]),
+                                      minute: int.parse(widget.habit.notificationSettings!.eventTime!.split(':')[1]),
+                                    )
+                                  : TimeOfDay.now(),
+                            );
+                            if (picked != null) {
+                              final settings = HabitNotificationSettings(
+                                timing: NotificationTiming.atEventTime,
+                                eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+                              );
+                              if (widget.onEdit != null) {
+                                await widget.onEdit!(
+                                  widget.habit.copyWith(notificationSettings: settings),
+                                );
+                                setState(() {});
+                              }
+                            }
+                          },
+                        ),
+                        // Checkbox
+                        InkWell(
+                          onTap: _isCompleting ? null : _handleComplete,
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            padding: const EdgeInsets.all(4),
+                            child: _isCompleting
+                                ? SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        habitColor,
+                                      ),
+                                    ),
+                                  )
+                                : Transform.scale(
+                                    scale: 1.3,
+                                    child: Checkbox(
+                                      value: isCompleted,
+                                      onChanged: (val) {
+                                        if (!_isCompleting) {
+                                          _handleComplete();
+                                        }
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      activeColor: habitColor,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      visualDensity: const VisualDensity(
+                                          horizontal: 0, vertical: 0),
+                                      side: BorderSide(width: 2, color: habitColor),
+                                    ),
                                   ),
-                                ),
-                              )
-                            : Transform.scale(
-                                scale: 1.3,
-                                child: Checkbox(
-                                  value: isCompleted,
-                                  onChanged: (val) {
-                                    if (!_isCompleting) {
-                                      _handleComplete();
-                                    }
-                                  },
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  activeColor: habitColor,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  visualDensity: const VisualDensity(
-                                      horizontal: 0, vertical: 0),
-                                  side: BorderSide(width: 2, color: habitColor),
-                                ),
-                              ),
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
