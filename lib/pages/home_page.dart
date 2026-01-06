@@ -353,7 +353,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
               UnifiedHabitList(
-                habits: habits,
                 onComplete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.completeHabit(habitId);

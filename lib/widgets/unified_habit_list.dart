@@ -13,7 +13,6 @@ import '../l10n/app_localizations.dart';
 /// - Swipe-to-delete functionality from home_page
 /// - Tap-to-expand details from CompactHabitCard
 class UnifiedHabitList extends ConsumerWidget {
-  final List<Habit> habits;
   final Future<void> Function(String habitId) onComplete;
   final Future<void> Function(String habitId) onUncheck;
   final Future<void> Function(String habitId) onDelete;
@@ -22,7 +21,6 @@ class UnifiedHabitList extends ConsumerWidget {
 
   const UnifiedHabitList({
     super.key,
-    required this.habits,
     required this.onComplete,
     required this.onUncheck,
     required this.onDelete,
@@ -32,37 +30,42 @@ class UnifiedHabitList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint(
-        '🟢 UnifiedHabitList.build: Recibidos ${habits.length} hábitos: ${habits.map((h) => h.name).toList()}');
-    if (habits.isEmpty) {
-      final l10n = AppLocalizations.of(context)!;
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Text(
-            l10n.startJourney,
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey.shade500,
+    final habitsAsync = ref.watch(habitsStreamProvider);
+    final l10n = AppLocalizations.of(context)!;
+    return habitsAsync.when(
+      data: (habits) {
+        debugPrint('🟢 UnifiedHabitList.build: Recibidos ${habits.length} hábitos: ${habits.map((h) => h.name).toList()}');
+        if (habits.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Text(
+                l10n.startJourney,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey.shade500,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
-    return Column(
-      children: [
-        ...habits.map((habit) => UnifiedHabitCard(
-              habit: habit,
-              onComplete: onComplete,
-              onUncheck: onUncheck,
-              onDelete: onDelete,
-              onEdit: onEdit,
-            )),
-        if (showSwipeHint && habits.any((h) => !h.completedToday))
-          _buildSwipeHint(context),
-      ],
+          );
+        }
+        return Column(
+          children: [
+            ...habits.map((habit) => UnifiedHabitCard(
+                  habit: habit,
+                  onComplete: onComplete,
+                  onUncheck: onUncheck,
+                  onDelete: onDelete,
+                  onEdit: onEdit,
+                )),
+            if (showSwipeHint && habits.any((h) => !h.completedToday))
+              _buildSwipeHint(context),
+          ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(l10n.errorUnknown)),
     );
   }
 
@@ -113,6 +116,17 @@ class UnifiedHabitCard extends ConsumerStatefulWidget {
 class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   bool _isCompleting = false;
 
+  Habit getLatestHabit(WidgetRef ref) {
+    final habitsAsync = ref.watch(habitsStreamProvider);
+    return habitsAsync.maybeWhen(
+      data: (habits) => habits.firstWhere(
+        (h) => h.id == widget.habit.id,
+        orElse: () => widget.habit,
+      ),
+      orElse: () => widget.habit,
+    );
+  }
+
   Future<void> _handleComplete() async {
     if (_isCompleting) return;
 
@@ -121,12 +135,13 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     });
 
     try {
-      if (widget.habit.completedToday) {
-        debugPrint('Desmarcando hábito: ${widget.habit.id}');
-        await widget.onUncheck(widget.habit.id);
+      final habit = getLatestHabit(ref);
+      if (habit.completedToday) {
+        debugPrint('Desmarcando hábito: ${habit.id}');
+        await widget.onUncheck(habit.id);
       } else {
-        debugPrint('Marcando hábito: ${widget.habit.id}');
-        await widget.onComplete(widget.habit.id);
+        debugPrint('Marcando hábito: ${habit.id}');
+        await widget.onComplete(habit.id);
       }
     } finally {
       if (mounted) {
@@ -139,11 +154,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
+    final habit = getLatestHabit(ref);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.deleteHabit),
-        content: Text(l10n.deleteHabitConfirm(widget.habit.name)),
+        content: Text(l10n.deleteHabitConfirm(habit.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -161,15 +177,16 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     );
 
     if (confirmed == true) {
-      await widget.onDelete(widget.habit.id);
+      await widget.onDelete(habit.id);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final habitColor = HabitColors.getHabitColor(widget.habit);
-    final isCompleted = widget.habit.completedToday;
+    final habit = getLatestHabit(ref);
+    final habitColor = HabitColors.getHabitColor(habit);
+    final isCompleted = habit.completedToday;
 
     return AnimatedScale(
       scale: isCompleted ? 0.98 : 1.0,
@@ -314,7 +331,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(l10n.reminderConfig + ': ' + l10n.notificationsDisabled),
+                                      content: Text('${l10n.reminderConfig}: ${l10n.notificationsDisabled}'),
                                       duration: const Duration(seconds: 2),
                                     ),
                                   );
@@ -338,7 +355,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     final formatted = picked.format(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(l10n.reminderConfig + ': ' + formatted),
+                                        content: Text('${l10n.reminderConfig}: $formatted'),
                                         duration: const Duration(seconds: 2),
                                       ),
                                     );
@@ -405,6 +422,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Widget _buildExpandedContent(
       BuildContext context, AppLocalizations l10n, Color habitColor) {
+    final habit = getLatestHabit(ref);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -476,7 +494,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                 child: OutlinedButton.icon(
                   onPressed: widget.onEdit != null
                       ? () async {
-                          await widget.onEdit!(widget.habit);
+                          await widget.onEdit!(habit);
                           Navigator.of(context).pop();
                         }
                       : null,

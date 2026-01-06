@@ -204,7 +204,6 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
         ),
         Expanded(
           child: UnifiedHabitList(
-            habits: widget.habits,
             onComplete: (habitId) async {
               debugPrint('HabitsPageUI: marcado hábito $habitId');
               if (widget.onComplete != null) {
