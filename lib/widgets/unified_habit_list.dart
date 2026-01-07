@@ -51,16 +51,49 @@ class UnifiedHabitList extends ConsumerWidget {
             ),
           );
         }
+
+        // Sort habits: pending first, then completed/skipped/failed
+        final sortedHabits = [...habits]..sort((a, b) {
+            // Pending habits come first
+            if (a.dailyStatus == HabitDailyStatus.pending &&
+                b.dailyStatus != HabitDailyStatus.pending) {
+              return -1;
+            }
+            if (a.dailyStatus != HabitDailyStatus.pending &&
+                b.dailyStatus == HabitDailyStatus.pending) {
+              return 1;
+            }
+            // Within same status group, maintain creation order
+            return 0;
+          });
+
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ...habits.map((habit) => UnifiedHabitCard(
+            // "Planificar día" title
+            if (sortedHabits
+                .any((h) => h.dailyStatus == HabitDailyStatus.pending))
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child: Text(
+                  l10n.planYourDay,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+              ),
+            ...sortedHabits.map((habit) => UnifiedHabitCard(
                   habit: habit,
                   onComplete: onComplete,
                   onUncheck: onUncheck,
                   onDelete: onDelete,
                   onEdit: onEdit,
                 )),
-            if (showSwipeHint && habits.any((h) => !h.completedToday))
+            if (showSwipeHint &&
+                sortedHabits
+                    .any((h) => h.dailyStatus == HabitDailyStatus.pending))
               _buildSwipeHint(context),
           ],
         );
@@ -182,15 +215,51 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     }
   }
 
+  Future<void> _handleSkip() async {
+    final l10n = AppLocalizations.of(context)!;
+    final habit = getLatestHabit(ref);
+    final notifier = ref.read(habitsNotifierProvider.notifier);
+
+    // Skip the habit for today
+    await notifier.skipHabit(habit.id);
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.habitSkipped),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  Future<void> _handleFail() async {
+    final l10n = AppLocalizations.of(context)!;
+    final habit = getLatestHabit(ref);
+    final notifier = ref.read(habitsNotifierProvider.notifier);
+
+    // Mark the habit as failed for today
+    await notifier.failHabit(habit.id);
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.habitMarkedAsNotCompleted),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
     final habitColor = HabitColors.getHabitColor(habit);
     final isCompleted = habit.completedToday;
+    final isSkipped = habit.dailyStatus == HabitDailyStatus.skipped;
+    final isFailed = habit.dailyStatus == HabitDailyStatus.failed;
 
     return AnimatedScale(
-      scale: isCompleted ? 0.98 : 1.0,
+      scale: (isCompleted || isSkipped || isFailed) ? 0.98 : 1.0,
       duration: const Duration(milliseconds: 150),
       curve: Curves.easeInOut,
       child: Padding(
@@ -220,7 +289,13 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: isCompleted ? Colors.green.shade50 : Colors.white,
+              color: isCompleted
+                  ? Colors.green.shade50
+                  : isSkipped
+                      ? Colors.orange.shade50
+                      : isFailed
+                          ? Colors.red.shade50
+                          : Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border(
                 left: BorderSide(color: habitColor, width: 4),
@@ -270,18 +345,64 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.habit.name,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: isCompleted
-                                  ? Colors.green.shade900
-                                  : Colors.grey.shade900,
-                              decoration: isCompleted
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  widget.habit.name,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: isCompleted
+                                        ? Colors.green.shade900
+                                        : Colors.grey.shade900,
+                                    decoration:
+                                        (isCompleted || isSkipped || isFailed)
+                                            ? TextDecoration.lineThrough
+                                            : null,
+                                  ),
+                                ),
+                              ),
+                              // Status badge
+                              if (isSkipped)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    l10n.skippedHabit,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.orange.shade900,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                )
+                              else if (isFailed)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    l10n.failedHabit,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.red.shade900,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                           const SizedBox(height: 4),
                           Row(
@@ -536,6 +657,43 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          // Skip and Fail options
+          if (habit.dailyStatus == HabitDailyStatus.pending ||
+              habit.dailyStatus == HabitDailyStatus.completed)
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      await _handleSkip();
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.skip_next),
+                    label: Text(l10n.skipHabit),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.orange.shade700,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      await _handleFail();
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.close),
+                    label: Text(l10n.markAsNotCompleted),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red.shade700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           // Espaciador invisible para evitar que las opciones se mezclen con la navegación del sistema
           const SizedBox(height: 32),
         ],

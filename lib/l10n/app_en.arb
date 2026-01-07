@@ -1008,9 +1008,9 @@
   "@recurrenceConfig": {
     "description": "Recurrence configuration dialog title"
   },
-  "repeat": "Repeat",
+  "repeat": "Repeat Reminder",
   "@repeat": {
-    "description": "Repeat toggle label"
+    "description": "Repeat reminder toggle label"
   },
   "setCycleForPlan": "Set a cycle for your plan",
   "@setCycleForPlan": {
@@ -1195,5 +1195,37 @@
   "onboardingSelectAtLeastOneGoal": "Please select at least one goal",
   "onboardingPreparingHabits": "Preparing your habits...",
   "onboardingKeepAtLeastOneHabit": "You must keep at least one habit",
-  "onboardingCouldNotCreateHabits": "Could not create habits. Please try again."
+  "onboardingCouldNotCreateHabits": "Could not create habits. Please try again.",
+  "planYourDay": "Plan Your Day",
+  "@planYourDay": {
+    "description": "Title for planning the day's habits"
+  },
+  "skipHabit": "Skip for Today",
+  "@skipHabit": {
+    "description": "Option to skip/postpone habit for today"
+  },
+  "markAsNotCompleted": "Mark as Not Completed",
+  "@markAsNotCompleted": {
+    "description": "Option to mark habit as failed/not completed"
+  },
+  "skippedHabit": "Skipped",
+  "@skippedHabit": {
+    "description": "Label for skipped habit"
+  },
+  "failedHabit": "Not Completed",
+  "@failedHabit": {
+    "description": "Label for failed/not completed habit"
+  },
+  "repeatReminder": "Repeat Reminder",
+  "@repeatReminder": {
+    "description": "Repeat reminder configuration option"
+  },
+  "habitSkipped": "Habit skipped for today",
+  "@habitSkipped": {
+    "description": "Message when habit is skipped"
+  },
+  "habitMarkedAsNotCompleted": "Habit marked as not completed",
+  "@habitMarkedAsNotCompleted": {
+    "description": "Message when habit is marked as failed"
+  }
 }

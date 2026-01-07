@@ -711,7 +711,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recurrenceConfig => '每日重复';
 
   @override
-  String get repeat => '重复';
+  String get repeat => '重复提醒';
 
   @override
   String get setCycleForPlan => '为您的计划设置周期';
@@ -955,4 +955,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get onboardingCouldNotCreateHabits => '无法创建习惯。请重试。';
+
+  @override
+  String get planYourDay => '计划您的一天';
+
+  @override
+  String get skipHabit => '今天推迟';
+
+  @override
+  String get markAsNotCompleted => '标记为未完成';
+
+  @override
+  String get skippedHabit => '已推迟';
+
+  @override
+  String get failedHabit => '未完成';
+
+  @override
+  String get repeatReminder => '重复提醒';
+
+  @override
+  String get habitSkipped => '今天的习惯已推迟';
+
+  @override
+  String get habitMarkedAsNotCompleted => '习惯已标记为未完成';
 }
