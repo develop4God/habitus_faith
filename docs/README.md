@@ -94,6 +94,15 @@ dart format . && flutter analyze --fatal-infos
 
 ## 📚 Documentación
 
+### 🔍 Senior Architect Review (NEW)
+| Documento | Descripción |
+|-----------|-------------|
+| **[SENIOR_ARCHITECT_REVIEW_INDEX.md](SENIOR_ARCHITECT_REVIEW_INDEX.md)** | 📋 Índice completo de revisión de arquitectura |
+| **[ARCHITECTURE_REVIEW.md](ARCHITECTURE_REVIEW.md)** | 🏗️ Análisis de arquitectura y calidad de código (Calificación: A-) |
+| **[ML_MODEL_REVIEW.md](ML_MODEL_REVIEW.md)** | 🤖 Revisión del modelo ML y pipeline de entrenamiento (Calificación: B+) |
+| **[AI_COACH_REVIEW.md](AI_COACH_REVIEW.md)** | 💡 Análisis de Gemini Service y Behavioral Engine (Calificación: A) |
+
+### 📖 Documentación General
 | Documento | Descripción |
 |-----------|-------------|
 | **[AI_FEATURES.md](AI_FEATURES.md)** | Guía completa de características de IA |
