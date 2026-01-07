@@ -214,17 +214,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                               );
                             },
                             child: SizedBox(
-                              width: 160,
-                              height: 160,
+                              width: 110,
+                              height: 110,
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
                                   SizedBox(
-                                    width: 160,
-                                    height: 160,
+                                    width: 110,
+                                    height: 110,
                                     child: CircularProgressIndicator(
                                       value: value,
-                                      strokeWidth: 13,
+                                      strokeWidth: 9,
                                       backgroundColor: Colors.grey.shade200,
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         completedHabits == totalHabits &&
@@ -248,7 +248,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         builder: (context, value, _) => Text(
                                           '$value%',
                                           style: TextStyle(
-                                            fontSize: 42,
+                                            fontSize: 28,
                                             fontWeight: FontWeight.bold,
                                             color: completedHabits ==
                                                         totalHabits &&
@@ -263,7 +263,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         l10n.habitsCompletedCount(
                                             completedHabits, totalHabits),
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           color: Colors.grey.shade600,
                                           fontWeight: FontWeight.w500,
                                         ),
