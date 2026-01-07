@@ -140,10 +140,9 @@ class DeveloperDebugPage extends ConsumerWidget {
                     onSettingsChanged: (settings) {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(
-                          'Notification set: '
-                          '${settings?.timing.displayName ?? 'None'} @ ${settings?.eventTime ?? ''}'
-                        )),
+                        SnackBar(
+                            content: Text('Notification set: '
+                                '${settings?.timing.displayName ?? 'None'} @ ${settings?.eventTime ?? ''}')),
                       );
                     },
                   ),

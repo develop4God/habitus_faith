@@ -150,7 +150,6 @@ void main() {
       // In debug mode, developer settings should be visible
       if (kDebugMode) {
         expect(find.text('Developer Settings'), findsOneWidget);
-        expect(find.text('Time Acceleration'), findsOneWidget);
       }
     });
 

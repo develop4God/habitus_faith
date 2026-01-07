@@ -58,7 +58,7 @@ class _AdvancedHabitCardState extends ConsumerState<AdvancedHabitCard> {
   Future<void> _handleAddNote() async {
     final repository = ref.read(jsonHabitsRepositoryProvider);
     final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
-    
+
     final note = await showAddNoteDialog(
       context: context,
       habitName: widget.habit.name,

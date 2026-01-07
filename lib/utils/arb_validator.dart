@@ -77,7 +77,7 @@ void main(List<String> args) async {
     insertMissingKeys(referenceJson, targetJson);
 
     stdout.writeln(
-      '==== ARB TRANSLATION VALIDATION AND COMPLETION REPORT ($lang) ====');
+        '==== ARB TRANSLATION VALIDATION AND COMPLETION REPORT ($lang) ====');
     if (missingKeys.isEmpty && incompleteKeys.isEmpty) {
       stdout.writeln('✅ All keys are present and complete.');
     } else {
@@ -104,7 +104,8 @@ void main(List<String> args) async {
         '✅ app_$lang.arb updated: $pendingCount new keys added as "PENDING".',
       );
     } else {
-      stdout.writeln('ℹ️ No new keys added. app_$lang.arb was already complete.');
+      stdout
+          .writeln('ℹ️ No new keys added. app_$lang.arb was already complete.');
     }
     stdout.writeln('');
   }
@@ -116,4 +117,3 @@ void main(List<String> args) async {
     stdout.writeln('All language files were found and validated.');
   }
 }
-

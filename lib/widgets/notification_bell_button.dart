@@ -43,7 +43,8 @@ class NotificationBellButton extends StatelessWidget {
         if (picked != null) {
           final settings = HabitNotificationSettings(
             timing: NotificationTiming.atEventTime,
-            eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+            eventTime:
+                '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
             // Recurrence is always daily in backend logic
           );
           onSettingsChanged(settings);

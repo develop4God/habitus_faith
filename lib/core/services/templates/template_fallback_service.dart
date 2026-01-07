@@ -16,6 +16,4 @@ class TemplateFallbackService {
     // No plantillas locales: siempre fallback a Gemini
     return null;
   }
-
-
 }

@@ -132,8 +132,8 @@ class MyApp extends ConsumerWidget {
                   ? const SimpleOnboardingFlow()
                   : const AdaptiveOnboardingPage();
             },
-            loading: () =>
-                const Scaffold(body: Center(child: CircularProgressIndicator())),
+            loading: () => const Scaffold(
+                body: Center(child: CircularProgressIndicator())),
             error: (error, stack) =>
                 Scaffold(body: Center(child: Text('Error: $error'))),
           ),

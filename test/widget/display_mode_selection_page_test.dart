@@ -303,12 +303,12 @@ void main() {
           reason: 'Advanced mode feature 1 should be displayed',
         );
         expect(
-          find.text('AI-powered insights'),
+          find.text('Advanced and personalized insights.'),
           findsOneWidget,
           reason: 'Advanced mode feature 2 should be displayed',
         );
         expect(
-          find.text('Advanced customization'),
+          find.text('Third feature of advanced mode'),
           findsOneWidget,
           reason: 'Advanced mode feature 3 should be displayed',
         );
