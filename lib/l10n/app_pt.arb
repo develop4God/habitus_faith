@@ -970,6 +970,14 @@
   "onboardingPreparingHabits": "Preparando seus hábitos...",
   "onboardingKeepAtLeastOneHabit": "Você deve manter pelo menos um hábito",
   "onboardingCouldNotCreateHabits": "Não foi possível criar os hábitos. Por favor, tente novamente.",
+  "planYourDay": "Planejar o dia",
+  "skipHabit": "Adiar para hoje",
+  "markAsNotCompleted": "Marcar como não concluído",
+  "skippedHabit": "Adiado",
+  "failedHabit": "Não concluído",
+  "repeatReminder": "Repetir lembrete",
+  "habitSkipped": "Hábito adiado para hoje",
+  "habitMarkedAsNotCompleted": "Hábito marcado como não concluído",
   "@onboardingWelcomeMessage": {
     "description": "Onboarding welcome message"
   },

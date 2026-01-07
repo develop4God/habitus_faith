@@ -970,6 +970,14 @@
   "onboardingPreparingHabits": "正在准备您的习惯...",
   "onboardingKeepAtLeastOneHabit": "您必须至少保留一个习惯",
   "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。",
+  "planYourDay": "计划您的一天",
+  "skipHabit": "今天推迟",
+  "markAsNotCompleted": "标记为未完成",
+  "skippedHabit": "已推迟",
+  "failedHabit": "未完成",
+  "repeatReminder": "重复提醒",
+  "habitSkipped": "今天的习惯已推迟",
+  "habitMarkedAsNotCompleted": "习惯已标记为未完成",
   "@onboardingWelcomeMessage": {
     "description": "Onboarding welcome message"
   },

@@ -6,6 +6,14 @@ import 'ml_features_calculator.dart';
 
 enum FailurePattern { weekendGap, eveningSlump, inconsistent }
 
+/// Represents the status of a habit for the current day
+enum HabitDailyStatus {
+  pending, // Not yet completed
+  completed, // Successfully completed
+  skipped, // Skipped/postponed - doesn't affect statistics
+  failed; // Marked as not completed - affects statistics negatively
+}
+
 enum HabitCategory {
   spiritual, // prayer, bible reading, worship, fasting
   physical, // exercise, sleep, nutrition, health
@@ -66,6 +74,9 @@ class Habit {
   final String? reminderTime;
   final String? predefinedId;
   final bool completedToday;
+  final HabitDailyStatus dailyStatus; // Current day status
+  final List<DateTime> skippedDates; // Dates when habit was skipped
+  final List<DateTime> failedDates; // Dates when habit was marked as failed
   final int currentStreak;
   final int longestStreak;
   final DateTime? lastCompletedAt;
@@ -102,6 +113,9 @@ class Habit {
     this.reminderTime,
     this.predefinedId,
     this.completedToday = false,
+    this.dailyStatus = HabitDailyStatus.pending,
+    this.skippedDates = const [],
+    this.failedDates = const [],
     this.currentStreak = 0,
     this.longestStreak = 0,
     this.lastCompletedAt,
@@ -214,6 +228,7 @@ class Habit {
 
     return copyWith(
       completedToday: true,
+      dailyStatus: HabitDailyStatus.completed,
       currentStreak: newStreak,
       longestStreak: newLongestStreak,
       lastCompletedAt: now,
@@ -221,6 +236,81 @@ class Habit {
       successRate7d: newSuccessRate7d,
       consecutiveFailures:
           0, // Reset consecutive failures on successful completion
+    );
+  }
+
+  /// Skip/postpone habit for today - doesn't affect statistics
+  Habit skipToday({Clock? clock}) {
+    final effectiveClock = clock ?? const Clock.system();
+    final now = effectiveClock.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
+    // Check if already marked for today
+    if (skippedDates.any((date) {
+      final d = DateTime(date.year, date.month, date.day);
+      return d == today;
+    })) {
+      return this; // Already skipped
+    }
+    
+    final newSkippedDates = [...skippedDates, now];
+    
+    return copyWith(
+      dailyStatus: HabitDailyStatus.skipped,
+      skippedDates: newSkippedDates,
+      completedToday: false,
+    );
+  }
+
+  /// Mark habit as failed for today - affects statistics negatively
+  Habit failToday({Clock? clock}) {
+    final effectiveClock = clock ?? const Clock.system();
+    final now = effectiveClock.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
+    // Check if already marked for today
+    if (failedDates.any((date) {
+      final d = DateTime(date.year, date.month, date.day);
+      return d == today;
+    })) {
+      return this; // Already failed
+    }
+    
+    final newFailedDates = [...failedDates, now];
+    final newConsecutiveFailures = consecutiveFailures + 1;
+    
+    return copyWith(
+      dailyStatus: HabitDailyStatus.failed,
+      failedDates: newFailedDates,
+      completedToday: false,
+      currentStreak: 0, // Break the streak
+      consecutiveFailures: newConsecutiveFailures,
+    );
+  }
+
+  /// Reset habit status for today back to pending
+  Habit resetToday({Clock? clock}) {
+    final effectiveClock = clock ?? const Clock.system();
+    final now = effectiveClock.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
+    // Remove from skipped dates
+    final newSkippedDates = skippedDates.where((date) {
+      final d = DateTime(date.year, date.month, date.day);
+      return d != today;
+    }).toList();
+    
+    // Remove from failed dates
+    final newFailedDates = failedDates.where((date) {
+      final d = DateTime(date.year, date.month, date.day);
+      return d != today;
+    }).toList();
+    
+    return copyWith(
+      dailyStatus: HabitDailyStatus.pending,
+      skippedDates: newSkippedDates,
+      failedDates: newFailedDates,
+      completedToday: false,
     );
   }
 
@@ -234,6 +324,9 @@ class Habit {
     String? reminderTime,
     String? predefinedId,
     bool? completedToday,
+    HabitDailyStatus? dailyStatus,
+    List<DateTime>? skippedDates,
+    List<DateTime>? failedDates,
     int? currentStreak,
     int? longestStreak,
     DateTime? lastCompletedAt,
@@ -265,6 +358,9 @@ class Habit {
       reminderTime: reminderTime ?? this.reminderTime,
       predefinedId: predefinedId ?? this.predefinedId,
       completedToday: completedToday ?? this.completedToday,
+      dailyStatus: dailyStatus ?? this.dailyStatus,
+      skippedDates: skippedDates ?? this.skippedDates,
+      failedDates: failedDates ?? this.failedDates,
       currentStreak: currentStreak ?? this.currentStreak,
       longestStreak: longestStreak ?? this.longestStreak,
       lastCompletedAt: lastCompletedAt ?? this.lastCompletedAt,

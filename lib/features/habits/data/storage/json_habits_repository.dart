@@ -528,6 +528,7 @@ class JsonHabitsRepository implements HabitsRepository {
       final newCurrentStreak = _calculateCurrentStreak(updatedHistory);
       final updatedHabit = habit.copyWith(
         completedToday: false,
+        dailyStatus: HabitDailyStatus.pending,
         currentStreak: newCurrentStreak,
         completionHistory: updatedHistory,
       );
@@ -556,6 +557,56 @@ class JsonHabitsRepository implements HabitsRepository {
     } catch (e) {
       debugPrint('uncheckHabit: error: $e');
       return Failure(HabitFailure.persistence('Failed to uncheck habit: $e'));
+    }
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> skipHabit(String habitId) async {
+    debugPrint('skipHabit: inicio para habitId=$habitId');
+    try {
+      final habits = _loadHabits();
+      final index = habits.indexWhere((h) => h.id == habitId);
+      if (index == -1) {
+        debugPrint('skipHabit: hábito no encontrado "$habitId"');
+        return Failure(HabitFailure.notFound('Habit not found: $habitId'));
+      }
+
+      final habit = habits[index];
+      final updatedHabit = habit.skipToday();
+      
+      habits[index] = updatedHabit;
+      await _saveHabits(habits);
+      await _updateStatistics();
+      debugPrint('skipHabit: hábito "$habitId" pospuesto para hoy');
+      return Success(updatedHabit);
+    } catch (e) {
+      debugPrint('skipHabit: error: $e');
+      return Failure(HabitFailure.persistence('Failed to skip habit: $e'));
+    }
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> failHabit(String habitId) async {
+    debugPrint('failHabit: inicio para habitId=$habitId');
+    try {
+      final habits = _loadHabits();
+      final index = habits.indexWhere((h) => h.id == habitId);
+      if (index == -1) {
+        debugPrint('failHabit: hábito no encontrado "$habitId"');
+        return Failure(HabitFailure.notFound('Habit not found: $habitId'));
+      }
+
+      final habit = habits[index];
+      final updatedHabit = habit.failToday();
+      
+      habits[index] = updatedHabit;
+      await _saveHabits(habits);
+      await _updateStatistics();
+      debugPrint('failHabit: hábito "$habitId" marcado como fallido para hoy');
+      return Success(updatedHabit);
+    } catch (e) {
+      debugPrint('failHabit: error: $e');
+      return Failure(HabitFailure.persistence('Failed to fail habit: $e'));
     }
   }
 

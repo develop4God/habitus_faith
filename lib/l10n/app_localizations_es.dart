@@ -999,4 +999,28 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get onboardingCouldNotCreateHabits =>
       'No pudimos crear los hábitos. Intenta de nuevo.';
+
+  @override
+  String get planYourDay => 'Planificar día';
+
+  @override
+  String get skipHabit => 'Posponer para hoy';
+
+  @override
+  String get markAsNotCompleted => 'Marcar como no completado';
+
+  @override
+  String get skippedHabit => 'Pospuesto';
+
+  @override
+  String get failedHabit => 'No completado';
+
+  @override
+  String get repeatReminder => 'Repetir recordatorio';
+
+  @override
+  String get habitSkipped => 'Hábito pospuesto para hoy';
+
+  @override
+  String get habitMarkedAsNotCompleted => 'Hábito marcado como no completado';
 }

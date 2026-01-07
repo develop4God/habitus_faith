@@ -982,6 +982,14 @@
   "onboardingPreparingHabits": "Preparando tus hábitos...",
   "onboardingKeepAtLeastOneHabit": "Debes mantener al menos un hábito",
   "onboardingCouldNotCreateHabits": "No pudimos crear los hábitos. Intenta de nuevo.",
+  "planYourDay": "Planificar día",
+  "skipHabit": "Posponer para hoy",
+  "markAsNotCompleted": "Marcar como no completado",
+  "skippedHabit": "Pospuesto",
+  "failedHabit": "No completado",
+  "repeatReminder": "Repetir recordatorio",
+  "habitSkipped": "Hábito pospuesto para hoy",
+  "habitMarkedAsNotCompleted": "Hábito marcado como no completado",
   "@chooseYourExperience": {
     "description": "Title for display mode selection screen"
   },

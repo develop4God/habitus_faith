@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -1885,6 +1885,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not create habits. Please try again.'**
   String get onboardingCouldNotCreateHabits;
+
+  /// Title for planning the day's habits
+  ///
+  /// In en, this message translates to:
+  /// **'Plan Your Day'**
+  String get planYourDay;
+
+  /// Option to skip/postpone habit for today
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for Today'**
+  String get skipHabit;
+
+  /// Option to mark habit as failed/not completed
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Not Completed'**
+  String get markAsNotCompleted;
+
+  /// Label for skipped habit
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get skippedHabit;
+
+  /// Label for failed/not completed habit
+  ///
+  /// In en, this message translates to:
+  /// **'Not Completed'**
+  String get failedHabit;
+
+  /// Repeat reminder configuration option
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat Reminder'**
+  String get repeatReminder;
+
+  /// Message when habit is skipped
+  ///
+  /// In en, this message translates to:
+  /// **'Habit skipped for today'**
+  String get habitSkipped;
+
+  /// Message when habit is marked as failed
+  ///
+  /// In en, this message translates to:
+  /// **'Habit marked as not completed'**
+  String get habitMarkedAsNotCompleted;
 }
 
 class _AppLocalizationsDelegate
@@ -1920,9 +1968,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

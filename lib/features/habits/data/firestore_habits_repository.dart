@@ -214,9 +214,68 @@ class FirestoreHabitsRepository implements HabitsRepository {
 
       final updatedHabit = habit.copyWith(
         completedToday: false,
+        dailyStatus: HabitDailyStatus.pending,
         currentStreak: newCurrentStreak,
         completionHistory: updatedHistory,
       );
+
+      await firestore
+          .collection('habits')
+          .doc(habitId)
+          .update(HabitModel.toFirestore(updatedHabit));
+
+      return Success(updatedHabit);
+    } on FirebaseException catch (e) {
+      return Failure(NetworkFailure(e.message ?? 'Unknown Firebase error'));
+    } catch (e) {
+      return Failure(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> skipHabit(String habitId) async {
+    try {
+      if (userId == null) {
+        return const Failure(UserNotAuthenticatedFailure());
+      }
+
+      final doc = await firestore.collection('habits').doc(habitId).get();
+
+      if (!doc.exists) {
+        return Failure(HabitNotFoundFailure(habitId));
+      }
+
+      final habit = HabitModel.fromFirestore(doc);
+      final updatedHabit = habit.skipToday();
+
+      await firestore
+          .collection('habits')
+          .doc(habitId)
+          .update(HabitModel.toFirestore(updatedHabit));
+
+      return Success(updatedHabit);
+    } on FirebaseException catch (e) {
+      return Failure(NetworkFailure(e.message ?? 'Unknown Firebase error'));
+    } catch (e) {
+      return Failure(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> failHabit(String habitId) async {
+    try {
+      if (userId == null) {
+        return const Failure(UserNotAuthenticatedFailure());
+      }
+
+      final doc = await firestore.collection('habits').doc(habitId).get();
+
+      if (!doc.exists) {
+        return Failure(HabitNotFoundFailure(habitId));
+      }
+
+      final habit = HabitModel.fromFirestore(doc);
+      final updatedHabit = habit.failToday();
 
       await firestore
           .collection('habits')

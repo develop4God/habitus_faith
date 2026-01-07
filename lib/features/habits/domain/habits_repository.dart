@@ -79,6 +79,12 @@ abstract class HabitsRepository {
   /// Uncheck a habit (reset today's completion)
   Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId);
 
+  /// Skip/postpone a habit for today (doesn't affect statistics)
+  Future<Result<Habit, HabitFailure>> skipHabit(String habitId);
+
+  /// Mark a habit as failed/not completed for today (affects statistics negatively)
+  Future<Result<Habit, HabitFailure>> failHabit(String habitId);
+
   /// Delete a habit
   Future<Result<void, HabitFailure>> deleteHabit(String habitId);
 

@@ -157,6 +157,42 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
     );
   }
+
+  Future<void> skipHabit(String habitId) async {
+    debugPrint('HabitsNotifier.skipHabit: llamado para habitId=$habitId');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.skipHabit(habitId);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.skipHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint(
+            'HabitsNotifier.skipHabit: éxito, habit.dailyStatus=${habit.dailyStatus}');
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> failHabit(String habitId) async {
+    debugPrint('HabitsNotifier.failHabit: llamado para habitId=$habitId');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.failHabit(habitId);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.failHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint(
+            'HabitsNotifier.failHabit: éxito, habit.dailyStatus=${habit.dailyStatus}');
+        state = const AsyncData(null);
+      },
+    );
+  }
 }
 
 final habitsNotifierProvider = AsyncNotifierProvider<HabitsNotifier, void>(() {
