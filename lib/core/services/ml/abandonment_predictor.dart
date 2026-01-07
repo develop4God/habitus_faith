@@ -11,8 +11,15 @@ import '../../services/time/time.dart';
 /// Loads TFLite model and provides real-time predictions without server dependency
 ///
 /// Input tensor order (CRITICAL - must match training):
-/// [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
+/// [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, hoursFromReminder]
 /// Shape: [1, 5] (batch size 1, 5 features)
+///
+/// Feature definitions:
+/// 1. hourOfDay: Hour when habit was last completed (0-23), default 12 if never completed
+/// 2. dayOfWeek: Day of week when last completed (1-7, Monday=1), default 1 if never completed
+/// 3. currentStreak: Current streak count
+/// 4. failuresLast7Days: Number of missed days in last 7 days
+/// 5. hoursFromReminder: Absolute hours from reminder time to now
 class AbandonmentPredictor {
   final Clock clock;
   Interpreter? _interpreter;
@@ -89,6 +96,9 @@ class AbandonmentPredictor {
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
+      // Validate model schema
+      _validateModelSchema();
+
       // Load persisted telemetry
       await _loadTelemetry();
 
@@ -105,6 +115,58 @@ class AbandonmentPredictor {
       // Non-critical failure - predictor will return 0.0 for predictions
       _initialized = false;
     }
+  }
+
+  /// Validate that model schema matches expected configuration
+  /// Throws if there's a critical mismatch
+  void _validateModelSchema() {
+    const expectedFeatureCount = 5;
+    const expectedInputShape = [1, 5];
+    const expectedOutputShape = [1, 1];
+
+    // Validate metadata
+    if (_modelMetadata != null) {
+      final inputShape = _modelMetadata!['input_shape'] as List?;
+      final outputShape = _modelMetadata!['output_shape'] as List?;
+
+      if (inputShape != null &&
+          (inputShape[0] != expectedInputShape[0] ||
+              inputShape[1] != expectedInputShape[1])) {
+        throw Exception(
+          'Model input shape mismatch: expected $expectedInputShape, got $inputShape',
+        );
+      }
+
+      if (outputShape != null &&
+          (outputShape[0] != expectedOutputShape[0] ||
+              outputShape[1] != expectedOutputShape[1])) {
+        throw Exception(
+          'Model output shape mismatch: expected $expectedOutputShape, got $outputShape',
+        );
+      }
+    }
+
+    // Validate scaler params match expected feature count
+    if (_scalerParams != null) {
+      final mean = (_scalerParams!['mean'] as List);
+      final scale = (_scalerParams!['scale'] as List);
+
+      if (mean.length != expectedFeatureCount) {
+        throw Exception(
+          'Scaler mean length mismatch: expected $expectedFeatureCount features, got ${mean.length}',
+        );
+      }
+
+      if (scale.length != expectedFeatureCount) {
+        throw Exception(
+          'Scaler scale length mismatch: expected $expectedFeatureCount features, got ${scale.length}',
+        );
+      }
+    }
+
+    debugPrint(
+      'AbandonmentPredictor: Schema validation passed - input shape: $expectedInputShape, features: $expectedFeatureCount',
+    );
   }
 
   /// Normalize features using StandardScaler parameters from training
@@ -150,7 +212,7 @@ class AbandonmentPredictor {
   /// 2. Day of week (lastCompletedAt?.weekday ?? 1)
   /// 3. Current streak
   /// 4. Failures last 7 days (MLFeaturesCalculator.countRecentFailures(habit, 7))
-  /// 5. Category enum value (habit.category.index)
+  /// 5. Hours from reminder (MLFeaturesCalculator.calculateHoursFromReminder(habit, now))
   Future<double> predictRisk(Habit habit) async {
     if (!_initialized || _interpreter == null) {
       debugPrint(
@@ -181,28 +243,39 @@ class AbandonmentPredictor {
         habit,
         7,
       );
-      final categoryEnumValue = habit.category.index;
+      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(
+        habit,
+        clock.now(),
+      );
 
       // Prepare input features in exact order:
-      // [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
+      // [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, hoursFromReminder]
       final rawFeatures = [
         hourOfDay.toDouble(),
         dayOfWeek.toDouble(),
         currentStreak.toDouble(),
         failuresLast7Days.toDouble(),
-        categoryEnumValue.toDouble(),
+        hoursFromReminder.toDouble(),
       ];
+
+      // Validate feature count
+      const expectedFeatureCount = 5;
+      if (rawFeatures.length != expectedFeatureCount) {
+        throw Exception(
+          'Feature count mismatch: expected $expectedFeatureCount, got ${rawFeatures.length}',
+        );
+      }
 
       debugPrint(
         'AbandonmentPredictor: Raw features [hour=$hourOfDay, day=$dayOfWeek, '
-        'streak=$currentStreak, failures=$failuresLast7Days, category=$categoryEnumValue]',
+        'streak=$currentStreak, failures=$failuresLast7Days, hoursFromReminder=$hoursFromReminder]',
       );
 
       // Normalize features using StandardScaler (x - mean) / std
       final normalizedFeatures = _normalizeFeatures(rawFeatures);
 
       // Prepare input tensor [1, 5] - batch size 1, 5 features
-      // Input must be 2D array: [[hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]]
+      // Input must be 2D array: [[hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, hoursFromReminder]]
       final input = [normalizedFeatures];
 
       // Prepare output tensor [1, 1] - batch size 1, 1 output
