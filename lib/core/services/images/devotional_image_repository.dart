@@ -19,7 +19,7 @@ class DevotionalImageRepository {
 
   DevotionalImageRepository({
     this.apiUrl =
-        'https://api.github.com/repos/develop4God/Devocionales-assets/contents/images',
+        'https://api.github.com/repos/develop4God/Devocionales-assets/contents/images/habitus',
     DevotionalImageNormalizer? normalizer,
     http.Client? httpClient,
     this.sharedPreferences,
@@ -141,4 +141,3 @@ class DevotionalImageRepository {
         lowercaseName.endsWith('.webp');
   }
 }
-
