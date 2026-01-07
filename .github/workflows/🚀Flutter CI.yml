@@ -13,6 +13,8 @@ on:
         default: true
         type: boolean
 
+  push:
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main", "develop" ]
 
@@ -49,7 +51,8 @@ jobs:
           echo "🎨 Checking Dart code formatting..."
           if ! dart format --set-exit-if-changed . 2>/dev/null; then
             echo "📝 Formatting issues detected!"
-            if [ "${{ github.event.inputs.auto_format }}" = "true" ]; then
+            # Auto-format logic: enabled for push/pull_request, or if manual run and input is true
+            if [ "${{ github.event.inputs.auto_format }}" = "true" ] || [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event_name }}" = "pull_request" ]; then
               echo "🔧 Auto-formatting enabled. Applying fixes..."
               dart format .
               git config --local user.email "action@github.com"
@@ -70,7 +73,7 @@ jobs:
               fi
             else
               echo "❌ Auto-formatting is disabled. Please format manually:"
-              dart format --show-all .
+              dart format --dry-run .
               exit 1
             fi
           else
@@ -194,7 +197,12 @@ jobs:
                 default: return '🔄';
               }
             };
-            const autoFormatEnabled = '${{ github.event.inputs.auto_format }}' === 'true';
+            // For push/pull_request, auto-format is always enabled; for manual runs, use the input
+            const autoFormatEnabled = (
+              '${{ github.event.inputs.auto_format }}' === 'true' ||
+              '${{ github.event_name }}' === 'push' ||
+              '${{ github.event_name }}' === 'pull_request'
+            );
             const formatNote = autoFormatEnabled ? '🎨 Auto-format: Enabled' : '⚠️ Auto-format: Disabled';
             const comment = `## 🎉 CI Results for PR #${{ github.event.number }}
 
@@ -232,7 +240,7 @@ jobs:
           output: 'trivy-results.sarif'
 
       - name: 📤 Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
