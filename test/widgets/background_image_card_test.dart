@@ -32,7 +32,8 @@ void main() {
       expect(find.text('Test Content'), findsOneWidget);
     });
 
-    testWidgets('displays card with background when image loads successfully', (tester) async {
+    testWidgets('displays card with background when image loads successfully',
+        (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -81,7 +82,8 @@ void main() {
       expect(find.text('Test Content'), findsOneWidget);
     });
 
-    testWidgets('displays card without background when URL is placeholder', (tester) async {
+    testWidgets('displays card without background when URL is placeholder',
+        (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -189,4 +191,3 @@ void main() {
     });
   });
 }
-

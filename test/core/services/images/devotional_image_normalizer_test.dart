@@ -16,7 +16,8 @@ void main() {
       });
 
       test('returns original URL for GitHub raw content URLs', () {
-        const url = 'https://raw.githubusercontent.com/user/repo/main/image.jpg';
+        const url =
+            'https://raw.githubusercontent.com/user/repo/main/image.jpg';
         final result = normalizer.normalize(url);
         expect(result, url);
       });
@@ -48,4 +49,3 @@ void main() {
     });
   });
 }
-

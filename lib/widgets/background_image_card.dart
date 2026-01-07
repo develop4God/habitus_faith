@@ -76,7 +76,8 @@ class BackgroundImageCard extends ConsumerWidget {
               if (blurSigma > 0 || overlayOpacity > 0)
                 Positioned.fill(
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+                    filter:
+                        ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
                     child: Container(
                       color: overlayOpacity > 0
                           ? Colors.white.withValues(alpha: overlayOpacity)

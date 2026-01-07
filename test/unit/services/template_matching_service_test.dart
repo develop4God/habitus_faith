@@ -50,7 +50,6 @@ void main() {
     registerFallbackValue(Uri());
   });
 
-
   group('findMatch', () {
     test('returns cached template if available', () async {
       final profile = OnboardingProfile(

@@ -46,8 +46,7 @@ class DevotionalImageRepository {
 
         imageUrls = files
             .where((file) =>
-                file['type'] == 'file' &&
-                _isImageFile(file['name'] as String))
+                file['type'] == 'file' && _isImageFile(file['name'] as String))
             .map<String>((file) => file['download_url'] as String)
             .toList();
 
@@ -107,8 +106,7 @@ class DevotionalImageRepository {
         final List<dynamic> files = json.decode(response.body);
         final imageUrls = files
             .where((file) =>
-                file['type'] == 'file' &&
-                _isImageFile(file['name'] as String))
+                file['type'] == 'file' && _isImageFile(file['name'] as String))
             .map<String>((file) => file['download_url'] as String)
             .toList();
 
