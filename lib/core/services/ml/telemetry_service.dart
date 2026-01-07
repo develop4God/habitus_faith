@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../../../features/habits/domain/habit.dart';
@@ -12,19 +13,40 @@ import '../time/time.dart';
 /// - Track abandoned vs completed habits (7-day inactivity rule)
 /// - Add metadata (app version, user segment)
 /// - Enable batch export to JSON/CSV for model retraining
+///
+/// **Budget Optimization:**
+/// - Uses 10% sampling to reduce Firestore writes (10K/day → 1K/day)
+/// - Batches records (writes every 100 records instead of per prediction)
+/// - Target: <200 writes/day total across all users
 class MLTelemetryService {
   final FirebaseFirestore? _firestore;
   final Clock clock;
   final String appVersion;
+  
+  // Batching configuration
+  static const int batchSize = 100; // Write after 100 records
+  final double samplingRate; // Configurable sampling rate for testing
+  
+  // Internal buffer for batching
+  final List<Map<String, dynamic>> _buffer = [];
+  final math.Random _random;
 
   MLTelemetryService({
     FirebaseFirestore? firestore,
     Clock? clock,
     this.appVersion = '1.0.0', // Default version, should be injected
+    this.samplingRate = 0.10, // Default 10% sampling, 1.0 = 100% for tests
+    math.Random? random, // Allow injection for testing
   })  : _firestore = firestore,
-        clock = clock ?? const Clock.system();
+        clock = clock ?? const Clock.system(),
+        _random = random ?? math.Random();
 
   /// Log a prediction with all features for monitoring
+  ///
+  /// **Budget Optimization:**
+  /// - Samples 10% of predictions (reduces 10K writes/day → 1K/day)
+  /// - Buffers records and writes in batches of 100
+  /// - Automatically flushes when buffer is full
   ///
   /// Features logged (matching training pipeline):
   /// 1. hourOfDay - Hour when prediction was made
@@ -46,6 +68,14 @@ class MLTelemetryService {
     if (_firestore == null) {
       debugPrint(
         'MLTelemetryService: Firestore not available, skipping telemetry',
+      );
+      return;
+    }
+
+    // Sampling: Only log 10% of predictions to reduce costs
+    if (_random.nextDouble() > samplingRate) {
+      debugPrint(
+        'MLTelemetryService: Skipped prediction (sampling: ${(samplingRate * 100).toInt()}%)',
       );
       return;
     }
@@ -95,25 +125,63 @@ class MLTelemetryService {
         'habit_category': habit.category.name,
         'habit_id': habit.id,
         'user_id': habit.userId,
-        'timestamp': FieldValue.serverTimestamp(),
+        'timestamp': Timestamp.fromDate(now), // Use Timestamp for buffering
         'days_since_last_completion': daysSinceLastCompletion,
       };
 
-      await _firestore!
-          .collection('ml_telemetry')
-          .add(telemetryData); // Use add() for auto-generated unique IDs
-      // This ensures each prediction is logged separately even if multiple
-      // predictions happen in the same millisecond (e.g., batch processing)
+      // Add to buffer instead of immediate write
+      _buffer.add(telemetryData);
 
       debugPrint(
-        'MLTelemetryService: Logged prediction for habit ${habit.id} '
-        '(risk=$predictedRisk, abandoned=$isAbandoned)',
+        'MLTelemetryService: Buffered prediction for habit ${habit.id} '
+        '(risk=$predictedRisk, abandoned=$isAbandoned, buffer: ${_buffer.length}/$batchSize)',
       );
+
+      // Flush if buffer is full
+      if (_buffer.length >= batchSize) {
+        await flush();
+      }
     } catch (e) {
       debugPrint('MLTelemetryService: Failed to log prediction: $e');
       // Non-critical - don't throw
     }
   }
+
+  /// Flush buffered telemetry records to Firestore
+  ///
+  /// Writes all buffered records in a single batch operation
+  /// Call this manually before app termination or when needed
+  Future<void> flush() async {
+    if (_firestore == null || _buffer.isEmpty) {
+      return;
+    }
+
+    try {
+      final batch = _firestore!.batch();
+      final collection = _firestore!.collection('ml_telemetry');
+
+      for (final record in _buffer) {
+        final docRef = collection.doc(); // Auto-generate unique ID
+        batch.set(docRef, record);
+      }
+
+      await batch.commit();
+
+      debugPrint(
+        'MLTelemetryService: Flushed ${_buffer.length} records to Firestore',
+      );
+
+      _buffer.clear();
+    } catch (e) {
+      debugPrint('MLTelemetryService: Failed to flush buffer: $e');
+      // Keep records in buffer for retry
+    }
+  }
+
+  /// Get current buffer size
+  ///
+  /// Useful for monitoring and testing
+  int get bufferSize => _buffer.length;
 
   /// Calculate user engagement segment
   String _calculateUserSegment(Habit habit) {
