@@ -297,7 +297,8 @@ class JsonHabitsRepository implements HabitsRepository {
     String habitId,
     String? note,
   ) async {
-    debugPrint('completeHabitWithNote: inicio para habitId=$habitId, note=$note');
+    debugPrint(
+        'completeHabitWithNote: inicio para habitId=$habitId, note=$note');
     try {
       final habits = _loadHabits();
       debugPrint('completeHabitWithNote: hábitos cargados: ${habits.length}');
@@ -312,7 +313,8 @@ class JsonHabitsRepository implements HabitsRepository {
       debugPrint(
           'completeHabitWithNote: estado completedToday antes: ${habit.completedToday}');
       if (habit.completedToday) {
-        debugPrint('completeHabitWithNote: hábito "$habitId" ya completado hoy');
+        debugPrint(
+            'completeHabitWithNote: hábito "$habitId" ya completado hoy');
         return Success(habit);
       }
       final completionRecord = CompletionRecord(

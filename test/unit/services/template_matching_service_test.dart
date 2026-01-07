@@ -212,7 +212,7 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_normal_lackOfTime_closerToGod_understandBible_new', // Different motivations
+                'faithBased_normal_lackOfTime_closerToGod_prayer_new', // More similar - just 'prayer' instead of 'prayerDiscipline'
             'habits': [
               {
                 'name': 'Fuzzy Match Prayer',

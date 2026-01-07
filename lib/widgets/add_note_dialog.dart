@@ -31,10 +31,38 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
 
   // Curated list of faith-related and positive emojis
   final List<String> _emojis = [
-    '🙏', '✝️', '❤️', '🕊️', '⭐', '🌟', '💫', '✨',
-    '😊', '😌', '🙌', '💪', '👍', '🎯', '🔥', '💯',
-    '📖', '⛪', '🎵', '🎶', '🌅', '🌄', '🌈', '☀️',
-    '💡', '🎉', '🎊', '🏆', '🎁', '💝', '🌺', '🌸',
+    '🙏',
+    '✝️',
+    '❤️',
+    '🕊️',
+    '⭐',
+    '🌟',
+    '💫',
+    '✨',
+    '😊',
+    '😌',
+    '🙌',
+    '💪',
+    '👍',
+    '🎯',
+    '🔥',
+    '💯',
+    '📖',
+    '⛪',
+    '🎵',
+    '🎶',
+    '🌅',
+    '🌄',
+    '🌈',
+    '☀️',
+    '💡',
+    '🎉',
+    '🎊',
+    '🏆',
+    '🎁',
+    '💝',
+    '🌺',
+    '🌸',
   ];
 
   @override
@@ -160,7 +188,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                               label: Text(l10n.shareNote),
                               style: OutlinedButton.styleFrom(
                                 minimumSize: const Size(0, 40),
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
                               ),
                             ),
                           ),
@@ -176,7 +205,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                               label: Text(l10n.add),
                               style: FilledButton.styleFrom(
                                 minimumSize: const Size(0, 40),
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
                               ),
                             ),
                           ),
@@ -214,8 +244,11 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                             _showEmojiPicker = !_showEmojiPicker;
                           });
                         },
-                        icon: Icon(_showEmojiPicker ? Icons.close : Icons.emoji_emotions),
-                        label: Text(_showEmojiPicker ? l10n.hideEmojis : l10n.addEmoji),
+                        icon: Icon(_showEmojiPicker
+                            ? Icons.close
+                            : Icons.emoji_emotions),
+                        label: Text(
+                            _showEmojiPicker ? l10n.hideEmojis : l10n.addEmoji),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -230,7 +263,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceContainerHighest.withAlpha(77),
+                            color: theme.colorScheme.surfaceContainerHighest
+                                .withAlpha(77),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Wrap(

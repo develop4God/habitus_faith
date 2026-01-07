@@ -104,7 +104,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       }
       final numHabits = _selectedHabitIds.length;
       final perHabitMinutes = (totalMinutes / numHabits).round();
-      debugPrint('⏱️ Total minutes: $totalMinutes, Habits: $numHabits, Per habit: $perHabitMinutes');
+      debugPrint(
+          '⏱️ Total minutes: $totalMinutes, Habits: $numHabits, Per habit: $perHabitMinutes');
 
       // Create habits from selected IDs
       for (final habitId in _selectedHabitIds) {
@@ -124,7 +125,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
             predefined_data.PredefinedHabitCategoryX(predefinedHabit.category)
                 .toDomainCategory();
 
-        debugPrint('📝 Creating habit: $habitId, name: $name, category: $category, emoji: ${predefinedHabit.emoji}, minutes: $perHabitMinutes');
+        debugPrint(
+            '📝 Creating habit: $habitId, name: $name, category: $category, emoji: ${predefinedHabit.emoji}, minutes: $perHabitMinutes');
         await habitsRepository.createHabit(
           name: name,
           category: category,
