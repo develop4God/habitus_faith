@@ -389,18 +389,19 @@ void main() {
 
       test('handles very old habit with sparse data', () async {
         // Arrange: Old habit, infrequent completions
+        final now = fixedClock.now();
         final oldHabit = Habit(
           id: 'old1',
           userId: 'user1',
           name: 'Old Sparse Habit',
           category: HabitCategory.mental,
-          createdAt: DateTime(2023, 1, 1), // Very old
+          createdAt: now.subtract(const Duration(days: 380)), // ~13 months old
           currentStreak: 1,
-          lastCompletedAt: DateTime(2024, 1, 15),
+          lastCompletedAt: now,
           completionHistory: [
-            DateTime(2024, 1, 15),
-            DateTime(2024, 1, 1),
-            DateTime(2023, 12, 15),
+            now,
+            now.subtract(const Duration(days: 14)),
+            now.subtract(const Duration(days: 31)),
           ], // Sparse
           reminderTime: '20:00',
         );

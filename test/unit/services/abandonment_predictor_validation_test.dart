@@ -174,7 +174,12 @@ void main() {
       );
 
       final risk = await predictor.predictRisk(habitWithNulls);
-      expect(risk, equals(0.5)); // Default risk for new habits
+      
+      // Should return default risk for new habits
+      expect(
+        risk,
+        equals(AbandonmentPredictor.defaultRiskForNewHabits),
+      );
     });
 
     test('executes prediction in less than 100ms', () async {
@@ -259,7 +264,7 @@ void main() {
 
       // Should not throw, returns neutral risk
       final risk = await uninitializedPredictor.predictRisk(habit);
-      expect(risk, equals(0.5));
+      expect(risk, equals(AbandonmentPredictor.defaultRiskWhenUninitialized));
 
       uninitializedPredictor.dispose();
     });

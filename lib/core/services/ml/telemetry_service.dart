@@ -101,7 +101,9 @@ class MLTelemetryService {
 
       await _firestore!
           .collection('ml_telemetry')
-          .add(telemetryData); // Use add() to auto-generate unique IDs
+          .add(telemetryData); // Use add() for auto-generated unique IDs
+      // This ensures each prediction is logged separately even if multiple
+      // predictions happen in the same millisecond (e.g., batch processing)
 
       debugPrint(
         'MLTelemetryService: Logged prediction for habit ${habit.id} '

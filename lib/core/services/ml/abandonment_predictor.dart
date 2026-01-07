@@ -27,6 +27,11 @@ class AbandonmentPredictor {
   Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
 
+  // Model constants
+  static const int featureCount = 5;
+  static const double defaultRiskForNewHabits = 0.5;
+  static const double defaultRiskWhenUninitialized = 0.5;
+
   // Telemetry tracking (persisted across sessions)
   int _predictionCount = 0;
   int _errorCount = 0;
@@ -120,8 +125,7 @@ class AbandonmentPredictor {
   /// Validate that model schema matches expected configuration
   /// Throws if there's a critical mismatch
   void _validateModelSchema() {
-    const expectedFeatureCount = 5;
-    const expectedInputShape = [1, 5];
+    const expectedInputShape = [1, featureCount];
     const expectedOutputShape = [1, 1];
 
     // Validate metadata
@@ -151,21 +155,21 @@ class AbandonmentPredictor {
       final mean = (_scalerParams!['mean'] as List);
       final scale = (_scalerParams!['scale'] as List);
 
-      if (mean.length != expectedFeatureCount) {
+      if (mean.length != featureCount) {
         throw Exception(
-          'Scaler mean length mismatch: expected $expectedFeatureCount features, got ${mean.length}',
+          'Scaler mean length mismatch: expected $featureCount features, got ${mean.length}',
         );
       }
 
-      if (scale.length != expectedFeatureCount) {
+      if (scale.length != featureCount) {
         throw Exception(
-          'Scaler scale length mismatch: expected $expectedFeatureCount features, got ${scale.length}',
+          'Scaler scale length mismatch: expected $featureCount features, got ${scale.length}',
         );
       }
     }
 
     debugPrint(
-      'AbandonmentPredictor: Schema validation passed - input shape: $expectedInputShape, features: $expectedFeatureCount',
+      'AbandonmentPredictor: Schema validation passed - input shape: $expectedInputShape, features: $featureCount',
     );
   }
 
@@ -216,10 +220,10 @@ class AbandonmentPredictor {
   Future<double> predictRisk(Habit habit) async {
     if (!_initialized || _interpreter == null) {
       debugPrint(
-        'AbandonmentPredictor: Not initialized, returning neutral risk 0.5',
+        'AbandonmentPredictor: Not initialized, returning neutral risk $defaultRiskWhenUninitialized',
       );
       _errorCount++;
-      return 0.5; // Return neutral risk when not initialized
+      return defaultRiskWhenUninitialized; // Return neutral risk when not initialized
     }
 
     try {
@@ -227,12 +231,12 @@ class AbandonmentPredictor {
       _predictionCount++;
       _lastPredictionTime = clock.now();
 
-      // ⚠️ CRITICAL: Handle first-time habits (no history) → return 0.5 default risk
+      // ⚠️ CRITICAL: Handle first-time habits (no history) → return default risk
       if (habit.completionHistory.isEmpty && habit.currentStreak == 0) {
         debugPrint(
-          'AbandonmentPredictor: First-time habit detected, returning default risk 0.5',
+          'AbandonmentPredictor: First-time habit detected, returning default risk $defaultRiskForNewHabits',
         );
-        return 0.5;
+        return defaultRiskForNewHabits;
       }
 
       // Extract features from habit (EXACT order as specified in requirements)
@@ -259,10 +263,9 @@ class AbandonmentPredictor {
       ];
 
       // Validate feature count
-      const expectedFeatureCount = 5;
-      if (rawFeatures.length != expectedFeatureCount) {
+      if (rawFeatures.length != featureCount) {
         throw Exception(
-          'Feature count mismatch: expected $expectedFeatureCount, got ${rawFeatures.length}',
+          'Feature count mismatch: expected $featureCount, got ${rawFeatures.length}',
         );
       }
 
@@ -303,8 +306,8 @@ class AbandonmentPredictor {
       _errorCount++;
       // Save telemetry even on error
       await _saveTelemetry();
-      // Return neutral risk (0.5) instead of 0.0 to avoid false "no risk" signal
-      return 0.5;
+      // Return neutral risk instead of 0.0 to avoid false "no risk" signal
+      return defaultRiskWhenUninitialized;
     }
   }
 

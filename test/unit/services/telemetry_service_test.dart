@@ -91,17 +91,18 @@ void main() {
 
       test('includes metadata (app_version, user_segment)', () async {
         // Arrange - veteran user
+        final now = fixedClock.now();
         final veteranHabit = Habit(
           id: 'habit3',
           userId: 'user1',
           name: 'Veteran Habit',
           category: HabitCategory.mental,
-          createdAt: DateTime(2023, 12, 1), // 45 days old
+          createdAt: now.subtract(const Duration(days: 45)), // 45 days old
           currentStreak: 30,
-          lastCompletedAt: DateTime(2024, 1, 15),
+          lastCompletedAt: now,
           completionHistory: List.generate(
             60,
-            (i) => DateTime(2024, 1, 15).subtract(Duration(days: i)),
+            (i) => now.subtract(Duration(days: i)),
           ),
         );
 
@@ -124,15 +125,16 @@ void main() {
 
       test('correctly identifies new user segment', () async {
         // Arrange - new user (< 7 days old)
+        final now = fixedClock.now();
         final newHabit = Habit(
           id: 'habit4',
           userId: 'user1',
           name: 'New Habit',
           category: HabitCategory.spiritual,
-          createdAt: DateTime(2024, 1, 12), // 3 days old
+          createdAt: now.subtract(const Duration(days: 3)), // 3 days old
           currentStreak: 2,
-          lastCompletedAt: DateTime(2024, 1, 15),
-          completionHistory: [DateTime(2024, 1, 15), DateTime(2024, 1, 14)],
+          lastCompletedAt: now,
+          completionHistory: [now, now.subtract(const Duration(days: 1))],
         );
 
         // Act
@@ -150,17 +152,18 @@ void main() {
 
       test('correctly identifies active user segment', () async {
         // Arrange - active user (between new and veteran)
+        final now = fixedClock.now();
         final activeHabit = Habit(
           id: 'habit5',
           userId: 'user1',
           name: 'Active Habit',
           category: HabitCategory.relational,
-          createdAt: DateTime(2024, 1, 1), // 14 days old
+          createdAt: now.subtract(const Duration(days: 14)), // 14 days old
           currentStreak: 10,
-          lastCompletedAt: DateTime(2024, 1, 15),
+          lastCompletedAt: now,
           completionHistory: List.generate(
             12,
-            (i) => DateTime(2024, 1, 15).subtract(Duration(days: i)),
+            (i) => now.subtract(Duration(days: i)),
           ),
         );
 
