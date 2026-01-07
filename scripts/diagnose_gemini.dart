@@ -21,7 +21,8 @@ void main() async {
   stdout.writeln('✅ API Key found: [${apiKey.substring(0, 10)}]...');
 
   if (!apiKey.startsWith('AIza')) {
-    stdout.writeln('⚠️  Warning: API key doesn\'t start with "AIza" (expected format)');
+    stdout.writeln(
+        '⚠️  Warning: API key doesn\'t start with "AIza" (expected format)');
   }
 
   // 2. Test different model names (ordered by likelihood of working)
@@ -56,7 +57,8 @@ void main() async {
     } catch (e) {
       if (e.toString().contains('not found') ||
           e.toString().contains('not supported')) {
-        stdout.writeln('  ❌ Model not available: ${e.toString().split('\n').first}');
+        stdout.writeln(
+            '  ❌ Model not available: ${e.toString().split('\n').first}');
       } else if (e.toString().contains('API_KEY')) {
         stdout.writeln('  ❌ API key issue: $e');
         break; // No point testing other models
@@ -69,7 +71,10 @@ void main() async {
 
   stdout.writeln('\n📖 Recommendations:');
   stdout.writeln('  1. Use the model name that showed ✅ SUCCESS above');
-  stdout.writeln('  2. Update lib/core/config/ai_config.dart with the working model name');
-  stdout.writeln('  3. Verify your API key has Gemini API enabled in Google AI Studio');
-  stdout.writeln('  4. Check https://ai.google.dev/gemini-api/docs/models for latest model names');
+  stdout.writeln(
+      '  2. Update lib/core/config/ai_config.dart with the working model name');
+  stdout.writeln(
+      '  3. Verify your API key has Gemini API enabled in Google AI Studio');
+  stdout.writeln(
+      '  4. Check https://ai.google.dev/gemini-api/docs/models for latest model names');
 }

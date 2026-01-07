@@ -55,7 +55,7 @@ void main() {
           final failurePattern = behavioralEngine.detectFailurePattern(
             riskyHabit,
           );
-          
+
           // Pattern detection helps coach generate targeted advice
           expect(failurePattern, isNotNull);
         }
@@ -125,7 +125,7 @@ void main() {
 
         // Assert: Pattern detection may or may not trigger (depends on data)
         expect(risk, greaterThanOrEqualTo(0.0));
-        
+
         // Pattern detection requires specific conditions
         // If detected, should be one of the defined patterns
         if (pattern != null) {
@@ -238,7 +238,7 @@ void main() {
         if (risk >= 0.3 && risk <= 0.7) {
           // Find optimal time for suggestion
           final optimalTime = behavioralEngine.findOptimalTime(moderateHabit);
-          
+
           // Coach should suggest completion at optimal time
           expect(optimalTime, isNotNull);
         }

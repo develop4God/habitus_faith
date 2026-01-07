@@ -22,11 +22,11 @@ class MLTelemetryService {
   final FirebaseFirestore? _firestore;
   final Clock clock;
   final String appVersion;
-  
+
   // Batching configuration
   static const int batchSize = 100; // Write after 100 records
   final double samplingRate; // Configurable sampling rate for testing
-  
+
   // Internal buffer for batching
   final List<Map<String, dynamic>> _buffer = [];
   final math.Random _random;

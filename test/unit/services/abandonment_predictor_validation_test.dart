@@ -174,7 +174,7 @@ void main() {
       );
 
       final risk = await predictor.predictRisk(habitWithNulls);
-      
+
       // Should return default risk for new habits
       expect(
         risk,
@@ -288,10 +288,10 @@ void main() {
       await predictor.predictRisk(habit);
 
       final telemetry = predictor.telemetry;
-      
+
       // Either prediction count or error count should have increased
-      final totalAttempts = (telemetry['prediction_count'] as int) + 
-                           (telemetry['error_count'] as int);
+      final totalAttempts = (telemetry['prediction_count'] as int) +
+          (telemetry['error_count'] as int);
       expect(totalAttempts, greaterThan(0));
 
       await predictor.dispose();
@@ -305,12 +305,12 @@ void main() {
       // 1. Not throw an exception
       // 2. Mark itself as not initialized
       // 3. Return default risk (0.5) on predictions
-      
+
       final predictor = AbandonmentPredictor();
-      
+
       // Attempt to initialize - if metadata is corrupted, should handle gracefully
       await predictor.initialize();
-      
+
       // Even if initialization fails due to schema mismatch, predictor should work
       final habit = Habit(
         id: 'test',
@@ -321,12 +321,12 @@ void main() {
         currentStreak: 5,
         completionHistory: [],
       );
-      
+
       // Should not throw, returns default 0.5
       final risk = await predictor.predictRisk(habit);
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
-      
+
       await predictor.dispose();
     });
   });
@@ -335,10 +335,10 @@ void main() {
     test('dispose flushes telemetry buffer when service provided', () async {
       // This test verifies that dispose() flushes the telemetry buffer
       // Note: In real usage, telemetry service should be injected
-      
+
       final predictor = AbandonmentPredictor();
       await predictor.initialize();
-      
+
       // Make some predictions
       final habit = Habit(
         id: 'test',
@@ -350,18 +350,19 @@ void main() {
         lastCompletedAt: DateTime.now(),
         completionHistory: [DateTime.now()],
       );
-      
+
       await predictor.predictRisk(habit);
-      
+
       // Dispose should complete without errors
       expect(() => predictor.dispose(), returnsNormally);
-      
+
       // After dispose, predictor should not be initialized
       await predictor.dispose();
-      
+
       // Verify predictor is no longer usable after dispose
       final riskAfterDispose = await predictor.predictRisk(habit);
-      expect(riskAfterDispose, equals(AbandonmentPredictor.defaultRiskWhenUninitialized));
+      expect(riskAfterDispose,
+          equals(AbandonmentPredictor.defaultRiskWhenUninitialized));
     });
   });
 }

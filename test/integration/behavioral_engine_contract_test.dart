@@ -10,7 +10,7 @@ void main() {
 
     setUp(() {
       engine = BehavioralEngine();
-      
+
       // Create a standard test habit with sufficient data
       testHabit = Habit(
         id: 'test1',
@@ -38,21 +38,21 @@ void main() {
 
     test('findOptimalTime returns correct type', () {
       final result = engine.findOptimalTime(testHabit);
-      
+
       // Should return TimeOfDay or null
       expect(result, anyOf(isA<TimeOfDay>(), isNull));
     });
 
     test('detectFailurePattern returns correct type', () {
       final result = engine.detectFailurePattern(testHabit);
-      
+
       // Should return FailurePattern or null
       expect(result, anyOf(isA<FailurePattern>(), isNull));
     });
 
     test('calculateNextDifficulty returns valid integer', () {
       final result = engine.calculateNextDifficulty(testHabit);
-      
+
       // Should return int within valid range
       expect(result, isA<int>());
       expect(result, greaterThanOrEqualTo(BehavioralEngine.minDifficultyLevel));
@@ -61,10 +61,10 @@ void main() {
 
     test('findOptimalDays returns correct type', () {
       final result = engine.findOptimalDays(testHabit);
-      
+
       // Should return List<int> (may be empty)
       expect(result, isA<List<int>>());
-      
+
       // All values should be valid weekdays (1-7)
       for (final day in result) {
         expect(day, greaterThanOrEqualTo(1));
@@ -86,7 +86,8 @@ void main() {
       // Should not throw with minimal data
       expect(() => engine.findOptimalTime(minimalHabit), returnsNormally);
       expect(() => engine.detectFailurePattern(minimalHabit), returnsNormally);
-      expect(() => engine.calculateNextDifficulty(minimalHabit), returnsNormally);
+      expect(
+          () => engine.calculateNextDifficulty(minimalHabit), returnsNormally);
       expect(() => engine.findOptimalDays(minimalHabit), returnsNormally);
 
       // With no data, should return safe defaults
@@ -112,7 +113,8 @@ void main() {
       );
 
       final nextDifficulty = engine.calculateNextDifficulty(maxDifficultyHabit);
-      expect(nextDifficulty, lessThanOrEqualTo(BehavioralEngine.maxDifficultyLevel));
+      expect(nextDifficulty,
+          lessThanOrEqualTo(BehavioralEngine.maxDifficultyLevel));
 
       // Test lower boundary
       final minDifficultyHabit = Habit(
@@ -126,8 +128,10 @@ void main() {
         completionHistory: [],
       );
 
-      final nextMinDifficulty = engine.calculateNextDifficulty(minDifficultyHabit);
-      expect(nextMinDifficulty, greaterThanOrEqualTo(BehavioralEngine.minDifficultyLevel));
+      final nextMinDifficulty =
+          engine.calculateNextDifficulty(minDifficultyHabit);
+      expect(nextMinDifficulty,
+          greaterThanOrEqualTo(BehavioralEngine.minDifficultyLevel));
     });
 
     test('findOptimalTime with consistent completion times', () {
@@ -147,7 +151,7 @@ void main() {
       );
 
       final optimalTime = engine.findOptimalTime(consistentHabit);
-      
+
       expect(optimalTime, isNotNull);
       expect(optimalTime!.hour, equals(10));
     });
@@ -171,17 +175,19 @@ void main() {
       );
 
       final pattern = engine.detectFailurePattern(strugglingHabit);
-      
+
       // Should return a specific pattern or null
-      expect(pattern, anyOf(
-        isA<FailurePattern>(),
-        isNull,
-      ));
+      expect(
+          pattern,
+          anyOf(
+            isA<FailurePattern>(),
+            isNull,
+          ));
     });
 
     test('interface stability - methods maintain same signatures', () {
       // This test ensures the public API doesn't change unexpectedly
-      
+
       // Verify method signatures by checking parameter types
       final TimeOfDay? optimalTime = engine.findOptimalTime(testHabit);
       final FailurePattern? pattern = engine.detectFailurePattern(testHabit);

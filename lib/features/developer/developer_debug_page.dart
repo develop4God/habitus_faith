@@ -161,7 +161,8 @@ class DeveloperDebugPage extends ConsumerWidget {
           const Divider(),
           // Export statistics (JSON) button migrated from SettingsPage
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Builder(
               builder: (context) {
                 return ElevatedButton.icon(

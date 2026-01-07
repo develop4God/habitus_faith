@@ -87,7 +87,7 @@ void main() {
         // Assert
         final snapshot = await fakeFirestore.collection('ml_telemetry').get();
         expect(snapshot.docs.length, greaterThan(0));
-        
+
         final data = snapshot.docs.first.data();
 
         expect(data['predicted_risk'], equals(0.85));
@@ -124,7 +124,7 @@ void main() {
         // Assert
         final snapshot = await fakeFirestore.collection('ml_telemetry').get();
         expect(snapshot.docs.length, greaterThan(0));
-        
+
         final data = snapshot.docs.first.data();
 
         expect(data['app_version'], equals('1.1.0'));
@@ -159,7 +159,7 @@ void main() {
         // Assert
         final snapshot = await fakeFirestore.collection('ml_telemetry').get();
         expect(snapshot.docs.length, greaterThan(0));
-        
+
         final data = snapshot.docs.first.data();
 
         expect(data['user_segment'], equals('new'));
@@ -193,7 +193,7 @@ void main() {
         // Assert
         final snapshot = await fakeFirestore.collection('ml_telemetry').get();
         expect(snapshot.docs.length, greaterThan(0));
-        
+
         final data = snapshot.docs.first.data();
 
         expect(data['user_segment'], equals('active'));
@@ -253,7 +253,7 @@ void main() {
         // Assert
         final snapshot = await fakeFirestore.collection('ml_telemetry').get();
         expect(snapshot.docs.length, greaterThan(0));
-        
+
         final data = snapshot.docs.first.data();
 
         expect(data['abandoned'], isTrue); // 999 days > 7
@@ -285,15 +285,18 @@ void main() {
 
         // Log many to bypass sampling
         for (int i = 0; i < 50; i++) {
-          await telemetryService.logPrediction(habit: habit1, predictedRisk: 0.3);
+          await telemetryService.logPrediction(
+              habit: habit1, predictedRisk: 0.3);
         }
         for (int i = 0; i < 50; i++) {
-          await telemetryService.logPrediction(habit: habit2, predictedRisk: 0.7);
+          await telemetryService.logPrediction(
+              habit: habit2, predictedRisk: 0.7);
         }
         for (int i = 0; i < 50; i++) {
-          await telemetryService.logPrediction(habit: habit1, predictedRisk: 0.2);
+          await telemetryService.logPrediction(
+              habit: habit1, predictedRisk: 0.2);
         }
-        
+
         // Flush to ensure data is in Firestore
         await telemetryService.flush();
 
@@ -329,7 +332,7 @@ void main() {
             predictedRisk: 0.1,
           );
         }
-        
+
         // Flush
         await telemetryService.flush();
 
@@ -361,9 +364,10 @@ void main() {
 
         // Log many to bypass sampling
         for (int i = 0; i < 150; i++) {
-          await telemetryService.logPrediction(habit: habit, predictedRisk: 0.3);
+          await telemetryService.logPrediction(
+              habit: habit, predictedRisk: 0.3);
         }
-        
+
         // Flush
         await telemetryService.flush();
 
@@ -398,7 +402,7 @@ void main() {
             predictedRisk: 0.2,
           );
         }
-        
+
         // Flush
         await telemetryService.flush();
 
@@ -431,9 +435,10 @@ void main() {
 
         // Log many to bypass sampling
         for (int i = 0; i < 150; i++) {
-          await telemetryService.logPrediction(habit: habit, predictedRisk: 0.3);
+          await telemetryService.logPrediction(
+              habit: habit, predictedRisk: 0.3);
         }
-        
+
         // Flush
         await telemetryService.flush();
 
@@ -475,7 +480,7 @@ void main() {
             predictedRisk: 0.9,
           );
         }
-        
+
         // Flush
         await telemetryService.flush();
 
@@ -545,7 +550,7 @@ void main() {
             predictedRisk: 0.9,
           );
         }
-        
+
         // Flush
         await telemetryService.flush();
 
@@ -676,7 +681,7 @@ void main() {
           appVersion: '1.1.0',
           samplingRate: 0.10, // 10% sampling
         );
-        
+
         final habit = Habit(
           id: 'h1',
           userId: 'user1',

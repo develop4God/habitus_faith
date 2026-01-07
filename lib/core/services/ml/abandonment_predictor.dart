@@ -402,7 +402,7 @@ class AbandonmentPredictor {
       await _telemetryService!.flush();
       debugPrint('AbandonmentPredictor: Flushed telemetry buffer');
     }
-    
+
     _interpreter?.close();
     _interpreter = null;
     _scalerParams = null;

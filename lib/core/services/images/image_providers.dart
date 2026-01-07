@@ -30,4 +30,3 @@ final dailyDevotionalImageProvider = FutureProvider<String>((ref) async {
   final repository = ref.watch(devotionalImageRepositoryProvider);
   return repository.getImageForToday(width: 800, height: 400);
 });
-
