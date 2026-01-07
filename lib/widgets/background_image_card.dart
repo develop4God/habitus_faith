@@ -26,12 +26,12 @@ class BackgroundImageCard extends ConsumerWidget {
     required this.child,
     this.borderRadius = 22,
     this.padding = const EdgeInsets.all(26),
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = Colors.transparent,
     this.borderSide,
     this.elevation = 2,
     this.imageHeight = 200,
-    this.blurSigma = 10,
-    this.overlayOpacity = 0.15,
+    this.blurSigma = 0, // no blur
+    this.overlayOpacity = 0, // no overlay
   });
 
   @override
@@ -55,7 +55,7 @@ class BackgroundImageCard extends ConsumerWidget {
       borderRadius: BorderRadius.circular(borderRadius),
       child: Stack(
         children: [
-          // Background image layer with blur
+          // Background image layer
           Positioned.fill(
             child: Image.network(
               imageUrl,
@@ -69,19 +69,22 @@ class BackgroundImageCard extends ConsumerWidget {
               },
             ),
           ),
-          // Blur and overlay
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-              child: Container(
-                color: backgroundColor.withValues(alpha: overlayOpacity),
+          // Only add blur/overlay if needed
+          if (blurSigma > 0 || overlayOpacity > 0)
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+                child: Container(
+                  color: overlayOpacity > 0
+                      ? Colors.white.withValues(alpha: overlayOpacity)
+                      : Colors.transparent,
+                ),
               ),
             ),
-          ),
           // Card content
           Card(
             elevation: elevation,
-            color: backgroundColor,
+            color: Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               side: borderSide ?? BorderSide.none,
@@ -111,4 +114,3 @@ class BackgroundImageCard extends ConsumerWidget {
     );
   }
 }
-
