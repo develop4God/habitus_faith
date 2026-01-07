@@ -821,7 +821,7 @@
   "@recurrenceConfig": {
     "description": "Título del diálogo de configuración de recurrencia"
   },
-  "repeat": "Repetir",
+  "repeat": "Repetir recordatorio",
   "@repeat": {
     "description": "Etiqueta del interruptor de repetición"
   },

@@ -1008,9 +1008,9 @@
   "@recurrenceConfig": {
     "description": "Recurrence configuration dialog title"
   },
-  "repeat": "Repeat",
+  "repeat": "Repeat Reminder",
   "@repeat": {
-    "description": "Repeat toggle label"
+    "description": "Repeat reminder toggle label"
   },
   "setCycleForPlan": "Set a cycle for your plan",
   "@setCycleForPlan": {

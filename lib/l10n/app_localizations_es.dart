@@ -752,7 +752,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recurrenceConfig => 'Repeticiones cada día';
 
   @override
-  String get repeat => 'Repetir';
+  String get repeat => 'Repetir recordatorio';
 
   @override
   String get setCycleForPlan => 'Fija un ciclo para tu plan';

@@ -51,27 +51,28 @@ class UnifiedHabitList extends ConsumerWidget {
             ),
           );
         }
-        
+
         // Sort habits: pending first, then completed/skipped/failed
         final sortedHabits = [...habits]..sort((a, b) {
-          // Pending habits come first
-          if (a.dailyStatus == HabitDailyStatus.pending && 
-              b.dailyStatus != HabitDailyStatus.pending) {
-            return -1;
-          }
-          if (a.dailyStatus != HabitDailyStatus.pending && 
-              b.dailyStatus == HabitDailyStatus.pending) {
-            return 1;
-          }
-          // Within same status group, maintain creation order
-          return 0;
-        });
-        
+            // Pending habits come first
+            if (a.dailyStatus == HabitDailyStatus.pending &&
+                b.dailyStatus != HabitDailyStatus.pending) {
+              return -1;
+            }
+            if (a.dailyStatus != HabitDailyStatus.pending &&
+                b.dailyStatus == HabitDailyStatus.pending) {
+              return 1;
+            }
+            // Within same status group, maintain creation order
+            return 0;
+          });
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // "Planificar día" title
-            if (sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
+            if (sortedHabits
+                .any((h) => h.dailyStatus == HabitDailyStatus.pending))
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Text(
@@ -90,7 +91,9 @@ class UnifiedHabitList extends ConsumerWidget {
                   onDelete: onDelete,
                   onEdit: onEdit,
                 )),
-            if (showSwipeHint && sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
+            if (showSwipeHint &&
+                sortedHabits
+                    .any((h) => h.dailyStatus == HabitDailyStatus.pending))
               _buildSwipeHint(context),
           ],
         );
@@ -216,10 +219,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
     final notifier = ref.read(habitsNotifierProvider.notifier);
-    
+
     // Skip the habit for today
     await notifier.skipHabit(habit.id);
-    
+
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -233,10 +236,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
     final notifier = ref.read(habitsNotifierProvider.notifier);
-    
+
     // Mark the habit as failed for today
     await notifier.failHabit(habit.id);
-    
+
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -286,13 +289,13 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: isCompleted 
-                  ? Colors.green.shade50 
-                  : isSkipped 
-                    ? Colors.orange.shade50
-                    : isFailed
-                      ? Colors.red.shade50
-                      : Colors.white,
+              color: isCompleted
+                  ? Colors.green.shade50
+                  : isSkipped
+                      ? Colors.orange.shade50
+                      : isFailed
+                          ? Colors.red.shade50
+                          : Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border(
                 left: BorderSide(color: habitColor, width: 4),
@@ -353,9 +356,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     color: isCompleted
                                         ? Colors.green.shade900
                                         : Colors.grey.shade900,
-                                    decoration: (isCompleted || isSkipped || isFailed)
-                                        ? TextDecoration.lineThrough
-                                        : null,
+                                    decoration:
+                                        (isCompleted || isSkipped || isFailed)
+                                            ? TextDecoration.lineThrough
+                                            : null,
                                   ),
                                 ),
                               ),
@@ -655,7 +659,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           ),
           const SizedBox(height: 12),
           // Skip and Fail options
-          if (habit.dailyStatus == HabitDailyStatus.pending || 
+          if (habit.dailyStatus == HabitDailyStatus.pending ||
               habit.dailyStatus == HabitDailyStatus.completed)
             Row(
               children: [

@@ -244,7 +244,7 @@ class Habit {
     final effectiveClock = clock ?? const Clock.system();
     final now = effectiveClock.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     // Check if already marked for today
     if (skippedDates.any((date) {
       final d = DateTime(date.year, date.month, date.day);
@@ -252,9 +252,9 @@ class Habit {
     })) {
       return this; // Already skipped
     }
-    
+
     final newSkippedDates = [...skippedDates, now];
-    
+
     return copyWith(
       dailyStatus: HabitDailyStatus.skipped,
       skippedDates: newSkippedDates,
@@ -267,7 +267,7 @@ class Habit {
     final effectiveClock = clock ?? const Clock.system();
     final now = effectiveClock.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     // Check if already marked for today
     if (failedDates.any((date) {
       final d = DateTime(date.year, date.month, date.day);
@@ -275,10 +275,10 @@ class Habit {
     })) {
       return this; // Already failed
     }
-    
+
     final newFailedDates = [...failedDates, now];
     final newConsecutiveFailures = consecutiveFailures + 1;
-    
+
     return copyWith(
       dailyStatus: HabitDailyStatus.failed,
       failedDates: newFailedDates,
@@ -293,19 +293,19 @@ class Habit {
     final effectiveClock = clock ?? const Clock.system();
     final now = effectiveClock.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     // Remove from skipped dates
     final newSkippedDates = skippedDates.where((date) {
       final d = DateTime(date.year, date.month, date.day);
       return d != today;
     }).toList();
-    
+
     // Remove from failed dates
     final newFailedDates = failedDates.where((date) {
       final d = DateTime(date.year, date.month, date.day);
       return d != today;
     }).toList();
-    
+
     return copyWith(
       dailyStatus: HabitDailyStatus.pending,
       skippedDates: newSkippedDates,

@@ -127,12 +127,10 @@ class HabitModel {
       'predefinedId': habit.predefinedId,
       'completedToday': habit.completedToday,
       'dailyStatus': habit.dailyStatus.name,
-      'skippedDates': habit.skippedDates
-          .map((date) => Timestamp.fromDate(date))
-          .toList(),
-      'failedDates': habit.failedDates
-          .map((date) => Timestamp.fromDate(date))
-          .toList(),
+      'skippedDates':
+          habit.skippedDates.map((date) => Timestamp.fromDate(date)).toList(),
+      'failedDates':
+          habit.failedDates.map((date) => Timestamp.fromDate(date)).toList(),
       'currentStreak': habit.currentStreak,
       'longestStreak': habit.longestStreak,
       'lastCompletedAt': habit.lastCompletedAt != null

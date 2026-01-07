@@ -826,7 +826,7 @@
   "@recurrenceConfig": {
     "description": "Recurrence configuration dialog title"
   },
-  "repeat": "重复",
+  "repeat": "重复提醒",
   "@repeat": {
     "description": "Repeat toggle label"
   },

@@ -711,7 +711,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recurrenceConfig => '每日重复';
 
   @override
-  String get repeat => '重复';
+  String get repeat => '重复提醒';
 
   @override
   String get setCycleForPlan => '为您的计划设置周期';

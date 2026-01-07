@@ -1406,10 +1406,10 @@ abstract class AppLocalizations {
   /// **'Daily Repetitions'**
   String get recurrenceConfig;
 
-  /// Repeat toggle label
+  /// Repeat reminder toggle label
   ///
   /// In en, this message translates to:
-  /// **'Repeat'**
+  /// **'Repeat Reminder'**
   String get repeat;
 
   /// Subtitle for repeat toggle

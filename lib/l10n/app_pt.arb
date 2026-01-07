@@ -811,7 +811,7 @@
   },
   "reminderConfig": "Configuração de Lembrete",
   "recurrenceConfig": "Repetições Diárias",
-  "repeat": "Repetir",
+  "repeat": "Repetir lembrete",
   "setCycleForPlan": "Definir um ciclo para seu plano",
   "subtasks": "Subtarefas",
   "addSubtask": "Adicionar subtarefa",
