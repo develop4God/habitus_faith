@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/clock_provider.dart';
 import 'package:habitus_faith/core/services/time/clock.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/notification_bell_button.dart';
@@ -156,6 +158,58 @@ class DeveloperDebugPage extends ConsumerWidget {
               );
             },
           ),
+          const Divider(),
+          // Export statistics (JSON) button migrated from SettingsPage
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Builder(
+              builder: (context) {
+                return ElevatedButton.icon(
+                  icon: const Icon(Icons.download),
+                  label: const Text('Exportar estadísticas (JSON)'),
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final navigator = Navigator.of(context);
+                    final prefs = await SharedPreferences.getInstance();
+                    final statsJson = prefs.getString('user_statistics');
+                    if (statsJson == null) {
+                      if (navigator.mounted) {
+                        messenger.showSnackBar(
+                          const SnackBar(
+                              content:
+                                  Text('No hay estadísticas para exportar.')),
+                        );
+                      }
+                      return;
+                    }
+                    try {
+                      final downloadsDir = await getExternalStorageDirectory();
+                      final now = DateTime.now();
+                      final formatted =
+                          '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
+                      final file = File(
+                          '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$formatted.json');
+                      await file.writeAsString(statsJson);
+                      if (navigator.mounted) {
+                        messenger.showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Estadísticas exportadas en: \n${file.path}')),
+                        );
+                      }
+                    } catch (e) {
+                      if (navigator.mounted) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text('Error al exportar: $e')),
+                        );
+                      }
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+          const Divider(),
           // Add more developer tools here as needed
         ],
       ),
