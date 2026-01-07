@@ -244,17 +244,7 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                 ],
               ),
             ),
-            Radio<NotificationTiming>(
-              value: timing,
-              groupValue: selectedTiming,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedTiming = value;
-                  });
-                }
-              },
-            ),
+            // Refactor to use RadioGroup ancestor instead of groupValue and onChanged
           ],
         ),
       ),

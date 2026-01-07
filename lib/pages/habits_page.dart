@@ -35,7 +35,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
   }
 
   Future<void> completeHabitWithNote(String habitId, String? note) async {
-    debugPrint('JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note');
+    debugPrint(
+        'JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -43,11 +44,13 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
     result.fold(
       (failure) {
-        debugPrint('JsonHabitsNotifier.completeHabitWithNote: failure -> $failure');
+        debugPrint(
+            'JsonHabitsNotifier.completeHabitWithNote: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
-        debugPrint('JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}');
+        debugPrint(
+            'JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}');
         state = const AsyncData(null);
       },
     );
@@ -263,24 +266,25 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                 onComplete: (habitId) async {
                   debugPrint('HabitsPage: completando hábito $habitId');
                   final l10n = AppLocalizations.of(context)!;
-                  final habit = filtrados.firstWhere((h) => h.id == habitId, orElse: () => Habit(
-                    id: habitId,
-                    name: l10n.addNote,
-                    category: HabitCategory.mental,
-                    colorValue: null,
-                    difficulty: HabitDifficulty.medium,
-                    emoji: '',
-                    notificationSettings: null,
-                    recurrence: null,
-                    subtasks: [],
-                    completedToday: false,
-                    currentStreak: 0,
-                    longestStreak: 0,
-                    lastCompletedAt: null,
-                    completionHistory: [],
-                    userId: 'local_user',
-                    createdAt: DateTime.now(),
-                  ));
+                  final habit = filtrados.firstWhere((h) => h.id == habitId,
+                      orElse: () => Habit(
+                            id: habitId,
+                            name: l10n.addNote,
+                            category: HabitCategory.mental,
+                            colorValue: null,
+                            difficulty: HabitDifficulty.medium,
+                            emoji: '',
+                            notificationSettings: null,
+                            recurrence: null,
+                            subtasks: [],
+                            completedToday: false,
+                            currentStreak: 0,
+                            longestStreak: 0,
+                            lastCompletedAt: null,
+                            completionHistory: [],
+                            userId: 'local_user',
+                            createdAt: DateTime.now(),
+                          ));
                   String habitName = habit.name;
                   final note = await showAddNoteDialog(
                     context: context,

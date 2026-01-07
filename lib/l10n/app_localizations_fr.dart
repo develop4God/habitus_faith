@@ -758,7 +758,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get recurrenceConfig => 'Répétitions Quotidiennes';
 
   @override
-  String get repeat => 'Répéter';
+  String get repeat => 'Répéter le rappel';
 
   @override
   String get setCycleForPlan => 'Définir un cycle pour votre plan';
@@ -1006,4 +1006,29 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get onboardingCouldNotCreateHabits =>
       'Impossible de créer les habitudes. Veuillez réessayer.';
+
+  @override
+  String get planYourDay => 'Planifier votre journée';
+
+  @override
+  String get skipHabit => 'Reporter pour aujourd\'hui';
+
+  @override
+  String get markAsNotCompleted => 'Marquer comme non complété';
+
+  @override
+  String get skippedHabit => 'Reporté';
+
+  @override
+  String get failedHabit => 'Non complété';
+
+  @override
+  String get repeatReminder => 'Répéter le rappel';
+
+  @override
+  String get habitSkipped => 'Habitude reportée pour aujourd\'hui';
+
+  @override
+  String get habitMarkedAsNotCompleted =>
+      'Habitude marquée comme non complétée';
 }

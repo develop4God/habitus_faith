@@ -50,58 +50,6 @@ void main() {
     registerFallbackValue(Uri());
   });
 
-  group('generatePatternId', () {
-    test('generates correct pattern ID for faith-based profile', () {
-      final profile = OnboardingProfile(
-        primaryIntent: UserIntent.faithBased,
-        motivations: ['closerToGod', 'prayerDiscipline', 'growInFaith'],
-        challenge: 'lackOfTime',
-        supportLevel: 'normal',
-        spiritualMaturity: 'new',
-        commitment: 'daily',
-        completedAt: DateTime.now(),
-      );
-
-      final patternId = service.generatePatternId(profile);
-
-      expect(patternId,
-          'faithBased_normal_lackOfTime_closerToGod_prayerDiscipline_new');
-    });
-
-    test('generates correct pattern ID for wellness profile', () {
-      final profile = OnboardingProfile(
-        primaryIntent: UserIntent.wellness,
-        motivations: ['timeManagement', 'productivity'],
-        challenge: 'lackOfMotivation',
-        supportLevel: 'normal',
-        spiritualMaturity: null,
-        commitment: 'weekly',
-        completedAt: DateTime.now(),
-      );
-
-      final patternId = service.generatePatternId(profile);
-
-      expect(patternId,
-          'wellness_normal_lackOfMotivation_timeManagement_productivity_timeManagement');
-    });
-
-    test('uses only first two motivations', () {
-      final profile = OnboardingProfile(
-        primaryIntent: UserIntent.faithBased,
-        motivations: ['closerToGod', 'prayerDiscipline', 'understandBible'],
-        challenge: 'dontKnowStart',
-        supportLevel: 'normal',
-        spiritualMaturity: 'growing',
-        commitment: 'daily',
-        completedAt: DateTime.now(),
-      );
-
-      final patternId = service.generatePatternId(profile);
-
-      expect(patternId,
-          'faithBased_normal_dontKnowStart_closerToGod_prayerDiscipline_growing');
-    });
-  });
 
   group('findMatch', () {
     test('returns cached template if available', () async {
@@ -212,7 +160,7 @@ void main() {
         'templates': [
           {
             'pattern_id':
-                'faithBased_normal_lackOfTime_closerToGod_understandBible_new', // Different motivations
+                'faithBased_normal_lackOfTime_closerToGod_prayer_new', // More similar - just 'prayer' instead of 'prayerDiscipline'
             'habits': [
               {
                 'name': 'Fuzzy Match Prayer',

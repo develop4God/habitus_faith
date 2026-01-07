@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/habit.dart';
 import '../domain/models/habit_notification.dart';
 import '../data/storage/storage_providers.dart';
+import '../../../core/services/notifications/notification_service.dart';
 
 /// Repository provider with injectable ID generator
 final habitsRepositoryProvider = jsonHabitsRepositoryProvider;
@@ -120,9 +121,21 @@ class HabitsNotifier extends AsyncNotifier<void> {
         debugPrint('HabitsNotifier.updateHabit: failure -> $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-      (habit) {
+      (habit) async {
         debugPrint('HabitsNotifier.updateHabit: success -> ${habit.id}');
         state = const AsyncData(null);
+        // Schedule or cancel notification
+        if (notificationSettings != null &&
+            notificationSettings.timing == NotificationTiming.atEventTime &&
+            notificationSettings.eventTime != null) {
+          await NotificationService().scheduleHabitNotification(
+            habitId: habit.id,
+            habitName: habit.name,
+            eventTime: notificationSettings.eventTime!,
+          );
+        } else if (notificationSettings == null) {
+          await NotificationService().cancelHabitNotification(habit.id);
+        }
       },
     );
   }
@@ -140,6 +153,42 @@ class HabitsNotifier extends AsyncNotifier<void> {
       (habit) {
         debugPrint(
             'HabitsNotifier.uncheckHabit: éxito, habit.completedToday=${habit.completedToday}');
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> skipHabit(String habitId) async {
+    debugPrint('HabitsNotifier.skipHabit: llamado para habitId=$habitId');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.skipHabit(habitId);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.skipHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint(
+            'HabitsNotifier.skipHabit: éxito, habit.dailyStatus=${habit.dailyStatus}');
+        state = const AsyncData(null);
+      },
+    );
+  }
+
+  Future<void> failHabit(String habitId) async {
+    debugPrint('HabitsNotifier.failHabit: llamado para habitId=$habitId');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.failHabit(habitId);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.failHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint(
+            'HabitsNotifier.failHabit: éxito, habit.dailyStatus=${habit.dailyStatus}');
         state = const AsyncData(null);
       },
     );

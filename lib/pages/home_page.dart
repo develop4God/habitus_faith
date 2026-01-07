@@ -12,6 +12,8 @@ import '../features/habits/presentation/habits_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../utils/date_format_utils.dart';
 import '../widgets/unified_habit_list.dart';
+import '../widgets/background_image_card.dart';
+import 'edit_habit_dialog.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -178,102 +180,97 @@ class _HomePageState extends ConsumerState<HomePage> {
               // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Card(
-                  elevation: 2,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                    side: BorderSide(
-                      color: completedHabits == totalHabits && totalHabits > 0
-                          ? Colors.green.shade300
-                          : Colors.blue.shade300,
-                      width: 2,
-                    ),
+                child: BackgroundImageCard(
+                  borderSide: BorderSide(
+                    color: completedHabits == totalHabits && totalHabits > 0
+                        ? Colors.green.shade300
+                        : Colors.blue.shade300,
+                    width: 2,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(26),
+                  child: SingleChildScrollView(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         // Circular progress indicator (ring) - ANIMATED
                         TweenAnimationBuilder<double>(
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeInOut,
-                          tween: Tween<double>(
-                            begin: 0,
-                            end: totalHabits > 0
-                                ? completedHabits / totalHabits
-                                : 0,
-                          ),
-                          builder: (context, value, _) => GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => const StatisticsPage(),
-                                ),
-                              );
-                            },
-                            child: SizedBox(
-                              width: 160,
-                              height: 160,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 160,
-                                    height: 160,
-                                    child: CircularProgressIndicator(
-                                      value: value,
-                                      strokeWidth: 13,
-                                      backgroundColor: Colors.grey.shade200,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        completedHabits == totalHabits &&
-                                                totalHabits > 0
-                                            ? Colors.green.shade400
-                                            : Colors.blue.shade400,
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeInOut,
+                            tween: Tween<double>(
+                              begin: 0,
+                              end: totalHabits > 0
+                                  ? completedHabits / totalHabits
+                                  : 0,
+                            ),
+                            builder: (context, value, _) => GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const StatisticsPage(),
+                                  ),
+                                );
+                              },
+                              child: SizedBox(
+                                width: 110,
+                                height: 110,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 110,
+                                      height: 110,
+                                      child: CircularProgressIndicator(
+                                        value: value,
+                                        strokeWidth: 9,
+                                        backgroundColor: Colors.grey.shade200,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          completedHabits == totalHabits &&
+                                                  totalHabits > 0
+                                              ? Colors.green.shade400
+                                              : Colors.blue.shade400,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TweenAnimationBuilder<int>(
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        curve: Curves.easeInOut,
-                                        tween: IntTween(
-                                          begin: 0,
-                                          end: completionPercentage,
-                                        ),
-                                        builder: (context, value, _) => Text(
-                                          '$value%',
-                                          style: TextStyle(
-                                            fontSize: 42,
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                completedHabits == totalHabits &&
-                                                        totalHabits > 0
-                                                    ? Colors.green.shade700
-                                                    : Colors.blue.shade700,
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TweenAnimationBuilder<int>(
+                                          duration:
+                                              const Duration(milliseconds: 250),
+                                          curve: Curves.easeInOut,
+                                          tween: IntTween(
+                                            begin: 0,
+                                            end: completionPercentage,
+                                          ),
+                                          builder: (context, value, _) => Text(
+                                            '$value%',
+                                            style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                              color: completedHabits ==
+                                                          totalHabits &&
+                                                      totalHabits > 0
+                                                  ? Colors.green.shade700
+                                                  : Colors.blue.shade700,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        l10n.habitsCompletedCount(
-                                            completedHabits, totalHabits),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          l10n.habitsCompletedCount(
+                                              completedHabits, totalHabits),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey.shade600,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
 
                         const SizedBox(height: 18),
 
@@ -353,7 +350,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
               UnifiedHabitList(
-                habits: habits,
                 onComplete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.completeHabit(habitId);
@@ -365,6 +361,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                 onDelete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.deleteHabit(habitId);
+                },
+                onEdit: (habit) async {
+                  final l10n = AppLocalizations.of(context)!;
+                  await showDialog(
+                    context: context,
+                    builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                  );
                 },
                 showSwipeHint: true,
               ),

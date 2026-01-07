@@ -3,16 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/widgets/unified_habit_list.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
+import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   group('UnifiedHabitList Widget Tests', () {
     testWidgets('should display empty message when no habits', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            habitsStreamProvider.overrideWith(
+              (ref) => Stream.value([]),
+            ),
+          ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
-                habits: const [],
                 onComplete: (_) async {},
                 onUncheck: (_) async {},
                 onDelete: (_) async {},
@@ -22,8 +35,10 @@ void main() {
         ),
       );
 
-      // Should show empty state
-      expect(find.text('¡Comienza tu viaje de hábitos!'), findsOneWidget);
+      await tester.pump();
+
+      // Should show empty state (English locale)
+      expect(find.text('Start your journey today'), findsOneWidget);
     });
 
     testWidgets('should display habit cards when habits exist', (tester) async {
@@ -48,10 +63,20 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            habitsStreamProvider.overrideWith(
+              (ref) => Stream.value(testHabits),
+            ),
+          ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
-                habits: testHabits,
                 onComplete: (_) async {},
                 onUncheck: (_) async {},
                 onDelete: (_) async {},
@@ -60,6 +85,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pump();
 
       // Should show both habits
       expect(find.text('Test Habit 1'), findsOneWidget);
@@ -81,10 +108,20 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            habitsStreamProvider.overrideWith(
+              (ref) => Stream.value(testHabits),
+            ),
+          ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
-                habits: testHabits,
                 onComplete: (_) async {},
                 onUncheck: (_) async {},
                 onDelete: (_) async {},
@@ -94,6 +131,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pump();
 
       // Should show swipe hint
       expect(find.byIcon(Icons.swipe_left), findsOneWidget);
@@ -112,10 +151,20 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            habitsStreamProvider.overrideWith(
+              (ref) => Stream.value(testHabits),
+            ),
+          ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
-                habits: testHabits,
                 onComplete: (_) async {},
                 onUncheck: (_) async {},
                 onDelete: (_) async {},
@@ -125,6 +174,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pump();
 
       // Should not show swipe hint
       expect(find.byIcon(Icons.swipe_left), findsNothing);
@@ -150,10 +201,20 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            habitsStreamProvider.overrideWith(
+              (ref) => Stream.value(testHabits),
+            ),
+          ],
           child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', '')],
             home: Scaffold(
               body: UnifiedHabitList(
-                habits: testHabits,
                 onComplete: (_) async {},
                 onUncheck: (_) async {},
                 onDelete: (_) async {},
@@ -162,6 +223,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pump();
 
       // Should have checkboxes for both habits
       expect(find.byType(Checkbox), findsNWidgets(2));

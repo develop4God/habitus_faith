@@ -8,10 +8,6 @@ import 'package:habitus_faith/pages/language_settings_page.dart';
 import 'package:habitus_faith/pages/notifications_settings_page.dart';
 import 'package:habitus_faith/pages/home_page.dart';
 import 'package:habitus_faith/widgets/display_mode_modal.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:intl/intl.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -84,57 +80,6 @@ class SettingsPage extends ConsumerWidget {
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () =>
                 _showDisplayModeDialog(context, ref, l10n, currentMode),
-          ),
-          const Divider(),
-          // Botón para exportar estadísticas
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Builder(
-              builder: (context) {
-                return ElevatedButton.icon(
-                  icon: const Icon(Icons.download),
-                  label: const Text('Exportar estadísticas (JSON)'),
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    final navigator = Navigator.of(context);
-                    final prefs = await SharedPreferences.getInstance();
-                    final statsJson = prefs.getString('user_statistics');
-                    if (statsJson == null) {
-                      if (navigator.mounted) {
-                        messenger.showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text('No hay estadísticas para exportar.')),
-                        );
-                      }
-                      return;
-                    }
-                    try {
-                      final downloadsDir = await getExternalStorageDirectory();
-                      final now =
-                          DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-                      final file = File(
-                          '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$now.json');
-                      await file.writeAsString(statsJson);
-                      if (navigator.mounted) {
-                        messenger.showSnackBar(
-                          SnackBar(
-                              content: Text(
-                                  'Estadísticas exportadas en: \n${file.path}')),
-                        );
-                      }
-                    } catch (e) {
-                      if (navigator.mounted) {
-                        messenger.showSnackBar(
-                          SnackBar(content: Text('Error al exportar: $e')),
-                        );
-                      }
-                    }
-                  },
-                );
-              },
-            ),
           ),
           const Divider(),
           // Developer Settings button (only in debug mode)

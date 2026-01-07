@@ -1406,10 +1406,10 @@ abstract class AppLocalizations {
   /// **'Daily Repetitions'**
   String get recurrenceConfig;
 
-  /// Repeat toggle label
+  /// Repeat reminder toggle label
   ///
   /// In en, this message translates to:
-  /// **'Repeat'**
+  /// **'Repeat Reminder'**
   String get repeat;
 
   /// Subtitle for repeat toggle
@@ -1885,6 +1885,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not create habits. Please try again.'**
   String get onboardingCouldNotCreateHabits;
+
+  /// Title for planning the day's habits
+  ///
+  /// In en, this message translates to:
+  /// **'Plan Your Day'**
+  String get planYourDay;
+
+  /// Option to skip/postpone habit for today
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for Today'**
+  String get skipHabit;
+
+  /// Option to mark habit as failed/not completed
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Not Completed'**
+  String get markAsNotCompleted;
+
+  /// Label for skipped habit
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get skippedHabit;
+
+  /// Label for failed/not completed habit
+  ///
+  /// In en, this message translates to:
+  /// **'Not Completed'**
+  String get failedHabit;
+
+  /// Repeat reminder configuration option
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat Reminder'**
+  String get repeatReminder;
+
+  /// Message when habit is skipped
+  ///
+  /// In en, this message translates to:
+  /// **'Habit skipped for today'**
+  String get habitSkipped;
+
+  /// Message when habit is marked as failed
+  ///
+  /// In en, this message translates to:
+  /// **'Habit marked as not completed'**
+  String get habitMarkedAsNotCompleted;
 }
 
 class _AppLocalizationsDelegate
