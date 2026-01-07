@@ -51,51 +51,66 @@ class BackgroundImageCard extends ConsumerWidget {
       return _buildCardWithoutBackground();
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: Stack(
-        children: [
-          // Background image layer
-          Positioned.fill(
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(color: Colors.grey.shade100);
-              },
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(color: Colors.grey.shade100);
-              },
-            ),
-          ),
-          // Only add blur/overlay if needed
-          if (blurSigma > 0 || overlayOpacity > 0)
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-                child: Container(
-                  color: overlayOpacity > 0
-                      ? Colors.white.withValues(alpha: overlayOpacity)
-                      : Colors.transparent,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final hasBoundedHeight = constraints.hasBoundedHeight && constraints.maxHeight < double.infinity;
+        final hasBoundedWidth = constraints.hasBoundedWidth && constraints.maxWidth < double.infinity;
+        // If both are bounded, use constraints.biggest, else use a default height
+        final boxHeight = hasBoundedHeight ? constraints.maxHeight : imageHeight;
+        final boxWidth = hasBoundedWidth ? constraints.maxWidth : double.infinity;
+        return SizedBox(
+          height: boxHeight,
+          width: boxWidth,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: Stack(
+              children: [
+                // Background image layer
+                Positioned.fill(
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(color: Colors.grey.shade100);
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(color: Colors.grey.shade100);
+                    },
+                  ),
                 ),
-              ),
-            ),
-          // Card content
-          Card(
-            elevation: elevation,
-            color: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius),
-              side: borderSide ?? BorderSide.none,
-            ),
-            child: Padding(
-              padding: padding,
-              child: child,
+                // Only add blur/overlay if needed
+                if (blurSigma > 0 || overlayOpacity > 0)
+                  Positioned.fill(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+                      child: Container(
+                        color: overlayOpacity > 0
+                            ? Colors.white.withValues(alpha: overlayOpacity)
+                            : Colors.transparent,
+                      ),
+                    ),
+                  ),
+                // Card content
+                Positioned.fill(
+                  child: Card(
+                    elevation: elevation,
+                    color: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      side: BorderSide.none, // No border/outline
+                    ),
+                    child: Padding(
+                      padding: padding,
+                      child: child,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
