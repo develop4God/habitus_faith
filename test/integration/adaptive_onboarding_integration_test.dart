@@ -14,7 +14,7 @@ void main() {
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
     });
-    
+
     tearDown(() {
       TestWidgetsFlutterBinding.ensureInitialized()
           .platformDispatcher
@@ -30,7 +30,7 @@ void main() {
 
     Future<void> pumpApp(WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -56,7 +56,7 @@ void main() {
 
     testWidgets('page loads without errors', (WidgetTester tester) async {
       await pumpApp(tester);
-      
+
       // Page should load
       expect(find.byType(AdaptiveOnboardingPage), findsOneWidget);
     });

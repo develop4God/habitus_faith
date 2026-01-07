@@ -7,7 +7,8 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-Future<void> pumpSimpleOnboardingFlow(WidgetTester tester, {bool skipIntro = true}) async {
+Future<void> pumpSimpleOnboardingFlow(WidgetTester tester,
+    {bool skipIntro = true}) async {
   final prefs = await SharedPreferences.getInstance();
 
   // Set larger viewport to prevent overflow
@@ -32,7 +33,7 @@ Future<void> pumpSimpleOnboardingFlow(WidgetTester tester, {bool skipIntro = tru
   );
 
   await tester.pump();
-  
+
   // Skip intro page if needed
   if (skipIntro) {
     final startButton = find.text('Comenzar');
@@ -49,7 +50,7 @@ void main() {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
-    
+
     tearDown(() {
       TestWidgetsFlutterBinding.ensureInitialized()
           .platformDispatcher

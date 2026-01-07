@@ -19,7 +19,7 @@ void main() {
         'completions': '{}',
       });
     });
-    
+
     tearDown(() {
       TestWidgetsFlutterBinding.ensureInitialized()
           .platformDispatcher
@@ -35,7 +35,7 @@ void main() {
 
     Future<void> pumpHomePage(WidgetTester tester, List<Habit> habits) async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -73,7 +73,7 @@ void main() {
       ];
 
       await pumpHomePage(tester, testHabits);
-      
+
       // Page should load
       expect(find.byType(HomePage), findsOneWidget);
     });
@@ -83,7 +83,7 @@ void main() {
     setUp(() {
       SharedPreferences.setMockInitialValues({'onboarding_complete': true});
     });
-    
+
     tearDown(() {
       TestWidgetsFlutterBinding.ensureInitialized()
           .platformDispatcher
@@ -99,7 +99,7 @@ void main() {
 
     Future<void> pumpHomePage(WidgetTester tester, List<Habit> habits) async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -125,7 +125,8 @@ void main() {
       await tester.pump();
     }
 
-    testWidgets('completed habits display correctly', (WidgetTester tester) async {
+    testWidgets('completed habits display correctly',
+        (WidgetTester tester) async {
       final testHabits = [
         Habit(
           id: '1',
@@ -139,7 +140,7 @@ void main() {
       ];
 
       await pumpHomePage(tester, testHabits);
-      
+
       // Should show the habit name
       expect(find.text('Completed Habit'), findsOneWidget);
     });

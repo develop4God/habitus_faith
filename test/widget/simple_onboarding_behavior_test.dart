@@ -48,7 +48,7 @@ void main() {
       );
 
       await tester.pump();
-      
+
       // Skip intro page if needed
       if (skipIntro) {
         final startButton = find.text('Comenzar');

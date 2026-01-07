@@ -14,7 +14,7 @@ void main() {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
-    
+
     tearDown(() {
       TestWidgetsFlutterBinding.ensureInitialized()
           .platformDispatcher
@@ -30,7 +30,7 @@ void main() {
 
     Future<void> pumpAdaptiveOnboardingPage(WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -56,12 +56,13 @@ void main() {
 
     testWidgets('page loads without errors', (WidgetTester tester) async {
       await pumpAdaptiveOnboardingPage(tester);
-      
+
       // Page should load (this will throw if there are build errors)
       expect(find.byType(AdaptiveOnboardingPage), findsOneWidget);
     });
 
-    testWidgets('displays intro page with start button', (WidgetTester tester) async {
+    testWidgets('displays intro page with start button',
+        (WidgetTester tester) async {
       await pumpAdaptiveOnboardingPage(tester);
 
       // Should show intro with start button
