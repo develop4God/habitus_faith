@@ -6,6 +6,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import '../../../features/habits/domain/habit.dart';
 import '../../../features/habits/domain/ml_features_calculator.dart';
 import '../../services/time/time.dart';
+import 'telemetry_service.dart';
 
 /// Service for ML-based habit abandonment risk prediction
 /// Loads TFLite model and provides real-time predictions without server dependency
@@ -22,6 +23,7 @@ import '../../services/time/time.dart';
 /// 5. hoursFromReminder: Absolute hours from reminder time to now
 class AbandonmentPredictor {
   final Clock clock;
+  final MLTelemetryService? _telemetryService;
   Interpreter? _interpreter;
   Map<String, dynamic>? _scalerParams;
   Map<String, dynamic>? _modelMetadata;
@@ -44,8 +46,12 @@ class AbandonmentPredictor {
   static const String _telemetryLastPredictionKey = 'ml_last_prediction';
   static const String _telemetryLastResetKey = 'ml_last_reset';
 
-  /// Constructor with optional clock injection
-  AbandonmentPredictor({Clock? clock}) : clock = clock ?? const Clock.system();
+  /// Constructor with optional clock and telemetry service injection
+  AbandonmentPredictor({
+    Clock? clock,
+    MLTelemetryService? telemetryService,
+  })  : clock = clock ?? const Clock.system(),
+        _telemetryService = telemetryService;
 
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
@@ -128,7 +134,7 @@ class AbandonmentPredictor {
     const expectedInputShape = [1, featureCount];
     const expectedOutputShape = [1, 1];
 
-    // Validate metadata
+    // Validate metadata (log warnings instead of throwing)
     if (_modelMetadata != null) {
       final inputShape = _modelMetadata!['input_shape'] as List?;
       final outputShape = _modelMetadata!['output_shape'] as List?;
@@ -136,17 +142,21 @@ class AbandonmentPredictor {
       if (inputShape != null &&
           (inputShape[0] != expectedInputShape[0] ||
               inputShape[1] != expectedInputShape[1])) {
-        throw Exception(
-          'Model input shape mismatch: expected $expectedInputShape, got $inputShape',
+        debugPrint(
+          '⚠️ Schema mismatch: expected input shape $expectedInputShape, got $inputShape',
         );
+        _initialized = false; // Mark as not initialized
+        return; // Exit validation, predictRisk() will return default 0.5
       }
 
       if (outputShape != null &&
           (outputShape[0] != expectedOutputShape[0] ||
               outputShape[1] != expectedOutputShape[1])) {
-        throw Exception(
-          'Model output shape mismatch: expected $expectedOutputShape, got $outputShape',
+        debugPrint(
+          '⚠️ Schema mismatch: expected output shape $expectedOutputShape, got $outputShape',
         );
+        _initialized = false;
+        return;
       }
     }
 
@@ -156,15 +166,19 @@ class AbandonmentPredictor {
       final scale = (_scalerParams!['scale'] as List);
 
       if (mean.length != featureCount) {
-        throw Exception(
-          'Scaler mean length mismatch: expected $featureCount features, got ${mean.length}',
+        debugPrint(
+          '⚠️ Schema mismatch: expected $featureCount features in mean, got ${mean.length}',
         );
+        _initialized = false;
+        return;
       }
 
       if (scale.length != featureCount) {
-        throw Exception(
-          'Scaler scale length mismatch: expected $featureCount features, got ${scale.length}',
+        debugPrint(
+          '⚠️ Schema mismatch: expected $featureCount features in scale, got ${scale.length}',
         );
+        _initialized = false;
+        return;
       }
     }
 
@@ -295,7 +309,15 @@ class AbandonmentPredictor {
         '(model v${_modelMetadata?['version']})',
       );
 
-      // Save telemetry after successful prediction
+      // Log to telemetry service if available
+      if (_telemetryService != null) {
+        await _telemetryService!.logPrediction(
+          habit: habit,
+          predictedRisk: probability,
+        );
+      }
+
+      // Save internal telemetry after successful prediction
       await _saveTelemetry();
 
       return probability.clamp(0.0, 1.0);
@@ -373,8 +395,14 @@ class AbandonmentPredictor {
     }
   }
 
-  /// Dispose resources
-  void dispose() {
+  /// Dispose resources and flush telemetry
+  Future<void> dispose() async {
+    // Flush telemetry buffer before disposing
+    if (_telemetryService != null) {
+      await _telemetryService!.flush();
+      debugPrint('AbandonmentPredictor: Flushed telemetry buffer');
+    }
+    
     _interpreter?.close();
     _interpreter = null;
     _scalerParams = null;

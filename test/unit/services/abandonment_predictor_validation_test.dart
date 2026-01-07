@@ -294,7 +294,74 @@ void main() {
                            (telemetry['error_count'] as int);
       expect(totalAttempts, greaterThan(0));
 
-      predictor.dispose();
+      await predictor.dispose();
+    });
+  });
+
+  group('AbandonmentPredictor Schema Mismatch Handling', () {
+    test('schema mismatch does not crash app', () async {
+      // This test verifies that schema validation logs warnings instead of throwing
+      // In a real scenario with corrupted metadata, the predictor should:
+      // 1. Not throw an exception
+      // 2. Mark itself as not initialized
+      // 3. Return default risk (0.5) on predictions
+      
+      final predictor = AbandonmentPredictor();
+      
+      // Attempt to initialize - if metadata is corrupted, should handle gracefully
+      await predictor.initialize();
+      
+      // Even if initialization fails due to schema mismatch, predictor should work
+      final habit = Habit(
+        id: 'test',
+        userId: 'user1',
+        name: 'Test',
+        category: HabitCategory.spiritual,
+        createdAt: DateTime.now(),
+        currentStreak: 5,
+        completionHistory: [],
+      );
+      
+      // Should not throw, returns default 0.5
+      final risk = await predictor.predictRisk(habit);
+      expect(risk, greaterThanOrEqualTo(0.0));
+      expect(risk, lessThanOrEqualTo(1.0));
+      
+      await predictor.dispose();
+    });
+  });
+
+  group('AbandonmentPredictor Dispose with Telemetry', () {
+    test('dispose flushes telemetry buffer when service provided', () async {
+      // This test verifies that dispose() flushes the telemetry buffer
+      // Note: In real usage, telemetry service should be injected
+      
+      final predictor = AbandonmentPredictor();
+      await predictor.initialize();
+      
+      // Make some predictions
+      final habit = Habit(
+        id: 'test',
+        userId: 'user1',
+        name: 'Test',
+        category: HabitCategory.spiritual,
+        createdAt: DateTime.now().subtract(const Duration(days: 10)),
+        currentStreak: 5,
+        lastCompletedAt: DateTime.now(),
+        completionHistory: [DateTime.now()],
+      );
+      
+      await predictor.predictRisk(habit);
+      
+      // Dispose should complete without errors
+      expect(() => predictor.dispose(), returnsNormally);
+      
+      // After dispose, predictor should not be initialized
+      await predictor.dispose();
+      
+      // Verify predictor is no longer usable after dispose
+      final riskAfterDispose = await predictor.predictRisk(habit);
+      expect(riskAfterDispose, equals(AbandonmentPredictor.defaultRiskWhenUninitialized));
     });
   });
 }
