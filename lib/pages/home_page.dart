@@ -12,6 +12,7 @@ import '../features/habits/presentation/habits_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../utils/date_format_utils.dart';
 import '../widgets/unified_habit_list.dart';
+import '../widgets/background_image_card.dart';
 import 'edit_habit_dialog.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -179,24 +180,17 @@ class _HomePageState extends ConsumerState<HomePage> {
               // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Card(
-                  elevation: 2,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                    side: BorderSide(
-                      color: completedHabits == totalHabits && totalHabits > 0
-                          ? Colors.green.shade300
-                          : Colors.blue.shade300,
-                      width: 2,
-                    ),
+                child: BackgroundImageCard(
+                  borderSide: BorderSide(
+                    color: completedHabits == totalHabits && totalHabits > 0
+                        ? Colors.green.shade300
+                        : Colors.blue.shade300,
+                    width: 2,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(26),
-                    child: Column(
-                      children: [
-                        // Circular progress indicator (ring) - ANIMATED
-                        TweenAnimationBuilder<double>(
+                  child: Column(
+                    children: [
+                      // Circular progress indicator (ring) - ANIMATED
+                      TweenAnimationBuilder<double>(
                           duration: const Duration(milliseconds: 250),
                           curve: Curves.easeInOut,
                           tween: Tween<double>(
@@ -327,8 +321,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),
