@@ -6,19 +6,33 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import '../../../features/habits/domain/habit.dart';
 import '../../../features/habits/domain/ml_features_calculator.dart';
 import '../../services/time/time.dart';
+import 'telemetry_service.dart';
 
 /// Service for ML-based habit abandonment risk prediction
 /// Loads TFLite model and provides real-time predictions without server dependency
 ///
 /// Input tensor order (CRITICAL - must match training):
-/// [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
+/// [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, hoursFromReminder]
 /// Shape: [1, 5] (batch size 1, 5 features)
+///
+/// Feature definitions:
+/// 1. hourOfDay: Hour when habit was last completed (0-23), default 12 if never completed
+/// 2. dayOfWeek: Day of week when last completed (1-7, Monday=1), default 1 if never completed
+/// 3. currentStreak: Current streak count
+/// 4. failuresLast7Days: Number of missed days in last 7 days
+/// 5. hoursFromReminder: Absolute hours from reminder time to now
 class AbandonmentPredictor {
   final Clock clock;
+  final MLTelemetryService? _telemetryService;
   Interpreter? _interpreter;
   Map<String, dynamic>? _scalerParams;
   Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
+
+  // Model constants
+  static const int featureCount = 5;
+  static const double defaultRiskForNewHabits = 0.5;
+  static const double defaultRiskWhenUninitialized = 0.5;
 
   // Telemetry tracking (persisted across sessions)
   int _predictionCount = 0;
@@ -32,8 +46,12 @@ class AbandonmentPredictor {
   static const String _telemetryLastPredictionKey = 'ml_last_prediction';
   static const String _telemetryLastResetKey = 'ml_last_reset';
 
-  /// Constructor with optional clock injection
-  AbandonmentPredictor({Clock? clock}) : clock = clock ?? const Clock.system();
+  /// Constructor with optional clock and telemetry service injection
+  AbandonmentPredictor({
+    Clock? clock,
+    MLTelemetryService? telemetryService,
+  })  : clock = clock ?? const Clock.system(),
+        _telemetryService = telemetryService;
 
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
@@ -89,6 +107,9 @@ class AbandonmentPredictor {
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
+      // Validate model schema
+      _validateModelSchema();
+
       // Load persisted telemetry
       await _loadTelemetry();
 
@@ -105,6 +126,65 @@ class AbandonmentPredictor {
       // Non-critical failure - predictor will return 0.0 for predictions
       _initialized = false;
     }
+  }
+
+  /// Validate that model schema matches expected configuration
+  /// Throws if there's a critical mismatch
+  void _validateModelSchema() {
+    const expectedInputShape = [1, featureCount];
+    const expectedOutputShape = [1, 1];
+
+    // Validate metadata (log warnings instead of throwing)
+    if (_modelMetadata != null) {
+      final inputShape = _modelMetadata!['input_shape'] as List?;
+      final outputShape = _modelMetadata!['output_shape'] as List?;
+
+      if (inputShape != null &&
+          (inputShape[0] != expectedInputShape[0] ||
+              inputShape[1] != expectedInputShape[1])) {
+        debugPrint(
+          '⚠️ Schema mismatch: expected input shape $expectedInputShape, got $inputShape',
+        );
+        _initialized = false; // Mark as not initialized
+        return; // Exit validation, predictRisk() will return default 0.5
+      }
+
+      if (outputShape != null &&
+          (outputShape[0] != expectedOutputShape[0] ||
+              outputShape[1] != expectedOutputShape[1])) {
+        debugPrint(
+          '⚠️ Schema mismatch: expected output shape $expectedOutputShape, got $outputShape',
+        );
+        _initialized = false;
+        return;
+      }
+    }
+
+    // Validate scaler params match expected feature count
+    if (_scalerParams != null) {
+      final mean = (_scalerParams!['mean'] as List);
+      final scale = (_scalerParams!['scale'] as List);
+
+      if (mean.length != featureCount) {
+        debugPrint(
+          '⚠️ Schema mismatch: expected $featureCount features in mean, got ${mean.length}',
+        );
+        _initialized = false;
+        return;
+      }
+
+      if (scale.length != featureCount) {
+        debugPrint(
+          '⚠️ Schema mismatch: expected $featureCount features in scale, got ${scale.length}',
+        );
+        _initialized = false;
+        return;
+      }
+    }
+
+    debugPrint(
+      'AbandonmentPredictor: Schema validation passed - input shape: $expectedInputShape, features: $featureCount',
+    );
   }
 
   /// Normalize features using StandardScaler parameters from training
@@ -150,14 +230,14 @@ class AbandonmentPredictor {
   /// 2. Day of week (lastCompletedAt?.weekday ?? 1)
   /// 3. Current streak
   /// 4. Failures last 7 days (MLFeaturesCalculator.countRecentFailures(habit, 7))
-  /// 5. Category enum value (habit.category.index)
+  /// 5. Hours from reminder (MLFeaturesCalculator.calculateHoursFromReminder(habit, now))
   Future<double> predictRisk(Habit habit) async {
     if (!_initialized || _interpreter == null) {
       debugPrint(
-        'AbandonmentPredictor: Not initialized, returning neutral risk 0.5',
+        'AbandonmentPredictor: Not initialized, returning neutral risk $defaultRiskWhenUninitialized',
       );
       _errorCount++;
-      return 0.5; // Return neutral risk when not initialized
+      return defaultRiskWhenUninitialized; // Return neutral risk when not initialized
     }
 
     try {
@@ -165,12 +245,12 @@ class AbandonmentPredictor {
       _predictionCount++;
       _lastPredictionTime = clock.now();
 
-      // ⚠️ CRITICAL: Handle first-time habits (no history) → return 0.5 default risk
+      // ⚠️ CRITICAL: Handle first-time habits (no history) → return default risk
       if (habit.completionHistory.isEmpty && habit.currentStreak == 0) {
         debugPrint(
-          'AbandonmentPredictor: First-time habit detected, returning default risk 0.5',
+          'AbandonmentPredictor: First-time habit detected, returning default risk $defaultRiskForNewHabits',
         );
-        return 0.5;
+        return defaultRiskForNewHabits;
       }
 
       // Extract features from habit (EXACT order as specified in requirements)
@@ -181,28 +261,38 @@ class AbandonmentPredictor {
         habit,
         7,
       );
-      final categoryEnumValue = habit.category.index;
+      final hoursFromReminder = MLFeaturesCalculator.calculateHoursFromReminder(
+        habit,
+        clock.now(),
+      );
 
       // Prepare input features in exact order:
-      // [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]
+      // [hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, hoursFromReminder]
       final rawFeatures = [
         hourOfDay.toDouble(),
         dayOfWeek.toDouble(),
         currentStreak.toDouble(),
         failuresLast7Days.toDouble(),
-        categoryEnumValue.toDouble(),
+        hoursFromReminder.toDouble(),
       ];
+
+      // Validate feature count
+      if (rawFeatures.length != featureCount) {
+        throw Exception(
+          'Feature count mismatch: expected $featureCount, got ${rawFeatures.length}',
+        );
+      }
 
       debugPrint(
         'AbandonmentPredictor: Raw features [hour=$hourOfDay, day=$dayOfWeek, '
-        'streak=$currentStreak, failures=$failuresLast7Days, category=$categoryEnumValue]',
+        'streak=$currentStreak, failures=$failuresLast7Days, hoursFromReminder=$hoursFromReminder]',
       );
 
       // Normalize features using StandardScaler (x - mean) / std
       final normalizedFeatures = _normalizeFeatures(rawFeatures);
 
       // Prepare input tensor [1, 5] - batch size 1, 5 features
-      // Input must be 2D array: [[hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, categoryEnumValue]]
+      // Input must be 2D array: [[hourOfDay, dayOfWeek, currentStreak, failuresLast7Days, hoursFromReminder]]
       final input = [normalizedFeatures];
 
       // Prepare output tensor [1, 1] - batch size 1, 1 output
@@ -219,7 +309,15 @@ class AbandonmentPredictor {
         '(model v${_modelMetadata?['version']})',
       );
 
-      // Save telemetry after successful prediction
+      // Log to telemetry service if available
+      if (_telemetryService != null) {
+        await _telemetryService!.logPrediction(
+          habit: habit,
+          predictedRisk: probability,
+        );
+      }
+
+      // Save internal telemetry after successful prediction
       await _saveTelemetry();
 
       return probability.clamp(0.0, 1.0);
@@ -230,8 +328,8 @@ class AbandonmentPredictor {
       _errorCount++;
       // Save telemetry even on error
       await _saveTelemetry();
-      // Return neutral risk (0.5) instead of 0.0 to avoid false "no risk" signal
-      return 0.5;
+      // Return neutral risk instead of 0.0 to avoid false "no risk" signal
+      return defaultRiskWhenUninitialized;
     }
   }
 
@@ -297,8 +395,14 @@ class AbandonmentPredictor {
     }
   }
 
-  /// Dispose resources
-  void dispose() {
+  /// Dispose resources and flush telemetry
+  Future<void> dispose() async {
+    // Flush telemetry buffer before disposing
+    if (_telemetryService != null) {
+      await _telemetryService!.flush();
+      debugPrint('AbandonmentPredictor: Flushed telemetry buffer');
+    }
+
     _interpreter?.close();
     _interpreter = null;
     _scalerParams = null;

@@ -1,37 +1,246 @@
-name: "Copilot Setup Steps"
+name: 🚀Flutter CI
 
 on:
   workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Branch to test (leave empty for current)'
+        required: false
+        default: ''
+      auto_format:
+        description: 'Auto-format code if needed'
+        required: false
+        default: true
+        type: boolean
+
   push:
-    paths:
-      - .github/workflows/copilot-setup-steps.yml
+    branches: [ "main", "develop" ]
   pull_request:
-    paths:
-      - .github/workflows/copilot-setup-steps.yml
+    branches: [ "main", "develop" ]
 
 jobs:
-  copilot-setup-steps:
+  analyze:
+    name: 📊 Static Analysis
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event_name == 'pull_request' && format('refs/heads/{0}', github.head_ref)
+            || (github.event.inputs.target_branch != '' && format('refs/heads/{0}', github.event.inputs.target_branch)
+            || github.ref) }}
 
-      - name: Setup Flutter
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 🔧 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.8'  # ← Misma versión que funcionaba hace 1 semana
           channel: stable
           cache: true
 
-      - name: Install dependencies
+      - name: 📦 Get dependencies
         run: flutter pub get
 
-      - name: Accept Android Licenses
-        run: yes | flutter doctor --android-licenses
+      - name: 🎨 Check and auto-format code
+        run: |
+          echo "🎨 Checking Dart code formatting..."
+          if ! dart format --set-exit-if-changed . 2>/dev/null; then
+            echo "📝 Formatting issues detected!"
+            # Auto-format logic: enabled for push/pull_request, or if manual run and input is true
+            if [ "${{ github.event.inputs.auto_format }}" = "true" ] || [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "🔧 Auto-formatting enabled. Applying fixes..."
+              dart format .
+              git config --local user.email "action@github.com"
+              git config --local user.name "GitHub Action [bot]"
 
-      - name: Run flutter doctor
-        run: flutter doctor -v
+              if [ "${{ github.event_name }}" = "pull_request" ]; then
+                BRANCH="${{ github.head_ref }}"
+              elif [ -n "${{ github.event.inputs.target_branch }}" ]; then
+                BRANCH="${{ github.event.inputs.target_branch }}"
+              else
+                BRANCH="${{ github.ref_name }}"
+              fi
+
+              if ! git diff --quiet; then
+                git add .
+                git commit -m "🎨 Auto-format code with dart format [skip ci]"
+                git push origin "$BRANCH"
+              fi
+            else
+              echo "❌ Auto-formatting is disabled. Please format manually:"
+              dart format --dry-run .
+              exit 1
+            fi
+          else
+            echo "✅ All files are already properly formatted!"
+          fi
+
+      - name: 🧹 Remove unused imports (dart fix)
+        run: |
+          echo "🧹 Eliminando imports no usados y aplicando fixes automáticos..."
+          dart fix --apply
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action [bot]"
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BRANCH="${{ github.head_ref }}"
+          elif [ -n "${{ github.event.inputs.target_branch }}" ]; then
+            BRANCH="${{ github.event.inputs.target_branch }}"
+          else
+            BRANCH="${{ github.ref_name }}"
+          fi
+
+          if ! git diff --quiet; then
+            git add .
+            git commit -m "🧹 Remove unused imports and auto-fix code [skip ci]"
+            git push origin "$BRANCH"
+          fi
+
+      - name: 🔍 Analyze code
+        run: flutter analyze --fatal-infos
+
+      - name: 📚 Check Dartdoc
+        run: dart doc --validate-links
+
+      - name: 📋 Check pub.dev score
+        run: dart pub deps
+
+  test:
+    name: 🧪 Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 🔧 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 📦 Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            **/pubspec.lock
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: 🧪 Run unit tests (expanded)
+        run: |
+          flutter test --coverage --reporter=expanded | tee test_output.txt
+
+      - name: 📋 Upload test output
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output
+          path: test_output.txt
+
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage/lcov.info
+          fail_ci_if_error: false
+
+      - name: 📈 Generate coverage report
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov
+          genhtml coverage/lcov.info -o coverage/html
+          lcov --summary coverage/lcov.info
+
+      - name: 📋 Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+  comment:
+    name: 💬 PR Comment
+    runs-on: ubuntu-latest
+    needs: [analyze, test]
+    if: github.event_name == 'pull_request' && always()
+    steps:
+      - name: 📥 Download coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+        continue-on-error: true
+
+      - name: 💬 Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const analyzeStatus = '${{ needs.analyze.result }}';
+            const testStatus = '${{ needs.test.result }}';
+            const getStatusEmoji = (status) => {
+              switch (status) {
+                case 'success': return '✅';
+                case 'failure': return '❌';
+                case 'cancelled': return '⏹️';
+                case 'skipped': return '⏭️';
+                default: return '🔄';
+              }
+            };
+            // For push/pull_request, auto-format is always enabled; for manual runs, use the input
+            const autoFormatEnabled = (
+              '${{ github.event.inputs.auto_format }}' === 'true' ||
+              '${{ github.event_name }}' === 'push' ||
+              '${{ github.event_name }}' === 'pull_request'
+            );
+            const formatNote = autoFormatEnabled ? '🎨 Auto-format: Enabled' : '⚠️ Auto-format: Disabled';
+            const comment = `## 🎉 CI Results for PR #${{ github.event.number }}
+
+            ${getStatusEmoji(analyzeStatus)} **Static Analysis**: ${analyzeStatus}
+            ${getStatusEmoji(testStatus)} **Tests**: ${testStatus}
+
+            ${formatNote}
+
+            ### ${analyzeStatus === 'success' && testStatus === 'success' ? '🚀 Ready to merge!' : '⚠️ Issues found - check the logs'}
+
+            ${analyzeStatus === 'failure' && !autoFormatEnabled ? '\n💡 **Tip**: Enable auto-format when running the workflow to automatically fix formatting issues!' : ''}
+
+            ---
+            *Generated by GitHub Actions*`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔍 Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: 📤 Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
