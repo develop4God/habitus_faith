@@ -1,15 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('AbandonmentPredictor.predictRisk', () {
     late AbandonmentPredictor predictor;
+    late MockInterpreter mockInterpreter;
 
     setUpAll(() async {
-      predictor = AbandonmentPredictor();
+      mockInterpreter = MockInterpreter();
+      predictor = AbandonmentPredictor(interpreter: mockInterpreter);
       await predictor.initialize();
     });
 
@@ -324,3 +328,5 @@ void main() {
     });
   });
 }
+
+class MockInterpreter extends Mock implements Interpreter {}

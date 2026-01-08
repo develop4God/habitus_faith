@@ -53,43 +53,31 @@ class MLFeaturesCalculator {
   /// If habit was created less than N days ago, only count actual days elapsed
   static int countRecentFailures(Habit habit, int days, {DateTime? now}) {
     final currentTime = now ?? DateTime.now();
-    final today = DateTime(
-      currentTime.year,
-      currentTime.month,
-      currentTime.day,
-    );
+    final today = DateTime(currentTime.year, currentTime.month, currentTime.day);
 
-    // Calculate habit age in days
-    final habitCreated = DateTime(
-      habit.createdAt.year,
-      habit.createdAt.month,
-      habit.createdAt.day,
-    );
-    final habitAgeDays = today.difference(habitCreated).inDays;
+    // Calculate habit age in days (inclusive of today)
+    final habitCreated = DateTime(habit.createdAt.year, habit.createdAt.month, habit.createdAt.day);
+    final habitAgeDays = today.difference(habitCreated).inDays + 1;
 
     // Use actual days elapsed if habit is newer than requested window
     final daysToCheck = habitAgeDays < days ? habitAgeDays : days;
 
-    // If habit was just created today or is brand new, no failures yet
-    if (daysToCheck <= 0) {
-      return 0;
-    }
+    // If habit was just created today or is brand new, expected completions is 1
+    if (daysToCheck <= 0) return 0;
 
-    // Count completions in the last N days
-    final cutoffDate = today.subtract(Duration(days: daysToCheck));
+    // The window includes today and goes back (daysToCheck - 1) days
+    final windowStart = today.subtract(Duration(days: daysToCheck - 1));
 
+    // Count completions in the window [windowStart, today] inclusive
     final recentCompletions = habit.completionHistory.where((completion) {
-      final completionDate = DateTime(
-        completion.year,
-        completion.month,
-        completion.day,
-      );
-      return completionDate.isAfter(cutoffDate) || completionDate == cutoffDate;
+      final completionDate = DateTime(completion.year, completion.month, completion.day);
+      return completionDate.isAtSameMomentAs(windowStart) ||
+             completionDate.isAtSameMomentAs(today) ||
+             (completionDate.isAfter(windowStart) && completionDate.isBefore(today));
     }).length;
 
-    // Expected completions = days to check, actual = recentCompletions
+    // Expected completions = daysToCheck, actual = recentCompletions
     final failures = daysToCheck - recentCompletions;
-
     return failures > 0 ? failures : 0;
   }
 

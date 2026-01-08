@@ -50,8 +50,14 @@ class AbandonmentPredictor {
   AbandonmentPredictor({
     Clock? clock,
     MLTelemetryService? telemetryService,
+    Interpreter? interpreter, // Add this for test injection
   })  : clock = clock ?? const Clock.system(),
-        _telemetryService = telemetryService;
+        _telemetryService = telemetryService {
+    if (interpreter != null) {
+      _interpreter = interpreter;
+      _initialized = true;
+    }
+  }
 
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
