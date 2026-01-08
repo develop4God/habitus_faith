@@ -308,8 +308,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                             l10n.buildConsistency,
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.blue.shade700,
+                              color: Colors.blue.shade900,
                               fontWeight: FontWeight.w500,
+                              shadows: const [
+                                Shadow(
+                                  offset: Offset(0, 1),
+                                  blurRadius: 3,
+                                  color: Colors.white,
+                                ),
+                              ],
                             ),
                             textAlign: TextAlign.center,
                           )

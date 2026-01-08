@@ -69,6 +69,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   }
 
   Future<void> _save() async {
+    final l10n = widget.l10n;
     await ref.read(habitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
@@ -105,7 +106,16 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
       await notificationService.cancelHabitNotification(widget.habit.id);
     }
 
-    if (mounted) Navigator.of(context).pop();
+    if (mounted) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.habitEdited),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   @override
@@ -120,12 +130,31 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                l10n.editHabit,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              // Header with title and action buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.editHabit,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(l10n.cancel),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: _save,
+                        child: Text(l10n.save),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               TextField(
@@ -390,17 +419,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(l10n.cancel),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(onPressed: _save, child: Text(l10n.save)),
-                ],
               ),
             ],
           ),

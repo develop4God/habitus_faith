@@ -278,6 +278,10 @@
   "@editHabit": {
     "description": "Edit habit dialog title"
   },
+  "habitEdited": "Hábito editado exitosamente",
+  "@habitEdited": {
+    "description": "Success message after editing a habit"
+  },
   "defaultColor": "Por defecto",
   "@defaultColor": {
     "description": "Default color option label"

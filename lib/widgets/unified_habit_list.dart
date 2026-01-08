@@ -52,27 +52,14 @@ class UnifiedHabitList extends ConsumerWidget {
           );
         }
 
-        // Sort habits: pending first, then completed/skipped/failed
-        final sortedHabits = [...habits]..sort((a, b) {
-            // Pending habits come first
-            if (a.dailyStatus == HabitDailyStatus.pending &&
-                b.dailyStatus != HabitDailyStatus.pending) {
-              return -1;
-            }
-            if (a.dailyStatus != HabitDailyStatus.pending &&
-                b.dailyStatus == HabitDailyStatus.pending) {
-              return 1;
-            }
-            // Within same status group, maintain creation order
-            return 0;
-          });
+        // No sorting - maintain user-defined order (for drag-and-drop)
+        final sortedHabits = [...habits];
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return ListView(
+          // Removed shrinkWrap and physics to allow scrolling in Expanded
           children: [
             // "Planificar día" title
-            if (sortedHabits
-                .any((h) => h.dailyStatus == HabitDailyStatus.pending))
+            if (sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Text(
@@ -85,25 +72,31 @@ class UnifiedHabitList extends ConsumerWidget {
                       Shadow(
                         offset: const Offset(0, 2),
                         blurRadius: 8,
-                        color: Colors.blueAccent.withValues(alpha: 0.3),
+                        color: Colors.blueAccent.withAlpha(77),
                       ),
                     ],
-                    // Optionally, use a modern font family if available
-                    // fontFamily: 'Montserrat',
                   ),
                   textAlign: TextAlign.left,
                 ),
               ),
-            ...sortedHabits.map((habit) => UnifiedHabitCard(
+            // Habit cards (with drag-and-drop if enabled)
+            ...sortedHabits.asMap().entries.map((entry) {
+              final index = entry.key;
+              final habit = entry.value;
+              return ReorderableDragStartListener(
+                key: Key('habit_drag_${habit.id}'),
+                index: index,
+                child: UnifiedHabitCard(
                   habit: habit,
                   onComplete: onComplete,
                   onUncheck: onUncheck,
                   onDelete: onDelete,
                   onEdit: onEdit,
-                )),
+                ),
+              );
+            }),
             if (showSwipeHint &&
-                sortedHabits
-                    .any((h) => h.dailyStatus == HabitDailyStatus.pending))
+                sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
               _buildSwipeHint(context),
           ],
         );
@@ -613,6 +606,48 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             ],
           ),
           const SizedBox(height: 16),
+          // Subtasks section
+          if (habit.subtasks.isNotEmpty) ...[
+            Text(
+              l10n.subtasks,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...habit.subtasks.map((subtask) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    children: [
+                      Icon(
+                        subtask.completed
+                            ? Icons.check_circle
+                            : Icons.radio_button_unchecked,
+                        size: 16,
+                        color: subtask.completed
+                            ? Colors.green
+                            : Colors.grey.shade400,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          subtask.title,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade700,
+                            decoration: subtask.completed
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            const SizedBox(height: 16),
+          ],
           // Estadísticas
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

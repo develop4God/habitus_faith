@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/predefined_habits_data.dart';
 import '../features/habits/domain/models/predefined_habit.dart';
+import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/predefined_habit_translations.dart';
+import 'recurrence_config_dialog.dart';
 import 'dart:math';
 
 /// Dialog tipo discovery para agregar hábito, con pasos y skip en campos opcionales
@@ -32,6 +34,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   HabitCategory selectedCategory = HabitCategory.mental;
   HabitDifficulty selectedDifficulty = HabitDifficulty.medium;
   Color? selectedColor;
+  HabitRecurrence? recurrence;
 
   // Para expand/collapse de campos opcionales
   bool showAdvanced = false;
@@ -108,6 +111,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     'category', // opcional
     'difficulty', // opcional
     'color', // opcional
+    'recurrence', // opcional
   ];
 
   void _nextStep() {
@@ -134,7 +138,29 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           colorValue: selectedColor?.toARGB32(),
           difficulty: selectedDifficulty,
         );
+
+    // If recurrence is set, update the habit with recurrence
+    if (recurrence != null && recurrence!.enabled) {
+      final habits = await ref.read(habitsStreamProvider.future);
+      final newHabit = habits.firstWhere((h) => h.name == nameCtrl.text);
+      await ref.read(habitsNotifierProvider.notifier).updateHabit(
+            habitId: newHabit.id,
+            recurrence: recurrence,
+          );
+    }
+
     navigator.pop();
+  }
+
+  String _getFrequencyUnit(RecurrenceFrequency frequency) {
+    switch (frequency) {
+      case RecurrenceFrequency.daily:
+        return 'día';
+      case RecurrenceFrequency.weekly:
+        return 'semana';
+      case RecurrenceFrequency.monthly:
+        return 'mes';
+    }
   }
 
   @override
@@ -400,6 +426,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       case 'color':
         stepLabel = widget.l10n.color;
         break;
+      case 'recurrence':
+        stepLabel = widget.l10n.repetition;
+        break;
       default:
         stepLabel = '';
     }
@@ -558,6 +587,47 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             _nextStep();
           },
           l10n: widget.l10n,
+        );
+        break;
+      case 'recurrence':
+        stepWidget = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              color: Colors.green.shade50,
+              child: ListTile(
+                leading: const Icon(Icons.repeat, color: Colors.green),
+                title: Text(
+                  widget.l10n.repetition,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  recurrence?.enabled == true
+                      ? '${recurrence!.frequency.displayName} (Cada ${recurrence!.interval} ${_getFrequencyUnit(recurrence!.frequency)})'
+                      : widget.l10n.noRepetition,
+                  style: const TextStyle(color: Colors.green),
+                ),
+                trailing: const Icon(Icons.chevron_right, color: Colors.green),
+                onTap: () async {
+                  final result = await showDialog<HabitRecurrence>(
+                    context: context,
+                    builder: (context) => RecurrenceConfigDialog(
+                      initialRecurrence: recurrence,
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      recurrence = result;
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
         );
         break;
       default:
