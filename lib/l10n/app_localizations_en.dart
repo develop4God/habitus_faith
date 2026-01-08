@@ -230,6 +230,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editHabit => 'Edit Habit';
 
   @override
+  String get habitEdited => 'Habit edited successfully';
+
+  @override
   String get defaultColor => 'Default';
 
   @override

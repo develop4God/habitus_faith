@@ -216,6 +216,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editHabit => '编辑习惯';
 
   @override
+  String get habitEdited => 'Habit edited successfully';
+
+  @override
   String get defaultColor => '默认';
 
   @override

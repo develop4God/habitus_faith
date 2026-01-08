@@ -512,6 +512,12 @@ abstract class AppLocalizations {
   /// **'Edit Habit'**
   String get editHabit;
 
+  /// Success message after editing a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Habit edited successfully'**
+  String get habitEdited;
+
   /// Default color option label
   ///
   /// In en, this message translates to:

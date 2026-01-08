@@ -1,1 +1,13 @@
-{}
+{
+  "fr": [
+    "habitEdited"
+  ],
+
+  "pt": [
+    "habitEdited"
+  ],
+
+  "zh": [
+    "habitEdited"
+  ]
+}

@@ -229,6 +229,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get editHabit => 'Editar Hábito';
 
   @override
+  String get habitEdited => 'Habit edited successfully';
+
+  @override
   String get defaultColor => 'Padrão';
 
   @override
