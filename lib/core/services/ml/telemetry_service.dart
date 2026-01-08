@@ -25,6 +25,7 @@ class MLTelemetryService {
 
   // Batching configuration
   static const int batchSize = 100; // Write after 100 records
+  static const int maxBufferSize = 500; // ADD THIS
   final double samplingRate; // Configurable sampling rate for testing
 
   // Internal buffer for batching
@@ -48,7 +49,7 @@ class MLTelemetryService {
   /// - Buffers records and writes in batches of 100
   /// - Automatically flushes when buffer is full
   ///
-  /// Features logged (matching training pipeline):
+  /// Features logged (matching training pipeline order):
   /// 1. hourOfDay - Hour when prediction was made
   /// 2. dayOfWeek - Day of week when prediction was made
   /// 3. currentStreak - User's current streak
@@ -138,7 +139,7 @@ class MLTelemetryService {
       );
 
       // Flush if buffer is full
-      if (_buffer.length >= batchSize) {
+      if (_buffer.length >= batchSize || _buffer.length >= maxBufferSize) {
         await flush();
       }
     } catch (e) {

@@ -349,8 +349,8 @@ void main() {
         final stopwatch = Stopwatch()..start();
 
         final risk = await predictor.predictRisk(habit);
-        final pattern = behavioralEngine.detectFailurePattern(habit);
-        final optimalTime = behavioralEngine.findOptimalTime(habit);
+        behavioralEngine.detectFailurePattern(habit);
+        behavioralEngine.findOptimalTime(habit);
         final nextDifficulty = behavioralEngine.calculateNextDifficulty(habit);
 
         stopwatch.stop();
@@ -408,7 +408,7 @@ void main() {
 
         // Act
         final risk = await predictor.predictRisk(oldHabit);
-        final pattern = behavioralEngine.detectFailurePattern(oldHabit);
+        behavioralEngine.detectFailurePattern(oldHabit);
 
         // Assert: Handles gracefully
         expect(risk, greaterThanOrEqualTo(0.0));
