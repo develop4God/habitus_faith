@@ -53,10 +53,12 @@ class MLFeaturesCalculator {
   /// If habit was created less than N days ago, only count actual days elapsed
   static int countRecentFailures(Habit habit, int days, {DateTime? now}) {
     final currentTime = now ?? DateTime.now();
-    final today = DateTime(currentTime.year, currentTime.month, currentTime.day);
+    final today =
+        DateTime(currentTime.year, currentTime.month, currentTime.day);
 
     // Calculate habit age in days (inclusive of today)
-    final habitCreated = DateTime(habit.createdAt.year, habit.createdAt.month, habit.createdAt.day);
+    final habitCreated = DateTime(
+        habit.createdAt.year, habit.createdAt.month, habit.createdAt.day);
     final habitAgeDays = today.difference(habitCreated).inDays + 1;
 
     // Use actual days elapsed if habit is newer than requested window
@@ -70,10 +72,12 @@ class MLFeaturesCalculator {
 
     // Count completions in the window [windowStart, today] inclusive
     final recentCompletions = habit.completionHistory.where((completion) {
-      final completionDate = DateTime(completion.year, completion.month, completion.day);
+      final completionDate =
+          DateTime(completion.year, completion.month, completion.day);
       return completionDate.isAtSameMomentAs(windowStart) ||
-             completionDate.isAtSameMomentAs(today) ||
-             (completionDate.isAfter(windowStart) && completionDate.isBefore(today));
+          completionDate.isAtSameMomentAs(today) ||
+          (completionDate.isAfter(windowStart) &&
+              completionDate.isBefore(today));
     }).length;
 
     // Expected completions = daysToCheck, actual = recentCompletions
