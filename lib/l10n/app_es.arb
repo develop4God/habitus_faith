@@ -1207,5 +1207,29 @@
   },
   "@hideEmojis": {
     "description": "Hide emojis button text"
+  },
+  "@planYourDay": {
+    "description": "PENDING"
+  },
+  "@skipHabit": {
+    "description": "PENDING"
+  },
+  "@markAsNotCompleted": {
+    "description": "PENDING"
+  },
+  "@skippedHabit": {
+    "description": "PENDING"
+  },
+  "@failedHabit": {
+    "description": "PENDING"
+  },
+  "@repeatReminder": {
+    "description": "PENDING"
+  },
+  "@habitSkipped": {
+    "description": "PENDING"
+  },
+  "@habitMarkedAsNotCompleted": {
+    "description": "PENDING"
   }
 }
