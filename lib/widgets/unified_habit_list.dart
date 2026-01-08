@@ -76,12 +76,22 @@ class UnifiedHabitList extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Text(
-                  l10n.planYourDay,
+                  '📝 ${l10n.planYourDay}',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade800,
+                    fontSize: 25, // Increased for visibility
+                    fontWeight: FontWeight.w900, // Extra bold
+                    color: Colors.blueAccent, // Vibrant, modern color
+                    shadows: [
+                      Shadow(
+                        offset: const Offset(0, 2),
+                        blurRadius: 8,
+                        color: Colors.blueAccent.withValues(alpha: 0.3),
+                      ),
+                    ],
+                    // Optionally, use a modern font family if available
+                    // fontFamily: 'Montserrat',
                   ),
+                  textAlign: TextAlign.left,
                 ),
               ),
             ...sortedHabits.map((habit) => UnifiedHabitCard(
