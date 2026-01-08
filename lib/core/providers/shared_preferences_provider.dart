@@ -9,4 +9,3 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
     'sharedPreferencesProvider must be overridden in main.dart',
   );
 });
-

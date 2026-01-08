@@ -23,8 +23,7 @@ class DevotionalImageNormalizer {
     }
 
     // GitHub raw content URLs don't support resizing
-    if (url.contains('githubusercontent.com') ||
-        url.contains('github.com')) {
+    if (url.contains('githubusercontent.com') || url.contains('github.com')) {
       debugPrint('[ImageNormalizer] GitHub URL detected - no resize support');
       return url;
     }
@@ -39,4 +38,3 @@ class DevotionalImageNormalizer {
     return url;
   }
 }
-
