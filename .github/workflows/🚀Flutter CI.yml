@@ -80,9 +80,9 @@ jobs:
             echo "✅ All files are already properly formatted!"
           fi
 
-      - name: 🧹 Remove unused imports (dart fix)
+      - name: 🛠️ Remove unused imports (dart fix)
         run: |
-          echo "🧹 Eliminando imports no usados y aplicando fixes automáticos..."
+          echo "🛠️ Eliminando imports no usados y aplicando fixes automáticos..."
           dart fix --apply
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action [bot]"
@@ -97,7 +97,7 @@ jobs:
 
           if ! git diff --quiet; then
             git add .
-            git commit -m "🧹 Remove unused imports and auto-fix code [skip ci]"
+            git commit -m "🛠️ Remove unused imports and auto-fix code [skip ci]"
             git push origin "$BRANCH"
           fi
 
