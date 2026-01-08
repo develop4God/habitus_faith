@@ -986,250 +986,36 @@
   "onboardingPreparingHabits": "Preparando tus hábitos...",
   "onboardingKeepAtLeastOneHabit": "Debes mantener al menos un hábito",
   "onboardingCouldNotCreateHabits": "No pudimos crear los hábitos. Intenta de nuevo.",
-  "planYourDay": "Planificar día",
-  "skipHabit": "Posponer para hoy",
-  "markAsNotCompleted": "Marcar como no completado",
-  "skippedHabit": "Pospuesto",
-  "failedHabit": "No completado",
-  "repeatReminder": "Repetir recordatorio",
-  "habitSkipped": "Hábito pospuesto para hoy",
-  "habitMarkedAsNotCompleted": "Hábito marcado como no completado",
-  "@chooseYourExperience": {
-    "description": "Title for display mode selection screen"
-  },
-  "@displayModeDescription": {
-    "description": "Description text for display mode selection"
-  },
-  "@compactMode": {
-    "description": "Title for compact display mode"
-  },
-  "@compactModeDescription": {
-    "description": "Description of compact display mode"
-  },
-  "@compactModeFeature1": {
-    "description": "First feature of compact mode"
-  },
-  "@compactModeFeature2": {
-    "description": "Second feature of compact mode"
-  },
-  "@compactModeFeature3": {
-    "description": "Third feature of compact mode"
-  },
-  "@advancedMode": {
-    "description": "Title for advanced display mode"
-  },
-  "@advancedModeDescription": {
-    "description": "Description of advanced display mode"
-  },
-  "@advancedModeFeature1": {
-    "description": "First feature of advanced mode"
-  },
-  "@advancedModeFeature2": {
-    "description": "Second feature of advanced mode"
-  },
-  "@advancedModeFeature3": {
-    "description": "Third feature of advanced mode"
-  },
-  "@changeAnytime": {
-    "description": "Message informing users they can change mode later"
-  },
-  "@selectMode": {
-    "description": "Button text to confirm mode selection"
-  },
-  "@displayMode": {
-    "description": "Display mode setting title"
-  },
-  "@compactModeSubtitle": {
-    "description": "Subtitle for compact mode in settings"
-  },
-  "@advancedModeSubtitle": {
-    "description": "Subtitle for advanced mode in settings"
-  },
-  "@mlPredictionFailed": {
-    "description": "Error message when ML prediction fails"
-  },
-  "@mlModelNotLoaded": {
-    "description": "Error when ML model is not loaded"
-  },
-  "@mlInsufficientData": {
-    "description": "Error when not enough data for predictions",
-    "placeholders": {
-      "days": {
-        "type": "int",
-        "example": "7"
-      }
-    }
-  },
-  "@backgroundSyncFailed": {
-    "description": "Background sync failure message",
-    "placeholders": {
-      "reason": {
-        "type": "String",
-        "example": "Network error"
-      }
-    }
-  },
-  "@backgroundSyncNetwork": {
-    "description": "Sync failed due to network"
-  },
-  "@backgroundSyncPermission": {
-    "description": "Sync disabled due to permissions"
-  },
-  "@workmanagerActive": {
-    "description": "WorkManager is active"
-  },
-  "@workmanagerRestricted": {
-    "description": "WorkManager restricted warning"
-  },
-  "@workmanagerDisabled": {
-    "description": "WorkManager disabled"
-  },
-  "@patternWeekend": {
-    "description": "Weekend pattern detected message"
-  },
-  "@patternEvening": {
-    "description": "Evening pattern detected message"
-  },
-  "@optimalTimeFound": {
-    "description": "Optimal time found message",
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "example": "8:00 AM"
-      }
-    }
-  },
-  "@networkTimeout": {
-    "description": "Network timeout error"
-  },
-  "@firebasePermissionDenied": {
-    "description": "Firebase permission denied"
-  },
-  "@errorUnknown": {
-    "description": "Generic unknown error"
-  },
-  "@devBannerTitle": {
-    "description": "Dev tools banner title"
-  },
-  "@devBannerLastSync": {
-    "description": "Last sync time in dev banner",
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "example": "2m ago"
-      }
-    }
-  },
-  "@devBannerMlStatus": {
-    "description": "ML model status in dev banner",
-    "placeholders": {
-      "status": {
-        "type": "String",
-        "example": "Loaded"
-      }
-    }
-  },
-  "@devBannerWorkmanager": {
-    "description": "WorkManager status in dev banner",
-    "placeholders": {
-      "status": {
-        "type": "String",
-        "example": "Active"
-      }
-    }
-  },
-  "@devBannerFastTime": {
-    "description": "Fast time mode in dev banner",
-    "placeholders": {
-      "multiplier": {
-        "type": "String",
-        "example": "288"
-      },
-      "date": {
-        "type": "String",
-        "example": "Nov 7, 2025"
-      }
-    }
-  },
-  "@riskLevelLow": {
-    "description": "Low abandonment risk level"
-  },
-  "@riskLevelMedium": {
-    "description": "Medium abandonment risk level"
-  },
-  "@riskLevelHigh": {
-    "description": "High abandonment risk level"
-  },
-  "@predictorRunning": {
-    "description": "Predictor is running"
-  },
-  "@predictorComplete": {
-    "description": "Predictor completed"
-  },
-  "@syncInProgress": {
-    "description": "Sync in progress"
-  },
-  "@syncComplete": {
-    "description": "Sync completed successfully"
-  },
-  "@mlModelLoaded": {
-    "description": "ML model loaded status"
-  },
-  "@mlModelLoading": {
-    "description": "ML model loading status"
-  },
-  "@mlModelError": {
-    "description": "ML model error status"
-  },
-  "@addNote": {
-    "description": "Add note button text"
-  },
-  "@noteHint": {
-    "description": "Hint text for note input"
-  },
-  "@viewNote": {
-    "description": "View note button text"
-  },
-  "@shareNote": {
-    "description": "Share note button text"
-  },
-  "@noteAdded": {
-    "description": "Note added success message"
-  },
-  "@addNoteDialog": {
-    "description": "Add note dialog title"
-  },
-  "@completeWithNote": {
-    "description": "Complete with note button text"
-  },
-  "@addEmoji": {
-    "description": "Add emoji button text"
-  },
-  "@hideEmojis": {
-    "description": "Hide emojis button text"
-  },
+  "planYourDay": "Planifica tu día",
   "@planYourDay": {
-    "description": "PENDING"
+    "description": "Título para la sección de planificación diaria de hábitos."
   },
+  "skipHabit": "Saltar hábito",
   "@skipHabit": {
-    "description": "PENDING"
+    "description": "Botón para saltar un hábito hoy."
   },
+  "markAsNotCompleted": "Marcar como no completado",
   "@markAsNotCompleted": {
-    "description": "PENDING"
+    "description": "Botón para marcar un hábito como no completado/fallido."
   },
+  "skippedHabit": "Saltado",
   "@skippedHabit": {
-    "description": "PENDING"
+    "description": "Etiqueta para hábito saltado."
   },
+  "failedHabit": "Fallido",
   "@failedHabit": {
-    "description": "PENDING"
+    "description": "Etiqueta para hábito fallido."
   },
+  "repeatReminder": "Repetir recordatorio",
   "@repeatReminder": {
-    "description": "PENDING"
+    "description": "Texto para configurar la repetición de recordatorios."
   },
+  "habitSkipped": "Hábito saltado",
   "@habitSkipped": {
-    "description": "PENDING"
+    "description": "Mensaje de éxito al saltar un hábito."
   },
+  "habitMarkedAsNotCompleted": "Hábito marcado como no completado",
   "@habitMarkedAsNotCompleted": {
-    "description": "PENDING"
+    "description": "Mensaje de éxito al marcar un hábito como no completado/fallido."
   }
 }
