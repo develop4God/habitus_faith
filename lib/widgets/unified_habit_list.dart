@@ -55,23 +55,87 @@ class UnifiedHabitList extends ConsumerWidget {
         // No sorting - maintain user-defined order (for drag-and-drop)
         final sortedHabits = [...habits];
 
+        // Sort habits: pending/skipped/failed first (by order), completed last (by order)
+        sortedHabits.sort((a, b) {
+          final aCompleted = a.dailyStatus == HabitDailyStatus.completed;
+          final bCompleted = b.dailyStatus == HabitDailyStatus.completed;
+
+          // If completion status differs, pending goes first
+          if (aCompleted != bCompleted) {
+            return aCompleted ? 1 : -1;
+          }
+
+          // If both have same completion status, sort by order
+          return a.order.compareTo(b.order);
+        });
+
         return Expanded(
-          child: ListView(
-            padding:
-                const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
-            // Removed shrinkWrap and physics to allow scrolling in Expanded
-            children: [
-              // "Planificar día" title
-              if (sortedHabits
-                  .any((h) => h.dailyStatus == HabitDailyStatus.pending))
-                Padding(
+          child: ReorderableListView.builder(
+            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
+            itemCount: sortedHabits.length + 2, // +2 for title and swipe hint
+            onReorder: (oldIndex, newIndex) async {
+              // Adjust for the title being at index 0
+              final hasTitleBefore = sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending);
+              final titleOffset = hasTitleBefore ? 1 : 0;
+
+              // Adjust indices for the title
+              var adjustedOldIndex = oldIndex - titleOffset;
+              var adjustedNewIndex = newIndex - titleOffset;
+
+              // Ensure indices are within bounds
+              if (adjustedOldIndex < 0 || adjustedOldIndex >= sortedHabits.length ||
+                  adjustedNewIndex < 0 || adjustedNewIndex > sortedHabits.length) {
+                return;
+              }
+
+              // Adjust newIndex for list behavior
+              if (adjustedNewIndex > adjustedOldIndex) {
+                adjustedNewIndex -= 1;
+              }
+
+              // Check if we're trying to move between sections (pending <-> completed)
+              final movedHabit = sortedHabits[adjustedOldIndex];
+              final movedIsCompleted = movedHabit.dailyStatus == HabitDailyStatus.completed;
+
+              // Find the boundary between pending and completed
+              final completedStartIndex = sortedHabits.indexWhere(
+                (h) => h.dailyStatus == HabitDailyStatus.completed,
+              );
+
+              // Prevent moving completed to pending section and vice versa
+              if (completedStartIndex != -1) {
+                if (movedIsCompleted && adjustedNewIndex < completedStartIndex) {
+                  // Don't allow moving completed habit to pending section
+                  return;
+                }
+                if (!movedIsCompleted && adjustedNewIndex >= completedStartIndex) {
+                  // Don't allow moving pending habit to completed section
+                  return;
+                }
+              }
+
+              // Reorder the list
+              final reorderedHabits = [...sortedHabits];
+              final item = reorderedHabits.removeAt(adjustedOldIndex);
+              reorderedHabits.insert(adjustedNewIndex, item);
+
+              // Update order values and save
+              final habitIds = reorderedHabits.map((h) => h.id).toList();
+              final notifier = ref.read(habitsNotifierProvider.notifier);
+              await notifier.reorderHabits(habitIds);
+            },
+            itemBuilder: (context, index) {
+              // Title at the beginning
+              if (index == 0 && sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending)) {
+                return Padding(
+                  key: const Key('plan_your_day_title'),
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                   child: Text(
                     '📝 ${l10n.planYourDay}',
                     style: TextStyle(
-                      fontSize: 25, // Increased for visibility
-                      fontWeight: FontWeight.w900, // Extra bold
-                      color: Colors.blueAccent, // Vibrant, modern color
+                      fontSize: 25,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.blueAccent,
                       shadows: [
                         Shadow(
                           offset: const Offset(0, 2),
@@ -82,28 +146,50 @@ class UnifiedHabitList extends ConsumerWidget {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                ),
-              // Habit cards (with drag-and-drop if enabled)
-              ...sortedHabits.asMap().entries.map((entry) {
-                final index = entry.key;
-                final habit = entry.value;
-                return ReorderableDragStartListener(
-                  key: Key('habit_drag_${habit.id}'),
-                  index: index,
-                  child: UnifiedHabitCard(
-                    habit: habit,
-                    onComplete: onComplete,
-                    onUncheck: onUncheck,
-                    onDelete: onDelete,
-                    onEdit: onEdit,
-                  ),
                 );
-              }),
-              if (showSwipeHint &&
-                  sortedHabits
-                      .any((h) => h.dailyStatus == HabitDailyStatus.pending))
-                _buildSwipeHint(context),
-            ],
+              }
+
+              // Adjust index for title
+              final hasTitleBefore = sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending);
+              final titleOffset = hasTitleBefore ? 1 : 0;
+              final habitIndex = index - titleOffset;
+
+              // Swipe hint at the end
+              if (habitIndex >= sortedHabits.length) {
+                if (showSwipeHint && sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending)) {
+                  return Padding(
+                    key: const Key('swipe_hint'),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.swipeToComplete,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade500,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox.shrink(key: Key('empty_end'));
+              }
+
+              final habit = sortedHabits[habitIndex];
+              return UnifiedHabitCard(
+                key: Key('habit_${habit.id}'),
+                habit: habit,
+                onComplete: onComplete,
+                onUncheck: onUncheck,
+                onDelete: onDelete,
+                onEdit: onEdit,
+              );
+            },
           ),
         );
       },
@@ -433,6 +519,28 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                               ),
                             ],
                           ),
+                          // Subtasks summary (if any)
+                          if (habit.subtasks.isNotEmpty) ...[
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.checklist,
+                                  size: 14,
+                                  color: Colors.grey.shade500,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${habit.subtasks.where((s) => s.completed).length}/${habit.subtasks.length} ${l10n.subtasks}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                     ),

@@ -103,6 +103,9 @@ class Habit {
   final HabitRecurrence? recurrence;
   final List<Subtask> subtasks;
 
+  // Display order field for user-defined positioning
+  final int order;
+
   Habit({
     required this.id,
     required this.userId,
@@ -136,6 +139,7 @@ class Habit {
     this.notificationSettings,
     this.recurrence,
     this.subtasks = const [],
+    this.order = 0,
   });
 
   factory Habit.create({
@@ -347,6 +351,7 @@ class Habit {
     HabitNotificationSettings? notificationSettings,
     HabitRecurrence? recurrence,
     List<Subtask>? subtasks,
+    int? order,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -381,6 +386,7 @@ class Habit {
       notificationSettings: notificationSettings ?? this.notificationSettings,
       recurrence: recurrence ?? this.recurrence,
       subtasks: subtasks ?? this.subtasks,
+      order: order ?? this.order,
     );
   }
 }

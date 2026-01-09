@@ -626,6 +626,34 @@ class JsonHabitsRepository implements HabitsRepository {
     }
   }
 
+  @override
+  Future<Result<void, HabitFailure>> reorderHabits(List<String> habitIds) async {
+    try {
+      final habits = _loadHabits();
+
+      // Create a map for quick lookup
+      final habitMap = {for (var h in habits) h.id: h};
+
+      // Update order based on the new list order
+      final reorderedHabits = <Habit>[];
+      for (var i = 0; i < habitIds.length; i++) {
+        final habitId = habitIds[i];
+        final habit = habitMap[habitId];
+        if (habit != null) {
+          reorderedHabits.add(habit.copyWith(order: i));
+        }
+      }
+
+      debugPrint('JsonHabitsRepository.reorderHabits: Reordered ${reorderedHabits.length} habits');
+      await _saveHabits(reorderedHabits);
+
+      return const Success(null);
+    } catch (e) {
+      debugPrint('JsonHabitsRepository.reorderHabits: Failure: $e');
+      return Failure(HabitFailure.persistence('Failed to reorder habits: $e'));
+    }
+  }
+
   void dispose() {
     _habitsController.close();
     debugPrint('JsonHabitsRepository.dispose: habitsController closed');

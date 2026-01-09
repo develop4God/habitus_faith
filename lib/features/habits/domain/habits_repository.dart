@@ -88,6 +88,9 @@ abstract class HabitsRepository {
   /// Delete a habit
   Future<Result<void, HabitFailure>> deleteHabit(String habitId);
 
+  /// Reorder habits - update the order field for multiple habits
+  Future<Result<void, HabitFailure>> reorderHabits(List<String> habitIds);
+
   /// Record completion/abandonment data for ML training
   Future<void> recordCompletionForML(String habitId, bool completed);
 

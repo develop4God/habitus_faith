@@ -193,6 +193,23 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
     );
   }
+
+  Future<void> reorderHabits(List<String> habitIds) async {
+    debugPrint('HabitsNotifier.reorderHabits: reordering ${habitIds.length} habits');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.reorderHabits(habitIds);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.reorderHabits: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (_) {
+        debugPrint('HabitsNotifier.reorderHabits: éxito');
+        state = const AsyncData(null);
+      },
+    );
+  }
 }
 
 final habitsNotifierProvider = AsyncNotifierProvider<HabitsNotifier, void>(() {

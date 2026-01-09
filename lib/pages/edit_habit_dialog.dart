@@ -70,6 +70,14 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
 
   Future<void> _save() async {
     final l10n = widget.l10n;
+
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
+    );
+
     await ref.read(habitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
@@ -107,12 +115,25 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     }
 
     if (mounted) {
+      // Close loading dialog
+      Navigator.of(context).pop();
+      // Close edit dialog
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.habitEdited),
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle, color: Colors.white),
+              const SizedBox(width: 12),
+              Text('${l10n.habitEdited} ✓'),
+            ],
+          ),
           duration: const Duration(seconds: 2),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.green.shade600,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       );
     }
@@ -148,9 +169,21 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         child: Text(l10n.cancel),
                       ),
                       const SizedBox(width: 8),
-                      ElevatedButton(
+                      ElevatedButton.icon(
                         onPressed: _save,
-                        child: Text(l10n.save),
+                        icon: const Icon(Icons.check, size: 18),
+                        label: Text(l10n.save),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
                       ),
                     ],
                   ),
