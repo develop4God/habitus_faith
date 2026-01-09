@@ -1213,5 +1213,23 @@
   },
   "@hideEmojis": {
     "description": "Ocultar emojis."
+  },
+  "@mlInsufficientData": {
+    "description": "Mensaje mostrado cuando no hay suficientes días de datos para predicciones de ML.",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "@backgroundSyncFailed": {
+    "description": "Mensaje mostrado cuando la sincronización en segundo plano falla.",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Sin conexión a internet"
+      }
+    }
   }
 }

@@ -599,8 +599,8 @@
   "compactModeFeature3": "Estatísticas básicas",
   "advancedMode": "Modo avançado",
   "advancedModeDescription": "Experiência completa com análises e insights",
-  "advancedModeFeature1": "Análises detalhadas de hábitos",
-  "advancedModeFeature2": "Insights avançados e personalizados.",
+  "advancedModeFeature1": "Análise detalhada de hábitos",
+  "advancedModeFeature2": "Informações avançadas e personalizadas.",
   "advancedModeFeature3": "Personalização avançada",
   "changeAnytime": "Você pode alterar esta configuração a qualquer momento nas preferências",
   "onboardingWelcomeMessage": "Vamos ajudá-lo a personalizar suas primeiras rotinas, de acordo com suas preferências.",
@@ -808,5 +808,428 @@
   },
   "@hideEmojis": {
     "description": "Ocultar emojis."
+  },
+  "@onboardingWelcomeMessage": {
+    "description": "Mensagem de boas-vindas exibida na primeira utilização."
+  },
+  "habitEdited": "Hábito editado com sucesso",
+  "@habitEdited": {
+    "description": "Mensagem de sucesso após editar um hábito."
+  },
+  "@chooseYourExperience": {
+    "description": "Título para escolha da experiência do usuário."
+  },
+  "@displayModeDescription": {
+    "description": "Descrição da seleção do modo de exibição."
+  },
+  "@compactMode": {
+    "description": "Nome do modo compacto."
+  },
+  "@compactModeDescription": {
+    "description": "Descrição do modo compacto."
+  },
+  "@compactModeFeature1": {
+    "description": "Interface limpa e minimalista."
+  },
+  "@compactModeFeature2": {
+    "description": "Rastreamento rápido de hábitos."
+  },
+  "@compactModeFeature3": {
+    "description": "Estatísticas básicas."
+  },
+  "@advancedMode": {
+    "description": "Nome do modo avançado."
+  },
+  "@advancedModeDescription": {
+    "description": "Descrição do modo avançado."
+  },
+  "@advancedModeFeature1": {
+    "description": "Análise detalhada de hábitos."
+  },
+  "@advancedModeFeature2": {
+    "description": "Informações avançadas e personalizadas."
+  },
+  "@advancedModeFeature3": {
+    "description": "Personalização avançada."
+  },
+  "@changeAnytime": {
+    "description": "Indica que a configuração pode ser alterada a qualquer momento."
+  },
+  "@selectMode": {
+    "description": "Instrução para selecionar o modo de exibição."
+  },
+  "@displayMode": {
+    "description": "Etiqueta para o modo de exibição."
+  },
+  "@displayModeUpdated": {
+    "description": "Mensagem de confirmação ao alterar o modo de exibição.",
+    "placeholders": {
+      "mode": {
+        "type": "String",
+        "example": "Compacto"
+      }
+    }
+  },
+  "@compactModeSubtitle": {
+    "description": "Subtítulo para o modo compacto."
+  },
+  "@advancedModeSubtitle": {
+    "description": "Subtítulo para o modo avançado."
+  },
+  "@mlPredictionFailed": {
+    "description": "Mensagem de erro quando a previsão de ML falha."
+  },
+  "@mlModelNotLoaded": {
+    "description": "Mensagem de erro quando o modelo ML não está carregado."
+  },
+  "@mlInsufficientData": {
+    "description": "Mensagem exibida quando não há dados suficientes para previsões de ML.",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "@backgroundSyncFailed": {
+    "description": "Mensagem exibida quando a sincronização em segundo plano falha.",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Sem conexão à internet"
+      }
+    }
+  },
+  "@backgroundSyncNetwork": {
+    "description": "PENDING"
+  },
+  "@backgroundSyncPermission": {
+    "description": "PENDING"
+  },
+  "chooseHabitType": "PENDING",
+  "@chooseHabitType": {
+    "description": "PENDING"
+  },
+  "chooseFromPredefined": "PENDING",
+  "@chooseFromPredefined": {
+    "description": "PENDING"
+  },
+  "manual": "PENDING",
+  "@manual": {
+    "description": "PENDING"
+  },
+  "custom": "PENDING",
+  "@custom": {
+    "description": "PENDING"
+  },
+  "defaultHabit": "PENDING",
+  "@defaultHabit": {
+    "description": "PENDING"
+  },
+  "addHabitDiscoverySubtitle": "PENDING",
+  "@addHabitDiscoverySubtitle": {
+    "description": "PENDING"
+  },
+  "requiredFieldLabel": "PENDING",
+  "@requiredFieldLabel": {
+    "description": "PENDING"
+  },
+  "back": "PENDING",
+  "@back": {
+    "description": "PENDING"
+  },
+  "selectAll": "PENDING",
+  "@selectAll": {
+    "description": "PENDING"
+  },
+  "copy": "PENDING",
+  "@copy": {
+    "description": "PENDING"
+  },
+  "copyHabit": "PENDING",
+  "@copyHabit": {
+    "description": "PENDING"
+  },
+  "copyHabitConfirm": "PENDING",
+  "@copyHabitConfirm": {
+    "description": "PENDING",
+    "placeholders": {
+      "habitName": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "introMessage": "PENDING",
+  "@introMessage": {
+    "description": "PENDING"
+  },
+  "todaysVerse": "PENDING",
+  "@todaysVerse": {
+    "description": "PENDING"
+  },
+  "todaysHabits": "PENDING",
+  "@todaysHabits": {
+    "description": "PENDING"
+  },
+  "allHabitsCompleted": "PENDING",
+  "@allHabitsCompleted": {
+    "description": "PENDING"
+  },
+  "dayStreak": "PENDING",
+  "@dayStreak": {
+    "description": "PENDING",
+    "placeholders": {
+      "count": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "startJourney": "PENDING",
+  "@startJourney": {
+    "description": "PENDING"
+  },
+  "buildConsistency": "PENDING",
+  "@buildConsistency": {
+    "description": "PENDING"
+  },
+  "greatProgress": "PENDING",
+  "@greatProgress": {
+    "description": "PENDING"
+  },
+  "habitsRemaining": "PENDING",
+  "@habitsRemaining": {
+    "description": "PENDING",
+    "placeholders": {
+      "count": {
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
+  },
+  "longestStreakCard": "PENDING",
+  "@longestStreakCard": {
+    "description": "PENDING"
+  },
+  "weeklyConsistencyCard": "PENDING",
+  "@weeklyConsistencyCard": {
+    "description": "PENDING"
+  },
+  "swipeToComplete": "PENDING",
+  "@swipeToComplete": {
+    "description": "PENDING"
+  },
+  "usefulTip": "PENDING",
+  "@usefulTip": {
+    "description": "PENDING"
+  },
+  "habitsTip": "PENDING",
+  "@habitsTip": {
+    "description": "PENDING"
+  },
+  "understood": "PENDING",
+  "@understood": {
+    "description": "PENDING"
+  },
+  "bible": "PENDING",
+  "@bible": {
+    "description": "PENDING"
+  },
+  "home": "PENDING",
+  "@home": {
+    "description": "PENDING"
+  },
+  "reminderConfig": "PENDING",
+  "@reminderConfig": {
+    "description": "PENDING"
+  },
+  "recurrenceConfig": "PENDING",
+  "@recurrenceConfig": {
+    "description": "PENDING"
+  },
+  "repeat": "PENDING",
+  "@repeat": {
+    "description": "PENDING"
+  },
+  "setCycleForPlan": "PENDING",
+  "@setCycleForPlan": {
+    "description": "PENDING"
+  },
+  "subtasks": "PENDING",
+  "@subtasks": {
+    "description": "PENDING"
+  },
+  "addSubtask": "PENDING",
+  "@addSubtask": {
+    "description": "PENDING"
+  },
+  "minutesBefore": "PENDING",
+  "@minutesBefore": {
+    "description": "PENDING"
+  },
+  "interval": "PENDING",
+  "@interval": {
+    "description": "PENDING"
+  },
+  "endDate": "PENDING",
+  "@endDate": {
+    "description": "PENDING"
+  },
+  "daily": "PENDING",
+  "@daily": {
+    "description": "PENDING"
+  },
+  "weekly": "PENDING",
+  "@weekly": {
+    "description": "PENDING"
+  },
+  "monthly": "PENDING",
+  "@monthly": {
+    "description": "PENDING"
+  },
+  "everyXDays": "PENDING",
+  "@everyXDays": {
+    "description": "PENDING",
+    "placeholders": {
+      "count": {
+        "type": "PENDING"
+      }
+    }
+  },
+  "everyXWeeks": "PENDING",
+  "@everyXWeeks": {
+    "description": "PENDING",
+    "placeholders": {
+      "count": {
+        "type": "PENDING"
+      }
+    }
+  },
+  "everyXMonths": "PENDING",
+  "@everyXMonths": {
+    "description": "PENDING",
+    "placeholders": {
+      "count": {
+        "type": "PENDING"
+      }
+    }
+  },
+  "noRepetition": "PENDING",
+  "@noRepetition": {
+    "description": "PENDING"
+  },
+  "reminder": "PENDING",
+  "@reminder": {
+    "description": "PENDING"
+  },
+  "repetition": "PENDING",
+  "@repetition": {
+    "description": "PENDING"
+  },
+  "eventTime": "PENDING",
+  "@eventTime": {
+    "description": "PENDING"
+  },
+  "invalidMinutes": "PENDING",
+  "@invalidMinutes": {
+    "description": "PENDING"
+  },
+  "invalidInterval": "PENDING",
+  "@invalidInterval": {
+    "description": "PENDING"
+  },
+  "habitTracking": "PENDING",
+  "@habitTracking": {
+    "description": "PENDING"
+  },
+  "routine": "PENDING",
+  "@routine": {
+    "description": "PENDING"
+  },
+  "today": "PENDING",
+  "@today": {
+    "description": "PENDING"
+  },
+  "morning_prayer": "PENDING",
+  "bible_reading": "PENDING",
+  "evening_prayer": "PENDING",
+  "worship_music": "PENDING",
+  "gratitude_journal": "PENDING",
+  "scripture_meditation": "PENDING",
+  "fasting": "PENDING",
+  "serve_others": "PENDING",
+  "bible_study_group": "PENDING",
+  "prayer_walk": "PENDING",
+  "scripture_memorization": "PENDING",
+  "intercessory_prayer": "PENDING",
+  "devotional_reading": "PENDING",
+  "confession_repentance": "PENDING",
+  "praise_thanksgiving": "PENDING",
+  "sabbath_rest": "PENDING",
+  "digital_detox_prayer": "PENDING",
+  "christian_podcast": "PENDING",
+  "family_devotion": "PENDING",
+  "spiritual_reading": "PENDING",
+  "daily_walk": "PENDING",
+  "morning_exercise": "PENDING",
+  "yoga_stretching": "PENDING",
+  "healthy_breakfast": "PENDING",
+  "hydration_routine": "PENDING",
+  "running_jogging": "PENDING",
+  "strength_training": "PENDING",
+  "bike_cycling": "PENDING",
+  "healthy_meal_prep": "PENDING",
+  "swimming": "PENDING",
+  "dance_movement": "PENDING",
+  "sports_recreation": "PENDING",
+  "posture_breaks": "PENDING",
+  "outdoor_nature": "PENDING",
+  "evening_walk": "PENDING",
+  "mindfulness_meditation": "PENDING",
+  "journaling": "PENDING",
+  "deep_work_focus": "PENDING",
+  "reading_learning": "PENDING",
+  "digital_detox": "PENDING",
+  "planning_review": "PENDING",
+  "breathing_exercises": "PENDING",
+  "creative_hobby": "PENDING",
+  "call_friend_family": "PENDING",
+  "quality_time_loved_ones": "PENDING",
+  "onboardingSelectAtLeastOneGoal": "PENDING",
+  "onboardingPreparingHabits": "PENDING",
+  "onboardingKeepAtLeastOneHabit": "PENDING",
+  "onboardingCouldNotCreateHabits": "PENDING",
+  "planYourDay": "PENDING",
+  "@planYourDay": {
+    "description": "PENDING"
+  },
+  "skipHabit": "PENDING",
+  "@skipHabit": {
+    "description": "PENDING"
+  },
+  "markAsNotCompleted": "PENDING",
+  "@markAsNotCompleted": {
+    "description": "PENDING"
+  },
+  "skippedHabit": "PENDING",
+  "@skippedHabit": {
+    "description": "PENDING"
+  },
+  "failedHabit": "PENDING",
+  "@failedHabit": {
+    "description": "PENDING"
+  },
+  "repeatReminder": "PENDING",
+  "@repeatReminder": {
+    "description": "PENDING"
+  },
+  "habitSkipped": "PENDING",
+  "@habitSkipped": {
+    "description": "PENDING"
+  },
+  "habitMarkedAsNotCompleted": "PENDING",
+  "@habitMarkedAsNotCompleted": {
+    "description": "PENDING"
   }
 }
