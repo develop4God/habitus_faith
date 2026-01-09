@@ -467,13 +467,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'Funciones esenciales para el seguimiento diario de hábitos';
 
   @override
-  String get compactModeFeature1 => 'Interfaz limpia y minimalista';
+  String get compactModeFeature1 => 'Interfaz limpia y minimalista.';
 
   @override
-  String get compactModeFeature2 => 'Seguimiento rápido de hábitos';
+  String get compactModeFeature2 => 'Seguimiento rápido de hábitos.';
 
   @override
-  String get compactModeFeature3 => 'Estadísticas básicas';
+  String get compactModeFeature3 => 'Estadísticas básicas.';
 
   @override
   String get advancedMode => 'Modo avanzado';
@@ -483,14 +483,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'Experiencia completa con análisis y perspectivas';
 
   @override
-  String get advancedModeFeature1 => 'Análisis detallados de hábitos';
+  String get advancedModeFeature1 => 'Análisis detallado de hábitos.';
 
   @override
-  String get advancedModeFeature2 =>
-      'Información avanzada y perspectivas personalizadas.';
+  String get advancedModeFeature2 => 'Información avanzada y personalizada.';
 
   @override
-  String get advancedModeFeature3 => 'Personalización avanzada';
+  String get advancedModeFeature3 => 'Personalización avanzada.';
 
   @override
   String get changeAnytime =>
@@ -1004,25 +1003,25 @@ class AppLocalizationsEs extends AppLocalizations {
       'No pudimos crear los hábitos. Intenta de nuevo.';
 
   @override
-  String get planYourDay => 'Planificar día';
+  String get planYourDay => 'Planifica tu día';
 
   @override
-  String get skipHabit => 'Posponer para hoy';
+  String get skipHabit => 'Saltar hábito';
 
   @override
   String get markAsNotCompleted => 'Marcar como no completado';
 
   @override
-  String get skippedHabit => 'Pospuesto';
+  String get skippedHabit => 'Saltado';
 
   @override
-  String get failedHabit => 'No completado';
+  String get failedHabit => 'Fallido';
 
   @override
   String get repeatReminder => 'Repetir recordatorio';
 
   @override
-  String get habitSkipped => 'Hábito pospuesto para hoy';
+  String get habitSkipped => 'Hábito saltado';
 
   @override
   String get habitMarkedAsNotCompleted => 'Hábito marcado como no completado';
