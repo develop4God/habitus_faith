@@ -1086,7 +1086,7 @@
   },
   "monthly": "Mensal",
   "@monthly": {
-    "description": "Opção de frequência mensal"
+    "description": "Opção de frequência mensal."
   },
   "everyXDays": "A cada {count} dias",
   "@everyXDays": {
