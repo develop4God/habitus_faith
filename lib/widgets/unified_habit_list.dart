@@ -55,52 +55,53 @@ class UnifiedHabitList extends ConsumerWidget {
         // No sorting - maintain user-defined order (for drag-and-drop)
         final sortedHabits = [...habits];
 
-        return ListView(
-          // Removed shrinkWrap and physics to allow scrolling in Expanded
-          children: [
-            // "Planificar día" title
-            if (sortedHabits
-                .any((h) => h.dailyStatus == HabitDailyStatus.pending))
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Text(
-                  '📝 ${l10n.planYourDay}',
-                  style: TextStyle(
-                    fontSize: 25, // Increased for visibility
-                    fontWeight: FontWeight.w900, // Extra bold
-                    color: Colors.blueAccent, // Vibrant, modern color
-                    shadows: [
-                      Shadow(
-                        offset: const Offset(0, 2),
-                        blurRadius: 8,
-                        color: Colors.blueAccent.withAlpha(77),
-                      ),
-                    ],
+        return Expanded(
+          child: ListView(
+            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
+            // Removed shrinkWrap and physics to allow scrolling in Expanded
+            children: [
+              // "Planificar día" title
+              if (sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                  child: Text(
+                    '📝 ${l10n.planYourDay}',
+                    style: TextStyle(
+                      fontSize: 25, // Increased for visibility
+                      fontWeight: FontWeight.w900, // Extra bold
+                      color: Colors.blueAccent, // Vibrant, modern color
+                      shadows: [
+                        Shadow(
+                          offset: const Offset(0, 2),
+                          blurRadius: 8,
+                          color: Colors.blueAccent.withAlpha(77),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
                 ),
-              ),
-            // Habit cards (with drag-and-drop if enabled)
-            ...sortedHabits.asMap().entries.map((entry) {
-              final index = entry.key;
-              final habit = entry.value;
-              return ReorderableDragStartListener(
-                key: Key('habit_drag_${habit.id}'),
-                index: index,
-                child: UnifiedHabitCard(
-                  habit: habit,
-                  onComplete: onComplete,
-                  onUncheck: onUncheck,
-                  onDelete: onDelete,
-                  onEdit: onEdit,
-                ),
-              );
-            }),
-            if (showSwipeHint &&
-                sortedHabits
-                    .any((h) => h.dailyStatus == HabitDailyStatus.pending))
-              _buildSwipeHint(context),
-          ],
+              // Habit cards (with drag-and-drop if enabled)
+              ...sortedHabits.asMap().entries.map((entry) {
+                final index = entry.key;
+                final habit = entry.value;
+                return ReorderableDragStartListener(
+                  key: Key('habit_drag_${habit.id}'),
+                  index: index,
+                  child: UnifiedHabitCard(
+                    habit: habit,
+                    onComplete: onComplete,
+                    onUncheck: onUncheck,
+                    onDelete: onDelete,
+                    onEdit: onEdit,
+                  ),
+                );
+              }),
+              if (showSwipeHint &&
+                  sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
+                _buildSwipeHint(context),
+            ],
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -361,10 +362,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     color: isCompleted
                                         ? Colors.green.shade900
                                         : Colors.grey.shade900,
-                                    decoration:
-                                        (isCompleted || isSkipped || isFailed)
-                                            ? TextDecoration.lineThrough
-                                            : null,
+                                    decoration: (isCompleted || isSkipped || isFailed)
+                                        ? TextDecoration.lineThrough
+                                        : null,
                                   ),
                                 ),
                               ),
@@ -442,8 +442,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                 widget.habit.notificationSettings != null &&
                                     widget.habit.notificationSettings!.timing ==
                                         NotificationTiming.atEventTime &&
-                                    widget.habit.notificationSettings!
-                                            .eventTime !=
+                                    widget.habit.notificationSettings!.eventTime !=
                                         null;
                             return IconButton(
                               icon: Icon(
@@ -487,8 +486,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                         '🔔 Bell configuration set for habitId=${widget.habit.id}, hour=${picked.hour}, minute=${picked.minute}');
                                     final settings = HabitNotificationSettings(
                                       timing: NotificationTiming.atEventTime,
-                                      eventTime:
-                                          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+                                      eventTime: '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
                                     );
                                     await notifier.updateHabit(
                                       habitId: widget.habit.id,
@@ -498,8 +496,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     final formatted = picked.format(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                            '${l10n.reminderConfig}: $formatted'),
+                                        content: Text('${l10n.reminderConfig}: $formatted'),
                                         duration: const Duration(seconds: 2),
                                       ),
                                     );
@@ -544,12 +541,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       activeColor: habitColor,
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      visualDensity: const VisualDensity(
-                                          horizontal: 0, vertical: 0),
-                                      side: BorderSide(
-                                          width: 2, color: habitColor),
+                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+                                      side: BorderSide(width: 2, color: habitColor),
                                     ),
                                   ),
                           ),

@@ -481,9 +481,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               // E. INSPIRATIONAL CONTENT (TERTIARY)
               // Removed versiculo logic and UI as requested
-
-              // Add invisible space to ensure last habit is visible above bottom bar
-              const SizedBox(height: 80),
             ],
           ),
         ),
