@@ -377,7 +377,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     final l10n = AppLocalizations.of(context)!;
                     await showDialog(
                       context: context,
-                      builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                      builder: (ctx) =>
+                          EditHabitDialog(l10n: l10n, habit: habit),
                     );
                   },
                   showSwipeHint: true,
