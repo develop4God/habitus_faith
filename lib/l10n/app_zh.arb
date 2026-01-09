@@ -1222,5 +1222,14 @@
   "habitMarkedAsNotCompleted": "习惯已标记为未完成",
   "@habitMarkedAsNotCompleted": {
     "description": "标记习惯为未完成/失败后的成功消息。"
-  }
+  },
+  "addNote": "添加备注",
+  "noteHint": "输入您的备注...",
+  "viewNote": "查看备注",
+  "shareNote": "分享备注",
+  "noteAdded": "备注已添加",
+  "addNoteDialog": "添加备注对话框",
+  "completeWithNote": "完成并添加备注",
+  "addEmoji": "添加表情符号",
+  "hideEmojis": "隐藏表情符号"
 }
