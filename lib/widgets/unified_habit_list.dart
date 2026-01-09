@@ -210,7 +210,6 @@ class UnifiedHabitList extends ConsumerWidget {
       error: (err, stack) => Center(child: Text(l10n.errorUnknown)),
     );
   }
-
 }
 
 /// Individual habit card with swipe-to-delete and tap-to-expand
@@ -545,13 +544,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                       // Notification bell button (left of checkbox)
                       Consumer(
                         builder: (context, ref, _) {
-                          final isActive =
-                              widget.habit.notificationSettings != null &&
-                                  widget.habit.notificationSettings!.timing ==
-                                      NotificationTiming.atEventTime &&
-                                  widget.habit.notificationSettings!
-                                          .eventTime !=
-                                      null;
+                          final isActive = widget.habit.notificationSettings !=
+                                  null &&
+                              widget.habit.notificationSettings!.timing ==
+                                  NotificationTiming.atEventTime &&
+                              widget.habit.notificationSettings!.eventTime !=
+                                  null;
                           return IconButton(
                             icon: Icon(
                               isActive
@@ -655,8 +653,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                         MaterialTapTargetSize.shrinkWrap,
                                     visualDensity: const VisualDensity(
                                         horizontal: 0, vertical: 0),
-                                    side: BorderSide(
-                                        width: 2, color: habitColor),
+                                    side:
+                                        BorderSide(width: 2, color: habitColor),
                                   ),
                                 ),
                         ),
