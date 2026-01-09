@@ -653,7 +653,7 @@
   "firebasePermissionDenied": "Accès refusé. Veuillez vous reconnecter.",
   "errorUnknown": "Une erreur inattendue s'est produite. Veuillez réessayer.",
   "devBannerTitle": "Outils de Développement",
-  "devBannerLastSync": "Dernière synchro: {time}",
+  "devBannerLastSync": "Dernière synchronisation: {time}",
   "devBannerMlStatus": "Modèle ML: {status}",
   "devBannerWorkmanager": "Arrière-plan: {status}",
   "devBannerFastTime": "Temps: {multiplier}x (Simulé: {date})",
@@ -1166,7 +1166,7 @@
     "description": "Indique le multiplicateur de temps et la date simulée.",
     "placeholders": {
       "multiplier": {
-        "type": "int",
+        "type": "String",
         "example": "2"
       },
       "date": {

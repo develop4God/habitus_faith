@@ -1148,7 +1148,7 @@
     "description": "Indica el multiplicador de tiempo y la fecha simulada.",
     "placeholders": {
       "multiplier": {
-        "type": "int",
+        "type": "String",
         "example": "2"
       },
       "date": {
