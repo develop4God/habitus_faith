@@ -70,11 +70,13 @@ class UnifiedHabitList extends ConsumerWidget {
 
         return Expanded(
           child: ReorderableListView.builder(
-            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
+            padding:
+                const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
             itemCount: sortedHabits.length + 2, // +2 for title and swipe hint
             onReorder: (oldIndex, newIndex) async {
               // Adjust for the title being at index 0
-              final hasTitleBefore = sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending);
+              final hasTitleBefore = sortedHabits
+                  .any((h) => h.dailyStatus == HabitDailyStatus.pending);
               final titleOffset = hasTitleBefore ? 1 : 0;
 
               // Adjust indices for the title
@@ -82,8 +84,10 @@ class UnifiedHabitList extends ConsumerWidget {
               var adjustedNewIndex = newIndex - titleOffset;
 
               // Ensure indices are within bounds
-              if (adjustedOldIndex < 0 || adjustedOldIndex >= sortedHabits.length ||
-                  adjustedNewIndex < 0 || adjustedNewIndex > sortedHabits.length) {
+              if (adjustedOldIndex < 0 ||
+                  adjustedOldIndex >= sortedHabits.length ||
+                  adjustedNewIndex < 0 ||
+                  adjustedNewIndex > sortedHabits.length) {
                 return;
               }
 
@@ -94,7 +98,8 @@ class UnifiedHabitList extends ConsumerWidget {
 
               // Check if we're trying to move between sections (pending <-> completed)
               final movedHabit = sortedHabits[adjustedOldIndex];
-              final movedIsCompleted = movedHabit.dailyStatus == HabitDailyStatus.completed;
+              final movedIsCompleted =
+                  movedHabit.dailyStatus == HabitDailyStatus.completed;
 
               // Find the boundary between pending and completed
               final completedStartIndex = sortedHabits.indexWhere(
@@ -103,11 +108,13 @@ class UnifiedHabitList extends ConsumerWidget {
 
               // Prevent moving completed to pending section and vice versa
               if (completedStartIndex != -1) {
-                if (movedIsCompleted && adjustedNewIndex < completedStartIndex) {
+                if (movedIsCompleted &&
+                    adjustedNewIndex < completedStartIndex) {
                   // Don't allow moving completed habit to pending section
                   return;
                 }
-                if (!movedIsCompleted && adjustedNewIndex >= completedStartIndex) {
+                if (!movedIsCompleted &&
+                    adjustedNewIndex >= completedStartIndex) {
                   // Don't allow moving pending habit to completed section
                   return;
                 }
@@ -125,7 +132,9 @@ class UnifiedHabitList extends ConsumerWidget {
             },
             itemBuilder: (context, index) {
               // Title at the beginning
-              if (index == 0 && sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending)) {
+              if (index == 0 &&
+                  sortedHabits
+                      .any((h) => h.dailyStatus == HabitDailyStatus.pending)) {
                 return Padding(
                   key: const Key('plan_your_day_title'),
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
@@ -149,20 +158,25 @@ class UnifiedHabitList extends ConsumerWidget {
               }
 
               // Adjust index for title
-              final hasTitleBefore = sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending);
+              final hasTitleBefore = sortedHabits
+                  .any((h) => h.dailyStatus == HabitDailyStatus.pending);
               final titleOffset = hasTitleBefore ? 1 : 0;
               final habitIndex = index - titleOffset;
 
               // Swipe hint at the end
               if (habitIndex >= sortedHabits.length) {
-                if (showSwipeHint && sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending)) {
+                if (showSwipeHint &&
+                    sortedHabits.any(
+                        (h) => h.dailyStatus == HabitDailyStatus.pending)) {
                   return Padding(
                     key: const Key('swipe_hint'),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
+                        Icon(Icons.swipe_left,
+                            size: 16, color: Colors.grey.shade500),
                         const SizedBox(width: 8),
                         Text(
                           l10n.swipeToComplete,

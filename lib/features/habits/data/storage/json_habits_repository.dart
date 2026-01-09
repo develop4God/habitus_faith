@@ -627,7 +627,8 @@ class JsonHabitsRepository implements HabitsRepository {
   }
 
   @override
-  Future<Result<void, HabitFailure>> reorderHabits(List<String> habitIds) async {
+  Future<Result<void, HabitFailure>> reorderHabits(
+      List<String> habitIds) async {
     try {
       final habits = _loadHabits();
 
@@ -644,7 +645,8 @@ class JsonHabitsRepository implements HabitsRepository {
         }
       }
 
-      debugPrint('JsonHabitsRepository.reorderHabits: Reordered ${reorderedHabits.length} habits');
+      debugPrint(
+          'JsonHabitsRepository.reorderHabits: Reordered ${reorderedHabits.length} habits');
       await _saveHabits(reorderedHabits);
 
       return const Success(null);

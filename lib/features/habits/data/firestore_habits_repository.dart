@@ -307,7 +307,8 @@ class FirestoreHabitsRepository implements HabitsRepository {
   }
 
   @override
-  Future<Result<void, HabitFailure>> reorderHabits(List<String> habitIds) async {
+  Future<Result<void, HabitFailure>> reorderHabits(
+      List<String> habitIds) async {
     try {
       if (userId == null) {
         return const Failure(UserNotAuthenticatedFailure());
