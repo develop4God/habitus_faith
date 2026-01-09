@@ -901,335 +901,335 @@
     }
   },
   "@backgroundSyncNetwork": {
-    "description": "PENDING"
+    "description": "Mensagem exibida quando a sincronização falha por problemas de rede."
   },
   "@backgroundSyncPermission": {
-    "description": "PENDING"
+    "description": "Mensagem exibida quando a sincronização em segundo plano está desativada."
   },
-  "chooseHabitType": "PENDING",
+  "chooseHabitType": "Que tipo de hábito você deseja adicionar?",
   "@chooseHabitType": {
-    "description": "PENDING"
+    "description": "Texto para escolher o tipo de hábito ao adicionar."
   },
-  "chooseFromPredefined": "PENDING",
+  "chooseFromPredefined": "Escolha um hábito predefinido",
   "@chooseFromPredefined": {
-    "description": "PENDING"
+    "description": "Texto para escolher entre hábitos predefinidos."
   },
-  "manual": "PENDING",
+  "manual": "Manual",
   "@manual": {
-    "description": "PENDING"
+    "description": "Opção de hábito manual (etiqueta curta)"
   },
-  "custom": "PENDING",
+  "custom": "Personalizado",
   "@custom": {
-    "description": "PENDING"
+    "description": "Opção de hábito personalizado (etiqueta curta)"
   },
-  "defaultHabit": "PENDING",
+  "defaultHabit": "Predefinido",
   "@defaultHabit": {
-    "description": "PENDING"
+    "description": "Opção de hábito predefinido (etiqueta curta)"
   },
-  "addHabitDiscoverySubtitle": "PENDING",
+  "addHabitDiscoverySubtitle": "Escolha como deseja adicionar seu novo hábito: crie um personalizado ou selecione um predefinido para começar rapidamente.",
   "@addHabitDiscoverySubtitle": {
-    "description": "PENDING"
+    "description": "Subtítulo explicativo para o diálogo de descoberta de adicionar hábito."
   },
-  "requiredFieldLabel": "PENDING",
+  "requiredFieldLabel": "Obrigatório",
   "@requiredFieldLabel": {
-    "description": "PENDING"
+    "description": "Etiqueta para indicar que um campo é obrigatório."
   },
-  "back": "PENDING",
+  "back": "Voltar",
   "@back": {
-    "description": "PENDING"
+    "description": "Botão para retornar ao passo anterior no diálogo."
   },
-  "selectAll": "PENDING",
+  "selectAll": "Selecionar tudo",
   "@selectAll": {
-    "description": "PENDING"
+    "description": "Botão para selecionar todos os hábitos na página de hábitos."
   },
-  "copy": "PENDING",
+  "copy": "Duplicar",
   "@copy": {
-    "description": "PENDING"
+    "description": "Texto para duplicar um hábito (ação de deslizar)"
   },
-  "copyHabit": "PENDING",
+  "copyHabit": "Deseja duplicar a tarefa?",
   "@copyHabit": {
-    "description": "PENDING"
+    "description": "Título do diálogo para duplicar um hábito."
   },
-  "copyHabitConfirm": "PENDING",
+  "copyHabitConfirm": "Tem certeza que deseja duplicar '{habitName}'?",
   "@copyHabitConfirm": {
-    "description": "PENDING",
+    "description": "Mensagem de confirmação para duplicar um hábito.",
     "placeholders": {
       "habitName": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Oração matinal"
       }
     }
   },
-  "introMessage": "PENDING",
+  "introMessage": "A maior mudança começa com a persistência...",
   "@introMessage": {
-    "description": "PENDING"
+    "description": "Mensagem motivacional exibida na tela inicial."
   },
-  "todaysVerse": "PENDING",
+  "todaysVerse": "Versículo do dia",
   "@todaysVerse": {
-    "description": "PENDING"
+    "description": "Título da seção do versículo bíblico do dia."
   },
-  "todaysHabits": "PENDING",
+  "todaysHabits": "Hábitos de hoje",
   "@todaysHabits": {
-    "description": "PENDING"
+    "description": "Título da seção de hábitos do dia."
   },
-  "allHabitsCompleted": "PENDING",
+  "allHabitsCompleted": "🎉 Todos os hábitos de hoje foram concluídos!",
   "@allHabitsCompleted": {
-    "description": "PENDING"
+    "description": "Mensagem de sucesso ao concluir todos os hábitos do dia."
   },
-  "dayStreak": "PENDING",
+  "dayStreak": "{count} dias consecutivos",
   "@dayStreak": {
-    "description": "PENDING",
+    "description": "Exibe o número de dias consecutivos de hábitos concluídos.",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "7"
       }
     }
   },
-  "startJourney": "PENDING",
+  "startJourney": "Comece sua jornada hoje",
   "@startJourney": {
-    "description": "PENDING"
+    "description": "Mensagem exibida quando o usuário não tem hábitos cadastrados."
   },
-  "buildConsistency": "PENDING",
+  "buildConsistency": "Vamos começar a construir consistência hoje! 💪",
   "@buildConsistency": {
-    "description": "PENDING"
+    "description": "Mensagem motivacional exibida quando nenhum hábito foi concluído."
   },
-  "greatProgress": "PENDING",
+  "greatProgress": "Ótimo progresso! Continue assim! 🔥",
   "@greatProgress": {
-    "description": "PENDING"
+    "description": "Mensagem motivacional exibida quando parte dos hábitos foi concluída."
   },
-  "habitsRemaining": "PENDING",
+  "habitsRemaining": "Faltam {count} hábitos",
   "@habitsRemaining": {
-    "description": "PENDING",
+    "description": "Exibe o número de hábitos restantes para completar.",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "3"
       }
     }
   },
-  "longestStreakCard": "PENDING",
+  "longestStreakCard": "Maior sequência",
   "@longestStreakCard": {
-    "description": "PENDING"
+    "description": "Título do cartão de maior sequência na tela inicial."
   },
-  "weeklyConsistencyCard": "PENDING",
+  "weeklyConsistencyCard": "Consistência semanal",
   "@weeklyConsistencyCard": {
-    "description": "PENDING"
+    "description": "Título do cartão de consistência semanal na tela inicial."
   },
-  "swipeToComplete": "PENDING",
+  "swipeToComplete": "Toque ou deslize para completar",
   "@swipeToComplete": {
-    "description": "PENDING"
+    "description": "Texto de ajuda para completar hábitos."
   },
-  "usefulTip": "PENDING",
+  "usefulTip": "Dica útil",
   "@usefulTip": {
-    "description": "PENDING"
+    "description": "Título para dicas educativas."
   },
-  "habitsTip": "PENDING",
+  "habitsTip": "Deslize para ver opções de hábitos",
   "@habitsTip": {
-    "description": "PENDING"
+    "description": "Descrição para dicas educativas sobre hábitos."
   },
-  "understood": "PENDING",
+  "understood": "Entendi",
   "@understood": {
-    "description": "PENDING"
+    "description": "Botão para fechar dicas educativas."
   },
-  "bible": "PENDING",
+  "bible": "Bíblia",
   "@bible": {
-    "description": "PENDING"
+    "description": "Título da barra de navegação da página da Bíblia."
   },
-  "home": "PENDING",
+  "home": "Início",
   "@home": {
-    "description": "PENDING"
+    "description": "Rótulo da página inicial."
   },
-  "reminderConfig": "PENDING",
+  "reminderConfig": "Configuração de lembrete",
   "@reminderConfig": {
-    "description": "PENDING"
+    "description": "Título do diálogo de configuração de lembrete."
   },
-  "recurrenceConfig": "PENDING",
+  "recurrenceConfig": "Repetição diária",
   "@recurrenceConfig": {
-    "description": "PENDING"
+    "description": "Título do diálogo de configuração de repetição."
   },
-  "repeat": "PENDING",
+  "repeat": "Repetir lembrete",
   "@repeat": {
-    "description": "PENDING"
+    "description": "Rótulo do botão de repetição de lembrete."
   },
-  "setCycleForPlan": "PENDING",
+  "setCycleForPlan": "Defina o ciclo para seu plano",
   "@setCycleForPlan": {
-    "description": "PENDING"
+    "description": "Texto explicativo para configuração de ciclo de repetição."
   },
-  "subtasks": "PENDING",
+  "subtasks": "Subtarefas",
   "@subtasks": {
-    "description": "PENDING"
+    "description": "Rótulo da seção de subtarefas."
   },
-  "addSubtask": "PENDING",
+  "addSubtask": "Adicionar subtarefa",
   "@addSubtask": {
-    "description": "PENDING"
+    "description": "Texto de ajuda para adicionar subtarefas."
   },
-  "minutesBefore": "PENDING",
+  "minutesBefore": "Minutos antes",
   "@minutesBefore": {
-    "description": "PENDING"
+    "description": "Rótulo para campo de minutos antes do evento."
   },
-  "interval": "PENDING",
+  "interval": "Intervalo",
   "@interval": {
-    "description": "PENDING"
+    "description": "Rótulo para campo de intervalo de repetição."
   },
-  "endDate": "PENDING",
+  "endDate": "Data final",
   "@endDate": {
-    "description": "PENDING"
+    "description": "Rótulo para campo de data final de repetição."
   },
-  "daily": "PENDING",
+  "daily": "Diário",
   "@daily": {
-    "description": "PENDING"
+    "description": "Opção de frequência diária."
   },
-  "weekly": "PENDING",
+  "weekly": "Semanal",
   "@weekly": {
-    "description": "PENDING"
+    "description": "Opção de frequência semanal."
   },
-  "monthly": "PENDING",
+  "monthly": "Mensal",
   "@monthly": {
-    "description": "PENDING"
+    "description": "Opção de frequência mensal"
   },
-  "everyXDays": "PENDING",
+  "everyXDays": "A cada {count} dias",
   "@everyXDays": {
-    "description": "PENDING",
+    "description": "Texto para frequência a cada X dias.",
     "placeholders": {
       "count": {
-        "type": "PENDING"
+        "type": "int"
       }
     }
   },
-  "everyXWeeks": "PENDING",
+  "everyXWeeks": "A cada {count} semanas",
   "@everyXWeeks": {
-    "description": "PENDING",
+    "description": "Texto para frequência a cada X semanas.",
     "placeholders": {
       "count": {
-        "type": "PENDING"
+        "type": "int"
       }
     }
   },
-  "everyXMonths": "PENDING",
+  "everyXMonths": "A cada {count} meses",
   "@everyXMonths": {
-    "description": "PENDING",
+    "description": "Texto para frequência a cada X meses.",
     "placeholders": {
       "count": {
-        "type": "PENDING"
+        "type": "int"
       }
     }
   },
-  "noRepetition": "PENDING",
+  "noRepetition": "Sem repetição",
   "@noRepetition": {
-    "description": "PENDING"
+    "description": "Opção para não repetir o hábito."
   },
-  "reminder": "PENDING",
+  "reminder": "Lembrete",
   "@reminder": {
-    "description": "PENDING"
+    "description": "Rótulo para campo de lembrete."
   },
-  "repetition": "PENDING",
+  "repetition": "Repetição",
   "@repetition": {
-    "description": "PENDING"
+    "description": "Rótulo para campo de repetição."
   },
-  "eventTime": "PENDING",
+  "eventTime": "Horário do evento (HH:MM)",
   "@eventTime": {
-    "description": "PENDING"
+    "description": "Rótulo para campo de horário do evento."
   },
-  "invalidMinutes": "PENDING",
+  "invalidMinutes": "Insira um valor válido entre 1 e 1440",
   "@invalidMinutes": {
-    "description": "PENDING"
+    "description": "Mensagem de erro para minutos inválidos."
   },
-  "invalidInterval": "PENDING",
+  "invalidInterval": "O intervalo deve ser pelo menos 1",
   "@invalidInterval": {
-    "description": "PENDING"
+    "description": "Mensagem de erro para intervalo inválido."
   },
-  "habitTracking": "PENDING",
+  "habitTracking": "Rastreamento de hábitos",
   "@habitTracking": {
-    "description": "PENDING"
+    "description": "Título da página de rastreamento de hábitos."
   },
-  "routine": "PENDING",
+  "routine": "Rotina",
   "@routine": {
-    "description": "PENDING"
+    "description": "Rótulo para opção de rotina na navegação."
   },
-  "today": "PENDING",
+  "today": "Hoje",
   "@today": {
-    "description": "PENDING"
+    "description": "Rótulo para exibir o dia atual na visualização de hábitos."
   },
-  "morning_prayer": "PENDING",
-  "bible_reading": "PENDING",
-  "evening_prayer": "PENDING",
-  "worship_music": "PENDING",
-  "gratitude_journal": "PENDING",
-  "scripture_meditation": "PENDING",
-  "fasting": "PENDING",
-  "serve_others": "PENDING",
-  "bible_study_group": "PENDING",
-  "prayer_walk": "PENDING",
-  "scripture_memorization": "PENDING",
-  "intercessory_prayer": "PENDING",
-  "devotional_reading": "PENDING",
-  "confession_repentance": "PENDING",
-  "praise_thanksgiving": "PENDING",
-  "sabbath_rest": "PENDING",
-  "digital_detox_prayer": "PENDING",
-  "christian_podcast": "PENDING",
-  "family_devotion": "PENDING",
-  "spiritual_reading": "PENDING",
-  "daily_walk": "PENDING",
-  "morning_exercise": "PENDING",
-  "yoga_stretching": "PENDING",
-  "healthy_breakfast": "PENDING",
-  "hydration_routine": "PENDING",
-  "running_jogging": "PENDING",
-  "strength_training": "PENDING",
-  "bike_cycling": "PENDING",
-  "healthy_meal_prep": "PENDING",
-  "swimming": "PENDING",
-  "dance_movement": "PENDING",
-  "sports_recreation": "PENDING",
-  "posture_breaks": "PENDING",
-  "outdoor_nature": "PENDING",
-  "evening_walk": "PENDING",
-  "mindfulness_meditation": "PENDING",
-  "journaling": "PENDING",
-  "deep_work_focus": "PENDING",
-  "reading_learning": "PENDING",
-  "digital_detox": "PENDING",
-  "planning_review": "PENDING",
-  "breathing_exercises": "PENDING",
-  "creative_hobby": "PENDING",
-  "call_friend_family": "PENDING",
-  "quality_time_loved_ones": "PENDING",
-  "onboardingSelectAtLeastOneGoal": "PENDING",
-  "onboardingPreparingHabits": "PENDING",
-  "onboardingKeepAtLeastOneHabit": "PENDING",
-  "onboardingCouldNotCreateHabits": "PENDING",
-  "planYourDay": "PENDING",
+  "morning_prayer": "Oração matinal",
+  "bible_reading": "Leitura bíblica",
+  "evening_prayer": "Oração vespertina",
+  "worship_music": "Música de adoração",
+  "gratitude_journal": "Diário de gratidão",
+  "scripture_meditation": "Meditação nas escrituras",
+  "fasting": "Jejum",
+  "serve_others": "Servir ao próximo",
+  "bible_study_group": "Grupo de estudo bíblico",
+  "prayer_walk": "Caminhada de oração",
+  "scripture_memorization": "Memorização das escrituras",
+  "intercessory_prayer": "Oração intercessória",
+  "devotional_reading": "Leitura devocional",
+  "confession_repentance": "Confissão e arrependimento",
+  "praise_thanksgiving": "Louvor e agradecimento",
+  "sabbath_rest": "Descanso sabático",
+  "digital_detox_prayer": "Desintoxicação digital e oração",
+  "christian_podcast": "Podcast cristão",
+  "family_devotion": "Devoção em família",
+  "spiritual_reading": "Leitura espiritual",
+  "daily_walk": "Caminhada diária",
+  "morning_exercise": "Exercício matinal",
+  "yoga_stretching": "Yoga e alongamento",
+  "healthy_breakfast": "Café da manhã saudável",
+  "hydration_routine": "Rotina de hidratação",
+  "running_jogging": "Corrida e caminhada",
+  "strength_training": "Treinamento de força",
+  "bike_cycling": "Ciclismo",
+  "healthy_meal_prep": "Preparação de refeição saudável",
+  "swimming": "Natação",
+  "dance_movement": "Dança e movimento",
+  "sports_recreation": "Esportes e recreação",
+  "posture_breaks": "Pausas para postura",
+  "outdoor_nature": "Tempo ao ar livre e natureza",
+  "evening_walk": "Caminhada noturna",
+  "mindfulness_meditation": "Meditação mindfulness",
+  "journaling": "Jornalização",
+  "deep_work_focus": "Trabalho profundo e foco",
+  "reading_learning": "Leitura e aprendizado",
+  "digital_detox": "Desintoxicação digital",
+  "planning_review": "Planejamento e revisão",
+  "breathing_exercises": "Exercícios de respiração",
+  "creative_hobby": "Hobby criativo",
+  "call_friend_family": "Ligar para amigos/família",
+  "quality_time_loved_ones": "Tempo de qualidade com entes queridos",
+  "onboardingSelectAtLeastOneGoal": "Selecione pelo menos um objetivo",
+  "onboardingPreparingHabits": "Preparando seus hábitos...",
+  "onboardingKeepAtLeastOneHabit": "Mantenha pelo menos um hábito",
+  "onboardingCouldNotCreateHabits": "Não foi possível criar hábitos. Tente novamente.",
+  "planYourDay": "Planeje seu dia",
   "@planYourDay": {
-    "description": "PENDING"
+    "description": "Título da seção de planejamento diário de hábitos."
   },
-  "skipHabit": "PENDING",
+  "skipHabit": "Pular hábito",
   "@skipHabit": {
-    "description": "PENDING"
+    "description": "Botão para pular o hábito do dia."
   },
-  "markAsNotCompleted": "PENDING",
+  "markAsNotCompleted": "Marcar como não concluído",
   "@markAsNotCompleted": {
-    "description": "PENDING"
+    "description": "Botão para marcar hábito como não concluído/fracassado."
   },
-  "skippedHabit": "PENDING",
+  "skippedHabit": "Hábito pulado",
   "@skippedHabit": {
-    "description": "PENDING"
+    "description": "Rótulo para hábito pulado."
   },
-  "failedHabit": "PENDING",
+  "failedHabit": "Fracassado",
   "@failedHabit": {
-    "description": "PENDING"
+    "description": "Rótulo para hábito fracassado."
   },
-  "repeatReminder": "PENDING",
+  "repeatReminder": "Repetir lembrete",
   "@repeatReminder": {
-    "description": "PENDING"
+    "description": "Texto para configuração de repetição de lembrete."
   },
-  "habitSkipped": "PENDING",
+  "habitSkipped": "Hábito pulado com sucesso",
   "@habitSkipped": {
-    "description": "PENDING"
+    "description": "Mensagem de sucesso ao pular hábito."
   },
-  "habitMarkedAsNotCompleted": "PENDING",
+  "habitMarkedAsNotCompleted": "Hábito marcado como não concluído",
   "@habitMarkedAsNotCompleted": {
-    "description": "PENDING"
+    "description": "Mensagem de sucesso ao marcar hábito como não concluído/fracassado."
   }
 }
