@@ -797,7 +797,7 @@
     "description": "显示时间倍速和模拟日期。",
     "placeholders": {
       "multiplier": {
-        "type": "int",
+        "type": "String",
         "example": "2"
       },
       "date": {
