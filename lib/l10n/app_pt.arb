@@ -646,364 +646,167 @@
   "workmanagerActive": "Sincronização em segundo plano ativa",
   "workmanagerRestricted": "A sincronização em segundo plano pode ser limitada pela otimização da bateria",
   "workmanagerDisabled": "Sincronização em segundo plano desativada nas configurações do sistema",
-  "patternWeekend": "Você tende a pular os fins de semana. Tente definir um lembrete?",
-  "patternEvening": "A taxa de conclusão à noite é baixa. Considere hábitos matinais?",
-  "optimalTimeFound": "Seu melhor horário de conclusão é {time}",
+  "patternWeekend": "Você costuma pular os fins de semana. Deseja configurar um lembrete?",
+  "patternEvening": "A taxa de conclusão à noite é baixa. Considere hábitos matinais.",
+  "optimalTimeFound": "Seu melhor horário de conclusão foi encontrado.",
   "networkTimeout": "Tempo de espera esgotado. Verifique sua conexão.",
-  "firebasePermissionDenied": "Acesso negado. Por favor, faça login novamente.",
-  "errorUnknown": "Ocorreu um erro inesperado. Por favor, tente novamente.",
-  "devBannerTitle": "Ferramentas de Desenvolvimento",
-  "devBannerLastSync": "Última sincronização: {time}",
-  "devBannerMlStatus": "Modelo ML: {status}",
-  "devBannerWorkmanager": "Segundo plano: {status}",
-  "devBannerFastTime": "Tempo: {multiplier}x (Simulado: {date})",
-  "riskLevelLow": "Risco baixo",
-  "riskLevelMedium": "Risco médio",
-  "riskLevelHigh": "Risco alto",
+  "firebasePermissionDenied": "Acesso negado ao Firebase. Faça login novamente.",
+  "errorUnknown": "Ocorreu um erro inesperado. Tente novamente.",
+  "devBannerTitle": "Título para a barra de ferramentas de desenvolvimento.",
+  "devBannerLastSync": "Indica a última sincronização.",
+  "devBannerMlStatus": "Status do modelo ML.",
+  "devBannerWorkmanager": "Status do gerenciador de segundo plano.",
+  "devBannerFastTime": "Indica o multiplicador de tempo e a data simulada.",
+  "riskLevelLow": "Indica baixo risco.",
+  "riskLevelMedium": "Indica risco médio.",
+  "riskLevelHigh": "Indica alto risco.",
   "predictorRunning": "Analisando hábitos...",
-  "predictorComplete": "Análise concluída",
+  "predictorComplete": "Análise de hábitos concluída.",
   "syncInProgress": "Sincronizando...",
-  "syncComplete": "Sincronização concluída",
-  "mlModelLoaded": "Carregado",
-  "mlModelLoading": "Carregando...",
-  "mlModelError": "Erro",
-  "chooseHabitType": "Que tipo de hábito você deseja adicionar?",
-  "@chooseHabitType": {
-    "description": "Texto para escolher o tipo de hábito ao adicionar"
+  "syncComplete": "Sincronização concluída.",
+  "mlModelLoaded": "Modelo ML carregado.",
+  "mlModelLoading": "Carregando modelo ML...",
+  "mlModelError": "Erro no modelo ML.",
+  "addNote": "Adicionar nota.",
+  "noteHint": "Texto de ajuda para nota.",
+  "viewNote": "Ver nota.",
+  "shareNote": "Compartilhar nota.",
+  "noteAdded": "Nota adicionada.",
+  "addNoteDialog": "Diálogo para adicionar nota.",
+  "completeWithNote": "Completar e adicionar nota.",
+  "addEmoji": "Adicionar emoji.",
+  "hideEmojis": "Ocultar emojis.",
+  "@workmanagerActive": {
+    "description": "Sincronização em segundo plano ativa."
   },
-  "chooseFromPredefined": "Escolha um hábito predefinido",
-  "@chooseFromPredefined": {
-    "description": "Texto para escolher entre hábitos predefinidos"
+  "@workmanagerRestricted": {
+    "description": "Sincronização pode ser limitada pela otimização da bateria."
   },
-  "manual": "Manual",
-  "@manual": {
-    "description": "Opção de hábito manual (rótulo curto)"
+  "@workmanagerDisabled": {
+    "description": "Sincronização em segundo plano desativada nas configurações do sistema."
   },
-  "custom": "Personalizado",
-  "@custom": {
-    "description": "Opção de hábito personalizado (rótulo curto)"
+  "@patternWeekend": {
+    "description": "Você costuma pular os fins de semana. Deseja configurar um lembrete?"
   },
-  "defaultHabit": "Padrão",
-  "@defaultHabit": {
-    "description": "Opção de hábito predefinido (rótulo curto)"
+  "@patternEvening": {
+    "description": "A taxa de conclusão à noite é baixa. Considere hábitos matinais."
   },
-  "addHabitDiscoverySubtitle": "Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.",
-  "@addHabitDiscoverySubtitle": {
-    "description": "Subtítulo explicativo para o diálogo de descoberta de adicionar hábito"
-  },
-  "requiredFieldLabel": "Obrigatório",
-  "@requiredFieldLabel": {
-    "description": "Etiqueta para indicar que um campo é obrigatório"
-  },
-  "back": "Voltar",
-  "@back": {
-    "description": "Botão para voltar ao passo anterior no diálogo"
-  },
-  "selectAll": "Selecionar todos",
-  "@selectAll": {
-    "description": "Botão para selecionar todos os hábitos na página de hábitos"
-  },
-  "copy": "Duplicar",
-  "@copy": {
-    "description": "Texto para duplicar um hábito (ação de swipe)"
-  },
-  "copyHabit": "Deseja duplicar a tarefa?",
-  "@copyHabit": {
-    "description": "Dialog title for duplicating a habit"
-  },
-  "copyHabitConfirm": "Tem certeza de que deseja duplicar \"{habitName}\"?",
-  "@copyHabitConfirm": {
-    "description": "Confirmation message for duplicating a habit",
+  "@optimalTimeFound": {
+    "description": "Seu melhor horário de conclusão foi encontrado.",
     "placeholders": {
-      "habitName": {
+      "time": {
         "type": "String",
-        "example": "Oração matinal"
+        "example": "08:00"
       }
     }
   },
-  "introMessage": "As maiores mudanças começam na constância...",
-  "@introMessage": {
-    "description": "Mensagem motivacional mostrada na landing page."
+  "@networkTimeout": {
+    "description": "Tempo de espera esgotado. Verifique sua conexão."
   },
-  "todaysVerse": "Versículo do Dia",
-  "@todaysVerse": {
-    "description": "Título da seção do versículo bíblico do dia"
+  "@firebasePermissionDenied": {
+    "description": "Acesso negado ao Firebase. Faça login novamente."
   },
-  "todaysHabits": "Hábitos de Hoje",
-  "@todaysHabits": {
-    "description": "Título da seção de hábitos de hoje"
+  "@errorUnknown": {
+    "description": "Ocorreu um erro inesperado. Tente novamente."
   },
-  "allHabitsCompleted": "🎉 Todos os hábitos concluídos hoje!",
-  "@allHabitsCompleted": {
-    "description": "Mensagem de sucesso quando todos os hábitos são concluídos"
+  "@devBannerTitle": {
+    "description": "Título para a barra de ferramentas de desenvolvimento."
   },
-  "dayStreak": "Sequência de {count} dias",
-  "@dayStreak": {
-    "description": "Mostra a sequência atual de um hábito",
+  "@devBannerLastSync": {
+    "description": "Indica a última sincronização.",
     "placeholders": {
-      "count": {
+      "time": {
+        "type": "String",
+        "example": "2026-01-08 12:00"
+      }
+    }
+  },
+  "@devBannerMlStatus": {
+    "description": "Status do modelo ML.",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Carregado"
+      }
+    }
+  },
+  "@devBannerWorkmanager": {
+    "description": "Status do gerenciador de segundo plano.",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Ativo"
+      }
+    }
+  },
+  "@devBannerFastTime": {
+    "description": "Indica o multiplicador de tempo e a data simulada.",
+    "placeholders": {
+      "multiplier": {
         "type": "int",
-        "example": "7"
+        "example": "2"
+      },
+      "date": {
+        "type": "String",
+        "example": "2026-01-08"
       }
     }
   },
-  "startJourney": "Comece sua jornada hoje",
-  "@startJourney": {
-    "description": "Mensagem mostrada quando o usuário não tem hábitos"
+  "@riskLevelLow": {
+    "description": "Indica baixo risco."
   },
-  "buildConsistency": "Vamos construir consistência hoje! 💪",
-  "@buildConsistency": {
-    "description": "Mensagem motivacional quando nenhum hábito está concluído"
+  "@riskLevelMedium": {
+    "description": "Indica risco médio."
   },
-  "greatProgress": "Ótimo progresso! Continue assim! 🔥",
-  "@greatProgress": {
-    "description": "Mensagem motivacional quando alguns hábitos estão concluídos"
+  "@riskLevelHigh": {
+    "description": "Indica alto risco."
   },
-  "habitsRemaining": "{count, plural, =1{1 hábito restante hoje} other{{count} hábitos restantes hoje}}",
-  "@habitsRemaining": {
-    "description": "Mostra quantos hábitos restam para concluir",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
+  "@predictorRunning": {
+    "description": "Analisando hábitos..."
   },
-  "longestStreakCard": "Sequência\nMais Longa",
-  "@longestStreakCard": {
-    "description": "Etiqueta para cartão de sequência mais longa na página inicial"
+  "@predictorComplete": {
+    "description": "Análise de hábitos concluída."
   },
-  "weeklyConsistencyCard": "Consistência\nSemanal",
-  "@weeklyConsistencyCard": {
-    "description": "Etiqueta para cartão de consistência semanal na página inicial"
+  "@syncInProgress": {
+    "description": "Sincronizando..."
   },
-  "swipeToComplete": "Toque ou deslize para a esquerda para concluir",
-  "@swipeToComplete": {
-    "description": "Texto de ajuda mostrando como concluir hábitos"
+  "@syncComplete": {
+    "description": "Sincronização concluída."
   },
-  "usefulTip": "Dica útil",
-  "@usefulTip": {
-    "description": "Título da dica educativa"
+  "@mlModelLoaded": {
+    "description": "Modelo ML carregado."
   },
-  "habitsTip": "Deslize para ver ações nos seus hábitos",
-  "@habitsTip": {
-    "description": "Descrição da dica educativa"
+  "@mlModelLoading": {
+    "description": "Carregando modelo ML..."
   },
-  "understood": "Entendido",
-  "@understood": {
-    "description": "Botão para fechar a dica educativa"
+  "@mlModelError": {
+    "description": "Erro no modelo ML."
   },
-  "bible": "Bíblia",
-  "@bible": {
-    "description": "Título para o AppBar da Bíblia"
+  "@addNote": {
+    "description": "Adicionar nota."
   },
-  "home": "Início",
-  "@home": {
-    "description": "Rótulo da aba inicial"
+  "@noteHint": {
+    "description": "Texto de ajuda para nota."
   },
-  "routine": "Rotina",
-  "@routine": {
-    "description": "Etiqueta para a opção de rotina na barra de navegação"
+  "@viewNote": {
+    "description": "Ver nota."
   },
-  "today": "Hoje",
-  "@today": {
-    "description": "Rótulo para mostrar o dia atual na visualização de hábitos"
+  "@shareNote": {
+    "description": "Compartilhar nota."
   },
-  "reminderConfig": "Configuração de Lembrete",
-  "recurrenceConfig": "Repetições Diárias",
-  "repeat": "Repetir lembrete",
-  "setCycleForPlan": "Definir um ciclo para seu plano",
-  "subtasks": "Subtarefas",
-  "addSubtask": "Adicionar subtarefa",
-  "minutesBefore": "Minutos antes",
-  "interval": "Intervalo",
-  "endDate": "Data de término",
-  "daily": "Diário",
-  "weekly": "Semanal",
-  "monthly": "Mensal",
-  "everyXDays": "A cada {count} dia(s)",
-  "everyXWeeks": "A cada {count} semana(s)",
-  "everyXMonths": "A cada {count} mês(es)",
-  "noRepetition": "Sem repetição",
-  "reminder": "Lembrete",
-  "repetition": "Repetição",
-  "eventTime": "Hora do evento (HH:MM)",
-  "invalidMinutes": "Por favor, insira um número válido entre 1 e 1440",
-  "invalidInterval": "O intervalo deve ser pelo menos 1",
-  "habitTracking": "Rastreamento de Hábitos",
-  "addNote": "Adicionar Nota",
-  "noteHint": "Como foi? Compartilhe seus pensamentos...",
-  "viewNote": "Ver Nota",
-  "shareNote": "Compartilhar",
-  "noteAdded": "Nota adicionada",
-  "addNoteDialog": "Adicionar uma Nota",
-  "completeWithNote": "Concluir e Adicionar Nota",
-  "addEmoji": "Adicionar Emoji",
-  "hideEmojis": "Ocultar Emojis",
-  "@reminderConfig": {
-    "description": "Reminder configuration dialog title"
+  "@noteAdded": {
+    "description": "Nota adicionada."
   },
-  "@recurrenceConfig": {
-    "description": "Recurrence configuration dialog title"
+  "@addNoteDialog": {
+    "description": "Diálogo para adicionar nota."
   },
-  "@repeat": {
-    "description": "Repeat toggle label"
+  "@completeWithNote": {
+    "description": "Completar e adicionar nota."
   },
-  "@setCycleForPlan": {
-    "description": "Subtitle for repeat toggle"
+  "@addEmoji": {
+    "description": "Adicionar emoji."
   },
-  "@subtasks": {
-    "description": "Subtasks section label"
-  },
-  "@addSubtask": {
-    "description": "Add subtask hint text"
-  },
-  "@minutesBefore": {
-    "description": "Custom minutes before label"
-  },
-  "@interval": {
-    "description": "Interval label for recurrence"
-  },
-  "@endDate": {
-    "description": "End date label for recurrence"
-  },
-  "@daily": {
-    "description": "Daily frequency option"
-  },
-  "@weekly": {
-    "description": "Weekly frequency option"
-  },
-  "@monthly": {
-    "description": "Monthly frequency option"
-  },
-  "@everyXDays": {
-    "description": "Every X days text",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@everyXWeeks": {
-    "description": "Every X weeks text",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@everyXMonths": {
-    "description": "Every X months text",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@noRepetition": {
-    "description": "No repetition text"
-  },
-  "@reminder": {
-    "description": "Reminder label"
-  },
-  "@repetition": {
-    "description": "Repetition label"
-  },
-  "@eventTime": {
-    "description": "Event time label"
-  },
-  "@invalidMinutes": {
-    "description": "Validation message for invalid custom minutes"
-  },
-  "@invalidInterval": {
-    "description": "Validation message for invalid interval"
-  },
-  "@habitTracking": {
-    "description": "Title for habit tracking calendar page"
-  },
-  "morning_prayer": "Oração Matinal",
-  "bible_reading": "Leitura Bíblica",
-  "evening_prayer": "Oração Noturna",
-  "worship_music": "Música de Adoração",
-  "gratitude_journal": "Diário de Gratidão",
-  "scripture_meditation": "Meditação nas Escrituras",
-  "fasting": "Jejum",
-  "serve_others": "Servir aos Outros",
-  "bible_study_group": "Grupo de Estudo Bíblico",
-  "prayer_walk": "Caminhada de Oração",
-  "scripture_memorization": "Memorização das Escrituras",
-  "intercessory_prayer": "Oração Intercessória",
-  "devotional_reading": "Leitura Devocional",
-  "confession_repentance": "Confissão e Arrependimento",
-  "praise_thanksgiving": "Louvor e Ação de Graças",
-  "sabbath_rest": "Descanso do Sábado",
-  "digital_detox_prayer": "Desintoxicação Digital e Oração",
-  "christian_podcast": "Podcast Cristão",
-  "family_devotion": "Devoção Familiar",
-  "spiritual_reading": "Leitura Espiritual",
-  "daily_walk": "Caminhada Diária",
-  "morning_exercise": "Exercício Matinal",
-  "yoga_stretching": "Alongamento",
-  "healthy_breakfast": "Café da Manhã Saudável",
-  "hydration_routine": "Rotina de Hidratação",
-  "running_jogging": "Corrida/Jogging",
-  "strength_training": "Treinamento de Força",
-  "bike_cycling": "Ciclismo",
-  "healthy_meal_prep": "Preparação de Refeições Saudáveis",
-  "swimming": "Natação",
-  "dance_movement": "Dança/Movimento",
-  "sports_recreation": "Esportes/Recreação",
-  "posture_breaks": "Pausas para Postura",
-  "outdoor_nature": "Tempo ao Ar Livre/Natureza",
-  "evening_walk": "Caminhada Noturna",
-  "mindfulness_meditation": "Meditação de Atenção Plena",
-  "journaling": "Escrever Diário",
-  "deep_work_focus": "Trabalho Profundo/Foco",
-  "reading_learning": "Leitura/Aprendizado",
-  "digital_detox": "Desintoxicação Digital",
-  "planning_review": "Planejamento e Revisão",
-  "breathing_exercises": "Exercícios de Respiração",
-  "creative_hobby": "Hobby Criativo",
-  "call_friend_family": "Ligar para Amigo/Família",
-  "quality_time_loved_ones": "Tempo de Qualidade com Entes Queridos",
-  "onboardingSelectAtLeastOneGoal": "Por favor, selecione pelo menos um objetivo",
-  "onboardingPreparingHabits": "Preparando seus hábitos...",
-  "onboardingKeepAtLeastOneHabit": "Você deve manter pelo menos um hábito",
-  "onboardingCouldNotCreateHabits": "Não foi possível criar os hábitos. Por favor, tente novamente.",
-  "planYourDay": "Planeje seu dia",
-  "@planYourDay": {
-    "description": "Título para a seção de planejamento diário de hábitos."
-  },
-  "skipHabit": "Pular hábito",
-  "@skipHabit": {
-    "description": "Botão para pular um hábito hoje."
-  },
-  "markAsNotCompleted": "Marcar como não concluído",
-  "@markAsNotCompleted": {
-    "description": "Botão para marcar um hábito como não concluído/falhado."
-  },
-  "skippedHabit": "Ignorado",
-  "@skippedHabit": {
-    "description": "Etiqueta para hábito ignorado."
-  },
-  "failedHabit": "Falhou",
-  "@failedHabit": {
-    "description": "Etiqueta para hábito falhado."
-  },
-  "repeatReminder": "Repetir lembrete",
-  "@repeatReminder": {
-    "description": "Texto para configurar a repetição de lembretes."
-  },
-  "habitSkipped": "Hábito ignorado",
-  "@habitSkipped": {
-    "description": "Mensagem de sucesso ao ignorar um hábito."
-  },
-  "habitMarkedAsNotCompleted": "Hábito marcado como não concluído",
-  "@habitMarkedAsNotCompleted": {
-    "description": "Mensagem de sucesso ao marcar um hábito como não concluído/falhado."
-  },
-  "habitEdited": "Hábito editado com sucesso",
-  "@habitEdited": {
-    "description": "Mensagem de sucesso após editar um hábito."
+  "@hideEmojis": {
+    "description": "Ocultar emojis."
   }
 }

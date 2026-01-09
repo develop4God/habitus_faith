@@ -1005,5 +1005,231 @@
   "habitEdited": "Habitude modifiée avec succès",
   "@habitEdited": {
     "description": "Message de succès après la modification d'une habitude."
+  },
+  "@onboardingWelcomeMessage": {
+    "description": "Message de bienvenue lors de l'onboarding."
+  },
+  "@chooseYourExperience": {
+    "description": "Titre pour choisir l'expérience utilisateur."
+  },
+  "@displayModeDescription": {
+    "description": "Description de la sélection du mode d'affichage."
+  },
+  "@compactMode": {
+    "description": "Nom du mode compact."
+  },
+  "@compactModeDescription": {
+    "description": "Description du mode compact."
+  },
+  "@compactModeFeature1": {
+    "description": "Interface épurée et minimaliste."
+  },
+  "@compactModeFeature2": {
+    "description": "Suivi rapide des habitudes."
+  },
+  "@compactModeFeature3": {
+    "description": "Statistiques de base."
+  },
+  "@advancedMode": {
+    "description": "Nom du mode avancé."
+  },
+  "@advancedModeDescription": {
+    "description": "Description du mode avancé."
+  },
+  "@advancedModeFeature1": {
+    "description": "Analyses détaillées des habitudes."
+  },
+  "@advancedModeFeature2": {
+    "description": "Informations avancées et personnalisées."
+  },
+  "@advancedModeFeature3": {
+    "description": "Personnalisation avancée."
+  },
+  "@changeAnytime": {
+    "description": "Indique que la configuration peut être modifiée à tout moment."
+  },
+  "@selectMode": {
+    "description": "Instruction pour sélectionner le mode d'affichage."
+  },
+  "@displayMode": {
+    "description": "Label pour le mode d'affichage."
+  },
+  "@displayModeUpdated": {
+    "description": "Message de confirmation lors du changement de mode d'affichage.",
+    "placeholders": {
+      "mode": {
+        "type": "String",
+        "example": "Compact"
+      }
+    }
+  },
+  "@compactModeSubtitle": {
+    "description": "Sous-titre pour le mode compact."
+  },
+  "@advancedModeSubtitle": {
+    "description": "Sous-titre pour le mode avancé."
+  },
+  "@mlPredictionFailed": {
+    "description": "Message d'erreur lorsque la prédiction ML échoue."
+  },
+  "@mlModelNotLoaded": {
+    "description": "Message d'erreur lorsque le modèle ML n'est pas chargé."
+  },
+  "@mlInsufficientData": {
+    "description": "Message affiché lorsqu'il n'y a pas assez de jours de données pour les prédictions ML.",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "@backgroundSyncFailed": {
+    "description": "Message affiché lorsque la synchronisation en arrière-plan échoue.",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Pas de connexion internet"
+      }
+    }
+  },
+  "@backgroundSyncNetwork": {
+    "description": "Message affiché lorsque la synchronisation échoue à cause du réseau."
+  },
+  "@backgroundSyncPermission": {
+    "description": "Message affiché lorsque la synchronisation en arrière-plan est désactivée."
+  },
+  "@workmanagerActive": {
+    "description": "Indique que la synchronisation en arrière-plan est active."
+  },
+  "@workmanagerRestricted": {
+    "description": "Indique que la synchronisation peut être limitée par l'optimisation de la batterie."
+  },
+  "@workmanagerDisabled": {
+    "description": "Indique que la synchronisation en arrière-plan est désactivée dans les paramètres système."
+  },
+  "@patternWeekend": {
+    "description": "Message pour l'utilisateur qui saute souvent les week-ends."
+  },
+  "@patternEvening": {
+    "description": "Message pour l'utilisateur qui a une faible complétion le soir."
+  },
+  "@optimalTimeFound": {
+    "description": "Message affiché lorsque le meilleur horaire de complétion est trouvé.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "08:00"
+      }
+    }
+  },
+  "@networkTimeout": {
+    "description": "Message d'erreur pour un délai d'attente réseau."
+  },
+  "@firebasePermissionDenied": {
+    "description": "Message d'erreur lorsque l'accès Firebase est refusé."
+  },
+  "@errorUnknown": {
+    "description": "Message d'erreur pour une erreur inattendue."
+  },
+  "@devBannerTitle": {
+    "description": "Titre pour la bannière de développement."
+  },
+  "@devBannerLastSync": {
+    "description": "Indique la dernière synchronisation.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "2026-01-08 12:00"
+      }
+    }
+  },
+  "@devBannerMlStatus": {
+    "description": "Statut du modèle ML.",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Chargé"
+      }
+    }
+  },
+  "@devBannerWorkmanager": {
+    "description": "Statut du gestionnaire d'arrière-plan.",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Actif"
+      }
+    }
+  },
+  "@devBannerFastTime": {
+    "description": "Indique le multiplicateur de temps et la date simulée.",
+    "placeholders": {
+      "multiplier": {
+        "type": "int",
+        "example": "2"
+      },
+      "date": {
+        "type": "String",
+        "example": "2026-01-08"
+      }
+    }
+  },
+  "@riskLevelLow": {
+    "description": "Indique un faible niveau de risque."
+  },
+  "@riskLevelMedium": {
+    "description": "Indique un niveau de risque moyen."
+  },
+  "@riskLevelHigh": {
+    "description": "Indique un niveau de risque élevé."
+  },
+  "@predictorRunning": {
+    "description": "Message affiché pendant l'analyse des habitudes."
+  },
+  "@predictorComplete": {
+    "description": "Message affiché lorsque l'analyse est terminée."
+  },
+  "@syncInProgress": {
+    "description": "Message affiché pendant la synchronisation."
+  },
+  "@syncComplete": {
+    "description": "Message affiché lorsque la synchronisation est terminée."
+  },
+  "@mlModelLoaded": {
+    "description": "Indique que le modèle ML est chargé."
+  },
+  "@mlModelLoading": {
+    "description": "Indique que le modèle ML est en cours de chargement."
+  },
+  "@mlModelError": {
+    "description": "Message d'erreur pour le modèle ML."
+  },
+  "@addNote": {
+    "description": "Label pour ajouter une note."
+  },
+  "@noteHint": {
+    "description": "Texte d'aide pour la saisie de la note."
+  },
+  "@viewNote": {
+    "description": "Label pour voir la note."
+  },
+  "@shareNote": {
+    "description": "Label pour partager la note."
+  },
+  "@noteAdded": {
+    "description": "Message affiché lorsque la note est ajoutée."
+  },
+  "@addNoteDialog": {
+    "description": "Titre du dialogue pour ajouter une note."
+  },
+  "@completeWithNote": {
+    "description": "Label pour compléter et ajouter une note."
+  },
+  "@addEmoji": {
+    "description": "Label pour ajouter un emoji."
+  },
+  "@hideEmojis": {
+    "description": "Label pour masquer les emojis."
   }
 }

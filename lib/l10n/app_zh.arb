@@ -637,373 +637,230 @@
   "@total": {
     "description": "统计数据的总计标签"
   },
-  "mlPredictionFailed": "无法计算放弃风险",
-  "mlModelNotLoaded": "预测模型不可用。请重启应用。",
-  "mlInsufficientData": "预测需要至少{days}天的数据",
-  "backgroundSyncFailed": "同步失败：{reason}",
-  "backgroundSyncNetwork": "没有网络连接。更改将在在线时同步。",
-  "backgroundSyncPermission": "后台同步已禁用。请在设置中启用。",
-  "workmanagerActive": "后台同步活动中",
-  "workmanagerRestricted": "后台同步可能受电池优化限制",
-  "workmanagerDisabled": "系统设置中已禁用后台同步",
-  "patternWeekend": "您倾向于跳过周末。尝试设置提醒？",
-  "patternEvening": "晚上完成率较低。考虑早晨的习惯？",
-  "optimalTimeFound": "您最佳完成时间是{time}",
-  "networkTimeout": "请求超时。检查您的连接。",
-  "firebasePermissionDenied": "访问被拒绝。请重新登录。",
-  "errorUnknown": "发生意外错误。请重试。",
-  "devBannerTitle": "开发工具",
-  "devBannerLastSync": "最后同步：{time}",
-  "devBannerMlStatus": "机器学习模型：{status}",
-  "devBannerWorkmanager": "后台：{status}",
-  "devBannerFastTime": "时间：{multiplier}倍（模拟：{date}）",
-  "riskLevelLow": "低风险",
-  "riskLevelMedium": "中风险",
-  "riskLevelHigh": "高风险",
-  "predictorRunning": "正在分析习惯...",
-  "predictorComplete": "分析完成",
-  "syncInProgress": "同步中...",
-  "syncComplete": "同步完成",
-  "mlModelLoaded": "已加载",
-  "mlModelLoading": "加载中...",
-  "mlModelError": "错误",
-  "chooseHabitType": "你想添加哪种类型的习惯？",
-  "@chooseHabitType": {
-    "description": "添加习惯时选择类型的文本"
+  "@onboardingWelcomeMessage": {
+    "description": "欢迎信息，用户首次使用时显示。"
   },
-  "chooseFromPredefined": "选择一个预设习惯",
-  "@chooseFromPredefined": {
-    "description": "选择预设习惯的文本"
+  "@chooseYourExperience": {
+    "description": "选择用户体验的标题。"
   },
-  "manual": "手动",
-  "@manual": {
-    "description": "手动习惯选项（短标签）"
+  "@displayModeDescription": {
+    "description": "显示模式选择的描述。"
   },
-  "custom": "自定义",
-  "@custom": {
-    "description": "自定义习惯选项（短标签）"
+  "@compactMode": {
+    "description": "紧凑模式名称。"
   },
-  "defaultHabit": "预设",
-  "@defaultHabit": {
-    "description": "预设习惯选项（短标签）"
+  "@compactModeDescription": {
+    "description": "紧凑模式的描述。"
   },
-  "addHabitDiscoverySubtitle": "选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。",
-  "@addHabitDiscoverySubtitle": {
-    "description": "添加习惯发现对话框的说明性副标题"
+  "@compactModeFeature1": {
+    "description": "简洁的界面。"
   },
-  "requiredFieldLabel": "必填",
-  "@requiredFieldLabel": {
-    "description": "用于指示字段为必填项的标签"
+  "@compactModeFeature2": {
+    "description": "快速习惯跟踪。"
   },
-  "back": "返回",
-  "@back": {
-    "description": "返回上一步的按钮"
+  "@compactModeFeature3": {
+    "description": "基础统计。"
   },
-  "selectAll": "全选",
-  "@selectAll": {
-    "description": "在习惯页面选择所有习惯的按钮"
+  "@advancedMode": {
+    "description": "高级模式名称。"
   },
-  "copy": "复制",
-  "@copy": {
-    "description": "用于习惯复制的文本（滑动操作）"
+  "@advancedModeDescription": {
+    "description": "高级模式的描述。"
   },
-  "introMessage": "最大的改变始于坚持...",
-  "@introMessage": {
-    "description": "在欢迎页显示的激励语。"
+  "@advancedModeFeature1": {
+    "description": "详细习惯分析。"
   },
-  "todaysVerse": "今日经文",
-  "@todaysVerse": {
-    "description": "今日圣经经文部分的标题"
+  "@advancedModeFeature2": {
+    "description": "高级个性化信息。"
   },
-  "todaysHabits": "今日习惯",
-  "@todaysHabits": {
-    "description": "今日习惯部分的标题"
+  "@advancedModeFeature3": {
+    "description": "高级自定义。"
   },
-  "allHabitsCompleted": "🎉 今天所有习惯已完成！",
-  "@allHabitsCompleted": {
-    "description": "所有习惯完成时的成功消息"
+  "@changeAnytime": {
+    "description": "提示用户可随时更改设置。"
   },
-  "dayStreak": "{count}天连续",
-  "@dayStreak": {
-    "description": "显示习惯的当前连续天数",
+  "@selectMode": {
+    "description": "选择显示模式的说明。"
+  },
+  "@displayMode": {
+    "description": "显示模式标签。"
+  },
+  "@displayModeUpdated": {
+    "description": "更改显示模式时的确认信息。",
     "placeholders": {
-      "count": {
+      "mode": {
+        "type": "String",
+        "example": "紧凑"
+      }
+    }
+  },
+  "@compactModeSubtitle": {
+    "description": "紧凑模式副标题。"
+  },
+  "@advancedModeSubtitle": {
+    "description": "高级模式副标题。"
+  },
+  "@mlPredictionFailed": {
+    "description": "机器学习预测失败时的错误信息。"
+  },
+  "@mlModelNotLoaded": {
+    "description": "机器学习模型未加载时的错误信息。"
+  },
+  "@mlInsufficientData": {
+    "description": "数据天数不足时的提示信息。",
+    "placeholders": {
+      "days": {
         "type": "int",
         "example": "7"
       }
     }
   },
-  "startJourney": "今天开始您的旅程",
-  "@startJourney": {
-    "description": "用户没有习惯时显示的消息"
-  },
-  "buildConsistency": "今天让我们建立一致性！💪",
-  "@buildConsistency": {
-    "description": "没有完成习惯时的激励消息"
-  },
-  "greatProgress": "进展很好！继续保持！🔥",
-  "@greatProgress": {
-    "description": "部分习惯完成时的激励消息"
-  },
-  "habitsRemaining": "{count, plural, =1{今天还剩1个习惯} other{今天还剩{count}个习惯}}",
-  "@habitsRemaining": {
-    "description": "显示还剩多少习惯需要完成",
+  "@backgroundSyncFailed": {
+    "description": "后台同步失败时的提示信息。",
     "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
-  "longestStreakCard": "最长\n连续",
-  "@longestStreakCard": {
-    "description": "主页上最长连续卡片的标签"
-  },
-  "weeklyConsistencyCard": "每周\n一致性",
-  "@weeklyConsistencyCard": {
-    "description": "主页上每周一致性卡片的标签"
-  },
-  "swipeToComplete": "点击或向左滑动以完成",
-  "@swipeToComplete": {
-    "description": "显示如何完成习惯的提示文本"
-  },
-  "copyHabit": "您想要复制此任务吗？",
-  "@copyHabit": {
-    "description": "Dialog title for duplicating a habit"
-  },
-  "copyHabitConfirm": "您确定要复制\"{habitName}\"吗？",
-  "@copyHabitConfirm": {
-    "description": "Confirmation message for duplicating a habit",
-    "placeholders": {
-      "habitName": {
+      "reason": {
         "type": "String",
-        "example": "晨祷"
+        "example": "无网络连接"
       }
     }
   },
-  "usefulTip": "实用提示",
-  "@usefulTip": {
-    "description": "教育提示标题"
+  "@backgroundSyncNetwork": {
+    "description": "因网络问题导致同步失败的提示。"
   },
-  "habitsTip": "滑动以查看您的习惯操作",
-  "@habitsTip": {
-    "description": "教育提示描述"
+  "@backgroundSyncPermission": {
+    "description": "后台同步权限关闭时的提示。"
   },
-  "understood": "明白了",
-  "@understood": {
-    "description": "关闭教育提示的按钮"
+  "@workmanagerActive": {
+    "description": "后台同步活动中"
   },
-  "bible": "圣经",
-  "@bible": {
-    "description": "圣经页面的标题"
+  "@workmanagerRestricted": {
+    "description": "后台同步可能受电池优化限制"
   },
-  "home": "首页",
-  "@home": {
-    "description": "主页标签"
+  "@workmanagerDisabled": {
+    "description": "系统设置中已禁用后台同步"
   },
-  "routine": "常规",
-  "@routine": {
-    "description": "导航栏中常规选项的标签"
+  "@patternWeekend": {
+    "description": "您经常在周末跳过习惯。建议设置提醒？"
   },
-  "today": "今天",
-  "@today": {
-    "description": "用于在习惯视图中显示当天的标签"
+  "@patternEvening": {
+    "description": "晚上完成率较低。建议尝试早晨习惯。"
   },
-  "addNote": "添加笔记",
-  "noteHint": "进展如何？分享您的想法...",
-  "viewNote": "查看笔记",
-  "shareNote": "分享",
-  "noteAdded": "笔记已添加",
-  "addNoteDialog": "添加笔记",
-  "completeWithNote": "完成并添加笔记",
-  "addEmoji": "添加表情符号",
-  "hideEmojis": "隐藏表情符号",
-  "reminderConfig": "提醒配置",
-  "@reminderConfig": {
-    "description": "Reminder configuration dialog title"
-  },
-  "recurrenceConfig": "每日重复",
-  "@recurrenceConfig": {
-    "description": "Recurrence configuration dialog title"
-  },
-  "repeat": "重复提醒",
-  "@repeat": {
-    "description": "Repeat toggle label"
-  },
-  "setCycleForPlan": "为您的计划设置周期",
-  "@setCycleForPlan": {
-    "description": "Subtitle for repeat toggle"
-  },
-  "subtasks": "子任务",
-  "@subtasks": {
-    "description": "Subtasks section label"
-  },
-  "addSubtask": "添加子任务",
-  "@addSubtask": {
-    "description": "Add subtask hint text"
-  },
-  "minutesBefore": "提前分钟数",
-  "@minutesBefore": {
-    "description": "Custom minutes before label"
-  },
-  "interval": "间隔",
-  "@interval": {
-    "description": "Interval label for recurrence"
-  },
-  "endDate": "结束日期",
-  "@endDate": {
-    "description": "End date label for recurrence"
-  },
-  "daily": "每天",
-  "@daily": {
-    "description": "Daily frequency option"
-  },
-  "weekly": "每周",
-  "@weekly": {
-    "description": "Weekly frequency option"
-  },
-  "monthly": "每月",
-  "@monthly": {
-    "description": "Monthly frequency option"
-  },
-  "everyXDays": "每{count}天",
-  "@everyXDays": {
-    "description": "Every X days text",
+  "@optimalTimeFound": {
+    "description": "已找到最佳完成时间。",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "time": {
+        "type": "String",
+        "example": "08:00"
       }
     }
   },
-  "everyXWeeks": "每{count}周",
-  "@everyXWeeks": {
-    "description": "Every X weeks text",
+  "@networkTimeout": {
+    "description": "网络超时。请检查您的连接。"
+  },
+  "@firebasePermissionDenied": {
+    "description": "Firebase访问被拒绝。请重新登录。"
+  },
+  "@errorUnknown": {
+    "description": "发生未知错误。请重试。"
+  },
+  "@devBannerTitle": {
+    "description": "开发工具栏标题。"
+  },
+  "@devBannerLastSync": {
+    "description": "显示最后一次同步时间。",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "time": {
+        "type": "String",
+        "example": "2026-01-08 12:00"
       }
     }
   },
-  "everyXMonths": "每{count}月",
-  "@everyXMonths": {
-    "description": "Every X months text",
+  "@devBannerMlStatus": {
+    "description": "ML模型状态。",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "status": {
+        "type": "String",
+        "example": "已加载"
       }
     }
   },
-  "noRepetition": "不重复",
-  "@noRepetition": {
-    "description": "No repetition text"
+  "@devBannerWorkmanager": {
+    "description": "后台管理器状态。",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "活动"
+      }
+    }
   },
-  "reminder": "提醒",
-  "@reminder": {
-    "description": "Reminder label"
+  "@devBannerFastTime": {
+    "description": "显示时间倍速和模拟日期。",
+    "placeholders": {
+      "multiplier": {
+        "type": "int",
+        "example": "2"
+      },
+      "date": {
+        "type": "String",
+        "example": "2026-01-08"
+      }
+    }
   },
-  "repetition": "重复",
-  "@repetition": {
-    "description": "Repetition label"
+  "@riskLevelLow": {
+    "description": "低风险。"
   },
-  "eventTime": "事件时间（HH:MM）",
-  "@eventTime": {
-    "description": "Event time label"
+  "@riskLevelMedium": {
+    "description": "中等风险。"
   },
-  "invalidMinutes": "请输入1到1440之间的有效数字",
-  "@invalidMinutes": {
-    "description": "Validation message for invalid custom minutes"
+  "@riskLevelHigh": {
+    "description": "高风险。"
   },
-  "invalidInterval": "间隔必须至少为1",
-  "@invalidInterval": {
-    "description": "Validation message for invalid interval"
+  "@predictorRunning": {
+    "description": "习惯分析进行中..."
   },
-  "habitTracking": "习惯跟踪",
-  "@habitTracking": {
-    "description": "Title for habit tracking calendar page"
+  "@predictorComplete": {
+    "description": "习惯分析已完成。"
   },
-  "morning_prayer": "晨祷",
-  "bible_reading": "圣经阅读",
-  "evening_prayer": "晚祷",
-  "worship_music": "敬拜音乐",
-  "gratitude_journal": "感恩日记",
-  "scripture_meditation": "经文默想",
-  "fasting": "禁食",
-  "serve_others": "服侍他人",
-  "bible_study_group": "圣经学习小组",
-  "prayer_walk": "祷告散步",
-  "scripture_memorization": "经文背诵",
-  "intercessory_prayer": "代祷",
-  "devotional_reading": "灵修阅读",
-  "confession_repentance": "认罪与悔改",
-  "praise_thanksgiving": "赞美与感恩",
-  "sabbath_rest": "安息日休息",
-  "digital_detox_prayer": "数字排毒与祷告",
-  "christian_podcast": "基督教播客",
-  "family_devotion": "家庭灵修",
-  "spiritual_reading": "属灵阅读",
-  "daily_walk": "每日散步",
-  "morning_exercise": "晨练",
-  "yoga_stretching": "伸展运动",
-  "healthy_breakfast": "健康早餐",
-  "hydration_routine": "补水习惯",
-  "running_jogging": "跑步/慢跑",
-  "strength_training": "力量训练",
-  "bike_cycling": "骑自行车",
-  "healthy_meal_prep": "健康膳食准备",
-  "swimming": "游泳",
-  "dance_movement": "舞蹈/运动",
-  "sports_recreation": "体育/娱乐",
-  "posture_breaks": "姿势休息",
-  "outdoor_nature": "户外/自然时光",
-  "evening_walk": "晚间散步",
-  "mindfulness_meditation": "正念冥想",
-  "journaling": "写日记",
-  "deep_work_focus": "深度工作/专注",
-  "reading_learning": "阅读/学习",
-  "digital_detox": "数字排毒",
-  "planning_review": "计划与回顾",
-  "breathing_exercises": "呼吸练习",
-  "creative_hobby": "创意爱好",
-  "call_friend_family": "联系朋友/家人",
-  "quality_time_loved_ones": "与亲人共度美好时光",
-  "onboardingSelectAtLeastOneGoal": "请至少选择一个目标",
-  "onboardingPreparingHabits": "正在准备您的习惯...",
-  "onboardingKeepAtLeastOneHabit": "您必须至少保留一个习惯",
-  "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。",
-  "planYourDay": "规划你的一天",
-  "@planYourDay": {
-    "description": "每日习惯规划部分的标题。"
+  "@syncInProgress": {
+    "description": "同步进行中..."
   },
-  "skipHabit": "跳过习惯",
-  "@skipHabit": {
-    "description": "今天跳过习惯的按钮。"
+  "@syncComplete": {
+    "description": "同步完成。"
   },
-  "markAsNotCompleted": "标记为未完成",
-  "@markAsNotCompleted": {
-    "description": "将习惯标记为未完成/失败的按钮。"
+  "@mlModelLoaded": {
+    "description": "ML模型已加载。"
   },
-  "skippedHabit": "已跳过",
-  "@skippedHabit": {
-    "description": "跳过习惯的标签。"
+  "@mlModelLoading": {
+    "description": "ML模型加载中..."
   },
-  "failedHabit": "失败",
-  "@failedHabit": {
-    "description": "失败习惯的标签。"
+  "@mlModelError": {
+    "description": "ML模型错误。"
   },
-  "repeatReminder": "重复提醒",
-  "@repeatReminder": {
-    "description": "用于设置提醒重复的文本。"
+  "@addNote": {
+    "description": "添加备注。"
   },
-  "habitSkipped": "习惯已跳过",
-  "@habitSkipped": {
-    "description": "跳过习惯时的成功消息。"
+  "@noteHint": {
+    "description": "备注输入提示。"
   },
-  "habitMarkedAsNotCompleted": "习惯已标记为未完成",
-  "@habitMarkedAsNotCompleted": {
-    "description": "将习惯标记为未完成/失败时的成功消息。"
+  "@viewNote": {
+    "description": "查看备注。"
   },
-  "habitEdited": "习惯编辑成功",
-  "@habitEdited": {
-    "description": "编辑习惯后的成功消息。"
+  "@shareNote": {
+    "description": "分享备注。"
+  },
+  "@noteAdded": {
+    "description": "备注已添加。"
+  },
+  "@addNoteDialog": {
+    "description": "添加备注对话框。"
+  },
+  "@completeWithNote": {
+    "description": "完成并添加备注。"
+  },
+  "@addEmoji": {
+    "description": "添加表情符号。"
+  },
+  "@hideEmojis": {
+    "description": "隐藏表情符号。"
   }
 }
