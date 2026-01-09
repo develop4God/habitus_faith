@@ -39,7 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     // Devocional de hoy
     final devotionalState = ref.watch(devotionalProvider);
-    final todayDevocional = devotionalState.all.firstWhere(
+    devotionalState.all.firstWhere(
       (d) =>
           d.date.year == today.year &&
           d.date.month == today.month &&
@@ -356,27 +356,32 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(height: 12),
 
               // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
-              UnifiedHabitList(
-                onComplete: (habitId) async {
-                  final notifier = ref.read(habitsNotifierProvider.notifier);
-                  await notifier.completeHabit(habitId);
-                },
-                onUncheck: (habitId) async {
-                  final notifier = ref.read(habitsNotifierProvider.notifier);
-                  await notifier.uncheckHabit(habitId);
-                },
-                onDelete: (habitId) async {
-                  final notifier = ref.read(habitsNotifierProvider.notifier);
-                  await notifier.deleteHabit(habitId);
-                },
-                onEdit: (habit) async {
-                  final l10n = AppLocalizations.of(context)!;
-                  await showDialog(
-                    context: context,
-                    builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
-                  );
-                },
-                showSwipeHint: true,
+              Container(
+                constraints: const BoxConstraints(
+                  maxHeight: 400, // Adjust as needed for visible habits
+                ),
+                child: UnifiedHabitList(
+                  onComplete: (habitId) async {
+                    final notifier = ref.read(habitsNotifierProvider.notifier);
+                    await notifier.completeHabit(habitId);
+                  },
+                  onUncheck: (habitId) async {
+                    final notifier = ref.read(habitsNotifierProvider.notifier);
+                    await notifier.uncheckHabit(habitId);
+                  },
+                  onDelete: (habitId) async {
+                    final notifier = ref.read(habitsNotifierProvider.notifier);
+                    await notifier.deleteHabit(habitId);
+                  },
+                  onEdit: (habit) async {
+                    final l10n = AppLocalizations.of(context)!;
+                    await showDialog(
+                      context: context,
+                      builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                    );
+                  },
+                  showSwipeHint: true,
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -475,55 +480,10 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 20),
 
               // E. INSPIRATIONAL CONTENT (TERTIARY)
-              if (todayDevocional.versiculo.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Card(
-                    elevation: 0,
-                    color: Colors.amber.shade50,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: Colors.amber.shade200),
-                    ),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(
-                        dividerColor: Colors.transparent,
-                      ),
-                      child: ExpansionTile(
-                        tilePadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        childrenPadding:
-                            const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        leading: Icon(
-                          Icons.auto_stories,
-                          color: Colors.amber.shade700,
-                          size: 24,
-                        ),
-                        title: Text(
-                          l10n.todaysVerse,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.amber.shade900,
-                          ),
-                        ),
-                        children: [
-                          Text(
-                            todayDevocional.versiculo,
-                            style: TextStyle(
-                              color: Colors.amber.shade900,
-                              fontSize: 14,
-                              height: 1.5,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              // Removed versiculo logic and UI as requested
 
-              const SizedBox(height: 32),
+              // Add invisible space to ensure last habit is visible above bottom bar
+              const SizedBox(height: 80),
             ],
           ),
         ),
