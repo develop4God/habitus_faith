@@ -229,7 +229,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get editHabit => 'Editar Hábito';
 
   @override
-  String get habitEdited => 'Habit edited successfully';
+  String get habitEdited => 'Hábito editado com sucesso';
 
   @override
   String get defaultColor => 'Padrão';
@@ -483,10 +483,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Experiência completa com análises e insights';
 
   @override
-  String get advancedModeFeature1 => 'Análises detalhadas de hábitos';
+  String get advancedModeFeature1 => 'Análise detalhada de hábitos';
 
   @override
-  String get advancedModeFeature2 => 'Insights avançados e personalizados.';
+  String get advancedModeFeature2 => 'Informações avançadas e personalizadas.';
 
   @override
   String get advancedModeFeature3 => 'Personalização avançada';
@@ -572,15 +572,15 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get patternWeekend =>
-      'Você tende a pular os fins de semana. Tente definir um lembrete?';
+      'Você costuma pular os fins de semana. Deseja configurar um lembrete?';
 
   @override
   String get patternEvening =>
-      'A taxa de conclusão à noite é baixa. Considere hábitos matinais?';
+      'A taxa de conclusão à noite é baixa. Considere hábitos matinais.';
 
   @override
   String optimalTimeFound(String time) {
-    return 'Seu melhor horário de conclusão é $time';
+    return 'Seu melhor horário de conclusão foi encontrado.';
   }
 
   @override
@@ -589,64 +589,64 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get firebasePermissionDenied =>
-      'Acesso negado. Por favor, faça login novamente.';
+      'Acesso negado ao Firebase. Faça login novamente.';
 
   @override
-  String get errorUnknown =>
-      'Ocorreu um erro inesperado. Por favor, tente novamente.';
+  String get errorUnknown => 'Ocorreu um erro inesperado. Tente novamente.';
 
   @override
-  String get devBannerTitle => 'Ferramentas de Desenvolvimento';
+  String get devBannerTitle =>
+      'Título para a barra de ferramentas de desenvolvimento.';
 
   @override
   String devBannerLastSync(String time) {
-    return 'Última sincronização: $time';
+    return 'Indica a última sincronização.';
   }
 
   @override
   String devBannerMlStatus(String status) {
-    return 'Modelo ML: $status';
+    return 'Status do modelo ML.';
   }
 
   @override
   String devBannerWorkmanager(String status) {
-    return 'Segundo plano: $status';
+    return 'Status do gerenciador de segundo plano.';
   }
 
   @override
   String devBannerFastTime(String multiplier, String date) {
-    return 'Tempo: ${multiplier}x (Simulado: $date)';
+    return 'Indica o multiplicador de tempo e a data simulada.';
   }
 
   @override
-  String get riskLevelLow => 'Risco baixo';
+  String get riskLevelLow => 'Indica baixo risco.';
 
   @override
-  String get riskLevelMedium => 'Risco médio';
+  String get riskLevelMedium => 'Indica risco médio.';
 
   @override
-  String get riskLevelHigh => 'Risco alto';
+  String get riskLevelHigh => 'Indica alto risco.';
 
   @override
   String get predictorRunning => 'Analisando hábitos...';
 
   @override
-  String get predictorComplete => 'Análise concluída';
+  String get predictorComplete => 'Análise de hábitos concluída.';
 
   @override
   String get syncInProgress => 'Sincronizando...';
 
   @override
-  String get syncComplete => 'Sincronização concluída';
+  String get syncComplete => 'Sincronização concluída.';
 
   @override
-  String get mlModelLoaded => 'Carregado';
+  String get mlModelLoaded => 'Modelo ML carregado.';
 
   @override
-  String get mlModelLoading => 'Carregando...';
+  String get mlModelLoading => 'Carregando modelo ML...';
 
   @override
-  String get mlModelError => 'Erro';
+  String get mlModelError => 'Erro no modelo ML.';
 
   @override
   String get chooseHabitType => 'Que tipo de hábito você deseja adicionar?';
@@ -661,11 +661,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get custom => 'Personalizado';
 
   @override
-  String get defaultHabit => 'Padrão';
+  String get defaultHabit => 'Predefinido';
 
   @override
   String get addHabitDiscoverySubtitle =>
-      'Escolha como deseja adicionar seu novo hábito: você pode criar um personalizado ou selecionar um predefinido para começar mais rápido.';
+      'Escolha como deseja adicionar seu novo hábito: crie um personalizado ou selecione um predefinido para começar rapidamente.';
 
   @override
   String get requiredFieldLabel => 'Obrigatório';
@@ -674,7 +674,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get back => 'Voltar';
 
   @override
-  String get selectAll => 'Selecionar todos';
+  String get selectAll => 'Selecionar tudo';
 
   @override
   String get copy => 'Duplicar';
@@ -684,64 +684,59 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String copyHabitConfirm(String habitName) {
-    return 'Tem certeza de que deseja duplicar \"$habitName\"?';
+    return 'Tem certeza que deseja duplicar \'$habitName\'?';
   }
 
   @override
-  String get introMessage => 'As maiores mudanças começam na constância...';
+  String get introMessage => 'A maior mudança começa com a persistência...';
 
   @override
-  String get todaysVerse => 'Versículo do Dia';
+  String get todaysVerse => 'Versículo do dia';
 
   @override
-  String get todaysHabits => 'Hábitos de Hoje';
+  String get todaysHabits => 'Hábitos de hoje';
 
   @override
-  String get allHabitsCompleted => '🎉 Todos os hábitos concluídos hoje!';
+  String get allHabitsCompleted =>
+      '🎉 Todos os hábitos de hoje foram concluídos!';
 
   @override
   String dayStreak(int count) {
-    return 'Sequência de $count dias';
+    return '$count dias consecutivos';
   }
 
   @override
   String get startJourney => 'Comece sua jornada hoje';
 
   @override
-  String get buildConsistency => 'Vamos construir consistência hoje! 💪';
+  String get buildConsistency =>
+      'Vamos começar a construir consistência hoje! 💪';
 
   @override
   String get greatProgress => 'Ótimo progresso! Continue assim! 🔥';
 
   @override
   String habitsRemaining(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count hábitos restantes hoje',
-      one: '1 hábito restante hoje',
-    );
-    return '$_temp0';
+    return 'Faltam $count hábitos';
   }
 
   @override
-  String get longestStreakCard => 'Sequência\nMais Longa';
+  String get longestStreakCard => 'Maior sequência';
 
   @override
-  String get weeklyConsistencyCard => 'Consistência\nSemanal';
+  String get weeklyConsistencyCard => 'Consistência semanal';
 
   @override
-  String get swipeToComplete =>
-      'Toque ou deslize para a esquerda para concluir';
+  String get swipeToComplete => 'Toque ou deslize para completar';
 
   @override
   String get usefulTip => 'Dica útil';
 
   @override
-  String get habitsTip => 'Deslize para ver ações nos seus hábitos';
+  String get habitsTip => 'Deslize para ver opções de hábitos';
 
   @override
-  String get understood => 'Entendido';
+  String get understood => 'Entendi';
 
   @override
   String get bible => 'Bíblia';
@@ -750,16 +745,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get home => 'Início';
 
   @override
-  String get reminderConfig => 'Configuração de Lembrete';
+  String get reminderConfig => 'Configuração de lembrete';
 
   @override
-  String get recurrenceConfig => 'Repetições Diárias';
+  String get recurrenceConfig => 'Repetição diária';
 
   @override
   String get repeat => 'Repetir lembrete';
 
   @override
-  String get setCycleForPlan => 'Definir um ciclo para seu plano';
+  String get setCycleForPlan => 'Defina o ciclo para seu plano';
 
   @override
   String get subtasks => 'Subtarefas';
@@ -774,7 +769,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get interval => 'Intervalo';
 
   @override
-  String get endDate => 'Data de término';
+  String get endDate => 'Data final';
 
   @override
   String get daily => 'Diário';
@@ -787,17 +782,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String everyXDays(int count) {
-    return 'A cada $count dia(s)';
+    return 'A cada $count dias';
   }
 
   @override
   String everyXWeeks(int count) {
-    return 'A cada $count semana(s)';
+    return 'A cada $count semanas';
   }
 
   @override
   String everyXMonths(int count) {
-    return 'A cada $count mês(es)';
+    return 'A cada $count meses';
   }
 
   @override
@@ -810,17 +805,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get repetition => 'Repetição';
 
   @override
-  String get eventTime => 'Hora do evento (HH:MM)';
+  String get eventTime => 'Horário do evento (HH:MM)';
 
   @override
-  String get invalidMinutes =>
-      'Por favor, insira um número válido entre 1 e 1440';
+  String get invalidMinutes => 'Insira um valor válido entre 1 e 1440';
 
   @override
   String get invalidInterval => 'O intervalo deve ser pelo menos 1';
 
   @override
-  String get habitTracking => 'Rastreamento de Hábitos';
+  String get habitTracking => 'Rastreamento de hábitos';
 
   @override
   String get routine => 'Rotina';
@@ -829,202 +823,201 @@ class AppLocalizationsPt extends AppLocalizations {
   String get today => 'Hoje';
 
   @override
-  String get morning_prayer => 'Oração Matinal';
+  String get morning_prayer => 'Oração matinal';
 
   @override
-  String get bible_reading => 'Leitura Bíblica';
+  String get bible_reading => 'Leitura bíblica';
 
   @override
-  String get evening_prayer => 'Oração Noturna';
+  String get evening_prayer => 'Oração vespertina';
 
   @override
-  String get worship_music => 'Música de Adoração';
+  String get worship_music => 'Música de adoração';
 
   @override
-  String get gratitude_journal => 'Diário de Gratidão';
+  String get gratitude_journal => 'Diário de gratidão';
 
   @override
-  String get scripture_meditation => 'Meditação nas Escrituras';
+  String get scripture_meditation => 'Meditação nas escrituras';
 
   @override
   String get fasting => 'Jejum';
 
   @override
-  String get serve_others => 'Servir aos Outros';
+  String get serve_others => 'Servir ao próximo';
 
   @override
-  String get bible_study_group => 'Grupo de Estudo Bíblico';
+  String get bible_study_group => 'Grupo de estudo bíblico';
 
   @override
-  String get prayer_walk => 'Caminhada de Oração';
+  String get prayer_walk => 'Caminhada de oração';
 
   @override
-  String get scripture_memorization => 'Memorização das Escrituras';
+  String get scripture_memorization => 'Memorização das escrituras';
 
   @override
-  String get intercessory_prayer => 'Oração Intercessória';
+  String get intercessory_prayer => 'Oração intercessória';
 
   @override
-  String get devotional_reading => 'Leitura Devocional';
+  String get devotional_reading => 'Leitura devocional';
 
   @override
-  String get confession_repentance => 'Confissão e Arrependimento';
+  String get confession_repentance => 'Confissão e arrependimento';
 
   @override
-  String get praise_thanksgiving => 'Louvor e Ação de Graças';
+  String get praise_thanksgiving => 'Louvor e agradecimento';
 
   @override
-  String get sabbath_rest => 'Descanso do Sábado';
+  String get sabbath_rest => 'Descanso sabático';
 
   @override
-  String get digital_detox_prayer => 'Desintoxicação Digital e Oração';
+  String get digital_detox_prayer => 'Desintoxicação digital e oração';
 
   @override
-  String get christian_podcast => 'Podcast Cristão';
+  String get christian_podcast => 'Podcast cristão';
 
   @override
-  String get family_devotion => 'Devoção Familiar';
+  String get family_devotion => 'Devoção em família';
 
   @override
-  String get spiritual_reading => 'Leitura Espiritual';
+  String get spiritual_reading => 'Leitura espiritual';
 
   @override
-  String get daily_walk => 'Caminhada Diária';
+  String get daily_walk => 'Caminhada diária';
 
   @override
-  String get morning_exercise => 'Exercício Matinal';
+  String get morning_exercise => 'Exercício matinal';
 
   @override
-  String get yoga_stretching => 'Alongamento';
+  String get yoga_stretching => 'Yoga e alongamento';
 
   @override
-  String get healthy_breakfast => 'Café da Manhã Saudável';
+  String get healthy_breakfast => 'Café da manhã saudável';
 
   @override
-  String get hydration_routine => 'Rotina de Hidratação';
+  String get hydration_routine => 'Rotina de hidratação';
 
   @override
-  String get running_jogging => 'Corrida/Jogging';
+  String get running_jogging => 'Corrida e caminhada';
 
   @override
-  String get strength_training => 'Treinamento de Força';
+  String get strength_training => 'Treinamento de força';
 
   @override
   String get bike_cycling => 'Ciclismo';
 
   @override
-  String get healthy_meal_prep => 'Preparação de Refeições Saudáveis';
+  String get healthy_meal_prep => 'Preparação de refeição saudável';
 
   @override
   String get swimming => 'Natação';
 
   @override
-  String get dance_movement => 'Dança/Movimento';
+  String get dance_movement => 'Dança e movimento';
 
   @override
-  String get sports_recreation => 'Esportes/Recreação';
+  String get sports_recreation => 'Esportes e recreação';
 
   @override
-  String get posture_breaks => 'Pausas para Postura';
+  String get posture_breaks => 'Pausas para postura';
 
   @override
-  String get outdoor_nature => 'Tempo ao Ar Livre/Natureza';
+  String get outdoor_nature => 'Tempo ao ar livre e natureza';
 
   @override
-  String get evening_walk => 'Caminhada Noturna';
+  String get evening_walk => 'Caminhada noturna';
 
   @override
-  String get mindfulness_meditation => 'Meditação de Atenção Plena';
+  String get mindfulness_meditation => 'Meditação mindfulness';
 
   @override
-  String get journaling => 'Escrever Diário';
+  String get journaling => 'Jornalização';
 
   @override
-  String get deep_work_focus => 'Trabalho Profundo/Foco';
+  String get deep_work_focus => 'Trabalho profundo e foco';
 
   @override
-  String get reading_learning => 'Leitura/Aprendizado';
+  String get reading_learning => 'Leitura e aprendizado';
 
   @override
-  String get digital_detox => 'Desintoxicação Digital';
+  String get digital_detox => 'Desintoxicação digital';
 
   @override
-  String get planning_review => 'Planejamento e Revisão';
+  String get planning_review => 'Planejamento e revisão';
 
   @override
-  String get breathing_exercises => 'Exercícios de Respiração';
+  String get breathing_exercises => 'Exercícios de respiração';
 
   @override
-  String get creative_hobby => 'Hobby Criativo';
+  String get creative_hobby => 'Hobby criativo';
 
   @override
-  String get call_friend_family => 'Ligar para Amigo/Família';
+  String get call_friend_family => 'Ligar para amigos/família';
 
   @override
-  String get quality_time_loved_ones => 'Tempo de Qualidade com Entes Queridos';
+  String get quality_time_loved_ones => 'Tempo de qualidade com entes queridos';
 
   @override
-  String get addNote => 'Adicionar Nota';
+  String get addNote => 'Adicionar nota.';
 
   @override
-  String get noteHint => 'Como foi? Compartilhe seus pensamentos...';
+  String get noteHint => 'Texto de ajuda para nota.';
 
   @override
-  String get viewNote => 'Ver Nota';
+  String get viewNote => 'Ver nota.';
 
   @override
-  String get shareNote => 'Compartilhar';
+  String get shareNote => 'Compartilhar nota.';
 
   @override
-  String get noteAdded => 'Nota adicionada';
+  String get noteAdded => 'Nota adicionada.';
 
   @override
-  String get addNoteDialog => 'Adicionar uma Nota';
+  String get addNoteDialog => 'Diálogo para adicionar nota.';
 
   @override
-  String get completeWithNote => 'Concluir e Adicionar Nota';
+  String get completeWithNote => 'Completar e adicionar nota.';
 
   @override
-  String get addEmoji => 'Adicionar Emoji';
+  String get addEmoji => 'Adicionar emoji.';
 
   @override
-  String get hideEmojis => 'Ocultar Emojis';
+  String get hideEmojis => 'Ocultar emojis.';
 
   @override
   String get onboardingSelectAtLeastOneGoal =>
-      'Por favor, selecione pelo menos um objetivo';
+      'Selecione pelo menos um objetivo';
 
   @override
   String get onboardingPreparingHabits => 'Preparando seus hábitos...';
 
   @override
-  String get onboardingKeepAtLeastOneHabit =>
-      'Você deve manter pelo menos um hábito';
+  String get onboardingKeepAtLeastOneHabit => 'Mantenha pelo menos um hábito';
 
   @override
   String get onboardingCouldNotCreateHabits =>
-      'Não foi possível criar os hábitos. Por favor, tente novamente.';
+      'Não foi possível criar hábitos. Tente novamente.';
 
   @override
-  String get planYourDay => 'Planejar o dia';
+  String get planYourDay => 'Planeje seu dia';
 
   @override
-  String get skipHabit => 'Adiar para hoje';
+  String get skipHabit => 'Pular hábito';
 
   @override
   String get markAsNotCompleted => 'Marcar como não concluído';
 
   @override
-  String get skippedHabit => 'Adiado';
+  String get skippedHabit => 'Hábito pulado';
 
   @override
-  String get failedHabit => 'Não concluído';
+  String get failedHabit => 'Fracassado';
 
   @override
   String get repeatReminder => 'Repetir lembrete';
 
   @override
-  String get habitSkipped => 'Hábito adiado para hoje';
+  String get habitSkipped => 'Hábito pulado com sucesso';
 
   @override
   String get habitMarkedAsNotCompleted => 'Hábito marcado como não concluído';

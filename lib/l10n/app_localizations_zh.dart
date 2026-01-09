@@ -216,7 +216,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editHabit => '编辑习惯';
 
   @override
-  String get habitEdited => 'Habit edited successfully';
+  String get habitEdited => '习惯已成功编辑';
 
   @override
   String get defaultColor => '默认';
@@ -512,7 +512,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String mlInsufficientData(int days) {
-    return '预测需要至少$days天的数据';
+    return '至少需要 $days 天的数据进行预测';
   }
 
   @override
@@ -521,42 +521,42 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get backgroundSyncNetwork => '没有网络连接。更改将在在线时同步。';
+  String get backgroundSyncNetwork => '无网络连接。更改将在联网后同步。';
 
   @override
   String get backgroundSyncPermission => '后台同步已禁用。请在设置中启用。';
 
   @override
-  String get workmanagerActive => '后台同步活动中';
+  String get workmanagerActive => '后台同步已激活';
 
   @override
   String get workmanagerRestricted => '后台同步可能受电池优化限制';
 
   @override
-  String get workmanagerDisabled => '系统设置中已禁用后台同步';
+  String get workmanagerDisabled => '后台同步已在系统设置中禁用';
 
   @override
-  String get patternWeekend => '您倾向于跳过周末。尝试设置提醒？';
+  String get patternWeekend => '您经常在周末跳过习惯。建议设置提醒？';
 
   @override
-  String get patternEvening => '晚上完成率较低。考虑早晨的习惯？';
+  String get patternEvening => '晚上完成率较低。建议尝试早晨习惯。';
 
   @override
   String optimalTimeFound(String time) {
-    return '您最佳完成时间是$time';
+    return '已找到最佳完成时间 $time';
   }
 
   @override
-  String get networkTimeout => '请求超时。检查您的连接。';
+  String get networkTimeout => '网络超时。请检查您的连接。';
 
   @override
-  String get firebasePermissionDenied => '访问被拒绝。请重新登录。';
+  String get firebasePermissionDenied => 'Firebase访问被拒绝。请重新登录。';
 
   @override
-  String get errorUnknown => '发生意外错误。请重试。';
+  String get errorUnknown => '发生未知错误。请重试。';
 
   @override
-  String get devBannerTitle => '开发工具';
+  String get devBannerTitle => '开发工具栏标题。';
 
   @override
   String devBannerLastSync(String time) {
@@ -565,39 +565,39 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String devBannerMlStatus(String status) {
-    return '机器学习模型：$status';
+    return 'ML模型：$status';
   }
 
   @override
   String devBannerWorkmanager(String status) {
-    return '后台：$status';
+    return '后台管理器：$status';
   }
 
   @override
   String devBannerFastTime(String multiplier, String date) {
-    return '时间：$multiplier倍（模拟：$date）';
+    return '时间：${multiplier}x（模拟：$date）';
   }
 
   @override
   String get riskLevelLow => '低风险';
 
   @override
-  String get riskLevelMedium => '中风险';
+  String get riskLevelMedium => '中等风险';
 
   @override
   String get riskLevelHigh => '高风险';
 
   @override
-  String get predictorRunning => '正在分析习惯...';
+  String get predictorRunning => '习惯分析进行中...';
 
   @override
-  String get predictorComplete => '分析完成';
+  String get predictorComplete => '习惯分析已完成。';
 
   @override
-  String get syncInProgress => '同步中...';
+  String get syncInProgress => '同步进行中...';
 
   @override
-  String get syncComplete => '同步完成';
+  String get syncComplete => '同步完成。';
 
   @override
   String get mlModelLoaded => '已加载';
@@ -609,10 +609,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mlModelError => '错误';
 
   @override
-  String get chooseHabitType => '你想添加哪种类型的习惯？';
+  String get chooseHabitType => '您想添加哪种类型的习惯？';
 
   @override
-  String get chooseFromPredefined => '选择一个预设习惯';
+  String get chooseFromPredefined => '选择预设习惯';
 
   @override
   String get manual => '手动';
@@ -624,7 +624,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get defaultHabit => '预设';
 
   @override
-  String get addHabitDiscoverySubtitle => '选择如何添加新习惯：你可以创建自定义习惯，或选择一个预设习惯快速开始。';
+  String get addHabitDiscoverySubtitle => '选择如何添加新习惯：可自定义或选择预设习惯快速开始。';
 
   @override
   String get requiredFieldLabel => '必填';
@@ -639,15 +639,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get copy => '复制';
 
   @override
-  String get copyHabit => '您想要复制此任务吗？';
+  String get copyHabit => '要复制任务吗？';
 
   @override
   String copyHabitConfirm(String habitName) {
-    return '您确定要复制\"$habitName\"吗？';
+    return '确定要复制“$habitName”吗？';
   }
 
   @override
-  String get introMessage => '最大的改变始于坚持...';
+  String get introMessage => '最大的改变，始于坚持...';
 
   @override
   String get todaysVerse => '今日经文';
@@ -656,47 +656,41 @@ class AppLocalizationsZh extends AppLocalizations {
   String get todaysHabits => '今日习惯';
 
   @override
-  String get allHabitsCompleted => '🎉 今天所有习惯已完成！';
+  String get allHabitsCompleted => '🎉 今日所有习惯已完成！';
 
   @override
   String dayStreak(int count) {
-    return '$count天连续';
+    return '连续 $count 天';
   }
 
   @override
-  String get startJourney => '今天开始您的旅程';
+  String get startJourney => '今天开始你的旅程';
 
   @override
-  String get buildConsistency => '今天让我们建立一致性！💪';
+  String get buildConsistency => '让我们今天开始坚持！💪';
 
   @override
-  String get greatProgress => '进展很好！继续保持！🔥';
+  String get greatProgress => '进步很大！继续加油！🔥';
 
   @override
   String habitsRemaining(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '今天还剩$count个习惯',
-      one: '今天还剩1个习惯',
-    );
-    return '$_temp0';
+    return '还剩 $count 个习惯';
   }
 
   @override
-  String get longestStreakCard => '最长\n连续';
+  String get longestStreakCard => '最长连续';
 
   @override
-  String get weeklyConsistencyCard => '每周\n一致性';
+  String get weeklyConsistencyCard => '每周坚持';
 
   @override
-  String get swipeToComplete => '点击或向左滑动以完成';
+  String get swipeToComplete => '点击或左滑完成';
 
   @override
   String get usefulTip => '实用提示';
 
   @override
-  String get habitsTip => '滑动以查看您的习惯操作';
+  String get habitsTip => '滑动查看习惯操作';
 
   @override
   String get understood => '明白了';
@@ -708,16 +702,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get home => '首页';
 
   @override
-  String get reminderConfig => '提醒配置';
+  String get reminderConfig => '提醒设置';
 
   @override
-  String get recurrenceConfig => '每日重复';
+  String get recurrenceConfig => '每天重复';
 
   @override
   String get repeat => '重复提醒';
 
   @override
-  String get setCycleForPlan => '为您的计划设置周期';
+  String get setCycleForPlan => '为你的计划设置周期';
 
   @override
   String get subtasks => '子任务';
@@ -735,7 +729,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get endDate => '结束日期';
 
   @override
-  String get daily => '每天';
+  String get daily => '每日';
 
   @override
   String get weekly => '每周';
@@ -745,21 +739,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String everyXDays(int count) {
-    return '每$count天';
+    return '每 $count 天';
   }
 
   @override
   String everyXWeeks(int count) {
-    return '每$count周';
+    return '每 $count 周';
   }
 
   @override
   String everyXMonths(int count) {
-    return '每$count月';
+    return '每 $count 月';
   }
 
   @override
-  String get noRepetition => '不重复';
+  String get noRepetition => '无重复';
 
   @override
   String get reminder => '提醒';
@@ -768,7 +762,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get repetition => '重复';
 
   @override
-  String get eventTime => '事件时间（HH:MM）';
+  String get eventTime => '事件时间 (HH:MM)';
 
   @override
   String get invalidMinutes => '请输入1到1440之间的有效数字';
@@ -780,7 +774,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitTracking => '习惯跟踪';
 
   @override
-  String get routine => '常规';
+  String get routine => '日常';
 
   @override
   String get today => '今天';
@@ -789,7 +783,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get morning_prayer => '晨祷';
 
   @override
-  String get bible_reading => '圣经阅读';
+  String get bible_reading => '读经';
 
   @override
   String get evening_prayer => '晚祷';
@@ -807,13 +801,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fasting => '禁食';
 
   @override
-  String get serve_others => '服侍他人';
+  String get serve_others => '服务他人';
 
   @override
-  String get bible_study_group => '圣经学习小组';
+  String get bible_study_group => '查经小组';
 
   @override
-  String get prayer_walk => '祷告散步';
+  String get prayer_walk => '祷告行走';
 
   @override
   String get scripture_memorization => '经文背诵';
@@ -825,7 +819,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get devotional_reading => '灵修阅读';
 
   @override
-  String get confession_repentance => '认罪与悔改';
+  String get confession_repentance => '认罪悔改';
 
   @override
   String get praise_thanksgiving => '赞美与感恩';
@@ -846,13 +840,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get spiritual_reading => '属灵阅读';
 
   @override
-  String get daily_walk => '每日散步';
+  String get daily_walk => '每日步行';
 
   @override
   String get morning_exercise => '晨练';
 
   @override
-  String get yoga_stretching => '伸展运动';
+  String get yoga_stretching => '瑜伽拉伸';
 
   @override
   String get healthy_breakfast => '健康早餐';
@@ -867,10 +861,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get strength_training => '力量训练';
 
   @override
-  String get bike_cycling => '骑自行车';
+  String get bike_cycling => '骑行';
 
   @override
-  String get healthy_meal_prep => '健康膳食准备';
+  String get healthy_meal_prep => '健康餐准备';
 
   @override
   String get swimming => '游泳';
@@ -885,10 +879,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get posture_breaks => '姿势休息';
 
   @override
-  String get outdoor_nature => '户外/自然时光';
+  String get outdoor_nature => '户外/自然时间';
 
   @override
-  String get evening_walk => '晚间散步';
+  String get evening_walk => '夜间步行';
 
   @override
   String get mindfulness_meditation => '正念冥想';
@@ -921,25 +915,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get quality_time_loved_ones => '与亲人共度美好时光';
 
   @override
-  String get addNote => '添加笔记';
+  String get addNote => '添加备注';
 
   @override
-  String get noteHint => '进展如何？分享您的想法...';
+  String get noteHint => '输入您的备注...';
 
   @override
-  String get viewNote => '查看笔记';
+  String get viewNote => '查看备注';
 
   @override
-  String get shareNote => '分享';
+  String get shareNote => '分享备注';
 
   @override
-  String get noteAdded => '笔记已添加';
+  String get noteAdded => '备注已添加';
 
   @override
-  String get addNoteDialog => '添加笔记';
+  String get addNoteDialog => '添加备注对话框';
 
   @override
-  String get completeWithNote => '完成并添加笔记';
+  String get completeWithNote => '完成并添加备注';
 
   @override
   String get addEmoji => '添加表情符号';
@@ -948,37 +942,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hideEmojis => '隐藏表情符号';
 
   @override
-  String get onboardingSelectAtLeastOneGoal => '请至少选择一个目标';
+  String get onboardingSelectAtLeastOneGoal => '请选择至少一个目标';
 
   @override
   String get onboardingPreparingHabits => '正在准备您的习惯...';
 
   @override
-  String get onboardingKeepAtLeastOneHabit => '您必须至少保留一个习惯';
+  String get onboardingKeepAtLeastOneHabit => '至少保留一个习惯';
 
   @override
   String get onboardingCouldNotCreateHabits => '无法创建习惯。请重试。';
 
   @override
-  String get planYourDay => '计划您的一天';
+  String get planYourDay => '规划您的一天';
 
   @override
-  String get skipHabit => '今天推迟';
+  String get skipHabit => '跳过习惯';
 
   @override
   String get markAsNotCompleted => '标记为未完成';
 
   @override
-  String get skippedHabit => '已推迟';
+  String get skippedHabit => '已跳过';
 
   @override
-  String get failedHabit => '未完成';
+  String get failedHabit => '失败';
 
   @override
   String get repeatReminder => '重复提醒';
 
   @override
-  String get habitSkipped => '今天的习惯已推迟';
+  String get habitSkipped => '习惯已跳过';
 
   @override
   String get habitMarkedAsNotCompleted => '习惯已标记为未完成';

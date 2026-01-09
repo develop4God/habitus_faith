@@ -59,7 +59,8 @@ class UnifiedHabitList extends ConsumerWidget {
           // Removed shrinkWrap and physics to allow scrolling in Expanded
           children: [
             // "Planificar día" title
-            if (sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
+            if (sortedHabits
+                .any((h) => h.dailyStatus == HabitDailyStatus.pending))
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Text(
@@ -96,7 +97,8 @@ class UnifiedHabitList extends ConsumerWidget {
               );
             }),
             if (showSwipeHint &&
-                sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending))
+                sortedHabits
+                    .any((h) => h.dailyStatus == HabitDailyStatus.pending))
               _buildSwipeHint(context),
           ],
         );
