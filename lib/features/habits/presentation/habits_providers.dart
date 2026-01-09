@@ -195,7 +195,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
   }
 
   Future<void> reorderHabits(List<String> habitIds) async {
-    debugPrint('HabitsNotifier.reorderHabits: reordering ${habitIds.length} habits');
+    debugPrint(
+        'HabitsNotifier.reorderHabits: reordering ${habitIds.length} habits');
     state = const AsyncLoading();
     final repository = ref.read(habitsRepositoryProvider);
     final result = await repository.reorderHabits(habitIds);
