@@ -5,7 +5,7 @@ import 'habits_page.dart';
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
 import 'devotional_discovery_page.dart';
-import '../features/statistics/statistics_page.dart'; // Importa la página correcta
+import '../features/statistics/statistics_page.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../features/habits/presentation/habits_providers.dart';
@@ -63,8 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final completionPercentage =
         totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
-    // Calculate weekly consistency (last 7 days)
-    // Normalize dates to midnight to avoid DST issues
+    // Calculate weekly consistency
     final normalizedToday = DateTime(today.year, today.month, today.day);
     final sevenDaysAgo = normalizedToday.subtract(const Duration(days: 7));
     final tomorrowStart = normalizedToday.add(const Duration(days: 1));
@@ -72,42 +71,46 @@ class _HomePageState extends ConsumerState<HomePage> {
     int actualCompletions = 0;
 
     for (final habit in habits) {
-      // Normalize habit creation date to midnight
       final normalizedHabitCreated = DateTime(
         habit.createdAt.year,
         habit.createdAt.month,
         habit.createdAt.day,
       );
 
-      // Calculate days this habit has existed in the 7-day window
       final habitStart = normalizedHabitCreated.isAfter(sevenDaysAgo)
           ? normalizedHabitCreated
           : sevenDaysAgo;
       final daysSinceCreation =
           normalizedToday.difference(habitStart).inDays + 1;
-      final daysInWindow = daysSinceCreation.clamp(0, 7);
+      final daysSinceCreationInWindow = daysSinceCreation.clamp(0, 7);
 
       final relevantCompletions = habit.completionHistory.where((date) {
-        // Normalize completion date to midnight for DST-safe comparison
         final normalizedDate = DateTime(date.year, date.month, date.day);
         return !normalizedDate.isBefore(sevenDaysAgo) &&
             normalizedDate.isBefore(tomorrowStart);
       }).length;
       actualCompletions += relevantCompletions;
-      totalPossibleCompletions += daysInWindow;
+      totalPossibleCompletions += daysSinceCreationInWindow;
     }
 
     final weeklyConsistency = totalPossibleCompletions > 0
         ? (actualCompletions / totalPossibleCompletions * 100).round()
         : 0;
 
-    // Calculate longest streak across all habits
     final longestStreak = habits.isNotEmpty
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
+    // Subtle shadow to protect text inside the ring without highlights
+    final List<Shadow> ringTextShadows = [
+      Shadow(
+        offset: const Offset(0, 1),
+        blurRadius: 4,
+        color: Colors.white.withValues(alpha: 0.85),
+      ),
+    ];
+
     final List<Widget> pages = [
-      // UX-optimized home: Progress → Habits → Streaks → Inspiration
       Scaffold(
         backgroundColor: Colors.grey.shade50,
         body: SingleChildScrollView(
@@ -116,7 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const SizedBox(height: 32),
 
-              // Modern hero section with sun icon, intro message, and date
+              // Hero section with gradient
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(16),
@@ -177,7 +180,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 20),
 
-              // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
+              // A. DAILY PROGRESS inside BackgroundImageCard
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: BackgroundImageCard(
@@ -191,7 +194,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Circular progress indicator (ring) - ANIMATED
                         TweenAnimationBuilder<double>(
                           duration: const Duration(milliseconds: 250),
                           curve: Curves.easeInOut,
@@ -221,21 +223,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: CircularProgressIndicator(
                                       value: value,
                                       strokeWidth: 9,
-                                      backgroundColor: Colors.grey.shade200,
+                                      backgroundColor: Colors.white.withValues(alpha: 0.2),
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         completedHabits == totalHabits &&
                                                 totalHabits > 0
-                                            ? Colors.green.shade400
-                                            : Colors.blue.shade400,
+                                            ? Colors.green.shade600
+                                            : Colors.blue.shade600,
                                       ),
                                     ),
                                   ),
+                                  // Percentage and Count text (NO highlight, directly on image)
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       TweenAnimationBuilder<int>(
-                                        duration:
-                                            const Duration(milliseconds: 250),
+                                        duration: const Duration(milliseconds: 250),
                                         curve: Curves.easeInOut,
                                         tween: IntTween(
                                           begin: 0,
@@ -245,23 +247,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           '$value%',
                                           style: TextStyle(
                                             fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            color: completedHabits ==
-                                                        totalHabits &&
-                                                    totalHabits > 0
-                                                ? Colors.green.shade700
-                                                : Colors.blue.shade700,
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.black,
+                                            shadows: ringTextShadows,
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 6),
+                                      const SizedBox(height: 4),
                                       Text(
                                         l10n.habitsCompletedCount(
                                             completedHabits, totalHabits),
                                         style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w700,
+                                          shadows: ringTextShadows,
                                         ),
                                       ),
                                     ],
@@ -274,62 +274,48 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                         const SizedBox(height: 18),
 
-                        // Motivational micro-copy (dynamic)
-                        if (totalHabits == 0)
-                          Text(
-                            l10n.startJourney,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        else if (completedHabits == totalHabits)
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(width: 8),
-                                Text(
-                                  l10n.allHabitsCompleted,
-                                  style: TextStyle(
+                        // Motivational messages with Pill Highlight
+                        _buildHighlightContainer(
+                          child: totalHabits == 0
+                              ? Text(
+                                  l10n.startJourney,
+                                  style: const TextStyle(
                                     fontSize: 16,
-                                    color: Colors.green.shade700,
-                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
-                        else if (completedHabits == 0)
-                          Text(
-                            l10n.buildConsistency,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade900,
-                              fontWeight: FontWeight.w500,
-                              shadows: const [
-                                Shadow(
-                                  offset: Offset(0, 1),
-                                  blurRadius: 3,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        else
-                          Text(
-                            l10n.greatProgress,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                                  textAlign: TextAlign.center,
+                                )
+                              : completedHabits == totalHabits
+                                  ? Text(
+                                      l10n.allHabitsCompleted,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.green.shade900,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : completedHabits == 0
+                                      ? Text(
+                                          l10n.buildConsistency,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue.shade900,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : Text(
+                                          l10n.greatProgress,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue.shade800,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                        ),
                       ],
                     ),
                   ),
@@ -338,7 +324,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 24),
 
-              // C. REMAINING HABITS INDICATOR
+              // Rest of the UI
               if (totalHabits > 0 && remainingHabits > 0)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -355,10 +341,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               if (totalHabits > 0 && remainingHabits > 0)
                 const SizedBox(height: 12),
 
-              // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
               Container(
                 constraints: const BoxConstraints(
-                  maxHeight: 400, // Adjust as needed for visible habits
+                  maxHeight: 400,
                 ),
                 child: UnifiedHabitList(
                   onComplete: (habitId) async {
@@ -387,7 +372,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 20),
 
-              // D. STREAKS & MOMENTUM (SECONDARY)
               if (habits.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -479,9 +463,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
 
               const SizedBox(height: 20),
-
-              // E. INSPIRATIONAL CONTENT (TERTIARY)
-              // Removed versiculo logic and UI as requested
             ],
           ),
         ),
@@ -527,6 +508,17 @@ class _HomePageState extends ConsumerState<HomePage> {
         selectedItemColor: Colors.blue[800],
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  Widget _buildHighlightContainer({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: child,
     );
   }
 }

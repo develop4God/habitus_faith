@@ -70,167 +70,170 @@ class UnifiedHabitList extends ConsumerWidget {
         final hasPendingHabits =
             sortedHabits.any((h) => h.dailyStatus != HabitDailyStatus.completed);
 
-        return Expanded(
-          child: ReorderableListView.builder(
-            buildDefaultDragHandles: false, // We use custom drag listeners
-            padding:
-                const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
-            itemCount: sortedHabits.length + 2, // +2 for title and swipe hint
-            proxyDecorator: (child, index, animation) {
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (context, _) {
-                  final double animValue =
-                      Curves.easeInOut.transform(animation.value);
-                  final double elevation = lerpDouble(0, 6, animValue)!;
-                  final double scale = lerpDouble(1, 1.02, animValue)!;
-                  return Transform.scale(
-                    scale: scale,
-                    child: Material(
-                      elevation: elevation,
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(16),
-                      child: child,
-                    ),
-                  );
-                },
-              );
-            },
-            onReorderStart: (index) {
-              // Haptic feedback specifically when the user starts the drag
-              HapticFeedback.mediumImpact();
-            },
-            onReorder: (oldIndex, newIndex) async {
-              // Adjust for the title being at index 0
-              final titleOffset = hasPendingHabits ? 1 : 0;
+        // NOTE: Previously this returned an Expanded(child: ReorderableListView),
+        // which caused a ParentDataWidget assertion when UnifiedHabitList was used
+        // inside non-Flex parents. Return the ReorderableListView directly so the
+        // parent can control sizing (and callers can wrap with Expanded/Flexible
+        // when placed inside a Flex).
+        return ReorderableListView.builder(
+          buildDefaultDragHandles: false, // We use custom drag listeners
+          padding:
+              const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
+          itemCount: sortedHabits.length + 2, // +2 for title and swipe hint
+          proxyDecorator: (child, index, animation) {
+            return AnimatedBuilder(
+              animation: animation,
+              builder: (context, _) {
+                final double animValue =
+                    Curves.easeInOut.transform(animation.value);
+                final double elevation = lerpDouble(0, 6, animValue)!;
+                final double scale = lerpDouble(1, 1.02, animValue)!;
+                return Transform.scale(
+                  scale: scale,
+                  child: Material(
+                    elevation: elevation,
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(16),
+                    child: child,
+                  ),
+                );
+              },
+            );
+          },
+          onReorderStart: (index) {
+            // Haptic feedback specifically when the user starts the drag
+            HapticFeedback.mediumImpact();
+          },
+          onReorder: (oldIndex, newIndex) async {
+            // Adjust for the title being at index 0
+            final titleOffset = hasPendingHabits ? 1 : 0;
 
-              // Adjust indices for the title
-              var adjustedOldIndex = oldIndex - titleOffset;
-              var adjustedNewIndex = newIndex - titleOffset;
+            // Adjust indices for the title
+            var adjustedOldIndex = oldIndex - titleOffset;
+            var adjustedNewIndex = newIndex - titleOffset;
 
-              // Ensure indices are within bounds for the habits list
-              if (adjustedOldIndex < 0 ||
-                  adjustedOldIndex >= sortedHabits.length) {
+            // Ensure indices are within bounds for the habits list
+            if (adjustedOldIndex < 0 ||
+                adjustedOldIndex >= sortedHabits.length) {
+              return;
+            }
+
+            // Adjust newIndex for list behavior
+            if (adjustedNewIndex > adjustedOldIndex) {
+              adjustedNewIndex -= 1;
+            }
+
+            // Constrain newIndex to habit list bounds
+            if (adjustedNewIndex < 0) adjustedNewIndex = 0;
+            if (adjustedNewIndex >= sortedHabits.length) {
+              adjustedNewIndex = sortedHabits.length - 1;
+            }
+
+            // Check if we're trying to move between sections (pending <-> completed)
+            final movedHabit = sortedHabits[adjustedOldIndex];
+            final movedIsCompleted =
+                movedHabit.dailyStatus == HabitDailyStatus.completed;
+
+            // Find the boundary between pending and completed
+            final completedStartIndex = sortedHabits.indexWhere(
+              (h) => h.dailyStatus == HabitDailyStatus.completed,
+            );
+
+            // Prevent moving completed to pending section and vice versa
+            if (completedStartIndex != -1) {
+              if (movedIsCompleted &&
+                  adjustedNewIndex < completedStartIndex) {
                 return;
               }
-
-              // Adjust newIndex for list behavior
-              if (adjustedNewIndex > adjustedOldIndex) {
-                adjustedNewIndex -= 1;
+              if (!movedIsCompleted &&
+                  adjustedNewIndex >= completedStartIndex) {
+                return;
               }
+            }
 
-              // Constrain newIndex to habit list bounds
-              if (adjustedNewIndex < 0) adjustedNewIndex = 0;
-              if (adjustedNewIndex >= sortedHabits.length) {
-                adjustedNewIndex = sortedHabits.length - 1;
-              }
+            // Perform reorder
+            final reorderedHabits = [...sortedHabits];
+            final item = reorderedHabits.removeAt(adjustedOldIndex);
+            reorderedHabits.insert(adjustedNewIndex, item);
 
-              // Check if we're trying to move between sections (pending <-> completed)
-              final movedHabit = sortedHabits[adjustedOldIndex];
-              final movedIsCompleted =
-                  movedHabit.dailyStatus == HabitDailyStatus.completed;
+            // Update order values and save
+            final habitIds = reorderedHabits.map((h) => h.id).toList();
+            final notifier = ref.read(habitsNotifierProvider.notifier);
 
-              // Find the boundary between pending and completed
-              final completedStartIndex = sortedHabits.indexWhere(
-                (h) => h.dailyStatus == HabitDailyStatus.completed,
+            HapticFeedback.lightImpact();
+            await notifier.reorderHabits(habitIds);
+          },
+          itemBuilder: (context, index) {
+            // Title at the beginning
+            if (index == 0 && hasPendingHabits) {
+              return Padding(
+                key: const Key('plan_your_day_title'),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child: Text(
+                  '📝 ${l10n.planYourDay}',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.blueAccent,
+                    shadows: [
+                      Shadow(
+                        offset: const Offset(0, 2),
+                        blurRadius: 8,
+                        color: Colors.blueAccent.withAlpha(77),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.left,
+                ),
               );
+            }
 
-              // Prevent moving completed to pending section and vice versa
-              if (completedStartIndex != -1) {
-                if (movedIsCompleted &&
-                    adjustedNewIndex < completedStartIndex) {
-                  return;
-                }
-                if (!movedIsCompleted &&
-                    adjustedNewIndex >= completedStartIndex) {
-                  return;
-                }
-              }
+            // Adjust index for title
+            final titleOffset = hasPendingHabits ? 1 : 0;
+            final habitIndex = index - titleOffset;
 
-              // Perform reorder
-              final reorderedHabits = [...sortedHabits];
-              final item = reorderedHabits.removeAt(adjustedOldIndex);
-              reorderedHabits.insert(adjustedNewIndex, item);
-
-              // Update order values and save
-              final habitIds = reorderedHabits.map((h) => h.id).toList();
-              final notifier = ref.read(habitsNotifierProvider.notifier);
-              
-              HapticFeedback.lightImpact();
-              await notifier.reorderHabits(habitIds);
-            },
-            itemBuilder: (context, index) {
-              // Title at the beginning
-              if (index == 0 && hasPendingHabits) {
+            // Swipe hint/Empty space at the end
+            if (habitIndex >= sortedHabits.length) {
+              if (showSwipeHint && hasPendingHabits) {
                 return Padding(
-                  key: const Key('plan_your_day_title'),
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                  child: Text(
-                    '📝 ${l10n.planYourDay}',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.blueAccent,
-                      shadows: [
-                        Shadow(
-                          offset: const Offset(0, 2),
-                          blurRadius: 8,
-                          color: Colors.blueAccent.withAlpha(77),
+                  key: const Key('swipe_hint'),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.swipe_left,
+                          size: 16, color: Colors.grey.shade500),
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.swipeToComplete,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade500,
+                          fontStyle: FontStyle.italic,
                         ),
-                      ],
-                    ),
-                    textAlign: TextAlign.left,
+                      ),
+                    ],
                   ),
                 );
               }
+              return const SizedBox.shrink(key: Key('empty_end'));
+            }
 
-              // Adjust index for title
-              final titleOffset = hasPendingHabits ? 1 : 0;
-              final habitIndex = index - titleOffset;
-
-              // Swipe hint/Empty space at the end
-              if (habitIndex >= sortedHabits.length) {
-                if (showSwipeHint && hasPendingHabits) {
-                  return Padding(
-                    key: const Key('swipe_hint'),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.swipe_left,
-                            size: 16, color: Colors.grey.shade500),
-                        const SizedBox(width: 8),
-                        Text(
-                          l10n.swipeToComplete,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox.shrink(key: Key('empty_end'));
-              }
-
-              // Habit Card with Drag Listener
-              final habit = sortedHabits[habitIndex];
-              return ReorderableDragStartListener(
-                key: Key('habit_${habit.id}'),
-                index: index,
-                child: UnifiedHabitCard(
-                  habit: habit,
-                  onComplete: onComplete,
-                  onUncheck: onUncheck,
-                  onDelete: onDelete,
-                  onEdit: onEdit,
-                ),
-              );
-            },
-          ),
+            // Habit Card with Drag Listener
+            final habit = sortedHabits[habitIndex];
+            return ReorderableDragStartListener(
+              key: Key('habit_${habit.id}'),
+              index: index,
+              child: UnifiedHabitCard(
+                habit: habit,
+                onComplete: onComplete,
+                onUncheck: onUncheck,
+                onDelete: onDelete,
+                onEdit: onEdit,
+              ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
