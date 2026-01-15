@@ -134,7 +134,8 @@ class UnifiedHabitList extends ConsumerWidget {
               },
               itemBuilder: (context, index) {
                 final habit = sortedHabits[index];
-                return ReorderableDragStartListener(
+                // Using Delayed listener to ensure scroll takes priority over reorder
+                return ReorderableDelayedDragStartListener(
                   key: Key('habit_${habit.id}'),
                   index: index,
                   child: UnifiedHabitCard(
@@ -147,6 +148,7 @@ class UnifiedHabitList extends ConsumerWidget {
                 );
               },
             ),
+            const SizedBox(height: 16),
           ],
         );
       },
