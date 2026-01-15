@@ -74,27 +74,28 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
 
   bool _hasChanges() {
     final habit = widget.habit;
-    
+
     // Compare basic fields
     if (nameCtrl.text != habit.name) return true;
     if (emojiCtrl.text != (habit.emoji ?? '')) return true;
     if (selectedCategory != habit.category) return true;
     if (selectedDifficulty != habit.difficulty) return true;
-    
+
     // Compare color
     final habitColorValue = habit.colorValue;
     final currentColorValue = selectedColor?.toARGB32();
     if (currentColorValue != habitColorValue) return true;
-    
+
     // Compare notifications
     if (notificationSettings != habit.notificationSettings) return true;
-    
+
     // Compare recurrence
     if (recurrence != habit.recurrence) return true;
-    
+
     // Compare subtasks
-    if (!const ListEquality<Subtask>().equals(subtasks, habit.subtasks)) return true;
-    
+    if (!const ListEquality<Subtask>().equals(subtasks, habit.subtasks))
+      return true;
+
     return false;
   }
 
@@ -356,7 +357,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 TextButton.icon(
                   onPressed: () => setState(() => selectedColor = null),
                   icon: const Icon(Icons.clear, size: 16),
-                  label: const Text('Limpiar color', style: TextStyle(fontSize: 12)),
+                  label: const Text('Limpiar color',
+                      style: TextStyle(fontSize: 12)),
                 ),
               const SizedBox(height: 20),
               Row(
