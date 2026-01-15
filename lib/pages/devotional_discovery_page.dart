@@ -543,13 +543,12 @@ class _DevotionalDiscoveryPageState
       title: Text(versionCode),
       trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
       onTap: () async {
-        Navigator.pop(context);
-        final notifier = ref.read(devotionalProvider.notifier);
-        await notifier.changeVersion(versionCode);
-        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Bible version set to: $versionCode')),
         );
+        Navigator.pop(context);
+        final notifier = ref.read(devotionalProvider.notifier);
+        await notifier.changeVersion(versionCode);
       },
     );
   }
