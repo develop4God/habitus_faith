@@ -93,8 +93,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     if (recurrence != habit.recurrence) return true;
 
     // Compare subtasks
-    if (!const ListEquality<Subtask>().equals(subtasks, habit.subtasks))
+    if (!const ListEquality<Subtask>().equals(subtasks, habit.subtasks)) {
       return true;
+    }
 
     return false;
   }
@@ -252,7 +253,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitCategory>(
-                value: selectedCategory,
+                initialValue: selectedCategory,
                 decoration: InputDecoration(
                   labelText: l10n.category,
                   border: OutlineInputBorder(
@@ -287,7 +288,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<HabitDifficulty>(
-                value: selectedDifficulty,
+                initialValue: selectedDifficulty,
                 decoration: InputDecoration(
                   labelText: l10n.difficulty,
                   border: OutlineInputBorder(
