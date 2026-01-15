@@ -525,10 +525,8 @@ class _DevotionalDiscoveryPageState
                   ),
                 ),
                 const Divider(),
-                ...available
-                    .map((version) => _buildVersionOption(
-                        context, version, version == current))
-                    ,
+                ...available.map((version) =>
+                    _buildVersionOption(context, version, version == current)),
                 const SizedBox(height: 12),
               ],
             ),
