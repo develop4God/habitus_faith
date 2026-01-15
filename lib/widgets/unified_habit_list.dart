@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
@@ -51,10 +52,8 @@ class UnifiedHabitList extends ConsumerWidget {
           );
         }
 
-        // No sorting - maintain user-defined order (for drag-and-drop)
-        final sortedHabits = [...habits];
-
         // Sort habits: pending/skipped/failed first (by order), completed last (by order)
+        final sortedHabits = [...habits];
         sortedHabits.sort((a, b) {
           final aCompleted = a.dailyStatus == HabitDailyStatus.completed;
           final bCompleted = b.dailyStatus == HabitDailyStatus.completed;
@@ -68,32 +67,62 @@ class UnifiedHabitList extends ConsumerWidget {
           return a.order.compareTo(b.order);
         });
 
+        final hasPendingHabits =
+            sortedHabits.any((h) => h.dailyStatus != HabitDailyStatus.completed);
+
         return Expanded(
           child: ReorderableListView.builder(
+            buildDefaultDragHandles: false, // We use custom drag listeners
             padding:
                 const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 24),
             itemCount: sortedHabits.length + 2, // +2 for title and swipe hint
+            proxyDecorator: (child, index, animation) {
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (context, _) {
+                  final double animValue =
+                      Curves.easeInOut.transform(animation.value);
+                  final double elevation = lerpDouble(0, 6, animValue)!;
+                  final double scale = lerpDouble(1, 1.02, animValue)!;
+                  return Transform.scale(
+                    scale: scale,
+                    child: Material(
+                      elevation: elevation,
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            },
+            onReorderStart: (index) {
+              // Haptic feedback specifically when the user starts the drag
+              HapticFeedback.mediumImpact();
+            },
             onReorder: (oldIndex, newIndex) async {
               // Adjust for the title being at index 0
-              final hasTitleBefore = sortedHabits
-                  .any((h) => h.dailyStatus == HabitDailyStatus.pending);
-              final titleOffset = hasTitleBefore ? 1 : 0;
+              final titleOffset = hasPendingHabits ? 1 : 0;
 
               // Adjust indices for the title
               var adjustedOldIndex = oldIndex - titleOffset;
               var adjustedNewIndex = newIndex - titleOffset;
 
-              // Ensure indices are within bounds
+              // Ensure indices are within bounds for the habits list
               if (adjustedOldIndex < 0 ||
-                  adjustedOldIndex >= sortedHabits.length ||
-                  adjustedNewIndex < 0 ||
-                  adjustedNewIndex > sortedHabits.length) {
+                  adjustedOldIndex >= sortedHabits.length) {
                 return;
               }
 
               // Adjust newIndex for list behavior
               if (adjustedNewIndex > adjustedOldIndex) {
                 adjustedNewIndex -= 1;
+              }
+
+              // Constrain newIndex to habit list bounds
+              if (adjustedNewIndex < 0) adjustedNewIndex = 0;
+              if (adjustedNewIndex >= sortedHabits.length) {
+                adjustedNewIndex = sortedHabits.length - 1;
               }
 
               // Check if we're trying to move between sections (pending <-> completed)
@@ -110,17 +139,15 @@ class UnifiedHabitList extends ConsumerWidget {
               if (completedStartIndex != -1) {
                 if (movedIsCompleted &&
                     adjustedNewIndex < completedStartIndex) {
-                  // Don't allow moving completed habit to pending section
                   return;
                 }
                 if (!movedIsCompleted &&
                     adjustedNewIndex >= completedStartIndex) {
-                  // Don't allow moving pending habit to completed section
                   return;
                 }
               }
 
-              // Reorder the list
+              // Perform reorder
               final reorderedHabits = [...sortedHabits];
               final item = reorderedHabits.removeAt(adjustedOldIndex);
               reorderedHabits.insert(adjustedNewIndex, item);
@@ -128,13 +155,13 @@ class UnifiedHabitList extends ConsumerWidget {
               // Update order values and save
               final habitIds = reorderedHabits.map((h) => h.id).toList();
               final notifier = ref.read(habitsNotifierProvider.notifier);
+              
+              HapticFeedback.lightImpact();
               await notifier.reorderHabits(habitIds);
             },
             itemBuilder: (context, index) {
               // Title at the beginning
-              if (index == 0 &&
-                  sortedHabits
-                      .any((h) => h.dailyStatus == HabitDailyStatus.pending)) {
+              if (index == 0 && hasPendingHabits) {
                 return Padding(
                   key: const Key('plan_your_day_title'),
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
@@ -158,16 +185,12 @@ class UnifiedHabitList extends ConsumerWidget {
               }
 
               // Adjust index for title
-              final hasTitleBefore = sortedHabits
-                  .any((h) => h.dailyStatus == HabitDailyStatus.pending);
-              final titleOffset = hasTitleBefore ? 1 : 0;
+              final titleOffset = hasPendingHabits ? 1 : 0;
               final habitIndex = index - titleOffset;
 
-              // Swipe hint at the end
+              // Swipe hint/Empty space at the end
               if (habitIndex >= sortedHabits.length) {
-                if (showSwipeHint &&
-                    sortedHabits.any(
-                        (h) => h.dailyStatus == HabitDailyStatus.pending)) {
+                if (showSwipeHint && hasPendingHabits) {
                   return Padding(
                     key: const Key('swipe_hint'),
                     padding: const EdgeInsets.symmetric(
@@ -193,14 +216,18 @@ class UnifiedHabitList extends ConsumerWidget {
                 return const SizedBox.shrink(key: Key('empty_end'));
               }
 
+              // Habit Card with Drag Listener
               final habit = sortedHabits[habitIndex];
-              return UnifiedHabitCard(
+              return ReorderableDragStartListener(
                 key: Key('habit_${habit.id}'),
-                habit: habit,
-                onComplete: onComplete,
-                onUncheck: onUncheck,
-                onDelete: onDelete,
-                onEdit: onEdit,
+                index: index,
+                child: UnifiedHabitCard(
+                  habit: habit,
+                  onComplete: onComplete,
+                  onUncheck: onUncheck,
+                  onDelete: onDelete,
+                  onEdit: onEdit,
+                ),
               );
             },
           ),
@@ -209,6 +236,14 @@ class UnifiedHabitList extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Center(child: Text(l10n.errorUnknown)),
     );
+  }
+
+  // Helper for lerp double since it's used in the decorator
+  double? lerpDouble(num? a, num? b, double t) {
+    if (a == null && b == null) return null;
+    a ??= 0.0;
+    b ??= 0.0;
+    return a + (b - a) * t;
   }
 }
 
@@ -350,32 +385,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       curve: Curves.easeInOut,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        // Swipe-to-delete is currently disabled. To re-enable, uncomment the Dismissible widget below.
-        /*
-        child: Dismissible(
-          key: Key('habit_${widget.habit.id}'),
-          direction: DismissDirection.endToStart,
-          confirmDismiss: (direction) async {
-            if (direction == DismissDirection.endToStart) {
-              HapticFeedback.mediumImpact();
-              await _handleDelete();
-            }
-            return false; // Don't actually dismiss the widget
-          },
-          background: Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20),
-            decoration: BoxDecoration(
-              color: Colors.red.shade400,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(
-              Icons.delete,
-              color: Colors.white,
-              size: 28,
-            ),
-          ),
-        */
         child: Container(
           decoration: BoxDecoration(
             color: isCompleted
@@ -538,10 +547,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                       ],
                     ),
                   ),
-                  // Checkbox más grande y notification bell juntos
+                  // Checkbox and notification bell
                   Row(
                     children: [
-                      // Notification bell button (left of checkbox)
+                      // Notification bell button
                       Consumer(
                         builder: (context, ref, _) {
                           final isActive = widget.habit.notificationSettings !=
@@ -559,14 +568,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                             ),
                             tooltip: l10n.reminderConfig,
                             onPressed: () async {
-                              debugPrint(
-                                  '🔔 Bell tapped. isActive=$isActive, habitId=${widget.habit.id}');
                               final notifier =
                                   ref.read(habitsNotifierProvider.notifier);
                               if (isActive) {
-                                // Turn off notification
-                                debugPrint(
-                                    '🔕 Bell untap (turn off notification) for habitId=${widget.habit.id}');
                                 await notifier.updateHabit(
                                   habitId: widget.habit.id,
                                   notificationSettings: null,
@@ -580,16 +584,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   ),
                                 );
                               } else {
-                                // Open time picker to set notification
-                                debugPrint(
-                                    '⏰ Bell tap (open time picker) for habitId=${widget.habit.id}');
                                 final picked = await showTimePicker(
                                   context: context,
                                   initialTime: TimeOfDay.now(),
                                 );
                                 if (picked != null) {
-                                  debugPrint(
-                                      '🔔 Bell configuration set for habitId=${widget.habit.id}, hour=${picked.hour}, minute=${picked.minute}');
                                   final settings = HabitNotificationSettings(
                                     timing: NotificationTiming.atEventTime,
                                     eventTime:
@@ -608,9 +607,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                       duration: const Duration(seconds: 2),
                                     ),
                                   );
-                                } else {
-                                  debugPrint(
-                                      '🔕 Bell configuration cancelled for habitId=${widget.habit.id}');
                                 }
                               }
                             },
@@ -666,7 +662,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             ),
           ),
         ),
-        // ), // End Dismissible
       ),
     );
   }
@@ -846,7 +841,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                 ),
               ],
             ),
-          // Espaciador invisible para evitar que las opciones se mezclen con la navegación del sistema
           const SizedBox(height: 32),
         ],
       ),

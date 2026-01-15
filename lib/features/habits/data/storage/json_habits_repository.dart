@@ -630,24 +630,36 @@ class JsonHabitsRepository implements HabitsRepository {
   Future<Result<void, HabitFailure>> reorderHabits(
       List<String> habitIds) async {
     try {
-      final habits = _loadHabits();
+      // 1. Load ALL raw habits from storage to avoid losing data (archived, other users, etc)
+      final jsonList = _storage.getJsonList(_habitsKey);
+      final allHabits =
+          jsonList.map((json) => HabitModel.fromJson(json)).toList();
 
-      // Create a map for quick lookup
-      final habitMap = {for (var h in habits) h.id: h};
+      // 2. Separate habits that are NOT being reordered (e.g. archived or different user)
+      final otherHabits =
+          allHabits.where((h) => !habitIds.contains(h.id)).toList();
 
-      // Update order based on the new list order
-      final reorderedHabits = <Habit>[];
+      // 3. Get the habits being reordered and update their order property
+      final habitsToReorder =
+          allHabits.where((h) => habitIds.contains(h.id)).toList();
+      final habitMap = {for (var h in habitsToReorder) h.id: h};
+
+      final reorderedList = <Habit>[];
       for (var i = 0; i < habitIds.length; i++) {
         final habitId = habitIds[i];
         final habit = habitMap[habitId];
         if (habit != null) {
-          reorderedHabits.add(habit.copyWith(order: i));
+          reorderedList.add(habit.copyWith(order: i));
         }
       }
 
+      // 4. Combine and save
+      final finalHabits = [...otherHabits, ...reorderedList];
+
       debugPrint(
-          'JsonHabitsRepository.reorderHabits: Reordered ${reorderedHabits.length} habits');
-      await _saveHabits(reorderedHabits);
+          'JsonHabitsRepository.reorderHabits: Saving ${finalHabits.length} habits total (${reorderedList.length} reordered)');
+
+      await _saveHabits(finalHabits);
 
       return const Success(null);
     } catch (e) {
