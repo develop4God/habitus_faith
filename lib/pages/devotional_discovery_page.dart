@@ -512,14 +512,21 @@ class _DevotionalDiscoveryPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Text(
                     'Select Bible Version',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 const Divider(),
-                ...available.map((version) => _buildVersionOption(context, version, version == current)).toList(),
+                ...available
+                    .map((version) => _buildVersionOption(
+                        context, version, version == current))
+                    .toList(),
                 const SizedBox(height: 12),
               ],
             ),
@@ -529,7 +536,8 @@ class _DevotionalDiscoveryPageState
     );
   }
 
-  Widget _buildVersionOption(BuildContext context, String versionCode, bool selected) {
+  Widget _buildVersionOption(
+      BuildContext context, String versionCode, bool selected) {
     return ListTile(
       title: Text(versionCode),
       trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
@@ -646,7 +654,6 @@ class _DevotionalDiscoveryPageState
         ? [Colors.deepPurple[900]!, Colors.purple[800]!]
         : [Colors.deepPurple[400]!, Colors.purple[400]!];
   }
-
 
   void _navigateToVerse(BuildContext context, Devocional devocional) async {
     // Parse the verse reference from the devotional

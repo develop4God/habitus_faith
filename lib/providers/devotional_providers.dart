@@ -381,7 +381,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
   /// Expose available Bible versions for the currently selected language
   List<String> getAvailableVersionsForCurrentLanguage() {
-    return DevotionalConstants.bibleVersionsByLanguage[state.selectedLanguage] ??
+    return DevotionalConstants
+            .bibleVersionsByLanguage[state.selectedLanguage] ??
         [];
   }
 }
