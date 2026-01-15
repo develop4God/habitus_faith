@@ -100,8 +100,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
-    // Subtle shadow to protect text inside the ring without highlights
-
     final List<Widget> pages = [
       Scaffold(
         backgroundColor: Colors.grey.shade50,
@@ -321,6 +319,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 24),
 
               UnifiedHabitList(
+                shrinkWrap: true, // Crucial for visibility in scrollable home page
                 onComplete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.completeHabit(habitId);
