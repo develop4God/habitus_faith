@@ -141,8 +141,7 @@ class UnifiedHabitList extends ConsumerWidget {
 
             // Prevent moving completed to pending section and vice versa
             if (completedStartIndex != -1) {
-              if (movedIsCompleted &&
-                  adjustedNewIndex < completedStartIndex) {
+              if (movedIsCompleted && adjustedNewIndex < completedStartIndex) {
                 return;
               }
               if (!movedIsCompleted &&
@@ -197,8 +196,8 @@ class UnifiedHabitList extends ConsumerWidget {
               if (showSwipeHint && hasPendingHabits) {
                 return Padding(
                   key: const Key('swipe_hint'),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
