@@ -526,7 +526,7 @@ class _DevotionalDiscoveryPageState
                 ...available
                     .map((version) => _buildVersionOption(
                         context, version, version == current))
-                    .toList(),
+                    ,
                 const SizedBox(height: 12),
               ],
             ),
