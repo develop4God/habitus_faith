@@ -108,7 +108,9 @@ class BackgroundImageCard extends ConsumerWidget {
   Widget _buildCardWithoutBackground() {
     return Card(
       elevation: elevation,
-      color: backgroundColor,
+      color: backgroundColor == Colors.transparent
+          ? Colors.white
+          : backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
         side: borderSide ?? BorderSide.none,

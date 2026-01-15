@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
@@ -52,12 +53,15 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     selectedColor = widget.habit.colorValue != null
         ? Color(widget.habit.colorValue!)
         : null;
-    // subtasks siempre tiene valor por defecto
     subtasks = List<Subtask>.from(widget.habit.subtasks);
     selectedCategory = widget.habit.category;
     selectedDifficulty = widget.habit.difficulty;
     notificationSettings = widget.habit.notificationSettings;
     recurrence = widget.habit.recurrence;
+
+    // Listen to text changes to update Save button visibility
+    nameCtrl.addListener(() => setState(() {}));
+    emojiCtrl.addListener(() => setState(() {}));
   }
 
   @override
@@ -68,7 +72,43 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     super.dispose();
   }
 
+  bool _hasChanges() {
+    final habit = widget.habit;
+
+    // Compare basic fields
+    if (nameCtrl.text != habit.name) return true;
+    if (emojiCtrl.text != (habit.emoji ?? '')) return true;
+    if (selectedCategory != habit.category) return true;
+    if (selectedDifficulty != habit.difficulty) return true;
+
+    // Compare color
+    final habitColorValue = habit.colorValue;
+    final currentColorValue = selectedColor?.toARGB32();
+    if (currentColorValue != habitColorValue) return true;
+
+    // Compare notifications
+    if (notificationSettings != habit.notificationSettings) return true;
+
+    // Compare recurrence
+    if (recurrence != habit.recurrence) return true;
+
+    // Compare subtasks
+    if (!const ListEquality<Subtask>().equals(subtasks, habit.subtasks)) {
+      return true;
+    }
+
+    return false;
+  }
+
   Future<void> _save() async {
+    final l10n = widget.l10n;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
+    );
+
     await ref.read(habitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
@@ -81,12 +121,10 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
           subtasks: subtasks,
         );
 
-    // Schedule or cancel notifications based on settings
     final notificationService = ref.read(notificationServiceProvider);
     if (notificationSettings != null &&
         notificationSettings!.timing != NotificationTiming.none &&
         notificationSettings!.eventTime != null) {
-      // Calculate minutes before
       int? minutesBefore;
       if (notificationSettings!.timing == NotificationTiming.custom) {
         minutesBefore = notificationSettings!.customMinutesBefore;
@@ -101,18 +139,39 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
         minutesBefore: minutesBefore,
       );
     } else {
-      // Cancel notification if disabled
       await notificationService.cancelHabitNotification(widget.habit.id);
     }
 
-    if (mounted) Navigator.of(context).pop();
+    if (mounted) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle, color: Colors.white),
+              const SizedBox(width: 12),
+              Text('${l10n.habitEdited} ✓'),
+            ],
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.green.shade600,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = widget.l10n;
+    final canSave = _hasChanges();
 
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -120,14 +179,60 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                l10n.editHabit,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.editHabit,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(l10n.cancel),
+                  ),
+                  if (canSave) ...[
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: _save,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.check, size: 16),
+                          const SizedBox(width: 4),
+                          Text(l10n.save, style: const TextStyle(fontSize: 14)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               TextField(
                 controller: nameCtrl,
                 decoration: InputDecoration(
@@ -203,8 +308,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   }
                 },
               ),
-              const SizedBox(height: 12),
-              // Color picker moderno y agradable
+              const SizedBox(height: 16),
               SizedBox(
                 height: 56,
                 child: ListView.separated(
@@ -251,12 +355,13 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 ),
               ),
               if (selectedColor != null)
-                IconButton(
-                  icon: const Icon(Icons.clear, size: 18),
+                TextButton.icon(
                   onPressed: () => setState(() => selectedColor = null),
+                  icon: const Icon(Icons.clear, size: 16),
+                  label: const Text('Limpiar color',
+                      style: TextStyle(fontSize: 12)),
                 ),
               const SizedBox(height: 20),
-              // Event time for notifications
               Row(
                 children: [
                   Expanded(
@@ -310,7 +415,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 ],
               ),
               const SizedBox(height: 12),
-              // Notification configuration button
               ListTile(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
@@ -343,7 +447,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 },
               ),
               const SizedBox(height: 12),
-              // Recurrence configuration button
               ListTile(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
@@ -373,7 +476,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 },
               ),
               const SizedBox(height: 20),
-              // Subtasks section
               SubtasksSection(
                 initialSubtasks: subtasks,
                 onSubtasksChanged: (newSubtasks) {
@@ -390,17 +492,6 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(l10n.cancel),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(onPressed: _save, child: Text(l10n.save)),
-                ],
               ),
             ],
           ),

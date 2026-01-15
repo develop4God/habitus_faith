@@ -5,7 +5,7 @@ import 'habits_page.dart';
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
 import 'devotional_discovery_page.dart';
-import '../features/statistics/statistics_page.dart'; // Importa la página correcta
+import '../features/statistics/statistics_page.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../features/habits/presentation/habits_providers.dart';
@@ -39,7 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     // Devocional de hoy
     final devotionalState = ref.watch(devotionalProvider);
-    final todayDevocional = devotionalState.all.firstWhere(
+    devotionalState.all.firstWhere(
       (d) =>
           d.date.year == today.year &&
           d.date.month == today.month &&
@@ -59,12 +59,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     final habits = habitsAsync.asData?.value ?? [];
     final completedHabits = habits.where((h) => h.completedToday).length;
     final totalHabits = habits.length;
-    final remainingHabits = totalHabits - completedHabits;
     final completionPercentage =
         totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
-    // Calculate weekly consistency (last 7 days)
-    // Normalize dates to midnight to avoid DST issues
+    // Calculate weekly consistency
     final normalizedToday = DateTime(today.year, today.month, today.day);
     final sevenDaysAgo = normalizedToday.subtract(const Duration(days: 7));
     final tomorrowStart = normalizedToday.add(const Duration(days: 1));
@@ -72,42 +70,37 @@ class _HomePageState extends ConsumerState<HomePage> {
     int actualCompletions = 0;
 
     for (final habit in habits) {
-      // Normalize habit creation date to midnight
       final normalizedHabitCreated = DateTime(
         habit.createdAt.year,
         habit.createdAt.month,
         habit.createdAt.day,
       );
 
-      // Calculate days this habit has existed in the 7-day window
       final habitStart = normalizedHabitCreated.isAfter(sevenDaysAgo)
           ? normalizedHabitCreated
           : sevenDaysAgo;
       final daysSinceCreation =
           normalizedToday.difference(habitStart).inDays + 1;
-      final daysInWindow = daysSinceCreation.clamp(0, 7);
+      final daysSinceCreationInWindow = daysSinceCreation.clamp(0, 7);
 
       final relevantCompletions = habit.completionHistory.where((date) {
-        // Normalize completion date to midnight for DST-safe comparison
         final normalizedDate = DateTime(date.year, date.month, date.day);
         return !normalizedDate.isBefore(sevenDaysAgo) &&
             normalizedDate.isBefore(tomorrowStart);
       }).length;
       actualCompletions += relevantCompletions;
-      totalPossibleCompletions += daysInWindow;
+      totalPossibleCompletions += daysSinceCreationInWindow;
     }
 
     final weeklyConsistency = totalPossibleCompletions > 0
         ? (actualCompletions / totalPossibleCompletions * 100).round()
         : 0;
 
-    // Calculate longest streak across all habits
     final longestStreak = habits.isNotEmpty
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
     final List<Widget> pages = [
-      // UX-optimized home: Progress → Habits → Streaks → Inspiration
       Scaffold(
         backgroundColor: Colors.grey.shade50,
         body: SingleChildScrollView(
@@ -116,7 +109,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const SizedBox(height: 32),
 
-              // Modern hero section with sun icon, intro message, and date
+              // Hero section with gradient
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(16),
@@ -177,7 +170,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 20),
 
-              // A. DAILY PROGRESS (PRIMARY) - Dominant visual indicator with animation
+              // A. DAILY PROGRESS inside BackgroundImageCard
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: BackgroundImageCard(
@@ -191,7 +184,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Circular progress indicator (ring) - ANIMATED
                         TweenAnimationBuilder<double>(
                           duration: const Duration(milliseconds: 250),
                           curve: Curves.easeInOut,
@@ -221,108 +213,103 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: CircularProgressIndicator(
                                       value: value,
                                       strokeWidth: 9,
-                                      backgroundColor: Colors.grey.shade200,
+                                      backgroundColor:
+                                          Colors.white.withValues(alpha: 0.2),
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         completedHabits == totalHabits &&
                                                 totalHabits > 0
-                                            ? Colors.green.shade400
-                                            : Colors.blue.shade400,
+                                            ? Colors.green.shade600
+                                            : Colors.blue.shade600,
                                       ),
                                     ),
                                   ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TweenAnimationBuilder<int>(
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        curve: Curves.easeInOut,
-                                        tween: IntTween(
-                                          begin: 0,
-                                          end: completionPercentage,
-                                        ),
-                                        builder: (context, value, _) => Text(
-                                          '$value%',
-                                          style: TextStyle(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            color: completedHabits ==
-                                                        totalHabits &&
-                                                    totalHabits > 0
-                                                ? Colors.green.shade700
-                                                : Colors.blue.shade700,
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.7),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TweenAnimationBuilder<int>(
+                                          duration:
+                                              const Duration(milliseconds: 250),
+                                          curve: Curves.easeInOut,
+                                          tween: IntTween(
+                                            begin: 0,
+                                            end: completionPercentage,
+                                          ),
+                                          builder: (context, value, _) => Text(
+                                            '$value%',
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        l10n.habitsCompletedCount(
-                                            completedHabits, totalHabits),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          l10n.habitsCompletedCount(
+                                              completedHabits, totalHabits),
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 18),
-
-                        // Motivational micro-copy (dynamic)
-                        if (totalHabits == 0)
-                          Text(
-                            l10n.startJourney,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        else if (completedHabits == totalHabits)
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(width: 8),
-                                Text(
-                                  l10n.allHabitsCompleted,
-                                  style: TextStyle(
+                        _buildHighlightContainer(
+                          child: totalHabits == 0
+                              ? Text(
+                                  l10n.startJourney,
+                                  style: const TextStyle(
                                     fontSize: 16,
-                                    color: Colors.green.shade700,
-                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
-                        else if (completedHabits == 0)
-                          Text(
-                            l10n.buildConsistency,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        else
-                          Text(
-                            l10n.greatProgress,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                                  textAlign: TextAlign.center,
+                                )
+                              : completedHabits == totalHabits
+                                  ? Text(
+                                      l10n.allHabitsCompleted,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.green.shade900,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : completedHabits == 0
+                                      ? Text(
+                                          l10n.buildConsistency,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue.shade900,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : Text(
+                                          l10n.greatProgress,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue.shade800,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                        ),
                       ],
                     ),
                   ),
@@ -331,25 +318,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 24),
 
-              // C. REMAINING HABITS INDICATOR
-              if (totalHabits > 0 && remainingHabits > 0)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    l10n.habitsRemaining(remainingHabits),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                ),
-
-              if (totalHabits > 0 && remainingHabits > 0)
-                const SizedBox(height: 12),
-
-              // B. TODAY'S HABITS (PRIMARY ACTIONS) - Using unified widget
               UnifiedHabitList(
+                shrinkWrap:
+                    true, // Crucial for visibility in scrollable home page
                 onComplete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.completeHabit(habitId);
@@ -369,12 +340,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
                   );
                 },
-                showSwipeHint: true,
               ),
 
               const SizedBox(height: 20),
 
-              // D. STREAKS & MOMENTUM (SECONDARY)
               if (habits.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -466,57 +435,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
 
               const SizedBox(height: 20),
-
-              // E. INSPIRATIONAL CONTENT (TERTIARY)
-              if (todayDevocional.versiculo.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Card(
-                    elevation: 0,
-                    color: Colors.amber.shade50,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: Colors.amber.shade200),
-                    ),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(
-                        dividerColor: Colors.transparent,
-                      ),
-                      child: ExpansionTile(
-                        tilePadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        childrenPadding:
-                            const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        leading: Icon(
-                          Icons.auto_stories,
-                          color: Colors.amber.shade700,
-                          size: 24,
-                        ),
-                        title: Text(
-                          l10n.todaysVerse,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.amber.shade900,
-                          ),
-                        ),
-                        children: [
-                          Text(
-                            todayDevocional.versiculo,
-                            style: TextStyle(
-                              color: Colors.amber.shade900,
-                              fontSize: 14,
-                              height: 1.5,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -562,6 +480,17 @@ class _HomePageState extends ConsumerState<HomePage> {
         selectedItemColor: Colors.blue[800],
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  Widget _buildHighlightContainer({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: child,
     );
   }
 }

@@ -512,6 +512,12 @@ abstract class AppLocalizations {
   /// **'Edit Habit'**
   String get editHabit;
 
+  /// Success message after editing a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Habit edited successfully'**
+  String get habitEdited;
+
   /// Default color option label
   ///
   /// In en, this message translates to:
@@ -1933,6 +1939,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Habit marked as not completed'**
   String get habitMarkedAsNotCompleted;
+
+  /// Success message after deleting a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Habit deleted'**
+  String get habitDeleted;
 }
 
 class _AppLocalizationsDelegate

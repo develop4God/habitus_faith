@@ -1,15 +1,17 @@
 // lib/core/config/devotional_constants.dart
 
-/// Global constants for devotionals
+import 'package:flutter/material.dart';
+
+/// Global constants for devotionals and related features
 class DevotionalConstants {
   /// URL GENERATION FUNCTIONS
 
-  // Original method - DO NOT MODIFY (Backward Compatibility)
+  // ORIGINAL METHOD - DO NOT MODIFY (Backward Compatibility)
   static String getDevocionalesApiUrl(int year) {
     return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/Devocional_year_$year.json';
   }
 
-  // New method for multilingual support
+  // NEW METHOD for multilingual support
   static String getDevocionalesApiUrlMultilingual(
     int year,
     String languageCode,
@@ -24,7 +26,7 @@ class DevotionalConstants {
     return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/Devocional_year_${year}_${languageCode}_$versionCode.json';
   }
 
-  /// LANGUAGE AND VERSION MAPS
+  /// MAPS: LANGUAGES, VERSIONS, DEFAULTS
 
   // Supported languages and their readable names
   static const Map<String, String> supportedLanguages = {
@@ -32,7 +34,8 @@ class DevotionalConstants {
     'en': 'English',
     'pt': 'Português',
     'fr': 'Français',
-    'zh': 'Chinese (Coming Soon)',
+    'ja': '日本語', // Japanese
+    'zh': '中文', // Chinese
   };
 
   // Available Bible versions by language
@@ -41,7 +44,8 @@ class DevotionalConstants {
     'en': ['KJV', 'NIV'],
     'pt': ['ARC', 'NVI'],
     'fr': ['LSG1910', 'TOB'],
-    'zh': [], // Coming soon
+    'ja': ['新改訳2003', 'リビングバイブル'], // Japanese versions
+    'zh': ['和合本1919', '新译本'], // Chinese versions
   };
 
   // Default Bible version by language
@@ -50,7 +54,8 @@ class DevotionalConstants {
     'en': 'KJV',
     'pt': 'ARC',
     'fr': 'LSG1910',
-    'zh': 'RVR1960', // Fallback until Chinese content is available
+    'ja': '新改訳2003',
+    'zh': '和合本1919',
   };
 
   /// PREFERENCES (SharedPreferences KEYS)
@@ -63,4 +68,33 @@ class DevotionalConstants {
   static const String prefSelectedLanguage = 'selectedLanguage';
   static const String prefSelectedVersion = 'selectedVersion';
   static const String prefDevocionalFontSize = 'devocional_font_size';
+
+  /// Favorites local storage schema version. Bump this when changing the
+  /// local format for favorites so migrations can be applied.
+  static const int favoritesSchemaVersion = 1;
+
+  /// FEATURE FLAGS
+  static const bool enableOnboardingFeature = false;
+  static const bool enableBackupFeature = false;
+  static const bool enableDiscoveryFeature = true;
+
+  /// DISCOVERY STUDIES URLS
+  static const String discoveryIndexUrl =
+      'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/discovery/index.json';
+
+  static String getDiscoveryStudyFileUrl(String fileName) {
+    return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/discovery/$fileName';
+  }
+}
+
+/// Schema versioning and migration constants for favorites storage
+class FavoritesSchema {
+  static const int currentVersion = 2;
+  static const String versionKey = 'favorites_schema_version';
+  static const String migratedAtKey = 'favorites_migrated_at';
+}
+
+// Servicio de navegación global
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }

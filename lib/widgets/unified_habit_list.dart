@@ -10,14 +10,15 @@ import '../l10n/app_localizations.dart';
 
 /// Unified habit list widget that combines:
 /// - Visual design from habits_page (colored border)
-/// - Swipe-to-delete functionality from home_page
+/// - Swipe-to-complete functionality
 /// - Tap-to-expand details from CompactHabitCard
 class UnifiedHabitList extends ConsumerWidget {
   final Future<void> Function(String habitId) onComplete;
   final Future<void> Function(String habitId) onUncheck;
   final Future<void> Function(String habitId) onDelete;
   final Future<void> Function(Habit habit)? onEdit;
-  final bool showSwipeHint;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
 
   const UnifiedHabitList({
     super.key,
@@ -25,17 +26,17 @@ class UnifiedHabitList extends ConsumerWidget {
     required this.onUncheck,
     required this.onDelete,
     this.onEdit,
-    this.showSwipeHint = false,
+    this.shrinkWrap = false,
+    this.physics,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
     final l10n = AppLocalizations.of(context)!;
+
     return habitsAsync.when(
       data: (habits) {
-        debugPrint(
-            '🟢 UnifiedHabitList.build: Recibidos ${habits.length} hábitos: ${habits.map((h) => h.name).toList()}');
         if (habits.isEmpty) {
           return Center(
             child: Padding(
@@ -52,91 +53,138 @@ class UnifiedHabitList extends ConsumerWidget {
           );
         }
 
-        // Sort habits: pending first, then completed/skipped/failed
-        final sortedHabits = [...habits]..sort((a, b) {
-            // Pending habits come first
-            if (a.dailyStatus == HabitDailyStatus.pending &&
-                b.dailyStatus != HabitDailyStatus.pending) {
-              return -1;
-            }
-            if (a.dailyStatus != HabitDailyStatus.pending &&
-                b.dailyStatus == HabitDailyStatus.pending) {
-              return 1;
-            }
-            // Within same status group, maintain creation order
-            return 0;
-          });
+        // Sort habits: pending/skipped/failed first (by order), completed last (by order)
+        final sortedHabits = [...habits];
+        sortedHabits.sort((a, b) {
+          final aCompleted = a.dailyStatus == HabitDailyStatus.completed;
+          final bCompleted = b.dailyStatus == HabitDailyStatus.completed;
+          if (aCompleted != bCompleted) {
+            return aCompleted ? 1 : -1;
+          }
+          return a.order.compareTo(b.order);
+        });
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // "Planificar día" title
-            if (sortedHabits
-                .any((h) => h.dailyStatus == HabitDailyStatus.pending))
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Text(
-                  '📝 ${l10n.planYourDay}',
-                  style: TextStyle(
-                    fontSize: 25, // Increased for visibility
-                    fontWeight: FontWeight.w900, // Extra bold
-                    color: Colors.blueAccent, // Vibrant, modern color
-                    shadows: [
-                      Shadow(
-                        offset: const Offset(0, 2),
-                        blurRadius: 8,
-                        color: Colors.blueAccent.withValues(alpha: 0.3),
+        final hasPendingHabits = sortedHabits
+            .any((h) => h.dailyStatus != HabitDailyStatus.completed);
+
+        return Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.transparent,
+          ),
+          child: ReorderableListView.builder(
+            header: hasPendingHabits
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                    child: Text(
+                      '📝 ${l10n.planYourDay}',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.blueAccent,
+                        shadows: [
+                          Shadow(
+                            offset: const Offset(0, 2),
+                            blurRadius: 8,
+                            color: Colors.blueAccent.withAlpha(77),
+                          ),
+                        ],
                       ),
-                    ],
-                    // Optionally, use a modern font family if available
-                    // fontFamily: 'Montserrat',
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ...sortedHabits.map((habit) => UnifiedHabitCard(
+                    ),
+                  )
+                : null,
+            footer: const SizedBox(height: 32),
+            shrinkWrap: shrinkWrap,
+            physics: physics ??
+                (shrinkWrap
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics()),
+            buildDefaultDragHandles: false,
+            itemCount: sortedHabits.length,
+            proxyDecorator: (child, index, animation) {
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (context, _) {
+                  final double animValue =
+                      Curves.easeInOut.transform(animation.value);
+                  final double elevation = lerpDouble(0, 6, animValue)!;
+                  final double scale = lerpDouble(1, 1.02, animValue)!;
+                  return Transform.scale(
+                    scale: scale,
+                    child: Material(
+                      elevation: elevation,
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            },
+            onReorderStart: (_) => HapticFeedback.mediumImpact(),
+            onReorder: (oldIndex, newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+
+              final movedHabit = sortedHabits[oldIndex];
+              final movedIsCompleted =
+                  movedHabit.dailyStatus == HabitDailyStatus.completed;
+              final completedStartIndex = sortedHabits.indexWhere(
+                  (h) => h.dailyStatus == HabitDailyStatus.completed);
+
+              if (completedStartIndex != -1) {
+                if (movedIsCompleted && newIndex < completedStartIndex) {
+                  return;
+                }
+                if (!movedIsCompleted && newIndex >= completedStartIndex) {
+                  return;
+                }
+              }
+
+              final reorderedHabits = [...sortedHabits];
+              final item = reorderedHabits.removeAt(oldIndex);
+              reorderedHabits.insert(newIndex, item);
+
+              HapticFeedback.lightImpact();
+              await ref.read(habitsNotifierProvider.notifier).reorderHabits(
+                    reorderedHabits.map((h) => h.id).toList(),
+                  );
+            },
+            itemBuilder: (context, index) {
+              final habit = sortedHabits[index];
+              return ReorderableDelayedDragStartListener(
+                key: Key('habit_${habit.id}'),
+                index: index,
+                child: UnifiedHabitCard(
                   habit: habit,
                   onComplete: onComplete,
                   onUncheck: onUncheck,
                   onDelete: onDelete,
                   onEdit: onEdit,
-                )),
-            if (showSwipeHint &&
-                sortedHabits
-                    .any((h) => h.dailyStatus == HabitDailyStatus.pending))
-              _buildSwipeHint(context),
-          ],
+                ),
+              );
+            },
+          ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: CircularProgressIndicator(),
+        ),
+      ),
       error: (err, stack) => Center(child: Text(l10n.errorUnknown)),
     );
   }
 
-  Widget _buildSwipeHint(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
-          const SizedBox(width: 8),
-          Text(
-            l10n.swipeToComplete,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ],
-      ),
-    );
+  double? lerpDouble(num? a, num? b, double t) {
+    if (a == null && b == null) return null;
+    a ??= 0.0;
+    b ??= 0.0;
+    return a + (b - a) * t;
   }
 }
 
-/// Individual habit card with swipe-to-delete and tap-to-expand
 class UnifiedHabitCard extends ConsumerStatefulWidget {
   final Habit habit;
   final Future<void> Function(String habitId) onComplete;
@@ -173,32 +221,24 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleComplete() async {
     if (_isCompleting) return;
-
-    setState(() {
-      _isCompleting = true;
-    });
-
+    setState(() => _isCompleting = true);
     try {
       final habit = getLatestHabit(ref);
       if (habit.completedToday) {
-        debugPrint('Desmarcando hábito: ${habit.id}');
         await widget.onUncheck(habit.id);
       } else {
-        debugPrint('Marcando hábito: ${habit.id}');
         await widget.onComplete(habit.id);
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _isCompleting = false;
-        });
-      }
+      if (mounted) setState(() => _isCompleting = false);
     }
   }
 
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
+
+    // 1. Show confirmation dialog
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -206,14 +246,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         content: Text(l10n.deleteHabitConfirm(habit.name)),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l10n.cancel),
-          ),
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(l10n.cancel)),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
-            ),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: Text(l10n.delete),
           ),
         ],
@@ -221,42 +258,43 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     );
 
     if (confirmed == true) {
+      // 2. Perform deletion
       await widget.onDelete(habit.id);
+
+      if (!mounted) return;
+
+      // 3. Close the expanded habit bottom sheet
+      // The confirmation dialog was already closed by Navigator.pop(true)
+      Navigator.of(context).pop();
+
+      // 4. Show confirmation SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.habitDeleted),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
   }
 
   Future<void> _handleSkip() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
-    final notifier = ref.read(habitsNotifierProvider.notifier);
-
-    // Skip the habit for today
-    await notifier.skipHabit(habit.id);
-
+    await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.habitSkipped),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+        duration: const Duration(seconds: 2)));
   }
 
   Future<void> _handleFail() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
-    final notifier = ref.read(habitsNotifierProvider.notifier);
-
-    // Mark the habit as failed for today
-    await notifier.failHabit(habit.id);
-
+    await ref.read(habitsNotifierProvider.notifier).failHabit(habit.id);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.habitMarkedAsNotCompleted),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+        duration: const Duration(seconds: 2)));
   }
 
   @override
@@ -274,301 +312,188 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       curve: Curves.easeInOut,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        child: Dismissible(
-          key: Key('habit_${widget.habit.id}'),
-          direction: DismissDirection.endToStart,
-          confirmDismiss: (direction) async {
-            if (direction == DismissDirection.endToStart) {
-              HapticFeedback.mediumImpact();
-              await _handleDelete();
-            }
-            return false; // Don't actually dismiss the widget
-          },
-          background: Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20),
-            decoration: BoxDecoration(
-              color: Colors.red.shade400,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(
-              Icons.delete,
-              color: Colors.white,
-              size: 28,
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: isCompleted
-                  ? Colors.green.shade50
-                  : isSkipped
-                      ? Colors.orange.shade50
-                      : isFailed
-                          ? Colors.red.shade50
-                          : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border(
-                left: BorderSide(color: habitColor, width: 4),
+        child: Container(
+          decoration: BoxDecoration(
+            color: isCompleted
+                ? Colors.green.shade50
+                : isSkipped
+                    ? Colors.orange.shade50
+                    : isFailed
+                        ? Colors.red.shade50
+                        : Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border(left: BorderSide(color: habitColor, width: 4)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: InkWell(
-              onTap: () async {
-                // Show expanded modal sheet
-                await HabitModalSheet.show(
-                  context: context,
-                  child: _buildExpandedContent(context, l10n, habitColor),
-                  maxHeight: 480,
-                );
-                if (!mounted) return;
-                setState(() {});
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    // Emoji con color de fondo
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: habitColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.habit.emoji ?? '✓',
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                      ),
+            ],
+          ),
+          child: InkWell(
+            onTap: () async {
+              await HabitModalSheet.show(
+                context: context,
+                child: _buildExpandedContent(context, l10n, habitColor),
+                maxHeight: 480,
+              );
+              if (!mounted) return;
+              setState(() {});
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: habitColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(width: 16),
-                    // Habit info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  widget.habit.name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: isCompleted
-                                        ? Colors.green.shade900
-                                        : Colors.grey.shade900,
-                                    decoration:
-                                        (isCompleted || isSkipped || isFailed)
-                                            ? TextDecoration.lineThrough
-                                            : null,
-                                  ),
+                    child: Center(
+                        child: Text(widget.habit.emoji ?? '✓',
+                            style: const TextStyle(fontSize: 24))),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.habit.name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: isCompleted
+                                      ? Colors.green.shade900
+                                      : Colors.grey.shade900,
+                                  decoration:
+                                      (isCompleted || isSkipped || isFailed)
+                                          ? TextDecoration.lineThrough
+                                          : null,
                                 ),
                               ),
-                              // Status badge
-                              if (isSkipped)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange.shade100,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    l10n.skippedHabit,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.orange.shade900,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                )
-                              else if (isFailed)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.shade100,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    l10n.failedHabit,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.red.shade900,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.local_fire_department,
+                            ),
+                            if (isSkipped)
+                              _buildStatusBadge(
+                                  l10n.skippedHabit, Colors.orange)
+                            else if (isFailed)
+                              _buildStatusBadge(l10n.failedHabit, Colors.red),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(Icons.local_fire_department,
                                 size: 14,
                                 color: widget.habit.currentStreak > 0
                                     ? Colors.orange.shade600
-                                    : Colors.grey.shade400,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                l10n.dayStreak(widget.habit.currentStreak),
+                                    : Colors.grey.shade400),
+                            const SizedBox(width: 4),
+                            Text(l10n.dayStreak(widget.habit.currentStreak),
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Checkbox más grande y notification bell juntos
-                    Row(
-                      children: [
-                        // Notification bell button (left of checkbox)
-                        Consumer(
-                          builder: (context, ref, _) {
-                            final isActive =
-                                widget.habit.notificationSettings != null &&
-                                    widget.habit.notificationSettings!.timing ==
-                                        NotificationTiming.atEventTime &&
-                                    widget.habit.notificationSettings!
-                                            .eventTime !=
-                                        null;
-                            return IconButton(
-                              icon: Icon(
-                                isActive
-                                    ? Icons.notifications_active
-                                    : Icons.notifications_none,
-                                color: isActive ? Colors.orange : Colors.grey,
-                              ),
-                              tooltip: l10n.reminderConfig,
-                              onPressed: () async {
-                                debugPrint(
-                                    '🔔 Bell tapped. isActive=$isActive, habitId=${widget.habit.id}');
-                                final notifier =
-                                    ref.read(habitsNotifierProvider.notifier);
-                                if (isActive) {
-                                  // Turn off notification
-                                  debugPrint(
-                                      '🔕 Bell untap (turn off notification) for habitId=${widget.habit.id}');
-                                  await notifier.updateHabit(
-                                    habitId: widget.habit.id,
-                                    notificationSettings: null,
-                                  );
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          '${l10n.reminderConfig}: ${l10n.notificationsDisabled}'),
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                } else {
-                                  // Open time picker to set notification
-                                  debugPrint(
-                                      '⏰ Bell tap (open time picker) for habitId=${widget.habit.id}');
-                                  final picked = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-                                  if (picked != null) {
-                                    debugPrint(
-                                        '🔔 Bell configuration set for habitId=${widget.habit.id}, hour=${picked.hour}, minute=${picked.minute}');
-                                    final settings = HabitNotificationSettings(
-                                      timing: NotificationTiming.atEventTime,
-                                      eventTime:
-                                          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
-                                    );
-                                    await notifier.updateHabit(
-                                      habitId: widget.habit.id,
-                                      notificationSettings: settings,
-                                    );
-                                    if (!context.mounted) return;
-                                    final formatted = picked.format(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            '${l10n.reminderConfig}: $formatted'),
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
-                                  } else {
-                                    debugPrint(
-                                        '🔕 Bell configuration cancelled for habitId=${widget.habit.id}');
-                                  }
-                                }
-                              },
-                            );
-                          },
-                        ),
-                        // Checkbox
-                        InkWell(
-                          onTap: _isCompleting ? null : _handleComplete,
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            padding: const EdgeInsets.all(4),
-                            child: _isCompleting
-                                ? SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        habitColor,
-                                      ),
-                                    ),
-                                  )
-                                : Transform.scale(
-                                    scale: 1.3,
-                                    child: Checkbox(
-                                      value: isCompleted,
-                                      onChanged: (val) {
-                                        if (!_isCompleting) {
-                                          _handleComplete();
-                                        }
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      activeColor: habitColor,
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      visualDensity: const VisualDensity(
-                                          horizontal: 0, vertical: 0),
-                                      side: BorderSide(
-                                          width: 2, color: habitColor),
-                                    ),
-                                  ),
-                          ),
+                                    fontSize: 13, color: Colors.grey.shade600)),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  _buildActions(
+                      context, ref, l10n, habit, isCompleted, habitColor),
+                ],
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildStatusBadge(String text, MaterialColor color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+          color: color.shade100, borderRadius: BorderRadius.circular(8)),
+      child: Text(text,
+          style: TextStyle(
+              fontSize: 10,
+              color: color.shade900,
+              fontWeight: FontWeight.w600)),
+    );
+  }
+
+  Widget _buildActions(BuildContext context, WidgetRef ref,
+      AppLocalizations l10n, Habit habit, bool isCompleted, Color habitColor) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(
+            habit.notificationSettings != null
+                ? Icons.notifications_active
+                : Icons.notifications_none,
+            color: habit.notificationSettings != null
+                ? Colors.orange
+                : Colors.grey,
+          ),
+          onPressed: () => _handleNotification(context, ref, l10n, habit),
+        ),
+        InkWell(
+          onTap: _isCompleting ? null : _handleComplete,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            width: 40,
+            height: 40,
+            padding: const EdgeInsets.all(4),
+            child: _isCompleting
+                ? Center(
+                    child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(habitColor))))
+                : Transform.scale(
+                    scale: 1.3,
+                    child: Checkbox(
+                      value: isCompleted,
+                      onChanged: (_) => _handleComplete(),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
+                      activeColor: habitColor,
+                      side: BorderSide(width: 2, color: habitColor),
+                    ),
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _handleNotification(BuildContext context, WidgetRef ref,
+      AppLocalizations l10n, Habit habit) async {
+    final notifier = ref.read(habitsNotifierProvider.notifier);
+    if (habit.notificationSettings != null) {
+      await notifier.updateHabit(habitId: habit.id, notificationSettings: null);
+    } else {
+      final picked =
+          await showTimePicker(context: context, initialTime: TimeOfDay.now());
+      if (picked != null) {
+        final settings = HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime:
+              '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+        );
+        await notifier.updateHabit(
+            habitId: habit.id, notificationSettings: settings);
+      }
+    }
   }
 
   Widget _buildExpandedContent(
@@ -580,164 +505,99 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header con emoji y nombre
           Row(
             children: [
               Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: habitColor.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
+                    color: habitColor.withValues(alpha: 0.1),
+                    shape: BoxShape.circle),
                 child: Center(
-                  child: Text(
-                    widget.habit.emoji ?? '✓',
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                ),
+                    child: Text(widget.habit.emoji ?? '✓',
+                        style: const TextStyle(fontSize: 24))),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(
-                  widget.habit.name,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    decoration: widget.habit.completedToday
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                  ),
-                ),
-              ),
+                  child: Text(widget.habit.name,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          decoration: isHabitCompleted(habit)
+                              ? TextDecoration.lineThrough
+                              : null))),
             ],
           ),
           const SizedBox(height: 16),
-          // Estadísticas
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStat(
-                icon: Icons.local_fire_department,
-                label: l10n.currentStreak,
-                value: '${widget.habit.currentStreak}',
-                color: Colors.orange,
-              ),
-              _buildStat(
-                icon: Icons.trending_up,
-                label: l10n.longestStreak,
-                value: '${widget.habit.longestStreak}',
-                color: Colors.blue,
-              ),
-              _buildStat(
-                icon: Icons.check_circle,
-                label: 'Total',
-                value: '${widget.habit.completionHistory.length}',
-                color: Colors.green,
-              ),
+              _buildStat(Icons.local_fire_department, l10n.currentStreak,
+                  '${habit.currentStreak}', Colors.orange),
+              _buildStat(Icons.trending_up, l10n.longestStreak,
+                  '${habit.longestStreak}', Colors.blue),
+              _buildStat(Icons.check_circle, 'Total',
+                  '${habit.completionHistory.length}', Colors.green),
             ],
           ),
-          const SizedBox(height: 16),
-          // Acciones
+          const SizedBox(height: 24),
           Row(
             children: [
               Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: widget.onEdit != null
-                      ? () async {
-                          await widget.onEdit!(habit);
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                        }
-                      : null,
-                  icon: const Icon(Icons.edit),
-                  label: Text(l10n.edit),
-                ),
-              ),
+                  child: OutlinedButton.icon(
+                      onPressed: () => widget.onEdit?.call(habit),
+                      icon: const Icon(Icons.edit),
+                      label: Text(l10n.edit))),
               const SizedBox(width: 12),
               Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _handleDelete,
-                  icon: const Icon(Icons.delete),
-                  label: Text(l10n.delete),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.red,
-                  ),
-                ),
-              ),
+                  child: OutlinedButton.icon(
+                      onPressed: _handleDelete,
+                      icon: const Icon(Icons.delete),
+                      label: Text(l10n.delete),
+                      style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.red))),
             ],
           ),
           const SizedBox(height: 12),
-          // Skip and Fail options
-          if (habit.dailyStatus == HabitDailyStatus.pending ||
-              habit.dailyStatus == HabitDailyStatus.completed)
-            Row(
-              children: [
-                Expanded(
+          Row(
+            children: [
+              Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () async {
-                      await _handleSkip();
-                      if (!context.mounted) return;
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.skip_next),
-                    label: Text(l10n.skipHabit),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.orange.shade700,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
+                      onPressed: _handleSkip,
+                      icon: const Icon(Icons.skip_next),
+                      label: Text(l10n.skipHabit),
+                      style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.orange.shade700))),
+              const SizedBox(width: 12),
+              Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () async {
-                      await _handleFail();
-                      if (!context.mounted) return;
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.close),
-                    label: Text(l10n.markAsNotCompleted),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.red.shade700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          // Espaciador invisible para evitar que las opciones se mezclen con la navegación del sistema
+                      onPressed: _handleFail,
+                      icon: const Icon(Icons.close),
+                      label: Text(l10n.markAsNotCompleted),
+                      style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.red.shade700))),
+            ],
+          ),
           const SizedBox(height: 32),
         ],
       ),
     );
   }
 
-  Widget _buildStat({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-  }) {
+  bool isHabitCompleted(Habit habit) =>
+      habit.dailyStatus == HabitDailyStatus.completed;
+
+  Widget _buildStat(IconData icon, String label, String value, Color color) {
     return Column(
       children: [
         Icon(icon, color: color, size: 24),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey.shade600,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        Text(value,
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: color)),
+        Text(label,
+            style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+            textAlign: TextAlign.center),
       ],
     );
   }

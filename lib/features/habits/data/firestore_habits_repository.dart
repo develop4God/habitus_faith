@@ -307,6 +307,30 @@ class FirestoreHabitsRepository implements HabitsRepository {
   }
 
   @override
+  Future<Result<void, HabitFailure>> reorderHabits(
+      List<String> habitIds) async {
+    try {
+      if (userId == null) {
+        return const Failure(UserNotAuthenticatedFailure());
+      }
+
+      // Batch update all habits with their new order
+      final batch = firestore.batch();
+      for (var i = 0; i < habitIds.length; i++) {
+        final habitRef = firestore.collection('habits').doc(habitIds[i]);
+        batch.update(habitRef, {'order': i});
+      }
+      await batch.commit();
+
+      return const Success(null);
+    } on FirebaseException catch (e) {
+      return Failure(NetworkFailure(e.message ?? 'Unknown Firebase error'));
+    } catch (e) {
+      return Failure(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<void> recordCompletionForML(String habitId, bool completed) async {
     // Firestore implementation - not currently used but required by interface
     // Data collection happens via GitHubMLStorage in JsonHabitsRepository

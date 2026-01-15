@@ -278,6 +278,10 @@
   "@editHabit": {
     "description": "Edit habit dialog title"
   },
+  "habitEdited": "Habit edited successfully",
+  "@habitEdited": {
+    "description": "Success message after editing a habit"
+  },
   "defaultColor": "Default",
   "@defaultColor": {
     "description": "Default color option label"
@@ -1227,5 +1231,9 @@
   "habitMarkedAsNotCompleted": "Habit marked as not completed",
   "@habitMarkedAsNotCompleted": {
     "description": "Message when habit is marked as failed"
+  },
+  "habitDeleted": "Habit deleted",
+  "@habitDeleted": {
+    "description": "Success message after deleting a habit"
   }
 }

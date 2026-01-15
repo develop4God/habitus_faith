@@ -9,6 +9,7 @@ import '../bible_reader_core/bible_reader_core.dart';
 import 'bible_reader_page.dart';
 import 'favorites_page.dart';
 import 'package:intl/intl.dart';
+import '../l10n/app_localizations.dart';
 
 /// Devotional Discovery Page
 ///
@@ -57,7 +58,7 @@ class _DevotionalDiscoveryPageState
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          'Daily Devotional',
+          AppLocalizations.of(context)!.devotional_reading,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -65,14 +66,14 @@ class _DevotionalDiscoveryPageState
           ),
         ),
         actions: [
-          // Language selector
+          // Bible version selector (shows available versions for current devotional language)
           IconButton(
             icon: Icon(
-              Icons.language,
+              Icons.menu_book,
               color: isDark ? Colors.white : Colors.black87,
             ),
-            tooltip: 'Select Language',
-            onPressed: () => _showLanguageSelector(context),
+            tooltip: 'Bible Version: ${state.selectedVersion}',
+            onPressed: () => _showVersionSelector(context),
           ),
           // Favorites page
           IconButton(
@@ -112,7 +113,7 @@ class _DevotionalDiscoveryPageState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Today',
+                      _localizedTodayLabel(context),
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
@@ -121,7 +122,9 @@ class _DevotionalDiscoveryPageState
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('EEEE, MMMM d').format(DateTime.now()),
+                      DateFormat('EEEE, MMMM d',
+                              Localizations.localeOf(context).toString())
+                          .format(DateTime.now()),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -482,6 +485,74 @@ class _DevotionalDiscoveryPageState
     );
   }
 
+  // Show bottom sheet to pick Bible version for the current devotional language
+  void _showVersionSelector(BuildContext context) {
+    final notifier = ref.read(devotionalProvider.notifier);
+    final available = notifier.getAvailableVersionsForCurrentLanguage();
+
+    if (available.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No Bible versions available for this language.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final current = ref.read(devotionalProvider).selectedVersion;
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Text(
+                    'Select Bible Version',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const Divider(),
+                ...available.map((version) =>
+                    _buildVersionOption(context, version, version == current)),
+                const SizedBox(height: 12),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildVersionOption(
+      BuildContext context, String versionCode, bool selected) {
+    return ListTile(
+      title: Text(versionCode),
+      trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
+      onTap: () async {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Bible version set to: $versionCode')),
+        );
+        Navigator.pop(context);
+        final notifier = ref.read(devotionalProvider.notifier);
+        await notifier.changeVersion(versionCode);
+      },
+    );
+  }
+
   // Helper to get display date - converts past dates to future dates
   String _getDisplayDate(Devocional devocional) {
     final now = DateTime.now();
@@ -582,75 +653,6 @@ class _DevotionalDiscoveryPageState
     return isDark
         ? [Colors.deepPurple[900]!, Colors.purple[800]!]
         : [Colors.deepPurple[400]!, Colors.purple[400]!];
-  }
-
-  // Language selector dialog
-  void _showLanguageSelector(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Select Language',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                _buildLanguageOption(context, 'es', 'Español', '🇪🇸'),
-                _buildLanguageOption(context, 'en', 'English', '🇺🇸'),
-                _buildLanguageOption(context, 'pt', 'Português', '🇧🇷'),
-                _buildLanguageOption(context, 'fr', 'Français', '🇫🇷'),
-                _buildLanguageOption(
-                  context,
-                  'zh',
-                  'Chinese (Coming Soon)',
-                  '🇨🇳',
-                  disabled: true,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildLanguageOption(
-    BuildContext context,
-    String code,
-    String name,
-    String flag, {
-    bool disabled = false,
-  }) {
-    return ListTile(
-      leading: Text(flag, style: const TextStyle(fontSize: 24)),
-      title: Text(name),
-      enabled: !disabled,
-      onTap: disabled
-          ? () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Chinese devotionals coming soon! 即将推出中文灵修内容！'),
-                  duration: Duration(seconds: 3),
-                ),
-              );
-            }
-          : () {
-              Navigator.pop(context);
-              ref.read(devotionalProvider.notifier).changeLanguage(code);
-            },
-    );
   }
 
   void _navigateToVerse(BuildContext context, Devocional devocional) async {
@@ -869,6 +871,22 @@ class _DevotionalDiscoveryPageState
         ],
       ),
     );
+  }
+
+  String _localizedTodayLabel(BuildContext context) {
+    final code = Localizations.localeOf(context).languageCode;
+    switch (code) {
+      case 'es':
+        return 'Hoy';
+      case 'fr':
+        return "Aujourd'hui";
+      case 'pt':
+        return 'Hoje';
+      case 'zh':
+        return '今天';
+      default:
+        return 'Today';
+    }
   }
 }
 

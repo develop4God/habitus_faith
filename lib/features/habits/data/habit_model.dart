@@ -234,6 +234,7 @@ class HabitModel {
               ?.map((e) => Subtask.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+      order: data['order'] as int? ?? 0,
     );
   }
 
@@ -277,6 +278,7 @@ class HabitModel {
       'notificationSettings': habit.notificationSettings?.toJson(),
       'recurrence': habit.recurrence?.toJson(),
       'subtasks': habit.subtasks.map((s) => s.toJson()).toList(),
+      'order': habit.order,
     };
   }
 }

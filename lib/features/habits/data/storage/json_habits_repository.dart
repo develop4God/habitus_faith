@@ -626,6 +626,48 @@ class JsonHabitsRepository implements HabitsRepository {
     }
   }
 
+  @override
+  Future<Result<void, HabitFailure>> reorderHabits(
+      List<String> habitIds) async {
+    try {
+      // 1. Load ALL raw habits from storage to avoid losing data (archived, other users, etc)
+      final jsonList = _storage.getJsonList(_habitsKey);
+      final allHabits =
+          jsonList.map((json) => HabitModel.fromJson(json)).toList();
+
+      // 2. Separate habits that are NOT being reordered (e.g. archived or different user)
+      final otherHabits =
+          allHabits.where((h) => !habitIds.contains(h.id)).toList();
+
+      // 3. Get the habits being reordered and update their order property
+      final habitsToReorder =
+          allHabits.where((h) => habitIds.contains(h.id)).toList();
+      final habitMap = {for (var h in habitsToReorder) h.id: h};
+
+      final reorderedList = <Habit>[];
+      for (var i = 0; i < habitIds.length; i++) {
+        final habitId = habitIds[i];
+        final habit = habitMap[habitId];
+        if (habit != null) {
+          reorderedList.add(habit.copyWith(order: i));
+        }
+      }
+
+      // 4. Combine and save
+      final finalHabits = [...otherHabits, ...reorderedList];
+
+      debugPrint(
+          'JsonHabitsRepository.reorderHabits: Saving ${finalHabits.length} habits total (${reorderedList.length} reordered)');
+
+      await _saveHabits(finalHabits);
+
+      return const Success(null);
+    } catch (e) {
+      debugPrint('JsonHabitsRepository.reorderHabits: Failure: $e');
+      return Failure(HabitFailure.persistence('Failed to reorder habits: $e'));
+    }
+  }
+
   void dispose() {
     _habitsController.close();
     debugPrint('JsonHabitsRepository.dispose: habitsController closed');

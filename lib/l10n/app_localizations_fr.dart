@@ -230,6 +230,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get editHabit => 'Modifier l\'Habitude';
 
   @override
+  String get habitEdited => 'Habitude modifiée avec succès';
+
+  @override
   String get defaultColor => 'Par défaut';
 
   @override
@@ -598,7 +601,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String devBannerLastSync(String time) {
-    return 'Dernière synchro: $time';
+    return 'Dernière synchronisation: $time';
   }
 
   @override
@@ -1008,27 +1011,30 @@ class AppLocalizationsFr extends AppLocalizations {
       'Impossible de créer les habitudes. Veuillez réessayer.';
 
   @override
-  String get planYourDay => 'Planifier votre journée';
+  String get planYourDay => 'Planifiez votre journée';
 
   @override
-  String get skipHabit => 'Reporter pour aujourd\'hui';
+  String get skipHabit => 'Ignorer l\'habitude';
 
   @override
-  String get markAsNotCompleted => 'Marquer comme non complété';
+  String get markAsNotCompleted => 'Marquer comme non complétée';
 
   @override
-  String get skippedHabit => 'Reporté';
+  String get skippedHabit => 'Ignorée';
 
   @override
-  String get failedHabit => 'Non complété';
+  String get failedHabit => 'Échouée';
 
   @override
   String get repeatReminder => 'Répéter le rappel';
 
   @override
-  String get habitSkipped => 'Habitude reportée pour aujourd\'hui';
+  String get habitSkipped => 'Habitude ignorée';
 
   @override
   String get habitMarkedAsNotCompleted =>
       'Habitude marquée comme non complétée';
+
+  @override
+  String get habitDeleted => 'Habit deleted';
 }

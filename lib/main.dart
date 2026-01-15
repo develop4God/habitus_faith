@@ -25,6 +25,7 @@ import 'features/habits/data/storage/storage_providers.dart';
 import 'l10n/app_localizations.dart';
 import 'dev_tools/fast_time_banner.dart';
 import 'features/developer/developer_debug_page.dart';
+import 'providers/devotional_providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -85,6 +86,16 @@ class MyApp extends ConsumerWidget {
     final authInit = ref.watch(authInitProvider);
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
     final currentLocale = ref.watch(appLanguageProvider);
+
+    // Listen for app language changes and notify devotional provider so it can
+    // fetch devotionals for the newly selected language. We ignore the
+    // initial notification (previous == null) to avoid double initialization.
+    ref.listen<Locale>(appLanguageProvider, (previous, next) {
+      if (previous != null && previous.languageCode != next.languageCode) {
+        // Fire-and-forget changeLanguage; provider handles its own errors.
+        ref.read(devotionalProvider.notifier).changeLanguage(next.languageCode);
+      }
+    });
 
     // Initialize notification service
     ref.watch(notificationInitProvider);
