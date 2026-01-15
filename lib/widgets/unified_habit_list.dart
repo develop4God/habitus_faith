@@ -233,7 +233,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
-    
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -253,9 +253,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     if (confirmed == true) {
       await widget.onDelete(habit.id);
       if (!mounted) return;
-      
+
       Navigator.of(context).pop();
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.habitDeleted),
