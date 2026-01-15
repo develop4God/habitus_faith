@@ -67,8 +67,8 @@ class UnifiedHabitList extends ConsumerWidget {
           return a.order.compareTo(b.order);
         });
 
-        final hasPendingHabits =
-            sortedHabits.any((h) => h.dailyStatus != HabitDailyStatus.completed);
+        final hasPendingHabits = sortedHabits
+            .any((h) => h.dailyStatus != HabitDailyStatus.completed);
 
         return Expanded(
           child: ReorderableListView.builder(
@@ -155,7 +155,7 @@ class UnifiedHabitList extends ConsumerWidget {
               // Update order values and save
               final habitIds = reorderedHabits.map((h) => h.id).toList();
               final notifier = ref.read(habitsNotifierProvider.notifier);
-              
+
               HapticFeedback.lightImpact();
               await notifier.reorderHabits(habitIds);
             },
