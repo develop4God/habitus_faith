@@ -214,8 +214,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: CircularProgressIndicator(
                                       value: value,
                                       strokeWidth: 9,
-                                      backgroundColor:
-                                          Colors.white.withValues(alpha: 0.2),
+                                      backgroundColor: Colors.white.withValues(alpha: 0.2),
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         completedHabits == totalHabits &&
                                                 totalHabits > 0
@@ -224,7 +223,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       ),
                                     ),
                                   ),
-                                  // Circular Highlight for Percentage and Count
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
@@ -235,8 +233,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         TweenAnimationBuilder<int>(
-                                          duration:
-                                            const Duration(milliseconds: 250),
+                                          duration: const Duration(milliseconds: 250),
                                           curve: Curves.easeInOut,
                                           tween: IntTween(
                                             begin: 0,
@@ -245,18 +242,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           builder: (context, value, _) => Text(
                                             '$value%',
                                             style: const TextStyle(
-                                              fontSize: 37,
+                                              fontSize: 24,
                                               fontWeight: FontWeight.w900,
                                               color: Colors.black,
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(height: 1),
+                                        const SizedBox(height: 2),
                                         Text(
                                           l10n.habitsCompletedCount(
                                               completedHabits, totalHabits),
                                           style: const TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 10,
                                             color: Colors.black87,
                                             fontWeight: FontWeight.w700,
                                           ),
@@ -272,7 +269,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                         const SizedBox(height: 18),
 
-                        // Motivational messages with Pill Highlight
                         _buildHighlightContainer(
                           child: totalHabits == 0
                               ? Text(
@@ -322,50 +318,29 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 24),
 
-              // Rest of the UI
-              if (totalHabits > 0 && remainingHabits > 0)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    l10n.habitsRemaining(remainingHabits),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                ),
-
-              if (totalHabits > 0 && remainingHabits > 0)
-                const SizedBox(height: 12),
-
-              Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 400,
-                ),
-                child: UnifiedHabitList(
-                  onComplete: (habitId) async {
-                    final notifier = ref.read(habitsNotifierProvider.notifier);
-                    await notifier.completeHabit(habitId);
-                  },
-                  onUncheck: (habitId) async {
-                    final notifier = ref.read(habitsNotifierProvider.notifier);
-                    await notifier.uncheckHabit(habitId);
-                  },
-                  onDelete: (habitId) async {
-                    final notifier = ref.read(habitsNotifierProvider.notifier);
-                    await notifier.deleteHabit(habitId);
-                  },
-                  onEdit: (habit) async {
-                    final l10n = AppLocalizations.of(context)!;
-                    await showDialog(
-                      context: context,
-                      builder: (ctx) =>
-                          EditHabitDialog(l10n: l10n, habit: habit),
-                    );
-                  },
-                  showSwipeHint: true,
-                ),
+              // Unified Habit List now takes only needed space and doesn't conflict with scroll
+              UnifiedHabitList(
+                onComplete: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.completeHabit(habitId);
+                },
+                onUncheck: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.uncheckHabit(habitId);
+                },
+                onDelete: (habitId) async {
+                  final notifier = ref.read(habitsNotifierProvider.notifier);
+                  await notifier.deleteHabit(habitId);
+                },
+                onEdit: (habit) async {
+                  final l10n = AppLocalizations.of(context)!;
+                  await showDialog(
+                    context: context,
+                    builder: (ctx) =>
+                        EditHabitDialog(l10n: l10n, habit: habit),
+                  );
+                },
+                showSwipeHint: true,
               ),
 
               const SizedBox(height: 20),
