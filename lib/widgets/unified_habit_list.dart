@@ -128,8 +128,9 @@ class UnifiedHabitList extends ConsumerWidget {
 
               if (completedStartIndex != -1) {
                 if (movedIsCompleted && newIndex < completedStartIndex) return;
-                if (!movedIsCompleted && newIndex >= completedStartIndex)
+                if (!movedIsCompleted && newIndex >= completedStartIndex) {
                   return;
+                }
               }
 
               final reorderedHabits = [...sortedHabits];
