@@ -234,7 +234,6 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                   builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
                 );
               },
-              showSwipeHint: false,
             ),
           ),
         ),

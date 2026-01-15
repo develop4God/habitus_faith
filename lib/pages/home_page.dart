@@ -59,7 +59,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final habits = habitsAsync.asData?.value ?? [];
     final completedHabits = habits.where((h) => h.completedToday).length;
     final totalHabits = habits.length;
-    final remainingHabits = totalHabits - completedHabits;
     final completionPercentage =
         totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
@@ -101,6 +100,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
+    // Subtle shadow to protect text inside the ring without highlights
+
     final List<Widget> pages = [
       Scaffold(
         backgroundColor: Colors.grey.shade50,
@@ -110,7 +111,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const SizedBox(height: 32),
 
-              // Hero section
+              // Hero section with gradient
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(16),
@@ -214,8 +215,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: CircularProgressIndicator(
                                       value: value,
                                       strokeWidth: 9,
-                                      backgroundColor:
-                                          Colors.white.withValues(alpha: 0.2),
+                                      backgroundColor: Colors.white.withValues(alpha: 0.2),
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         completedHabits == totalHabits &&
                                                 totalHabits > 0
@@ -227,16 +227,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.7),
+                                      color: Colors.white.withValues(alpha: 0.7),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         TweenAnimationBuilder<int>(
-                                          duration:
-                                              const Duration(milliseconds: 250),
+                                          duration: const Duration(milliseconds: 250),
                                           curve: Curves.easeInOut,
                                           tween: IntTween(
                                             begin: 0,
@@ -269,7 +267,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 18),
+
                         _buildHighlightContainer(
                           child: totalHabits == 0
                               ? Text(
@@ -319,7 +319,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 24),
 
-              // Unified Habit List now takes only needed space and doesn't conflict with scroll
               UnifiedHabitList(
                 onComplete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
@@ -337,10 +336,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                   final l10n = AppLocalizations.of(context)!;
                   await showDialog(
                     context: context,
-                    builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+                    builder: (ctx) =>
+                        EditHabitDialog(l10n: l10n, habit: habit),
                   );
                 },
-                showSwipeHint: true,
               ),
 
               const SizedBox(height: 20),

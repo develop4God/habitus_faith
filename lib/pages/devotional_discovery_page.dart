@@ -65,6 +65,15 @@ class _DevotionalDiscoveryPageState
           ),
         ),
         actions: [
+          // Bible version selector (shows available versions for current devotional language)
+          IconButton(
+            icon: Icon(
+              Icons.menu_book,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+            tooltip: 'Bible Version: ${state.selectedVersion}',
+            onPressed: () => _showVersionSelector(context),
+          ),
           // Favorites page
           IconButton(
             icon: Icon(
@@ -470,6 +479,69 @@ class _DevotionalDiscoveryPageState
           ),
         ),
       ),
+    );
+  }
+
+  // Show bottom sheet to pick Bible version for the current devotional language
+  void _showVersionSelector(BuildContext context) {
+    final notifier = ref.read(devotionalProvider.notifier);
+    final available = notifier.getAvailableVersionsForCurrentLanguage();
+
+    if (available.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No Bible versions available for this language.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final current = ref.read(devotionalProvider).selectedVersion;
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Text(
+                    'Select Bible Version',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const Divider(),
+                ...available.map((version) => _buildVersionOption(context, version, version == current)).toList(),
+                const SizedBox(height: 12),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildVersionOption(BuildContext context, String versionCode, bool selected) {
+    return ListTile(
+      title: Text(versionCode),
+      trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
+      onTap: () async {
+        Navigator.pop(context);
+        final notifier = ref.read(devotionalProvider.notifier);
+        await notifier.changeVersion(versionCode);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Bible version set to: $versionCode')),
+        );
+      },
     );
   }
 
