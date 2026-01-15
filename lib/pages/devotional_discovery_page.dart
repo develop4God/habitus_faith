@@ -122,7 +122,8 @@ class _DevotionalDiscoveryPageState
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('EEEE, MMMM d', Localizations.localeOf(context).toString())
+                      DateFormat('EEEE, MMMM d',
+                              Localizations.localeOf(context).toString())
                           .format(DateTime.now()),
                       style: const TextStyle(
                         color: Colors.white,
