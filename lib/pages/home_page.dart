@@ -215,7 +215,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: CircularProgressIndicator(
                                       value: value,
                                       strokeWidth: 9,
-                                      backgroundColor: Colors.white.withValues(alpha: 0.2),
+                                      backgroundColor:
+                                          Colors.white.withValues(alpha: 0.2),
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         completedHabits == totalHabits &&
                                                 totalHabits > 0
@@ -227,14 +228,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.7),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.7),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         TweenAnimationBuilder<int>(
-                                          duration: const Duration(milliseconds: 250),
+                                          duration:
+                                              const Duration(milliseconds: 250),
                                           curve: Curves.easeInOut,
                                           tween: IntTween(
                                             begin: 0,
@@ -267,9 +270,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 18),
-
                         _buildHighlightContainer(
                           child: totalHabits == 0
                               ? Text(
@@ -336,8 +337,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   final l10n = AppLocalizations.of(context)!;
                   await showDialog(
                     context: context,
-                    builder: (ctx) =>
-                        EditHabitDialog(l10n: l10n, habit: habit),
+                    builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
                   );
                 },
               ),
