@@ -67,8 +67,8 @@ class UnifiedHabitList extends ConsumerWidget {
           return a.order.compareTo(b.order);
         });
 
-        final hasPendingHabits =
-            sortedHabits.any((h) => h.dailyStatus != HabitDailyStatus.completed);
+        final hasPendingHabits = sortedHabits
+            .any((h) => h.dailyStatus != HabitDailyStatus.completed);
 
         // NOTE: Previously this returned an Expanded(child: ReorderableListView),
         // which caused a ParentDataWidget assertion when UnifiedHabitList was used
