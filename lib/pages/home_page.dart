@@ -101,15 +101,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
-    // Subtle shadow to protect text inside the ring without highlights
-    final List<Shadow> ringTextShadows = [
-      Shadow(
-        offset: const Offset(0, 1),
-        blurRadius: 4,
-        color: Colors.white.withValues(alpha: 0.85),
-      ),
-    ];
-
     final List<Widget> pages = [
       Scaffold(
         backgroundColor: Colors.grey.shade50,
@@ -119,7 +110,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const SizedBox(height: 32),
 
-              // Hero section with gradient
+              // Hero section
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(16),
@@ -232,39 +223,44 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       ),
                                     ),
                                   ),
-                                  // Percentage and Count text (NO highlight, directly on image)
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TweenAnimationBuilder<int>(
-                                        duration: const Duration(milliseconds: 250),
-                                        curve: Curves.easeInOut,
-                                        tween: IntTween(
-                                          begin: 0,
-                                          end: completionPercentage,
-                                        ),
-                                        builder: (context, value, _) => Text(
-                                          '$value%',
-                                          style: TextStyle(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.w900,
-                                            color: Colors.black,
-                                            shadows: ringTextShadows,
+                                  // Circular Highlight for Percentage and Count
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.7),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TweenAnimationBuilder<int>(
+                                          duration: const Duration(milliseconds: 250),
+                                          curve: Curves.easeInOut,
+                                          tween: IntTween(
+                                            begin: 0,
+                                            end: completionPercentage,
+                                          ),
+                                          builder: (context, value, _) => Text(
+                                            '$value%',
+                                            style: const TextStyle(
+                                              fontSize: 37,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        l10n.habitsCompletedCount(
-                                            completedHabits, totalHabits),
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w700,
-                                          shadows: ringTextShadows,
+                                        const SizedBox(height: 1),
+                                        Text(
+                                          l10n.habitsCompletedCount(
+                                              completedHabits, totalHabits),
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
