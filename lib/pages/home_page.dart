@@ -319,7 +319,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 24),
 
               UnifiedHabitList(
-                shrinkWrap: true, // Crucial for visibility in scrollable home page
+                shrinkWrap:
+                    true, // Crucial for visibility in scrollable home page
                 onComplete: (habitId) async {
                   final notifier = ref.read(habitsNotifierProvider.notifier);
                   await notifier.completeHabit(habitId);
