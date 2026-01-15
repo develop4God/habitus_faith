@@ -9,6 +9,7 @@ import '../bible_reader_core/bible_reader_core.dart';
 import 'bible_reader_page.dart';
 import 'favorites_page.dart';
 import 'package:intl/intl.dart';
+import '../l10n/app_localizations.dart';
 
 /// Devotional Discovery Page
 ///
@@ -57,7 +58,7 @@ class _DevotionalDiscoveryPageState
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          'Daily Devotional',
+          AppLocalizations.of(context)!.devotional_reading,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -112,7 +113,7 @@ class _DevotionalDiscoveryPageState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Today',
+                      _localizedTodayLabel(context),
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
@@ -121,7 +122,8 @@ class _DevotionalDiscoveryPageState
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('EEEE, MMMM d').format(DateTime.now()),
+                      DateFormat('EEEE, MMMM d', Localizations.localeOf(context).toString())
+                          .format(DateTime.now()),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -871,6 +873,22 @@ class _DevotionalDiscoveryPageState
         ],
       ),
     );
+  }
+
+  String _localizedTodayLabel(BuildContext context) {
+    final code = Localizations.localeOf(context).languageCode;
+    switch (code) {
+      case 'es':
+        return 'Hoy';
+      case 'fr':
+        return "Aujourd'hui";
+      case 'pt':
+        return 'Hoje';
+      case 'zh':
+        return '今天';
+      default:
+        return 'Today';
+    }
   }
 }
 
