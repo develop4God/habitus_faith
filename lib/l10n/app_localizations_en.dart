@@ -1018,4 +1018,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get habitMarkedAsNotCompleted => 'Habit marked as not completed';
+
+  @override
+  String get habitDeleted => 'Habit deleted';
 }

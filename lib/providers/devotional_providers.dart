@@ -95,14 +95,27 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         );
       }
 
-      // Get saved version or use default
+      // Get saved version or use default and validate it's compatible with language
       String savedVersion =
           prefs.getString(DevotionalConstants.prefSelectedVersion) ?? '';
       String defaultVersion =
           DevotionalConstants.defaultVersionByLanguage[selectedLanguage] ??
               'RVR1960';
-      String selectedVersion =
-          savedVersion.isNotEmpty ? savedVersion : defaultVersion;
+
+      final availableVersions =
+          DevotionalConstants.bibleVersionsByLanguage[selectedLanguage] ?? [];
+
+      String selectedVersion;
+      if (savedVersion.isNotEmpty && availableVersions.contains(savedVersion)) {
+        selectedVersion = savedVersion;
+      } else {
+        selectedVersion = defaultVersion;
+        // Persist the default version for this language when falling back
+        await prefs.setString(
+          DevotionalConstants.prefSelectedVersion,
+          selectedVersion,
+        );
+      }
 
       // Update state with language and version
       state = state.copyWith(
@@ -298,6 +311,12 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
           DevotionalConstants.defaultVersionByLanguage[languageCode] ??
               'RVR1960';
 
+      // Persist selected version for the new language
+      await prefs.setString(
+        DevotionalConstants.prefSelectedVersion,
+        defaultVersion,
+      );
+
       state = state.copyWith(
         selectedLanguage: languageCode,
         selectedVersion: defaultVersion,
@@ -358,6 +377,12 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     } catch (e) {
       return null;
     }
+  }
+
+  /// Expose available Bible versions for the currently selected language
+  List<String> getAvailableVersionsForCurrentLanguage() {
+    return DevotionalConstants.bibleVersionsByLanguage[state.selectedLanguage] ??
+        [];
   }
 }
 

@@ -65,15 +65,6 @@ class _DevotionalDiscoveryPageState
           ),
         ),
         actions: [
-          // Language selector
-          IconButton(
-            icon: Icon(
-              Icons.language,
-              color: isDark ? Colors.white : Colors.black87,
-            ),
-            tooltip: 'Select Language',
-            onPressed: () => _showLanguageSelector(context),
-          ),
           // Favorites page
           IconButton(
             icon: Icon(
@@ -584,74 +575,6 @@ class _DevotionalDiscoveryPageState
         : [Colors.deepPurple[400]!, Colors.purple[400]!];
   }
 
-  // Language selector dialog
-  void _showLanguageSelector(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Select Language',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                _buildLanguageOption(context, 'es', 'Español', '🇪🇸'),
-                _buildLanguageOption(context, 'en', 'English', '🇺🇸'),
-                _buildLanguageOption(context, 'pt', 'Português', '🇧🇷'),
-                _buildLanguageOption(context, 'fr', 'Français', '🇫🇷'),
-                _buildLanguageOption(
-                  context,
-                  'zh',
-                  'Chinese (Coming Soon)',
-                  '🇨🇳',
-                  disabled: true,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildLanguageOption(
-    BuildContext context,
-    String code,
-    String name,
-    String flag, {
-    bool disabled = false,
-  }) {
-    return ListTile(
-      leading: Text(flag, style: const TextStyle(fontSize: 24)),
-      title: Text(name),
-      enabled: !disabled,
-      onTap: disabled
-          ? () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Chinese devotionals coming soon! 即将推出中文灵修内容！'),
-                  duration: Duration(seconds: 3),
-                ),
-              );
-            }
-          : () {
-              Navigator.pop(context);
-              ref.read(devotionalProvider.notifier).changeLanguage(code);
-            },
-    );
-  }
 
   void _navigateToVerse(BuildContext context, Devocional devocional) async {
     // Parse the verse reference from the devotional

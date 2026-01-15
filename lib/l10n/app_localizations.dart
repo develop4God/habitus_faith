@@ -1939,6 +1939,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Habit marked as not completed'**
   String get habitMarkedAsNotCompleted;
+
+  /// Success message after deleting a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Habit deleted'**
+  String get habitDeleted;
 }
 
 class _AppLocalizationsDelegate

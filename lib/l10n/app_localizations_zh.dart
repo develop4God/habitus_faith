@@ -976,4 +976,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get habitMarkedAsNotCompleted => '习惯已标记为未完成';
+
+  @override
+  String get habitDeleted => 'Habit deleted';
 }

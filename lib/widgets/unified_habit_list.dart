@@ -10,14 +10,13 @@ import '../l10n/app_localizations.dart';
 
 /// Unified habit list widget that combines:
 /// - Visual design from habits_page (colored border)
-/// - Swipe-to-delete functionality from home_page
+/// - Swipe-to-complete functionality
 /// - Tap-to-expand details from CompactHabitCard
 class UnifiedHabitList extends ConsumerWidget {
   final Future<void> Function(String habitId) onComplete;
   final Future<void> Function(String habitId) onUncheck;
   final Future<void> Function(String habitId) onDelete;
   final Future<void> Function(Habit habit)? onEdit;
-  final bool showSwipeHint;
 
   const UnifiedHabitList({
     super.key,
@@ -25,7 +24,6 @@ class UnifiedHabitList extends ConsumerWidget {
     required this.onUncheck,
     required this.onDelete,
     this.onEdit,
-    this.showSwipeHint = false,
   });
 
   @override
@@ -67,7 +65,6 @@ class UnifiedHabitList extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Title moved outside the reorderable area
             if (hasPendingHabits)
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
@@ -88,10 +85,9 @@ class UnifiedHabitList extends ConsumerWidget {
                 ),
               ),
 
-            // Strictly limited Reorderable List
             ReorderableListView.builder(
-              shrinkWrap: true, // Takes only required space
-              physics: const NeverScrollableScrollPhysics(), // Disables conflict with outer scroll
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               buildDefaultDragHandles: false,
               itemCount: sortedHabits.length,
               proxyDecorator: (child, index, animation) {
@@ -118,7 +114,6 @@ class UnifiedHabitList extends ConsumerWidget {
               onReorder: (oldIndex, newIndex) async {
                 if (newIndex > oldIndex) newIndex -= 1;
 
-                // Restrict reordering between Pending and Completed sections
                 final movedHabit = sortedHabits[oldIndex];
                 final movedIsCompleted = movedHabit.dailyStatus == HabitDailyStatus.completed;
                 final completedStartIndex = sortedHabits.indexWhere((h) => h.dailyStatus == HabitDailyStatus.completed);
@@ -152,27 +147,6 @@ class UnifiedHabitList extends ConsumerWidget {
                 );
               },
             ),
-
-            // Hint moved outside the reorderable area
-            if (showSwipeHint && hasPendingHabits)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
-                    const SizedBox(width: 8),
-                    Text(
-                      l10n.swipeToComplete,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
           ],
         );
       },
@@ -244,6 +218,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = getLatestHabit(ref);
+    
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -259,7 +234,20 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         ],
       ),
     );
-    if (confirmed == true) await widget.onDelete(habit.id);
+
+    if (confirmed == true) {
+      await widget.onDelete(habit.id);
+      if (!mounted) return;
+      
+      Navigator.of(context).pop();
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.habitDeleted),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   Future<void> _handleSkip() async {
