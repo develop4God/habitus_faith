@@ -1634,16 +1634,130 @@ abstract class AppLocalizations {
   /// **'Praise & Thanksgiving'**
   String get praise_thanksgiving;
 
-  /// Add note button label
+  /// No description provided for @sabbath_rest.
   ///
   /// In en, this message translates to:
-  /// **'Add Note'**
+  /// **'Sabbath Rest'**
+  String get sabbath_rest;
+
+  /// No description provided for @digital_detox_prayer.
   ///
   /// In en, this message translates to:
-  /// Add note dialog title
+  /// **'Digital Detox & Prayer'**
+  String get digital_detox_prayer;
+
+  /// No description provided for @christian_podcast.
   ///
   /// In en, this message translates to:
-  /// **'Add a Note'**
+  /// **'Christian Podcast'**
+  String get christian_podcast;
+
+  /// No description provided for @family_devotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Devotion'**
+  String get family_devotion;
+
+  /// No description provided for @spiritual_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Spiritual Reading'**
+  String get spiritual_reading;
+
+  /// No description provided for @daily_walk.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Walk'**
+  String get daily_walk;
+
+  /// No description provided for @morning_exercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning Exercise'**
+  String get morning_exercise;
+
+  /// No description provided for @yoga_stretching.
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching'**
+  String get yoga_stretching;
+
+  /// No description provided for @healthy_breakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy Breakfast'**
+  String get healthy_breakfast;
+
+  /// No description provided for @hydration_routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration Routine'**
+  String get hydration_routine;
+
+  /// No description provided for @running_jogging.
+  ///
+  /// In en, this message translates to:
+  /// **'Running/Jogging'**
+  String get running_jogging;
+
+  /// No description provided for @strength_training.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength Training'**
+  String get strength_training;
+
+  /// No description provided for @bike_cycling.
+  ///
+  /// In en, this message translates to:
+  /// **'Biking/Cycling'**
+  String get bike_cycling;
+
+  /// No description provided for @healthy_meal_prep.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy Meal Prep'**
+  String get healthy_meal_prep;
+
+  /// No description provided for @swimming.
+  ///
+  /// In en, this message translates to:
+  /// **'Swimming'**
+  String get swimming;
+
+  /// No description provided for @dance_movement.
+  ///
+  /// In en, this message translates to:
+  /// **'Dance/Movement'**
+  String get dance_movement;
+
+  /// No description provided for @sports_recreation.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports/Recreation'**
+  String get sports_recreation;
+
+  /// No description provided for @posture_breaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Posture Breaks'**
+  String get posture_breaks;
+
+  /// No description provided for @outdoor_nature.
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoor/Nature Time'**
+  String get outdoor_nature;
+
+  /// No description provided for @evening_walk.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening Walk'**
+  String get evening_walk;
+
+  /// No description provided for @mindfulness_meditation.
+  ///
+  /// In en, this message translates to:
+  /// **'Mindfulness Meditation'**
   String get mindfulness_meditation;
 
   /// No description provided for @journaling.
@@ -1763,46 +1877,10 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPreparingHabits.
   ///
   /// In en, this message translates to:
-  /// Hint text for note input
-  ///
-  /// In en, this message translates to:
-  /// **'How did it go? Share your thoughts...'**
-  ///
-  /// In en, this message translates to:
-  /// **'Hide Emojis'**
-  ///
-  /// In en, this message translates to:
-  /// Title for daily planning section
-  ///
-  /// In en, this message translates to:
-  /// **'Plan your day'**
-  ///
-  /// In en, this message translates to:
-  /// SnackBar message when a habit is skipped
-  ///
-  /// In en, this message translates to:
-  /// **'Habit skipped'**
+  /// **'Preparing your habits...'**
+  String get onboardingPreparingHabits;
 
-
-  /// SnackBar message when habit marked not completed
-  ///
-  /// In en, this message translates to:
-  /// Label for failed habit status
-  ///
-  /// In en, this message translates to:
-  /// **'Failed'**
-  ///
-  /// In en, this message translates to:
-  /// Button label to skip a habit
-  ///
-  /// In en, this message translates to:
-  /// **'Skip habit'**
-  ///
-  /// In en, this message translates to:
-  /// Button label to mark habit as not completed
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as not completed'**
+  /// No description provided for @onboardingKeepAtLeastOneHabit.
   ///
   /// In en, this message translates to:
   /// **'You must keep at least one habit'**

@@ -9,9 +9,5 @@
 
   "pt": [
     "habitDeleted"
-  ],
-
-  "zh": [
-    "habitDeleted"
   ]
 }

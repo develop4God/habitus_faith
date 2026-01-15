@@ -179,14 +179,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get predefinedHabit_service_description => '以爱和同情服务他人';
 
   @override
-  String get onboardingErrorMessage =>
-      'Failed to save habits. Please try again.';
+  String get onboardingErrorMessage => '保存习惯失败。请重试。';
 
   @override
-  String get retry => 'Retry';
+  String get retry => '重试';
 
   @override
-  String get selected => 'Selected';
+  String get selected => '已选择';
 
   @override
   String get category => '类别';
@@ -556,7 +555,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get errorUnknown => '发生未知错误。请重试。';
 
   @override
-  String get devBannerTitle => '开发工具栏标题。';
+  String get devBannerTitle => '开发工具栏';
 
   @override
   String devBannerLastSync(String time) {
@@ -978,5 +977,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitMarkedAsNotCompleted => '习惯已标记为未完成';
 
   @override
-  String get habitDeleted => 'Habit deleted';
+  String get habitDeleted => '习惯已删除';
 }
