@@ -443,7 +443,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       const HabitsPage(),
       const GoalsPage(),
-      const DailyReflectionPage(),
+      const NotesPage(),
       const BibleReaderPage(),
       const DevotionalDiscoveryPage(),
       const StatisticsPage(),
