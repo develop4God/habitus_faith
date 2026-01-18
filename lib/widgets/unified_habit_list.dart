@@ -105,7 +105,7 @@ class UnifiedHabitList extends ConsumerWidget {
                       Text(
                         l10n.swipeToComplete,
                         style:
-                            TextStyle(fontSize: 13, color: Colors.blueAccent),
+                            const TextStyle(fontSize: 13, color: Colors.blueAccent),
                       ),
                     ],
                   ),

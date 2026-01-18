@@ -52,7 +52,7 @@ class JsonGoalsRepository {
     try {
       final jsonList = _storage.getJsonList(_goalsKey);
       return jsonList
-          .map((json) => Goal.fromJson(json as Map<String, dynamic>))
+          .map((json) => Goal.fromJson(json))
           .where((g) => g.userId == _userId)
           .toList();
     } catch (e) {

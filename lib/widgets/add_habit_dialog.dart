@@ -516,7 +516,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             onChanged: (v) => setState(() {}));
       case 'category':
         return DropdownButtonFormField<HabitCategory>(
-            value: selectedCategory,
+            initialValue: selectedCategory,
             decoration: InputDecoration(
                 labelText: '$stepLabel (${widget.l10n.optional})',
                 border: const OutlineInputBorder()),
@@ -569,7 +569,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                   HabitDifficultyHelper.getDifficultyStars(d),
                   (i) => Icon(Icons.star,
                       size: 16, color: isSelected ? color : Colors.grey))),
-          Text(d.displayName, style: TextStyle(fontSize: 10))
+          Text(d.displayName, style: const TextStyle(fontSize: 10))
         ]),
       ),
     );
