@@ -120,8 +120,10 @@ class MyApp extends ConsumerWidget {
         home: UpgradeAlert(
           // Optimized for testing and production
           upgrader: Upgrader(
-            debugDisplayAlways: kDebugMode, // Only show update dialog always in local debug
-            durationUntilAlertAgain: const Duration(hours: 2), // Check more frequently
+            debugDisplayAlways:
+                kDebugMode, // Only show update dialog always in local debug
+            durationUntilAlertAgain:
+                const Duration(hours: 2), // Check more frequently
             minAppVersion: '1.1.0', // Force update for very old versions
           ),
           child: authInit.when(
