@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 
 import 'notes_providers.dart';
 import '../domain/models/general_note_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -15,7 +16,10 @@ class NotesPage extends ConsumerStatefulWidget {
 
 class _NotesPageState extends ConsumerState<NotesPage> {
   final TextEditingController _noteController = TextEditingController();
-  final List<String> _quickEmojis = ['🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥'];
+  final List<String> _quickEmojis = [
+    '🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥',
+    '😊', '😌', '🌟', '🌈', '💡', '🎉', '🏆', '🎯', '💧', '⛪'
+  ];
   static const int _minChars = 10;
   static const int _maxChars = 500;
 
@@ -113,7 +117,6 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   Widget _buildNewNoteInput() {
     final charCount = _noteController.text.length;
     final isTooShort = charCount > 0 && charCount < _minChars;
-    final isTooLong = charCount > _maxChars;
     final canSave = charCount >= _minChars && charCount <= _maxChars;
 
     return Container(
@@ -147,38 +150,33 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               hintText: 'Escribe un testimonio, oración o pensamiento...',
               hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 15),
               border: InputBorder.none,
-              counterText: '', // Hide default counter to use our custom one
+              counterText: '',
             ),
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  isTooShort 
-                    ? 'Mínimo $_minChars caracteres' 
-                    : '$charCount / $_maxChars',
-                  style: TextStyle(
-                    fontSize: 11, 
-                    color: isTooShort ? Colors.red : (isTooLong ? Colors.red : Colors.grey),
-                    fontWeight: isTooShort ? FontWeight.bold : FontWeight.normal,
-                  ),
+          const SizedBox(height: 12),
+          // Scrollable emoji row to support many emojis without overflow
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _quickEmojis.map((e) => InkWell(
+                onTap: () => setState(() => _noteController.text += e),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(e, style: const TextStyle(fontSize: 22)),
                 ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: _quickEmojis.map((e) => InkWell(
-                    onTap: () => setState(() => _noteController.text += e),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: Text(e, style: const TextStyle(fontSize: 20)),
-                    ),
-                  )).toList(),
-                ),
-              ),
-            ],
+              )).toList(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            isTooShort 
+              ? 'Mínimo $_minChars caracteres' 
+              : '$charCount / $_maxChars',
+            style: TextStyle(
+              fontSize: 11, 
+              color: isTooShort ? Colors.red : Colors.grey,
+              fontWeight: isTooShort ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ],
       ),
