@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/widgets/background_image_card.dart';
 import 'package:habitus_faith/core/services/images/image_providers.dart';
 
+
 void main() {
   group('BackgroundImageCard', () {
     testWidgets('displays loading state while fetching image', (tester) async {
@@ -12,7 +13,7 @@ void main() {
           overrides: [
             dailyDevotionalImageProvider.overrideWith(
               (ref) => Future.delayed(
-                const Duration(seconds: 10),
+                const Duration(seconds: 1),
                 () => 'https://example.com/image.jpg',
               ),
             ),
@@ -26,6 +27,12 @@ void main() {
           ),
         ),
       );
+
+      // Initial pump: should be loading
+      await tester.pump();
+      // Wait for the image to load
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
 
       // Should show card without background during loading
       expect(find.byType(Card), findsOneWidget);

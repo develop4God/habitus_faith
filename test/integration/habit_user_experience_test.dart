@@ -121,9 +121,13 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      // Find save and cancel buttons
-      final saveButton = find.text('Save');
-      final cancelButton = find.text('Cancel');
+      // Find save and cancel buttons (support both English and Spanish)
+      final saveButton = find.text('Save').evaluate().isNotEmpty
+          ? find.text('Save')
+          : find.text('Guardar');
+      final cancelButton = find.text('Cancel').evaluate().isNotEmpty
+          ? find.text('Cancel')
+          : find.text('Cancelar');
 
       expect(saveButton, findsOneWidget);
       expect(cancelButton, findsOneWidget);
@@ -164,11 +168,13 @@ void main() {
               return Stream.value([testHabit]);
             }),
           ],
-          child: TestAppWrapper(
-            child: UnifiedHabitList(
-              onComplete: (_) async {},
-              onUncheck: (_) async {},
-              onDelete: (_) async {},
+          child: MaterialApp(
+            home: Scaffold(
+              body: UnifiedHabitList(
+                onComplete: (_) async {},
+                onUncheck: (_) async {},
+                onDelete: (_) async {},
+              ),
             ),
           ),
         ),
