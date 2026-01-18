@@ -6,7 +6,8 @@ import '../domain/models/general_note_model.dart';
 import '../data/storage/storage_providers.dart';
 import '../data/storage/json_storage_service.dart';
 
-final jsonGeneralNotesRepositoryProvider = Provider<JsonGeneralNotesRepository>((ref) {
+final jsonGeneralNotesRepositoryProvider =
+    Provider<JsonGeneralNotesRepository>((ref) {
   final storage = ref.watch(jsonStorageServiceProvider);
   return JsonGeneralNotesRepository(storage: storage, userId: 'local_user');
 });
@@ -22,16 +23,18 @@ class JsonGeneralNotesRepository {
   static const String _notesKey = 'general_notes';
   late final StreamController<List<GeneralNote>> _controller;
 
-  JsonGeneralNotesRepository({required JsonStorageService storage, required String userId})
+  JsonGeneralNotesRepository(
+      {required JsonStorageService storage, required String userId})
       : _storage = storage,
         _userId = userId {
     _controller = StreamController<List<GeneralNote>>.broadcast(
       onListen: () {
-        debugPrint('JsonGeneralNotesRepository: first listener - emitting initial notes');
+        debugPrint(
+            'JsonGeneralNotesRepository: first listener - emitting initial notes');
         _emit();
       },
     );
-    
+
     // Immediate initial emission
     Future.microtask(() => _emit());
   }
@@ -40,7 +43,8 @@ class JsonGeneralNotesRepository {
     if (_controller.isClosed) return;
     try {
       final list = _load();
-      debugPrint('JsonGeneralNotesRepository._emit: emitting ${list.length} notes');
+      debugPrint(
+          'JsonGeneralNotesRepository._emit: emitting ${list.length} notes');
       _controller.add(list);
     } catch (e) {
       debugPrint('JsonGeneralNotesRepository._emit error: $e');
