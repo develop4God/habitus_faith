@@ -382,7 +382,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   _buildStatusBadge(
                                       l10n.skippedHabit, Colors.orange)
                                 else if (isFailed)
-                                  _buildStatusBadge(l10n.failedHabit, Colors.red),
+                                  _buildStatusBadge(
+                                      l10n.failedHabit, Colors.red),
                               ],
                             ),
                             const SizedBox(height: 4),
@@ -396,22 +397,27 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                 const SizedBox(width: 4),
                                 Text(l10n.dayStreak(widget.habit.currentStreak),
                                     style: TextStyle(
-                                        fontSize: 13, color: Colors.grey.shade600)),
+                                        fontSize: 13,
+                                        color: Colors.grey.shade600)),
                                 if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 12),
                                   InkWell(
                                     onTap: () {
-                                      setState(() => _isExpanded = !_isExpanded);
+                                      setState(
+                                          () => _isExpanded = !_isExpanded);
                                     },
                                     borderRadius: BorderRadius.circular(20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: habitColor.withValues(alpha: 0.15),
+                                        color:
+                                            habitColor.withValues(alpha: 0.15),
                                         shape: BoxShape.circle,
                                       ),
                                       padding: const EdgeInsets.all(4),
                                       child: Icon(
-                                        _isExpanded ? Icons.expand_less : Icons.expand_more,
+                                        _isExpanded
+                                            ? Icons.expand_less
+                                            : Icons.expand_more,
                                         size: 22,
                                         color: habitColor,
                                       ),
@@ -470,9 +476,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               child: Row(
                 children: [
                   Icon(
-                    subtask.completed ? Icons.check_circle : Icons.circle_outlined,
+                    subtask.completed
+                        ? Icons.check_circle
+                        : Icons.circle_outlined,
                     size: 18,
-                    color: subtask.completed ? habitColor : Colors.grey.shade400,
+                    color:
+                        subtask.completed ? habitColor : Colors.grey.shade400,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -480,8 +489,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                       subtask.title,
                       style: TextStyle(
                         fontSize: 14,
-                        decoration: subtask.completed ? TextDecoration.lineThrough : null,
-                        color: subtask.completed ? Colors.grey.shade500 : Colors.grey.shade800,
+                        decoration: subtask.completed
+                            ? TextDecoration.lineThrough
+                            : null,
+                        color: subtask.completed
+                            ? Colors.grey.shade500
+                            : Colors.grey.shade800,
                       ),
                     ),
                   ),
