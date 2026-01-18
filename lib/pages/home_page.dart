@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
+import '../features/habits/presentation/goals_page.dart';
 
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
@@ -440,6 +441,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
       const HabitsPage(),
+      const GoalsPage(), // New Goals Page
       const BibleReaderPage(),
       const DevotionalDiscoveryPage(),
       const StatisticsPage(),
@@ -458,6 +460,10 @@ class _HomePageState extends ConsumerState<HomePage> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.playlist_add_check_circle_outlined),
             label: l10n.routine,
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.flag_outlined),
+            label: 'Metas', // Spanish first as requested
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.auto_stories_outlined),

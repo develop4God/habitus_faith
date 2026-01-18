@@ -72,8 +72,11 @@ class UnifiedHabitList extends ConsumerWidget {
             canvasColor: Colors.transparent,
           ),
           child: ReorderableListView.builder(
-            header: hasPendingHabits
-                ? Padding(
+            header: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (hasPendingHabits)
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                     child: Text(
                       '📝 ${l10n.planYourDay}',
@@ -90,8 +93,22 @@ class UnifiedHabitList extends ConsumerWidget {
                         ],
                       ),
                     ),
-                  )
-                : null,
+                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.swipe_left, color: Colors.blueAccent, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.swipeToComplete,
+                        style: TextStyle(fontSize: 13, color: Colors.blueAccent),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             footer: const SizedBox(height: 32),
             shrinkWrap: shrinkWrap,
             physics: physics ??
@@ -152,15 +169,48 @@ class UnifiedHabitList extends ConsumerWidget {
             },
             itemBuilder: (context, index) {
               final habit = sortedHabits[index];
-              return ReorderableDelayedDragStartListener(
+              return Dismissible(
                 key: Key('habit_${habit.id}'),
-                index: index,
-                child: UnifiedHabitCard(
-                  habit: habit,
-                  onComplete: onComplete,
-                  onUncheck: onUncheck,
-                  onDelete: onDelete,
-                  onEdit: onEdit,
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  color: Colors.red.shade100,
+                  child: const Icon(Icons.delete, color: Colors.red, size: 32),
+                ),
+                confirmDismiss: (_) async {
+                  // Confirm delete dialog
+                  return await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text(l10n.deleteHabit),
+                      content: Text(l10n.deleteHabitConfirm(habit.name)),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(false),
+                            child: Text(l10n.cancel)),
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          style: TextButton.styleFrom(foregroundColor: Colors.red),
+                          child: Text(l10n.delete),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onDismissed: (_) async {
+                  await onDelete(habit.id);
+                },
+                child: ReorderableDelayedDragStartListener(
+                  key: Key('drag_${habit.id}'),
+                  index: index,
+                  child: UnifiedHabitCard(
+                    habit: habit,
+                    onComplete: onComplete,
+                    onUncheck: onUncheck,
+                    onDelete: onDelete,
+                    onEdit: onEdit,
+                  ),
                 ),
               );
             },
