@@ -327,7 +327,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             ],
           ),
           child: InkWell(
-            onLongPress: () async {
+            // Single tap restored to management modal
+            onTap: () async {
               await HabitModalSheet.show(
                 context: context,
                 child: _buildExpandedModalContent(context, l10n, habitColor),
@@ -336,13 +337,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               if (!mounted) return;
               setState(() {});
             },
-            onTap: () {
-              if (habit.subtasks.isNotEmpty) {
-                setState(() => _isExpanded = !_isExpanded);
-              } else {
-                _handleComplete();
-              }
-            },
+            // Long press removed to allow ReorderableDelayedDragStartListener to work correctly
             borderRadius: BorderRadius.circular(16),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -405,11 +400,25 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     style: TextStyle(
                                         fontSize: 13, color: Colors.grey.shade600)),
                                 if (habit.subtasks.isNotEmpty) ...[
-                                  const SizedBox(width: 8),
-                                  Icon(
-                                    _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                                    size: 16,
-                                    color: habitColor,
+                                  const SizedBox(width: 12),
+                                  // DEDICATED EXPANSION BUTTON
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() => _isExpanded = !_isExpanded);
+                                    },
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: habitColor.withValues(alpha: 0.15),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      padding: const EdgeInsets.all(4),
+                                      child: Icon(
+                                        _isExpanded ? Icons.expand_less : Icons.expand_more,
+                                        size: 22,
+                                        color: habitColor,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ],
