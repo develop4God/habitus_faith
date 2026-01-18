@@ -95,7 +95,8 @@ void main() {
       debugPrint('Text style: \\${textWidget.style}');
 
       // Check that the Text widget exists and has a style
-      expect(textWidget, isNotNull, reason: 'Progress Text widget should exist');
+      expect(textWidget, isNotNull,
+          reason: 'Progress Text widget should exist');
       expect(textWidget.style, isNotNull, reason: 'Text should have a style');
       // Optionally, check for color or fontWeight if needed
     });
@@ -143,15 +144,18 @@ void main() {
       }
 
       // Find save and cancel buttons (support both English and Spanish)
-      final saveButton = find.widgetWithIcon(ElevatedButton, Icons.check).evaluate().isNotEmpty
-        ? find.widgetWithIcon(ElevatedButton, Icons.check)
-        : find.widgetWithText(ElevatedButton, l10n.save);
+      final saveButton =
+          find.widgetWithIcon(ElevatedButton, Icons.check).evaluate().isNotEmpty
+              ? find.widgetWithIcon(ElevatedButton, Icons.check)
+              : find.widgetWithText(ElevatedButton, l10n.save);
       final cancelButton = find.text('Cancel').evaluate().isNotEmpty
           ? find.text('Cancel')
           : find.text('Cancelar');
 
-      expect(saveButton, findsOneWidget, reason: 'Save button with check icon or save text should be present');
-      expect(cancelButton, findsOneWidget, reason: 'Cancel or Cancelar button should be present');
+      expect(saveButton, findsOneWidget,
+          reason: 'Save button with check icon or save text should be present');
+      expect(cancelButton, findsOneWidget,
+          reason: 'Cancel or Cancelar button should be present');
 
       // Get positions
       final savePos = tester.getTopLeft(saveButton);
