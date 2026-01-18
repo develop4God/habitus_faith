@@ -826,6 +826,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get today => 'Hoy';
 
   @override
+  String get flashTask => 'Tarea Flash';
+
+  @override
+  String get flashTaskSubtitle =>
+      'Agrega rápidamente una tarea con solo nombre y emoji';
+
+  @override
   String get morning_prayer => 'Oración Matutina';
 
   @override

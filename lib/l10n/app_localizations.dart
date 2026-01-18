@@ -1544,6 +1544,18 @@ abstract class AppLocalizations {
   /// **'Today'**
   String get today;
 
+  /// Quick task option with only name and emoji
+  ///
+  /// In en, this message translates to:
+  /// **'Flash Task'**
+  String get flashTask;
+
+  /// Description for flash task option
+  ///
+  /// In en, this message translates to:
+  /// **'Quickly add a task with just a name and emoji'**
+  String get flashTaskSubtitle;
+
   /// No description provided for @morning_prayer.
   ///
   /// In en, this message translates to:

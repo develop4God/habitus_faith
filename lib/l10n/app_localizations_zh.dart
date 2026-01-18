@@ -779,6 +779,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get today => '今天';
 
   @override
+  String get flashTask => 'Flash Task';
+
+  @override
+  String get flashTaskSubtitle =>
+      'Quickly add a task with just a name and emoji';
+
+  @override
   String get morning_prayer => '晨祷';
 
   @override

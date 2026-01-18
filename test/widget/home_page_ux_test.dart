@@ -62,6 +62,30 @@ void main() {
           longestStreak: 2,
           completionHistory: [],
         ),
+        Habit(
+          id: 'habit-4',
+          userId: 'test-user',
+          name: 'Test Habit 4',
+          category: HabitCategory.physical,
+          emoji: '🏃',
+          createdAt: now.subtract(const Duration(days: 2)),
+          completedToday: false,
+          currentStreak: 1,
+          longestStreak: 1,
+          completionHistory: [],
+        ),
+        Habit(
+          id: 'habit-5',
+          userId: 'test-user',
+          name: 'Test Habit 5',
+          category: HabitCategory.mental,
+          emoji: '📝',
+          createdAt: now.subtract(const Duration(days: 1)),
+          completedToday: false,
+          currentStreak: 0,
+          longestStreak: 0,
+          completionHistory: [],
+        ),
       ];
 
       testDevocional = Devocional(

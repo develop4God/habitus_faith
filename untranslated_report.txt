@@ -4,10 +4,19 @@
   ],
 
   "fr": [
+    "flashTask",
+    "flashTaskSubtitle",
     "habitDeleted"
   ],
 
   "pt": [
+    "flashTask",
+    "flashTaskSubtitle",
     "habitDeleted"
+  ],
+
+  "zh": [
+    "flashTask",
+    "flashTaskSubtitle"
   ]
 }

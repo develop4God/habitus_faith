@@ -1115,6 +1115,14 @@
   "@today": {
     "description": "Label to show the current day in the habits view"
   },
+  "flashTask": "Flash Task",
+  "@flashTask": {
+    "description": "Quick task option with only name and emoji"
+  },
+  "flashTaskSubtitle": "Quickly add a task with just a name and emoji",
+  "@flashTaskSubtitle": {
+    "description": "Description for flash task option"
+  },
   "morning_prayer": "Morning Prayer",
   "bible_reading": "Bible Reading",
   "evening_prayer": "Evening Prayer",
