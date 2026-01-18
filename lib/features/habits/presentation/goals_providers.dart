@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/goal_model.dart';
 import '../data/storage/storage_providers.dart';
@@ -10,32 +11,52 @@ final jsonGoalsRepositoryProvider = Provider<JsonGoalsRepository>((ref) {
 });
 
 final goalsStreamProvider = StreamProvider<List<Goal>>((ref) {
-  return ref.watch(jsonGoalsRepositoryProvider).watchGoals();
+  final repository = ref.watch(jsonGoalsRepositoryProvider);
+  return repository.watchGoals();
 });
 
 class JsonGoalsRepository {
   final JsonStorageService _storage;
   final String _userId;
   static const String _goalsKey = 'goals';
-  final _controller = StreamController<List<Goal>>.broadcast();
+  late final StreamController<List<Goal>> _controller;
 
   JsonGoalsRepository({required JsonStorageService storage, required String userId})
       : _storage = storage,
         _userId = userId {
-    _emit();
+    _controller = StreamController<List<Goal>>.broadcast(
+      onListen: () {
+        debugPrint('JsonGoalsRepository: first listener - emitting initial goals');
+        _emit();
+      },
+    );
+    
+    // Ensure initial emission for any late listeners or quick rebuilds
+    Future.microtask(() => _emit());
   }
 
   void _emit() {
-    final list = _load();
-    _controller.add(list);
+    if (_controller.isClosed) return;
+    try {
+      final list = _load();
+      debugPrint('JsonGoalsRepository._emit: emitting ${list.length} goals');
+      _controller.add(list);
+    } catch (e) {
+      debugPrint('JsonGoalsRepository._emit: error -> $e');
+    }
   }
 
   List<Goal> _load() {
-    final jsonList = _storage.getJsonList(_goalsKey);
-    return jsonList
-        .map((json) => Goal.fromJson(json))
-        .where((g) => g.userId == _userId)
-        .toList();
+    try {
+      final jsonList = _storage.getJsonList(_goalsKey);
+      return jsonList
+          .map((json) => Goal.fromJson(json as Map<String, dynamic>))
+          .where((g) => g.userId == _userId)
+          .toList();
+    } catch (e) {
+      debugPrint('JsonGoalsRepository._load: error -> $e');
+      return [];
+    }
   }
 
   Stream<List<Goal>> watchGoals() => _controller.stream;
@@ -65,5 +86,9 @@ class JsonGoalsRepository {
     final jsonList = list.map((g) => g.toJson()).toList();
     await _storage.saveJsonList(_goalsKey, jsonList);
     _emit();
+  }
+
+  void dispose() {
+    _controller.close();
   }
 }
