@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/widgets/background_image_card.dart';
 import 'package:habitus_faith/core/services/images/image_providers.dart';
 
-
 void main() {
   group('BackgroundImageCard', () {
     testWidgets('displays loading state while fetching image', (tester) async {

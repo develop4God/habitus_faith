@@ -30,7 +30,16 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
 
   // Curated quick emojis for daily reflection
   final List<String> _quickEmojis = [
-    '🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥'
+    '🙏',
+    '✨',
+    '📖',
+    '❤️',
+    '🙌',
+    '💪',
+    '🌱',
+    '☀️',
+    '🕊️',
+    '🔥'
   ];
 
   @override
@@ -48,7 +57,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
   void _insertEmoji(String emoji) {
     final text = _noteController.text;
     final selection = _noteController.selection;
-    
+
     // If no selection, just append
     if (selection.start == -1) {
       setState(() => _noteController.text += emoji);
@@ -58,7 +67,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
     final newText = text.replaceRange(selection.start, selection.end, emoji);
     _noteController.value = TextEditingValue(
       text: newText,
-      selection: TextSelection.collapsed(offset: selection.start + emoji.length),
+      selection:
+          TextSelection.collapsed(offset: selection.start + emoji.length),
     );
   }
 
@@ -91,7 +101,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
               ),
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
             child: Row(
@@ -109,7 +119,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                       ),
                       Text(
                         widget.habitName,
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 15),
+                        style: TextStyle(
+                            color: Colors.grey.shade600, fontSize: 15),
                       ),
                     ],
                   ),
@@ -129,21 +140,24 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
-                children: _quickEmojis.map((emoji) => Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: InkWell(
-                    onTap: () => _insertEmoji(emoji),
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(emoji, style: const TextStyle(fontSize: 22)),
-                    ),
-                  ),
-                )).toList(),
+                children: _quickEmojis
+                    .map((emoji) => Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: InkWell(
+                            onTap: () => _insertEmoji(emoji),
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade50,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(emoji,
+                                  style: const TextStyle(fontSize: 22)),
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ),
             ),
           ),
@@ -183,7 +197,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                         label: Text(l10n.shareNote),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
                         ),
                       ),
                     ),
@@ -201,7 +216,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                           backgroundColor: Colors.blue.shade700,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
                           elevation: 0,
                         ),
                       ),

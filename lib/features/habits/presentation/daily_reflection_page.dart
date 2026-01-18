@@ -10,12 +10,24 @@ class DailyReflectionPage extends ConsumerStatefulWidget {
   const DailyReflectionPage({super.key});
 
   @override
-  ConsumerState<DailyReflectionPage> createState() => _DailyReflectionPageState();
+  ConsumerState<DailyReflectionPage> createState() =>
+      _DailyReflectionPageState();
 }
 
 class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
   final TextEditingController _globalNoteController = TextEditingController();
-  final List<String> _quickEmojis = ['🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥'];
+  final List<String> _quickEmojis = [
+    '🙏',
+    '✨',
+    '📖',
+    '❤️',
+    '🙌',
+    '💪',
+    '🌱',
+    '☀️',
+    '🕊️',
+    '🔥'
+  ];
 
   @override
   void dispose() {
@@ -46,11 +58,15 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
                 children: [
                   const Text(
                     'Mi Reflexión',
-                    style: TextStyle(color: Color(0xFF1A1C1E), fontWeight: FontWeight.w900),
+                    style: TextStyle(
+                        color: Color(0xFF1A1C1E), fontWeight: FontWeight.w900),
                   ),
                   Text(
                     today,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.normal),
+                    style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal),
                   ),
                 ],
               ),
@@ -77,7 +93,10 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
                   const SizedBox(height: 32),
                   const Text(
                     'Hábitos del Día',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: -0.5),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5),
                   ),
                   const SizedBox(height: 8),
                   const Text(
@@ -91,7 +110,8 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
           ),
           habitsAsync.when(
             data: (habits) {
-              final completedHabits = habits.where((h) => h.completedToday).toList();
+              final completedHabits =
+                  habits.where((h) => h.completedToday).toList();
               if (completedHabits.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
@@ -102,14 +122,17 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildHabitNoteCard(completedHabits[index], l10n),
+                    (context, index) =>
+                        _buildHabitNoteCard(completedHabits[index], l10n),
                     childCount: completedHabits.length,
                   ),
                 ),
               );
             },
-            loading: () => const SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
-            error: (e, _) => SliverFillRemaining(child: Center(child: Text('Error: $e'))),
+            loading: () => const SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator())),
+            error: (e, _) =>
+                SliverFillRemaining(child: Center(child: Text('Error: $e'))),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
@@ -132,12 +155,14 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
             children: [
               const Icon(Icons.edit_note, color: Colors.orange),
               const SizedBox(width: 8),
-              const Text('Nota General', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text('Nota General',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const Spacer(),
               IconButton(
                 onPressed: () {
                   if (_globalNoteController.text.isNotEmpty) {
-                    Share.share('Reflexión del día (${DateFormat('d/M').format(DateTime.now())}):\n\n${_globalNoteController.text}');
+                    Share.share(
+                        'Reflexión del día (${DateFormat('d/M').format(DateTime.now())}):\n\n${_globalNoteController.text}');
                   }
                 },
                 icon: const Icon(Icons.share_outlined, size: 20),
@@ -157,13 +182,16 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _quickEmojis.map((e) => InkWell(
-                onTap: () => setState(() => _globalNoteController.text += e),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Text(e, style: const TextStyle(fontSize: 22)),
-                ),
-              )).toList(),
+              children: _quickEmojis
+                  .map((e) => InkWell(
+                        onTap: () =>
+                            setState(() => _globalNoteController.text += e),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Text(e, style: const TextStyle(fontSize: 22)),
+                        ),
+                      ))
+                  .toList(),
             ),
           ),
         ],
@@ -172,7 +200,10 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
   }
 
   Widget _buildHabitNoteCard(Habit habit, AppLocalizations l10n) {
-    final note = ref.watch(habitsRepositoryProvider).getTodayCompletionRecord(habit.id)?.notes;
+    final note = ref
+        .watch(habitsRepositoryProvider)
+        .getTodayCompletionRecord(habit.id)
+        ?.notes;
     final controller = TextEditingController(text: note);
 
     return Container(
@@ -180,30 +211,44 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withAlpha(5), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withAlpha(5),
+              blurRadius: 10,
+              offset: const Offset(0, 4))
+        ],
         border: Border.all(color: Colors.grey.shade100),
       ),
       child: Column(
         children: [
           ListTile(
-            leading: Text(habit.emoji ?? '✅', style: const TextStyle(fontSize: 24)),
-            title: Text(habit.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            trailing: const Icon(Icons.check_circle, color: Colors.green, size: 20),
+            leading:
+                Text(habit.emoji ?? '✅', style: const TextStyle(fontSize: 24)),
+            title: Text(habit.name,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            trailing:
+                const Icon(Icons.check_circle, color: Colors.green, size: 20),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: TextField(
               controller: controller,
               onChanged: (val) {
-                ref.read(habitsNotifierProvider.notifier).updateHabitNote(habit.id, val);
+                ref
+                    .read(habitsNotifierProvider.notifier)
+                    .updateHabitNote(habit.id, val);
               },
               style: const TextStyle(fontSize: 14),
               decoration: InputDecoration(
                 hintText: 'Añadir reflexión...',
                 filled: true,
                 fillColor: Colors.blue.shade50.withAlpha(100),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
             ),
           ),
@@ -217,9 +262,12 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.auto_awesome_outlined, size: 64, color: Colors.orange.shade200),
+          Icon(Icons.auto_awesome_outlined,
+              size: 64, color: Colors.orange.shade200),
           const SizedBox(height: 16),
-          const Text('Completa un hábito para reflexionar', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          const Text('Completa un hábito para reflexionar',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
         ],
       ),
     );

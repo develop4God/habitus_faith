@@ -388,10 +388,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Try matching alternative strings for remaining habits
-        final remainingFinder = find.textContaining('left')
-          .evaluate().isNotEmpty
-          ? find.textContaining('left')
-          : find.textContaining('remaining');
+        final remainingFinder =
+            find.textContaining('left').evaluate().isNotEmpty
+                ? find.textContaining('left')
+                : find.textContaining('remaining');
         expect(
           remainingFinder,
           findsOneWidget,
@@ -725,9 +725,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Accept alternative hints for swipe
-        final swipeHintFinder = find.textContaining('swipe').evaluate().isNotEmpty
-            ? find.textContaining('swipe')
-            : find.textContaining('left');
+        final swipeHintFinder =
+            find.textContaining('swipe').evaluate().isNotEmpty
+                ? find.textContaining('swipe')
+                : find.textContaining('left');
         expect(
           swipeHintFinder,
           findsOneWidget,
@@ -785,9 +786,10 @@ void main() {
 
         // Find key status indicators
         final progressFinder = find.textContaining('%');
-        final remainingFinder = find.textContaining('left').evaluate().isNotEmpty
-            ? find.textContaining('left')
-            : find.textContaining('remaining');
+        final remainingFinder =
+            find.textContaining('left').evaluate().isNotEmpty
+                ? find.textContaining('left')
+                : find.textContaining('remaining');
 
         expect(
           progressFinder,
@@ -842,7 +844,8 @@ void main() {
           matching: find.byType(InkWell),
         );
         expect(
-          dismissibleFinder.evaluate().isNotEmpty || inkWellFinder.evaluate().isNotEmpty,
+          dismissibleFinder.evaluate().isNotEmpty ||
+              inkWellFinder.evaluate().isNotEmpty,
           isTrue,
           reason: 'Habit should be in Dismissible or InkWell for completion',
         );

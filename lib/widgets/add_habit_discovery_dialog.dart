@@ -224,7 +224,8 @@ class _AnimatedBorderButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 onTap: onPressed,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
                   child: Row(
                     children: [
                       Icon(icon, size: 28, color: textColor),
@@ -238,7 +239,8 @@ class _AnimatedBorderButton extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Icon(Icons.chevron_right, size: 20, color: textColor.withValues(alpha: 0.5)),
+                      Icon(Icons.chevron_right,
+                          size: 20, color: textColor.withValues(alpha: 0.5)),
                     ],
                   ),
                 ),

@@ -8,10 +8,14 @@ enum GoalType {
 
   String get displayName {
     switch (this) {
-      case GoalType.year: return 'Anual';
-      case GoalType.month: return 'Mensual';
-      case GoalType.week: return 'Semanal';
-      case GoalType.custom: return 'Personalizado';
+      case GoalType.year:
+        return 'Anual';
+      case GoalType.month:
+        return 'Mensual';
+      case GoalType.week:
+        return 'Semanal';
+      case GoalType.custom:
+        return 'Personalizado';
     }
   }
 }

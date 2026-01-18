@@ -57,7 +57,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 children: [
                   goalsAsync.when(
                     data: (goals) => _buildSummaryCard(goals),
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (_, __) => const SizedBox.shrink(),
                   ),
                   const SizedBox(height: 32),
@@ -153,12 +154,16 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   color: Colors.white.withAlpha(40),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.auto_graph, color: Colors.white, size: 20),
+                child:
+                    const Icon(Icons.auto_graph, color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
                 'Progreso General',
-                style: TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -261,7 +266,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, color: Colors.grey),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'delete', child: Text('Eliminar')),
+                    const PopupMenuItem(
+                        value: 'delete', child: Text('Eliminar')),
                   ],
                   onSelected: (val) {
                     if (val == 'delete') {
@@ -280,7 +286,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     child: LinearProgressIndicator(
                       value: goal.progress,
                       backgroundColor: Colors.grey.shade100,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade600),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.blue.shade600),
                       minHeight: 6,
                     ),
                   ),
@@ -307,8 +314,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 value: goal.progress,
                 onChanged: (val) {
                   ref.read(jsonGoalsRepositoryProvider).updateGoal(
-                    goal.copyWith(progress: val, isCompleted: val >= 1.0),
-                  );
+                        goal.copyWith(progress: val, isCompleted: val >= 1.0),
+                      );
                 },
               ),
             ),
@@ -329,7 +336,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               color: Colors.blue.shade50,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.flag_rounded, size: 64, color: Colors.blue.shade300),
+            child:
+                Icon(Icons.flag_rounded, size: 64, color: Colors.blue.shade300),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -358,7 +366,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               backgroundColor: Colors.blue.shade700,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
           ),
         ],
@@ -377,7 +386,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
       builder: (context) => Container(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
-          top: 32, left: 24, right: 24,
+          top: 32,
+          left: 24,
+          right: 24,
         ),
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -398,7 +409,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               decoration: InputDecoration(
                 labelText: '¿Qué quieres lograr?',
                 hintText: 'Ej: Leer toda la Biblia',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
               ),
             ),
             const SizedBox(height: 20),
@@ -412,9 +424,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   return ChoiceChip(
                     label: Text(type.displayName),
                     selected: isSelected,
-                    onSelected: (val) => setModalState(() => selectedType = type),
+                    onSelected: (val) =>
+                        setModalState(() => selectedType = type),
                     selectedColor: Colors.blue.shade700,
-                    labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
+                    labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black),
                   );
                 }).toList(),
               ),
@@ -442,9 +456,12 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue.shade700,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('Guardar Meta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: const Text('Guardar Meta',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
             const SizedBox(height: 32),
