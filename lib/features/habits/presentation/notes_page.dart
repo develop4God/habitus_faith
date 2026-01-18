@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../../l10n/app_localizations.dart';
+
 import 'notes_providers.dart';
 import '../domain/models/general_note_model.dart';
 
-class DailyReflectionPage extends ConsumerStatefulWidget {
-  const DailyReflectionPage({super.key});
+class NotesPage extends ConsumerStatefulWidget {
+  const NotesPage({super.key});
 
   @override
-  ConsumerState<DailyReflectionPage> createState() => _DailyReflectionPageState();
+  ConsumerState<NotesPage> createState() => _NotesPageState();
 }
 
-class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
+class _NotesPageState extends ConsumerState<NotesPage> {
   final TextEditingController _noteController = TextEditingController();
   final List<String> _quickEmojis = ['🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥'];
   static const int _minChars = 10;
@@ -154,14 +154,16 @@ class _DailyReflectionPageState extends ConsumerState<DailyReflectionPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                isTooShort 
-                  ? 'Mínimo $_minChars caracteres' 
-                  : '$charCount / $_maxChars',
-                style: TextStyle(
-                  fontSize: 11, 
-                  color: isTooShort ? Colors.red : (isTooLong ? Colors.red : Colors.grey),
-                  fontWeight: isTooShort ? FontWeight.bold : FontWeight.normal,
+              Expanded(
+                child: Text(
+                  isTooShort 
+                    ? 'Mínimo $_minChars caracteres' 
+                    : '$charCount / $_maxChars',
+                  style: TextStyle(
+                    fontSize: 11, 
+                    color: isTooShort ? Colors.red : (isTooLong ? Colors.red : Colors.grey),
+                    fontWeight: isTooShort ? FontWeight.bold : FontWeight.normal,
+                  ),
                 ),
               ),
               SingleChildScrollView(

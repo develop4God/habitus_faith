@@ -1031,4 +1031,25 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get habitDeleted => 'Habit deleted';
+
+  @override
+  String get dailyReflection => 'Daily Reflection';
+
+  @override
+  String get myReflection => 'My Reflection';
+
+  @override
+  String get globalNote => 'General Note';
+
+  @override
+  String get globalNoteHint => 'How was your communion with God today?';
+
+  @override
+  String get dailyHabits => 'Daily Habits';
+
+  @override
+  String get addReflection => 'Add thoughts specific to your achievements.';
+
+  @override
+  String get completeHabitToReflect => 'Complete a habit to reflect on it';
 }
