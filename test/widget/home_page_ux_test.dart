@@ -18,7 +18,7 @@ void main() {
     late Devocional testDevocional;
 
     setUp(() {
-      final now = DateTime.now();
+      final now = DateTime(2026, 1, 17); // Fixed date for test consistency
       testHabits = [
         Habit(
           id: 'habit-1',

@@ -228,47 +228,94 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   }
 
   Widget _buildFlashTaskView(Color habitColor) {
-    return Column(
-      children: [
-        _buildPreviewCard(habitColor),
-        const SizedBox(height: 24),
-        TextField(
-          controller: nameCtrl,
-          autofocus: true,
-          maxLength: 40,
-          decoration: InputDecoration(
-            labelText: '${widget.l10n.name} *',
-            border: const OutlineInputBorder(),
+    final List<String> quickEmojis = ['⚡', '🙏', '✨', '📖', '🏃', '💧', '✅', '🔥'];
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildPreviewCard(habitColor),
+          const SizedBox(height: 24),
+          // Name Input
+          TextField(
+            controller: nameCtrl,
+            autofocus: true,
+            maxLength: 40,
+            decoration: InputDecoration(
+              labelText: '${widget.l10n.name} *',
+              border: const OutlineInputBorder(),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+            onChanged: (value) => setState(() {}),
           ),
-          onChanged: (value) => setState(() {}),
-        ),
-        const SizedBox(height: 16),
-        TextField(
-          controller: emojiCtrl,
-          decoration: InputDecoration(
-            labelText: '${widget.l10n.emoji} (${widget.l10n.optional})',
-            border: const OutlineInputBorder(),
-            hintText: '⚡',
+          const SizedBox(height: 16),
+          // Emoji Input & Quick Select Row
+          Text(
+            '${widget.l10n.emoji} (${widget.l10n.optional})',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey.shade700),
           ),
-          maxLength: 2,
-          onChanged: (value) => setState(() {}),
-        ),
-        const Spacer(),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.check),
-            label: Text(widget.l10n.add, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: habitColor,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+                child: TextField(
+                  controller: emojiCtrl,
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.zero,
+                    counterText: '',
+                  ),
+                  maxLength: 2,
+                  onChanged: (value) => setState(() {}),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: quickEmojis.map((e) => Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: InkWell(
+                        onTap: () => setState(() => emojiCtrl.text = e),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: emojiCtrl.text == e ? habitColor.withValues(alpha: 0.1) : Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: emojiCtrl.text == e ? habitColor : Colors.grey.shade300),
+                          ),
+                          child: Text(e, style: const TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                    )).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
+          // Save Button
+          SizedBox(
+            width: double.infinity,
+            height: 54,
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.check, size: 24),
+              label: Text(widget.l10n.add, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: habitColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                elevation: 2,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
