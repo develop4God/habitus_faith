@@ -1,4 +1,3 @@
-
 enum GoalType {
   year,
   month,
