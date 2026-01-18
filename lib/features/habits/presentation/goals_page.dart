@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../domain/models/goal_model.dart';
 import 'goals_providers.dart';
-import '../../../l10n/app_localizations.dart';
 
 class GoalsPage extends ConsumerStatefulWidget {
   const GoalsPage({super.key});
@@ -15,7 +14,6 @@ class GoalsPage extends ConsumerStatefulWidget {
 class _GoalsPageState extends ConsumerState<GoalsPage> {
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final goalsAsync = ref.watch(goalsStreamProvider);
 
     return Scaffold(

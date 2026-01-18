@@ -10,8 +10,8 @@ import '../l10n/app_localizations.dart';
 
 /// Unified habit list widget that combines:
 /// - Visual design from habits_page (colored border)
-/// - Swipe-to-complete functionality
-/// - Tap-to-expand details from CompactHabitCard
+/// - Reorderable items with drag-and-drop
+/// - Dedicated subtask expansion button
 class UnifiedHabitList extends ConsumerWidget {
   final Future<void> Function(String habitId) onComplete;
   final Future<void> Function(String habitId) onUncheck;
@@ -72,11 +72,8 @@ class UnifiedHabitList extends ConsumerWidget {
             canvasColor: Colors.transparent,
           ),
           child: ReorderableListView.builder(
-            header: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (hasPendingHabits)
-                  Padding(
+            header: hasPendingHabits
+                ? Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                     child: Text(
                       '📝 ${l10n.planYourDay}',
@@ -93,25 +90,8 @@ class UnifiedHabitList extends ConsumerWidget {
                         ],
                       ),
                     ),
-                  ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.swipe_left,
-                          color: Colors.blueAccent, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.swipeToComplete,
-                        style: const TextStyle(
-                            fontSize: 13, color: Colors.blueAccent),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                  )
+                : null,
             footer: const SizedBox(height: 32),
             shrinkWrap: shrinkWrap,
             physics: physics ??
@@ -172,49 +152,15 @@ class UnifiedHabitList extends ConsumerWidget {
             },
             itemBuilder: (context, index) {
               final habit = sortedHabits[index];
-              return Dismissible(
+              return ReorderableDelayedDragStartListener(
                 key: Key('habit_${habit.id}'),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  color: Colors.red.shade100,
-                  child: const Icon(Icons.delete, color: Colors.red, size: 32),
-                ),
-                confirmDismiss: (_) async {
-                  // Confirm delete dialog
-                  return await showDialog<bool>(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: Text(l10n.deleteHabit),
-                      content: Text(l10n.deleteHabitConfirm(habit.name)),
-                      actions: [
-                        TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(false),
-                            child: Text(l10n.cancel)),
-                        TextButton(
-                          onPressed: () => Navigator.of(ctx).pop(true),
-                          style:
-                              TextButton.styleFrom(foregroundColor: Colors.red),
-                          child: Text(l10n.delete),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                onDismissed: (_) async {
-                  await onDelete(habit.id);
-                },
-                child: ReorderableDelayedDragStartListener(
-                  key: Key('drag_${habit.id}'),
-                  index: index,
-                  child: UnifiedHabitCard(
-                    habit: habit,
-                    onComplete: onComplete,
-                    onUncheck: onUncheck,
-                    onDelete: onDelete,
-                    onEdit: onEdit,
-                  ),
+                index: index,
+                child: UnifiedHabitCard(
+                  habit: habit,
+                  onComplete: onComplete,
+                  onUncheck: onUncheck,
+                  onDelete: onDelete,
+                  onEdit: onEdit,
                 ),
               );
             },
@@ -381,7 +327,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             ],
           ),
           child: InkWell(
-            // Single tap restored to management modal
             onTap: () async {
               await HabitModalSheet.show(
                 context: context,
@@ -391,7 +336,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               if (!mounted) return;
               setState(() {});
             },
-            // Long press removed to allow ReorderableDelayedDragStartListener to work correctly
             borderRadius: BorderRadius.circular(16),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -438,8 +382,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   _buildStatusBadge(
                                       l10n.skippedHabit, Colors.orange)
                                 else if (isFailed)
-                                  _buildStatusBadge(
-                                      l10n.failedHabit, Colors.red),
+                                  _buildStatusBadge(l10n.failedHabit, Colors.red),
                               ],
                             ),
                             const SizedBox(height: 4),
@@ -453,28 +396,22 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                 const SizedBox(width: 4),
                                 Text(l10n.dayStreak(widget.habit.currentStreak),
                                     style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey.shade600)),
+                                        fontSize: 13, color: Colors.grey.shade600)),
                                 if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 12),
-                                  // DEDICATED EXPANSION BUTTON
                                   InkWell(
                                     onTap: () {
-                                      setState(
-                                          () => _isExpanded = !_isExpanded);
+                                      setState(() => _isExpanded = !_isExpanded);
                                     },
                                     borderRadius: BorderRadius.circular(20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color:
-                                            habitColor.withValues(alpha: 0.15),
+                                        color: habitColor.withValues(alpha: 0.15),
                                         shape: BoxShape.circle,
                                       ),
                                       padding: const EdgeInsets.all(4),
                                       child: Icon(
-                                        _isExpanded
-                                            ? Icons.expand_less
-                                            : Icons.expand_more,
+                                        _isExpanded ? Icons.expand_less : Icons.expand_more,
                                         size: 22,
                                         color: habitColor,
                                       ),
@@ -533,12 +470,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               child: Row(
                 children: [
                   Icon(
-                    subtask.completed
-                        ? Icons.check_circle
-                        : Icons.circle_outlined,
+                    subtask.completed ? Icons.check_circle : Icons.circle_outlined,
                     size: 18,
-                    color:
-                        subtask.completed ? habitColor : Colors.grey.shade400,
+                    color: subtask.completed ? habitColor : Colors.grey.shade400,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -546,12 +480,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                       subtask.title,
                       style: TextStyle(
                         fontSize: 14,
-                        decoration: subtask.completed
-                            ? TextDecoration.lineThrough
-                            : null,
-                        color: subtask.completed
-                            ? Colors.grey.shade500
-                            : Colors.grey.shade800,
+                        decoration: subtask.completed ? TextDecoration.lineThrough : null,
+                        color: subtask.completed ? Colors.grey.shade500 : Colors.grey.shade800,
                       ),
                     ),
                   ),
