@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:collection/collection.dart';
+
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
