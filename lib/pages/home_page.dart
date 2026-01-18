@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
-import '../features/habits/presentation/daily_reflection_page.dart';
+import '../features/habits/presentation/notes_page.dart';
 
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
