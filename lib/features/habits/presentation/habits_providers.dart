@@ -70,6 +70,15 @@ class HabitsNotifier extends AsyncNotifier<void> {
     );
   }
 
+  Future<void> updateHabitNote(String habitId, String? note) async {
+    debugPrint('HabitsNotifier.updateHabitNote: habitId=$habitId');
+    // We don't necessarily want to set state to Loading here to avoid flickering 
+    // since this might be called frequently while typing.
+    final repository = ref.read(habitsRepositoryProvider);
+    await repository.updateHabitNote(habitId, note);
+    // State remains Data(null) but the repository will emit new habits via watchHabits()
+  }
+
   Future<void> deleteHabit(String habitId) async {
     debugPrint('HabitsNotifier.deleteHabit: start -> $habitId');
     state = const AsyncLoading();
