@@ -928,6 +928,14 @@
   "@today": {
     "description": "Etiqueta para mostrar el día actual en la vista de hábitos"
   },
+  "flashTask": "Tarea Flash",
+  "@flashTask": {
+    "description": "Quick task option with only name and emoji"
+  },
+  "flashTaskSubtitle": "Agrega rápidamente una tarea con solo nombre y emoji",
+  "@flashTaskSubtitle": {
+    "description": "Description for flash task option"
+  },
   "morning_prayer": "Oración Matutina",
   "bible_reading": "Lectura Bíblica",
   "evening_prayer": "Oración Nocturna",

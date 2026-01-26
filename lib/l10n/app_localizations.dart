@@ -1544,6 +1544,18 @@ abstract class AppLocalizations {
   /// **'Today'**
   String get today;
 
+  /// Quick task option with only name and emoji
+  ///
+  /// In en, this message translates to:
+  /// **'Flash Task'**
+  String get flashTask;
+
+  /// Description for flash task option
+  ///
+  /// In en, this message translates to:
+  /// **'Quickly add a task with just a name and emoji'**
+  String get flashTaskSubtitle;
+
   /// No description provided for @morning_prayer.
   ///
   /// In en, this message translates to:
@@ -1945,6 +1957,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Habit deleted'**
   String get habitDeleted;
+
+  /// Title for the daily reflection/notes page
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Reflection'**
+  String get dailyReflection;
+
+  /// Subtitle/Header for daily reflection
+  ///
+  /// In en, this message translates to:
+  /// **'My Reflection'**
+  String get myReflection;
+
+  /// Label for the general daily note
+  ///
+  /// In en, this message translates to:
+  /// **'General Note'**
+  String get globalNote;
+
+  /// Hint for general daily note
+  ///
+  /// In en, this message translates to:
+  /// **'How was your communion with God today?'**
+  String get globalNoteHint;
+
+  /// Section header for daily habits in reflection
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Habits'**
+  String get dailyHabits;
+
+  /// Instruction for habit-specific reflections
+  ///
+  /// In en, this message translates to:
+  /// **'Add thoughts specific to your achievements.'**
+  String get addReflection;
+
+  /// Empty state message for reflection page
+  ///
+  /// In en, this message translates to:
+  /// **'Complete a habit to reflect on it'**
+  String get completeHabitToReflect;
 }
 
 class _AppLocalizationsDelegate

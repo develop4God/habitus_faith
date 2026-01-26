@@ -58,7 +58,7 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
             ),
             // Contenido principal
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -97,58 +97,74 @@ class _AddHabitDiscoveryDialogState extends State<AddHabitDiscoveryDialog>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _AnimatedBorderButton(
-                          animation: _controller,
-                          borderColors: const [
-                            Color(0xff7c3aed), // Purple
-                            Color(0xffc4b5fd), // Light Purple
-                            Color(0xff7c3aed),
-                          ],
-                          backgroundColor: const Color(0xfff3e8ff),
-                          icon: Icons.edit_note,
-                          label: widget.l10n.custom,
-                          textColor: const Color(0xff7c3aed),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder: (context) => AddHabitDialog(
-                                l10n: widget.l10n,
-                                initialTab: 0,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _AnimatedBorderButton(
-                          animation: _controller,
-                          borderColors: const [
-                            Color(0xff06b6d4), // Cyan
-                            Color(0xffa5f3fc), // Light Cyan
-                            Color(0xff06b6d4),
-                          ],
-                          backgroundColor: const Color(0xffecfeff),
-                          icon: Icons.checklist_outlined,
-                          label: widget.l10n.defaultHabit,
-                          textColor: const Color(0xff06b6d4),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder: (context) => AddHabitDialog(
-                                l10n: widget.l10n,
-                                initialTab: 1,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                  // Using a list for more consistency in button sizing
+                  _AnimatedBorderButton(
+                    animation: _controller,
+                    borderColors: const [
+                      Color(0xff7c3aed), // Purple
+                      Color(0xffc4b5fd),
+                      Color(0xff7c3aed),
                     ],
+                    backgroundColor: const Color(0xfff3e8ff),
+                    icon: Icons.edit_note,
+                    label: widget.l10n.custom,
+                    textColor: const Color(0xff7c3aed),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddHabitDialog(
+                          l10n: widget.l10n,
+                          initialTab: 0,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _AnimatedBorderButton(
+                    animation: _controller,
+                    borderColors: const [
+                      Color(0xff06b6d4), // Cyan
+                      Color(0xffa5f3fc),
+                      Color(0xff06b6d4),
+                    ],
+                    backgroundColor: const Color(0xffecfeff),
+                    icon: Icons.checklist_outlined,
+                    label: widget.l10n.defaultHabit,
+                    textColor: const Color(0xff06b6d4),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddHabitDialog(
+                          l10n: widget.l10n,
+                          initialTab: 1,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _AnimatedBorderButton(
+                    animation: _controller,
+                    borderColors: const [
+                      Color(0xffffd700), // Gold
+                      Color(0xffffa500),
+                      Color(0xffffd700),
+                    ],
+                    backgroundColor: const Color(0xfffffbeb),
+                    icon: Icons.bolt,
+                    label: widget.l10n.flashTask,
+                    textColor: const Color(0xffb45309),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddHabitDialog(
+                          l10n: widget.l10n,
+                          initialTab: 2, // Flash Task is now the 3rd tab
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -185,13 +201,13 @@ class _AnimatedBorderButton extends StatelessWidget {
       animation: animation,
       builder: (context, child) {
         final double t = animation.value;
-        // Gradiente animado alrededor del borde
         final Gradient borderGradient = LinearGradient(
           colors: borderColors,
           stops: [(t + 0.0) % 1.0, (t + 0.5) % 1.0, (t + 1.0) % 1.0],
         );
 
         return Container(
+          width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
             gradient: borderGradient,
@@ -208,20 +224,23 @@ class _AnimatedBorderButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 onTap: onPressed,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                  child: Row(
                     children: [
-                      Icon(icon, size: 32, color: textColor),
-                      const SizedBox(height: 8),
+                      Icon(icon, size: 28, color: textColor),
+                      const SizedBox(width: 16),
                       Text(
                         label,
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
                           color: textColor,
                         ),
                       ),
+                      const Spacer(),
+                      Icon(Icons.chevron_right,
+                          size: 20, color: textColor.withValues(alpha: 0.5)),
                     ],
                   ),
                 ),

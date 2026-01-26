@@ -1115,6 +1115,14 @@
   "@today": {
     "description": "Label to show the current day in the habits view"
   },
+  "flashTask": "Flash Task",
+  "@flashTask": {
+    "description": "Quick task option with only name and emoji"
+  },
+  "flashTaskSubtitle": "Quickly add a task with just a name and emoji",
+  "@flashTaskSubtitle": {
+    "description": "Description for flash task option"
+  },
   "morning_prayer": "Morning Prayer",
   "bible_reading": "Bible Reading",
   "evening_prayer": "Evening Prayer",
@@ -1235,5 +1243,33 @@
   "habitDeleted": "Habit deleted",
   "@habitDeleted": {
     "description": "Success message after deleting a habit"
+  },
+  "dailyReflection": "Daily Reflection",
+  "@dailyReflection": {
+    "description": "Title for the daily reflection/notes page"
+  },
+  "myReflection": "My Reflection",
+  "@myReflection": {
+    "description": "Subtitle/Header for daily reflection"
+  },
+  "globalNote": "General Note",
+  "@globalNote": {
+    "description": "Label for the general daily note"
+  },
+  "globalNoteHint": "How was your communion with God today?",
+  "@globalNoteHint": {
+    "description": "Hint for general daily note"
+  },
+  "dailyHabits": "Daily Habits",
+  "@dailyHabits": {
+    "description": "Section header for daily habits in reflection"
+  },
+  "addReflection": "Add thoughts specific to your achievements.",
+  "@addReflection": {
+    "description": "Instruction for habit-specific reflections"
+  },
+  "completeHabitToReflect": "Complete a habit to reflect on it",
+  "@completeHabitToReflect": {
+    "description": "Empty state message for reflection page"
   }
 }

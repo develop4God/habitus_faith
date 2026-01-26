@@ -779,6 +779,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get today => '今天';
 
   @override
+  String get flashTask => 'Flash Task';
+
+  @override
+  String get flashTaskSubtitle =>
+      'Quickly add a task with just a name and emoji';
+
+  @override
   String get morning_prayer => '晨祷';
 
   @override
@@ -978,4 +985,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get habitDeleted => '习惯已删除';
+
+  @override
+  String get dailyReflection => 'Daily Reflection';
+
+  @override
+  String get myReflection => 'My Reflection';
+
+  @override
+  String get globalNote => 'General Note';
+
+  @override
+  String get globalNoteHint => 'How was your communion with God today?';
+
+  @override
+  String get dailyHabits => 'Daily Habits';
+
+  @override
+  String get addReflection => 'Add thoughts specific to your achievements.';
+
+  @override
+  String get completeHabitToReflect => 'Complete a habit to reflect on it';
 }

@@ -1,5 +1,6 @@
 import 'dart:async' show unawaited;
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,8 +40,6 @@ void main() async {
   } catch (e) {
     debugPrint(
         'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}');
-    debugPrint(
-        'Ejecuta Flutter desde la raíz del proyecto y verifica que el archivo .env esté junto a pubspec.yaml, sin extensión oculta y con permisos de lectura.');
   }
 
   // Load environment configuration before Firebase
@@ -64,14 +63,14 @@ void main() async {
   // Non-blocking ML model update check
   unawaited(ModelUpdater().checkAndUpdateModel());
 
+  // Only for testing update logic: Upgrader.clearSavedSettings();
+
   runApp(
     ProviderScope(
       overrides: [
-        // Only override synchronous services
         sharedPreferencesProvider.overrideWithValue(prefs),
         jsonStorageServiceProvider.overrideWithValue(storageService),
         jsonHabitsRepositoryProvider.overrideWithValue(habitsRepository),
-        // Async providers (geminiService, bibleDbService) initialize themselves
       ],
       child: const MyApp(),
     ),
@@ -87,17 +86,12 @@ class MyApp extends ConsumerWidget {
     final onboardingComplete = ref.watch(onboardingCompleteProvider);
     final currentLocale = ref.watch(appLanguageProvider);
 
-    // Listen for app language changes and notify devotional provider so it can
-    // fetch devotionals for the newly selected language. We ignore the
-    // initial notification (previous == null) to avoid double initialization.
     ref.listen<Locale>(appLanguageProvider, (previous, next) {
       if (previous != null && previous.languageCode != next.languageCode) {
-        // Fire-and-forget changeLanguage; provider handles its own errors.
         ref.read(devotionalProvider.notifier).changeLanguage(next.languageCode);
       }
     });
 
-    // Initialize notification service
     ref.watch(notificationInitProvider);
 
     return WithFastTimeBanner(
@@ -119,13 +113,19 @@ class MyApp extends ConsumerWidget {
         ],
         routes: {
           '/home': (context) => const HomePage(),
-          '/onboarding': (context) {
-            return const SimpleOnboardingFlow();
-          },
+          '/onboarding': (context) => const SimpleOnboardingFlow(),
           '/habits': (context) => const HomePage(),
           '/devtools': (context) => const DeveloperDebugPage(),
         },
         home: UpgradeAlert(
+          // Optimized for testing and production
+          upgrader: Upgrader(
+            debugDisplayAlways:
+                kDebugMode, // Only show update dialog always in local debug
+            durationUntilAlertAgain:
+                const Duration(hours: 2), // Check more frequently
+            minAppVersion: '1.1.0', // Force update for very old versions
+          ),
           child: authInit.when(
             data: (_) {
               if (onboardingComplete) {
