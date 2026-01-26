@@ -27,7 +27,7 @@ class NotificationOptionsDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Semantics(
-                label: 'Notification bell icon',
+                label: 'Active notification',
                 child: Icon(
                   Icons.notifications_active,
                   size: 48,

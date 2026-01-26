@@ -567,10 +567,16 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     
     // Fallback to defaultNotificationTime
     final defaultParts = defaultNotificationTime.split(':');
-    return TimeOfDay(
-      hour: int.parse(defaultParts[0]),
-      minute: int.parse(defaultParts[1]),
-    );
+    if (defaultParts.length == 2) {
+      final hour = int.tryParse(defaultParts[0]);
+      final minute = int.tryParse(defaultParts[1]);
+      if (hour != null && minute != null) {
+        return TimeOfDay(hour: hour, minute: minute);
+      }
+    }
+    
+    // Final fallback
+    return const TimeOfDay(hour: 9, minute: 0);
   }
 
   Widget _buildExpandedContent(
