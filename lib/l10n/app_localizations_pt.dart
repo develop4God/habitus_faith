@@ -1032,25 +1032,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitDeleted => 'Hábito excluído';
 
   @override
-  String get dailyReflection => 'PENDING';
+  String get dailyReflection => 'Reflexão Diária';
 
   @override
-  String get myReflection => 'PENDING';
+  String get myReflection => 'Minha Reflexão';
 
   @override
-  String get globalNote => 'PENDING';
+  String get globalNote => 'Nota Geral';
 
   @override
-  String get globalNoteHint => 'PENDING';
+  String get globalNoteHint => 'Como foi sua comunhão com Deus hoje?';
 
   @override
-  String get dailyHabits => 'PENDING';
+  String get dailyHabits => 'Hábitos Diários';
 
   @override
-  String get addReflection => 'PENDING';
+  String get addReflection =>
+      'Adicione pensamentos específicos sobre suas conquistas.';
 
   @override
-  String get completeHabitToReflect => 'PENDING';
+  String get completeHabitToReflect =>
+      'Complete um hábito para refletir sobre ele';
 
   @override
   String get notificationOptions => 'Opções de Notificação';

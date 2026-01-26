@@ -1238,94 +1238,40 @@
   "@today": {
     "description": "PENDING"
   },
-  "flashTask": "PENDING",
+  "flashTask": "闪任务",
   "@flashTask": {
-    "description": "PENDING"
+    "description": "仅需名称和表情符号的快速任务选项"
   },
-  "flashTaskSubtitle": "PENDING",
+  "flashTaskSubtitle": "快速添加仅带名称和表情符号的任务",
   "@flashTaskSubtitle": {
-    "description": "PENDING"
+    "description": "闪任务选项的描述"
   },
-  "@addNote": {
-    "description": "PENDING"
-  },
-  "@noteHint": {
-    "description": "PENDING"
-  },
-  "@viewNote": {
-    "description": "PENDING"
-  },
-  "@shareNote": {
-    "description": "PENDING"
-  },
-  "@noteAdded": {
-    "description": "PENDING"
-  },
-  "@addNoteDialog": {
-    "description": "PENDING"
-  },
-  "@completeWithNote": {
-    "description": "PENDING"
-  },
-  "@addEmoji": {
-    "description": "PENDING"
-  },
-  "@hideEmojis": {
-    "description": "PENDING"
-  },
-  "@planYourDay": {
-    "description": "PENDING"
-  },
-  "@skipHabit": {
-    "description": "PENDING"
-  },
-  "@markAsNotCompleted": {
-    "description": "PENDING"
-  },
-  "@skippedHabit": {
-    "description": "PENDING"
-  },
-  "@failedHabit": {
-    "description": "PENDING"
-  },
-  "@repeatReminder": {
-    "description": "PENDING"
-  },
-  "@habitSkipped": {
-    "description": "PENDING"
-  },
-  "@habitMarkedAsNotCompleted": {
-    "description": "PENDING"
-  },
-  "@habitDeleted": {
-    "description": "PENDING"
-  },
-  "dailyReflection": "PENDING",
+  "dailyReflection": "每日反思",
   "@dailyReflection": {
-    "description": "PENDING"
+    "description": "每日反思/笔记页面标题"
   },
-  "myReflection": "PENDING",
+  "myReflection": "我的反思",
   "@myReflection": {
-    "description": "PENDING"
+    "description": "每日反思的副标题/标题"
   },
-  "globalNote": "PENDING",
+  "globalNote": "总体备注",
   "@globalNote": {
-    "description": "PENDING"
+    "description": "每日总体备注标签"
   },
-  "globalNoteHint": "PENDING",
+  "globalNoteHint": "你今天与神的关系如何？",
   "@globalNoteHint": {
-    "description": "PENDING"
+    "description": "每日总体备注的提示"
   },
-  "dailyHabits": "PENDING",
+  "dailyHabits": "每日习惯",
   "@dailyHabits": {
-    "description": "PENDING"
+    "description": "反思页面每日习惯部分标题"
   },
-  "addReflection": "PENDING",
+  "addReflection": "添加关于你成就的具体想法。",
   "@addReflection": {
-    "description": "PENDING"
+    "description": "针对习惯的具体反思指引"
   },
-  "completeHabitToReflect": "PENDING",
+  "completeHabitToReflect": "完成一个习惯以进行反思",
   "@completeHabitToReflect": {
-    "description": "PENDING"
+    "description": "反思页面的空状态消息"
   }
 }

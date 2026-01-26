@@ -1,1 +1,8 @@
-{}
+{
+  "fr": [
+    "dailyReflection",
+    "myReflection",
+    "globalNote",
+    "globalNoteHint"
+  ]
+}

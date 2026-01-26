@@ -1300,32 +1300,32 @@
   "@flashTaskSubtitle": {
     "description": "PENDING"
   },
-  "dailyReflection": "PENDING",
+  "dailyReflection": "Reflexão Diária",
   "@dailyReflection": {
-    "description": "PENDING"
+    "description": "Título para a página de reflexão/notas diárias"
   },
-  "myReflection": "PENDING",
+  "myReflection": "Minha Reflexão",
   "@myReflection": {
-    "description": "PENDING"
+    "description": "Subtítulo/Cabeçalho para reflexão diária"
   },
-  "globalNote": "PENDING",
+  "globalNote": "Nota Geral",
   "@globalNote": {
-    "description": "PENDING"
+    "description": "Etiqueta para a nota geral diária"
   },
-  "globalNoteHint": "PENDING",
+  "globalNoteHint": "Como foi sua comunhão com Deus hoje?",
   "@globalNoteHint": {
-    "description": "PENDING"
+    "description": "Dica para a nota geral diária"
   },
-  "dailyHabits": "PENDING",
+  "dailyHabits": "Hábitos Diários",
   "@dailyHabits": {
-    "description": "PENDING"
+    "description": "Cabeçalho de seção para hábitos diários na reflexão"
   },
-  "addReflection": "PENDING",
+  "addReflection": "Adicione pensamentos específicos sobre suas conquistas.",
   "@addReflection": {
-    "description": "PENDING"
+    "description": "Instrução para reflexões específicas de hábitos"
   },
-  "completeHabitToReflect": "PENDING",
+  "completeHabitToReflect": "Complete um hábito para refletir sobre ele",
   "@completeHabitToReflect": {
-    "description": "PENDING"
+    "description": "Mensagem de estado vazio para a página de reflexão"
   }
 }

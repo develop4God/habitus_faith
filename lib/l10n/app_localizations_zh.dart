@@ -779,10 +779,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get today => '今天';
 
   @override
-  String get flashTask => 'PENDING';
+  String get flashTask => '闪任务';
 
   @override
-  String get flashTaskSubtitle => 'PENDING';
+  String get flashTaskSubtitle => '快速添加仅带名称和表情符号的任务';
 
   @override
   String get morning_prayer => '晨祷';
@@ -986,25 +986,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitDeleted => '习惯已删除';
 
   @override
-  String get dailyReflection => 'PENDING';
+  String get dailyReflection => '每日反思';
 
   @override
-  String get myReflection => 'PENDING';
+  String get myReflection => '我的反思';
 
   @override
-  String get globalNote => 'PENDING';
+  String get globalNote => '总体备注';
 
   @override
-  String get globalNoteHint => 'PENDING';
+  String get globalNoteHint => '你今天与神的关系如何？';
 
   @override
-  String get dailyHabits => 'PENDING';
+  String get dailyHabits => '每日习惯';
 
   @override
-  String get addReflection => 'PENDING';
+  String get addReflection => '添加关于你成就的具体想法。';
 
   @override
-  String get completeHabitToReflect => 'PENDING';
+  String get completeHabitToReflect => '完成一个习惯以进行反思';
 
   @override
   String get notificationOptions => '通知选项';

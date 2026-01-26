@@ -1292,40 +1292,24 @@
   "@tomorrowLabel": {
     "description": "Étiquette pour la date de demain"
   },
-  "flashTask": "PENDING",
+  "flashTask": "Tâche Flash",
   "@flashTask": {
-    "description": "PENDING"
+    "description": "Option de tâche rapide avec seulement un nom et un emoji"
   },
-  "flashTaskSubtitle": "PENDING",
+  "flashTaskSubtitle": "Ajoutez rapidement une tâche avec seulement un nom et un emoji",
   "@flashTaskSubtitle": {
-    "description": "PENDING"
+    "description": "Description de l'option tâche flash"
   },
-  "dailyReflection": "PENDING",
-  "@dailyReflection": {
-    "description": "PENDING"
-  },
-  "myReflection": "PENDING",
-  "@myReflection": {
-    "description": "PENDING"
-  },
-  "globalNote": "PENDING",
-  "@globalNote": {
-    "description": "PENDING"
-  },
-  "globalNoteHint": "PENDING",
-  "@globalNoteHint": {
-    "description": "PENDING"
-  },
-  "dailyHabits": "PENDING",
+  "dailyHabits": "Habitudes Quotidiennes",
   "@dailyHabits": {
-    "description": "PENDING"
+    "description": "En-tête de section pour les habitudes quotidiennes dans la réflexion"
   },
-  "addReflection": "PENDING",
+  "addReflection": "Ajoutez des réflexions spécifiques sur vos réalisations.",
   "@addReflection": {
-    "description": "PENDING"
+    "description": "Instruction pour les réflexions spécifiques à une habitude"
   },
-  "completeHabitToReflect": "PENDING",
+  "completeHabitToReflect": "Complétez une habitude pour réfléchir dessus",
   "@completeHabitToReflect": {
-    "description": "PENDING"
+    "description": "Message d'état vide pour la page de réflexion"
   }
 }

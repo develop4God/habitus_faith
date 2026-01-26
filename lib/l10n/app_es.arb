@@ -1300,32 +1300,32 @@
   "@tomorrowLabel": {
     "description": "Etiqueta para la fecha de mañana"
   },
-  "dailyReflection": "PENDING",
+  "dailyReflection": "Reflexión Diaria",
   "@dailyReflection": {
-    "description": "PENDING"
+    "description": "Título para la página de reflexión/notas diarias"
   },
-  "myReflection": "PENDING",
+  "myReflection": "Mi Reflexión",
   "@myReflection": {
-    "description": "PENDING"
+    "description": "Subtítulo/Encabezado para la reflexión diaria"
   },
-  "globalNote": "PENDING",
+  "globalNote": "Nota General",
   "@globalNote": {
-    "description": "PENDING"
+    "description": "Etiqueta para la nota general diaria"
   },
-  "globalNoteHint": "PENDING",
+  "globalNoteHint": "¿Cómo estuvo tu comunión con Dios hoy?",
   "@globalNoteHint": {
-    "description": "PENDING"
+    "description": "Sugerencia para la nota general diaria"
   },
-  "dailyHabits": "PENDING",
+  "dailyHabits": "Hábitos Diarios",
   "@dailyHabits": {
-    "description": "PENDING"
+    "description": "Encabezado de sección para hábitos diarios en reflexión"
   },
-  "addReflection": "PENDING",
+  "addReflection": "Agrega pensamientos específicos sobre tus logros.",
   "@addReflection": {
-    "description": "PENDING"
+    "description": "Instrucción para reflexiones específicas de hábitos"
   },
-  "completeHabitToReflect": "PENDING",
+  "completeHabitToReflect": "Completa un hábito para reflexionar sobre él",
   "@completeHabitToReflect": {
-    "description": "PENDING"
+    "description": "Mensaje de estado vacío para la página de reflexión"
   }
 }
