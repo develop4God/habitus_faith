@@ -485,7 +485,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     
     // If notification is currently ON, show options dialog
     if (habit.hasActiveNotification) {
-      final currentTime = habit.notificationSettings!.eventTime ?? defaultNotificationTime;
+      final currentTime = habit.notificationSettings?.eventTime ?? defaultNotificationTime;
       
       final result = await showDialog<String>(
         context: context,
@@ -553,17 +553,23 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   
   TimeOfDay _parseTime(String timeStr) {
     final parts = timeStr.split(':');
-    if (parts.length >= 2) {
-      return TimeOfDay(
-        hour: int.tryParse(parts[0]) ?? 9,
-        minute: int.tryParse(parts[1]) ?? 0,
-      );
+    if (parts.length == 2) {
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+      
+      // Validate ranges
+      if (hour != null && minute != null &&
+          hour >= 0 && hour <= 23 &&
+          minute >= 0 && minute <= 59) {
+        return TimeOfDay(hour: hour, minute: minute);
+      }
     }
-    // Fallback to defaultNotificationTime if invalid format
+    
+    // Fallback to defaultNotificationTime
     final defaultParts = defaultNotificationTime.split(':');
     return TimeOfDay(
-      hour: int.tryParse(defaultParts[0]) ?? 9,
-      minute: int.tryParse(defaultParts[1]) ?? 0,
+      hour: int.parse(defaultParts[0]),
+      minute: int.parse(defaultParts[1]),
     );
   }
 
