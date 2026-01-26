@@ -1292,13 +1292,13 @@
   "@tomorrowLabel": {
     "description": "Etiqueta para a data de amanhã"
   },
-  "flashTask": "PENDING",
+  "flashTask": "Tarefa Rápida",
   "@flashTask": {
-    "description": "PENDING"
+    "description": "Opção de tarefa rápida com apenas nome e emoji"
   },
-  "flashTaskSubtitle": "PENDING",
+  "flashTaskSubtitle": "Adicione rapidamente uma tarefa apenas com nome e emoji",
   "@flashTaskSubtitle": {
-    "description": "PENDING"
+    "description": "Descrição da opção de tarefa rápida"
   },
   "dailyReflection": "Reflexão Diária",
   "@dailyReflection": {
