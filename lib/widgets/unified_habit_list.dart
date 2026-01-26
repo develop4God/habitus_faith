@@ -207,6 +207,8 @@ class UnifiedHabitCard extends ConsumerStatefulWidget {
 }
 
 class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
+  static const String defaultNotificationTime = '09:00';
+  
   bool _isCompleting = false;
 
   Habit getLatestHabit(WidgetRef ref) {
@@ -431,17 +433,14 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Widget _buildActions(BuildContext context, WidgetRef ref,
       AppLocalizations l10n, Habit habit, bool isCompleted, Color habitColor) {
-    final hasNotification = habit.notificationSettings != null &&
-        habit.notificationSettings!.timing != NotificationTiming.none;
-    
     return Row(
       children: [
         IconButton(
           icon: Icon(
-            hasNotification
+            habit.hasActiveNotification
                 ? Icons.notifications_active
                 : Icons.notifications_none,
-            color: hasNotification
+            color: habit.hasActiveNotification
                 ? Colors.orange
                 : Colors.grey,
           ),
@@ -485,9 +484,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     final notifier = ref.read(habitsNotifierProvider.notifier);
     
     // If notification is currently ON, show options dialog
-    if (habit.notificationSettings != null &&
-        habit.notificationSettings!.timing != NotificationTiming.none) {
-      final currentTime = habit.notificationSettings!.eventTime ?? '09:00';
+    if (habit.hasActiveNotification) {
+      final currentTime = habit.notificationSettings!.eventTime ?? defaultNotificationTime;
       
       final result = await showDialog<String>(
         context: context,
@@ -561,8 +559,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         minute: int.tryParse(parts[1]) ?? 0,
       );
     }
-    // Fallback to 9:00 AM if invalid format
-    return const TimeOfDay(hour: 9, minute: 0);
+    // Fallback to defaultNotificationTime if invalid format
+    final defaultParts = defaultNotificationTime.split(':');
+    return TimeOfDay(
+      hour: int.tryParse(defaultParts[0]) ?? 9,
+      minute: int.tryParse(defaultParts[1]) ?? 0,
+    );
   }
 
   Widget _buildExpandedContent(

@@ -318,6 +318,12 @@ class Habit {
     );
   }
 
+  /// Helper getter to check if habit has an active notification
+  bool get hasActiveNotification {
+    return notificationSettings != null &&
+        notificationSettings!.timing != NotificationTiming.none;
+  }
+
   Habit copyWith({
     String? id,
     String? userId,
