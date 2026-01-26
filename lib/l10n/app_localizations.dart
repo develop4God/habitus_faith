@@ -626,7 +626,7 @@ abstract class AppLocalizations {
   /// **'Select notification time'**
   String get selectNotificationTime;
 
-  /// Current time label
+  /// Label for current notification time
   ///
   /// In en, this message translates to:
   /// **'Current time'**
@@ -1999,6 +1999,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete a habit to reflect on it'**
   String get completeHabitToReflect;
+
+  /// Title for notification options dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Options'**
+  String get notificationOptions;
+
+  /// Option to turn off habit notification
+  ///
+  /// In en, this message translates to:
+  /// **'Turn Off Notification'**
+  String get turnOffNotification;
+
+  /// Description for turn off notification option
+  ///
+  /// In en, this message translates to:
+  /// **'Disable daily reminder for this habit'**
+  String get turnOffNotificationDesc;
+
+  /// Option to change notification time
+  ///
+  /// In en, this message translates to:
+  /// **'Change Time'**
+  String get changeNotificationTime;
+
+  /// Description for change notification time option
+  ///
+  /// In en, this message translates to:
+  /// **'Update when you want to be reminded'**
+  String get changeNotificationTimeDesc;
+
+  /// Message shown when notification is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Notification turned off'**
+  String get notificationTurnedOff;
+
+  /// Message shown when notification time is changed
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time updated'**
+  String get notificationTimeChanged;
+
+  /// Error message shown when notification data is corrupted or invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid notification configuration. Please set up the notification again.'**
+  String get invalidNotificationConfig;
 }
 
 class _AppLocalizationsDelegate

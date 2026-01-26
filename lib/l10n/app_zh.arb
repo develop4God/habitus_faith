@@ -408,5 +408,41 @@
   "completeWithNote": "完成并添加备注",
   "addEmoji": "添加表情符号",
   "hideEmojis": "隐藏表情符号",
-  "habitDeleted": "习惯已删除"
+  "habitDeleted": "习惯已删除",
+  "notificationOptions": "通知选项",
+  "@notificationOptions": {
+    "description": "通知选项对话框标题"
+  },
+  "currentTime": "当前时间",
+  "@currentTime": {
+    "description": "当前通知时间标签"
+  },
+  "turnOffNotification": "关闭通知",
+  "@turnOffNotification": {
+    "description": "关闭习惯通知选项"
+  },
+  "turnOffNotificationDesc": "禁用此习惯的每日提醒",
+  "@turnOffNotificationDesc": {
+    "description": "关闭通知选项描述"
+  },
+  "changeNotificationTime": "更改时间",
+  "@changeNotificationTime": {
+    "description": "更改通知时间选项"
+  },
+  "changeNotificationTimeDesc": "更新您想要被提醒的时间",
+  "@changeNotificationTimeDesc": {
+    "description": "更改通知时间选项描述"
+  },
+  "notificationTurnedOff": "通知已关闭",
+  "@notificationTurnedOff": {
+    "description": "通知被禁用时显示的消息"
+  },
+  "notificationTimeChanged": "通知时间已更新",
+  "@notificationTimeChanged": {
+    "description": "通知时间更改时显示的消息"
+  },
+  "invalidNotificationConfig": "通知配置无效。请重新设置通知。",
+  "@invalidNotificationConfig": {
+    "description": "通知数据损坏或无效时显示的错误消息"
+  }
 }

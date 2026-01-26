@@ -1043,7 +1043,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Habitude marquée comme non complétée';
 
   @override
-  String get habitDeleted => 'Habit deleted';
+  String get habitDeleted => 'Habitude supprimée';
 
   @override
   String get dailyReflection => 'Daily Reflection';
@@ -1065,4 +1065,31 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get completeHabitToReflect => 'Complete a habit to reflect on it';
+
+  @override
+  String get notificationOptions => 'Options de Notification';
+
+  @override
+  String get turnOffNotification => 'Désactiver la Notification';
+
+  @override
+  String get turnOffNotificationDesc =>
+      'Désactiver le rappel quotidien pour cette habitude';
+
+  @override
+  String get changeNotificationTime => 'Changer l\'Heure';
+
+  @override
+  String get changeNotificationTimeDesc =>
+      'Mettre à jour quand vous voulez être rappelé';
+
+  @override
+  String get notificationTurnedOff => 'Notification désactivée';
+
+  @override
+  String get notificationTimeChanged => 'Heure de notification mise à jour';
+
+  @override
+  String get invalidNotificationConfig =>
+      'Configuration de notification invalide. Veuillez configurer à nouveau la notification.';
 }

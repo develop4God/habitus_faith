@@ -12,6 +12,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../../features/habits/domain/models/habit_notification.dart';
+import '../../../features/habits/domain/habit.dart';
+
 // Background handler for notifications
 @pragma('vm:entry-point')
 void flutterLocalNotificationsBackgroundHandler(
@@ -39,7 +42,7 @@ class NotificationService {
 
   static const String _notificationsEnabledKey = 'notifications_enabled';
   static const String _notificationTimeKey = 'notification_time';
-  static const String _defaultNotificationTime = '09:00';
+  static const String defaultNotificationTime = '09:00';
   static const String _fcmTokenKey = 'fcm_token';
 
   Function(String? payload)? onNotificationTapped;
@@ -133,8 +136,8 @@ class NotificationService {
               : true;
           String initialNotificationTime = settingsDoc.exists
               ? (settingsDoc.data()?['notificationTime'] ??
-                  _defaultNotificationTime)
-              : _defaultNotificationTime;
+                  defaultNotificationTime)
+              : defaultNotificationTime;
           String initialUserTimezone = settingsDoc.exists
               ? (settingsDoc.data()?['userTimezone'] ?? currentDeviceTimezone)
               : currentDeviceTimezone;
@@ -412,7 +415,7 @@ class NotificationService {
             .doc('notifications')
             .get();
         String currentNotificationTime =
-            settingsDoc.data()?['notificationTime'] ?? _defaultNotificationTime;
+            settingsDoc.data()?['notificationTime'] ?? defaultNotificationTime;
         String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
 
@@ -438,7 +441,7 @@ class NotificationService {
 
   Future<String> getNotificationTime() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_notificationTimeKey) ?? _defaultNotificationTime;
+    return prefs.getString(_notificationTimeKey) ?? defaultNotificationTime;
   }
 
   Future<void> setNotificationTime(String time) async {
@@ -564,7 +567,7 @@ class NotificationService {
     final data = docSnapshot.data()!;
     bool notificationsEnabled = data['notificationsEnabled'] ?? false;
     String notificationTimeStr =
-        data['notificationTime'] ?? _defaultNotificationTime;
+        data['notificationTime'] ?? defaultNotificationTime;
     String userTimezoneStr =
         data['userTimezone'] ?? await FlutterTimezone.getLocalTimezone();
 
@@ -785,6 +788,61 @@ class NotificationService {
     } catch (e) {
       developer.log(
         'ERROR cancelling habit notification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+    }
+  }
+
+  /// Reschedule all habit notifications
+  /// This should be called when the app starts to ensure all habit notifications are scheduled
+  Future<void> rescheduleAllHabitNotifications(List<Habit> habits) async {
+    try {
+      developer.log(
+        'NotificationService: Rescheduling notifications for ${habits.length} habits',
+        name: 'NotificationService',
+      );
+
+      for (final habit in habits) {
+        // Check if habit has notification settings
+        final notificationSettings = habit.notificationSettings;
+        if (notificationSettings != null &&
+            notificationSettings.timing != NotificationTiming.none &&
+            notificationSettings.eventTime != null) {
+          // Determine minutes before based on timing type
+          int? minutesBefore;
+          if (notificationSettings.timing == NotificationTiming.custom) {
+            // For custom timing, use customMinutesBefore (may be null)
+            minutesBefore = notificationSettings.customMinutesBefore;
+            // Skip if custom timing is configured but no minutes specified
+            if (minutesBefore == null) {
+              developer.log(
+                'NotificationService: Skipping habit ${habit.name} - custom timing with no minutes specified',
+                name: 'NotificationService',
+              );
+              continue;
+            }
+          } else {
+            // For predefined timings, get minutesBefore from the enum
+            minutesBefore = notificationSettings.timing.minutesBefore;
+          }
+
+          await scheduleHabitNotification(
+            habitId: habit.id,
+            habitName: habit.name,
+            eventTime: notificationSettings.eventTime!,
+            minutesBefore: minutesBefore,
+          );
+        }
+      }
+
+      developer.log(
+        'NotificationService: Finished rescheduling habit notifications',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'ERROR rescheduling habit notifications: $e',
         name: 'NotificationService',
         error: e,
       );

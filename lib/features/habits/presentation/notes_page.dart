@@ -25,7 +25,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     '🌱',
     '☀️',
     '🕊️',
-    '🔥'
+    '🔥',
+    '😊',
+    '😌',
+    '🌟',
+    '🌈',
+    '💡',
+    '🎉',
+    '🏆',
+    '🎯',
+    '💧',
+    '⛪'
   ];
   static const int _minChars = 10;
   static const int _maxChars = 500;

@@ -1239,5 +1239,45 @@
         "example": "Sin conexión a internet"
       }
     }
+  },
+  "notificationOptions": "Opciones de Notificación",
+  "@notificationOptions": {
+    "description": "Título del diálogo de opciones de notificación"
+  },
+  "currentTime": "Hora actual",
+  "@currentTime": {
+    "description": "Etiqueta para la hora actual de notificación"
+  },
+  "turnOffNotification": "Desactivar Notificación",
+  "@turnOffNotification": {
+    "description": "Opción para desactivar la notificación del hábito"
+  },
+  "turnOffNotificationDesc": "Desactivar recordatorio diario para este hábito",
+  "@turnOffNotificationDesc": {
+    "description": "Descripción de la opción de desactivar notificación"
+  },
+  "changeNotificationTime": "Cambiar Hora",
+  "@changeNotificationTime": {
+    "description": "Opción para cambiar la hora de notificación"
+  },
+  "changeNotificationTimeDesc": "Actualizar cuándo quieres que te recuerden",
+  "@changeNotificationTimeDesc": {
+    "description": "Descripción de la opción de cambiar hora de notificación"
+  },
+  "notificationTurnedOff": "Notificación desactivada",
+  "@notificationTurnedOff": {
+    "description": "Mensaje mostrado cuando la notificación se desactiva"
+  },
+  "notificationTimeChanged": "Hora de notificación actualizada",
+  "@notificationTimeChanged": {
+    "description": "Mensaje mostrado cuando se cambia la hora de notificación"
+  },
+  "invalidNotificationConfig": "Configuración de notificación inválida. Por favor configure la notificación nuevamente.",
+  "@invalidNotificationConfig": {
+    "description": "Mensaje de error cuando los datos de notificación están corruptos o inválidos"
+  },
+  "habitDeleted": "Hábito eliminado",
+  "@habitDeleted": {
+    "description": "Mensaje de éxito después de eliminar un hábito"
   }
 }

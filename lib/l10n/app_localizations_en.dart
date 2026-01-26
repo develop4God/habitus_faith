@@ -1049,4 +1049,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completeHabitToReflect => 'Complete a habit to reflect on it';
+
+  @override
+  String get notificationOptions => 'Notification Options';
+
+  @override
+  String get turnOffNotification => 'Turn Off Notification';
+
+  @override
+  String get turnOffNotificationDesc => 'Disable daily reminder for this habit';
+
+  @override
+  String get changeNotificationTime => 'Change Time';
+
+  @override
+  String get changeNotificationTimeDesc =>
+      'Update when you want to be reminded';
+
+  @override
+  String get notificationTurnedOff => 'Notification turned off';
+
+  @override
+  String get notificationTimeChanged => 'Notification time updated';
+
+  @override
+  String get invalidNotificationConfig =>
+      'Invalid notification configuration. Please set up the notification again.';
 }

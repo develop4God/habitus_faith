@@ -1,6 +1,5 @@
 {
   "es": [
-    "habitDeleted",
     "dailyReflection",
     "myReflection",
     "globalNote",
@@ -13,7 +12,6 @@
   "fr": [
     "flashTask",
     "flashTaskSubtitle",
-    "habitDeleted",
     "dailyReflection",
     "myReflection",
     "globalNote",
@@ -26,7 +24,6 @@
   "pt": [
     "flashTask",
     "flashTaskSubtitle",
-    "habitDeleted",
     "dailyReflection",
     "myReflection",
     "globalNote",
