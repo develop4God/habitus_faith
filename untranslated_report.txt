@@ -4,5 +4,17 @@
     "myReflection",
     "globalNote",
     "globalNoteHint"
+  ],
+
+  "zh": [
+    "flashTask",
+    "flashTaskSubtitle",
+    "dailyReflection",
+    "myReflection",
+    "globalNote",
+    "globalNoteHint",
+    "dailyHabits",
+    "addReflection",
+    "completeHabitToReflect"
   ]
 }
