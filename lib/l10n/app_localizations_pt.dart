@@ -1023,7 +1023,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitMarkedAsNotCompleted => 'Hábito marcado como não concluído';
 
   @override
-  String get habitDeleted => 'Habit deleted';
+  String get habitDeleted => 'Hábito excluído';
 
   @override
   String get notificationOptions => 'Opções de Notificação';
@@ -1047,4 +1047,8 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get notificationTimeChanged => 'Hora de notificação atualizada';
+
+  @override
+  String get invalidNotificationConfig =>
+      'Configuração de notificação inválida. Por favor, configure a notificação novamente.';
 }

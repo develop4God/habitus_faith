@@ -999,4 +999,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get notificationTimeChanged => '通知时间已更新';
+
+  @override
+  String get invalidNotificationConfig => '通知配置无效。请重新设置通知。';
 }

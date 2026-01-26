@@ -1043,4 +1043,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationTimeChanged => 'Notification time updated';
+
+  @override
+  String get invalidNotificationConfig =>
+      'Invalid notification configuration. Please set up the notification again.';
 }

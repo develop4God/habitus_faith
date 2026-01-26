@@ -1,13 +1,1 @@
-{
-  "es": [
-    "habitDeleted"
-  ],
-
-  "fr": [
-    "habitDeleted"
-  ],
-
-  "pt": [
-    "habitDeleted"
-  ]
-}
+{}
