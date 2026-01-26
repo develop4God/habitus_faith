@@ -22,12 +22,17 @@ const languageNames = {
 /// Utility to validate and complete translations between the reference file app_en.arb and any language file
 /// Usage: dart run lib/utils/arb_validator.dart [lang]
 void main(List<String> args) async {
-  stdout.writeln('╔═══════════════════════════════════════════════════════════════╗');
-  stdout.writeln('║         ARB Translation Validator & Auto-Completer            ║');
-  stdout.writeln('╚═══════════════════════════════════════════════════════════════╝');
+  stdout.writeln(
+      '╔═══════════════════════════════════════════════════════════════╗');
+  stdout.writeln(
+      '║         ARB Translation Validator & Auto-Completer            ║');
+  stdout.writeln(
+      '╚═══════════════════════════════════════════════════════════════╝');
   stdout.writeln('');
 
-  final languages = args.isNotEmpty ? args : supportedLanguages.where((l) => l != 'en').toList();
+  final languages = args.isNotEmpty
+      ? args
+      : supportedLanguages.where((l) => l != 'en').toList();
   final procesados = <String, Map<String, dynamic>>{};
   final noEncontrados = <String>[];
 
@@ -45,14 +50,16 @@ void main(List<String> args) async {
       .where((key) => !key.startsWith('@') && key != '@@locale')
       .length;
 
-  stdout.writeln('📋 Reference: app_en.arb ($totalReferenceKeys content keys)\n');
+  stdout
+      .writeln('📋 Reference: app_en.arb ($totalReferenceKeys content keys)\n');
 
   for (final lang in languages) {
     final targetPath = 'lib/l10n/app_$lang.arb';
     final targetFile = File(targetPath);
 
     if (!targetFile.existsSync()) {
-      stdout.writeln('❌ ${languageNames[lang] ?? lang.toUpperCase()}: File not found\n');
+      stdout.writeln(
+          '❌ ${languageNames[lang] ?? lang.toUpperCase()}: File not found\n');
       noEncontrados.add(lang);
       continue;
     }
@@ -105,7 +112,8 @@ void main(List<String> args) async {
     final currentContentKeys = targetJson.keys
         .where((key) => !key.startsWith('@') && key != '@@locale')
         .length;
-    final completionPercentage = ((currentContentKeys / totalReferenceKeys) * 100).toStringAsFixed(1);
+    final completionPercentage =
+        ((currentContentKeys / totalReferenceKeys) * 100).toStringAsFixed(1);
     final pendingCount = pendingKeys.where((k) => !k.startsWith('@')).length;
 
     // Store results for summary
@@ -120,36 +128,48 @@ void main(List<String> args) async {
 
     // Print report for this language
     final langName = languageNames[lang] ?? lang.toUpperCase();
-    stdout.writeln('┌─────────────────────────────────────────────────────────────┐');
+    stdout.writeln(
+        '┌─────────────────────────────────────────────────────────────┐');
     stdout.writeln('${'│ $langName (app_$lang.arb)'.padRight(61)}│');
-    stdout.writeln('├─────────────────────────────────────────────────────────────┤');
-    stdout.writeln('${'│ Content Keys: $currentContentKeys/$totalReferenceKeys ($completionPercentage% complete)'.padRight(61)}│');
+    stdout.writeln(
+        '├─────────────────────────────────────────────────────────────┤');
+    stdout.writeln(
+        '${'│ Content Keys: $currentContentKeys/$totalReferenceKeys ($completionPercentage% complete)'.padRight(61)}│');
 
     if (missingContentKeys.isEmpty && pendingCount == 0) {
-      stdout.writeln('${'│ Status: ✅ All keys present and translated'.padRight(61)}│');
+      stdout.writeln(
+          '${'│ Status: ✅ All keys present and translated'.padRight(61)}│');
     } else {
       if (missingContentKeys.isNotEmpty) {
-        stdout.writeln('${'│ Status: ⚠️  ${missingContentKeys.length} missing, $pendingCount pending translation'.padRight(61)}│');
+        stdout.writeln(
+            '${'│ Status: ⚠️  ${missingContentKeys.length} missing, $pendingCount pending translation'.padRight(61)}│');
       } else if (pendingCount > 0) {
-        stdout.writeln('${'│ Status: ⚠️  $pendingCount keys pending translation'.padRight(61)}│');
+        stdout.writeln(
+            '${'│ Status: ⚠️  $pendingCount keys pending translation'.padRight(61)}│');
       }
     }
-    stdout.writeln('└─────────────────────────────────────────────────────────────┘');
+    stdout.writeln(
+        '└─────────────────────────────────────────────────────────────┘');
 
     // Show details if there are issues
     if (missingContentKeys.isNotEmpty || pendingCount > 0) {
       if (addedContentKeys > 0) {
-        stdout.writeln('  ✨ Added $addedContentKeys new content keys as "PENDING"');
+        stdout.writeln(
+            '  ✨ Added $addedContentKeys new content keys as "PENDING"');
       }
 
       if (pendingCount > 0 && pendingCount <= 20) {
-        stdout.writeln('  📝 Pending translations (${pendingKeys.where((k) => !k.startsWith('@')).length}):');
-        for (final key in pendingKeys.where((k) => !k.startsWith('@')).take(20)) {
+        stdout.writeln(
+            '  📝 Pending translations (${pendingKeys.where((k) => !k.startsWith('@')).length}):');
+        for (final key
+            in pendingKeys.where((k) => !k.startsWith('@')).take(20)) {
           stdout.writeln('     • $key');
         }
       } else if (pendingCount > 20) {
-        stdout.writeln('  📝 $pendingCount keys pending translation (showing first 10):');
-        for (final key in pendingKeys.where((k) => !k.startsWith('@')).take(10)) {
+        stdout.writeln(
+            '  📝 $pendingCount keys pending translation (showing first 10):');
+        for (final key
+            in pendingKeys.where((k) => !k.startsWith('@')).take(10)) {
           stdout.writeln('     • $key');
         }
         stdout.writeln('     ... and ${pendingCount - 10} more');
@@ -165,9 +185,12 @@ void main(List<String> args) async {
   }
 
   // Print comprehensive summary
-  stdout.writeln('╔═══════════════════════════════════════════════════════════════╗');
-  stdout.writeln('║                       SUMMARY REPORT                          ║');
-  stdout.writeln('╚═══════════════════════════════════════════════════════════════╝');
+  stdout.writeln(
+      '╔═══════════════════════════════════════════════════════════════╗');
+  stdout.writeln(
+      '║                       SUMMARY REPORT                          ║');
+  stdout.writeln(
+      '╚═══════════════════════════════════════════════════════════════╝');
   stdout.writeln('');
 
   if (procesados.isNotEmpty) {
@@ -176,7 +199,8 @@ void main(List<String> args) async {
 
     // Sort by completion percentage
     final sortedLanguages = procesados.entries.toList()
-      ..sort((a, b) => double.parse(b.value['completion']).compareTo(double.parse(a.value['completion'])));
+      ..sort((a, b) => double.parse(b.value['completion'])
+          .compareTo(double.parse(a.value['completion'])));
 
     for (final entry in sortedLanguages) {
       final data = entry.value;
@@ -193,7 +217,8 @@ void main(List<String> args) async {
         statusIcon = '🔴';
       }
 
-      stdout.writeln('  $statusIcon ${data['name'].toString().padRight(25)} $bar ${data['completion']}%');
+      stdout.writeln(
+          '  $statusIcon ${data['name'].toString().padRight(25)} $bar ${data['completion']}%');
 
       if (data['pending'] > 0 || data['missing'] > 0) {
         final issues = <String>[];
@@ -205,13 +230,17 @@ void main(List<String> args) async {
 
     stdout.writeln('');
     stdout.writeln('📈 Statistics:');
-    final totalPending = procesados.values.fold<int>(0, (sum, data) => sum + (data['pending'] as int));
-    final totalAdded = procesados.values.fold<int>(0, (sum, data) => sum + (data['added'] as int));
-    final fullyTranslated = procesados.values.where((data) =>
-      data['missing'] == 0 && data['pending'] == 0).length;
+    final totalPending = procesados.values
+        .fold<int>(0, (sum, data) => sum + (data['pending'] as int));
+    final totalAdded = procesados.values
+        .fold<int>(0, (sum, data) => sum + (data['added'] as int));
+    final fullyTranslated = procesados.values
+        .where((data) => data['missing'] == 0 && data['pending'] == 0)
+        .length;
 
     stdout.writeln('  • Languages processed: ${procesados.length}');
-    stdout.writeln('  • Fully translated: $fullyTranslated/${procesados.length}');
+    stdout
+        .writeln('  • Fully translated: $fullyTranslated/${procesados.length}');
     stdout.writeln('  • Keys added this run: $totalAdded');
     stdout.writeln('  • Total pending translations: $totalPending');
 
@@ -222,7 +251,8 @@ void main(List<String> args) async {
       for (final entry in sortedLanguages) {
         final data = entry.value;
         if (data['pending'] > 0) {
-          stdout.writeln('  • lib/l10n/app_${entry.key}.arb (${data['pending']} keys)');
+          stdout.writeln(
+              '  • lib/l10n/app_${entry.key}.arb (${data['pending']} keys)');
         }
       }
     } else {
@@ -237,7 +267,9 @@ void main(List<String> args) async {
   }
 
   stdout.writeln('');
-  stdout.writeln('═══════════════════════════════════════════════════════════════');
+  stdout.writeln(
+      '═══════════════════════════════════════════════════════════════');
   stdout.writeln('✅ Validation complete. All ARB files have been updated.');
-  stdout.writeln('═══════════════════════════════════════════════════════════════');
+  stdout.writeln(
+      '═══════════════════════════════════════════════════════════════');
 }
