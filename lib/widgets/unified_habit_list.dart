@@ -555,10 +555,14 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   
   TimeOfDay _parseTime(String timeStr) {
     final parts = timeStr.split(':');
-    return TimeOfDay(
-      hour: int.tryParse(parts[0]) ?? 9,
-      minute: int.tryParse(parts[1]) ?? 0,
-    );
+    if (parts.length >= 2) {
+      return TimeOfDay(
+        hour: int.tryParse(parts[0]) ?? 9,
+        minute: int.tryParse(parts[1]) ?? 0,
+      );
+    }
+    // Fallback to 9:00 AM if invalid format
+    return const TimeOfDay(hour: 9, minute: 0);
   }
 
   Widget _buildExpandedContent(
