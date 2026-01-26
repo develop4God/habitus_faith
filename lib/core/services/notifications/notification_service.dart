@@ -42,7 +42,7 @@ class NotificationService {
 
   static const String _notificationsEnabledKey = 'notifications_enabled';
   static const String _notificationTimeKey = 'notification_time';
-  static const String _defaultNotificationTime = '09:00';
+  static const String defaultNotificationTime = '09:00';
   static const String _fcmTokenKey = 'fcm_token';
 
   Function(String? payload)? onNotificationTapped;
@@ -136,8 +136,8 @@ class NotificationService {
               : true;
           String initialNotificationTime = settingsDoc.exists
               ? (settingsDoc.data()?['notificationTime'] ??
-                  _defaultNotificationTime)
-              : _defaultNotificationTime;
+                  defaultNotificationTime)
+              : defaultNotificationTime;
           String initialUserTimezone = settingsDoc.exists
               ? (settingsDoc.data()?['userTimezone'] ?? currentDeviceTimezone)
               : currentDeviceTimezone;
@@ -415,7 +415,7 @@ class NotificationService {
             .doc('notifications')
             .get();
         String currentNotificationTime =
-            settingsDoc.data()?['notificationTime'] ?? _defaultNotificationTime;
+            settingsDoc.data()?['notificationTime'] ?? defaultNotificationTime;
         String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
 
@@ -441,7 +441,7 @@ class NotificationService {
 
   Future<String> getNotificationTime() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_notificationTimeKey) ?? _defaultNotificationTime;
+    return prefs.getString(_notificationTimeKey) ?? defaultNotificationTime;
   }
 
   Future<void> setNotificationTime(String time) async {
@@ -567,7 +567,7 @@ class NotificationService {
     final data = docSnapshot.data()!;
     bool notificationsEnabled = data['notificationsEnabled'] ?? false;
     String notificationTimeStr =
-        data['notificationTime'] ?? _defaultNotificationTime;
+        data['notificationTime'] ?? defaultNotificationTime;
     String userTimezoneStr =
         data['userTimezone'] ?? await FlutterTimezone.getLocalTimezone();
 

@@ -978,4 +978,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get habitDeleted => '习惯已删除';
+
+  @override
+  String get notificationOptions => '通知选项';
+
+  @override
+  String get turnOffNotification => '关闭通知';
+
+  @override
+  String get turnOffNotificationDesc => '禁用此习惯的每日提醒';
+
+  @override
+  String get changeNotificationTime => '更改时间';
+
+  @override
+  String get changeNotificationTimeDesc => '更新您想要被提醒的时间';
+
+  @override
+  String get notificationTurnedOff => '通知已关闭';
+
+  @override
+  String get notificationTimeChanged => '通知时间已更新';
 }

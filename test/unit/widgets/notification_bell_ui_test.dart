@@ -28,7 +28,8 @@ void main() {
       );
 
       expect(habit.notificationSettings, isNotNull);
-      expect(habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+      expect(
+          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
       expect(habit.notificationSettings!.eventTime, '07:00');
       // UI should show orange bell icon (notifications_active)
     });
@@ -82,7 +83,8 @@ void main() {
         ),
       );
 
-      expect(updatedHabit.notificationSettings!.timing, NotificationTiming.none);
+      expect(
+          updatedHabit.notificationSettings!.timing, NotificationTiming.none);
       // Backend should cancel local notification
       // UI should show gray bell icon
     });
@@ -109,7 +111,8 @@ void main() {
         ),
       );
 
-      expect(updatedHabit.notificationSettings!.timing, NotificationTiming.atEventTime);
+      expect(updatedHabit.notificationSettings!.timing,
+          NotificationTiming.atEventTime);
       expect(updatedHabit.notificationSettings!.eventTime, '08:30');
       // Backend should reschedule local notification for new time
       // UI should keep orange bell icon
@@ -144,10 +147,11 @@ void main() {
         ),
       );
 
-      expect(habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+      expect(
+          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
       expect(habit.notificationSettings!.eventTime, '07:00');
       expect(habit.notificationSettings!.timing.minutesBefore, 0);
-      
+
       // Backend should schedule daily local notification at 07:00
       // Notification should repeat every day
       // Notification should persist after app restart
@@ -190,7 +194,7 @@ void main() {
       expect(morningPrayer.notificationSettings!.eventTime, '06:00');
       expect(exercise.notificationSettings!.eventTime, '07:30');
       expect(eveningPrayer.notificationSettings!.eventTime, '20:00');
-      
+
       // Each habit should have its own scheduled notification
       // Notifications should not interfere with each other
     });
@@ -208,7 +212,8 @@ void main() {
         ),
       );
 
-      expect(habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+      expect(
+          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
 
       // Turn OFF
       habit = habit.copyWith(
@@ -227,9 +232,10 @@ void main() {
         ),
       );
 
-      expect(habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+      expect(
+          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
       expect(habit.notificationSettings!.eventTime, '08:00');
-      
+
       // Notification should be rescheduled at new time
     });
 

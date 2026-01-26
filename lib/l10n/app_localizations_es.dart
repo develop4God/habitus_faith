@@ -1028,4 +1028,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get habitDeleted => 'Habit deleted';
+
+  @override
+  String get notificationOptions => 'Opciones de Notificación';
+
+  @override
+  String get turnOffNotification => 'Desactivar Notificación';
+
+  @override
+  String get turnOffNotificationDesc =>
+      'Desactivar recordatorio diario para este hábito';
+
+  @override
+  String get changeNotificationTime => 'Cambiar Hora';
+
+  @override
+  String get changeNotificationTimeDesc =>
+      'Actualizar cuándo quieres que te recuerden';
+
+  @override
+  String get notificationTurnedOff => 'Notificación desactivada';
+
+  @override
+  String get notificationTimeChanged => 'Hora de notificación actualizada';
 }

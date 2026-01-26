@@ -30,10 +30,10 @@ final notificationTimeProvider = FutureProvider<String>((ref) async {
 final habitNotificationsSchedulerProvider = FutureProvider<void>((ref) async {
   // Wait for notification service to initialize
   await ref.watch(notificationInitProvider.future);
-  
+
   // Wait for habits to load
   final habitsAsync = await ref.watch(habitsStreamProvider.future);
-  
+
   // Reschedule all habit notifications
   final notificationService = ref.read(notificationServiceProvider);
   await notificationService.rescheduleAllHabitNotifications(habitsAsync);

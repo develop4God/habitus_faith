@@ -61,7 +61,8 @@ void main() {
 
       expect(habitsWithNotifications.length, 3);
       expect(habitsWithNotifications.first.name, 'Morning Prayer');
-      expect(habitsWithNotifications.first.notificationSettings!.eventTime, '07:00');
+      expect(habitsWithNotifications.first.notificationSettings!.eventTime,
+          '07:00');
     });
 
     test('Handles habits with custom notification timing', () {
@@ -77,7 +78,8 @@ void main() {
         ),
       );
 
-      expect(customHabit.notificationSettings!.timing, NotificationTiming.custom);
+      expect(
+          customHabit.notificationSettings!.timing, NotificationTiming.custom);
       expect(customHabit.notificationSettings!.customMinutesBefore, 45);
       expect(customHabit.notificationSettings!.eventTime, '15:00');
     });
@@ -94,7 +96,8 @@ void main() {
         ),
       );
 
-      expect(noNotificationHabit.notificationSettings!.timing, NotificationTiming.none);
+      expect(noNotificationHabit.notificationSettings!.timing,
+          NotificationTiming.none);
       // This habit should not have notifications scheduled
     });
 
@@ -111,8 +114,10 @@ void main() {
         ),
       );
 
-      expect(invalidCustomHabit.notificationSettings!.timing, NotificationTiming.custom);
-      expect(invalidCustomHabit.notificationSettings!.customMinutesBefore, isNull);
+      expect(invalidCustomHabit.notificationSettings!.timing,
+          NotificationTiming.custom);
+      expect(
+          invalidCustomHabit.notificationSettings!.customMinutesBefore, isNull);
       // This habit should be skipped during rescheduling
     });
 
@@ -154,7 +159,8 @@ void main() {
       expect(oneHourBefore.timing.minutesBefore, 60);
     });
 
-    test('Real user scenario: Multiple habits scheduled at different times', () {
+    test('Real user scenario: Multiple habits scheduled at different times',
+        () {
       final habits = [
         Habit.create(id: 'h1', userId: 'u1', name: 'Morning Prayer').copyWith(
           notificationSettings: const HabitNotificationSettings(

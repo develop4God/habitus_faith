@@ -207,8 +207,6 @@ class UnifiedHabitCard extends ConsumerStatefulWidget {
 }
 
 class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
-  static const String defaultNotificationTime = '09:00';
-  
   bool _isCompleting = false;
 
   Habit getLatestHabit(WidgetRef ref) {
@@ -440,9 +438,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             habit.hasActiveNotification
                 ? Icons.notifications_active
                 : Icons.notifications_none,
-            color: habit.hasActiveNotification
-                ? Colors.orange
-                : Colors.grey,
+            color: habit.hasActiveNotification ? Colors.orange : Colors.grey,
           ),
           onPressed: () => _handleNotification(context, ref, l10n, habit),
         ),
@@ -482,18 +478,31 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleNotification(BuildContext context, WidgetRef ref,
       AppLocalizations l10n, Habit habit) async {
     final notifier = ref.read(habitsNotifierProvider.notifier);
-    
+
     // If notification is currently ON, show options dialog
     if (habit.hasActiveNotification) {
-      final currentTime = habit.notificationSettings?.eventTime ?? defaultNotificationTime;
-      
+      final currentTime = habit.notificationSettings?.eventTime;
+
+      // If eventTime is null (invalid state), show error to user
+      if (currentTime == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.error),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
       final result = await showDialog<String>(
         context: context,
         builder: (context) => NotificationOptionsDialog(
           currentTime: currentTime,
         ),
       );
-      
+
       if (result == 'turnOff') {
         // Turn off notification
         await notifier.updateHabit(
@@ -509,6 +518,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         }
       } else if (result == 'changeTime') {
         // Change notification time
+        if (!context.mounted) return;
         final picked = await showTimePicker(
           context: context,
           initialTime: _parseTime(currentTime),
@@ -550,33 +560,28 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       }
     }
   }
-  
+
+  /// Parse time string to TimeOfDay for time picker initial value
+  /// Returns current time if parsing fails (safe fallback for picker initialization)
   TimeOfDay _parseTime(String timeStr) {
     final parts = timeStr.split(':');
     if (parts.length == 2) {
       final hour = int.tryParse(parts[0]);
       final minute = int.tryParse(parts[1]);
-      
+
       // Validate ranges
-      if (hour != null && minute != null &&
-          hour >= 0 && hour <= 23 &&
-          minute >= 0 && minute <= 59) {
+      if (hour != null &&
+          minute != null &&
+          hour >= 0 &&
+          hour <= 23 &&
+          minute >= 0 &&
+          minute <= 59) {
         return TimeOfDay(hour: hour, minute: minute);
       }
     }
-    
-    // Fallback to defaultNotificationTime
-    final defaultParts = defaultNotificationTime.split(':');
-    if (defaultParts.length == 2) {
-      final hour = int.tryParse(defaultParts[0]);
-      final minute = int.tryParse(defaultParts[1]);
-      if (hour != null && minute != null) {
-        return TimeOfDay(hour: hour, minute: minute);
-      }
-    }
-    
-    // Final fallback
-    return const TimeOfDay(hour: 9, minute: 0);
+
+    // Fallback to current time for picker initialization only
+    return TimeOfDay.now();
   }
 
   Widget _buildExpandedContent(

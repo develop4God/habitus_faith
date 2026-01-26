@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh')
+    Locale('zh'),
   ];
 
   /// The title of the application
@@ -626,7 +626,7 @@ abstract class AppLocalizations {
   /// **'Select notification time'**
   String get selectNotificationTime;
 
-  /// Current time label
+  /// Label for current notification time
   ///
   /// In en, this message translates to:
   /// **'Current time'**
@@ -1945,6 +1945,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Habit deleted'**
   String get habitDeleted;
+
+  /// Title for notification options dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Options'**
+  String get notificationOptions;
+
+  /// Option to turn off habit notification
+  ///
+  /// In en, this message translates to:
+  /// **'Turn Off Notification'**
+  String get turnOffNotification;
+
+  /// Description for turn off notification option
+  ///
+  /// In en, this message translates to:
+  /// **'Disable daily reminder for this habit'**
+  String get turnOffNotificationDesc;
+
+  /// Option to change notification time
+  ///
+  /// In en, this message translates to:
+  /// **'Change Time'**
+  String get changeNotificationTime;
+
+  /// Description for change notification time option
+  ///
+  /// In en, this message translates to:
+  /// **'Update when you want to be reminded'**
+  String get changeNotificationTimeDesc;
+
+  /// Message shown when notification is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Notification turned off'**
+  String get notificationTurnedOff;
+
+  /// Message shown when notification time is changed
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time updated'**
+  String get notificationTimeChanged;
 }
 
 class _AppLocalizationsDelegate
@@ -1980,8 +2022,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

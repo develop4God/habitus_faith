@@ -14,7 +14,7 @@ class NotificationOptionsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Semantics(
       label: l10n.notificationOptions,
       child: Dialog(
@@ -27,59 +27,60 @@ class NotificationOptionsDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Semantics(
-                label: 'Active notification',
-                child: Icon(
+                label: l10n.notifications,
+                child: const Icon(
                   Icons.notifications_active,
                   size: 48,
                   color: Colors.orange,
                 ),
               ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.notificationOptions,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 16),
+              Text(
+                l10n.notificationOptions,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${l10n.currentTime}: $currentTime',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
+              const SizedBox(height: 8),
+              Text(
+                '${l10n.currentTime}: $currentTime',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            // Option A: Turn off notification
-            _buildOption(
-              context,
-              icon: Icons.notifications_off,
-              title: l10n.turnOffNotification,
-              subtitle: l10n.turnOffNotificationDesc,
-              color: Colors.grey,
-              onTap: () => Navigator.of(context).pop('turnOff'),
-            ),
-            const SizedBox(height: 12),
-            // Option B: Change notification time
-            _buildOption(
-              context,
-              icon: Icons.schedule,
-              title: l10n.changeNotificationTime,
-              subtitle: l10n.changeNotificationTimeDesc,
-              color: Colors.blue,
-              onTap: () => Navigator.of(context).pop('changeTime'),
-            ),
-            const SizedBox(height: 16),
-            // Cancel button
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                l10n.cancel,
-                style: TextStyle(color: Colors.grey[600]),
+              const SizedBox(height: 24),
+              // Option A: Turn off notification
+              _buildOption(
+                context,
+                icon: Icons.notifications_off,
+                title: l10n.turnOffNotification,
+                subtitle: l10n.turnOffNotificationDesc,
+                color: Colors.grey,
+                onTap: () => Navigator.of(context).pop('turnOff'),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              // Option B: Change notification time
+              _buildOption(
+                context,
+                icon: Icons.schedule,
+                title: l10n.changeNotificationTime,
+                subtitle: l10n.changeNotificationTimeDesc,
+                color: Colors.blue,
+                onTap: () => Navigator.of(context).pop('changeTime'),
+              ),
+              const SizedBox(height: 16),
+              // Cancel button
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  l10n.cancel,
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -111,7 +112,7 @@ class NotificationOptionsDialog extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(

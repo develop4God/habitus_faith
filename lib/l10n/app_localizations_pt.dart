@@ -289,7 +289,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get selectNotificationTime => 'Selecionar horário de notificação';
 
   @override
-  String get currentTime => 'Horário atual';
+  String get currentTime => 'Hora atual';
 
   @override
   String get notificationInfo =>
@@ -1024,4 +1024,27 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get habitDeleted => 'Habit deleted';
+
+  @override
+  String get notificationOptions => 'Opções de Notificação';
+
+  @override
+  String get turnOffNotification => 'Desativar Notificação';
+
+  @override
+  String get turnOffNotificationDesc =>
+      'Desativar lembrete diário para este hábito';
+
+  @override
+  String get changeNotificationTime => 'Alterar Hora';
+
+  @override
+  String get changeNotificationTimeDesc =>
+      'Atualizar quando você quer ser lembrado';
+
+  @override
+  String get notificationTurnedOff => 'Notificação desativada';
+
+  @override
+  String get notificationTimeChanged => 'Hora de notificação atualizada';
 }
