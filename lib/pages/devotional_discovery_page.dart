@@ -50,6 +50,7 @@ class _DevotionalDiscoveryPageState
     final state = ref.watch(devotionalProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
@@ -58,7 +59,7 @@ class _DevotionalDiscoveryPageState
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          AppLocalizations.of(context)!.devotional_reading,
+          l10n.devotional_reading,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -113,7 +114,7 @@ class _DevotionalDiscoveryPageState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _localizedTodayLabel(context),
+                      l10n.todayLabel,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
@@ -323,7 +324,6 @@ class _DevotionalDiscoveryPageState
                           children: [
                             // Date and favorite
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 if (displayDate != null)
                                   Container(
@@ -344,9 +344,8 @@ class _DevotionalDiscoveryPageState
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  )
-                                else
-                                  const Spacer(),
+                                  ),
+                                const Spacer(),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.2),
@@ -576,7 +575,7 @@ class _DevotionalDiscoveryPageState
     }
 
     // If date is in the past, project it to the future
-    // by adding years until it's in the future
+    // by adding years until it's in the future (matching month/day)
     DateTime displayDate = devDate;
     while (displayDate.isBefore(today)) {
       displayDate = DateTime(
@@ -877,22 +876,6 @@ class _DevotionalDiscoveryPageState
         ],
       ),
     );
-  }
-
-  String _localizedTodayLabel(BuildContext context) {
-    final code = Localizations.localeOf(context).languageCode;
-    switch (code) {
-      case 'es':
-        return 'Hoy';
-      case 'fr':
-        return "Aujourd'hui";
-      case 'pt':
-        return 'Hoje';
-      case 'zh':
-        return '今天';
-      default:
-        return 'Today';
-    }
   }
 }
 
