@@ -356,7 +356,7 @@
   },
   "currentTime": "Current time",
   "@currentTime": {
-    "description": "Current time label"
+    "description": "Label for current notification time"
   },
   "notificationInfo": "You will receive a daily reminder at your selected time to complete your habits.",
   "@notificationInfo": {
@@ -1276,10 +1276,6 @@
   "@notificationOptions": {
     "description": "Title for notification options dialog"
   },
-  "currentTime": "Current time",
-  "@currentTime": {
-    "description": "Label for current notification time"
-  },
   "turnOffNotification": "Turn Off Notification",
   "@turnOffNotification": {
     "description": "Option to turn off habit notification"
@@ -1307,5 +1303,29 @@
   "invalidNotificationConfig": "Invalid notification configuration. Please set up the notification again.",
   "@invalidNotificationConfig": {
     "description": "Error message shown when notification data is corrupted or invalid"
+  },
+  "readVerseFirst": "Read Verse First",
+  "@readVerseFirst": {
+    "description": "Button to read the Bible verse before the devotional"
+  },
+  "reflection": "Reflection",
+  "@reflection": {
+    "description": "Section title for devotional reflection"
+  },
+  "forMeditation": "For Meditation",
+  "@forMeditation": {
+    "description": "Section title for meditation points"
+  },
+  "prayer": "Prayer",
+  "@prayer": {
+    "description": "Section title for prayer"
+  },
+  "todayLabel": "Today",
+  "@todayLabel": {
+    "description": "Label for today's date"
+  },
+  "tomorrowLabel": "Tomorrow",
+  "@tomorrowLabel": {
+    "description": "Label for tomorrow's date"
   }
 }

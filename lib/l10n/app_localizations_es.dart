@@ -1083,4 +1083,22 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get invalidNotificationConfig =>
       'Configuración de notificación inválida. Por favor configure la notificación nuevamente.';
+
+  @override
+  String get readVerseFirst => 'Leer Versículo Primero';
+
+  @override
+  String get reflection => 'Reflexión';
+
+  @override
+  String get forMeditation => 'Para Meditar';
+
+  @override
+  String get prayer => 'Oración';
+
+  @override
+  String get todayLabel => 'Hoy';
+
+  @override
+  String get tomorrowLabel => 'Mañana';
 }

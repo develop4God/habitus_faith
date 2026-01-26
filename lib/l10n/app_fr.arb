@@ -348,7 +348,7 @@
   },
   "currentTime": "Heure actuelle",
   "@currentTime": {
-    "description": "Current time label"
+    "description": "Libellé pour l'heure de notification actuelle"
   },
   "notificationInfo": "Vous recevrez un rappel quotidien à l'heure sélectionnée pour compléter vos habitudes.",
   "@notificationInfo": {
@@ -1236,10 +1236,6 @@
   "@notificationOptions": {
     "description": "Titre de la boîte de dialogue des options de notification"
   },
-  "currentTime": "Heure actuelle",
-  "@currentTime": {
-    "description": "Libellé pour l'heure de notification actuelle"
-  },
   "turnOffNotification": "Désactiver la Notification",
   "@turnOffNotification": {
     "description": "Option pour désactiver la notification d'habitude"
@@ -1271,5 +1267,65 @@
   "habitDeleted": "Habitude supprimée",
   "@habitDeleted": {
     "description": "Message de succès après suppression d'une habitude"
+  },
+  "readVerseFirst": "Lire le Verset d'Abord",
+  "@readVerseFirst": {
+    "description": "Bouton pour lire le verset biblique avant le dévotion"
+  },
+  "reflection": "Réflexion",
+  "@reflection": {
+    "description": "Titre de section pour la réflexion dévotionnelle"
+  },
+  "forMeditation": "Pour Méditer",
+  "@forMeditation": {
+    "description": "Titre de section pour les points de méditation"
+  },
+  "prayer": "Prière",
+  "@prayer": {
+    "description": "Titre de section pour la prière"
+  },
+  "todayLabel": "Aujourd'hui",
+  "@todayLabel": {
+    "description": "Étiquette pour la date d'aujourd'hui"
+  },
+  "tomorrowLabel": "Demain",
+  "@tomorrowLabel": {
+    "description": "Étiquette pour la date de demain"
+  },
+  "flashTask": "PENDING",
+  "@flashTask": {
+    "description": "PENDING"
+  },
+  "flashTaskSubtitle": "PENDING",
+  "@flashTaskSubtitle": {
+    "description": "PENDING"
+  },
+  "dailyReflection": "PENDING",
+  "@dailyReflection": {
+    "description": "PENDING"
+  },
+  "myReflection": "PENDING",
+  "@myReflection": {
+    "description": "PENDING"
+  },
+  "globalNote": "PENDING",
+  "@globalNote": {
+    "description": "PENDING"
+  },
+  "globalNoteHint": "PENDING",
+  "@globalNoteHint": {
+    "description": "PENDING"
+  },
+  "dailyHabits": "PENDING",
+  "@dailyHabits": {
+    "description": "PENDING"
+  },
+  "addReflection": "PENDING",
+  "@addReflection": {
+    "description": "PENDING"
+  },
+  "completeHabitToReflect": "PENDING",
+  "@completeHabitToReflect": {
+    "description": "PENDING"
   }
 }

@@ -444,7 +444,7 @@ class _DevotionalDiscoveryPageState
                       // Read button
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
+                          child: ElevatedButton(
                           onPressed: () =>
                               _navigateToVerse(context, devocional),
                           style: ElevatedButton.styleFrom(
@@ -458,14 +458,14 @@ class _DevotionalDiscoveryPageState
                             ),
                             elevation: 0,
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.auto_stories_outlined, size: 20),
-                              SizedBox(width: 8),
+                              const Icon(Icons.auto_stories_outlined, size: 20),
+                              const SizedBox(width: 8),
                               Text(
-                                'Read Verse First',
-                                style: TextStyle(
+                                AppLocalizations.of(context)!.readVerseFirst,
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -563,9 +563,11 @@ class _DevotionalDiscoveryPageState
       devocional.date.day,
     );
 
-    // If date is today, show "Today"
+    final l10n = AppLocalizations.of(context)!;
+
+    // If date is today, show "Today" (localized)
     if (devDate == today) {
-      return 'Today';
+      return l10n.todayLabel;
     }
 
     // If date is in the past, project it to the future
@@ -579,10 +581,10 @@ class _DevotionalDiscoveryPageState
       );
     }
 
-    // Check if it's tomorrow
+    // Check if it's tomorrow (localized)
     final tomorrow = today.add(const Duration(days: 1));
     if (displayDate == tomorrow) {
-      return 'Tomorrow';
+      return l10n.tomorrowLabel;
     }
 
     // Check if it's within this week
@@ -791,7 +793,7 @@ class _DevotionalDiscoveryPageState
           // Read verse button
           ElevatedButton.icon(
             icon: const Icon(Icons.menu_book),
-            label: const Text('Read Verse First'),
+            label: Text(AppLocalizations.of(context)!.readVerseFirst),
             onPressed: () {
               Navigator.pop(context);
               _navigateToVerse(context, devocional);
@@ -801,7 +803,7 @@ class _DevotionalDiscoveryPageState
 
           // Reflection
           Text(
-            'Reflection',
+            AppLocalizations.of(context)!.reflection,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -816,7 +818,7 @@ class _DevotionalDiscoveryPageState
           // Meditation points
           if (devocional.paraMeditar.isNotEmpty) ...[
             Text(
-              'For Meditation',
+              AppLocalizations.of(context)!.forMeditation,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -849,7 +851,7 @@ class _DevotionalDiscoveryPageState
 
           // Prayer
           Text(
-            'Prayer',
+            AppLocalizations.of(context)!.prayer,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),

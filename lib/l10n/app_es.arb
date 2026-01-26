@@ -356,7 +356,7 @@
   },
   "currentTime": "Hora actual",
   "@currentTime": {
-    "description": "Current time label"
+    "description": "Etiqueta para la hora actual de notificación"
   },
   "notificationInfo": "Recibirás un recordatorio diario a la hora seleccionada para completar tus hábitos.",
   "@notificationInfo": {
@@ -1244,10 +1244,6 @@
   "@notificationOptions": {
     "description": "Título del diálogo de opciones de notificación"
   },
-  "currentTime": "Hora actual",
-  "@currentTime": {
-    "description": "Etiqueta para la hora actual de notificación"
-  },
   "turnOffNotification": "Desactivar Notificación",
   "@turnOffNotification": {
     "description": "Opción para desactivar la notificación del hábito"
@@ -1279,5 +1275,57 @@
   "habitDeleted": "Hábito eliminado",
   "@habitDeleted": {
     "description": "Mensaje de éxito después de eliminar un hábito"
+  },
+  "readVerseFirst": "Leer Versículo Primero",
+  "@readVerseFirst": {
+    "description": "Botón para leer el versículo bíblico antes del devocional"
+  },
+  "reflection": "Reflexión",
+  "@reflection": {
+    "description": "Título de sección para reflexión devocional"
+  },
+  "forMeditation": "Para Meditar",
+  "@forMeditation": {
+    "description": "Título de sección para puntos de meditación"
+  },
+  "prayer": "Oración",
+  "@prayer": {
+    "description": "Título de sección para oración"
+  },
+  "todayLabel": "Hoy",
+  "@todayLabel": {
+    "description": "Etiqueta para la fecha de hoy"
+  },
+  "tomorrowLabel": "Mañana",
+  "@tomorrowLabel": {
+    "description": "Etiqueta para la fecha de mañana"
+  },
+  "dailyReflection": "PENDING",
+  "@dailyReflection": {
+    "description": "PENDING"
+  },
+  "myReflection": "PENDING",
+  "@myReflection": {
+    "description": "PENDING"
+  },
+  "globalNote": "PENDING",
+  "@globalNote": {
+    "description": "PENDING"
+  },
+  "globalNoteHint": "PENDING",
+  "@globalNoteHint": {
+    "description": "PENDING"
+  },
+  "dailyHabits": "PENDING",
+  "@dailyHabits": {
+    "description": "PENDING"
+  },
+  "addReflection": "PENDING",
+  "@addReflection": {
+    "description": "PENDING"
+  },
+  "completeHabitToReflect": "PENDING",
+  "@completeHabitToReflect": {
+    "description": "PENDING"
   }
 }

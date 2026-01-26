@@ -1030,4 +1030,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get invalidNotificationConfig => '通知配置无效。请重新设置通知。';
+
+  @override
+  String get readVerseFirst => '先读经文';
+
+  @override
+  String get reflection => '反思';
+
+  @override
+  String get forMeditation => '默想要点';
+
+  @override
+  String get prayer => '祷告';
+
+  @override
+  String get todayLabel => '今天';
+
+  @override
+  String get tomorrowLabel => '明天';
 }

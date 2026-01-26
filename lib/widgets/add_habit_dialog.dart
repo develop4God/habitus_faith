@@ -702,13 +702,6 @@ class _ColorPickerSection extends StatelessWidget {
       required this.l10n});
   @override
   Widget build(BuildContext context) {
-    final groups = [
-      [const Color(0xff7c3aed), const Color(0xffa78bfa)],
-      [const Color(0xff06b6d4), const Color(0xff67e8f9)],
-      [const Color(0xfff59e42)],
-      [const Color(0xff22c55e)],
-      [const Color(0xff6366f1)]
-    ];
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text('${l10n.color} (${l10n.optional})',
           style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -716,7 +709,7 @@ class _ColorPickerSection extends StatelessWidget {
       Wrap(spacing: 8, runSpacing: 8, children: [
         _buildColorOption(null, HabitColors.categoryColors[selectedCategory]!,
             l10n.defaultColor),
-        ...groups.expand((g) => g.map((c) => _buildColorOption(c, c, null))),
+        ...HabitColors.availableColors.map((c) => _buildColorOption(c, c, null)),
       ]),
     ]);
   }

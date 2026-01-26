@@ -2047,6 +2047,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid notification configuration. Please set up the notification again.'**
   String get invalidNotificationConfig;
+
+  /// Button to read the Bible verse before the devotional
+  ///
+  /// In en, this message translates to:
+  /// **'Read Verse First'**
+  String get readVerseFirst;
+
+  /// Section title for devotional reflection
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection'**
+  String get reflection;
+
+  /// Section title for meditation points
+  ///
+  /// In en, this message translates to:
+  /// **'For Meditation'**
+  String get forMeditation;
+
+  /// Section title for prayer
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer'**
+  String get prayer;
+
+  /// Label for today's date
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayLabel;
+
+  /// Label for tomorrow's date
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrowLabel;
 }
 
 class _AppLocalizationsDelegate
