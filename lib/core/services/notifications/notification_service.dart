@@ -13,6 +13,7 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../../features/habits/domain/models/habit_notification.dart';
+import '../../../features/habits/domain/habit.dart';
 
 // Background handler for notifications
 @pragma('vm:entry-point')
@@ -795,8 +796,7 @@ class NotificationService {
 
   /// Reschedule all habit notifications
   /// This should be called when the app starts to ensure all habit notifications are scheduled
-  Future<void> rescheduleAllHabitNotifications(
-      List<dynamic> habits) async {
+  Future<void> rescheduleAllHabitNotifications(List<Habit> habits) async {
     try {
       developer.log(
         'NotificationService: Rescheduling notifications for ${habits.length} habits',
