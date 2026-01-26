@@ -440,5 +440,9 @@
   "notificationTimeChanged": "通知时间已更新",
   "@notificationTimeChanged": {
     "description": "通知时间更改时显示的消息"
+  },
+  "invalidNotificationConfig": "通知配置无效。请重新设置通知。",
+  "@invalidNotificationConfig": {
+    "description": "通知数据损坏或无效时显示的错误消息"
   }
 }

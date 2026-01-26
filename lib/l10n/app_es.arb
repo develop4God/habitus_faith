@@ -1263,5 +1263,13 @@
   "notificationTimeChanged": "Hora de notificación actualizada",
   "@notificationTimeChanged": {
     "description": "Mensaje mostrado cuando se cambia la hora de notificación"
+  },
+  "invalidNotificationConfig": "Configuración de notificación inválida. Por favor configure la notificación nuevamente.",
+  "@invalidNotificationConfig": {
+    "description": "Mensaje de error cuando los datos de notificación están corruptos o inválidos"
+  },
+  "habitDeleted": "Hábito eliminado",
+  "@habitDeleted": {
+    "description": "Mensaje de éxito después de eliminar un hábito"
   }
 }

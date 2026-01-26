@@ -1267,5 +1267,9 @@
   "notificationTimeChanged": "Notification time updated",
   "@notificationTimeChanged": {
     "description": "Message shown when notification time is changed"
+  },
+  "invalidNotificationConfig": "Invalid notification configuration. Please set up the notification again.",
+  "@invalidNotificationConfig": {
+    "description": "Error message shown when notification data is corrupted or invalid"
   }
 }

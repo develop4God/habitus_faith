@@ -488,7 +488,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(l10n.error),
+              content: Text(l10n.invalidNotificationConfig),
               backgroundColor: Colors.red,
             ),
           );
@@ -561,8 +561,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     }
   }
 
-  /// Parse time string to TimeOfDay for time picker initial value
-  /// Returns current time if parsing fails (safe fallback for picker initialization)
+  /// Parse time string to TimeOfDay for time picker initial value.
+  ///
+  /// This method is ONLY used to set the initial position in the time picker
+  /// when the user is changing a notification time. If the stored time string
+  /// cannot be parsed (corrupted data), TimeOfDay.now() is used as a safe
+  /// fallback so the time picker can still be shown to the user.
+  ///
+  /// Note: This does NOT save any time - it only provides an initial value
+  /// for the picker UI. The actual time saved is whatever the user selects.
   TimeOfDay _parseTime(String timeStr) {
     final parts = timeStr.split(':');
     if (parts.length == 2) {
@@ -581,6 +588,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     }
 
     // Fallback to current time for picker initialization only
+    // This allows the picker to be shown even if stored data is corrupted
     return TimeOfDay.now();
   }
 
