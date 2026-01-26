@@ -823,10 +823,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get today => 'Hoje';
 
   @override
-  String get flashTask => 'PENDING';
+  String get flashTask => 'Tarefa Rápida';
 
   @override
-  String get flashTaskSubtitle => 'PENDING';
+  String get flashTaskSubtitle =>
+      'Adicione rapidamente uma tarefa apenas com nome e emoji';
 
   @override
   String get morning_prayer => 'Oração matinal';

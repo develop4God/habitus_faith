@@ -124,30 +124,38 @@ class NotificationService {
           final currentDeviceTimezone =
               await FlutterTimezone.getLocalTimezone();
 
-          final settingsDoc = await _firestore
-              .collection('users')
-              .doc(userId)
-              .collection('settings')
-              .doc('notifications')
-              .get();
+          try {
+            final settingsDoc = await _firestore
+                .collection('users')
+                .doc(userId)
+                .collection('settings')
+                .doc('notifications')
+                .get();
 
-          bool initialNotificationsEnabled = settingsDoc.exists
-              ? (settingsDoc.data()?['notificationsEnabled'] ?? true)
-              : true;
-          String initialNotificationTime = settingsDoc.exists
-              ? (settingsDoc.data()?['notificationTime'] ??
-                  defaultNotificationTime)
-              : defaultNotificationTime;
-          String initialUserTimezone = settingsDoc.exists
-              ? (settingsDoc.data()?['userTimezone'] ?? currentDeviceTimezone)
-              : currentDeviceTimezone;
+            bool initialNotificationsEnabled = settingsDoc.exists
+                ? (settingsDoc.data()?['notificationsEnabled'] ?? true)
+                : true;
+            String initialNotificationTime = settingsDoc.exists
+                ? (settingsDoc.data()?['notificationTime'] ??
+                    defaultNotificationTime)
+                : defaultNotificationTime;
+            String initialUserTimezone = settingsDoc.exists
+                ? (settingsDoc.data()?['userTimezone'] ?? currentDeviceTimezone)
+                : currentDeviceTimezone;
 
-          await _saveNotificationSettingsToFirestore(
-            userId,
-            initialNotificationsEnabled,
-            initialNotificationTime,
-            initialUserTimezone,
-          );
+            await _saveNotificationSettingsToFirestore(
+              userId,
+              initialNotificationsEnabled,
+              initialNotificationTime,
+              initialUserTimezone,
+            );
+          } catch (e) {
+            developer.log(
+              'NotificationService: Failed to read/save Firestore settings (using defaults): $e',
+              name: 'NotificationService',
+            );
+            // Continue with default settings if Firestore access fails
+          }
         } else {
           developer.log(
             'NotificationService: No authenticated user.',
