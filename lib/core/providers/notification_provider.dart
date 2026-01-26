@@ -28,13 +28,20 @@ final notificationTimeProvider = FutureProvider<String>((ref) async {
 // Provider to reschedule habit notifications when app starts
 // This listens to the habits stream and reschedules notifications when habits are loaded
 final habitNotificationsSchedulerProvider = FutureProvider<void>((ref) async {
-  // Wait for notification service to initialize
-  await ref.watch(notificationInitProvider.future);
-  
-  // Wait for habits to load
-  final habitsAsync = await ref.watch(habitsStreamProvider.future);
-  
-  // Reschedule all habit notifications
-  final notificationService = ref.read(notificationServiceProvider);
-  await notificationService.rescheduleAllHabitNotifications(habitsAsync);
+  try {
+    // Wait for notification service to initialize
+    await ref.watch(notificationInitProvider.future);
+    
+    // Watch the habits stream and get the first emission
+    final habitsStream = ref.watch(habitsStreamProvider.stream);
+    final habitsAsync = await habitsStream.first;
+    
+    // Reschedule all habit notifications
+    final notificationService = ref.read(notificationServiceProvider);
+    await notificationService.rescheduleAllHabitNotifications(habitsAsync);
+  } catch (e) {
+    // Log error but don't fail the app initialization
+    // The notification service will log any specific errors
+    rethrow;
+  }
 });

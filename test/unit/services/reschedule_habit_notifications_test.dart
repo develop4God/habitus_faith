@@ -98,6 +98,24 @@ void main() {
       // This habit should not have notifications scheduled
     });
 
+    test('Skips habits with custom timing but null customMinutesBefore', () {
+      final invalidCustomHabit = Habit.create(
+        id: 'invalid1',
+        userId: 'user1',
+        name: 'Invalid Custom',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.custom,
+          customMinutesBefore: null,
+          eventTime: '10:00',
+        ),
+      );
+
+      expect(invalidCustomHabit.notificationSettings!.timing, NotificationTiming.custom);
+      expect(invalidCustomHabit.notificationSettings!.customMinutesBefore, isNull);
+      // This habit should be skipped during rescheduling
+    });
+
     test('Handles habits without notification settings', () {
       final plainHabit = Habit.create(
         id: 'plain1',

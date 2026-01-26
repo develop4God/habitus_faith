@@ -809,10 +809,23 @@ class NotificationService {
         if (notificationSettings != null &&
             notificationSettings.timing != NotificationTiming.none &&
             notificationSettings.eventTime != null) {
-          // Schedule the notification
-          final minutesBefore = notificationSettings.timing == NotificationTiming.custom
-              ? notificationSettings.customMinutesBefore
-              : notificationSettings.timing.minutesBefore;
+          // Determine minutes before based on timing type
+          int? minutesBefore;
+          if (notificationSettings.timing == NotificationTiming.custom) {
+            // For custom timing, use customMinutesBefore (may be null)
+            minutesBefore = notificationSettings.customMinutesBefore;
+            // Skip if custom timing is configured but no minutes specified
+            if (minutesBefore == null) {
+              developer.log(
+                'NotificationService: Skipping habit ${habit.name} - custom timing with no minutes specified',
+                name: 'NotificationService',
+              );
+              continue;
+            }
+          } else {
+            // For predefined timings, get minutesBefore from the enum
+            minutesBefore = notificationSettings.timing.minutesBefore;
+          }
 
           await scheduleHabitNotification(
             habitId: habit.id,
