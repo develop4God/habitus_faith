@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../../features/habits/domain/models/habit_notification.dart';
+
 // Background handler for notifications
 @pragma('vm:entry-point')
 void flutterLocalNotificationsBackgroundHandler(
@@ -785,6 +787,49 @@ class NotificationService {
     } catch (e) {
       developer.log(
         'ERROR cancelling habit notification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+    }
+  }
+
+  /// Reschedule all habit notifications
+  /// This should be called when the app starts to ensure all habit notifications are scheduled
+  Future<void> rescheduleAllHabitNotifications(
+      List<dynamic> habits) async {
+    try {
+      developer.log(
+        'NotificationService: Rescheduling notifications for ${habits.length} habits',
+        name: 'NotificationService',
+      );
+
+      for (final habit in habits) {
+        // Check if habit has notification settings
+        final notificationSettings = habit.notificationSettings;
+        if (notificationSettings != null &&
+            notificationSettings.timing != NotificationTiming.none &&
+            notificationSettings.eventTime != null) {
+          // Schedule the notification
+          final minutesBefore = notificationSettings.timing == NotificationTiming.custom
+              ? notificationSettings.customMinutesBefore
+              : notificationSettings.timing.minutesBefore;
+
+          await scheduleHabitNotification(
+            habitId: habit.id,
+            habitName: habit.name,
+            eventTime: notificationSettings.eventTime!,
+            minutesBefore: minutesBefore,
+          );
+        }
+      }
+
+      developer.log(
+        'NotificationService: Finished rescheduling habit notifications',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'ERROR rescheduling habit notifications: $e',
         name: 'NotificationService',
         error: e,
       );
