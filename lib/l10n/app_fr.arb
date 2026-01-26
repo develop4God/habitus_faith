@@ -1231,5 +1231,45 @@
   },
   "@hideEmojis": {
     "description": "Label pour masquer les emojis."
+  },
+  "notificationOptions": "Options de Notification",
+  "@notificationOptions": {
+    "description": "Titre de la boîte de dialogue des options de notification"
+  },
+  "currentTime": "Heure actuelle",
+  "@currentTime": {
+    "description": "Libellé pour l'heure de notification actuelle"
+  },
+  "turnOffNotification": "Désactiver la Notification",
+  "@turnOffNotification": {
+    "description": "Option pour désactiver la notification d'habitude"
+  },
+  "turnOffNotificationDesc": "Désactiver le rappel quotidien pour cette habitude",
+  "@turnOffNotificationDesc": {
+    "description": "Description de l'option de désactivation de notification"
+  },
+  "changeNotificationTime": "Changer l'Heure",
+  "@changeNotificationTime": {
+    "description": "Option pour changer l'heure de notification"
+  },
+  "changeNotificationTimeDesc": "Mettre à jour quand vous voulez être rappelé",
+  "@changeNotificationTimeDesc": {
+    "description": "Description de l'option de changement d'heure de notification"
+  },
+  "notificationTurnedOff": "Notification désactivée",
+  "@notificationTurnedOff": {
+    "description": "Message affiché lorsque la notification est désactivée"
+  },
+  "notificationTimeChanged": "Heure de notification mise à jour",
+  "@notificationTimeChanged": {
+    "description": "Message affiché lorsque l'heure de notification est changée"
+  },
+  "invalidNotificationConfig": "Configuration de notification invalide. Veuillez configurer à nouveau la notification.",
+  "@invalidNotificationConfig": {
+    "description": "Message d'erreur lorsque les données de notification sont corrompues ou invalides"
+  },
+  "habitDeleted": "Habitude supprimée",
+  "@habitDeleted": {
+    "description": "Message de succès après suppression d'une habitude"
   }
 }

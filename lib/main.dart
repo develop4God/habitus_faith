@@ -94,6 +94,9 @@ class MyApp extends ConsumerWidget {
 
     ref.watch(notificationInitProvider);
 
+    // Reschedule habit notifications when app starts
+    ref.watch(habitNotificationsSchedulerProvider);
+
     return WithFastTimeBanner(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

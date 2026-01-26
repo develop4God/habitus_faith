@@ -7,6 +7,7 @@ import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../l10n/app_localizations.dart';
+import 'notification_options_dialog.dart';
 
 /// Unified habit list widget that combines:
 /// - Visual design from habits_page (colored border)
@@ -330,7 +331,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             onTap: () async {
               await HabitModalSheet.show(
                 context: context,
-                child: _buildExpandedModalContent(context, l10n, habitColor),
+                child: _buildExpandedContent(context, l10n, habitColor),
                 maxHeight: 520,
               );
               if (!mounted) return;
@@ -561,12 +562,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       children: [
         IconButton(
           icon: Icon(
-            habit.notificationSettings != null
+            habit.hasActiveNotification
                 ? Icons.notifications_active
                 : Icons.notifications_none,
-            color: habit.notificationSettings != null
-                ? Colors.orange
-                : Colors.grey,
+            color: habit.hasActiveNotification ? Colors.orange : Colors.grey,
           ),
           onPressed: () => _handleNotification(context, ref, l10n, habit),
         ),
@@ -606,9 +605,70 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleNotification(BuildContext context, WidgetRef ref,
       AppLocalizations l10n, Habit habit) async {
     final notifier = ref.read(habitsNotifierProvider.notifier);
-    if (habit.notificationSettings != null) {
-      await notifier.updateHabit(habitId: habit.id, notificationSettings: null);
+
+    // If notification is currently ON, show options dialog
+    if (habit.hasActiveNotification) {
+      final currentTime = habit.notificationSettings?.eventTime;
+
+      // If eventTime is null (invalid state), show error to user
+      if (currentTime == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.invalidNotificationConfig),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      final result = await showDialog<String>(
+        context: context,
+        builder: (context) => NotificationOptionsDialog(
+          currentTime: currentTime,
+        ),
+      );
+
+      if (result == 'turnOff') {
+        // Turn off notification
+        await notifier.updateHabit(
+          habitId: habit.id,
+          notificationSettings: const HabitNotificationSettings(
+            timing: NotificationTiming.none,
+          ),
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.notificationTurnedOff)),
+          );
+        }
+      } else if (result == 'changeTime') {
+        // Change notification time
+        if (!context.mounted) return;
+        final picked = await showTimePicker(
+          context: context,
+          initialTime: _parseTime(currentTime),
+        );
+        if (picked != null) {
+          final settings = HabitNotificationSettings(
+            timing: NotificationTiming.atEventTime,
+            eventTime:
+                '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+          );
+          await notifier.updateHabit(
+            habitId: habit.id,
+            notificationSettings: settings,
+          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.notificationTimeChanged)),
+            );
+          }
+        }
+      }
     } else {
+      // Notification is OFF, show time picker to turn it on
       final picked =
           await showTimePicker(context: context, initialTime: TimeOfDay.now());
       if (picked != null) {
@@ -619,11 +679,47 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         );
         await notifier.updateHabit(
             habitId: habit.id, notificationSettings: settings);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.notificationTimeChanged)),
+          );
+        }
       }
     }
   }
 
-  Widget _buildExpandedModalContent(
+  /// Parse time string to TimeOfDay for time picker initial value.
+  ///
+  /// This method is ONLY used to set the initial position in the time picker
+  /// when the user is changing a notification time. If the stored time string
+  /// cannot be parsed (corrupted data), TimeOfDay.now() is used as a safe
+  /// fallback so the time picker can still be shown to the user.
+  ///
+  /// Note: This does NOT save any time - it only provides an initial value
+  /// for the picker UI. The actual time saved is whatever the user selects.
+  TimeOfDay _parseTime(String timeStr) {
+    final parts = timeStr.split(':');
+    if (parts.length == 2) {
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+
+      // Validate ranges
+      if (hour != null &&
+          minute != null &&
+          hour >= 0 &&
+          hour <= 23 &&
+          minute >= 0 &&
+          minute <= 59) {
+        return TimeOfDay(hour: hour, minute: minute);
+      }
+    }
+
+    // Fallback to current time for picker initialization only
+    // This allows the picker to be shown even if stored data is corrupted
+    return TimeOfDay.now();
+  }
+
+  Widget _buildExpandedContent(
       BuildContext context, AppLocalizations l10n, Color habitColor) {
     final habit = getLatestHabit(ref);
     return Padding(
