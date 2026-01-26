@@ -185,41 +185,43 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             ),
           ),
           const SizedBox(height: 8),
+          // Character counter row
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                child: Text(
-                  isTooShort
-                      ? 'Mínimo $_minChars caracteres'
-                      : '$charCount / $_maxChars',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: isTooShort
-                        ? Colors.red
-                        : (isTooLong ? Colors.red : Colors.grey),
-                    fontWeight:
-                        isTooShort ? FontWeight.bold : FontWeight.normal,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: _quickEmojis
-                      .map((e) => InkWell(
-                            onTap: () =>
-                                setState(() => _noteController.text += e),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child:
-                                  Text(e, style: const TextStyle(fontSize: 20)),
-                            ),
-                          ))
-                      .toList(),
+              Text(
+                isTooShort
+                    ? 'Mínimo $_minChars caracteres'
+                    : '$charCount / $_maxChars',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: isTooShort
+                      ? Colors.red
+                      : (isTooLong ? Colors.red : Colors.grey),
+                  fontWeight:
+                      isTooShort ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 4),
+          // Quick emoji row
+          SizedBox(
+            height: 32,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: _quickEmojis
+                  .map((e) => InkWell(
+                        onTap: () =>
+                            setState(() => _noteController.text += e),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child:
+                              Text(e, style: const TextStyle(fontSize: 20)),
+                        ),
+                      ))
+                  .toList(),
+            ),
           ),
         ],
       ),
