@@ -1,13 +1,47 @@
 {
   "es": [
-    "habitDeleted"
+    "dailyReflection",
+    "myReflection",
+    "globalNote",
+    "globalNoteHint",
+    "dailyHabits",
+    "addReflection",
+    "completeHabitToReflect"
   ],
 
   "fr": [
-    "habitDeleted"
+    "flashTask",
+    "flashTaskSubtitle",
+    "dailyReflection",
+    "myReflection",
+    "globalNote",
+    "globalNoteHint",
+    "dailyHabits",
+    "addReflection",
+    "completeHabitToReflect"
   ],
 
   "pt": [
-    "habitDeleted"
+    "flashTask",
+    "flashTaskSubtitle",
+    "dailyReflection",
+    "myReflection",
+    "globalNote",
+    "globalNoteHint",
+    "dailyHabits",
+    "addReflection",
+    "completeHabitToReflect"
+  ],
+
+  "zh": [
+    "flashTask",
+    "flashTaskSubtitle",
+    "dailyReflection",
+    "myReflection",
+    "globalNote",
+    "globalNoteHint",
+    "dailyHabits",
+    "addReflection",
+    "completeHabitToReflect"
   ]
 }

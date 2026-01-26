@@ -1010,7 +1010,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get notificationOptions => '通知选项';
 
-
   @override
   String get turnOffNotification => '关闭通知';
 

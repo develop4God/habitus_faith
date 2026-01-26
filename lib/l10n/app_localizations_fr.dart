@@ -1069,7 +1069,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get notificationOptions => 'Options de Notification';
 
-
   @override
   String get turnOffNotification => 'Désactiver la Notification';
 
