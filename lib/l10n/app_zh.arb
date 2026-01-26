@@ -643,8 +643,8 @@
     "description": "PENDING",
     "placeholders": {
       "percent": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "85"
       }
     }
   },
@@ -655,8 +655,8 @@
     "description": "PENDING",
     "placeholders": {
       "habitName": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Morning Prayer"
       }
     }
   },
@@ -664,8 +664,8 @@
     "description": "PENDING",
     "placeholders": {
       "minutes": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "10"
       }
     }
   },
@@ -691,12 +691,12 @@
     "description": "PENDING",
     "placeholders": {
       "completed": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "3"
       },
       "total": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "5"
       }
     }
   },
@@ -704,8 +704,8 @@
     "description": "PENDING",
     "placeholders": {
       "message": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Connection failed"
       }
     }
   },
@@ -761,8 +761,8 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "3"
       }
     }
   },
@@ -770,8 +770,8 @@
     "description": "PENDING",
     "placeholders": {
       "minutes": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "5"
       }
     }
   },
@@ -785,8 +785,8 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "7"
       }
     }
   },
@@ -794,8 +794,8 @@
     "description": "PENDING",
     "placeholders": {
       "limit": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "10"
       }
     }
   },
@@ -821,8 +821,8 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "5"
       }
     }
   },
@@ -878,8 +878,8 @@
     "description": "PENDING",
     "placeholders": {
       "mode": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Compact"
       }
     }
   },
@@ -920,8 +920,8 @@
     "description": "PENDING",
     "placeholders": {
       "days": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "7"
       }
     }
   },
@@ -929,8 +929,8 @@
     "description": "PENDING",
     "placeholders": {
       "reason": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Network error"
       }
     }
   },
@@ -959,8 +959,8 @@
     "description": "PENDING",
     "placeholders": {
       "time": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "8:00 AM"
       }
     }
   },
@@ -980,8 +980,8 @@
     "description": "PENDING",
     "placeholders": {
       "time": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "2m ago"
       }
     }
   },
@@ -989,8 +989,8 @@
     "description": "PENDING",
     "placeholders": {
       "status": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Loaded"
       }
     }
   },
@@ -998,8 +998,8 @@
     "description": "PENDING",
     "placeholders": {
       "status": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Active"
       }
     }
   },
@@ -1007,12 +1007,12 @@
     "description": "PENDING",
     "placeholders": {
       "multiplier": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "288"
       },
       "date": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Nov 7, 2025"
       }
     }
   },
@@ -1083,8 +1083,8 @@
     "description": "PENDING",
     "placeholders": {
       "habitName": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "String",
+        "example": "Morning Prayer"
       }
     }
   },
@@ -1104,8 +1104,8 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "7"
       }
     }
   },
@@ -1122,8 +1122,8 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING",
-        "example": "PENDING"
+        "type": "int",
+        "example": "3"
       }
     }
   },
@@ -1191,7 +1191,7 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING"
+        "type": "int"
       }
     }
   },
@@ -1199,7 +1199,7 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING"
+        "type": "int"
       }
     }
   },
@@ -1207,7 +1207,7 @@
     "description": "PENDING",
     "placeholders": {
       "count": {
-        "type": "PENDING"
+        "type": "int"
       }
     }
   },

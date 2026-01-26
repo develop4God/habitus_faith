@@ -834,11 +834,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get today => 'Aujourd\'hui';
 
   @override
-  String get flashTask => 'Flash Task';
+  String get flashTask => 'PENDING';
 
   @override
-  String get flashTaskSubtitle =>
-      'Quickly add a task with just a name and emoji';
+  String get flashTaskSubtitle => 'PENDING';
 
   @override
   String get morning_prayer => 'Prière du Matin';
@@ -1046,25 +1045,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get habitDeleted => 'Habitude supprimée';
 
   @override
-  String get dailyReflection => 'Daily Reflection';
+  String get dailyReflection => 'PENDING';
 
   @override
-  String get myReflection => 'My Reflection';
+  String get myReflection => 'PENDING';
 
   @override
-  String get globalNote => 'General Note';
+  String get globalNote => 'PENDING';
 
   @override
-  String get globalNoteHint => 'How was your communion with God today?';
+  String get globalNoteHint => 'PENDING';
 
   @override
-  String get dailyHabits => 'Daily Habits';
+  String get dailyHabits => 'PENDING';
 
   @override
-  String get addReflection => 'Add thoughts specific to your achievements.';
+  String get addReflection => 'PENDING';
 
   @override
-  String get completeHabitToReflect => 'Complete a habit to reflect on it';
+  String get completeHabitToReflect => 'PENDING';
 
   @override
   String get notificationOptions => 'Options de Notification';
