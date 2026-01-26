@@ -271,7 +271,7 @@ class _DevotionalDiscoveryPageState
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Use the new display date method that shows future dates
+    // Use the new display date method that shows labels for today/tomorrow
     final displayDate = _getDisplayDate(devocional);
 
     return Container(
@@ -325,24 +325,28 @@ class _DevotionalDiscoveryPageState
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    displayDate,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
+                                if (displayDate != null)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
                                     ),
-                                  ),
-                                ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      displayDate,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  const Spacer(),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.2),
@@ -554,7 +558,8 @@ class _DevotionalDiscoveryPageState
   }
 
   // Helper to get display date - converts past dates to future dates
-  String _getDisplayDate(Devocional devocional) {
+  // Only returns "Today" or "Tomorrow" (localized). Returns null for others.
+  String? _getDisplayDate(Devocional devocional) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final devDate = DateTime(
@@ -581,20 +586,19 @@ class _DevotionalDiscoveryPageState
       );
     }
 
+    // Re-check today after projection
+    if (displayDate == today) {
+      return l10n.todayLabel;
+    }
+
     // Check if it's tomorrow (localized)
     final tomorrow = today.add(const Duration(days: 1));
     if (displayDate == tomorrow) {
       return l10n.tomorrowLabel;
     }
 
-    // Check if it's within this week
-    final daysUntil = displayDate.difference(today).inDays;
-    if (daysUntil <= 7 && daysUntil > 1) {
-      return DateFormat('EEEE').format(displayDate); // e.g., "Monday"
-    }
-
-    // Otherwise show the date
-    return DateFormat('MMM dd').format(displayDate);
+    // For the rest, don't show the label
+    return null;
   }
 
   // Extract verse reference (e.g., "John 3:16" or "Marcos 7:20-23")
