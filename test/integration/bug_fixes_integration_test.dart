@@ -54,12 +54,14 @@ void main() {
           expect(
             find.text(expectedText),
             findsOneWidget,
-            reason: 'Should display "$expectedText" for locale ${locale.languageCode}',
+            reason:
+                'Should display "$expectedText" for locale ${locale.languageCode}',
           );
         }
       });
 
-      testWidgets('Should display all devotional section labels in current language',
+      testWidgets(
+          'Should display all devotional section labels in current language',
           (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
@@ -133,17 +135,21 @@ void main() {
         // Check distribution across color wheel
         final blueRange = hues.where((h) => h >= 200 && h < 240).length;
         final greenRange = hues.where((h) => h >= 90 && h < 150).length;
-        final redRange = hues.where((h) => (h >= 0 && h < 30) || h >= 340).length;
+        final redRange =
+            hues.where((h) => (h >= 0 && h < 30) || h >= 340).length;
         final purpleRange = hues.where((h) => h >= 270 && h < 310).length;
 
         // Should have at least one color in each major hue range
         expect(blueRange, greaterThan(0), reason: 'Should have blue colors');
         expect(greenRange, greaterThan(0), reason: 'Should have green colors');
         expect(redRange, greaterThan(0), reason: 'Should have red colors');
-        expect(purpleRange, greaterThan(0), reason: 'Should have purple colors');
+        expect(purpleRange, greaterThan(0),
+            reason: 'Should have purple colors');
       });
 
-      test('All colors should be visually distinct (different saturation/brightness)', () {
+      test(
+          'All colors should be visually distinct (different saturation/brightness)',
+          () {
         const colors = HabitColors.availableColors;
 
         for (final color in colors) {
@@ -240,7 +246,8 @@ void main() {
         );
       });
 
-      test('Should correctly calculate streaks from completion history', () async {
+      test('Should correctly calculate streaks from completion history',
+          () async {
         final prefs = await SharedPreferences.getInstance();
         final storage = JsonStorageService(prefs);
         final repository = JsonHabitsRepository(

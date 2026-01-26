@@ -709,7 +709,8 @@ class _ColorPickerSection extends StatelessWidget {
       Wrap(spacing: 8, runSpacing: 8, children: [
         _buildColorOption(null, HabitColors.categoryColors[selectedCategory]!,
             l10n.defaultColor),
-        ...HabitColors.availableColors.map((c) => _buildColorOption(c, c, null)),
+        ...HabitColors.availableColors
+            .map((c) => _buildColorOption(c, c, null)),
       ]),
     ]);
   }

@@ -63,7 +63,6 @@ void main(List<String> args) async {
     final missingMetadataKeys = <String>[];
     final pendingKeys = <String>[];
     int addedContentKeys = 0;
-    int addedMetadataKeys = 0;
 
     /// Inserta claves faltantes en el JSON destino, usando el valor 'PENDING' por defecto
     void insertMissingKeys(Map reference, Map target) {
@@ -71,9 +70,7 @@ void main(List<String> args) async {
         if (!target.containsKey(key)) {
           target[key] = value is Map ? {'description': 'PENDING'} : 'PENDING';
 
-          if (key.startsWith('@')) {
-            addedMetadataKeys++;
-          } else if (key != '@@locale') {
+          if (key != '@@locale' && !key.startsWith('@')) {
             addedContentKeys++;
           }
         } else if (value is Map && target[key] is Map) {
@@ -124,17 +121,17 @@ void main(List<String> args) async {
     // Print report for this language
     final langName = languageNames[lang] ?? lang.toUpperCase();
     stdout.writeln('┌─────────────────────────────────────────────────────────────┐');
-    stdout.writeln('│ $langName (app_$lang.arb)'.padRight(61) + '│');
+    stdout.writeln('${'│ $langName (app_$lang.arb)'.padRight(61)}│');
     stdout.writeln('├─────────────────────────────────────────────────────────────┤');
-    stdout.writeln('│ Content Keys: $currentContentKeys/$totalReferenceKeys ($completionPercentage% complete)'.padRight(61) + '│');
+    stdout.writeln('${'│ Content Keys: $currentContentKeys/$totalReferenceKeys ($completionPercentage% complete)'.padRight(61)}│');
 
     if (missingContentKeys.isEmpty && pendingCount == 0) {
-      stdout.writeln('│ Status: ✅ All keys present and translated'.padRight(61) + '│');
+      stdout.writeln('${'│ Status: ✅ All keys present and translated'.padRight(61)}│');
     } else {
       if (missingContentKeys.isNotEmpty) {
-        stdout.writeln('│ Status: ⚠️  ${missingContentKeys.length} missing, $pendingCount pending translation'.padRight(61) + '│');
+        stdout.writeln('${'│ Status: ⚠️  ${missingContentKeys.length} missing, $pendingCount pending translation'.padRight(61)}│');
       } else if (pendingCount > 0) {
-        stdout.writeln('│ Status: ⚠️  $pendingCount keys pending translation'.padRight(61) + '│');
+        stdout.writeln('${'│ Status: ⚠️  $pendingCount keys pending translation'.padRight(61)}│');
       }
     }
     stdout.writeln('└─────────────────────────────────────────────────────────────┘');
@@ -182,7 +179,6 @@ void main(List<String> args) async {
       ..sort((a, b) => double.parse(b.value['completion']).compareTo(double.parse(a.value['completion'])));
 
     for (final entry in sortedLanguages) {
-      final lang = entry.key;
       final data = entry.value;
       final completion = double.parse(data['completion']);
       final barLength = (completion / 5).round();

@@ -444,7 +444,7 @@ class _DevotionalDiscoveryPageState
                       // Read button
                       SizedBox(
                         width: double.infinity,
-                          child: ElevatedButton(
+                        child: ElevatedButton(
                           onPressed: () =>
                               _navigateToVerse(context, devocional),
                           style: ElevatedButton.styleFrom(

@@ -167,7 +167,9 @@ class _EnhancedHabitCalendarViewState
                       final completedCount =
                           logsForDay.where((log) => log.completed).length;
                       if (completedCount > 0) {
-                        return [completedCount]; // Show marker if any habit completed
+                        return [
+                          completedCount
+                        ]; // Show marker if any habit completed
                       }
                     }
                     return [];
@@ -180,7 +182,8 @@ class _EnhancedHabitCalendarViewState
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_today, size: 20, color: colorScheme.primary),
+                    Icon(Icons.calendar_today,
+                        size: 20, color: colorScheme.primary),
                     const SizedBox(width: 8),
                     Text(
                       _formatSelectedDate(l10n),
@@ -283,9 +286,8 @@ class _EnhancedHabitCalendarViewState
                     ),
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-            trailing: isCompleted
-                ? Icon(Icons.verified, color: habitColor)
-                : null,
+            trailing:
+                isCompleted ? Icon(Icons.verified, color: habitColor) : null,
           ),
         );
       },

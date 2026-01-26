@@ -17,7 +17,8 @@ void main() {
       calendarService = CalendarPersistenceService(prefs);
     });
 
-    test('Should save and retrieve calendar logs for a specific date', () async {
+    test('Should save and retrieve calendar logs for a specific date',
+        () async {
       final testDate = DateTime(2024, 1, 15);
       final logs = [
         CalendarCompletionLog(

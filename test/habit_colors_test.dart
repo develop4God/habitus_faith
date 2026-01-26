@@ -15,14 +15,15 @@ void main() {
     });
 
     test('Should have distinct colors (no duplicates)', () {
-      final colors = HabitColors.availableColors;
+      const colors = HabitColors.availableColors;
 
       for (int i = 0; i < colors.length; i++) {
         for (int j = i + 1; j < colors.length; j++) {
           expect(
-            colors[i].value != colors[j].value,
+            colors[i] != colors[j],
             isTrue,
-            reason: 'Color at index $i should be different from color at index $j',
+            reason:
+                'Color at index $i should be different from color at index $j',
           );
         }
       }
@@ -85,10 +86,11 @@ void main() {
     });
 
     test('Available colors should cover a diverse spectrum', () {
-      final colors = HabitColors.availableColors;
+      const colors = HabitColors.availableColors;
 
       // Check for variety in hue ranges
-      final hues = colors.map((color) => HSVColor.fromColor(color).hue).toList();
+      final hues =
+          colors.map((color) => HSVColor.fromColor(color).hue).toList();
 
       // We expect to have colors from different parts of the color wheel
       // Purple/Violet: 270-300
@@ -101,11 +103,13 @@ void main() {
       // Pink: 300-340
 
       final hasBlueRange = hues.any((h) => h >= 200 && h < 240);
-      final hasGreenRange = hues.any((h) => (h >= 60 && h < 90) || (h >= 140 && h < 180));
+      final hasGreenRange =
+          hues.any((h) => (h >= 60 && h < 90) || (h >= 140 && h < 180));
       final hasRedRange = hues.any((h) => (h >= 0 && h < 30) || h >= 340);
 
       expect(hasBlueRange, isTrue, reason: 'Should have colors in blue range');
-      expect(hasGreenRange, isTrue, reason: 'Should have colors in green/lime range');
+      expect(hasGreenRange, isTrue,
+          reason: 'Should have colors in green/lime range');
       expect(hasRedRange, isTrue, reason: 'Should have colors in red range');
     });
 
@@ -117,7 +121,8 @@ void main() {
         expect(
           hsvColor.saturation,
           greaterThan(0.4),
-          reason: 'Color $color should have saturation > 0.4 for good visibility',
+          reason:
+              'Color $color should have saturation > 0.4 for good visibility',
         );
 
         // Brightness should be in a reasonable range (30-98%)
@@ -141,7 +146,8 @@ void main() {
         expect(
           availableSet.contains(categoryColor),
           isTrue,
-          reason: 'Available colors should include category color: $categoryColor',
+          reason:
+              'Available colors should include category color: $categoryColor',
         );
       }
     });
