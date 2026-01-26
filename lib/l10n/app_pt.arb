@@ -1231,5 +1231,37 @@
   "habitMarkedAsNotCompleted": "Hábito marcado como não concluído",
   "@habitMarkedAsNotCompleted": {
     "description": "Mensagem de sucesso ao marcar hábito como não concluído/fracassado."
+  },
+  "notificationOptions": "Opções de Notificação",
+  "@notificationOptions": {
+    "description": "Título da caixa de diálogo de opções de notificação"
+  },
+  "currentTime": "Hora atual",
+  "@currentTime": {
+    "description": "Rótulo para a hora atual de notificação"
+  },
+  "turnOffNotification": "Desativar Notificação",
+  "@turnOffNotification": {
+    "description": "Opção para desativar a notificação do hábito"
+  },
+  "turnOffNotificationDesc": "Desativar lembrete diário para este hábito",
+  "@turnOffNotificationDesc": {
+    "description": "Descrição da opção de desativar notificação"
+  },
+  "changeNotificationTime": "Alterar Hora",
+  "@changeNotificationTime": {
+    "description": "Opção para alterar a hora de notificação"
+  },
+  "changeNotificationTimeDesc": "Atualizar quando você quer ser lembrado",
+  "@changeNotificationTimeDesc": {
+    "description": "Descrição da opção de alterar hora de notificação"
+  },
+  "notificationTurnedOff": "Notificação desativada",
+  "@notificationTurnedOff": {
+    "description": "Mensagem exibida quando a notificação é desativada"
+  },
+  "notificationTimeChanged": "Hora de notificação atualizada",
+  "@notificationTimeChanged": {
+    "description": "Mensagem exibida quando a hora de notificação é alterada"
   }
 }

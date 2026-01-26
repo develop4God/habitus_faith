@@ -1235,5 +1235,37 @@
   "habitDeleted": "Habit deleted",
   "@habitDeleted": {
     "description": "Success message after deleting a habit"
+  },
+  "notificationOptions": "Notification Options",
+  "@notificationOptions": {
+    "description": "Title for notification options dialog"
+  },
+  "currentTime": "Current time",
+  "@currentTime": {
+    "description": "Label for current notification time"
+  },
+  "turnOffNotification": "Turn Off Notification",
+  "@turnOffNotification": {
+    "description": "Option to turn off habit notification"
+  },
+  "turnOffNotificationDesc": "Disable daily reminder for this habit",
+  "@turnOffNotificationDesc": {
+    "description": "Description for turn off notification option"
+  },
+  "changeNotificationTime": "Change Time",
+  "@changeNotificationTime": {
+    "description": "Option to change notification time"
+  },
+  "changeNotificationTimeDesc": "Update when you want to be reminded",
+  "@changeNotificationTimeDesc": {
+    "description": "Description for change notification time option"
+  },
+  "notificationTurnedOff": "Notification turned off",
+  "@notificationTurnedOff": {
+    "description": "Message shown when notification is disabled"
+  },
+  "notificationTimeChanged": "Notification time updated",
+  "@notificationTimeChanged": {
+    "description": "Message shown when notification time is changed"
   }
 }

@@ -7,6 +7,7 @@ import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../l10n/app_localizations.dart';
+import 'notification_options_dialog.dart';
 
 /// Unified habit list widget that combines:
 /// - Visual design from habits_page (colored border)
@@ -430,14 +431,17 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Widget _buildActions(BuildContext context, WidgetRef ref,
       AppLocalizations l10n, Habit habit, bool isCompleted, Color habitColor) {
+    final hasNotification = habit.notificationSettings != null &&
+        habit.notificationSettings!.timing != NotificationTiming.none;
+    
     return Row(
       children: [
         IconButton(
           icon: Icon(
-            habit.notificationSettings != null
+            hasNotification
                 ? Icons.notifications_active
                 : Icons.notifications_none,
-            color: habit.notificationSettings != null
+            color: hasNotification
                 ? Colors.orange
                 : Colors.grey,
           ),
@@ -479,9 +483,57 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleNotification(BuildContext context, WidgetRef ref,
       AppLocalizations l10n, Habit habit) async {
     final notifier = ref.read(habitsNotifierProvider.notifier);
-    if (habit.notificationSettings != null) {
-      await notifier.updateHabit(habitId: habit.id, notificationSettings: null);
+    
+    // If notification is currently ON, show options dialog
+    if (habit.notificationSettings != null &&
+        habit.notificationSettings!.timing != NotificationTiming.none) {
+      final currentTime = habit.notificationSettings!.eventTime ?? '09:00';
+      
+      final result = await showDialog<String>(
+        context: context,
+        builder: (context) => NotificationOptionsDialog(
+          currentTime: currentTime,
+        ),
+      );
+      
+      if (result == 'turnOff') {
+        // Turn off notification
+        await notifier.updateHabit(
+          habitId: habit.id,
+          notificationSettings: const HabitNotificationSettings(
+            timing: NotificationTiming.none,
+          ),
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.notificationTurnedOff)),
+          );
+        }
+      } else if (result == 'changeTime') {
+        // Change notification time
+        final picked = await showTimePicker(
+          context: context,
+          initialTime: _parseTime(currentTime),
+        );
+        if (picked != null) {
+          final settings = HabitNotificationSettings(
+            timing: NotificationTiming.atEventTime,
+            eventTime:
+                '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
+          );
+          await notifier.updateHabit(
+            habitId: habit.id,
+            notificationSettings: settings,
+          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.notificationTimeChanged)),
+            );
+          }
+        }
+      }
     } else {
+      // Notification is OFF, show time picker to turn it on
       final picked =
           await showTimePicker(context: context, initialTime: TimeOfDay.now());
       if (picked != null) {
@@ -492,8 +544,21 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         );
         await notifier.updateHabit(
             habitId: habit.id, notificationSettings: settings);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.notificationTimeChanged)),
+          );
+        }
       }
     }
+  }
+  
+  TimeOfDay _parseTime(String timeStr) {
+    final parts = timeStr.split(':');
+    return TimeOfDay(
+      hour: int.tryParse(parts[0]) ?? 9,
+      minute: int.tryParse(parts[1]) ?? 0,
+    );
   }
 
   Widget _buildExpandedContent(
