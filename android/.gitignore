@@ -79,3 +79,4 @@ node_modules/
 key.properties
 **/*.keystore
 **/*.jks
+/Gemfile.lock
