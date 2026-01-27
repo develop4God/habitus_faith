@@ -317,7 +317,7 @@ class AbandonmentPredictor {
 
       // Log to telemetry service if available
       if (_telemetryService != null) {
-        await _telemetryService.logPrediction(
+        await _telemetryService?.logPrediction(
           habit: habit,
           predictedRisk: probability,
         );
@@ -405,7 +405,7 @@ class AbandonmentPredictor {
   Future<void> dispose() async {
     // Flush telemetry buffer before disposing
     if (_telemetryService != null) {
-      await _telemetryService.flush();
+      await _telemetryService?.flush();
       debugPrint('AbandonmentPredictor: Flushed telemetry buffer');
     }
 
