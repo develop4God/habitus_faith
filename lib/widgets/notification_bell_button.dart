@@ -19,8 +19,7 @@ class NotificationBellButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isActive =
-        initialSettings != null &&
+    final isActive = initialSettings != null &&
         initialSettings!.timing != NotificationTiming.none;
     return IconButton(
       icon: Icon(

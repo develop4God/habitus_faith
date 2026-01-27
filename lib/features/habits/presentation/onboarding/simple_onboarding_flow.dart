@@ -63,9 +63,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
     if (currentGoals.contains(goal)) {
       // Remove goal
-      ref.read(selectedGoalsProvider.notifier).state = currentGoals
-          .where((g) => g != goal)
-          .toList();
+      ref.read(selectedGoalsProvider.notifier).state =
+          currentGoals.where((g) => g != goal).toList();
     } else {
       // Add goal (max 3)
       if (currentGoals.length < OnboardingConfig.maxGoals) {
@@ -424,9 +423,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xff6366f1)
-                : const Color(0xffe2e8f0),
+            color:
+                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -534,9 +532,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xff6366f1)
-                : const Color(0xffe2e8f0),
+            color:
+                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -559,9 +556,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                     text,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: isSelected
                           ? const Color(0xff6366f1)
                           : const Color(0xff1e293b),
@@ -663,9 +659,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xff6366f1)
-                : const Color(0xffe2e8f0),
+            color:
+                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -690,9 +685,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                     text,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: isSelected
                           ? const Color(0xff6366f1)
                           : const Color(0xff1e293b),

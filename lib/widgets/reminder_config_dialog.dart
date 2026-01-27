@@ -140,7 +140,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                         setState(() {
                           customMinutesError = AppLocalizations.of(
                             context,
-                          )!.invalidMinutes;
+                          )!
+                              .invalidMinutes;
                         });
                         return;
                       }
@@ -201,9 +202,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                     title,
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.normal,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                   if (effectiveTime != null && effectiveTime.isNotEmpty)

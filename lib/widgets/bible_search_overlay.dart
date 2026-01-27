@@ -137,7 +137,9 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                             const SizedBox(width: 12),
                             Text(
                               'bible.search'.tr(),
-                              style: Theme.of(context).textTheme.titleMedium
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: colorScheme.onSurface,
@@ -273,10 +275,10 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                                             text: TextSpan(
                                               children:
                                                   _buildHighlightedTextSpans(
-                                                    text,
-                                                    state.searchQuery,
-                                                    colorScheme,
-                                                  ),
+                                                text,
+                                                state.searchQuery,
+                                                colorScheme,
+                                              ),
                                             ),
                                           ),
                                         ],

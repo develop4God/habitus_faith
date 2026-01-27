@@ -115,8 +115,7 @@ class _SubtasksSectionState extends State<SubtasksSection> {
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                style:
-                    widget.addButtonStyle ??
+                style: widget.addButtonStyle ??
                     ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,
                       foregroundColor: Colors.white,

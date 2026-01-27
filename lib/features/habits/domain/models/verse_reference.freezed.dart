@@ -68,24 +68,23 @@ class _$VerseReferenceCopyWithImpl<$Res, $Val extends VerseReference>
   }) {
     return _then(
       _value.copyWith(
-            book: null == book
-                ? _value.book
-                : book // ignore: cast_nullable_to_non_nullable
-                      as String,
-            chapter: null == chapter
-                ? _value.chapter
-                : chapter // ignore: cast_nullable_to_non_nullable
-                      as int,
-            verse: null == verse
-                ? _value.verse
-                : verse // ignore: cast_nullable_to_non_nullable
-                      as int,
-            endVerse: freezed == endVerse
-                ? _value.endVerse
-                : endVerse // ignore: cast_nullable_to_non_nullable
-                      as String?,
-          )
-          as $Val,
+        book: null == book
+            ? _value.book
+            : book // ignore: cast_nullable_to_non_nullable
+                as String,
+        chapter: null == chapter
+            ? _value.chapter
+            : chapter // ignore: cast_nullable_to_non_nullable
+                as int,
+        verse: null == verse
+            ? _value.verse
+            : verse // ignore: cast_nullable_to_non_nullable
+                as int,
+        endVerse: freezed == endVerse
+            ? _value.endVerse
+            : endVerse // ignore: cast_nullable_to_non_nullable
+                as String?,
+      ) as $Val,
     );
   }
 }
@@ -126,19 +125,19 @@ class __$$VerseReferenceImplCopyWithImpl<$Res>
         book: null == book
             ? _value.book
             : book // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         chapter: null == chapter
             ? _value.chapter
             : chapter // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         verse: null == verse
             ? _value.verse
             : verse // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         endVerse: freezed == endVerse
             ? _value.endVerse
             : endVerse // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
       ),
     );
   }

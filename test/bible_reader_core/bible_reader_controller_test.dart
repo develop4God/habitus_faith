@@ -146,9 +146,8 @@ void main() {
 
     test('toggleFontControls changes visibility', () {
       final controller = container.read(bibleReaderProvider.notifier);
-      final initialVisible = container
-          .read(bibleReaderProvider)
-          .showFontControls;
+      final initialVisible =
+          container.read(bibleReaderProvider).showFontControls;
 
       controller.toggleFontControls();
       expect(

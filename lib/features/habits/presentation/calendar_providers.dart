@@ -56,13 +56,13 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
   final CalendarPersistenceService _persistenceService;
 
   CalendarNotifier(this._persistenceService)
-    : super(
-        CalendarState(
-          selectedDate: DateTime.now(),
-          logsForSelectedDate: [],
-          logsForRange: {},
-        ),
-      ) {
+      : super(
+          CalendarState(
+            selectedDate: DateTime.now(),
+            logsForSelectedDate: [],
+            logsForRange: {},
+          ),
+        ) {
     loadLogsForDate(DateTime.now());
   }
 
@@ -132,6 +132,6 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
 /// Provider for CalendarNotifier
 final calendarNotifierProvider =
     StateNotifierProvider<CalendarNotifier, CalendarState>((ref) {
-      final persistenceService = ref.watch(calendarPersistenceServiceProvider);
-      return CalendarNotifier(persistenceService);
-    });
+  final persistenceService = ref.watch(calendarPersistenceServiceProvider);
+  return CalendarNotifier(persistenceService);
+});

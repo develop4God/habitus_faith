@@ -92,9 +92,8 @@ void main() {
       const colors = HabitColors.availableColors;
 
       // Check for variety in hue ranges
-      final hues = colors
-          .map((color) => HSVColor.fromColor(color).hue)
-          .toList();
+      final hues =
+          colors.map((color) => HSVColor.fromColor(color).hue).toList();
 
       // We expect to have colors from different parts of the color wheel
       // Purple/Violet: 270-300

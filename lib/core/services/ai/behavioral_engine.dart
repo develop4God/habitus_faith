@@ -50,9 +50,8 @@ class BehavioralEngine {
     }
 
     // Extract hours from completion history
-    final hours = habit.completionHistory
-        .map((dt) => dt.toLocal().hour)
-        .toList();
+    final hours =
+        habit.completionHistory.map((dt) => dt.toLocal().hour).toList();
 
     // Calculate mode (most frequent hour)
     final int? modeHour = _calculateMode(hours);
@@ -145,12 +144,10 @@ class BehavioralEngine {
     }
 
     // Check for evening slump (failures after 6pm = 18:00)
-    final eveningCompletions = recentCompletions
-        .where((dt) => dt.toLocal().hour >= 18)
-        .length;
-    final morningCompletions = recentCompletions
-        .where((dt) => dt.toLocal().hour < 18)
-        .length;
+    final eveningCompletions =
+        recentCompletions.where((dt) => dt.toLocal().hour >= 18).length;
+    final morningCompletions =
+        recentCompletions.where((dt) => dt.toLocal().hour < 18).length;
 
     if (morningCompletions > 0 &&
         eveningCompletions == 0 &&

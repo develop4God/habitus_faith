@@ -27,8 +27,8 @@ class JsonGeneralNotesRepository {
   JsonGeneralNotesRepository({
     required JsonStorageService storage,
     required String userId,
-  }) : _storage = storage,
-       _userId = userId {
+  })  : _storage = storage,
+        _userId = userId {
     _controller = StreamController<List<GeneralNote>>.broadcast(
       onListen: () {
         debugPrint(

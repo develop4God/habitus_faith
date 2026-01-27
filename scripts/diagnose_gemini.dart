@@ -45,9 +45,9 @@ void main() async {
       final model = GenerativeModel(model: modelName, apiKey: apiKey);
 
       // Try a simple generation
-      final response = await model
-          .generateContent([Content.text('Say "Hello" in one word only.')])
-          .timeout(const Duration(seconds: 10));
+      final response = await model.generateContent([
+        Content.text('Say "Hello" in one word only.')
+      ]).timeout(const Duration(seconds: 10));
 
       final text = response.text ?? '';
       stdout.writeln('  ✅ SUCCESS - Response: ${text.trim()}');

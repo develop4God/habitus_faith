@@ -11,7 +11,8 @@ import 'dart:developer';
 /// This test simulates real user scenarios and runs full end-to-end validation
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized(); // ← cambiar primer línea
+  IntegrationTestWidgetsFlutterBinding
+      .ensureInitialized(); // ← cambiar primer línea
 
   group('AbandonmentPredictor TFLite Integration', () {
     late Interpreter interpreter;
@@ -32,7 +33,8 @@ void main() {
       interpreter.close();
     });
 
-    test('Low-risk user scenario returns low abandonment probability', () async {
+    test('Low-risk user scenario returns low abandonment probability',
+        () async {
       // Simula usuario real: espiritual, completando hábito diario, cerca del recordatorio
       final now = DateTime(2024, 1, 15, 7, 30); // Lunes 7:30 AM
       final completions = List.generate(
@@ -115,9 +117,9 @@ void main() {
         ).toDouble();
         final hoursFromReminder =
             MLFeaturesCalculator.calculateHoursFromReminder(
-              habit,
-              now,
-            ).toDouble();
+          habit,
+          now,
+        ).toDouble();
 
         final mean = (scalerParams['mean'] as List).cast<double>();
         final scale = (scalerParams['scale'] as List).cast<double>();

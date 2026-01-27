@@ -145,10 +145,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             color: isCompleted
                 ? Colors.green.shade50
                 : isSkipped
-                ? Colors.orange.shade50
-                : isFailed
-                ? Colors.red.shade50
-                : Colors.white,
+                    ? Colors.orange.shade50
+                    : isFailed
+                        ? Colors.red.shade50
+                        : Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border(left: BorderSide(color: habitColor, width: 4)),
             boxShadow: [
@@ -209,8 +209,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                           : Colors.grey.shade900,
                                       decoration:
                                           (isCompleted || isSkipped || isFailed)
-                                          ? TextDecoration.lineThrough
-                                          : null,
+                                              ? TextDecoration.lineThrough
+                                              : null,
                                     ),
                                   ),
                                 ),
@@ -332,9 +332,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         ? Icons.check_circle
                         : Icons.circle_outlined,
                     size: 18,
-                    color: subtask.completed
-                        ? habitColor
-                        : Colors.grey.shade400,
+                    color:
+                        subtask.completed ? habitColor : Colors.grey.shade400,
                   ),
                   const SizedBox(width: 12),
                   Expanded(

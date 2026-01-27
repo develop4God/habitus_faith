@@ -148,8 +148,8 @@ void main() {
       // Find save and cancel buttons (support both English and Spanish)
       final saveButton =
           find.widgetWithIcon(ElevatedButton, Icons.check).evaluate().isNotEmpty
-          ? find.widgetWithIcon(ElevatedButton, Icons.check)
-          : find.widgetWithText(ElevatedButton, l10n.save);
+              ? find.widgetWithIcon(ElevatedButton, Icons.check)
+              : find.widgetWithText(ElevatedButton, l10n.save);
       final cancelButton = find.text('Cancel').evaluate().isNotEmpty
           ? find.text('Cancel')
           : find.text('Cancelar');
@@ -180,21 +180,20 @@ void main() {
     testWidgets('4. Subtasks are displayed in expanded habit view', (
       tester,
     ) async {
-      final testHabit =
-          Habit.create(
-            id: 'test_habit',
-            userId: 'test_user',
-            name: 'Test Habit with Subtasks',
-            category: HabitCategory.mental,
-            emoji: '🧠',
-            colorValue: Colors.blue.toARGB32(),
-            difficulty: HabitDifficulty.medium,
-          ).copyWith(
-            subtasks: const [
-              Subtask(id: '1', title: 'Subtask 1', completed: false),
-              Subtask(id: '2', title: 'Subtask 2', completed: true),
-            ],
-          );
+      final testHabit = Habit.create(
+        id: 'test_habit',
+        userId: 'test_user',
+        name: 'Test Habit with Subtasks',
+        category: HabitCategory.mental,
+        emoji: '🧠',
+        colorValue: Colors.blue.toARGB32(),
+        difficulty: HabitDifficulty.medium,
+      ).copyWith(
+        subtasks: const [
+          Subtask(id: '1', title: 'Subtask 1', completed: false),
+          Subtask(id: '2', title: 'Subtask 2', completed: true),
+        ],
+      );
 
       await tester.pumpWidget(
         ProviderScope(

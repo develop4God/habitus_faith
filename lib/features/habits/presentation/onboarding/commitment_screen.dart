@@ -198,9 +198,8 @@ class _CommitmentScreenState extends State<CommitmentScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: _backEnabled
-                        ? () => Navigator.of(context).pop()
-                        : null,
+                    onPressed:
+                        _backEnabled ? () => Navigator.of(context).pop() : null,
                   ),
                   const Spacer(),
                 ],

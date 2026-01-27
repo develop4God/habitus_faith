@@ -85,36 +85,35 @@ class _$PredefinedHabitCopyWithImpl<$Res, $Val extends PredefinedHabit>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            emoji: null == emoji
-                ? _value.emoji
-                : emoji // ignore: cast_nullable_to_non_nullable
-                      as String,
-            nameKey: null == nameKey
-                ? _value.nameKey
-                : nameKey // ignore: cast_nullable_to_non_nullable
-                      as String,
-            descriptionKey: freezed == descriptionKey
-                ? _value.descriptionKey
-                : descriptionKey // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            category: null == category
-                ? _value.category
-                : category // ignore: cast_nullable_to_non_nullable
-                      as PredefinedHabitCategory,
-            verse: freezed == verse
-                ? _value.verse
-                : verse // ignore: cast_nullable_to_non_nullable
-                      as VerseReference?,
-            suggestedTime: freezed == suggestedTime
-                ? _value.suggestedTime
-                : suggestedTime // ignore: cast_nullable_to_non_nullable
-                      as String?,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        emoji: null == emoji
+            ? _value.emoji
+            : emoji // ignore: cast_nullable_to_non_nullable
+                as String,
+        nameKey: null == nameKey
+            ? _value.nameKey
+            : nameKey // ignore: cast_nullable_to_non_nullable
+                as String,
+        descriptionKey: freezed == descriptionKey
+            ? _value.descriptionKey
+            : descriptionKey // ignore: cast_nullable_to_non_nullable
+                as String?,
+        category: null == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
+                as PredefinedHabitCategory,
+        verse: freezed == verse
+            ? _value.verse
+            : verse // ignore: cast_nullable_to_non_nullable
+                as VerseReference?,
+        suggestedTime: freezed == suggestedTime
+            ? _value.suggestedTime
+            : suggestedTime // ignore: cast_nullable_to_non_nullable
+                as String?,
+      ) as $Val,
     );
   }
 
@@ -183,31 +182,31 @@ class __$$PredefinedHabitImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         emoji: null == emoji
             ? _value.emoji
             : emoji // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         nameKey: null == nameKey
             ? _value.nameKey
             : nameKey // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         descriptionKey: freezed == descriptionKey
             ? _value.descriptionKey
             : descriptionKey // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         category: null == category
             ? _value.category
             : category // ignore: cast_nullable_to_non_nullable
-                  as PredefinedHabitCategory,
+                as PredefinedHabitCategory,
         verse: freezed == verse
             ? _value.verse
             : verse // ignore: cast_nullable_to_non_nullable
-                  as VerseReference?,
+                as VerseReference?,
         suggestedTime: freezed == suggestedTime
             ? _value.suggestedTime
             : suggestedTime // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
       ),
     );
   }
@@ -270,15 +269,15 @@ class _$PredefinedHabitImpl implements _PredefinedHabit {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    emoji,
-    nameKey,
-    descriptionKey,
-    category,
-    verse,
-    suggestedTime,
-  );
+        runtimeType,
+        id,
+        emoji,
+        nameKey,
+        descriptionKey,
+        category,
+        verse,
+        suggestedTime,
+      );
 
   /// Create a copy of PredefinedHabit
   /// with the given fields replaced by the non-null parameter values.

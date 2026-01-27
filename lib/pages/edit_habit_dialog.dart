@@ -42,8 +42,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     eventTimeCtrl = TextEditingController(
       text: widget.habit.notificationSettings?.eventTime ?? '',
     );
-    eventTime =
-        widget.habit.notificationSettings?.eventTime != null &&
+    eventTime = widget.habit.notificationSettings?.eventTime != null &&
             widget.habit.notificationSettings!.eventTime!.contains(':')
         ? TimeOfDay(
             hour: int.parse(
@@ -113,9 +112,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
       builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
 
-    await ref
-        .read(habitsNotifierProvider.notifier)
-        .updateHabit(
+    await ref.read(habitsNotifierProvider.notifier).updateHabit(
           habitId: widget.habit.id,
           name: nameCtrl.text,
           category: selectedCategory,
@@ -344,9 +341,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           color: color,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isSelected
-                                ? Colors.black
-                                : Colors.transparent,
+                            color:
+                                isSelected ? Colors.black : Colors.transparent,
                             width: isSelected ? 3 : 1,
                           ),
                           boxShadow: isSelected

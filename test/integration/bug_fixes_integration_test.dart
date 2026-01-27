@@ -20,7 +20,8 @@ void main() {
     });
 
     group('1. Devotional Localization', () {
-      testWidgets('Should display localized "Today" in all supported languages', (
+      testWidgets('Should display localized "Today" in all supported languages',
+          (
         WidgetTester tester,
       ) async {
         // Test each supported language
@@ -135,9 +136,8 @@ void main() {
         // Check distribution across color wheel
         final blueRange = hues.where((h) => h >= 200 && h < 240).length;
         final greenRange = hues.where((h) => h >= 90 && h < 150).length;
-        final redRange = hues
-            .where((h) => (h >= 0 && h < 30) || h >= 340)
-            .length;
+        final redRange =
+            hues.where((h) => (h >= 0 && h < 30) || h >= 340).length;
         final purpleRange = hues.where((h) => h >= 270 && h < 310).length;
 
         // Should have at least one color in each major hue range

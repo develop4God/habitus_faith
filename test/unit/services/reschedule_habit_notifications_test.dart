@@ -6,41 +6,38 @@ void main() {
   group('Habit Notification Rescheduling - User Behavior Tests', () {
     test('Reschedules notifications for habits with notification settings', () {
       // Create habits with different notification configurations
-      final morningPrayerHabit =
-          Habit.create(
-            id: 'prayer1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      final morningPrayerHabit = Habit.create(
+        id: 'prayer1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
-      final exerciseHabit =
-          Habit.create(
-            id: 'exercise1',
-            userId: 'user1',
-            name: 'Morning Exercise',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.tenMinutesBefore,
-              eventTime: '06:30',
-            ),
-          );
+      final exerciseHabit = Habit.create(
+        id: 'exercise1',
+        userId: 'user1',
+        name: 'Morning Exercise',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.tenMinutesBefore,
+          eventTime: '06:30',
+        ),
+      );
 
-      final bibleReadingHabit =
-          Habit.create(
-            id: 'bible1',
-            userId: 'user1',
-            name: 'Bible Reading',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.thirtyMinutesBefore,
-              eventTime: '21:00',
-            ),
-          );
+      final bibleReadingHabit = Habit.create(
+        id: 'bible1',
+        userId: 'user1',
+        name: 'Bible Reading',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.thirtyMinutesBefore,
+          eventTime: '21:00',
+        ),
+      );
 
       // Habit without notification settings
       final meditationHabit = Habit.create(
@@ -73,18 +70,17 @@ void main() {
     });
 
     test('Handles habits with custom notification timing', () {
-      final customHabit =
-          Habit.create(
-            id: 'custom1',
-            userId: 'user1',
-            name: 'Custom Reminder',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.custom,
-              customMinutesBefore: 45,
-              eventTime: '15:00',
-            ),
-          );
+      final customHabit = Habit.create(
+        id: 'custom1',
+        userId: 'user1',
+        name: 'Custom Reminder',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.custom,
+          customMinutesBefore: 45,
+          eventTime: '15:00',
+        ),
+      );
 
       expect(
         customHabit.notificationSettings!.timing,
@@ -95,17 +91,16 @@ void main() {
     });
 
     test('Skips habits with notification timing set to none', () {
-      final noNotificationHabit =
-          Habit.create(
-            id: 'none1',
-            userId: 'user1',
-            name: 'No Notification',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.none,
-              eventTime: '10:00',
-            ),
-          );
+      final noNotificationHabit = Habit.create(
+        id: 'none1',
+        userId: 'user1',
+        name: 'No Notification',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.none,
+          eventTime: '10:00',
+        ),
+      );
 
       expect(
         noNotificationHabit.notificationSettings!.timing,
@@ -115,18 +110,17 @@ void main() {
     });
 
     test('Skips habits with custom timing but null customMinutesBefore', () {
-      final invalidCustomHabit =
-          Habit.create(
-            id: 'invalid1',
-            userId: 'user1',
-            name: 'Invalid Custom',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.custom,
-              customMinutesBefore: null,
-              eventTime: '10:00',
-            ),
-          );
+      final invalidCustomHabit = Habit.create(
+        id: 'invalid1',
+        userId: 'user1',
+        name: 'Invalid Custom',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.custom,
+          customMinutesBefore: null,
+          eventTime: '10:00',
+        ),
+      );
 
       expect(
         invalidCustomHabit.notificationSettings!.timing,

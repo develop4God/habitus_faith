@@ -23,8 +23,8 @@ class DevotionalImageRepository {
     DevotionalImageNormalizer? normalizer,
     http.Client? httpClient,
     this.sharedPreferences,
-  }) : normalizer = normalizer ?? DevotionalImageNormalizer(),
-       httpClient = httpClient ?? http.Client();
+  })  : normalizer = normalizer ?? DevotionalImageNormalizer(),
+        httpClient = httpClient ?? http.Client();
 
   /// Fetches a random image URL from the repository.
   ///

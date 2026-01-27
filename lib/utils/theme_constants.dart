@@ -105,19 +105,18 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.deepPurple,
-            brightness: Brightness.light,
-          ).copyWith(
-            secondary: Colors.deepPurpleAccent,
-            surface: Colors.white,
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.black87,
-            error: Colors.red,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.deepPurple,
+        brightness: Brightness.light,
+      ).copyWith(
+        secondary: Colors.deepPurpleAccent,
+        surface: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.black87,
+        error: Colors.red,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple,
@@ -175,20 +174,19 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.deepPurple.shade900,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.deepPurple,
-            brightness: Brightness.dark,
-          ).copyWith(
-            primary: Colors.deepPurple.shade700,
-            secondary: Colors.deepPurpleAccent.shade700,
-            surface: const Color(0xFF121212),
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.white,
-            error: Colors.redAccent,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.deepPurple,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: Colors.deepPurple.shade700,
+        secondary: Colors.deepPurpleAccent.shade700,
+        surface: const Color(0xFF121212),
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        error: Colors.redAccent,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple.shade700,
@@ -243,19 +241,18 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.green,
-            brightness: Brightness.light,
-          ).copyWith(
-            secondary: Colors.greenAccent,
-            surface: Colors.white,
-            onPrimary: Colors.white,
-            onSecondary: Colors.black87,
-            onSurface: Colors.black87,
-            error: Colors.red,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.green,
+        brightness: Brightness.light,
+      ).copyWith(
+        secondary: Colors.greenAccent,
+        surface: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.black87,
+        onSurface: Colors.black87,
+        error: Colors.red,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,
@@ -308,20 +305,19 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.green.shade900,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.green,
-            brightness: Brightness.dark,
-          ).copyWith(
-            primary: Colors.green.shade700,
-            secondary: Colors.lightGreenAccent.shade700,
-            surface: const Color(0xFF121212),
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.white,
-            error: Colors.redAccent,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.green,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: Colors.green.shade700,
+        secondary: Colors.lightGreenAccent.shade700,
+        surface: const Color(0xFF121212),
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        error: Colors.redAccent,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green.shade700,
@@ -376,19 +372,18 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.pink,
-            brightness: Brightness.light,
-          ).copyWith(
-            secondary: Colors.pinkAccent,
-            surface: Colors.white,
-            onPrimary: Colors.white,
-            onSecondary: Colors.black87,
-            onSurface: Colors.black87,
-            error: Colors.red,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.pink,
+        brightness: Brightness.light,
+      ).copyWith(
+        secondary: Colors.pinkAccent,
+        surface: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.black87,
+        onSurface: Colors.black87,
+        error: Colors.red,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.pink,
@@ -441,20 +436,19 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.pink.shade900,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.pink,
-            brightness: Brightness.dark,
-          ).copyWith(
-            primary: Colors.pink.shade700,
-            secondary: Colors.pinkAccent.shade700,
-            surface: const Color(0xFF121212),
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.white,
-            error: Colors.redAccent,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.pink,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: Colors.pink.shade700,
+        secondary: Colors.pinkAccent.shade700,
+        surface: const Color(0xFF121212),
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        error: Colors.redAccent,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.pink.shade700,
@@ -509,19 +503,18 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.cyan,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.cyan,
-            brightness: Brightness.light,
-          ).copyWith(
-            secondary: Colors.cyanAccent,
-            surface: Colors.white,
-            onPrimary: Colors.white,
-            onSecondary: Colors.black87,
-            onSurface: Colors.black87,
-            error: Colors.red,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.cyan,
+        brightness: Brightness.light,
+      ).copyWith(
+        secondary: Colors.cyanAccent,
+        surface: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.black87,
+        onSurface: Colors.black87,
+        error: Colors.red,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.cyan,
@@ -574,20 +567,19 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.cyan.shade900,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.cyan,
-            brightness: Brightness.dark,
-          ).copyWith(
-            primary: Colors.cyan.shade700,
-            secondary: Colors.cyanAccent.shade700,
-            surface: const Color(0xFF121212),
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.white,
-            error: Colors.redAccent,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.cyan,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: Colors.cyan.shade700,
+        secondary: Colors.cyanAccent.shade700,
+        surface: const Color(0xFF121212),
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        error: Colors.redAccent,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.cyan.shade700,
@@ -642,19 +634,18 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.blue,
-            brightness: Brightness.light,
-          ).copyWith(
-            secondary: Colors.blueAccent,
-            surface: Colors.white,
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.black87,
-            error: Colors.red,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+      ).copyWith(
+        secondary: Colors.blueAccent,
+        surface: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.black87,
+        error: Colors.red,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue,
@@ -712,20 +703,19 @@ final Map<String, Map<String, ThemeData>> appThemeFamilies = {
         backgroundColor: Colors.blue.shade900,
         foregroundColor: Colors.white,
       ),
-      colorScheme:
-          ColorScheme.fromSwatch(
-            primarySwatch: Colors.blue,
-            brightness: Brightness.dark,
-          ).copyWith(
-            primary: Colors.blue.shade700,
-            secondary: Colors.blueAccent.shade700,
-            surface: const Color(0xFF121212),
-            onPrimary: Colors.white,
-            onSecondary: Colors.white,
-            onSurface: Colors.white,
-            error: Colors.redAccent,
-            onError: Colors.white,
-          ),
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: Colors.blue.shade700,
+        secondary: Colors.blueAccent.shade700,
+        surface: const Color(0xFF121212),
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        error: Colors.redAccent,
+        onError: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue.shade700,

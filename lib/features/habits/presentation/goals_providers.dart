@@ -24,8 +24,8 @@ class JsonGoalsRepository {
   JsonGoalsRepository({
     required JsonStorageService storage,
     required String userId,
-  }) : _storage = storage,
-       _userId = userId {
+  })  : _storage = storage,
+        _userId = userId {
     _controller = StreamController<List<Goal>>.broadcast(
       onListen: () {
         debugPrint(

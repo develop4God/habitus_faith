@@ -403,8 +403,8 @@ void main() {
         // Try matching alternative strings for remaining habits
         final remainingFinder =
             find.textContaining('left').evaluate().isNotEmpty
-            ? find.textContaining('left')
-            : find.textContaining('remaining');
+                ? find.textContaining('left')
+                : find.textContaining('remaining');
         expect(
           remainingFinder,
           findsOneWidget,
@@ -752,8 +752,8 @@ void main() {
         // Accept alternative hints for swipe
         final swipeHintFinder =
             find.textContaining('swipe').evaluate().isNotEmpty
-            ? find.textContaining('swipe')
-            : find.textContaining('left');
+                ? find.textContaining('swipe')
+                : find.textContaining('left');
         expect(
           swipeHintFinder,
           findsOneWidget,
@@ -814,8 +814,8 @@ void main() {
         final progressFinder = find.textContaining('%');
         final remainingFinder =
             find.textContaining('left').evaluate().isNotEmpty
-            ? find.textContaining('left')
-            : find.textContaining('remaining');
+                ? find.textContaining('left')
+                : find.textContaining('remaining');
 
         expect(
           progressFinder,

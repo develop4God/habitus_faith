@@ -61,9 +61,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     final habits = habitsAsync.asData?.value ?? [];
     final completedHabits = habits.where((h) => h.completedToday).length;
     final totalHabits = habits.length;
-    final completionPercentage = totalHabits > 0
-        ? (completedHabits / totalHabits * 100).round()
-        : 0;
+    final completionPercentage =
+        totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
     // Calculate weekly consistency
     final normalizedToday = DateTime(today.year, today.month, today.day);
@@ -289,34 +288,34 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   textAlign: TextAlign.center,
                                 )
                               : completedHabits == totalHabits
-                              ? Text(
-                                  l10n.allHabitsCompleted,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.green.shade900,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )
-                              : completedHabits == 0
-                              ? Text(
-                                  l10n.buildConsistency,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blue.shade900,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )
-                              : Text(
-                                  l10n.greatProgress,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blue.shade800,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
+                                  ? Text(
+                                      l10n.allHabitsCompleted,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.green.shade900,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : completedHabits == 0
+                                      ? Text(
+                                          l10n.buildConsistency,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue.shade900,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : Text(
+                                          l10n.greatProgress,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blue.shade800,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
                         ),
                       ],
                     ),

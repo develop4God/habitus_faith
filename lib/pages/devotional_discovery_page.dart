@@ -269,9 +269,8 @@ class _DevotionalDiscoveryPageState
     Devocional devocional,
     ColorScheme colorScheme,
   ) {
-    final isFavorite = ref
-        .read(devotionalProvider.notifier)
-        .isFavorite(devocional.id);
+    final isFavorite =
+        ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Use the display date method that shows labels for today/tomorrow only
@@ -530,8 +529,8 @@ class _DevotionalDiscoveryPageState
                   child: Text(
                     'Select Bible Version',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const Divider(),
@@ -777,9 +776,9 @@ class _DevotionalDiscoveryPageState
                 child: Text(
                   devocional.versiculo,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               Consumer(
@@ -847,9 +846,9 @@ class _DevotionalDiscoveryPageState
                     Text(
                       punto.cita,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.secondary,
-                      ),
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.secondary,
+                          ),
                     ),
                     const SizedBox(height: 4),
                     Text(

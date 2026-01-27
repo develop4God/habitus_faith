@@ -16,17 +16,16 @@ void main() {
     });
 
     test('Notification bell shows orange when on', () {
-      final habit =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      final habit = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
       expect(habit.notificationSettings, isNotNull);
       expect(
@@ -50,17 +49,16 @@ void main() {
     });
 
     test('Tapping bell when ON shows options dialog', () {
-      final habit =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      final habit = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
       expect(habit.notificationSettings, isNotNull);
       // Expected behavior: Show NotificationOptionsDialog with 2 options:
@@ -69,17 +67,16 @@ void main() {
     });
 
     test('Turn off notification option sets timing to none', () {
-      final habitWithNotification =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      final habitWithNotification = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
       // User selects "Turn off notification" option
       final updatedHabit = habitWithNotification.copyWith(
@@ -97,17 +94,16 @@ void main() {
     });
 
     test('Change time option shows time picker and updates eventTime', () {
-      final habitWithNotification =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      final habitWithNotification = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
       // User selects "Change time" option
       // Time picker shows with initial time 07:00
@@ -129,16 +125,15 @@ void main() {
     });
 
     test('Notification with timing none is treated as OFF', () {
-      final habitWithNoneNotification =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.none,
-            ),
-          );
+      final habitWithNoneNotification = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.none,
+        ),
+      );
 
       expect(
         habitWithNoneNotification.notificationSettings!.timing,
@@ -149,17 +144,16 @@ void main() {
     });
 
     test('Daily notification is scheduled at event time', () {
-      final habit =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      final habit = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
       expect(
         habit.notificationSettings!.timing,
@@ -174,41 +168,38 @@ void main() {
     });
 
     test('Multiple habits can have different notification times', () {
-      final morningPrayer =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '06:00',
-            ),
-          );
+      final morningPrayer = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '06:00',
+        ),
+      );
 
-      final exercise =
-          Habit.create(
-            id: 'habit2',
-            userId: 'user1',
-            name: 'Exercise',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:30',
-            ),
-          );
+      final exercise = Habit.create(
+        id: 'habit2',
+        userId: 'user1',
+        name: 'Exercise',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:30',
+        ),
+      );
 
-      final eveningPrayer =
-          Habit.create(
-            id: 'habit3',
-            userId: 'user1',
-            name: 'Evening Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '20:00',
-            ),
-          );
+      final eveningPrayer = Habit.create(
+        id: 'habit3',
+        userId: 'user1',
+        name: 'Evening Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '20:00',
+        ),
+      );
 
       expect(morningPrayer.notificationSettings!.eventTime, '06:00');
       expect(exercise.notificationSettings!.eventTime, '07:30');
@@ -220,17 +211,16 @@ void main() {
 
     test('Turning notification back on after turning off works correctly', () {
       // Start with notification ON
-      var habit =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Morning Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '07:00',
-            ),
-          );
+      var habit = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Morning Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '07:00',
+        ),
+      );
 
       expect(
         habit.notificationSettings!.timing,
@@ -264,34 +254,32 @@ void main() {
     });
 
     test('Edge case: midnight notification time', () {
-      final habit =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Midnight Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '00:00',
-            ),
-          );
+      final habit = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Midnight Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '00:00',
+        ),
+      );
 
       expect(habit.notificationSettings!.eventTime, '00:00');
       // Should handle midnight time correctly
     });
 
     test('Edge case: just before midnight notification time', () {
-      final habit =
-          Habit.create(
-            id: 'habit1',
-            userId: 'user1',
-            name: 'Late Night Prayer',
-          ).copyWith(
-            notificationSettings: const HabitNotificationSettings(
-              timing: NotificationTiming.atEventTime,
-              eventTime: '23:59',
-            ),
-          );
+      final habit = Habit.create(
+        id: 'habit1',
+        userId: 'user1',
+        name: 'Late Night Prayer',
+      ).copyWith(
+        notificationSettings: const HabitNotificationSettings(
+          timing: NotificationTiming.atEventTime,
+          eventTime: '23:59',
+        ),
+      );
 
       expect(habit.notificationSettings!.eventTime, '23:59');
       // Should handle time just before midnight correctly

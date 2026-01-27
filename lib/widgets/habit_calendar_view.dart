@@ -78,9 +78,8 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                 : Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: isSelected
-                                  ? Colors.blue
-                                  : Colors.transparent,
+                              color:
+                                  isSelected ? Colors.blue : Colors.transparent,
                               width: 2,
                             ),
                           ),
@@ -172,8 +171,8 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                   final day = monday.add(Duration(days: index));
                                   final isToday =
                                       DateTime.now().year == day.year &&
-                                      DateTime.now().month == day.month &&
-                                      DateTime.now().day == day.day;
+                                          DateTime.now().month == day.month &&
+                                          DateTime.now().day == day.day;
                                   final completedHabits = habits
                                       .where(
                                         (h) => h.completionHistory.any(
@@ -234,8 +233,8 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                             (habit) => Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                    vertical: 2,
-                                                  ),
+                                                vertical: 2,
+                                              ),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,

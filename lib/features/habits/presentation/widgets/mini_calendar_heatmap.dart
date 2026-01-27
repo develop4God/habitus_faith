@@ -77,9 +77,8 @@ class MiniCalendarHeatmap extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
-                          color: isCompleted
-                              ? Colors.white
-                              : Colors.grey.shade600,
+                          color:
+                              isCompleted ? Colors.white : Colors.grey.shade600,
                         ),
                       ),
                       const SizedBox(height: 2),

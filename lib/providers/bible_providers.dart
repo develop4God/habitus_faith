@@ -105,8 +105,8 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
 /// Provider for current Bible version
 final currentBibleVersionProvider =
     StateNotifierProvider<CurrentBibleVersionNotifier, BibleVersion?>((ref) {
-      return CurrentBibleVersionNotifier(ref);
-    });
+  return CurrentBibleVersionNotifier(ref);
+});
 
 /// Provider for Bible preferences service
 final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((
@@ -118,8 +118,8 @@ final biblePreferencesServiceProvider = Provider<BiblePreferencesService>((
 /// Provider for Bible reading position service
 final bibleReadingPositionServiceProvider =
     Provider<BibleReadingPositionService>((ref) {
-      return BibleReadingPositionService();
-    });
+  return BibleReadingPositionService();
+});
 
 /// Provider for Bible reader service
 final bibleReaderServiceProvider = Provider<BibleReaderService>((ref) {
@@ -134,14 +134,14 @@ final bibleReaderServiceProvider = Provider<BibleReaderService>((ref) {
 /// Now using the controller directly as it extends StateNotifier
 final bibleReaderProvider =
     StateNotifierProvider<BibleReaderController, BibleReaderState>((ref) {
-      final versions = ref.watch(bibleVersionsProvider);
-      final readerService = ref.watch(bibleReaderServiceProvider);
-      final preferencesService = ref.watch(biblePreferencesServiceProvider);
+  final versions = ref.watch(bibleVersionsProvider);
+  final readerService = ref.watch(bibleReaderServiceProvider);
+  final preferencesService = ref.watch(biblePreferencesServiceProvider);
 
-      return BibleReaderController(
-        ref: ref,
-        allVersions: versions,
-        readerService: readerService,
-        preferencesService: preferencesService,
-      );
-    });
+  return BibleReaderController(
+    ref: ref,
+    allVersions: versions,
+    readerService: readerService,
+    preferencesService: preferencesService,
+  );
+});

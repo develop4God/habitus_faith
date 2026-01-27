@@ -111,8 +111,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
       children: List.generate(7, (index) {
         final day = daysOfWeek[index];
         final dayOnly = DateTime(day.year, day.month, day.day);
-        final isToday =
-            day.year == today.year &&
+        final isToday = day.year == today.year &&
             day.month == today.month &&
             day.day == today.day;
         final isSelected = dayOnly == selectedDay;
@@ -146,21 +145,20 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                   color: isSelected
                       ? const Color(0xFF1976D2)
                       : isToday
-                      ? const Color(0xFFE3F2FD)
-                      : _getProgressColor(progress),
+                          ? const Color(0xFFE3F2FD)
+                          : _getProgressColor(progress),
                   shape: BoxShape.circle,
                   border: isSelected
                       ? Border.all(color: const Color(0xFF1565C0), width: 2)
                       : null,
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          (isSelected
-                                  ? const Color(0xFF1976D2)
-                                  : isToday
+                      color: (isSelected
+                              ? const Color(0xFF1976D2)
+                              : isToday
                                   ? const Color(0xFF2196F3)
                                   : Colors.grey.shade400)
-                              .withValues(alpha: 0.3),
+                          .withValues(alpha: 0.3),
                       blurRadius: isSelected ? 8 : 6,
                       offset: const Offset(0, 2),
                     ),
@@ -195,8 +193,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         color: isSelected
                             ? Colors.white
                             : isToday
-                            ? const Color(0xFF1976D2)
-                            : Colors.grey.shade800,
+                                ? const Color(0xFF1976D2)
+                                : Colors.grey.shade800,
                       ),
                     ),
                     if (totalHabits > 0) ...[
@@ -291,9 +289,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               IconButton(
                 icon: const Icon(Icons.chevron_right, size: 32),
                 onPressed: isInFuture ? null : _goToNextDay,
-                color: isInFuture
-                    ? Colors.grey.shade300
-                    : const Color(0xFF1976D2),
+                color:
+                    isInFuture ? Colors.grey.shade300 : const Color(0xFF1976D2),
               ),
             ],
           ),

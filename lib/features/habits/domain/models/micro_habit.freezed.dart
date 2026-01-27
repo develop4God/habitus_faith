@@ -85,36 +85,35 @@ class _$MicroHabitCopyWithImpl<$Res, $Val extends MicroHabit>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            action: null == action
-                ? _value.action
-                : action // ignore: cast_nullable_to_non_nullable
-                      as String,
-            verse: null == verse
-                ? _value.verse
-                : verse // ignore: cast_nullable_to_non_nullable
-                      as String,
-            verseText: freezed == verseText
-                ? _value.verseText
-                : verseText // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            purpose: null == purpose
-                ? _value.purpose
-                : purpose // ignore: cast_nullable_to_non_nullable
-                      as String,
-            estimatedMinutes: null == estimatedMinutes
-                ? _value.estimatedMinutes
-                : estimatedMinutes // ignore: cast_nullable_to_non_nullable
-                      as int,
-            generatedAt: freezed == generatedAt
-                ? _value.generatedAt
-                : generatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        action: null == action
+            ? _value.action
+            : action // ignore: cast_nullable_to_non_nullable
+                as String,
+        verse: null == verse
+            ? _value.verse
+            : verse // ignore: cast_nullable_to_non_nullable
+                as String,
+        verseText: freezed == verseText
+            ? _value.verseText
+            : verseText // ignore: cast_nullable_to_non_nullable
+                as String?,
+        purpose: null == purpose
+            ? _value.purpose
+            : purpose // ignore: cast_nullable_to_non_nullable
+                as String,
+        estimatedMinutes: null == estimatedMinutes
+            ? _value.estimatedMinutes
+            : estimatedMinutes // ignore: cast_nullable_to_non_nullable
+                as int,
+        generatedAt: freezed == generatedAt
+            ? _value.generatedAt
+            : generatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime?,
+      ) as $Val,
     );
   }
 }
@@ -166,31 +165,31 @@ class __$$MicroHabitImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         action: null == action
             ? _value.action
             : action // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         verse: null == verse
             ? _value.verse
             : verse // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         verseText: freezed == verseText
             ? _value.verseText
             : verseText // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         purpose: null == purpose
             ? _value.purpose
             : purpose // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         estimatedMinutes: null == estimatedMinutes
             ? _value.estimatedMinutes
             : estimatedMinutes // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         generatedAt: freezed == generatedAt
             ? _value.generatedAt
             : generatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
+                as DateTime?,
       ),
     );
   }
@@ -257,15 +256,15 @@ class _$MicroHabitImpl implements _MicroHabit {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    action,
-    verse,
-    verseText,
-    purpose,
-    estimatedMinutes,
-    generatedAt,
-  );
+        runtimeType,
+        id,
+        action,
+        verse,
+        verseText,
+        purpose,
+        estimatedMinutes,
+        generatedAt,
+      );
 
   /// Create a copy of MicroHabit
   /// with the given fields replaced by the non-null parameter values.

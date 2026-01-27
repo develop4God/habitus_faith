@@ -160,9 +160,8 @@ class _EnhancedHabitCalendarViewState
                     final logsForDay = calendarState.logsForRange[dateKey];
 
                     if (logsForDay != null && logsForDay.isNotEmpty) {
-                      final completedCount = logsForDay
-                          .where((log) => log.completed)
-                          .length;
+                      final completedCount =
+                          logsForDay.where((log) => log.completed).length;
                       if (completedCount > 0) {
                         return [
                           completedCount,
@@ -278,9 +277,8 @@ class _EnhancedHabitCalendarViewState
                     ),
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-            trailing: isCompleted
-                ? Icon(Icons.verified, color: habitColor)
-                : null,
+            trailing:
+                isCompleted ? Icon(Icons.verified, color: habitColor) : null,
           ),
         );
       },

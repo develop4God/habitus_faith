@@ -13,17 +13,14 @@ import 'habits_page_ui.dart'; // Nuevo import
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   final repository = ref.watch(jsonHabitsRepositoryProvider);
   debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
-  final stream = repository
-      .watchHabits()
-      .map((list) {
-        debugPrint(
-          'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
-        );
-        return list;
-      })
-      .handleError((e, st) {
-        debugPrint('jsonHabitsStreamProvider: stream error -> $e');
-      });
+  final stream = repository.watchHabits().map((list) {
+    debugPrint(
+      'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
+    );
+    return list;
+  }).handleError((e, st) {
+    debugPrint('jsonHabitsStreamProvider: stream error -> $e');
+  });
   return stream;
 });
 
@@ -172,8 +169,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
 final jsonHabitsNotifierProvider =
     StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
-      return JsonHabitsNotifier(ref);
-    });
+  return JsonHabitsNotifier(ref);
+});
 
 class HabitsPage extends ConsumerStatefulWidget {
   const HabitsPage({super.key});

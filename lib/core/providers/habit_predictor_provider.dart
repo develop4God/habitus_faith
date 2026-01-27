@@ -146,7 +146,7 @@ class HabitPredictorService {
       if (newDifficultyLevel < habit.difficultyLevel) {
         final newTargetMinutes =
             Habit.targetMinutesByLevel[newDifficultyLevel] ??
-            habit.targetMinutes;
+                habit.targetMinutes;
 
         // Show nudge notification
         await _showNudgeNotification(

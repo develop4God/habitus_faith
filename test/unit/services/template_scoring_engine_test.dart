@@ -245,9 +245,8 @@ void main() {
         ),
       ];
 
-      final scores = templates
-          .map((t) => engine.calculateScore(user, t))
-          .toList();
+      final scores =
+          templates.map((t) => engine.calculateScore(user, t)).toList();
 
       // Second template (exact match) should have highest score
       expect(scores[1].totalScore, greaterThan(scores[0].totalScore));
@@ -307,8 +306,7 @@ void main() {
       const motivationsScore = 0.5; // Jaccard: 1/3
       const maturityScore = 0.7; // adjacent levels
 
-      const expectedTotal =
-          (intentScore * 0.40) +
+      const expectedTotal = (intentScore * 0.40) +
           (supportScore * 0.20) +
           (challengeScore * 0.20) +
           (motivationsScore * 0.15) +
