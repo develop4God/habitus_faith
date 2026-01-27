@@ -566,7 +566,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               const SizedBox(height: 24),
             ],
           ),
-
           Row(
             children: [
               _buildModernStatCard(
@@ -592,7 +591,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             ],
           ),
           const SizedBox(height: 32),
-
           if (!isCompleted)
             SizedBox(
               width: double.infinity,
@@ -636,9 +634,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                 ),
               ),
             ),
-
           const SizedBox(height: 24),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
