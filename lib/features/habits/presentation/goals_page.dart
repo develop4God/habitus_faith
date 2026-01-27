@@ -115,8 +115,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
           goalsAsync.when(
             data: (goals) {
               // Filter goals by selected tab
-              final filteredGoals = goals.where((g) => g.type == _selectedTab).toList();
-              
+              final filteredGoals =
+                  goals.where((g) => g.type == _selectedTab).toList();
+
               if (filteredGoals.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
@@ -320,8 +321,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, color: Colors.grey),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                        value: 'edit', child: Text('Editar')),
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                         value: 'delete', child: Text('Eliminar')),
                   ],
@@ -469,12 +469,13 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 decoration: InputDecoration(
                   labelText: '¿Qué quieres lograr?',
                   hintText: 'Ej: Leer toda la Biblia',
-                  border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Plazo', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Plazo',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -497,7 +498,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   );
                 }).toList(),
               ),
-              if (selectedType == GoalType.custom && customDeadline != null) ...[
+              if (selectedType == GoalType.custom &&
+                  customDeadline != null) ...[
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -507,7 +509,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today, color: Colors.blue.shade700, size: 20),
+                      Icon(Icons.calendar_today,
+                          color: Colors.blue.shade700, size: 20),
                       const SizedBox(width: 8),
                       Text(
                         'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
@@ -520,7 +523,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
                         onPressed: () {
-                          _selectCustomDeadline(context, customDeadline, (date) {
+                          _selectCustomDeadline(context, customDeadline,
+                              (date) {
                             setDialogState(() => customDeadline = date);
                           });
                         },
@@ -539,16 +543,18 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   onPressed: () {
                     if (titleCtrl.text.isNotEmpty) {
                       // Validate custom deadline
-                      if (selectedType == GoalType.custom && customDeadline == null) {
+                      if (selectedType == GoalType.custom &&
+                          customDeadline == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Por favor selecciona una fecha límite'),
+                            content:
+                                Text('Por favor selecciona una fecha límite'),
                             backgroundColor: Colors.red,
                           ),
                         );
                         return;
                       }
-                      
+
                       DateTime deadline;
                       if (selectedType == GoalType.custom) {
                         deadline = customDeadline!;
@@ -557,9 +563,10 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
                       } else {
-                        deadline = DateTime.now().add(const Duration(days: 365));
+                        deadline =
+                            DateTime.now().add(const Duration(days: 365));
                       }
-                      
+
                       final newGoal = Goal(
                         id: const Uuid().v4(),
                         userId: 'local_user',
@@ -595,7 +602,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   void _showEditGoalDialog(BuildContext context, Goal goal) {
     final titleCtrl = TextEditingController(text: goal.title);
     GoalType selectedType = goal.type;
-    DateTime? customDeadline = goal.type == GoalType.custom ? goal.deadline : null;
+    DateTime? customDeadline =
+        goal.type == GoalType.custom ? goal.deadline : null;
 
     showModalBottomSheet(
       context: context,
@@ -628,12 +636,13 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 decoration: InputDecoration(
                   labelText: '¿Qué quieres lograr?',
                   hintText: 'Ej: Leer toda la Biblia',
-                  border:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Plazo', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Plazo',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -656,7 +665,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   );
                 }).toList(),
               ),
-              if (selectedType == GoalType.custom && customDeadline != null) ...[
+              if (selectedType == GoalType.custom &&
+                  customDeadline != null) ...[
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -666,7 +676,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today, color: Colors.blue.shade700, size: 20),
+                      Icon(Icons.calendar_today,
+                          color: Colors.blue.shade700, size: 20),
                       const SizedBox(width: 8),
                       Text(
                         'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
@@ -679,7 +690,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
                         onPressed: () {
-                          _selectCustomDeadline(context, customDeadline, (date) {
+                          _selectCustomDeadline(context, customDeadline,
+                              (date) {
                             setDialogState(() => customDeadline = date);
                           });
                         },
@@ -698,16 +710,18 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   onPressed: () {
                     if (titleCtrl.text.isNotEmpty) {
                       // Validate custom deadline
-                      if (selectedType == GoalType.custom && customDeadline == null) {
+                      if (selectedType == GoalType.custom &&
+                          customDeadline == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Por favor selecciona una fecha límite'),
+                            content:
+                                Text('Por favor selecciona una fecha límite'),
                             backgroundColor: Colors.red,
                           ),
                         );
                         return;
                       }
-                      
+
                       DateTime deadline;
                       if (selectedType == GoalType.custom) {
                         deadline = customDeadline!;
@@ -716,15 +730,18 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
                       } else {
-                        deadline = DateTime.now().add(const Duration(days: 365));
+                        deadline =
+                            DateTime.now().add(const Duration(days: 365));
                       }
-                      
+
                       final updatedGoal = goal.copyWith(
                         title: titleCtrl.text,
                         type: selectedType,
                         deadline: deadline,
                       );
-                      ref.read(jsonGoalsRepositoryProvider).updateGoal(updatedGoal);
+                      ref
+                          .read(jsonGoalsRepositoryProvider)
+                          .updateGoal(updatedGoal);
                       Navigator.pop(context);
                     }
                   },
@@ -754,7 +771,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: currentDeadline ?? DateTime.now().add(const Duration(days: 30)),
+      initialDate:
+          currentDeadline ?? DateTime.now().add(const Duration(days: 30)),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
       builder: (context, child) {
