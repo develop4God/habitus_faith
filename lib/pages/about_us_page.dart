@@ -255,7 +255,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       onTap: () async {
                         final url = Uri.parse('https://www.develop4God.com');
                         if (await canLaunchUrl(url)) {
-                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                          await launchUrl(url,
+                              mode: LaunchMode.externalApplication);
                         }
                       },
                       child: Row(
