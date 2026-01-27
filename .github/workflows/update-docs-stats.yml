@@ -1,0 +1,186 @@
+name: 📊 Update Documentation Stats
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-stats:
+    name: Update Test & Coverage Stats
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.8'
+          channel: 'stable'
+          cache: true
+          
+      - name: 📦 Get dependencies
+        run: flutter pub get
+        
+      - name: 🧪 Run tests with coverage
+        run: |
+          flutter test --coverage --reporter json > test_results.json || true
+          flutter test --coverage > test_results.txt 2>&1 || true
+        continue-on-error: true
+        
+      - name: 📊 Calculate statistics
+        id: stats
+        run: |
+          # Count Dart files
+          DART_FILES=$(find lib -name "*.dart" -type f | wc -l)
+          echo "dart_files=$DART_FILES" >> $GITHUB_OUTPUT
+          
+          # Extract test results
+          if [ -f test_results.txt ]; then
+            TOTAL_TESTS=$(grep -oP '\d+(?= tests passed)' test_results.txt | head -1 || echo "0")
+            FAILED_TESTS=$(grep -oP '\d+(?= failed)' test_results.txt | head -1 || echo "0")
+            PASSED_TESTS=$((TOTAL_TESTS - FAILED_TESTS))
+            
+            echo "total_tests=$TOTAL_TESTS" >> $GITHUB_OUTPUT
+            echo "passed_tests=$PASSED_TESTS" >> $GITHUB_OUTPUT
+            echo "failed_tests=$FAILED_TESTS" >> $GITHUB_OUTPUT
+          else
+            echo "total_tests=0" >> $GITHUB_OUTPUT
+            echo "passed_tests=0" >> $GITHUB_OUTPUT
+            echo "failed_tests=0" >> $GITHUB_OUTPUT
+          fi
+          
+          # Calculate coverage percentage
+          if [ -f coverage/lcov.info ]; then
+            LINES_FOUND=$(grep -E "^LF:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+            LINES_HIT=$(grep -E "^LH:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+            if [ "$LINES_FOUND" -gt 0 ]; then
+              COVERAGE=$(awk "BEGIN {printf \"%.1f\", ($LINES_HIT / $LINES_FOUND) * 100}")
+            else
+              COVERAGE="0.0"
+            fi
+            echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          else
+            echo "coverage=0.0" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 📝 Update README badges
+        env:
+          DART_FILES: ${{ steps.stats.outputs.dart_files }}
+          TOTAL_TESTS: ${{ steps.stats.outputs.total_tests }}
+          PASSED_TESTS: ${{ steps.stats.outputs.passed_tests }}
+          FAILED_TESTS: ${{ steps.stats.outputs.failed_tests }}
+          COVERAGE: ${{ steps.stats.outputs.coverage }}
+        run: |
+          # Update README.md with new stats
+          if [ -f README.md ]; then
+            # Update test badge
+            if [ "$FAILED_TESTS" -eq 0 ]; then
+              TEST_COLOR="brightgreen"
+              TEST_STATUS="${PASSED_TESTS} passing"
+            else
+              TEST_COLOR="yellow"
+              TEST_STATUS="${PASSED_TESTS}/${TOTAL_TESTS} passing"
+            fi
+            
+            # Update coverage badge color
+            if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+              COV_COLOR="green"
+            elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
+              COV_COLOR="yellow"
+            else
+              COV_COLOR="red"
+            fi
+            
+            # Replace badges in README
+            sed -i "s|\[\!\[Tests\](https://img.shields.io/badge/tests-[^)]*)\]()|\[\!\[Tests\](https://img.shields.io/badge/tests-${TEST_STATUS}-${TEST_COLOR})\]()|g" README.md
+            sed -i "s|\[\!\[Coverage\](https://img.shields.io/badge/coverage-[^)]*)\]()|\[\!\[Coverage\](https://img.shields.io/badge/coverage-${COVERAGE}%25-${COV_COLOR})\]()|g" README.md
+            
+            echo "README.md updated with new badges"
+          fi
+          
+      - name: 📝 Generate documentation stats file
+        env:
+          DART_FILES: ${{ steps.stats.outputs.dart_files }}
+          TOTAL_TESTS: ${{ steps.stats.outputs.total_tests }}
+          PASSED_TESTS: ${{ steps.stats.outputs.passed_tests }}
+          FAILED_TESTS: ${{ steps.stats.outputs.failed_tests }}
+          COVERAGE: ${{ steps.stats.outputs.coverage }}
+        run: |
+          cat > docs/STATS.md << EOF
+          # 📊 Project Statistics
+          
+          **Last Updated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          ## Code Metrics
+          
+          | Metric | Value |
+          |--------|-------|
+          | 📄 Dart Files | ${DART_FILES} |
+          | 🧪 Total Tests | ${TOTAL_TESTS} |
+          | ✅ Passing Tests | ${PASSED_TESTS} |
+          | ❌ Failing Tests | ${FAILED_TESTS} |
+          | 📊 Test Coverage | ${COVERAGE}% |
+          
+          ## Test Results
+          
+          \`\`\`
+          Tests Passed: ${PASSED_TESTS}
+          Tests Failed: ${FAILED_TESTS}
+          Total Tests: ${TOTAL_TESTS}
+          Coverage: ${COVERAGE}%
+          \`\`\`
+          
+          ## Coverage Report
+          
+          For detailed coverage information, see [coverage/lcov.info](../coverage/lcov.info)
+          
+          ---
+          
+          *This file is automatically generated by CI. Do not edit manually.*
+          EOF
+          
+          echo "Documentation stats file created at docs/STATS.md"
+          
+      - name: 💾 Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Add changes
+          git add README.md docs/STATS.md test_results.txt coverage/ 2>/dev/null || true
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "📊 Auto-update: Documentation stats and coverage [skip ci]"
+            git push || echo "Push failed, possibly due to no changes or permissions"
+          fi
+        continue-on-error: true
+        
+      - name: 📋 Summary
+        run: |
+          echo "## 📊 Statistics Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 📄 Dart Files | ${{ steps.stats.outputs.dart_files }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🧪 Total Tests | ${{ steps.stats.outputs.total_tests }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ✅ Passing Tests | ${{ steps.stats.outputs.passed_tests }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ❌ Failing Tests | ${{ steps.stats.outputs.failed_tests }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📊 Coverage | ${{ steps.stats.outputs.coverage }}% |" >> $GITHUB_STEP_SUMMARY

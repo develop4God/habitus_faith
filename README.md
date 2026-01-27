@@ -134,6 +134,17 @@ Full dependency injection architecture
 - v1.1: Push notifications, weekly reports
 - v2.0: ML-based predictions, wearables integration, group challenges
 
+### 📚 Documentation
+
+Comprehensive documentation is available in the [docs](docs/README.md) folder:
+
+- **[Quick Reference](docs/guides/QUICK_REFERENCE.md)** - Common commands and tasks
+- **[Features](docs/features/)** - Detailed feature documentation
+- **[Implementation](docs/implementation/)** - Implementation summaries and checklists
+- **[Testing](docs/testing/)** - Testing guides and reports
+- **[Reports](docs/reports/)** - Status reports and change logs
+- **[Project Statistics](docs/STATS.md)** - Auto-updated test and coverage stats
+
 ### 🤝 Contributing
 1. Fork repository  
 2. Create your branch  
@@ -171,7 +182,7 @@ Flutter, Riverpod, Firebase, Gemini, and the open source community
 
 ### 📞 Support
 - Email: support@develop4god.com  
-- Docs: [docs/README.md](docs/README.md)  
+- 📚 **[Documentation Hub](docs/README.md)** - Comprehensive guides, features, and reports  
 - Issues: [GitHub Issues](https://github.com/develop4God/habitus_faith/issues)  
 - Discussions: [GitHub Discussions](https://github.com/develop4God/habitus_faith/discussions)
 
@@ -334,6 +345,17 @@ Arquitectura de inyección de dependencias completa
 - v1.1: Notificaciones push, reportes semanales
 - v2.0: Predicción con ML, integración con wearables, retos de grupo
 
+### 📚 Documentación
+
+Documentación completa disponible en la carpeta [docs](docs/README.md):
+
+- **[Referencia Rápida](docs/guides/QUICK_REFERENCE.md)** - Comandos y tareas comunes
+- **[Características](docs/features/)** - Documentación detallada de características
+- **[Implementación](docs/implementation/)** - Resúmenes y listas de verificación
+- **[Testing](docs/testing/)** - Guías y reportes de pruebas
+- **[Reportes](docs/reports/)** - Reportes de estado y registros de cambios
+- **[Estadísticas del Proyecto](docs/STATS.md)** - Estadísticas de tests y cobertura actualizadas automáticamente
+
 ### 🤝 Cómo contribuir
 1. Haz un fork  
 2. Crea tu rama  
@@ -371,7 +393,7 @@ Flutter, Riverpod, Firebase, Gemini y la comunidad open source.
 
 ### 📞 Soporte
 - Email: support@develop4god.com  
-- Docs: [docs/README.md](docs/README.md)  
+- 📚 **[Centro de Documentación](docs/README.md)** - Guías completas, características e informes  
 - Issues: [GitHub Issues](https://github.com/develop4God/habitus_faith/issues)  
 - Discusiones: [GitHub Discussions](https://github.com/develop4God/habitus_faith/discussions)
 
