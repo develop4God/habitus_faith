@@ -66,48 +66,45 @@ void main() {
   });
 
   group('Devotional Date Display Tests', () {
-    testWidgets('Should display "Today" for today\'s devotional in English',
-        (WidgetTester tester) async {
+    testWidgets('Should display "Today" for today\'s devotional in English', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale('en'),
-          home: Scaffold(
-            body: _TestDateWidget(),
-          ),
+          home: Scaffold(body: _TestDateWidget()),
         ),
       );
 
       expect(find.text('Today'), findsOneWidget);
     });
 
-    testWidgets('Should display "Hoy" for today\'s devotional in Spanish',
-        (WidgetTester tester) async {
+    testWidgets('Should display "Hoy" for today\'s devotional in Spanish', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale('es'),
-          home: Scaffold(
-            body: _TestDateWidget(),
-          ),
+          home: Scaffold(body: _TestDateWidget()),
         ),
       );
 
       expect(find.text('Hoy'), findsOneWidget);
     });
 
-    testWidgets('Should display "Hoje" for today\'s devotional in Portuguese',
-        (WidgetTester tester) async {
+    testWidgets('Should display "Hoje" for today\'s devotional in Portuguese', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale('pt'),
-          home: Scaffold(
-            body: _TestDateWidget(),
-          ),
+          home: Scaffold(body: _TestDateWidget()),
         ),
       );
 
@@ -115,32 +112,30 @@ void main() {
     });
 
     testWidgets(
-        'Should display "Aujourd\'hui" for today\'s devotional in French',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale('fr'),
-          home: Scaffold(
-            body: _TestDateWidget(),
+      'Should display "Aujourd\'hui" for today\'s devotional in French',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale('fr'),
+            home: Scaffold(body: _TestDateWidget()),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Aujourd\'hui'), findsOneWidget);
-    });
+        expect(find.text('Aujourd\'hui'), findsOneWidget);
+      },
+    );
 
-    testWidgets('Should display "今天" for today\'s devotional in Chinese',
-        (WidgetTester tester) async {
+    testWidgets('Should display "今天" for today\'s devotional in Chinese', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale('zh'),
-          home: Scaffold(
-            body: _TestDateWidget(),
-          ),
+          home: Scaffold(body: _TestDateWidget()),
         ),
       );
 

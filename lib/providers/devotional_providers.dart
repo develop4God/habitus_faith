@@ -82,7 +82,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       // Get saved language or use device language
       String savedLanguage =
           prefs.getString(DevotionalConstants.prefSelectedLanguage) ??
-              deviceLanguage;
+          deviceLanguage;
       String selectedLanguage = _getSupportedLanguageWithFallback(
         savedLanguage,
       );
@@ -100,7 +100,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
           prefs.getString(DevotionalConstants.prefSelectedVersion) ?? '';
       String defaultVersion =
           DevotionalConstants.defaultVersionByLanguage[selectedLanguage] ??
-              'RVR1960';
+          'RVR1960';
 
       final availableVersions =
           DevotionalConstants.bibleVersionsByLanguage[selectedLanguage] ?? [];
@@ -155,8 +155,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
       if (favoritesJson != null && favoritesJson.isNotEmpty) {
         final List<dynamic> favoritesData = json.decode(favoritesJson);
-        final favorites =
-            favoritesData.map((item) => Devocional.fromJson(item)).toList();
+        final favorites = favoritesData
+            .map((item) => Devocional.fromJson(item))
+            .toList();
         state = state.copyWith(favorites: favorites);
       }
     } catch (e) {
@@ -309,7 +310,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       // Get default version for the new language
       final defaultVersion =
           DevotionalConstants.defaultVersionByLanguage[languageCode] ??
-              'RVR1960';
+          'RVR1960';
 
       // Persist selected version for the new language
       await prefs.setString(
@@ -381,8 +382,8 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 
   /// Expose available Bible versions for the currently selected language
   List<String> getAvailableVersionsForCurrentLanguage() {
-    return DevotionalConstants
-            .bibleVersionsByLanguage[state.selectedLanguage] ??
+    return DevotionalConstants.bibleVersionsByLanguage[state
+            .selectedLanguage] ??
         [];
   }
 }
@@ -390,5 +391,5 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
 /// Provider for devotional state
 final devotionalProvider =
     StateNotifierProvider<DevotionalNotifier, DevotionalState>((ref) {
-  return DevotionalNotifier();
-});
+      return DevotionalNotifier();
+    });

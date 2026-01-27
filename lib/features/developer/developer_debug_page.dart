@@ -19,7 +19,8 @@ class DeveloperDebugPage extends ConsumerWidget {
       // Prevent access in release mode
       return const Scaffold(
         body: Center(
-            child: Text('Developer tools are only available in debug mode.')),
+          child: Text('Developer tools are only available in debug mode.'),
+        ),
       );
     }
     const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
@@ -93,9 +94,9 @@ class DeveloperDebugPage extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Current simulated time: \\${clock.now()}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.orange,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.orange),
               ),
             ),
           const Divider(),
@@ -143,8 +144,11 @@ class DeveloperDebugPage extends ConsumerWidget {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content: Text('Notification set: '
-                                '${settings?.timing.displayName ?? 'None'} @ ${settings?.eventTime ?? ''}')),
+                          content: Text(
+                            'Notification set: '
+                            '${settings?.timing.displayName ?? 'None'} @ ${settings?.eventTime ?? ''}',
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -161,8 +165,10 @@ class DeveloperDebugPage extends ConsumerWidget {
           const Divider(),
           // Export statistics (JSON) button migrated from SettingsPage
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Builder(
               builder: (context) {
                 return ElevatedButton.icon(
@@ -177,8 +183,8 @@ class DeveloperDebugPage extends ConsumerWidget {
                       if (navigator.mounted) {
                         messenger.showSnackBar(
                           const SnackBar(
-                              content:
-                                  Text('No hay estadísticas para exportar.')),
+                            content: Text('No hay estadísticas para exportar.'),
+                          ),
                         );
                       }
                       return;
@@ -189,13 +195,16 @@ class DeveloperDebugPage extends ConsumerWidget {
                       final formatted =
                           '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
                       final file = File(
-                          '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$formatted.json');
+                        '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$formatted.json',
+                      );
                       await file.writeAsString(statsJson);
                       if (navigator.mounted) {
                         messenger.showSnackBar(
                           SnackBar(
-                              content: Text(
-                                  'Estadísticas exportadas en: \n${file.path}')),
+                            content: Text(
+                              'Estadísticas exportadas en: \n${file.path}',
+                            ),
+                          ),
                         );
                       }
                     } catch (e) {

@@ -148,9 +148,7 @@ void main() {
         expect(find.text('Morning Prayer'), findsOneWidget);
       });
 
-      testWidgets('habit renders when completed', (
-        WidgetTester tester,
-      ) async {
+      testWidgets('habit renders when completed', (WidgetTester tester) async {
         final completedHabit = testHabit.copyWith(completedToday: true);
         await tester.pumpWidget(createApp(completedHabit));
         await tester.pump();

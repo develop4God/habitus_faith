@@ -55,7 +55,8 @@ class Devocional {
       id: json['id'] as String? ?? UniqueKey().hashCode.toString(),
       versiculo: rawVersiculo,
       reflexion: json['reflexion'] ?? '',
-      paraMeditar: (json['para_meditar'] as List<dynamic>?)
+      paraMeditar:
+          (json['para_meditar'] as List<dynamic>?)
               ?.map(
                 (item) => ParaMeditar.fromJson(item as Map<String, dynamic>),
               )

@@ -23,62 +23,70 @@ void main() {
     });
 
     testWidgets(
-        'Habit completion persists after marking as complete and navigating away',
-        (WidgetTester tester) async {
-      final prefs = await SharedPreferences.getInstance();
-      final storageService = JsonStorageService(prefs);
-      const userId = 'test_user';
-      final repository = JsonHabitsRepository(
-        storage: storageService,
-        userId: userId,
-        idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
-      );
+      'Habit completion persists after marking as complete and navigating away',
+      (WidgetTester tester) async {
+        final prefs = await SharedPreferences.getInstance();
+        final storageService = JsonStorageService(prefs);
+        const userId = 'test_user';
+        final repository = JsonHabitsRepository(
+          storage: storageService,
+          userId: userId,
+          idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
+        );
 
-      // Create a test habit
-      final result = await repository.createHabit(
-        name: 'Test Habit',
-        category: HabitCategory.spiritual,
-        emoji: '🙏',
-      );
+        // Create a test habit
+        final result = await repository.createHabit(
+          name: 'Test Habit',
+          category: HabitCategory.spiritual,
+          emoji: '🙏',
+        );
 
-      late Habit createdHabit;
-      result.fold(
-        (failure) => fail('Failed to create habit'),
-        (habit) => createdHabit = habit,
-      );
+        late Habit createdHabit;
+        result.fold(
+          (failure) => fail('Failed to create habit'),
+          (habit) => createdHabit = habit,
+        );
 
-      expect(createdHabit.completedToday, false);
+        expect(createdHabit.completedToday, false);
 
-      // Complete the habit
-      final completeResult = await repository.completeHabit(createdHabit.id);
+        // Complete the habit
+        final completeResult = await repository.completeHabit(createdHabit.id);
 
-      late Habit completedHabit;
-      completeResult.fold(
-        (failure) => fail('Failed to complete habit'),
-        (habit) => completedHabit = habit,
-      );
+        late Habit completedHabit;
+        completeResult.fold(
+          (failure) => fail('Failed to complete habit'),
+          (habit) => completedHabit = habit,
+        );
 
-      expect(completedHabit.completedToday, true);
+        expect(completedHabit.completedToday, true);
 
-      // Simulate navigating away by creating a new repository instance
-      final newRepository = JsonHabitsRepository(
-        storage: storageService,
-        userId: userId,
-        idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
-      );
+        // Simulate navigating away by creating a new repository instance
+        final newRepository = JsonHabitsRepository(
+          storage: storageService,
+          userId: userId,
+          idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
+        );
 
-      // Load habits and verify completion persisted
-      final habits = await newRepository.watchHabits().first;
-      final reloadedHabit = habits.firstWhere((h) => h.id == createdHabit.id);
+        // Load habits and verify completion persisted
+        final habits = await newRepository.watchHabits().first;
+        final reloadedHabit = habits.firstWhere((h) => h.id == createdHabit.id);
 
-      expect(reloadedHabit.completedToday, true,
-          reason: 'Habit completion should persist after reload');
-      expect(reloadedHabit.currentStreak, 1,
-          reason: 'Streak should be updated');
-    });
+        expect(
+          reloadedHabit.completedToday,
+          true,
+          reason: 'Habit completion should persist after reload',
+        );
+        expect(
+          reloadedHabit.currentStreak,
+          1,
+          reason: 'Streak should be updated',
+        );
+      },
+    );
 
-    testWidgets('Habit can be unchecked and state persists',
-        (WidgetTester tester) async {
+    testWidgets('Habit can be unchecked and state persists', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
       final storageService = JsonStorageService(prefs);
       const userId = 'test_user';
@@ -118,21 +126,23 @@ void main() {
       final habits = await repository.watchHabits().first;
       final reloadedHabit = habits.firstWhere((h) => h.id == habitId);
 
-      expect(reloadedHabit.completedToday, false,
-          reason: 'Habit uncheck should persist');
+      expect(
+        reloadedHabit.completedToday,
+        false,
+        reason: 'Habit uncheck should persist',
+      );
     });
   });
 
   group('Time Acceleration - Developer Flag', () {
-    testWidgets('Settings page shows developer section in debug mode',
-        (WidgetTester tester) async {
+    testWidgets('Settings page shows developer section in debug mode', (
+      WidgetTester tester,
+    ) async {
       final prefs = await SharedPreferences.getInstance();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
@@ -153,8 +163,9 @@ void main() {
       }
     });
 
-    testWidgets('FAST_TIME banner appears when time acceleration is enabled',
-        (WidgetTester tester) async {
+    testWidgets('FAST_TIME banner appears when time acceleration is enabled', (
+      WidgetTester tester,
+    ) async {
       // This test verifies the FastTimeBanner is shown
       // Note: FAST_TIME can only be set via --dart-define at compile time
       // This test structure is prepared for when FAST_TIME is enabled
@@ -198,8 +209,10 @@ void main() {
       final currentTime = debugClock.now();
 
       // Both times should be "now" since we're not actually waiting
-      expect(currentTime.difference(startTime).inSeconds,
-          lessThan(2)); // Allow for minimal time passage
+      expect(
+        currentTime.difference(startTime).inSeconds,
+        lessThan(2),
+      ); // Allow for minimal time passage
     });
 
     test('DebugClock rejects invalid multipliers', () {
@@ -210,8 +223,9 @@ void main() {
   });
 
   group('Modal Keyboard Behavior', () {
-    testWidgets('Modal sheet adjusts for keyboard',
-        (WidgetTester tester) async {
+    testWidgets('Modal sheet adjusts for keyboard', (
+      WidgetTester tester,
+    ) async {
       // This test verifies the modal sheet structure supports keyboard adjustment
       // The actual keyboard behavior is handled by the platform and can't be
       // fully tested in widget tests, but we can verify the structure is correct
@@ -220,9 +234,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: const MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
@@ -230,11 +242,7 @@ void main() {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: [Locale('en', '')],
-            home: Scaffold(
-              body: Center(
-                child: Text('Test Page'),
-              ),
-            ),
+            home: Scaffold(body: Center(child: Text('Test Page'))),
           ),
         ),
       );

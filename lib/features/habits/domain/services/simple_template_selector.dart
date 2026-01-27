@@ -30,12 +30,12 @@ class SimpleTemplateSelector {
     (PrimaryIntent.faithBased, ScoreLevel.basic): ['morning_prayer'],
     (PrimaryIntent.faithBased, ScoreLevel.intermediate): [
       'morning_prayer',
-      'bible_reading'
+      'bible_reading',
     ],
     (PrimaryIntent.faithBased, ScoreLevel.advanced): [
       'morning_prayer',
       'bible_reading',
-      'gratitude'
+      'gratitude',
     ],
 
     // Wellness paths
@@ -44,7 +44,7 @@ class SimpleTemplateSelector {
     (PrimaryIntent.wellness, ScoreLevel.advanced): [
       'exercise',
       'sleep',
-      'healthy_eating'
+      'healthy_eating',
     ],
 
     // Mixed/Study/Peace paths (consolidated)
@@ -53,19 +53,19 @@ class SimpleTemplateSelector {
     (PrimaryIntent.mixed, ScoreLevel.advanced): [
       'meditation',
       'learning',
-      'gratitude'
+      'gratitude',
     ],
 
     // Study specific
     (PrimaryIntent.study, ScoreLevel.basic): ['learning'],
     (PrimaryIntent.study, ScoreLevel.intermediate): [
       'learning',
-      'bible_reading'
+      'bible_reading',
     ],
     (PrimaryIntent.study, ScoreLevel.advanced): [
       'learning',
       'bible_reading',
-      'creativity'
+      'creativity',
     ],
 
     // Peace specific
@@ -74,7 +74,7 @@ class SimpleTemplateSelector {
     (PrimaryIntent.peace, ScoreLevel.advanced): [
       'meditation',
       'gratitude',
-      'worship'
+      'worship',
     ],
   };
 

@@ -7,11 +7,7 @@ class ReminderConfigDialog extends ConsumerStatefulWidget {
   final HabitNotificationSettings? initialSettings;
   final String? eventTime;
 
-  const ReminderConfigDialog({
-    super.key,
-    this.initialSettings,
-    this.eventTime,
-  });
+  const ReminderConfigDialog({super.key, this.initialSettings, this.eventTime});
 
   @override
   ConsumerState<ReminderConfigDialog> createState() =>
@@ -83,9 +79,9 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               const SizedBox(height: 4),
               Text(
                 l10n.reminderConfig,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               _buildTimingOption(
@@ -102,24 +98,27 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               _buildTimingOption(
                 timing: NotificationTiming.tenMinutesBefore,
                 title: NotificationTiming.tenMinutesBefore.displayName,
-                effectiveTime:
-                    _getEffectiveTime(NotificationTiming.tenMinutesBefore),
+                effectiveTime: _getEffectiveTime(
+                  NotificationTiming.tenMinutesBefore,
+                ),
                 isSelected:
                     selectedTiming == NotificationTiming.tenMinutesBefore,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.thirtyMinutesBefore,
                 title: NotificationTiming.thirtyMinutesBefore.displayName,
-                effectiveTime:
-                    _getEffectiveTime(NotificationTiming.thirtyMinutesBefore),
+                effectiveTime: _getEffectiveTime(
+                  NotificationTiming.thirtyMinutesBefore,
+                ),
                 isSelected:
                     selectedTiming == NotificationTiming.thirtyMinutesBefore,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.oneHourBefore,
                 title: NotificationTiming.oneHourBefore.displayName,
-                effectiveTime:
-                    _getEffectiveTime(NotificationTiming.oneHourBefore),
+                effectiveTime: _getEffectiveTime(
+                  NotificationTiming.oneHourBefore,
+                ),
                 isSelected: selectedTiming == NotificationTiming.oneHourBefore,
               ),
               _buildTimingOption(
@@ -139,8 +138,9 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                           customMinutes! < 1 ||
                           customMinutes! > 1440) {
                         setState(() {
-                          customMinutesError =
-                              AppLocalizations.of(context)!.invalidMinutes;
+                          customMinutesError = AppLocalizations.of(
+                            context,
+                          )!.invalidMinutes;
                         });
                         return;
                       }
@@ -201,8 +201,9 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                     title,
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                   ),
                   if (effectiveTime != null && effectiveTime.isNotEmpty)
@@ -233,9 +234,11 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                                   });
                                 }
                               },
-                              child: Text(customTime != null
-                                  ? customTime!.format(context)
-                                  : 'Seleccionar hora'),
+                              child: Text(
+                                customTime != null
+                                    ? customTime!.format(context)
+                                    : 'Seleccionar hora',
+                              ),
                             ),
                           ),
                         ],

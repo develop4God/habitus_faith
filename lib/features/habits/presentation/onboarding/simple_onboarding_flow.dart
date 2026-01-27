@@ -63,14 +63,15 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
     if (currentGoals.contains(goal)) {
       // Remove goal
-      ref.read(selectedGoalsProvider.notifier).state =
-          currentGoals.where((g) => g != goal).toList();
+      ref.read(selectedGoalsProvider.notifier).state = currentGoals
+          .where((g) => g != goal)
+          .toList();
     } else {
       // Add goal (max 3)
       if (currentGoals.length < OnboardingConfig.maxGoals) {
         ref.read(selectedGoalsProvider.notifier).state = [
           ...currentGoals,
-          goal
+          goal,
         ];
       }
     }
@@ -110,8 +111,10 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n?.onboardingSelectAtLeastOneGoal ??
-                'Por favor selecciona al menos un objetivo'),
+            content: Text(
+              l10n?.onboardingSelectAtLeastOneGoal ??
+                  'Por favor selecciona al menos un objetivo',
+            ),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -159,7 +162,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
   Future<void> _showLoadingAndNavigate() async {
     debugPrint(
-        '🟢 Onboarding V2: Completed 3rd question, preparing habit preview...');
+      '🟢 Onboarding V2: Completed 3rd question, preparing habit preview...',
+    );
     try {
       final l10n = AppLocalizations.of(context);
       debugPrint('🟢 Showing loading dialog...');
@@ -267,9 +271,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
             const SizedBox(height: 24),
 
             // Question content
-            Expanded(
-              child: _buildQuestionContent(currentQuestion),
-            ),
+            Expanded(child: _buildQuestionContent(currentQuestion)),
           ],
         ),
       ),
@@ -334,10 +336,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           const SizedBox(height: 8),
           const Text(
             'Selecciona hasta 3 objetivos',
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xff64748b),
-            ),
+            style: TextStyle(fontSize: 16, color: Color(0xff64748b)),
           ),
           const SizedBox(height: 32),
 
@@ -388,10 +387,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
               ),
               child: const Text(
                 'Continuar',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -403,10 +399,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
               onPressed: _skipOnboarding,
               child: const Text(
                 'Saltar por ahora',
-                style: TextStyle(
-                  color: Color(0xff64748b),
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Color(0xff64748b), fontSize: 14),
               ),
             ),
           ),
@@ -431,8 +424,9 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color:
-                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
+            color: isSelected
+                ? const Color(0xff6366f1)
+                : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -447,10 +441,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
         ),
         child: Row(
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
+            Text(emoji, style: const TextStyle(fontSize: 32)),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
@@ -496,10 +487,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           const SizedBox(height: 8),
           const Text(
             'Selecciona tu compromiso de tiempo',
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xff64748b),
-            ),
+            style: TextStyle(fontSize: 16, color: Color(0xff64748b)),
           ),
           const SizedBox(height: 32),
 
@@ -546,8 +534,9 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color:
-                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
+            color: isSelected
+                ? const Color(0xff6366f1)
+                : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -570,8 +559,9 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                     text,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       color: isSelected
                           ? const Color(0xff6366f1)
                           : const Color(0xff1e293b),
@@ -622,10 +612,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           const SizedBox(height: 8),
           const Text(
             'Sé honesto, esto nos ayuda a personalizarlo',
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xff64748b),
-            ),
+            style: TextStyle(fontSize: 16, color: Color(0xff64748b)),
           ),
           const SizedBox(height: 32),
 
@@ -676,8 +663,9 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
           color: isSelected ? const Color(0xffeef2ff) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color:
-                isSelected ? const Color(0xff6366f1) : const Color(0xffe2e8f0),
+            color: isSelected
+                ? const Color(0xff6366f1)
+                : const Color(0xffe2e8f0),
             width: 2,
           ),
           boxShadow: isSelected
@@ -692,10 +680,7 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
         ),
         child: Row(
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
+            Text(emoji, style: const TextStyle(fontSize: 32)),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -705,8 +690,9 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                     text,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       color: isSelected
                           ? const Color(0xff6366f1)
                           : const Color(0xff1e293b),

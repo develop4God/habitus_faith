@@ -21,8 +21,7 @@ class GenerationRequest with _$GenerationRequest {
 
   /// Generate cache key from request parameters
   String toCacheKey() =>
-      '${userGoal}_${failurePattern}_${faithContext}_$languageCode'
-          .hashCode
+      '${userGoal}_${failurePattern}_${faithContext}_$languageCode'.hashCode
           .abs()
           .toString();
 }

@@ -29,10 +29,10 @@ class JsonHabitsRepository implements HabitsRepository {
     required String userId,
     required String Function() idGenerator,
     FirebaseFirestore? firestore,
-  })  : _storage = storage,
-        _userId = userId,
-        _idGenerator = idGenerator,
-        _firestore = firestore {
+  }) : _storage = storage,
+       _userId = userId,
+       _idGenerator = idGenerator,
+       _firestore = firestore {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
         debugPrint(
@@ -76,8 +76,9 @@ class JsonHabitsRepository implements HabitsRepository {
     debugPrint(
       'JsonHabitsRepository._loadHabits: filtered habits for user "$_userId": ${habits.length}',
     );
-    final loadedHabits =
-        habits.map((habit) => _loadHabitWithCompletions(habit)).toList();
+    final loadedHabits = habits
+        .map((habit) => _loadHabitWithCompletions(habit))
+        .toList();
     debugPrint(
       'JsonHabitsRepository._loadHabits: loadedHabits (with completions): ${loadedHabits.length}',
     );
@@ -151,11 +152,12 @@ class JsonHabitsRepository implements HabitsRepository {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    final sortedDates = completionDates
-        .map((date) => DateTime(date.year, date.month, date.day))
-        .toSet()
-        .toList()
-      ..sort((a, b) => b.compareTo(a));
+    final sortedDates =
+        completionDates
+            .map((date) => DateTime(date.year, date.month, date.day))
+            .toSet()
+            .toList()
+          ..sort((a, b) => b.compareTo(a));
 
     if (sortedDates.first != today) return 0;
 
@@ -177,11 +179,12 @@ class JsonHabitsRepository implements HabitsRepository {
   int _calculateLongestStreak(List<DateTime> completionDates) {
     if (completionDates.isEmpty) return 0;
 
-    final sortedDates = completionDates
-        .map((date) => DateTime(date.year, date.month, date.day))
-        .toSet()
-        .toList()
-      ..sort();
+    final sortedDates =
+        completionDates
+            .map((date) => DateTime(date.year, date.month, date.day))
+            .toSet()
+            .toList()
+          ..sort();
 
     int longestStreak = 1;
     int currentStreak = 1;
@@ -209,9 +212,7 @@ class JsonHabitsRepository implements HabitsRepository {
     );
     await _storage.saveJsonList(_habitsKey, jsonList);
     _emitHabits();
-    debugPrint(
-      'JsonHabitsRepository._saveHabits: Habits saved and emitted',
-    );
+    debugPrint('JsonHabitsRepository._saveHabits: Habits saved and emitted');
   }
 
   Future<void> _updateStatistics() async {
@@ -298,7 +299,8 @@ class JsonHabitsRepository implements HabitsRepository {
     String? note,
   ) async {
     debugPrint(
-        'completeHabitWithNote: inicio para habitId=$habitId, note=$note');
+      'completeHabitWithNote: inicio para habitId=$habitId, note=$note',
+    );
     try {
       final habits = _loadHabits();
       debugPrint('completeHabitWithNote: hábitos cargados: ${habits.length}');
@@ -311,10 +313,12 @@ class JsonHabitsRepository implements HabitsRepository {
       final now = DateTime.now();
       final habit = habits[index];
       debugPrint(
-          'completeHabitWithNote: estado completedToday antes: ${habit.completedToday}');
+        'completeHabitWithNote: estado completedToday antes: ${habit.completedToday}',
+      );
       if (habit.completedToday) {
         debugPrint(
-            'completeHabitWithNote: hábito "$habitId" ya completado hoy');
+          'completeHabitWithNote: hábito "$habitId" ya completado hoy',
+        );
         return Success(habit);
       }
       final completionRecord = CompletionRecord(
@@ -326,7 +330,8 @@ class JsonHabitsRepository implements HabitsRepository {
       debugPrint('completeHabitWithNote: registro de completado guardado');
       final updatedHabit = _loadHabitWithCompletions(habit);
       debugPrint(
-          'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}');
+        'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}',
+      );
       habits[index] = updatedHabit;
       debugPrint('completeHabitWithNote: hábito actualizado en la lista');
       await _saveHabits(habits);
@@ -334,7 +339,8 @@ class JsonHabitsRepository implements HabitsRepository {
       await _updateStatistics();
       debugPrint('completeHabitWithNote: estadísticas actualizadas');
       debugPrint(
-          'Happy path: completeHabitWithNote retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
+        'Happy path: completeHabitWithNote retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}',
+      );
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('completeHabitWithNote: error: $e');
@@ -514,7 +520,8 @@ class JsonHabitsRepository implements HabitsRepository {
       }
       final habit = habits[index];
       debugPrint(
-          'uncheckHabit: estado completedToday antes: ${habit.completedToday}');
+        'uncheckHabit: estado completedToday antes: ${habit.completedToday}',
+      );
       if (!habit.completedToday) {
         debugPrint('uncheckHabit: hábito "$habitId" no completado hoy');
         return Success(habit);
@@ -552,7 +559,8 @@ class JsonHabitsRepository implements HabitsRepository {
       await _updateStatistics();
       debugPrint('uncheckHabit: estadísticas actualizadas');
       debugPrint(
-          'Happy path: uncheckHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}');
+        'Happy path: uncheckHabit retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}',
+      );
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('uncheckHabit: error: $e');
@@ -628,20 +636,24 @@ class JsonHabitsRepository implements HabitsRepository {
 
   @override
   Future<Result<void, HabitFailure>> reorderHabits(
-      List<String> habitIds) async {
+    List<String> habitIds,
+  ) async {
     try {
       // 1. Load ALL raw habits from storage to avoid losing data (archived, other users, etc)
       final jsonList = _storage.getJsonList(_habitsKey);
-      final allHabits =
-          jsonList.map((json) => HabitModel.fromJson(json)).toList();
+      final allHabits = jsonList
+          .map((json) => HabitModel.fromJson(json))
+          .toList();
 
       // 2. Separate habits that are NOT being reordered (e.g. archived or different user)
-      final otherHabits =
-          allHabits.where((h) => !habitIds.contains(h.id)).toList();
+      final otherHabits = allHabits
+          .where((h) => !habitIds.contains(h.id))
+          .toList();
 
       // 3. Get the habits being reordered and update their order property
-      final habitsToReorder =
-          allHabits.where((h) => habitIds.contains(h.id)).toList();
+      final habitsToReorder = allHabits
+          .where((h) => habitIds.contains(h.id))
+          .toList();
       final habitMap = {for (var h in habitsToReorder) h.id: h};
 
       final reorderedList = <Habit>[];
@@ -657,7 +669,8 @@ class JsonHabitsRepository implements HabitsRepository {
       final finalHabits = [...otherHabits, ...reorderedList];
 
       debugPrint(
-          'JsonHabitsRepository.reorderHabits: Saving ${finalHabits.length} habits total (${reorderedList.length} reordered)');
+        'JsonHabitsRepository.reorderHabits: Saving ${finalHabits.length} habits total (${reorderedList.length} reordered)',
+      );
 
       await _saveHabits(finalHabits);
 

@@ -38,8 +38,9 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
 
   void deselectHabit(String habitId) {
     final current = ref.read(selectedHabitsProvider);
-    ref.read(selectedHabitsProvider.notifier).state =
-        current.where((id) => id != habitId).toList();
+    ref.read(selectedHabitsProvider.notifier).state = current
+        .where((id) => id != habitId)
+        .toList();
   }
 
   Future<bool> completeOnboarding({
@@ -114,5 +115,5 @@ class OnboardingNotifier extends StateNotifier<AsyncValue<void>> {
 
 final onboardingNotifierProvider =
     StateNotifierProvider<OnboardingNotifier, AsyncValue<void>>((ref) {
-  return OnboardingNotifier(ref);
-});
+      return OnboardingNotifier(ref);
+    });

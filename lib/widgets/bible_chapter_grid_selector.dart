@@ -155,8 +155,9 @@ class BibleChapterGridSelector extends StatelessWidget {
             child: Text(
               chapterNumber.toString(),
               style: textTheme.bodyMedium?.copyWith(
-                color:
-                    isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
+                color: isSelected
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 fontSize: 18,
               ),

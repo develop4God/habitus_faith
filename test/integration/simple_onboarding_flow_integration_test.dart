@@ -7,8 +7,10 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-Future<void> pumpSimpleOnboardingFlow(WidgetTester tester,
-    {bool skipIntro = true}) async {
+Future<void> pumpSimpleOnboardingFlow(
+  WidgetTester tester, {
+  bool skipIntro = true,
+}) async {
   final prefs = await SharedPreferences.getInstance();
 
   // Set larger viewport to prevent overflow
@@ -64,8 +66,9 @@ void main() {
           .resetDevicePixelRatio();
     });
 
-    testWidgets('Q1: displays goals question with 4 options',
-        (WidgetTester tester) async {
+    testWidgets('Q1: displays goals question with 4 options', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Should show title
@@ -83,16 +86,19 @@ void main() {
       expect(continueButton, findsOneWidget);
     });
 
-    testWidgets('Q1: selecting 0 goals shows error',
-        (WidgetTester tester) async {
+    testWidgets('Q1: selecting 0 goals shows error', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Continue button should be disabled when no goals selected
       final continueButton = find.text('Continuar');
-      final button = tester.widget<ElevatedButton>(find.ancestor(
-        of: continueButton,
-        matching: find.byType(ElevatedButton),
-      ));
+      final button = tester.widget<ElevatedButton>(
+        find.ancestor(
+          of: continueButton,
+          matching: find.byType(ElevatedButton),
+        ),
+      );
       expect(button.onPressed, isNull);
     });
 
@@ -121,8 +127,9 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsNWidgets(3));
     });
 
-    testWidgets('Q1: cannot select more than 3 goals',
-        (WidgetTester tester) async {
+    testWidgets('Q1: cannot select more than 3 goals', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Select 3 goals
@@ -157,8 +164,9 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsNothing);
     });
 
-    testWidgets('Full flow: Q1 -> Q2 -> Q3 (navigation)',
-        (WidgetTester tester) async {
+    testWidgets('Full flow: Q1 -> Q2 -> Q3 (navigation)', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Q1: Select goal and continue
@@ -186,8 +194,9 @@ void main() {
       expect(find.text('Consistente'), findsOneWidget);
     });
 
-    testWidgets('Progress indicator shows correct step',
-        (WidgetTester tester) async {
+    testWidgets('Progress indicator shows correct step', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Q1: First dot should be active (wide)
@@ -212,8 +221,9 @@ void main() {
       expect(find.text('¿Tu nivel actual?'), findsOneWidget);
     });
 
-    testWidgets('Score calculation: basic level (faith + short + newbie)',
-        (WidgetTester tester) async {
+    testWidgets('Score calculation: basic level (faith + short + newbie)', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Q1: Select faith
@@ -243,63 +253,66 @@ void main() {
     });
 
     testWidgets(
-        'Score calculation: intermediate level (2 goals + medium + growing)',
-        (WidgetTester tester) async {
-      await pumpSimpleOnboardingFlow(tester);
+      'Score calculation: intermediate level (2 goals + medium + growing)',
+      (WidgetTester tester) async {
+        await pumpSimpleOnboardingFlow(tester);
 
-      // Q1: Select 2 goals
-      await tester.tap(find.text('Fe'));
-      await tester.pump();
-      await tester.tap(find.text('Salud'));
-      await tester.pump();
-      await tester.tap(find.text('Continuar'));
-      await tester.pumpAndSettle();
+        // Q1: Select 2 goals
+        await tester.tap(find.text('Fe'));
+        await tester.pump();
+        await tester.tap(find.text('Salud'));
+        await tester.pump();
+        await tester.tap(find.text('Continuar'));
+        await tester.pumpAndSettle();
 
-      // Q2: Select medium time
-      await tester.tap(find.text('10-20 minutos'));
-      await tester.pump(const Duration(milliseconds: 400));
-      await tester.pumpAndSettle();
+        // Q2: Select medium time
+        await tester.tap(find.text('10-20 minutos'));
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pumpAndSettle();
 
-      // Q3: Select growing level
-      await tester.tap(find.text('Creciendo'));
-      await tester.pump(const Duration(milliseconds: 400));
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+        // Q3: Select growing level
+        await tester.tap(find.text('Creciendo'));
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      // Should show intermediate level
-      expect(find.textContaining('Creciendo'), findsOneWidget);
-    });
+        // Should show intermediate level
+        expect(find.textContaining('Creciendo'), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'Score calculation: advanced level (3 goals + long + consistent)',
-        (WidgetTester tester) async {
-      await pumpSimpleOnboardingFlow(tester);
+      'Score calculation: advanced level (3 goals + long + consistent)',
+      (WidgetTester tester) async {
+        await pumpSimpleOnboardingFlow(tester);
 
-      // Q1: Select 3 goals
-      await tester.tap(find.text('Fe'));
-      await tester.pump();
-      await tester.tap(find.text('Salud'));
-      await tester.pump();
-      await tester.tap(find.text('Estudio'));
-      await tester.pump();
-      await tester.tap(find.text('Continuar'));
-      await tester.pumpAndSettle();
+        // Q1: Select 3 goals
+        await tester.tap(find.text('Fe'));
+        await tester.pump();
+        await tester.tap(find.text('Salud'));
+        await tester.pump();
+        await tester.tap(find.text('Estudio'));
+        await tester.pump();
+        await tester.tap(find.text('Continuar'));
+        await tester.pumpAndSettle();
 
-      // Q2: Select long time
-      await tester.tap(find.text('20+ minutos'));
-      await tester.pump(const Duration(milliseconds: 400));
-      await tester.pumpAndSettle();
+        // Q2: Select long time
+        await tester.tap(find.text('20+ minutos'));
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pumpAndSettle();
 
-      // Q3: Select consistent level
-      await tester.tap(find.text('Consistente'));
-      await tester.pump(const Duration(milliseconds: 400));
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+        // Q3: Select consistent level
+        await tester.tap(find.text('Consistente'));
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      // Should show advanced level
-      expect(find.textContaining('Comprometido'), findsOneWidget);
-    });
+        // Should show advanced level
+        expect(find.textContaining('Comprometido'), findsOneWidget);
+      },
+    );
 
-    testWidgets('Accessibility: tap targets are large enough',
-        (WidgetTester tester) async {
+    testWidgets('Accessibility: tap targets are large enough', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Find a goal option InkWell

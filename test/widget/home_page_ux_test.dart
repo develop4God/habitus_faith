@@ -130,8 +130,9 @@ void main() {
     }
 
     group('A. Progress Dominance Tests', () {
-      testWidgets('Progress indicator visible without scrolling',
-          (WidgetTester tester) async {
+      testWidgets('Progress indicator visible without scrolling', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -155,8 +156,9 @@ void main() {
         );
       });
 
-      testWidgets('Progress shows correct percentage',
-          (WidgetTester tester) async {
+      testWidgets('Progress shows correct percentage', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -168,8 +170,9 @@ void main() {
         );
       });
 
-      testWidgets('Progress shows completed/total count',
-          (WidgetTester tester) async {
+      testWidgets('Progress shows completed/total count', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -185,8 +188,9 @@ void main() {
         );
       });
 
-      testWidgets('Progress animates with TweenAnimationBuilder',
-          (WidgetTester tester) async {
+      testWidgets('Progress animates with TweenAnimationBuilder', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pump(); // Initial frame
 
@@ -203,8 +207,9 @@ void main() {
         );
       });
 
-      testWidgets('Progress has elevation for visual dominance',
-          (WidgetTester tester) async {
+      testWidgets('Progress has elevation for visual dominance', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -223,8 +228,9 @@ void main() {
     });
 
     group('B. One-Gesture Completion Tests', () {
-      testWidgets('Habits can be completed by tap',
-          (WidgetTester tester) async {
+      testWidgets('Habits can be completed by tap', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -245,8 +251,9 @@ void main() {
         );
       });
 
-      testWidgets('Habits can be dismissed by swipe',
-          (WidgetTester tester) async {
+      testWidgets('Habits can be dismissed by swipe', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -272,8 +279,9 @@ void main() {
         );
       });
 
-      testWidgets('Completed habits disable interaction',
-          (WidgetTester tester) async {
+      testWidgets('Completed habits disable interaction', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -294,8 +302,9 @@ void main() {
         );
       });
 
-      testWidgets('Habit cards show completion control',
-          (WidgetTester tester) async {
+      testWidgets('Habit cards show completion control', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -323,8 +332,9 @@ void main() {
     });
 
     group('C. Immediate Feedback Tests', () {
-      testWidgets('Completed habits show green background',
-          (WidgetTester tester) async {
+      testWidgets('Completed habits show green background', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -342,8 +352,9 @@ void main() {
         );
       });
 
-      testWidgets('Completed habits show strikethrough text',
-          (WidgetTester tester) async {
+      testWidgets('Completed habits show strikethrough text', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -357,8 +368,9 @@ void main() {
         );
       });
 
-      testWidgets('AnimatedScale applies to habit cards',
-          (WidgetTester tester) async {
+      testWidgets('AnimatedScale applies to habit cards', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -369,8 +381,9 @@ void main() {
         );
       });
 
-      testWidgets('Habits show fire icon for streaks',
-          (WidgetTester tester) async {
+      testWidgets('Habits show fire icon for streaks', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -390,8 +403,8 @@ void main() {
         // Try matching alternative strings for remaining habits
         final remainingFinder =
             find.textContaining('left').evaluate().isNotEmpty
-                ? find.textContaining('left')
-                : find.textContaining('remaining');
+            ? find.textContaining('left')
+            : find.textContaining('remaining');
         expect(
           remainingFinder,
           findsOneWidget,
@@ -404,8 +417,9 @@ void main() {
         );
       });
 
-      testWidgets('Remaining indicator updates dynamically',
-          (WidgetTester tester) async {
+      testWidgets('Remaining indicator updates dynamically', (
+        WidgetTester tester,
+      ) async {
         // Start with all incomplete
         final allIncomplete = testHabits.map((h) {
           return Habit(
@@ -432,8 +446,9 @@ void main() {
         );
       });
 
-      testWidgets('Hides remaining indicator when all complete',
-          (WidgetTester tester) async {
+      testWidgets('Hides remaining indicator when all complete', (
+        WidgetTester tester,
+      ) async {
         // All habits completed
         final allComplete = testHabits.map((h) {
           return Habit(
@@ -462,8 +477,9 @@ void main() {
     });
 
     group('E. Edge Cases Tests', () {
-      testWidgets('No habits - shows start journey message',
-          (WidgetTester tester) async {
+      testWidgets('No habits - shows start journey message', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp([]));
         await tester.pumpAndSettle();
 
@@ -480,8 +496,9 @@ void main() {
         );
       });
 
-      testWidgets('All habits completed - shows celebration',
-          (WidgetTester tester) async {
+      testWidgets('All habits completed - shows celebration', (
+        WidgetTester tester,
+      ) async {
         final allComplete = testHabits.map((h) {
           return Habit(
             id: h.id,
@@ -514,8 +531,9 @@ void main() {
         );
       });
 
-      testWidgets('Single habit - proper pluralization',
-          (WidgetTester tester) async {
+      testWidgets('Single habit - proper pluralization', (
+        WidgetTester tester,
+      ) async {
         final singleHabit = [testHabits[0]];
 
         await tester.pumpWidget(createHomePageApp(singleHabit));
@@ -529,8 +547,9 @@ void main() {
         );
       });
 
-      testWidgets('Weekly consistency handles new habits',
-          (WidgetTester tester) async {
+      testWidgets('Weekly consistency handles new habits', (
+        WidgetTester tester,
+      ) async {
         final now = DateTime.now();
         final newHabit = Habit(
           id: 'new-habit',
@@ -614,16 +633,19 @@ void main() {
         );
       });
 
-      testWidgets('Streaks positioned below habits',
-          (WidgetTester tester) async {
+      testWidgets('Streaks positioned below habits', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
         // Get positions
-        final habitsPosition =
-            tester.getTopLeft(find.text('Morning Prayer').first);
-        final streaksPosition =
-            tester.getTopLeft(find.textContaining('Longest').first);
+        final habitsPosition = tester.getTopLeft(
+          find.text('Morning Prayer').first,
+        );
+        final streaksPosition = tester.getTopLeft(
+          find.textContaining('Longest').first,
+        );
 
         expect(
           streaksPosition.dy > habitsPosition.dy,
@@ -647,8 +669,9 @@ void main() {
         );
       });
 
-      testWidgets('Verse positioned below all actionable content',
-          (WidgetTester tester) async {
+      testWidgets('Verse positioned below all actionable content', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -682,8 +705,9 @@ void main() {
     });
 
     group('H. Accessibility Tests', () {
-      testWidgets('Large tap targets for habit cards',
-          (WidgetTester tester) async {
+      testWidgets('Large tap targets for habit cards', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -719,16 +743,17 @@ void main() {
         );
       });
 
-      testWidgets('Swipe hint visible for discoverability',
-          (WidgetTester tester) async {
+      testWidgets('Swipe hint visible for discoverability', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
         // Accept alternative hints for swipe
         final swipeHintFinder =
             find.textContaining('swipe').evaluate().isNotEmpty
-                ? find.textContaining('swipe')
-                : find.textContaining('left');
+            ? find.textContaining('swipe')
+            : find.textContaining('left');
         expect(
           swipeHintFinder,
           findsOneWidget,
@@ -775,8 +800,9 @@ void main() {
     });
 
     group('J. Real User Behavior Patterns', () {
-      testWidgets('User can understand status in <1 second',
-          (WidgetTester tester) async {
+      testWidgets('User can understand status in <1 second', (
+        WidgetTester tester,
+      ) async {
         final stopwatch = Stopwatch()..start();
 
         await tester.pumpWidget(createHomePageApp(testHabits));
@@ -788,8 +814,8 @@ void main() {
         final progressFinder = find.textContaining('%');
         final remainingFinder =
             find.textContaining('left').evaluate().isNotEmpty
-                ? find.textContaining('left')
-                : find.textContaining('remaining');
+            ? find.textContaining('left')
+            : find.textContaining('remaining');
 
         expect(
           progressFinder,
@@ -811,8 +837,9 @@ void main() {
         );
       });
 
-      testWidgets('All habits visible without scrolling for small lists',
-          (WidgetTester tester) async {
+      testWidgets('All habits visible without scrolling for small lists', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -822,8 +849,9 @@ void main() {
         expect(find.text('Meditate'), findsOneWidget);
       });
 
-      testWidgets('Habit completion does not require navigation',
-          (WidgetTester tester) async {
+      testWidgets('Habit completion does not require navigation', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpAndSettle();
 
@@ -853,19 +881,14 @@ void main() {
     });
 
     group('K. DST and Edge Case Tests', () {
-      testWidgets('Weekly consistency handles DST boundary correctly',
-          (WidgetTester tester) async {
+      testWidgets('Weekly consistency handles DST boundary correctly', (
+        WidgetTester tester,
+      ) async {
         final now = DateTime.now();
 
         // Simulate habit created before DST transition
         // Using a date that's 3 days ago at 23:30 (late evening)
-        final createdAt = DateTime(
-          now.year,
-          now.month,
-          now.day - 3,
-          23,
-          30,
-        );
+        final createdAt = DateTime(now.year, now.month, now.day - 3, 23, 30);
 
         final dstHabit = Habit(
           id: 'dst-habit',
@@ -892,44 +915,46 @@ void main() {
       });
 
       testWidgets(
-          'Multiple rapid habit completions handle concurrent animations',
-          (WidgetTester tester) async {
-        // Create 3 habits for rapid completion testing
-        final rapidHabits = List.generate(3, (i) {
-          return Habit(
-            id: 'rapid-$i',
-            userId: 'test-user',
-            name: 'Rapid Habit $i',
-            category: HabitCategory.physical,
-            emoji: '⚡',
-            createdAt: DateTime.now().subtract(const Duration(days: 5)),
-            completedToday: false,
-            currentStreak: 0,
-            longestStreak: 0,
-            completionHistory: [],
+        'Multiple rapid habit completions handle concurrent animations',
+        (WidgetTester tester) async {
+          // Create 3 habits for rapid completion testing
+          final rapidHabits = List.generate(3, (i) {
+            return Habit(
+              id: 'rapid-$i',
+              userId: 'test-user',
+              name: 'Rapid Habit $i',
+              category: HabitCategory.physical,
+              emoji: '⚡',
+              createdAt: DateTime.now().subtract(const Duration(days: 5)),
+              completedToday: false,
+              currentStreak: 0,
+              longestStreak: 0,
+              completionHistory: [],
+            );
+          });
+
+          await tester.pumpWidget(createHomePageApp(rapidHabits));
+          await tester.pumpAndSettle();
+
+          // Verify all AnimatedScale widgets are present
+          final animatedScaleFinders = find.byType(AnimatedScale);
+          expect(
+            animatedScaleFinders,
+            findsNWidgets(3),
+            reason: 'Should have AnimatedScale for each habit',
           );
-        });
 
-        await tester.pumpWidget(createHomePageApp(rapidHabits));
-        await tester.pumpAndSettle();
+          // Verify no frame drops during multiple animations
+          // All habits should be visible and ready
+          expect(find.text('Rapid Habit 0'), findsOneWidget);
+          expect(find.text('Rapid Habit 1'), findsOneWidget);
+          expect(find.text('Rapid Habit 2'), findsOneWidget);
+        },
+      );
 
-        // Verify all AnimatedScale widgets are present
-        final animatedScaleFinders = find.byType(AnimatedScale);
-        expect(
-          animatedScaleFinders,
-          findsNWidgets(3),
-          reason: 'Should have AnimatedScale for each habit',
-        );
-
-        // Verify no frame drops during multiple animations
-        // All habits should be visible and ready
-        expect(find.text('Rapid Habit 0'), findsOneWidget);
-        expect(find.text('Rapid Habit 1'), findsOneWidget);
-        expect(find.text('Rapid Habit 2'), findsOneWidget);
-      });
-
-      testWidgets('Complex multi-codepoint emoji rendering',
-          (WidgetTester tester) async {
+      testWidgets('Complex multi-codepoint emoji rendering', (
+        WidgetTester tester,
+      ) async {
         final complexEmojiHabits = [
           // Family emoji (multi-codepoint)
           Habit(

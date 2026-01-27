@@ -125,8 +125,9 @@ void main() {
       await tester.pump();
     }
 
-    testWidgets('completed habits display correctly',
-        (WidgetTester tester) async {
+    testWidgets('completed habits display correctly', (
+      WidgetTester tester,
+    ) async {
       final testHabits = [
         Habit(
           id: '1',

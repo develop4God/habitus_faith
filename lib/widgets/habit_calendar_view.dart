@@ -38,10 +38,7 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
             return Center(
               child: Text(
                 l10n.noHabits,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
               ),
             );
           }
@@ -81,8 +78,9 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                 : Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color:
-                                  isSelected ? Colors.blue : Colors.transparent,
+                              color: isSelected
+                                  ? Colors.blue
+                                  : Colors.transparent,
                               width: 2,
                             ),
                           ),
@@ -138,23 +136,26 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                     icon: const Icon(Icons.chevron_left),
                                     onPressed: () {
                                       setState(() {
-                                        _focusedDay = _focusedDay
-                                            .subtract(const Duration(days: 7));
+                                        _focusedDay = _focusedDay.subtract(
+                                          const Duration(days: 7),
+                                        );
                                       });
                                     },
                                   ),
                                   Text(
                                     'Semana del ${_focusedDay.subtract(Duration(days: _focusedDay.weekday - 1)).day}/${_focusedDay.month}/${_focusedDay.year}',
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.chevron_right),
                                     onPressed: () {
                                       setState(() {
-                                        _focusedDay = _focusedDay
-                                            .add(const Duration(days: 7));
+                                        _focusedDay = _focusedDay.add(
+                                          const Duration(days: 7),
+                                        );
                                       });
                                     },
                                   ),
@@ -166,33 +167,39 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: List.generate(7, (index) {
                                   final monday = _focusedDay.subtract(
-                                      Duration(days: _focusedDay.weekday - 1));
+                                    Duration(days: _focusedDay.weekday - 1),
+                                  );
                                   final day = monday.add(Duration(days: index));
                                   final isToday =
                                       DateTime.now().year == day.year &&
-                                          DateTime.now().month == day.month &&
-                                          DateTime.now().day == day.day;
+                                      DateTime.now().month == day.month &&
+                                      DateTime.now().day == day.day;
                                   final completedHabits = habits
-                                      .where((h) => h.completionHistory.any(
+                                      .where(
+                                        (h) => h.completionHistory.any(
                                           (dt) =>
                                               dt.year == day.year &&
                                               dt.month == day.month &&
-                                              dt.day == day.day))
+                                              dt.day == day.day,
+                                        ),
+                                      )
                                       .toList();
                                   return Expanded(
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
-                                          horizontal: 2),
+                                        horizontal: 2,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: isToday
                                             ? Colors.blue.shade100
                                             : Colors.grey.shade100,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: isToday
-                                                ? Colors.blue
-                                                : Colors.transparent,
-                                            width: 2),
+                                          color: isToday
+                                              ? Colors.blue
+                                              : Colors.transparent,
+                                          width: 2,
+                                        ),
                                       ),
                                       child: Column(
                                         children: [
@@ -204,48 +211,56 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                                               'J',
                                               'V',
                                               'S',
-                                              'D'
+                                              'D',
                                             ][index],
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: isToday
-                                                    ? Colors.blue
-                                                    : Colors.black),
+                                              fontWeight: FontWeight.bold,
+                                              color: isToday
+                                                  ? Colors.blue
+                                                  : Colors.black,
+                                            ),
                                           ),
                                           Text(
                                             '${day.day}',
                                             style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: isToday
-                                                    ? Colors.blue
-                                                    : Colors.black),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: isToday
+                                                  ? Colors.blue
+                                                  : Colors.black,
+                                            ),
                                           ),
-                                          ...completedHabits.map((habit) =>
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 2),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(habit.emoji ?? '📝',
-                                                        style: const TextStyle(
-                                                            fontSize: 14)),
-                                                    const SizedBox(width: 2),
-                                                    Flexible(
-                                                      child: Text(
-                                                        habit.name,
-                                                        style: const TextStyle(
-                                                            fontSize: 10),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
+                                          ...completedHabits.map(
+                                            (habit) => Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 2,
+                                                  ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    habit.emoji ?? '📝',
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
                                                     ),
-                                                  ],
-                                                ),
-                                              )),
+                                                  ),
+                                                  const SizedBox(width: 2),
+                                                  Flexible(
+                                                    child: Text(
+                                                      habit.name,
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -268,9 +283,7 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Text('Error: $error'),
-        ),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
@@ -278,15 +291,15 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
   Widget _buildStatistics(Habit habit, AppLocalizations l10n) {
     final thisMonth = DateTime.now();
     final completedThisMonth = habit.completionHistory
-        .where((date) =>
-            date.year == thisMonth.year && date.month == thisMonth.month)
+        .where(
+          (date) =>
+              date.year == thisMonth.year && date.month == thisMonth.month,
+        )
         .length;
 
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -331,18 +344,16 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
                   LinearProgressIndicator(
                     value: completedThisMonth / DateTime.now().day,
                     backgroundColor: Colors.grey.shade200,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.green.shade400),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.green.shade400,
+                    ),
                     minHeight: 8,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Completion rate this month: ${(completedThisMonth / DateTime.now().day * 100).toStringAsFixed(1)}%',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -354,7 +365,11 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
   }
 
   Widget _buildStatItem(
-      String label, String value, IconData icon, Color color) {
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -362,10 +377,7 @@ class _HabitCalendarViewState extends ConsumerState<HabitCalendarView> {
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Flexible(
           child: Text(

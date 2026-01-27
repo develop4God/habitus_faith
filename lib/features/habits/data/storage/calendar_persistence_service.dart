@@ -35,8 +35,10 @@ class CalendarPersistenceService {
 
     final logsJson = allLogs[dateKey] as List<dynamic>;
     return logsJson
-        .map((json) =>
-            CalendarCompletionLog.fromJson(json as Map<String, dynamic>))
+        .map(
+          (json) =>
+              CalendarCompletionLog.fromJson(json as Map<String, dynamic>),
+        )
         .toList();
   }
 
@@ -68,8 +70,10 @@ class CalendarPersistenceService {
       if (allLogs.containsKey(dateKey)) {
         final logsJson = allLogs[dateKey] as List<dynamic>;
         result[dateKey] = logsJson
-            .map((json) =>
-                CalendarCompletionLog.fromJson(json as Map<String, dynamic>))
+            .map(
+              (json) =>
+                  CalendarCompletionLog.fromJson(json as Map<String, dynamic>),
+            )
             .toList();
       }
 

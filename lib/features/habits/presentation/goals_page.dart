@@ -115,8 +115,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
           goalsAsync.when(
             data: (goals) {
               // Filter goals by selected tab
-              final filteredGoals =
-                  goals.where((g) => g.type == _selectedTab).toList();
+              final filteredGoals = goals
+                  .where((g) => g.type == _selectedTab)
+                  .toList();
 
               if (filteredGoals.isEmpty) {
                 return SliverFillRemaining(
@@ -127,21 +128,17 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return _buildGoalCard(filteredGoals[index]);
-                    },
-                    childCount: filteredGoals.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return _buildGoalCard(filteredGoals[index]);
+                  }, childCount: filteredGoals.length),
                 ),
               );
             },
             loading: () => const SliverFillRemaining(
               child: Center(child: CircularProgressIndicator()),
             ),
-            error: (e, _) => SliverFillRemaining(
-              child: Center(child: Text('Error: $e')),
-            ),
+            error: (e, _) =>
+                SliverFillRemaining(child: Center(child: Text('Error: $e'))),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
@@ -209,16 +206,20 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   color: Colors.white.withAlpha(40),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child:
-                    const Icon(Icons.auto_graph, color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.auto_graph,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               const Text(
                 'Progreso General',
                 style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500),
+                  color: Colors.white70,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -323,7 +324,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   itemBuilder: (context) => [
                     const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
-                        value: 'delete', child: Text('Eliminar')),
+                      value: 'delete',
+                      child: Text('Eliminar'),
+                    ),
                   ],
                   onSelected: (val) {
                     if (val == 'edit') {
@@ -344,8 +347,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     child: LinearProgressIndicator(
                       value: goal.progress,
                       backgroundColor: Colors.grey.shade100,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.blue.shade600),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.blue.shade600,
+                      ),
                       minHeight: 6,
                     ),
                   ),
@@ -371,7 +375,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               child: Slider(
                 value: goal.progress,
                 onChanged: (val) {
-                  ref.read(jsonGoalsRepositoryProvider).updateGoal(
+                  ref
+                      .read(jsonGoalsRepositoryProvider)
+                      .updateGoal(
                         goal.copyWith(progress: val, isCompleted: val >= 1.0),
                       );
                 },
@@ -394,8 +400,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               color: Colors.blue.shade50,
               shape: BoxShape.circle,
             ),
-            child:
-                Icon(Icons.flag_rounded, size: 64, color: Colors.blue.shade300),
+            child: Icon(
+              Icons.flag_rounded,
+              size: 64,
+              color: Colors.blue.shade300,
+            ),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -425,7 +434,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
           ),
         ],
@@ -470,12 +480,15 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   labelText: '¿Qué quieres lograr?',
                   hintText: 'Ej: Leer toda la Biblia',
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Plazo',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Plazo',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -494,7 +507,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     },
                     selectedColor: Colors.blue.shade700,
                     labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black),
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
                   );
                 }).toList(),
               ),
@@ -509,8 +523,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today,
-                          color: Colors.blue.shade700, size: 20),
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue.shade700,
+                        size: 20,
+                      ),
                       const SizedBox(width: 8),
                       Text(
                         'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
@@ -523,8 +540,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
                         onPressed: () {
-                          _selectCustomDeadline(context, customDeadline,
-                              (date) {
+                          _selectCustomDeadline(context, customDeadline, (
+                            date,
+                          ) {
                             setDialogState(() => customDeadline = date);
                           });
                         },
@@ -547,8 +565,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                           customDeadline == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content:
-                                Text('Por favor selecciona una fecha límite'),
+                            content: Text(
+                              'Por favor selecciona una fecha límite',
+                            ),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -563,8 +582,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
                       } else {
-                        deadline =
-                            DateTime.now().add(const Duration(days: 365));
+                        deadline = DateTime.now().add(
+                          const Duration(days: 365),
+                        );
                       }
 
                       final newGoal = Goal(
@@ -584,11 +604,13 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     backgroundColor: Colors.blue.shade700,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                  child: const Text('Guardar Meta',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Guardar Meta',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               const SizedBox(height: 32),
@@ -602,8 +624,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   void _showEditGoalDialog(BuildContext context, Goal goal) {
     final titleCtrl = TextEditingController(text: goal.title);
     GoalType selectedType = goal.type;
-    DateTime? customDeadline =
-        goal.type == GoalType.custom ? goal.deadline : null;
+    DateTime? customDeadline = goal.type == GoalType.custom
+        ? goal.deadline
+        : null;
 
     showModalBottomSheet(
       context: context,
@@ -637,12 +660,15 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   labelText: '¿Qué quieres lograr?',
                   hintText: 'Ej: Leer toda la Biblia',
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Plazo',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Plazo',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -661,7 +687,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     },
                     selectedColor: Colors.blue.shade700,
                     labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black),
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
                   );
                 }).toList(),
               ),
@@ -676,8 +703,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today,
-                          color: Colors.blue.shade700, size: 20),
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue.shade700,
+                        size: 20,
+                      ),
                       const SizedBox(width: 8),
                       Text(
                         'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
@@ -690,8 +720,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
                         onPressed: () {
-                          _selectCustomDeadline(context, customDeadline,
-                              (date) {
+                          _selectCustomDeadline(context, customDeadline, (
+                            date,
+                          ) {
                             setDialogState(() => customDeadline = date);
                           });
                         },
@@ -714,8 +745,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                           customDeadline == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content:
-                                Text('Por favor selecciona una fecha límite'),
+                            content: Text(
+                              'Por favor selecciona una fecha límite',
+                            ),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -730,8 +762,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
                       } else {
-                        deadline =
-                            DateTime.now().add(const Duration(days: 365));
+                        deadline = DateTime.now().add(
+                          const Duration(days: 365),
+                        );
                       }
 
                       final updatedGoal = goal.copyWith(
@@ -749,11 +782,13 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     backgroundColor: Colors.blue.shade700,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                  child: const Text('Actualizar Meta',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Actualizar Meta',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               const SizedBox(height: 32),

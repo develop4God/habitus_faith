@@ -45,8 +45,10 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n?.onboardingKeepAtLeastOneHabit ??
-              'Debes mantener al menos un hábito'),
+          content: Text(
+            l10n?.onboardingKeepAtLeastOneHabit ??
+                'Debes mantener al menos un hábito',
+          ),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -105,7 +107,8 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
       final numHabits = _selectedHabitIds.length;
       final perHabitMinutes = (totalMinutes / numHabits).round();
       debugPrint(
-          '⏱️ Total minutes: $totalMinutes, Habits: $numHabits, Per habit: $perHabitMinutes');
+        '⏱️ Total minutes: $totalMinutes, Habits: $numHabits, Per habit: $perHabitMinutes',
+      );
 
       // Create habits from selected IDs
       for (final habitId in _selectedHabitIds) {
@@ -117,16 +120,19 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
         // Get localized name
         final name = l10n != null
             ? PredefinedHabitTranslations.getTranslatedName(
-                l10n, predefinedHabit.nameKey)
+                l10n,
+                predefinedHabit.nameKey,
+              )
             : habitId;
 
         // Map category using the extension from predefined_data
-        final category =
-            predefined_data.PredefinedHabitCategoryX(predefinedHabit.category)
-                .toDomainCategory();
+        final category = predefined_data.PredefinedHabitCategoryX(
+          predefinedHabit.category,
+        ).toDomainCategory();
 
         debugPrint(
-            '📝 Creating habit: $habitId, name: $name, category: $category, emoji: ${predefinedHabit.emoji}, minutes: $perHabitMinutes');
+          '📝 Creating habit: $habitId, name: $name, category: $category, emoji: ${predefinedHabit.emoji}, minutes: $perHabitMinutes',
+        );
         await habitsRepository.createHabit(
           name: name,
           category: category,
@@ -141,8 +147,9 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
 
       if (mounted) {
         // Navigate to home page to avoid onboarding loop
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', (route) => false);
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil('/home', (route) => false);
       }
     } catch (e, stackTrace) {
       debugPrint('❌ Failed to create habits: $e\n$stackTrace');
@@ -151,8 +158,10 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n?.onboardingCouldNotCreateHabits ??
-                'No pudimos crear los hábitos. Intenta de nuevo.'),
+            content: Text(
+              l10n?.onboardingCouldNotCreateHabits ??
+                  'No pudimos crear los hábitos. Intenta de nuevo.',
+            ),
             duration: const Duration(seconds: 4),
           ),
         );
@@ -199,10 +208,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
                           // Title
                           const Row(
                             children: [
-                              Text(
-                                '🚀',
-                                style: TextStyle(fontSize: 32),
-                              ),
+                              Text('🚀', style: TextStyle(fontSize: 32)),
                               SizedBox(width: 12),
                               Expanded(
                                 child: Text(
@@ -293,10 +299,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color(0xffe2e8f0),
-                width: 1,
-              ),
+              border: Border.all(color: const Color(0xffe2e8f0), width: 1),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withAlpha(10), // ~0.04*255
@@ -408,10 +411,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
                 children: [
                   Text(
                     'Empezar con estos',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(width: 8),
                   Icon(Icons.arrow_forward, size: 20),
@@ -429,10 +429,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
             ),
             child: const Text(
               'Personalizar más',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
         ],

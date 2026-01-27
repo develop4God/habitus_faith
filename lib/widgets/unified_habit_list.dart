@@ -51,10 +51,7 @@ class UnifiedHabitList extends ConsumerWidget {
               padding: const EdgeInsets.all(32.0),
               child: Text(
                 l10n.startJourney,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey.shade500,
-                ),
+                style: TextStyle(fontSize: 18, color: Colors.grey.shade500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -87,13 +84,12 @@ class UnifiedHabitList extends ConsumerWidget {
 
         final hasPendingHabits = selectedDate != null && !isViewingToday
             ? sortedHabits.any((h) => !h.completedToday)
-            : sortedHabits
-                .any((h) => h.dailyStatus != HabitDailyStatus.completed);
+            : sortedHabits.any(
+                (h) => h.dailyStatus != HabitDailyStatus.completed,
+              );
 
         return Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors.transparent,
-          ),
+          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
           child: ReorderableListView.builder(
             header: hasPendingHabits
                 ? Padding(
@@ -117,7 +113,8 @@ class UnifiedHabitList extends ConsumerWidget {
                 : null,
             footer: const SizedBox(height: 32),
             shrinkWrap: shrinkWrap,
-            physics: physics ??
+            physics:
+                physics ??
                 (shrinkWrap
                     ? const NeverScrollableScrollPhysics()
                     : const AlwaysScrollableScrollPhysics()),
@@ -127,8 +124,9 @@ class UnifiedHabitList extends ConsumerWidget {
               return AnimatedBuilder(
                 animation: animation,
                 builder: (context, _) {
-                  final double animValue =
-                      Curves.easeInOut.transform(animation.value);
+                  final double animValue = Curves.easeInOut.transform(
+                    animation.value,
+                  );
                   final double elevation = lerpDouble(0, 6, animValue)!;
                   final double scale = lerpDouble(1, 1.02, animValue)!;
                   return Transform.scale(
@@ -153,7 +151,8 @@ class UnifiedHabitList extends ConsumerWidget {
               final movedIsCompleted =
                   movedHabit.dailyStatus == HabitDailyStatus.completed;
               final completedStartIndex = sortedHabits.indexWhere(
-                  (h) => h.dailyStatus == HabitDailyStatus.completed);
+                (h) => h.dailyStatus == HabitDailyStatus.completed,
+              );
 
               if (completedStartIndex != -1) {
                 if (movedIsCompleted && newIndex < completedStartIndex) {
@@ -169,9 +168,9 @@ class UnifiedHabitList extends ConsumerWidget {
               reorderedHabits.insert(newIndex, item);
 
               HapticFeedback.lightImpact();
-              await ref.read(habitsNotifierProvider.notifier).reorderHabits(
-                    reorderedHabits.map((h) => h.id).toList(),
-                  );
+              await ref
+                  .read(habitsNotifierProvider.notifier)
+                  .reorderHabits(reorderedHabits.map((h) => h.id).toList());
             },
             itemBuilder: (context, index) {
               final habit = sortedHabits[index];

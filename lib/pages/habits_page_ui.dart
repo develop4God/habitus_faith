@@ -33,7 +33,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   void initState() {
     super.initState();
     debugPrint(
-        'ModernWeeklyCalendarState.initState: inicializando calendario semanal, recibidos ${widget.habits.length} hábitos');
+      'ModernWeeklyCalendarState.initState: inicializando calendario semanal, recibidos ${widget.habits.length} hábitos',
+    );
     _pageController = PageController(initialPage: 1000);
     _selectedDate = widget.initialDate ?? DateTime.now();
   }
@@ -50,7 +51,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
       _selectedDate = date;
     });
     debugPrint(
-        'Selected date: ${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}');
+      'Selected date: ${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
+    );
   }
 
   void _goToPreviousDay() {
@@ -62,8 +64,11 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   void _goToNextDay() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final selected =
-        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final selected = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
     if (selected.isBefore(today)) {
       setState(() {
         _selectedDate = _selectedDate.add(const Duration(days: 1));
@@ -88,32 +93,44 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
 
   Widget _buildWeek(DateTime weekStart) {
     debugPrint(
-        'ModernWeeklyCalendar._buildWeek: recibiendo ${widget.habits.length} hábitos');
-    final daysOfWeek =
-        List.generate(7, (i) => weekStart.add(Duration(days: i)));
+      'ModernWeeklyCalendar._buildWeek: recibiendo ${widget.habits.length} hábitos',
+    );
+    final daysOfWeek = List.generate(
+      7,
+      (i) => weekStart.add(Duration(days: i)),
+    );
     final today = DateTime.now();
-    final selectedDay =
-        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final selectedDay = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(7, (index) {
         final day = daysOfWeek[index];
         final dayOnly = DateTime(day.year, day.month, day.day);
-        final isToday = day.year == today.year &&
+        final isToday =
+            day.year == today.year &&
             day.month == today.month &&
             day.day == today.day;
         final isSelected = dayOnly == selectedDay;
         final completedHabits = widget.habits
-            .where((h) => h.completionHistory.any((dt) =>
-                dt.year == day.year &&
-                dt.month == day.month &&
-                dt.day == day.day))
+            .where(
+              (h) => h.completionHistory.any(
+                (dt) =>
+                    dt.year == day.year &&
+                    dt.month == day.month &&
+                    dt.day == day.day,
+              ),
+            )
             .length;
         final totalHabits = widget.habits.length;
         final progress = totalHabits > 0 ? completedHabits / totalHabits : 0.0;
         debugPrint(
-            'ModernWeeklyCalendar._buildWeek: día ${day.day}/${day.month} - completados: $completedHabits/$totalHabits, progreso: $progress');
+          'ModernWeeklyCalendar._buildWeek: día ${day.day}/${day.month} - completados: $completedHabits/$totalHabits, progreso: $progress',
+        );
 
         return Expanded(
           child: Padding(
@@ -129,20 +146,21 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                   color: isSelected
                       ? const Color(0xFF1976D2)
                       : isToday
-                          ? const Color(0xFFE3F2FD)
-                          : _getProgressColor(progress),
+                      ? const Color(0xFFE3F2FD)
+                      : _getProgressColor(progress),
                   shape: BoxShape.circle,
                   border: isSelected
                       ? Border.all(color: const Color(0xFF1565C0), width: 2)
                       : null,
                   boxShadow: [
                     BoxShadow(
-                      color: (isSelected
-                              ? const Color(0xFF1976D2)
-                              : isToday
+                      color:
+                          (isSelected
+                                  ? const Color(0xFF1976D2)
+                                  : isToday
                                   ? const Color(0xFF2196F3)
                                   : Colors.grey.shade400)
-                          .withValues(alpha: 0.3),
+                              .withValues(alpha: 0.3),
                       blurRadius: isSelected ? 8 : 6,
                       offset: const Offset(0, 2),
                     ),
@@ -160,7 +178,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         'Mié',
                         'Jue',
                         'Vie',
-                        'Sáb'
+                        'Sáb',
                       ][day.weekday % 7],
                       style: TextStyle(
                         fontSize: 10,
@@ -177,8 +195,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         color: isSelected
                             ? Colors.white
                             : isToday
-                                ? const Color(0xFF1976D2)
-                                : Colors.grey.shade800,
+                            ? const Color(0xFF1976D2)
+                            : Colors.grey.shade800,
                       ),
                     ),
                     if (totalHabits > 0) ...[
@@ -207,12 +225,16 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   @override
   Widget build(BuildContext context) {
     debugPrint(
-        'ModernWeeklyCalendar.build: renderizando con ${widget.habits.length} hábitos');
+      'ModernWeeklyCalendar.build: renderizando con ${widget.habits.length} hábitos',
+    );
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final selected =
-        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final selected = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
     final isToday = selected == today;
     final isInFuture = selected.isAfter(today);
 
@@ -229,7 +251,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
       'Sep',
       'Oct',
       'Nov',
-      'Dic'
+      'Dic',
     ];
     final dateText = isToday
         ? 'Hoy'
@@ -269,8 +291,9 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               IconButton(
                 icon: const Icon(Icons.chevron_right, size: 32),
                 onPressed: isInFuture ? null : _goToNextDay,
-                color:
-                    isInFuture ? Colors.grey.shade300 : const Color(0xFF1976D2),
+                color: isInFuture
+                    ? Colors.grey.shade300
+                    : const Color(0xFF1976D2),
               ),
             ],
           ),
@@ -299,10 +322,12 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               },
               itemBuilder: (context, page) {
                 final weekOffset = page - 1000;
-                final baseDate =
-                    DateTime.now().add(Duration(days: weekOffset * 7));
-                final monday =
-                    baseDate.subtract(Duration(days: baseDate.weekday - 1));
+                final baseDate = DateTime.now().add(
+                  Duration(days: weekOffset * 7),
+                );
+                final monday = baseDate.subtract(
+                  Duration(days: baseDate.weekday - 1),
+                );
                 return _buildWeek(monday);
               },
             ),

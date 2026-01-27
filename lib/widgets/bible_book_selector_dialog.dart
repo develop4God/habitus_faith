@@ -104,11 +104,9 @@ class _BibleBookSelectorDialogState extends State<BibleBookSelectorDialog> {
                     child: Text(
                       'bible.search_book'.tr(),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
                     ),
                   ),
                   IconButton(

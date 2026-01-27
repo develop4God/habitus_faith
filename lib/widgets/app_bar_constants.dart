@@ -26,7 +26,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final textTheme = theme.textTheme;
 
     return AppBar(
-      title: titleWidget ??
+      title:
+          titleWidget ??
           Text(
             titleText ?? '',
             style: textTheme.titleLarge?.copyWith(color: colorScheme.onPrimary),

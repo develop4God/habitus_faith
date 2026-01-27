@@ -40,7 +40,8 @@ void main() async {
     debugPrint('Archivo .env cargado correctamente desde ruta relativa');
   } catch (e) {
     debugPrint(
-        'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}');
+      'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}',
+    );
   }
 
   // Load environment configuration before Firebase
@@ -148,9 +149,13 @@ class MyApp extends ConsumerWidget {
                                 snapshot.hasData) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('Versión: ${snapshot.data}',
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.grey)),
+                                child: Text(
+                                  'Versión: ${snapshot.data}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                               );
                             }
                             return const SizedBox.shrink();
@@ -162,7 +167,8 @@ class MyApp extends ConsumerWidget {
                   return const SimpleOnboardingFlow();
                 },
                 loading: () => const Scaffold(
-                    body: Center(child: CircularProgressIndicator())),
+                  body: Center(child: CircularProgressIndicator()),
+                ),
                 error: (error, stack) =>
                     Scaffold(body: Center(child: Text('Error: $error'))),
               );

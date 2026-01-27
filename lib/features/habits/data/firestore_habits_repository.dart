@@ -30,8 +30,10 @@ class FirestoreHabitsRepository implements HabitsRepository {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => HabitModel.fromFirestore(doc)).toList();
-    });
+          return snapshot.docs
+              .map((doc) => HabitModel.fromFirestore(doc))
+              .toList();
+        });
   }
 
   @override
@@ -191,11 +193,12 @@ class FirestoreHabitsRepository implements HabitsRepository {
       // Recalculate streak (simple version - could be improved)
       int newCurrentStreak = 0;
       if (updatedHistory.isNotEmpty) {
-        final sortedDates = updatedHistory
-            .map((date) => DateTime(date.year, date.month, date.day))
-            .toSet()
-            .toList()
-          ..sort((a, b) => b.compareTo(a));
+        final sortedDates =
+            updatedHistory
+                .map((date) => DateTime(date.year, date.month, date.day))
+                .toSet()
+                .toList()
+              ..sort((a, b) => b.compareTo(a));
 
         final yesterday = today.subtract(const Duration(days: 1));
         if (sortedDates.first == yesterday) {
@@ -308,7 +311,8 @@ class FirestoreHabitsRepository implements HabitsRepository {
 
   @override
   Future<Result<void, HabitFailure>> reorderHabits(
-      List<String> habitIds) async {
+    List<String> habitIds,
+  ) async {
     try {
       if (userId == null) {
         return const Failure(UserNotAuthenticatedFailure());

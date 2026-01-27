@@ -74,8 +74,9 @@ void main() {
     });
 
     group('Race Conditions', () {
-      testWidgets('double tap toggles selection correctly',
-          (WidgetTester tester) async {
+      testWidgets('double tap toggles selection correctly', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         final feFinder = find.text('Fe');
@@ -96,8 +97,9 @@ void main() {
         expect(find.byIcon(Icons.check_circle), findsOneWidget);
       });
 
-      testWidgets('rapid selection enforces max limit',
-          (WidgetTester tester) async {
+      testWidgets('rapid selection enforces max limit', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Rapidly select 4 goals (max is 3)
@@ -114,8 +116,9 @@ void main() {
         expect(find.byIcon(Icons.check_circle), findsNWidgets(3));
       });
 
-      testWidgets('timer cancellation on disposal prevents crashes',
-          (WidgetTester tester) async {
+      testWidgets('timer cancellation on disposal prevents crashes', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Complete Q1
@@ -155,8 +158,9 @@ void main() {
         expect(find.byIcon(Icons.check_circle), findsNWidgets(3));
       });
 
-      testWidgets('deselecting allows new selection',
-          (WidgetTester tester) async {
+      testWidgets('deselecting allows new selection', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Select 3 goals
@@ -180,8 +184,9 @@ void main() {
     });
 
     group('Error Validation', () {
-      testWidgets('continuing without goals does not crash',
-          (WidgetTester tester) async {
+      testWidgets('continuing without goals does not crash', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Try to continue without selecting
@@ -217,8 +222,9 @@ void main() {
     });
 
     group('Timer Behavior', () {
-      testWidgets('timer does not fire after widget disposal',
-          (WidgetTester tester) async {
+      testWidgets('timer does not fire after widget disposal', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Navigate to Q2
@@ -236,8 +242,9 @@ void main() {
         // No crashes should occur
       });
 
-      testWidgets('changing selection cancels previous timer',
-          (WidgetTester tester) async {
+      testWidgets('changing selection cancels previous timer', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Navigate to Q2
@@ -267,8 +274,9 @@ void main() {
         expect(find.text('Continuar'), findsOneWidget);
       });
 
-      testWidgets('selecting and deselecting all goals',
-          (WidgetTester tester) async {
+      testWidgets('selecting and deselecting all goals', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Select all
@@ -287,8 +295,9 @@ void main() {
         expect(find.byIcon(Icons.check_circle), findsNothing);
       });
 
-      testWidgets('navigation flow maintains state',
-          (WidgetTester tester) async {
+      testWidgets('navigation flow maintains state', (
+        WidgetTester tester,
+      ) async {
         await pumpOnboardingFlow(tester);
 
         // Complete Q1

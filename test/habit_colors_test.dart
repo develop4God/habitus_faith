@@ -10,8 +10,11 @@ void main() {
 
       // Check for uniqueness
       final uniqueColors = HabitColors.availableColors.toSet();
-      expect(uniqueColors.length, equals(12),
-          reason: 'All colors should be unique');
+      expect(
+        uniqueColors.length,
+        equals(12),
+        reason: 'All colors should be unique',
+      );
     });
 
     test('Should have distinct colors (no duplicates)', () {
@@ -89,8 +92,9 @@ void main() {
       const colors = HabitColors.availableColors;
 
       // Check for variety in hue ranges
-      final hues =
-          colors.map((color) => HSVColor.fromColor(color).hue).toList();
+      final hues = colors
+          .map((color) => HSVColor.fromColor(color).hue)
+          .toList();
 
       // We expect to have colors from different parts of the color wheel
       // Purple/Violet: 270-300
@@ -103,13 +107,17 @@ void main() {
       // Pink: 300-340
 
       final hasBlueRange = hues.any((h) => h >= 200 && h < 240);
-      final hasGreenRange =
-          hues.any((h) => (h >= 60 && h < 90) || (h >= 140 && h < 180));
+      final hasGreenRange = hues.any(
+        (h) => (h >= 60 && h < 90) || (h >= 140 && h < 180),
+      );
       final hasRedRange = hues.any((h) => (h >= 0 && h < 30) || h >= 340);
 
       expect(hasBlueRange, isTrue, reason: 'Should have colors in blue range');
-      expect(hasGreenRange, isTrue,
-          reason: 'Should have colors in green/lime range');
+      expect(
+        hasGreenRange,
+        isTrue,
+        reason: 'Should have colors in green/lime range',
+      );
       expect(hasRedRange, isTrue, reason: 'Should have colors in red range');
     });
 

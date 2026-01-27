@@ -12,8 +12,9 @@ class GeminiTemplateFirestoreService {
     required String language,
     required String source,
   }) async {
-    final docRef =
-        firestore.collection('habit_templates_master').doc(fingerprint);
+    final docRef = firestore
+        .collection('habit_templates_master')
+        .doc(fingerprint);
     await docRef.set({
       'fingerprint': fingerprint,
       'profile': profile,

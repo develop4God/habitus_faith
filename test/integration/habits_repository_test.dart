@@ -22,9 +22,7 @@ void main() {
 
     test('createHabit generates unique ID and persists', () async {
       // Act
-      final result = await repository.createHabit(
-        name: 'Prayer',
-      );
+      final result = await repository.createHabit(name: 'Prayer');
 
       // Assert
       result.fold(
@@ -51,9 +49,7 @@ void main() {
       );
 
       // Act
-      final result = await repo.createHabit(
-        name: 'Prayer',
-      );
+      final result = await repo.createHabit(name: 'Prayer');
 
       // Assert
       expect(result.isFailure(), true);
@@ -68,9 +64,7 @@ void main() {
 
     test('completeHabit updates streak correctly', () async {
       // Arrange
-      final createResult = await repository.createHabit(
-        name: 'Morning Prayer',
-      );
+      final createResult = await repository.createHabit(name: 'Morning Prayer');
 
       final habitId = createResult.fold(
         (failure) => fail('Setup failed'),
@@ -124,9 +118,7 @@ void main() {
 
     test('deleteHabit removes document', () async {
       // Arrange
-      final createResult = await repository.createHabit(
-        name: 'To Delete',
-      );
+      final createResult = await repository.createHabit(name: 'To Delete');
 
       final habitId = createResult.fold(
         (failure) => fail('Setup failed'),
@@ -154,9 +146,7 @@ void main() {
 
     test('watchHabits filters by userId', () async {
       // Arrange
-      await repository.createHabit(
-        name: 'Habit 1',
-      );
+      await repository.createHabit(name: 'Habit 1');
 
       // Create habit for different user
       final otherRepo = FirestoreHabitsRepository(

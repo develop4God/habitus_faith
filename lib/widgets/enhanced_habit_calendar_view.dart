@@ -39,10 +39,9 @@ class _EnhancedHabitCalendarViewState
     final firstDay = DateTime(_focusedDay.year, _focusedDay.month, 1);
     final lastDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
 
-    ref.read(calendarNotifierProvider.notifier).loadLogsForRange(
-          firstDay,
-          lastDay,
-        );
+    ref
+        .read(calendarNotifierProvider.notifier)
+        .loadLogsForRange(firstDay, lastDay);
   }
 
   @override
@@ -83,10 +82,7 @@ class _EnhancedHabitCalendarViewState
                   const SizedBox(height: 8),
                   Text(
                     'Create habits to track your progress',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade500,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
                   ),
                 ],
               ),
@@ -164,11 +160,12 @@ class _EnhancedHabitCalendarViewState
                     final logsForDay = calendarState.logsForRange[dateKey];
 
                     if (logsForDay != null && logsForDay.isNotEmpty) {
-                      final completedCount =
-                          logsForDay.where((log) => log.completed).length;
+                      final completedCount = logsForDay
+                          .where((log) => log.completed)
+                          .length;
                       if (completedCount > 0) {
                         return [
-                          completedCount
+                          completedCount,
                         ]; // Show marker if any habit completed
                       }
                     }
@@ -182,8 +179,11 @@ class _EnhancedHabitCalendarViewState
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_today,
-                        size: 20, color: colorScheme.primary),
+                    Icon(
+                      Icons.calendar_today,
+                      size: 20,
+                      color: colorScheme.primary,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       _formatSelectedDate(l10n),
@@ -197,16 +197,12 @@ class _EnhancedHabitCalendarViewState
               const SizedBox(height: 8),
 
               // Habits list for selected day
-              Expanded(
-                child: _buildHabitsList(habits, colorScheme),
-              ),
+              Expanded(child: _buildHabitsList(habits, colorScheme)),
             ],
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Text('Error: $error'),
-        ),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
@@ -264,11 +260,7 @@ class _EnhancedHabitCalendarViewState
             subtitle: isCompleted
                 ? Row(
                     children: [
-                      Icon(
-                        Icons.check_circle,
-                        size: 16,
-                        color: habitColor,
-                      ),
+                      Icon(Icons.check_circle, size: 16, color: habitColor),
                       const SizedBox(width: 4),
                       Text(
                         'Completed',
@@ -286,8 +278,9 @@ class _EnhancedHabitCalendarViewState
                     ),
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-            trailing:
-                isCompleted ? Icon(Icons.verified, color: habitColor) : null,
+            trailing: isCompleted
+                ? Icon(Icons.verified, color: habitColor)
+                : null,
           ),
         );
       },
@@ -346,7 +339,7 @@ class _EnhancedHabitCalendarViewState
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return months[month - 1];
   }

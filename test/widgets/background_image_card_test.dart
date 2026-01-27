@@ -19,9 +19,7 @@ void main() {
           ],
           child: const MaterialApp(
             home: Scaffold(
-              body: BackgroundImageCard(
-                child: Text('Test Content'),
-              ),
+              body: BackgroundImageCard(child: Text('Test Content')),
             ),
           ),
         ),
@@ -38,8 +36,9 @@ void main() {
       expect(find.text('Test Content'), findsOneWidget);
     });
 
-    testWidgets('displays card with background when image loads successfully',
-        (tester) async {
+    testWidgets('displays card with background when image loads successfully', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -49,9 +48,7 @@ void main() {
           ],
           child: const MaterialApp(
             home: Scaffold(
-              body: BackgroundImageCard(
-                child: Text('Test Content'),
-              ),
+              body: BackgroundImageCard(child: Text('Test Content')),
             ),
           ),
         ),
@@ -73,9 +70,7 @@ void main() {
           ],
           child: const MaterialApp(
             home: Scaffold(
-              body: BackgroundImageCard(
-                child: Text('Test Content'),
-              ),
+              body: BackgroundImageCard(child: Text('Test Content')),
             ),
           ),
         ),
@@ -88,8 +83,9 @@ void main() {
       expect(find.text('Test Content'), findsOneWidget);
     });
 
-    testWidgets('displays card without background when URL is placeholder',
-        (tester) async {
+    testWidgets('displays card without background when URL is placeholder', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -99,9 +95,7 @@ void main() {
           ],
           child: const MaterialApp(
             home: Scaffold(
-              body: BackgroundImageCard(
-                child: Text('Test Content'),
-              ),
+              body: BackgroundImageCard(child: Text('Test Content')),
             ),
           ),
         ),
@@ -178,12 +172,7 @@ void main() {
           child: const MaterialApp(
             home: Scaffold(
               body: BackgroundImageCard(
-                child: Column(
-                  children: [
-                    Text('Title'),
-                    Icon(Icons.star),
-                  ],
-                ),
+                child: Column(children: [Text('Title'), Icon(Icons.star)]),
               ),
             ),
           ),

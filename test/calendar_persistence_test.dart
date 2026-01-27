@@ -17,38 +17,40 @@ void main() {
       calendarService = CalendarPersistenceService(prefs);
     });
 
-    test('Should save and retrieve calendar logs for a specific date',
-        () async {
-      final testDate = DateTime(2024, 1, 15);
-      final logs = [
-        CalendarCompletionLog(
-          habitId: 'habit_1',
-          habitName: 'Morning Prayer',
-          date: testDate,
-          completed: true,
-          note: 'Great start to the day',
-        ),
-        CalendarCompletionLog(
-          habitId: 'habit_2',
-          habitName: 'Bible Reading',
-          date: testDate,
-          completed: false,
-        ),
-      ];
+    test(
+      'Should save and retrieve calendar logs for a specific date',
+      () async {
+        final testDate = DateTime(2024, 1, 15);
+        final logs = [
+          CalendarCompletionLog(
+            habitId: 'habit_1',
+            habitName: 'Morning Prayer',
+            date: testDate,
+            completed: true,
+            note: 'Great start to the day',
+          ),
+          CalendarCompletionLog(
+            habitId: 'habit_2',
+            habitName: 'Bible Reading',
+            date: testDate,
+            completed: false,
+          ),
+        ];
 
-      // Save logs
-      await calendarService.saveLogsForDate(testDate, logs);
+        // Save logs
+        await calendarService.saveLogsForDate(testDate, logs);
 
-      // Retrieve logs
-      final retrieved = await calendarService.getLogsForDate(testDate);
+        // Retrieve logs
+        final retrieved = await calendarService.getLogsForDate(testDate);
 
-      expect(retrieved.length, equals(2));
-      expect(retrieved[0].habitId, equals('habit_1'));
-      expect(retrieved[0].completed, equals(true));
-      expect(retrieved[0].note, equals('Great start to the day'));
-      expect(retrieved[1].habitId, equals('habit_2'));
-      expect(retrieved[1].completed, equals(false));
-    });
+        expect(retrieved.length, equals(2));
+        expect(retrieved[0].habitId, equals('habit_1'));
+        expect(retrieved[0].completed, equals(true));
+        expect(retrieved[0].note, equals('Great start to the day'));
+        expect(retrieved[1].habitId, equals('habit_2'));
+        expect(retrieved[1].completed, equals(false));
+      },
+    );
 
     test('Should retrieve logs for a date range', () async {
       final date1 = DateTime(2024, 1, 15);

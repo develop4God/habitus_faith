@@ -46,8 +46,9 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
 
   DateTime get _monday {
     final weekday = _focusedDate.weekday;
-    return _focusedDate
-        .subtract(Duration(days: weekday == 7 ? 6 : weekday - 1));
+    return _focusedDate.subtract(
+      Duration(days: weekday == 7 ? 6 : weekday - 1),
+    );
   }
 
   @override
@@ -73,7 +74,9 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                 Text(
                   'Semana del ${monday.day}/${monday.month}/${monday.year}',
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
@@ -90,14 +93,19 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final day = daysOfWeek[index];
-                  final isToday = day.year == today.year &&
+                  final isToday =
+                      day.year == today.year &&
                       day.month == today.month &&
                       day.day == today.day;
                   final completedHabits = widget.habits
-                      .where((h) => h.completionHistory.any((dt) =>
-                          dt.year == day.year &&
-                          dt.month == day.month &&
-                          dt.day == day.day))
+                      .where(
+                        (h) => h.completionHistory.any(
+                          (dt) =>
+                              dt.year == day.year &&
+                              dt.month == day.month &&
+                              dt.day == day.day,
+                        ),
+                      )
                       .toList();
                   final totalHabits = widget.habits.length;
                   final progress = totalHabits > 0
@@ -108,12 +116,14 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                     curve: Curves.easeInOut,
                     width: 60,
                     decoration: BoxDecoration(
-                      color:
-                          isToday ? Colors.blue.shade100 : Colors.grey.shade100,
+                      color: isToday
+                          ? Colors.blue.shade100
+                          : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color: isToday ? Colors.blue : Colors.transparent,
-                          width: 2),
+                        color: isToday ? Colors.blue : Colors.transparent,
+                        width: 2,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -121,15 +131,17 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                         Text(
                           ['L', 'M', 'X', 'J', 'V', 'S', 'D'][index],
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: isToday ? Colors.blue : Colors.black),
+                            fontWeight: FontWeight.bold,
+                            color: isToday ? Colors.blue : Colors.black,
+                          ),
                         ),
                         Text(
                           '${day.day}',
                           style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: isToday ? Colors.blue : Colors.black),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isToday ? Colors.blue : Colors.black,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Stack(
@@ -150,19 +162,26 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: completedHabits
                                     .take(2)
-                                    .map((habit) => Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2),
-                                          child: Text(habit.emoji ?? '✔️',
-                                              style: const TextStyle(
-                                                  fontSize: 14)),
-                                        ))
+                                    .map(
+                                      (habit) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 2,
+                                        ),
+                                        child: Text(
+                                          habit.emoji ?? '✔️',
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    )
                                     .toList(),
                               ),
                             if (completedHabits.length == totalHabits &&
                                 totalHabits > 0)
-                              const Icon(Icons.check_circle,
-                                  color: Colors.green, size: 18),
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 18,
+                              ),
                           ],
                         ),
                       ],

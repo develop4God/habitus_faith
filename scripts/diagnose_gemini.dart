@@ -22,7 +22,8 @@ void main() async {
 
   if (!apiKey.startsWith('AIza')) {
     stdout.writeln(
-        '⚠️  Warning: API key doesn\'t start with "AIza" (expected format)');
+      '⚠️  Warning: API key doesn\'t start with "AIza" (expected format)',
+    );
   }
 
   // 2. Test different model names (ordered by likelihood of working)
@@ -41,15 +42,12 @@ void main() async {
   for (final modelName in modelsToTest) {
     try {
       stdout.writeln('Testing: $modelName');
-      final model = GenerativeModel(
-        model: modelName,
-        apiKey: apiKey,
-      );
+      final model = GenerativeModel(model: modelName, apiKey: apiKey);
 
       // Try a simple generation
-      final response = await model.generateContent([
-        Content.text('Say "Hello" in one word only.')
-      ]).timeout(const Duration(seconds: 10));
+      final response = await model
+          .generateContent([Content.text('Say "Hello" in one word only.')])
+          .timeout(const Duration(seconds: 10));
 
       final text = response.text ?? '';
       stdout.writeln('  ✅ SUCCESS - Response: ${text.trim()}');
@@ -58,7 +56,8 @@ void main() async {
       if (e.toString().contains('not found') ||
           e.toString().contains('not supported')) {
         stdout.writeln(
-            '  ❌ Model not available: ${e.toString().split('\n').first}');
+          '  ❌ Model not available: ${e.toString().split('\n').first}',
+        );
       } else if (e.toString().contains('API_KEY')) {
         stdout.writeln('  ❌ API key issue: $e');
         break; // No point testing other models
@@ -72,9 +71,12 @@ void main() async {
   stdout.writeln('\n📖 Recommendations:');
   stdout.writeln('  1. Use the model name that showed ✅ SUCCESS above');
   stdout.writeln(
-      '  2. Update lib/core/config/ai_config.dart with the working model name');
+    '  2. Update lib/core/config/ai_config.dart with the working model name',
+  );
   stdout.writeln(
-      '  3. Verify your API key has Gemini API enabled in Google AI Studio');
+    '  3. Verify your API key has Gemini API enabled in Google AI Studio',
+  );
   stdout.writeln(
-      '  4. Check https://ai.google.dev/gemini-api/docs/models for latest model names');
+    '  4. Check https://ai.google.dev/gemini-api/docs/models for latest model names',
+  );
 }

@@ -41,10 +41,10 @@ class GeminiService implements IGeminiService {
     required ICacheService cache,
     required IRateLimitService rateLimit,
     BibleDbService? bibleService,
-  })  : _cache = cache,
-        _rateLimit = rateLimit,
-        _bibleService = bibleService,
-        _model = GenerativeModel(model: modelName, apiKey: apiKey);
+  }) : _cache = cache,
+       _rateLimit = rateLimit,
+       _bibleService = bibleService,
+       _model = GenerativeModel(model: modelName, apiKey: apiKey);
 
   @override
   Future<List<MicroHabit>> generateMicroHabits(
@@ -87,8 +87,9 @@ class GeminiService implements IGeminiService {
 
     // 5. Call Gemini API with timeout
     try {
-      final response = await _model.generateContent(
-          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+      final response = await _model
+          .generateContent([Content.text(prompt)])
+          .timeout(AiConfig.requestTimeout);
 
       // 6. Parse and validate JSON response
       final habits = _parseResponse(response.text, request.languageCode);
@@ -295,7 +296,7 @@ Requisitos estrictos:
       return null;
     }
 
-    return await _bibleService!.getVerse(
+    return await _bibleService.getVerse(
       bookNumber: bookNumber,
       chapter: chapter,
       verse: verse,
@@ -488,8 +489,11 @@ Requisitos estrictos:
   /// Generate habits based on onboarding profile with intent-aware context
   @override
   Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
-      OnboardingProfile profile, String userId,
-      {String language = 'es', bool isOnboarding = false}) async {
+    OnboardingProfile profile,
+    String userId, {
+    String language = 'es',
+    bool isOnboarding = false,
+  }) async {
     // Solo flujo moderno: descarga remota y Gemini
     // Eliminar referencias a fingerprint, Logger, plantillas locales
 
@@ -507,8 +511,9 @@ Requisitos estrictos:
     (prompt.length / 4).ceil();
 
     try {
-      final response = await _model.generateContent(
-          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+      final response = await _model
+          .generateContent([Content.text(prompt)])
+          .timeout(AiConfig.requestTimeout);
 
       final responseText = response.text ?? '';
       (responseText.length / 4).ceil();
@@ -521,8 +526,10 @@ Requisitos estrictos:
       final habitsForCache = habits.map((habit) {
         final habitCopy = Map<String, dynamic>.from(habit);
         if (habitCopy['category'] is HabitCategory) {
-          habitCopy['category'] =
-              habitCopy['category'].toString().split('.').last;
+          habitCopy['category'] = habitCopy['category']
+              .toString()
+              .split('.')
+              .last;
         }
         return habitCopy;
       }).toList();
@@ -539,8 +546,9 @@ Requisitos estrictos:
       await prefs.setString(cachedKey, jsonEncode(cacheData));
 
       // Después de parsear los hábitos generados por Gemini:
-      final firestoreService =
-          GeminiTemplateFirestoreService(FirebaseFirestore.instance);
+      final firestoreService = GeminiTemplateFirestoreService(
+        FirebaseFirestore.instance,
+      );
       await firestoreService.saveGeminiTemplate(
         fingerprint:
             '${profile.primaryIntent}_${profile.completedAt.toIso8601String()}',
@@ -552,9 +560,7 @@ Requisitos estrictos:
 
       return habits;
     } on TimeoutException {
-      throw GeminiException(
-        'Request timed out. Please try again.',
-      );
+      throw GeminiException('Request timed out. Please try again.');
     } catch (e) {
       final errorMessage = e.toString();
 
@@ -562,15 +568,17 @@ Requisitos estrictos:
       if (errorMessage.contains('not found') ||
           errorMessage.contains('not supported')) {
         throw GeminiException(
-            'AI model configuration error. Please check app settings. '
-            'Try updating the app or contact support.');
+          'AI model configuration error. Please check app settings. '
+          'Try updating the app or contact support.',
+        );
       }
 
       // Check for API key issues
       if (errorMessage.contains('API_KEY') ||
           errorMessage.contains('INVALID_ARGUMENT')) {
         throw GeminiException(
-            'AI service authentication failed. Please check configuration.');
+          'AI service authentication failed. Please check configuration.',
+        );
       }
 
       if (e is GeminiException) rethrow;
@@ -584,7 +592,8 @@ Requisitos estrictos:
 
     switch (profile.primaryIntent) {
       case UserIntent.faithBased:
-        prompt = '''
+        prompt =
+            '''
 Usuario cristiano busca fortalecer fe.
 Motivaciones: ${profile.motivations.join(', ')}
 Madurez espiritual: ${profile.spiritualMaturity}
@@ -606,7 +615,8 @@ Ejemplos prácticos de soporte:
         break;
 
       case UserIntent.wellness:
-        prompt = '''
+        prompt =
+            '''
 Usuario busca bienestar secular.
 Objetivos: ${profile.motivations.join(', ')}
 Estado actual: derivado de respuestas
@@ -627,7 +637,8 @@ Ejemplos:
         break;
 
       case UserIntent.both:
-        prompt = '''
+        prompt =
+            '''
 Usuario busca integración fe + bienestar.
 Motivaciones: ${profile.motivations.join(', ')}
 Madurez espiritual: ${profile.spiritualMaturity}
@@ -646,7 +657,8 @@ Ejemplos integrados:
         break;
     }
 
-    prompt += '''
+    prompt +=
+        '''
 
 Compromiso del usuario: "${profile.commitment}"
 
@@ -703,14 +715,18 @@ Requisitos:
 
       if (cleaned.isEmpty) {
         throw GeminiParseException(
-            'Empty response after cleanup', responseText);
+          'Empty response after cleanup',
+          responseText,
+        );
       }
 
       final dynamic json = jsonDecode(cleaned);
 
       if (json is! List) {
         throw GeminiParseException(
-            'Expected JSON array, got ${json.runtimeType}', responseText);
+          'Expected JSON array, got ${json.runtimeType}',
+          responseText,
+        );
       }
 
       // Parse each habit
@@ -749,10 +765,7 @@ Requisitos:
       }).toList();
     } catch (e) {
       if (e is GeminiParseException) rethrow;
-      throw GeminiParseException(
-        'Failed to parse response: $e',
-        responseText,
-      );
+      throw GeminiParseException('Failed to parse response: $e', responseText);
     }
   }
 

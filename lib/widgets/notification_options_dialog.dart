@@ -6,10 +6,7 @@ import '../l10n/app_localizations.dart';
 class NotificationOptionsDialog extends StatelessWidget {
   final String currentTime;
 
-  const NotificationOptionsDialog({
-    super.key,
-    required this.currentTime,
-  });
+  const NotificationOptionsDialog({super.key, required this.currentTime});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +15,7 @@ class NotificationOptionsDialog extends StatelessWidget {
     return Semantics(
       label: l10n.notificationOptions,
       child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -45,10 +40,7 @@ class NotificationOptionsDialog extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 '${l10n.currentTime}: $currentTime',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
               const SizedBox(height: 24),
               // Option A: Turn off notification
@@ -115,11 +107,7 @@ class NotificationOptionsDialog extends StatelessWidget {
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 28,
-                ),
+                child: Icon(icon, color: color, size: 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -136,18 +124,12 @@ class NotificationOptionsDialog extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.chevron_right, color: Colors.grey[400]),
             ],
           ),
         ),

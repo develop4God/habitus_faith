@@ -50,11 +50,13 @@ class HabitModel {
               orElse: () => HabitDailyStatus.pending,
             )
           : HabitDailyStatus.pending,
-      skippedDates: (data['skippedDates'] as List<dynamic>?)
+      skippedDates:
+          (data['skippedDates'] as List<dynamic>?)
               ?.map((e) => (e as Timestamp).toDate())
               .toList() ??
           [],
-      failedDates: (data['failedDates'] as List<dynamic>?)
+      failedDates:
+          (data['failedDates'] as List<dynamic>?)
               ?.map((e) => (e as Timestamp).toDate())
               .toList() ??
           [],
@@ -63,7 +65,8 @@ class HabitModel {
       lastCompletedAt: data['lastCompletedAt'] != null
           ? (data['lastCompletedAt'] as Timestamp).toDate()
           : null,
-      completionHistory: (data['completionHistory'] as List<dynamic>?)
+      completionHistory:
+          (data['completionHistory'] as List<dynamic>?)
               ?.map((e) => (e as Timestamp).toDate())
               .toList() ??
           [],
@@ -80,7 +83,8 @@ class HabitModel {
       difficultyLevel: data['difficultyLevel'] as int? ?? 3,
       targetMinutes: data['targetMinutes'] as int? ?? 20, // Matches level 3
       successRate7d: (data['successRate7d'] as num?)?.toDouble() ?? 0.0,
-      optimalDays: (data['optimalDays'] as List<dynamic>?)
+      optimalDays:
+          (data['optimalDays'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
           [],
@@ -104,12 +108,14 @@ class HabitModel {
       // Notification and recurrence fields
       notificationSettings: data['notificationSettings'] != null
           ? HabitNotificationSettings.fromJson(
-              data['notificationSettings'] as Map<String, dynamic>)
+              data['notificationSettings'] as Map<String, dynamic>,
+            )
           : null,
       recurrence: data['recurrence'] != null
           ? HabitRecurrence.fromJson(data['recurrence'] as Map<String, dynamic>)
           : null,
-      subtasks: (data['subtasks'] as List<dynamic>?)
+      subtasks:
+          (data['subtasks'] as List<dynamic>?)
               ?.map((e) => Subtask.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -127,10 +133,12 @@ class HabitModel {
       'predefinedId': habit.predefinedId,
       'completedToday': habit.completedToday,
       'dailyStatus': habit.dailyStatus.name,
-      'skippedDates':
-          habit.skippedDates.map((date) => Timestamp.fromDate(date)).toList(),
-      'failedDates':
-          habit.failedDates.map((date) => Timestamp.fromDate(date)).toList(),
+      'skippedDates': habit.skippedDates
+          .map((date) => Timestamp.fromDate(date))
+          .toList(),
+      'failedDates': habit.failedDates
+          .map((date) => Timestamp.fromDate(date))
+          .toList(),
       'currentStreak': habit.currentStreak,
       'longestStreak': habit.longestStreak,
       'lastCompletedAt': habit.lastCompletedAt != null
@@ -186,7 +194,8 @@ class HabitModel {
       lastCompletedAt: data['lastCompletedAt'] != null
           ? DateTime.parse(data['lastCompletedAt'] as String)
           : null,
-      completionHistory: (data['completionHistory'] as List<dynamic>?)
+      completionHistory:
+          (data['completionHistory'] as List<dynamic>?)
               ?.map((e) => DateTime.parse(e as String))
               .toList() ??
           [],
@@ -202,7 +211,8 @@ class HabitModel {
       difficultyLevel: data['difficultyLevel'] as int? ?? 3,
       targetMinutes: data['targetMinutes'] as int? ?? 20,
       successRate7d: (data['successRate7d'] as num?)?.toDouble() ?? 0.0,
-      optimalDays: (data['optimalDays'] as List<dynamic>?)
+      optimalDays:
+          (data['optimalDays'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
           [],
@@ -225,12 +235,14 @@ class HabitModel {
           : null,
       notificationSettings: data['notificationSettings'] != null
           ? HabitNotificationSettings.fromJson(
-              data['notificationSettings'] as Map<String, dynamic>)
+              data['notificationSettings'] as Map<String, dynamic>,
+            )
           : null,
       recurrence: data['recurrence'] != null
           ? HabitRecurrence.fromJson(data['recurrence'] as Map<String, dynamic>)
           : null,
-      subtasks: (data['subtasks'] as List<dynamic>?)
+      subtasks:
+          (data['subtasks'] as List<dynamic>?)
               ?.map((e) => Subtask.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],

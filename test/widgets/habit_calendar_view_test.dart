@@ -28,8 +28,9 @@ final testAsyncHabitsProvider = StreamProvider<List<Habit>>((ref) async* {
 });
 
 void main() {
-  testWidgets('HabitCalendarView no overflow smoke test',
-      (WidgetTester tester) async {
+  testWidgets('HabitCalendarView no overflow smoke test', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

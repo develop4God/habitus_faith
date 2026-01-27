@@ -31,16 +31,17 @@ void main() {
         yesterday.day,
       );
 
-      final habit = Habit.create(
-        id: 'test-2',
-        userId: 'user-1',
-        name: 'Lectura',
-      ).copyWith(
-        currentStreak: 5,
-        longestStreak: 5,
-        lastCompletedAt: yesterdayDate,
-        completionHistory: [yesterdayDate],
-      );
+      final habit =
+          Habit.create(
+            id: 'test-2',
+            userId: 'user-1',
+            name: 'Lectura',
+          ).copyWith(
+            currentStreak: 5,
+            longestStreak: 5,
+            lastCompletedAt: yesterdayDate,
+            completionHistory: [yesterdayDate],
+          );
 
       // Act
       final completed = habit.completeToday();
@@ -60,16 +61,17 @@ void main() {
         threeDaysAgo.day,
       );
 
-      final habit = Habit.create(
-        id: 'test-3',
-        userId: 'user-1',
-        name: 'Servicio',
-      ).copyWith(
-        currentStreak: 10,
-        longestStreak: 15,
-        lastCompletedAt: threeDaysAgoDate,
-        completionHistory: [threeDaysAgoDate],
-      );
+      final habit =
+          Habit.create(
+            id: 'test-3',
+            userId: 'user-1',
+            name: 'Servicio',
+          ).copyWith(
+            currentStreak: 10,
+            longestStreak: 15,
+            lastCompletedAt: threeDaysAgoDate,
+            completionHistory: [threeDaysAgoDate],
+          );
 
       // Act
       final completed = habit.completeToday();

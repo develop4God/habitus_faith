@@ -20,8 +20,9 @@ void main() {
     });
 
     group('1. Devotional Localization', () {
-      testWidgets('Should display localized "Today" in all supported languages',
-          (WidgetTester tester) async {
+      testWidgets('Should display localized "Today" in all supported languages', (
+        WidgetTester tester,
+      ) async {
         // Test each supported language
         final testCases = [
           (const Locale('en'), 'Today'),
@@ -43,9 +44,7 @@ void main() {
               home: Builder(
                 builder: (context) {
                   final l10n = AppLocalizations.of(context)!;
-                  return Scaffold(
-                    body: Text(l10n.todayLabel),
-                  );
+                  return Scaffold(body: Text(l10n.todayLabel));
                 },
               ),
             ),
@@ -61,36 +60,37 @@ void main() {
       });
 
       testWidgets(
-          'Should display all devotional section labels in current language',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('en'),
-            home: Builder(
-              builder: (context) {
-                final l10n = AppLocalizations.of(context)!;
-                return Scaffold(
-                  body: Column(
-                    children: [
-                      Text(l10n.readVerseFirst),
-                      Text(l10n.reflection),
-                      Text(l10n.forMeditation),
-                      Text(l10n.prayer),
-                    ],
-                  ),
-                );
-              },
+        'Should display all devotional section labels in current language',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: const Locale('en'),
+              home: Builder(
+                builder: (context) {
+                  final l10n = AppLocalizations.of(context)!;
+                  return Scaffold(
+                    body: Column(
+                      children: [
+                        Text(l10n.readVerseFirst),
+                        Text(l10n.reflection),
+                        Text(l10n.forMeditation),
+                        Text(l10n.prayer),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        );
+          );
 
-        expect(find.text('Read Verse First'), findsOneWidget);
-        expect(find.text('Reflection'), findsOneWidget);
-        expect(find.text('For Meditation'), findsOneWidget);
-        expect(find.text('Prayer'), findsOneWidget);
-      });
+          expect(find.text('Read Verse First'), findsOneWidget);
+          expect(find.text('Reflection'), findsOneWidget);
+          expect(find.text('For Meditation'), findsOneWidget);
+          expect(find.text('Prayer'), findsOneWidget);
+        },
+      );
 
       test('All languages should have complete devotional translations', () {
         // Test would require actual localization instances
@@ -135,38 +135,43 @@ void main() {
         // Check distribution across color wheel
         final blueRange = hues.where((h) => h >= 200 && h < 240).length;
         final greenRange = hues.where((h) => h >= 90 && h < 150).length;
-        final redRange =
-            hues.where((h) => (h >= 0 && h < 30) || h >= 340).length;
+        final redRange = hues
+            .where((h) => (h >= 0 && h < 30) || h >= 340)
+            .length;
         final purpleRange = hues.where((h) => h >= 270 && h < 310).length;
 
         // Should have at least one color in each major hue range
         expect(blueRange, greaterThan(0), reason: 'Should have blue colors');
         expect(greenRange, greaterThan(0), reason: 'Should have green colors');
         expect(redRange, greaterThan(0), reason: 'Should have red colors');
-        expect(purpleRange, greaterThan(0),
-            reason: 'Should have purple colors');
+        expect(
+          purpleRange,
+          greaterThan(0),
+          reason: 'Should have purple colors',
+        );
       });
 
       test(
-          'All colors should be visually distinct (different saturation/brightness)',
-          () {
-        const colors = HabitColors.availableColors;
+        'All colors should be visually distinct (different saturation/brightness)',
+        () {
+          const colors = HabitColors.availableColors;
 
-        for (final color in colors) {
-          final hsv = HSVColor.fromColor(color);
+          for (final color in colors) {
+            final hsv = HSVColor.fromColor(color);
 
-          // Check for good saturation (not too gray)
-          expect(
-            hsv.saturation,
-            greaterThan(0.4),
-            reason: 'Color should have good saturation for visibility',
-          );
+            // Check for good saturation (not too gray)
+            expect(
+              hsv.saturation,
+              greaterThan(0.4),
+              reason: 'Color should have good saturation for visibility',
+            );
 
-          // Check for reasonable brightness (not too dark or light)
-          expect(hsv.value, greaterThan(0.3));
-          expect(hsv.value, lessThan(0.95));
-        }
-      });
+            // Check for reasonable brightness (not too dark or light)
+            expect(hsv.value, greaterThan(0.3));
+            expect(hsv.value, lessThan(0.95));
+          }
+        },
+      );
     });
 
     group('3. Calendar Navigation and Persistence', () {
@@ -237,53 +242,52 @@ void main() {
         // (In real scenario, this would be done on different days)
         final completeResult = await repository.completeHabit(habit.id);
 
-        completeResult.fold(
-          (failure) => fail('Failed to complete habit'),
-          (h) {
-            expect(h.currentStreak, greaterThan(0));
-            expect(h.completionHistory.isNotEmpty, isTrue);
-          },
-        );
+        completeResult.fold((failure) => fail('Failed to complete habit'), (h) {
+          expect(h.currentStreak, greaterThan(0));
+          expect(h.completionHistory.isNotEmpty, isTrue);
+        });
       });
 
-      test('Should correctly calculate streaks from completion history',
-          () async {
-        final prefs = await SharedPreferences.getInstance();
-        final storage = JsonStorageService(prefs);
-        final repository = JsonHabitsRepository(
-          storage: storage,
-          userId: 'test_user',
-          idGenerator: () => 'habit_${DateTime.now().millisecondsSinceEpoch}',
-        );
+      test(
+        'Should correctly calculate streaks from completion history',
+        () async {
+          final prefs = await SharedPreferences.getInstance();
+          final storage = JsonStorageService(prefs);
+          final repository = JsonHabitsRepository(
+            storage: storage,
+            userId: 'test_user',
+            idGenerator: () => 'habit_${DateTime.now().millisecondsSinceEpoch}',
+          );
 
-        final createResult = await repository.createHabit(
-          name: 'Exercise',
-          category: HabitCategory.physical,
-          emoji: '💪',
-        );
+          final createResult = await repository.createHabit(
+            name: 'Exercise',
+            category: HabitCategory.physical,
+            emoji: '💪',
+          );
 
-        late Habit habit;
-        createResult.fold(
-          (failure) => fail('Failed to create habit'),
-          (h) => habit = h,
-        );
+          late Habit habit;
+          createResult.fold(
+            (failure) => fail('Failed to create habit'),
+            (h) => habit = h,
+          );
 
-        // Complete the habit
-        final completeResult = await repository.completeHabit(habit.id);
+          // Complete the habit
+          final completeResult = await repository.completeHabit(habit.id);
 
-        completeResult.fold(
-          (failure) => fail('Failed to complete habit'),
-          (h) {
+          completeResult.fold((failure) => fail('Failed to complete habit'), (
+            h,
+          ) {
             expect(h.currentStreak, equals(1));
             expect(h.longestStreak, greaterThanOrEqualTo(1));
-          },
-        );
-      });
+          });
+        },
+      );
     });
 
     group('User Behavior Integration Tests', () {
-      testWidgets('User can navigate between dates in calendar view',
-          (WidgetTester tester) async {
+      testWidgets('User can navigate between dates in calendar view', (
+        WidgetTester tester,
+      ) async {
         // This test simulates real user navigation behavior
         // In actual widget test, you would:
         // 1. Tap on calendar to change dates

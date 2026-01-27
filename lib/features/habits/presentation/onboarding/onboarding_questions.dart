@@ -1,10 +1,7 @@
 import 'onboarding_models.dart';
 
 /// Question type for adaptive onboarding flow
-enum QuestionType {
-  singleChoice,
-  multiChoice,
-}
+enum QuestionType { singleChoice, multiChoice }
 
 /// Represents a single onboarding question
 class OnboardingQuestion {
@@ -123,11 +120,7 @@ const faithWalkQuestion = OnboardingQuestion(
   title: '¿Cómo describirías tu caminar actual con Dios?',
   type: QuestionType.singleChoice,
   options: [
-    QuestionOption(
-      id: 'new',
-      emoji: '🌱',
-      text: 'Soy nuevo en la fe',
-    ),
+    QuestionOption(id: 'new', emoji: '🌱', text: 'Soy nuevo en la fe'),
     QuestionOption(
       id: 'growing',
       emoji: '🌿',
@@ -168,16 +161,8 @@ const wellnessGoalsQuestion = OnboardingQuestion(
       emoji: '😌',
       text: 'Reducir estrés y ansiedad',
     ),
-    QuestionOption(
-      id: 'productivity',
-      emoji: '📚',
-      text: 'Ser más productivo',
-    ),
-    QuestionOption(
-      id: 'betterSleep',
-      emoji: '😴',
-      text: 'Dormir mejor',
-    ),
+    QuestionOption(id: 'productivity', emoji: '📚', text: 'Ser más productivo'),
+    QuestionOption(id: 'betterSleep', emoji: '😴', text: 'Dormir mejor'),
   ],
 );
 
@@ -187,11 +172,7 @@ const currentStateQuestion = OnboardingQuestion(
   title: '¿En qué punto estás ahora?',
   type: QuestionType.singleChoice,
   options: [
-    QuestionOption(
-      id: 'starting',
-      emoji: '🆕',
-      text: 'Comenzando desde cero',
-    ),
+    QuestionOption(id: 'starting', emoji: '🆕', text: 'Comenzando desde cero'),
     QuestionOption(
       id: 'inconsistent',
       emoji: '📊',
@@ -216,11 +197,7 @@ const mainChallengeQuestion = OnboardingQuestion(
   title: '¿Cuál es tu mayor desafío?',
   type: QuestionType.singleChoice,
   options: [
-    QuestionOption(
-      id: 'lackOfTime',
-      emoji: '⏰',
-      text: 'Falta de tiempo',
-    ),
+    QuestionOption(id: 'lackOfTime', emoji: '⏰', text: 'Falta de tiempo'),
     QuestionOption(
       id: 'lackOfMotivation',
       emoji: '😴',
@@ -287,16 +264,10 @@ List<OnboardingQuestion> getQuestionsForIntent(UserIntent intent) {
 
   switch (intent) {
     case UserIntent.faithBased:
-      questions.addAll([
-        spiritualMotivationQuestion,
-        faithWalkQuestion,
-      ]);
+      questions.addAll([spiritualMotivationQuestion, faithWalkQuestion]);
       break;
     case UserIntent.wellness:
-      questions.addAll([
-        wellnessGoalsQuestion,
-        currentStateQuestion,
-      ]);
+      questions.addAll([wellnessGoalsQuestion, currentStateQuestion]);
       break;
     case UserIntent.both:
       questions.addAll([
@@ -308,10 +279,7 @@ List<OnboardingQuestion> getQuestionsForIntent(UserIntent intent) {
   }
 
   // Add universal questions
-  questions.addAll([
-    mainChallengeQuestion,
-    supportSystemQuestion,
-  ]);
+  questions.addAll([mainChallengeQuestion, supportSystemQuestion]);
 
   return questions;
 }

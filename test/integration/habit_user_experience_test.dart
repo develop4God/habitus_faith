@@ -55,9 +55,7 @@ void main() {
               return Stream.value(testHabits);
             }),
           ],
-          child: const TestAppWrapper(
-            child: HabitsPage(),
-          ),
+          child: const TestAppWrapper(child: HabitsPage()),
         ),
       );
 
@@ -71,19 +69,19 @@ void main() {
           200.0,
           scrollable: find.byType(Scrollable).first,
         );
-        expect(habitFinder, findsOneWidget,
-            reason: 'All habits should be visible in the habits page');
+        expect(
+          habitFinder,
+          findsOneWidget,
+          reason: 'All habits should be visible in the habits page',
+        );
       }
     });
 
-    testWidgets('2. Home page text is readable over background image',
-        (tester) async {
+    testWidgets('2. Home page text is readable over background image', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: TestAppWrapper(
-            child: HomePage(),
-          ),
-        ),
+        const ProviderScope(child: TestAppWrapper(child: HomePage())),
       );
 
       await tester.pumpAndSettle();
@@ -96,8 +94,11 @@ void main() {
       debugPrint('Text style: \\${textWidget.style}');
 
       // Check that the Text widget exists and has a style
-      expect(textWidget, isNotNull,
-          reason: 'Progress Text widget should exist');
+      expect(
+        textWidget,
+        isNotNull,
+        reason: 'Progress Text widget should exist',
+      );
       expect(textWidget.style, isNotNull, reason: 'Text should have a style');
       // Optionally, check for color or fontWeight if needed
     });
@@ -147,16 +148,22 @@ void main() {
       // Find save and cancel buttons (support both English and Spanish)
       final saveButton =
           find.widgetWithIcon(ElevatedButton, Icons.check).evaluate().isNotEmpty
-              ? find.widgetWithIcon(ElevatedButton, Icons.check)
-              : find.widgetWithText(ElevatedButton, l10n.save);
+          ? find.widgetWithIcon(ElevatedButton, Icons.check)
+          : find.widgetWithText(ElevatedButton, l10n.save);
       final cancelButton = find.text('Cancel').evaluate().isNotEmpty
           ? find.text('Cancel')
           : find.text('Cancelar');
 
-      expect(saveButton, findsOneWidget,
-          reason: 'Save button with check icon or save text should be present');
-      expect(cancelButton, findsOneWidget,
-          reason: 'Cancel or Cancelar button should be present');
+      expect(
+        saveButton,
+        findsOneWidget,
+        reason: 'Save button with check icon or save text should be present',
+      );
+      expect(
+        cancelButton,
+        findsOneWidget,
+        reason: 'Cancel or Cancelar button should be present',
+      );
 
       // Get positions
       final savePos = tester.getTopLeft(saveButton);
@@ -170,22 +177,24 @@ void main() {
       );
     });
 
-    testWidgets('4. Subtasks are displayed in expanded habit view',
-        (tester) async {
-      final testHabit = Habit.create(
-        id: 'test_habit',
-        userId: 'test_user',
-        name: 'Test Habit with Subtasks',
-        category: HabitCategory.mental,
-        emoji: '🧠',
-        colorValue: Colors.blue.toARGB32(),
-        difficulty: HabitDifficulty.medium,
-      ).copyWith(
-        subtasks: const [
-          Subtask(id: '1', title: 'Subtask 1', completed: false),
-          Subtask(id: '2', title: 'Subtask 2', completed: true),
-        ],
-      );
+    testWidgets('4. Subtasks are displayed in expanded habit view', (
+      tester,
+    ) async {
+      final testHabit =
+          Habit.create(
+            id: 'test_habit',
+            userId: 'test_user',
+            name: 'Test Habit with Subtasks',
+            category: HabitCategory.mental,
+            emoji: '🧠',
+            colorValue: Colors.blue.toARGB32(),
+            difficulty: HabitDifficulty.medium,
+          ).copyWith(
+            subtasks: const [
+              Subtask(id: '1', title: 'Subtask 1', completed: false),
+              Subtask(id: '2', title: 'Subtask 2', completed: true),
+            ],
+          );
 
       await tester.pumpWidget(
         ProviderScope(
@@ -220,8 +229,9 @@ void main() {
       expect(find.text('Subtask 2'), findsOneWidget);
     });
 
-    testWidgets('5. Add habit includes repetition configuration',
-        (tester) async {
+    testWidgets('5. Add habit includes repetition configuration', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -243,7 +253,9 @@ void main() {
 
       // Enter habit name
       await tester.enterText(
-          find.byKey(const Key('habit_name_input')), 'Daily Exercise');
+        find.byKey(const Key('habit_name_input')),
+        'Daily Exercise',
+      );
       await tester.pumpAndSettle();
 
       // Navigate through steps to reach recurrence
@@ -263,8 +275,9 @@ void main() {
       );
     });
 
-    testWidgets('7. Habits are not ordered by completion status',
-        (tester) async {
+    testWidgets('7. Habits are not ordered by completion status', (
+      tester,
+    ) async {
       final testHabits = [
         Habit.create(
           id: 'habit_1',
@@ -379,11 +392,13 @@ void main() {
       // Verify habits have unique keys for reordering
       final dragListener1 = tester
           .widget<ReorderableDragStartListener>(
-              find.byKey(const Key('habit_drag_habit_1')))
+            find.byKey(const Key('habit_drag_habit_1')),
+          )
           .key;
       final dragListener2 = tester
           .widget<ReorderableDragStartListener>(
-              find.byKey(const Key('habit_drag_habit_2')))
+            find.byKey(const Key('habit_drag_habit_2')),
+          )
           .key;
 
       expect(dragListener1, isNotNull);

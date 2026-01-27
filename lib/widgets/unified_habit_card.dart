@@ -70,8 +70,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         content: Text(l10n.deleteHabitConfirm(habit.name)),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(l10n.cancel)),
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -102,9 +103,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
     if (!mounted) return;
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         content: Text(l10n.habitSkipped),
-        duration: const Duration(seconds: 2)));
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> _handleFail() async {
@@ -113,9 +117,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     await ref.read(habitsNotifierProvider.notifier).failHabit(habit.id);
     if (!mounted) return;
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         content: Text(l10n.habitMarkedAsNotCompleted),
-        duration: const Duration(seconds: 2)));
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -138,10 +145,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             color: isCompleted
                 ? Colors.green.shade50
                 : isSkipped
-                    ? Colors.orange.shade50
-                    : isFailed
-                        ? Colors.red.shade50
-                        : Colors.white,
+                ? Colors.orange.shade50
+                : isFailed
+                ? Colors.red.shade50
+                : Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border(left: BorderSide(color: habitColor, width: 4)),
             boxShadow: [
@@ -178,8 +185,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
-                            child: Text(widget.habit.emoji ?? '✓',
-                                style: const TextStyle(fontSize: 24))),
+                          child: Text(
+                            widget.habit.emoji ?? '✓',
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -199,44 +209,55 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                           : Colors.grey.shade900,
                                       decoration:
                                           (isCompleted || isSkipped || isFailed)
-                                              ? TextDecoration.lineThrough
-                                              : null,
+                                          ? TextDecoration.lineThrough
+                                          : null,
                                     ),
                                   ),
                                 ),
                                 if (isSkipped)
                                   _buildStatusBadge(
-                                      l10n.skippedHabit, Colors.orange)
+                                    l10n.skippedHabit,
+                                    Colors.orange,
+                                  )
                                 else if (isFailed)
                                   _buildStatusBadge(
-                                      l10n.failedHabit, Colors.red),
+                                    l10n.failedHabit,
+                                    Colors.red,
+                                  ),
                               ],
                             ),
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Icon(Icons.local_fire_department,
-                                    size: 14,
-                                    color: widget.habit.currentStreak > 0
-                                        ? Colors.orange.shade600
-                                        : Colors.grey.shade400),
+                                Icon(
+                                  Icons.local_fire_department,
+                                  size: 14,
+                                  color: widget.habit.currentStreak > 0
+                                      ? Colors.orange.shade600
+                                      : Colors.grey.shade400,
+                                ),
                                 const SizedBox(width: 4),
-                                Text(l10n.dayStreak(widget.habit.currentStreak),
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey.shade600)),
+                                Text(
+                                  l10n.dayStreak(widget.habit.currentStreak),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
                                 if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 12),
                                   InkWell(
                                     onTap: () {
                                       setState(
-                                          () => _isExpanded = !_isExpanded);
+                                        () => _isExpanded = !_isExpanded,
+                                      );
                                     },
                                     borderRadius: BorderRadius.circular(20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color:
-                                            habitColor.withValues(alpha: 0.15),
+                                        color: habitColor.withValues(
+                                          alpha: 0.15,
+                                        ),
                                         shape: BoxShape.circle,
                                       ),
                                       padding: const EdgeInsets.all(4),
@@ -256,7 +277,13 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         ),
                       ),
                       _buildActions(
-                          context, ref, l10n, habit, isCompleted, habitColor),
+                        context,
+                        ref,
+                        l10n,
+                        habit,
+                        isCompleted,
+                        habitColor,
+                      ),
                     ],
                   ),
                   if (habit.subtasks.isNotEmpty) ...[
@@ -291,10 +318,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                 }
                 return s;
               }).toList();
-              await ref.read(habitsNotifierProvider.notifier).updateHabit(
-                    habitId: habit.id,
-                    subtasks: newSubtasks,
-                  );
+              await ref
+                  .read(habitsNotifierProvider.notifier)
+                  .updateHabit(habitId: habit.id, subtasks: newSubtasks);
             },
             borderRadius: BorderRadius.circular(8),
             child: Padding(
@@ -306,8 +332,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         ? Icons.check_circle
                         : Icons.circle_outlined,
                     size: 18,
-                    color:
-                        subtask.completed ? habitColor : Colors.grey.shade400,
+                    color: subtask.completed
+                        ? habitColor
+                        : Colors.grey.shade400,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -372,17 +399,28 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-          color: color.shade100, borderRadius: BorderRadius.circular(8)),
-      child: Text(text,
-          style: TextStyle(
-              fontSize: 10,
-              color: color.shade900,
-              fontWeight: FontWeight.w600)),
+        color: color.shade100,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 10,
+          color: color.shade900,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 
-  Widget _buildActions(BuildContext context, WidgetRef ref,
-      AppLocalizations l10n, Habit habit, bool isCompleted, Color habitColor) {
+  Widget _buildActions(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    Habit habit,
+    bool isCompleted,
+    Color habitColor,
+  ) {
     return Row(
       children: [
         IconButton(
@@ -404,19 +442,22 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             child: _isCompleting
                 ? Center(
                     child: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(habitColor))))
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(habitColor),
+                      ),
+                    ),
+                  )
                 : Transform.scale(
                     scale: 1.3,
                     child: Checkbox(
                       value: isCompleted,
                       onChanged: (_) => _handleComplete(),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                       activeColor: habitColor,
                       side: BorderSide(width: 2, color: habitColor),
                     ),
@@ -427,8 +468,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     );
   }
 
-  Future<void> _handleNotification(BuildContext context, WidgetRef ref,
-      AppLocalizations l10n, Habit habit) async {
+  Future<void> _handleNotification(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    Habit habit,
+  ) async {
     final notifier = ref.read(habitsNotifierProvider.notifier);
 
     if (habit.hasActiveNotification) {
@@ -447,9 +492,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
       final result = await showDialog<String>(
         context: context,
-        builder: (context) => NotificationOptionsDialog(
-          currentTime: currentTime,
-        ),
+        builder: (context) =>
+            NotificationOptionsDialog(currentTime: currentTime),
       );
 
       if (result == 'turnOff') {
@@ -460,9 +504,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           ),
         );
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.notificationTurnedOff)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.notificationTurnedOff)));
         }
       } else if (result == 'changeTime') {
         if (!context.mounted) return;
@@ -488,8 +532,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         }
       }
     } else {
-      final picked =
-          await showTimePicker(context: context, initialTime: TimeOfDay.now());
+      final picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
       if (picked != null) {
         final settings = HabitNotificationSettings(
           timing: NotificationTiming.atEventTime,
@@ -497,11 +543,13 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}',
         );
         await notifier.updateHabit(
-            habitId: habit.id, notificationSettings: settings);
+          habitId: habit.id,
+          notificationSettings: settings,
+        );
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.notificationTimeChanged)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.notificationTimeChanged)));
         }
       }
     }
@@ -525,7 +573,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   }
 
   Widget _buildExpandedContent(
-      BuildContext context, AppLocalizations l10n, Color habitColor) {
+    BuildContext context,
+    AppLocalizations l10n,
+    Color habitColor,
+  ) {
     final habit = getLatestHabit(ref);
     final isCompleted = habit.dailyStatus == HabitDailyStatus.completed;
 
@@ -604,13 +655,16 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                 label: Text(
                   l10n.completeNow,
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: habitColor,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   elevation: 0,
                 ),
               ),
@@ -630,7 +684,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   foregroundColor: Colors.grey.shade700,
                   side: BorderSide(color: Colors.grey.shade300),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
             ),
@@ -675,7 +730,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   }
 
   Widget _buildModernStatCard(
-      IconData icon, String label, String value, Color color) {
+    IconData icon,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
@@ -691,7 +750,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             Text(
               value,
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.w900, color: color),
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                color: color,
+              ),
             ),
             SizedBox(
               height: 28,
@@ -717,7 +779,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   }
 
   Widget _buildCircularAction(
-      IconData icon, String label, Color color, VoidCallback onTap) {
+    IconData icon,
+    String label,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,

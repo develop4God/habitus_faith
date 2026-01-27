@@ -13,14 +13,17 @@ import 'habits_page_ui.dart'; // Nuevo import
 final jsonHabitsStreamProvider = StreamProvider<List<Habit>>((ref) {
   final repository = ref.watch(jsonHabitsRepositoryProvider);
   debugPrint('jsonHabitsStreamProvider: repository watched -> $repository');
-  final stream = repository.watchHabits().map((list) {
-    debugPrint(
-      'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
-    );
-    return list;
-  }).handleError((e, st) {
-    debugPrint('jsonHabitsStreamProvider: stream error -> $e');
-  });
+  final stream = repository
+      .watchHabits()
+      .map((list) {
+        debugPrint(
+          'jsonHabitsStreamProvider: stream emitted ${list.length} habits',
+        );
+        return list;
+      })
+      .handleError((e, st) {
+        debugPrint('jsonHabitsStreamProvider: stream error -> $e');
+      });
   return stream;
 });
 
@@ -35,7 +38,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> completeHabitWithNote(String habitId, String? note) async {
     debugPrint(
-        'JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note');
+      'JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note',
+    );
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -44,12 +48,14 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     result.fold(
       (failure) {
         debugPrint(
-            'JsonHabitsNotifier.completeHabitWithNote: failure -> $failure');
+          'JsonHabitsNotifier.completeHabitWithNote: failure -> $failure',
+        );
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
         debugPrint(
-            'JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}');
+          'JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}',
+        );
         state = const AsyncData(null);
       },
     );
@@ -81,9 +87,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     HabitDifficulty difficulty = HabitDifficulty.medium,
     String? emoji,
   }) async {
-    debugPrint(
-      'JsonHabitsNotifier.addHabit: start -> name:$name',
-    );
+    debugPrint('JsonHabitsNotifier.addHabit: start -> name:$name');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -168,8 +172,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
 final jsonHabitsNotifierProvider =
     StateNotifierProvider<JsonHabitsNotifier, AsyncValue<void>>((ref) {
-  return JsonHabitsNotifier(ref);
-});
+      return JsonHabitsNotifier(ref);
+    });
 
 class HabitsPage extends ConsumerStatefulWidget {
   const HabitsPage({super.key});
@@ -194,7 +198,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       return hours * 60 + minutes;
     } catch (e) {
       debugPrint(
-          'HabitsPage._timeToMinutes: error parseando hora "$timeString": $e');
+        'HabitsPage._timeToMinutes: error parseando hora "$timeString": $e',
+      );
       return 24 * 60; // Error al parsear, va al final
     }
   }
@@ -210,7 +215,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       final minutesB = _timeToMinutes(timeB);
 
       debugPrint(
-          'HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)');
+        'HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)',
+      );
 
       return minutesA.compareTo(minutesB);
     });
@@ -235,7 +241,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     } else {
       filtrados = habits.where((h) => h.category == _categoryFilter).toList();
       debugPrint(
-          'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría');
+        'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría',
+      );
     }
 
     // Ordenar cronológicamente por hora de notificación
@@ -255,10 +262,12 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
           body: habitsAsync.when(
             data: (habits) {
               debugPrint(
-                  'HabitsPage.build: data recibida con ${habits.length} hábitos');
+                'HabitsPage.build: data recibida con ${habits.length} hábitos',
+              );
               final filtrados = _filterHabits(habits);
               debugPrint(
-                  'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
+                'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario',
+              );
               return ModernWeeklyCalendar(
                 habits: filtrados,
                 initialDate: DateTime.now(),

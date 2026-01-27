@@ -5,20 +5,22 @@ import '../domain/models/calendar_completion_log.dart';
 import '../domain/habit.dart';
 
 /// Provider for SharedPreferences instance
-final sharedPreferencesProvider =
-    FutureProvider<SharedPreferences>((ref) async {
+final sharedPreferencesProvider = FutureProvider<SharedPreferences>((
+  ref,
+) async {
   return await SharedPreferences.getInstance();
 });
 
 /// Provider for CalendarPersistenceService
-final calendarPersistenceServiceProvider =
-    Provider<CalendarPersistenceService>((ref) {
-  final prefs = ref.watch(sharedPreferencesProvider).value;
-  if (prefs == null) {
-    throw Exception('SharedPreferences not initialized');
-  }
-  return CalendarPersistenceService(prefs);
-});
+final calendarPersistenceServiceProvider = Provider<CalendarPersistenceService>(
+  (ref) {
+    final prefs = ref.watch(sharedPreferencesProvider).value;
+    if (prefs == null) {
+      throw Exception('SharedPreferences not initialized');
+    }
+    return CalendarPersistenceService(prefs);
+  },
+);
 
 /// Provider for calendar state management
 class CalendarState {
@@ -54,11 +56,13 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
   final CalendarPersistenceService _persistenceService;
 
   CalendarNotifier(this._persistenceService)
-      : super(CalendarState(
+    : super(
+        CalendarState(
           selectedDate: DateTime.now(),
           logsForSelectedDate: [],
           logsForRange: {},
-        )) {
+        ),
+      ) {
     loadLogsForDate(DateTime.now());
   }
 
@@ -81,10 +85,7 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
 
     final logsMap = await _persistenceService.getLogsForRange(start, end);
 
-    state = state.copyWith(
-      logsForRange: logsMap,
-      isLoading: false,
-    );
+    state = state.copyWith(logsForRange: logsMap, isLoading: false);
   }
 
   /// Sync habit completions from habits to calendar logs
@@ -131,6 +132,6 @@ class CalendarNotifier extends StateNotifier<CalendarState> {
 /// Provider for CalendarNotifier
 final calendarNotifierProvider =
     StateNotifierProvider<CalendarNotifier, CalendarState>((ref) {
-  final persistenceService = ref.watch(calendarPersistenceServiceProvider);
-  return CalendarNotifier(persistenceService);
-});
+      final persistenceService = ref.watch(calendarPersistenceServiceProvider);
+      return CalendarNotifier(persistenceService);
+    });

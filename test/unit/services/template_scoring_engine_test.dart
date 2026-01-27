@@ -146,8 +146,10 @@ void main() {
         motivations: ['closerToGod'],
         spiritualMaturity: 'new',
       );
-      final inconsistentScore =
-          engine.calculateScore(user, inconsistentTemplate);
+      final inconsistentScore = engine.calculateScore(
+        user,
+        inconsistentTemplate,
+      );
       expect(inconsistentScore.dimensionScores['supportLevel'], equals(0.6));
     });
 
@@ -243,8 +245,9 @@ void main() {
         ),
       ];
 
-      final scores =
-          templates.map((t) => engine.calculateScore(user, t)).toList();
+      final scores = templates
+          .map((t) => engine.calculateScore(user, t))
+          .toList();
 
       // Second template (exact match) should have highest score
       expect(scores[1].totalScore, greaterThan(scores[0].totalScore));
@@ -304,7 +307,8 @@ void main() {
       const motivationsScore = 0.5; // Jaccard: 1/3
       const maturityScore = 0.7; // adjacent levels
 
-      const expectedTotal = (intentScore * 0.40) +
+      const expectedTotal =
+          (intentScore * 0.40) +
           (supportScore * 0.20) +
           (challengeScore * 0.20) +
           (motivationsScore * 0.15) +
@@ -355,9 +359,13 @@ void main() {
   group('MatchConfidence', () {
     test('fromScore assigns correct confidence levels', () {
       expect(
-          MatchConfidence.fromScore(0.95), equals(MatchConfidence.excellent));
+        MatchConfidence.fromScore(0.95),
+        equals(MatchConfidence.excellent),
+      );
       expect(
-          MatchConfidence.fromScore(0.90), equals(MatchConfidence.excellent));
+        MatchConfidence.fromScore(0.90),
+        equals(MatchConfidence.excellent),
+      );
       expect(MatchConfidence.fromScore(0.85), equals(MatchConfidence.good));
       expect(MatchConfidence.fromScore(0.75), equals(MatchConfidence.good));
       expect(MatchConfidence.fromScore(0.70), equals(MatchConfidence.low));
@@ -439,7 +447,8 @@ void main() {
     test('invalid intent name throws FormatException', () {
       expect(
         () => TemplateMetadata.fromPatternId(
-            'invalidIntent_normal_lackOfTime_closerToGod_prayerDiscipline_new'),
+          'invalidIntent_normal_lackOfTime_closerToGod_prayerDiscipline_new',
+        ),
         throwsFormatException,
       );
     });
@@ -452,10 +461,7 @@ void main() {
     });
 
     test('empty pattern ID throws ArgumentError', () {
-      expect(
-        () => TemplateMetadata.fromPatternId(''),
-        throwsArgumentError,
-      );
+      expect(() => TemplateMetadata.fromPatternId(''), throwsArgumentError);
     });
   });
 
@@ -478,7 +484,7 @@ void main() {
           'lackOfTime',
           'lackOfMotivation',
           'givingUp',
-          'dontKnowStart'
+          'dontKnowStart',
         ];
         final motivations = ['closerToGod', 'prayerDiscipline', 'growInFaith'];
         final maturities = ['new', 'growing', 'passionate'];
@@ -502,9 +508,12 @@ void main() {
       }
       stopwatch.stop();
 
-      expect(stopwatch.elapsedMilliseconds, lessThan(50),
-          reason:
-              'Scoring 100 templates took ${stopwatch.elapsedMilliseconds}ms, expected < 50ms');
+      expect(
+        stopwatch.elapsedMilliseconds,
+        lessThan(50),
+        reason:
+            'Scoring 100 templates took ${stopwatch.elapsedMilliseconds}ms, expected < 50ms',
+      );
     });
   });
 
@@ -516,12 +525,15 @@ void main() {
 
     test('MatchConfidence uses threshold constants', () {
       expect(
-          MatchConfidence.fromScore(
-              TemplateScoringEngine.excellentMatchThreshold),
-          equals(MatchConfidence.excellent));
+        MatchConfidence.fromScore(
+          TemplateScoringEngine.excellentMatchThreshold,
+        ),
+        equals(MatchConfidence.excellent),
+      );
       expect(
-          MatchConfidence.fromScore(TemplateScoringEngine.goodMatchThreshold),
-          equals(MatchConfidence.good));
+        MatchConfidence.fromScore(TemplateScoringEngine.goodMatchThreshold),
+        equals(MatchConfidence.good),
+      );
       expect(MatchConfidence.fromScore(0.74), equals(MatchConfidence.low));
     });
   });

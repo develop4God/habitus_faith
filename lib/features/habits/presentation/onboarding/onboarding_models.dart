@@ -90,8 +90,9 @@ extension OnboardingProfileCache on OnboardingProfile {
     // Spiritual maturity (peso: 20%)
     if (spiritualMaturity == other.spiritualMaturity) score += 0.2;
     // Motivations overlap (peso: 20%)
-    final commonMotivations =
-        motivations.toSet().intersection(other.motivations.toSet());
+    final commonMotivations = motivations.toSet().intersection(
+      other.motivations.toSet(),
+    );
     score += 0.2 * (commonMotivations.length / motivations.length);
     // Challenge similarity (peso: 20%)
     if (challenge == other.challenge) score += 0.2;

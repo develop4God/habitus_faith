@@ -21,14 +21,16 @@ class JsonGoalsRepository {
   static const String _goalsKey = 'goals';
   late final StreamController<List<Goal>> _controller;
 
-  JsonGoalsRepository(
-      {required JsonStorageService storage, required String userId})
-      : _storage = storage,
-        _userId = userId {
+  JsonGoalsRepository({
+    required JsonStorageService storage,
+    required String userId,
+  }) : _storage = storage,
+       _userId = userId {
     _controller = StreamController<List<Goal>>.broadcast(
       onListen: () {
         debugPrint(
-            'JsonGoalsRepository: first listener - emitting initial goals');
+          'JsonGoalsRepository: first listener - emitting initial goals',
+        );
         _emit();
       },
     );

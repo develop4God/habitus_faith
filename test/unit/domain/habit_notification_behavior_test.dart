@@ -20,8 +20,10 @@ void main() {
         final updatedHabit = habit.copyWith(notificationSettings: settings);
 
         expect(updatedHabit.notificationSettings, isNotNull);
-        expect(updatedHabit.notificationSettings!.timing,
-            NotificationTiming.atEventTime);
+        expect(
+          updatedHabit.notificationSettings!.timing,
+          NotificationTiming.atEventTime,
+        );
         expect(updatedHabit.notificationSettings!.eventTime, '07:00');
       });
 
@@ -246,8 +248,9 @@ void main() {
         ];
 
         final jsonList = originalSubtasks.map((s) => s.toJson()).toList();
-        final restored =
-            jsonList.map((json) => Subtask.fromJson(json)).toList();
+        final restored = jsonList
+            .map((json) => Subtask.fromJson(json))
+            .toList();
 
         expect(restored.length, 2);
         expect(restored[0].completed, true);
@@ -316,16 +319,17 @@ void main() {
 
       test('User modifies existing habit configuration', () {
         // Start with configured habit
-        final habit = Habit.create(
-          id: 'prayer',
-          userId: 'user1',
-          name: 'Prayer',
-        ).copyWith(
-          notificationSettings: const HabitNotificationSettings(
-            timing: NotificationTiming.atEventTime,
-            eventTime: '07:00',
-          ),
-        );
+        final habit =
+            Habit.create(
+              id: 'prayer',
+              userId: 'user1',
+              name: 'Prayer',
+            ).copyWith(
+              notificationSettings: const HabitNotificationSettings(
+                timing: NotificationTiming.atEventTime,
+                eventTime: '07:00',
+              ),
+            );
 
         // User changes notification time
         const newSettings = HabitNotificationSettings(
@@ -336,8 +340,10 @@ void main() {
         final updated = habit.copyWith(notificationSettings: newSettings);
 
         expect(updated.notificationSettings!.eventTime, '08:00');
-        expect(updated.notificationSettings!.timing,
-            NotificationTiming.tenMinutesBefore);
+        expect(
+          updated.notificationSettings!.timing,
+          NotificationTiming.tenMinutesBefore,
+        );
       });
 
       test('User disables then re-enables recurrence', () {

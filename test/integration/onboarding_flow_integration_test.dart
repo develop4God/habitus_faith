@@ -61,8 +61,9 @@ void main() {
       expect(find.byType(SimpleOnboardingFlow), findsOneWidget);
     });
 
-    testWidgets('displays intro page with start button',
-        (WidgetTester tester) async {
+    testWidgets('displays intro page with start button', (
+      WidgetTester tester,
+    ) async {
       await pumpSimpleOnboardingFlow(tester);
 
       // Should show intro with start button (adjust text if needed)

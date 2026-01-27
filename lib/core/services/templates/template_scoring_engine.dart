@@ -82,7 +82,8 @@ class TemplateMetadata {
     final parts = patternId.split('_');
     if (parts.length < 5) {
       throw ArgumentError(
-          'Invalid pattern ID format: $patternId. Expected at least 5 parts (intent_supportLevel_challenge_motivation1_motivation2), got ${parts.length}');
+        'Invalid pattern ID format: $patternId. Expected at least 5 parts (intent_supportLevel_challenge_motivation1_motivation2), got ${parts.length}',
+      );
     }
 
     // Parse intent - explicit validation without fallback
@@ -90,7 +91,8 @@ class TemplateMetadata {
     final validIntents = UserIntent.values.map((e) => e.name).toSet();
     if (!validIntents.contains(intentName)) {
       throw FormatException(
-          'Invalid intent "$intentName" in pattern ID: $patternId. Valid values: ${validIntents.join(", ")}');
+        'Invalid intent "$intentName" in pattern ID: $patternId. Valid values: ${validIntents.join(", ")}',
+      );
     }
 
     final intent = UserIntent.values.firstWhere((e) => e.name == intentName);
@@ -171,25 +173,25 @@ class TemplateScoringEngine {
       'strong': 1.0,
       'normal': 0.8,
       'growing': 0.7,
-      'inconsistent': 0.3
+      'inconsistent': 0.3,
     },
     'normal': {
       'strong': 0.8,
       'normal': 1.0,
       'growing': 0.8,
-      'inconsistent': 0.5
+      'inconsistent': 0.5,
     },
     'growing': {
       'strong': 0.7,
       'normal': 0.8,
       'growing': 1.0,
-      'inconsistent': 0.6
+      'inconsistent': 0.6,
     },
     'inconsistent': {
       'strong': 0.3,
       'normal': 0.5,
       'growing': 0.6,
-      'inconsistent': 1.0
+      'inconsistent': 1.0,
     },
   };
 
@@ -227,7 +229,8 @@ class TemplateScoringEngine {
     this.spiritualMaturityWeight = 0.05,
   }) {
     // Validate weights sum to 1.0 (with small tolerance for floating point)
-    final sum = intentWeight +
+    final sum =
+        intentWeight +
         supportLevelWeight +
         challengeWeight +
         motivationsWeight +
@@ -264,7 +267,8 @@ class TemplateScoringEngine {
     dimensionScores['spiritualMaturity'] = _scoreMaturity(user, template);
 
     // Calculate weighted total score
-    final totalScore = (dimensionScores['intent']! * intentWeight) +
+    final totalScore =
+        (dimensionScores['intent']! * intentWeight) +
         (dimensionScores['supportLevel']! * supportLevelWeight) +
         (dimensionScores['challenge']! * challengeWeight) +
         (dimensionScores['motivations']! * motivationsWeight) +
@@ -373,8 +377,9 @@ class TemplateScoringEngine {
 
     // Check if they are adjacent in progression
     final userIndex = _maturityProgression.indexOf(user.spiritualMaturity!);
-    final templateIndex =
-        _maturityProgression.indexOf(template.spiritualMaturity!);
+    final templateIndex = _maturityProgression.indexOf(
+      template.spiritualMaturity!,
+    );
 
     if (userIndex != -1 && templateIndex != -1) {
       final distance = (userIndex - templateIndex).abs();

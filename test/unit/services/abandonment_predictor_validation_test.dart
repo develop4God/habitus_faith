@@ -167,18 +167,12 @@ void main() {
         completionHistory: [],
       );
 
-      expect(
-        () => predictor.predictRisk(habitWithNulls),
-        returnsNormally,
-      );
+      expect(() => predictor.predictRisk(habitWithNulls), returnsNormally);
 
       final risk = await predictor.predictRisk(habitWithNulls);
 
       // Should return default risk for new habits
-      expect(
-        risk,
-        equals(AbandonmentPredictor.defaultRiskForNewHabits),
-      );
+      expect(risk, equals(AbandonmentPredictor.defaultRiskForNewHabits));
     });
 
     test('executes prediction in less than 100ms', () async {
@@ -289,7 +283,8 @@ void main() {
       final telemetry = predictor.telemetry;
 
       // Either prediction count or error count should have increased
-      final totalAttempts = (telemetry['prediction_count'] as int) +
+      final totalAttempts =
+          (telemetry['prediction_count'] as int) +
           (telemetry['error_count'] as int);
       expect(totalAttempts, greaterThan(0));
 
@@ -360,8 +355,10 @@ void main() {
 
       // Verify predictor is no longer usable after dispose
       final riskAfterDispose = await predictor.predictRisk(habit);
-      expect(riskAfterDispose,
-          equals(AbandonmentPredictor.defaultRiskWhenUninitialized));
+      expect(
+        riskAfterDispose,
+        equals(AbandonmentPredictor.defaultRiskWhenUninitialized),
+      );
     });
   });
 }

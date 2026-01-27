@@ -44,10 +44,7 @@ class NotificationsListPage extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     'No hay notificaciones programadas',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -64,9 +61,7 @@ class NotificationsListPage extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Text('Error: $error'),
-        ),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
@@ -109,10 +104,7 @@ class NotificationsListPage extends ConsumerWidget {
               color: Colors.grey.shade200,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              _getCategoryIcon(habit.category),
-              size: 24,
-            ),
+            child: Icon(_getCategoryIcon(habit.category), size: 24),
           ),
           const SizedBox(width: 16),
           // Content
@@ -130,10 +122,7 @@ class NotificationsListPage extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   notificationTime.isNotEmpty ? notificationTime : 'Sin hora',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
               ],
             ),

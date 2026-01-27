@@ -358,8 +358,8 @@ void main() {
               supportedLocales: const [Locale('en', '')],
               routes: {
                 '/onboarding': (context) => const Scaffold(
-                      body: Center(child: Text('Onboarding Page')),
-                    ),
+                  body: Center(child: Text('Onboarding Page')),
+                ),
               },
               home: const DisplayModeSelectionPage(),
             ),
@@ -402,8 +402,8 @@ void main() {
               supportedLocales: const [Locale('en', '')],
               routes: {
                 '/onboarding': (context) => const Scaffold(
-                      body: Center(child: Text('Onboarding Page')),
-                    ),
+                  body: Center(child: Text('Onboarding Page')),
+                ),
               },
               home: const DisplayModeSelectionPage(),
             ),

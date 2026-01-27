@@ -33,10 +33,7 @@ void main() {
         createdAt: now,
       );
 
-      final updatedGoal = goal.copyWith(
-        progress: 0.5,
-        title: 'Updated',
-      );
+      final updatedGoal = goal.copyWith(progress: 0.5, title: 'Updated');
 
       expect(updatedGoal.progress, 0.5);
       expect(updatedGoal.title, 'Updated');

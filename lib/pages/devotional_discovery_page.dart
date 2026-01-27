@@ -123,9 +123,10 @@ class _DevotionalDiscoveryPageState
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('EEEE, MMMM d',
-                              Localizations.localeOf(context).toString())
-                          .format(DateTime.now()),
+                      DateFormat(
+                        'EEEE, MMMM d',
+                        Localizations.localeOf(context).toString(),
+                      ).format(DateTime.now()),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -268,8 +269,9 @@ class _DevotionalDiscoveryPageState
     Devocional devocional,
     ColorScheme colorScheme,
   ) {
-    final isFavorite =
-        ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
+    final isFavorite = ref
+        .read(devotionalProvider.notifier)
+        .isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Use the display date method that shows labels for today/tomorrow only
@@ -333,8 +335,9 @@ class _DevotionalDiscoveryPageState
                                       vertical: 6,
                                     ),
                                     decoration: BoxDecoration(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.2),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.2,
+                                      ),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
@@ -520,19 +523,22 @@ class _DevotionalDiscoveryPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: Text(
                     'Select Bible Version',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const Divider(),
-                ...available.map((version) =>
-                    _buildVersionOption(context, version, version == current)),
+                ...available.map(
+                  (version) =>
+                      _buildVersionOption(context, version, version == current),
+                ),
                 const SizedBox(height: 12),
               ],
             ),
@@ -543,7 +549,10 @@ class _DevotionalDiscoveryPageState
   }
 
   Widget _buildVersionOption(
-      BuildContext context, String versionCode, bool selected) {
+    BuildContext context,
+    String versionCode,
+    bool selected,
+  ) {
     return ListTile(
       title: Text(versionCode),
       trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
@@ -768,9 +777,9 @@ class _DevotionalDiscoveryPageState
                 child: Text(
                   devocional.versiculo,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Consumer(
@@ -838,9 +847,9 @@ class _DevotionalDiscoveryPageState
                     Text(
                       punto.cita,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.secondary,
-                          ),
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.secondary,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(

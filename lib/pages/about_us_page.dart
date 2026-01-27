@@ -44,9 +44,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.aboutUs),
-      ),
+      appBar: AppBar(title: Text(l10n.aboutUs)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -206,19 +204,13 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l10n.contactUsText,
-                      style: theme.textTheme.bodyLarge,
-                    ),
+                    Text(l10n.contactUsText, style: theme.textTheme.bodyLarge),
                     const SizedBox(height: 16),
                     InkWell(
                       onTap: _launchEmail,
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.email,
-                            color: theme.colorScheme.primary,
-                          ),
+                          Icon(Icons.email, color: theme.colorScheme.primary),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -255,8 +247,10 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       onTap: () async {
                         final url = Uri.parse('https://www.develop4God.com');
                         if (await canLaunchUrl(url)) {
-                          await launchUrl(url,
-                              mode: LaunchMode.externalApplication);
+                          await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          );
                         }
                       },
                       child: Row(
@@ -312,11 +306,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Widget _buildSectionTitle(String title, IconData icon, ThemeData theme) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: theme.colorScheme.primary,
-          size: 28,
-        ),
+        Icon(icon, color: theme.colorScheme.primary, size: 28),
         const SizedBox(width: 12),
         Text(
           title,
@@ -346,15 +336,12 @@ class _AboutUsPageState extends State<AboutUsPage> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color:
-                    theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
+                color: theme.colorScheme.primaryContainer.withValues(
+                  alpha: 0.5,
+                ),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
+              child: Icon(icon, color: theme.colorScheme.primary, size: 24),
             ),
             const SizedBox(width: 12),
             Expanded(
