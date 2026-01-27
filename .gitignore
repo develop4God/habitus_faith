@@ -81,3 +81,4 @@ coverage/
 # Environment variables (API keys)
 .env
 /habitus-faith-app-firebase-adminsdk-fbsvc-ee12a92662.json
+macos/Flutter/GeneratedPluginRegistrant.swift
