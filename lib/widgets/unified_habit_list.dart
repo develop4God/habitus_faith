@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
@@ -13,6 +14,7 @@ import 'notification_options_dialog.dart';
 /// - Visual design from habits_page (colored border)
 /// - Reorderable items with drag-and-drop
 /// - Dedicated subtask expansion button
+/// - Historical view support
 class UnifiedHabitList extends ConsumerWidget {
   final Future<void> Function(String habitId) onComplete;
   final Future<void> Function(String habitId) onUncheck;
@@ -20,6 +22,7 @@ class UnifiedHabitList extends ConsumerWidget {
   final Future<void> Function(Habit habit)? onEdit;
   final bool shrinkWrap;
   final ScrollPhysics? physics;
+  final DateTime? selectedDate;
 
   const UnifiedHabitList({
     super.key,
@@ -29,12 +32,20 @@ class UnifiedHabitList extends ConsumerWidget {
     this.onEdit,
     this.shrinkWrap = false,
     this.physics,
+    this.selectedDate,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
     final l10n = AppLocalizations.of(context)!;
+    
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final viewingDate = selectedDate != null 
+        ? DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day)
+        : today;
+    final isViewingToday = viewingDate == today;
 
     return habitsAsync.when(
       data: (habits) {
@@ -54,19 +65,33 @@ class UnifiedHabitList extends ConsumerWidget {
           );
         }
 
-        // Sort habits: pending/skipped/failed first (by order), completed last (by order)
-        final sortedHabits = [...habits];
+        final displayHabits = selectedDate != null && !isViewingToday
+            ? habits.map((habit) {
+                final wasCompletedOnDate = habit.completionHistory.any((dt) {
+                  final historyDay = DateTime(dt.year, dt.month, dt.day);
+                  return historyDay == viewingDate;
+                });
+                return habit.copyWith(completedToday: wasCompletedOnDate);
+              }).toList()
+            : habits;
+
+        final sortedHabits = [...displayHabits];
         sortedHabits.sort((a, b) {
-          final aCompleted = a.dailyStatus == HabitDailyStatus.completed;
-          final bCompleted = b.dailyStatus == HabitDailyStatus.completed;
+          final aCompleted = selectedDate != null && !isViewingToday
+              ? a.completedToday
+              : a.dailyStatus == HabitDailyStatus.completed;
+          final bCompleted = selectedDate != null && !isViewingToday
+              ? b.completedToday
+              : b.dailyStatus == HabitDailyStatus.completed;
           if (aCompleted != bCompleted) {
             return aCompleted ? 1 : -1;
           }
           return a.order.compareTo(b.order);
         });
 
-        final hasPendingHabits = sortedHabits
-            .any((h) => h.dailyStatus != HabitDailyStatus.completed);
+        final hasPendingHabits = selectedDate != null && !isViewingToday
+            ? sortedHabits.any((h) => !h.completedToday)
+            : sortedHabits.any((h) => h.dailyStatus != HabitDailyStatus.completed);
 
         return Theme(
           data: Theme.of(context).copyWith(
@@ -278,6 +303,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     final habit = getLatestHabit(ref);
     await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
     if (!mounted) return;
+    Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.habitSkipped),
         duration: const Duration(seconds: 2)));
@@ -288,6 +314,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     final habit = getLatestHabit(ref);
     await ref.read(habitsNotifierProvider.notifier).failHabit(habit.id);
     if (!mounted) return;
+    Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.habitMarkedAsNotCompleted),
         duration: const Duration(seconds: 2)));
@@ -606,11 +633,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       AppLocalizations l10n, Habit habit) async {
     final notifier = ref.read(habitsNotifierProvider.notifier);
 
-    // If notification is currently ON, show options dialog
     if (habit.hasActiveNotification) {
       final currentTime = habit.notificationSettings?.eventTime;
-
-      // If eventTime is null (invalid state), show error to user
       if (currentTime == null) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -631,7 +655,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       );
 
       if (result == 'turnOff') {
-        // Turn off notification
         await notifier.updateHabit(
           habitId: habit.id,
           notificationSettings: const HabitNotificationSettings(
@@ -644,7 +667,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           );
         }
       } else if (result == 'changeTime') {
-        // Change notification time
         if (!context.mounted) return;
         final picked = await showTimePicker(
           context: context,
@@ -668,7 +690,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         }
       }
     } else {
-      // Notification is OFF, show time picker to turn it on
       final picked =
           await showTimePicker(context: context, initialTime: TimeOfDay.now());
       if (picked != null) {
@@ -688,22 +709,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     }
   }
 
-  /// Parse time string to TimeOfDay for time picker initial value.
-  ///
-  /// This method is ONLY used to set the initial position in the time picker
-  /// when the user is changing a notification time. If the stored time string
-  /// cannot be parsed (corrupted data), TimeOfDay.now() is used as a safe
-  /// fallback so the time picker can still be shown to the user.
-  ///
-  /// Note: This does NOT save any time - it only provides an initial value
-  /// for the picker UI. The actual time saved is whatever the user selects.
   TimeOfDay _parseTime(String timeStr) {
     final parts = timeStr.split(':');
     if (parts.length == 2) {
       final hour = int.tryParse(parts[0]);
       final minute = int.tryParse(parts[1]);
-
-      // Validate ranges
       if (hour != null &&
           minute != null &&
           hour >= 0 &&
@@ -713,115 +723,245 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         return TimeOfDay(hour: hour, minute: minute);
       }
     }
-
-    // Fallback to current time for picker initialization only
-    // This allows the picker to be shown even if stored data is corrupted
     return TimeOfDay.now();
   }
 
   Widget _buildExpandedContent(
       BuildContext context, AppLocalizations l10n, Color habitColor) {
     final habit = getLatestHabit(ref);
+    final isCompleted = habit.dailyStatus == HabitDailyStatus.completed;
+
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 72,
+                height: 72,
                 decoration: BoxDecoration(
-                    color: habitColor.withValues(alpha: 0.1),
-                    shape: BoxShape.circle),
+                  color: habitColor.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
                 child: Center(
-                    child: Text(widget.habit.emoji ?? '✓',
-                        style: const TextStyle(fontSize: 24))),
+                  child: Text(
+                    habit.emoji ?? '✓',
+                    style: const TextStyle(fontSize: 36),
+                  ),
+                ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                  child: Text(widget.habit.name,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          decoration: isHabitCompleted(habit)
-                              ? TextDecoration.lineThrough
-                              : null))),
+              const SizedBox(height: 12),
+              AutoSizeText(
+                habit.name,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                minFontSize: 16,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.grey.shade900,
+                  decoration: isCompleted ? TextDecoration.lineThrough : null,
+                ),
+              ),
+              const SizedBox(height: 24),
             ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildStat(Icons.local_fire_department, l10n.currentStreak,
-                  '${habit.currentStreak}', Colors.orange),
-              _buildStat(Icons.trending_up, l10n.longestStreak,
-                  '${habit.longestStreak}', Colors.blue),
-              _buildStat(Icons.check_circle, 'Total',
-                  '${habit.completionHistory.length}', Colors.green),
-            ],
-          ),
-          const SizedBox(height: 24),
+
           Row(
             children: [
-              Expanded(
-                  child: OutlinedButton.icon(
-                      onPressed: () => widget.onEdit?.call(habit),
-                      icon: const Icon(Icons.edit),
-                      label: Text(l10n.edit))),
-              const SizedBox(width: 12),
-              Expanded(
-                  child: OutlinedButton.icon(
-                      onPressed: _handleDelete,
-                      icon: const Icon(Icons.delete),
-                      label: Text(l10n.delete),
-                      style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.red))),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                  child: OutlinedButton.icon(
-                      onPressed: _handleSkip,
-                      icon: const Icon(Icons.skip_next),
-                      label: Text(l10n.skipHabit),
-                      style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.orange.shade700))),
-              const SizedBox(width: 12),
-              Expanded(
-                  child: OutlinedButton.icon(
-                      onPressed: _handleFail,
-                      icon: const Icon(Icons.close),
-                      label: Text(l10n.markAsNotCompleted),
-                      style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.red.shade700))),
+              _buildModernStatCard(
+                Icons.local_fire_department,
+                l10n.currentStreak,
+                '${habit.currentStreak}',
+                Colors.orange,
+              ),
+              const SizedBox(width: 8),
+              _buildModernStatCard(
+                Icons.emoji_events,
+                l10n.longestStreak,
+                '${habit.longestStreak}',
+                Colors.blue,
+              ),
+              const SizedBox(width: 8),
+              _buildModernStatCard(
+                Icons.check_circle_rounded,
+                l10n.total,
+                '${habit.completionHistory.length}',
+                Colors.green,
+              ),
             ],
           ),
           const SizedBox(height: 32),
+
+          if (!isCompleted)
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _handleComplete();
+                },
+                icon: const Icon(Icons.check_rounded, size: 28),
+                label: Text(
+                  l10n.completeNow,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: habitColor,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 0,
+                ),
+              ),
+            )
+          else
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _handleComplete();
+                },
+                icon: const Icon(Icons.undo_rounded),
+                label: Text(l10n.uncheck),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.grey.shade700,
+                  side: BorderSide(color: Colors.grey.shade300),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+            ),
+
+          const SizedBox(height: 24),
+
+          // Secondary Actions Row with better spacing and AutoSizeText
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCircularAction(
+                Icons.edit_rounded,
+                l10n.edit,
+                Colors.blueGrey.shade600,
+                () {
+                  Navigator.of(context).pop();
+                  widget.onEdit?.call(habit);
+                },
+              ),
+              _buildCircularAction(
+                Icons.fast_forward_rounded,
+                l10n.skipHabit,
+                Colors.orange.shade700,
+                _handleSkip,
+              ),
+              _buildCircularAction(
+                Icons.close_rounded,
+                l10n.markAsNotCompleted,
+                Colors.red.shade700,
+                _handleFail,
+              ),
+              _buildCircularAction(
+                Icons.delete_outline_rounded,
+                l10n.delete,
+                Colors.red.shade400,
+                _handleDelete,
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
         ],
       ),
     );
   }
 
-  bool isHabitCompleted(Habit habit) =>
-      habit.dailyStatus == HabitDailyStatus.completed;
+  Widget _buildModernStatCard(
+      IconData icon, String label, String value, Color color) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.1), width: 1.5),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.w900, color: color),
+            ),
+            SizedBox(
+              height: 28,
+              child: Center(
+                child: AutoSizeText(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  minFontSize: 8,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: color.withValues(alpha: 0.7),
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  Widget _buildStat(IconData icon, String label, String value, Color color) {
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 24),
-        const SizedBox(height: 4),
-        Text(value,
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-        Text(label,
-            style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-            textAlign: TextAlign.center),
-      ],
+  Widget _buildCircularAction(
+      IconData icon, String label, Color color, VoidCallback onTap) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: SizedBox(
+              height: 32,
+              child: AutoSizeText(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                minFontSize: 7,
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
