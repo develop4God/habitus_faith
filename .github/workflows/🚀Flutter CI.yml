@@ -46,6 +46,11 @@ jobs:
       - name: 📦 Get dependencies
         run: flutter pub get
 
+      - name: "🔑 Create .env file from secret"
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+        shell: bash
+
       - name: 🎨 Check and auto-format code
         run: |
           echo "🎨 Checking Dart code formatting..."
