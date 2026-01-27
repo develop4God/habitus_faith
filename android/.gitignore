@@ -80,3 +80,15 @@ key.properties
 **/*.keystore
 **/*.jks
 /Gemfile.lock
+
+# Fastlane and related secrets
+fastlane/
+fastlane/*.json
+fastlane/*.p12
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Ignore macOS generated file
+macos/Flutter/GeneratedPluginRegistrant.swift
