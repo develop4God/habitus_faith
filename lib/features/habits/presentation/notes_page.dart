@@ -198,8 +198,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                   color: isTooShort
                       ? Colors.red
                       : (isTooLong ? Colors.red : Colors.grey),
-                  fontWeight:
-                      isTooShort ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isTooShort ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
             ],
@@ -212,12 +211,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               scrollDirection: Axis.horizontal,
               children: _quickEmojis
                   .map((e) => InkWell(
-                        onTap: () =>
-                            setState(() => _noteController.text += e),
+                        onTap: () => setState(() => _noteController.text += e),
                         child: Padding(
                           padding: const EdgeInsets.only(right: 12),
-                          child:
-                              Text(e, style: const TextStyle(fontSize: 20)),
+                          child: Text(e, style: const TextStyle(fontSize: 20)),
                         ),
                       ))
                   .toList(),
