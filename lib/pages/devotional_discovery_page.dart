@@ -272,7 +272,7 @@ class _DevotionalDiscoveryPageState
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Use the new display date method that shows labels for today/tomorrow
+    // Use the display date method that shows labels for today/tomorrow only
     final displayDate = _getDisplayDate(devocional);
 
     return Container(
@@ -322,7 +322,7 @@ class _DevotionalDiscoveryPageState
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Date and favorite
+                            // Date bubble and favorite button
                             Row(
                               children: [
                                 if (displayDate != null)
