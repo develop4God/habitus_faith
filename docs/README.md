@@ -95,6 +95,7 @@ Current test status is automatically updated by CI:
 
 Status reports and change logs:
 
+- **[Documentation Reorganization](DOCUMENTATION_REORGANIZATION.md)** - How documentation was reorganized and CI setup
 - **[Translation Completion Report](reports/TRANSLATION_COMPLETION_REPORT.md)** - Translation status and completion
 - **[ARB Validator Enhancement](reports/ARB_VALIDATOR_ENHANCEMENT.md)** - ARB validation improvements
 - **[Bug Fixes Summary](reports/BUG_FIXES_SUMMARY.md)** - Summary of bug fixes
