@@ -85,6 +85,39 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
+                  const SizedBox(height: 16),
+                  // Version Info (moved here)
+                  Card(
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                l10n.version,
+                                style: theme.textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            _version,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -199,7 +232,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'contact@habitusfaith.com',
+                                  'develop4God@gmail.com',
                                   style: theme.textTheme.bodyLarge?.copyWith(
                                     color: theme.colorScheme.primary,
                                     decoration: TextDecoration.underline,
@@ -216,38 +249,37 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Version Info
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: theme.colorScheme.primary,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          l10n.version,
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      _version,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[600],
+                    const SizedBox(height: 16),
+                    // Website link
+                    InkWell(
+                      onTap: () async {
+                        final url = Uri.parse('https://www.develop4God.com');
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.language,
+                            color: theme.colorScheme.primary,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'www.develop4God.com',
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: theme.colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.grey[400],
+                          ),
+                        ],
                       ),
                     ),
                   ],

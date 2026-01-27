@@ -324,6 +324,7 @@ class _DevotionalDiscoveryPageState
                           children: [
                             // Date bubble and favorite button
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 if (displayDate != null)
                                   Container(
@@ -344,8 +345,9 @@ class _DevotionalDiscoveryPageState
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                const Spacer(),
+                                  )
+                                else
+                                  const Spacer(),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.2),
