@@ -62,10 +62,10 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       color: theme.colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Icon(
-                      Icons.favorite,
-                      size: 80,
-                      color: theme.colorScheme.primary,
+                    child: Image.asset(
+                      'assets/icons/app_icon.png',
+                      width: 80,
+                      height: 80,
                     ),
                   ),
                   const SizedBox(height: 16),
