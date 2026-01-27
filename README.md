@@ -173,7 +173,7 @@ For the full license text, see the LICENSE file or visit:
 - [Summary](https://creativecommons.org/licenses/by-nc/4.0/)  
 - [Legal Code](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
 
-© 2024 develop4God
+© 2025 develop4God
 
 ---
 
