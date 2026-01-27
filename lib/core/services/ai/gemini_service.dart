@@ -295,7 +295,8 @@ Requisitos estrictos:
       return null;
     }
 
-    return await _bibleService.getVerse(
+    // Use null-aware operator to avoid unconditional invocation
+    return await _bibleService?.getVerse(
       bookNumber: bookNumber,
       chapter: chapter,
       verse: verse,
