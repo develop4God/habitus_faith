@@ -6,6 +6,7 @@ import 'package:habitus_faith/features/habits/presentation/onboarding/display_mo
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:habitus_faith/pages/language_settings_page.dart';
 import 'package:habitus_faith/pages/notifications_settings_page.dart';
+import 'package:habitus_faith/pages/about_us_page.dart';
 import 'package:habitus_faith/pages/home_page.dart';
 import 'package:habitus_faith/widgets/display_mode_modal.dart';
 
@@ -80,6 +81,20 @@ class SettingsPage extends ConsumerWidget {
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () =>
                 _showDisplayModeDialog(context, ref, l10n, currentMode),
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: Text(l10n.aboutUs),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutUsPage(),
+                ),
+              );
+            },
           ),
           const Divider(),
           // Developer Settings button (only in debug mode)
