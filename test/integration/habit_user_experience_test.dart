@@ -5,6 +5,7 @@ import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/habit_notification.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import 'package:habitus_faith/widgets/unified_habit_list.dart';
+import 'package:habitus_faith/widgets/unified_habit_card.dart';
 import 'package:habitus_faith/pages/home_page.dart';
 import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/pages/edit_habit_dialog.dart';
