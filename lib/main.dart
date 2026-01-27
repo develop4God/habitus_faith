@@ -139,7 +139,7 @@ class MyApp extends ConsumerWidget {
                   if (onboardingComplete) {
                     return Column(
                       children: [
-                        Expanded(child: LandingPage()),
+                        const Expanded(child: LandingPage()),
                         FutureBuilder<String>(
                           future: _getAppVersion(),
                           builder: (context, snapshot) {
@@ -149,11 +149,11 @@ class MyApp extends ConsumerWidget {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text('Versión: ${snapshot.data}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 12, color: Colors.grey)),
                               );
                             }
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           },
                         ),
                       ],
@@ -177,5 +177,5 @@ class MyApp extends ConsumerWidget {
 // Helper to get app version from package_info_plus
 Future<String> _getAppVersion() async {
   final info = await PackageInfo.fromPlatform();
-  return info.version + "+" + info.buildNumber;
+  return "${info.version}+${info.buildNumber}";
 }
