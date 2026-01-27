@@ -516,7 +516,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             onChanged: (v) => setState(() {}));
       case 'category':
         return DropdownButtonFormField<HabitCategory>(
-            value: selectedCategory,
+            initialValue: selectedCategory,
             decoration: InputDecoration(
                 labelText: '$stepLabel (${widget.l10n.optional})',
                 border: const OutlineInputBorder()),
