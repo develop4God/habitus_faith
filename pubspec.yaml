@@ -1,6 +1,6 @@
 name: habitus_faith
 description: App para llevar hábitos sanos y fortalecer tu fe día a día.
-version: 1.1.6+14
+version: 1.1.6+15
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
