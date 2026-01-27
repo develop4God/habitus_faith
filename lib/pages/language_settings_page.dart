@@ -46,9 +46,8 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLanguage = ref
-        .watch(appLanguageProvider.notifier)
-        .currentLanguage;
+    final currentLanguage =
+        ref.watch(appLanguageProvider.notifier).currentLanguage;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.languageSettings)),
@@ -92,14 +91,14 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
                                 color: Colors.green,
                               )
                             : _isChangingLanguage
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.circle_outlined),
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Icon(Icons.circle_outlined),
                         onTap: _isChangingLanguage || isSelected
                             ? null
                             : () => _changeLanguage(language),

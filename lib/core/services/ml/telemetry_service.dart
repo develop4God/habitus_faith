@@ -38,9 +38,9 @@ class MLTelemetryService {
     this.appVersion = '1.0.0', // Default version, should be injected
     this.samplingRate = 0.10, // Default 10% sampling, 1.0 = 100% for tests
     math.Random? random, // Allow injection for testing
-  }) : _firestore = firestore,
-       clock = clock ?? const Clock.system(),
-       _random = random ?? math.Random();
+  })  : _firestore = firestore,
+        clock = clock ?? const Clock.system(),
+        _random = random ?? math.Random();
 
   /// Log a prediction with all features for monitoring
   ///

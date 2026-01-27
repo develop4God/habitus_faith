@@ -11,7 +11,7 @@ class BibleSearchBar extends StatelessWidget {
   final VoidCallback onClear;
   final void Function(Map<String, dynamic>) onResultTap;
   final List<TextSpan> Function(String, String, ColorScheme)
-  buildHighlightedTextSpans;
+      buildHighlightedTextSpans;
 
   const BibleSearchBar({
     super.key,

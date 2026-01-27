@@ -283,8 +283,7 @@ void main() {
       final telemetry = predictor.telemetry;
 
       // Either prediction count or error count should have increased
-      final totalAttempts =
-          (telemetry['prediction_count'] as int) +
+      final totalAttempts = (telemetry['prediction_count'] as int) +
           (telemetry['error_count'] as int);
       expect(totalAttempts, greaterThan(0));
 

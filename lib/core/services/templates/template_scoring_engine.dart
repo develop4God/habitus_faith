@@ -229,8 +229,7 @@ class TemplateScoringEngine {
     this.spiritualMaturityWeight = 0.05,
   }) {
     // Validate weights sum to 1.0 (with small tolerance for floating point)
-    final sum =
-        intentWeight +
+    final sum = intentWeight +
         supportLevelWeight +
         challengeWeight +
         motivationsWeight +
@@ -267,8 +266,7 @@ class TemplateScoringEngine {
     dimensionScores['spiritualMaturity'] = _scoreMaturity(user, template);
 
     // Calculate weighted total score
-    final totalScore =
-        (dimensionScores['intent']! * intentWeight) +
+    final totalScore = (dimensionScores['intent']! * intentWeight) +
         (dimensionScores['supportLevel']! * supportLevelWeight) +
         (dimensionScores['challenge']! * challengeWeight) +
         (dimensionScores['motivations']! * motivationsWeight) +

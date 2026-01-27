@@ -177,8 +177,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             fontWeight: FontWeight.w600,
                             decoration:
                                 widget.habit.completedToday || _showLottieTick
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
                             decorationThickness: 2,
                           ),
                           maxLines: 1,
@@ -413,8 +413,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               NotificationTiming.none
                       ? Icons.notifications_active
                       : Icons.notifications_off,
-                  color:
-                      widget.habit.notificationSettings != null &&
+                  color: widget.habit.notificationSettings != null &&
                           widget.habit.notificationSettings!.timing !=
                               NotificationTiming.none
                       ? Colors.orange
@@ -423,8 +422,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child:
-                      widget.habit.notificationSettings != null &&
+                  child: widget.habit.notificationSettings != null &&
                           widget.habit.notificationSettings!.timing !=
                               NotificationTiming.none
                       ? Text(
@@ -452,8 +450,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           widget.habit.recurrence!.enabled
                       ? Icons.repeat
                       : Icons.repeat,
-                  color:
-                      widget.habit.recurrence != null &&
+                  color: widget.habit.recurrence != null &&
                           widget.habit.recurrence!.enabled
                       ? Colors.green
                       : Colors.grey,
@@ -461,8 +458,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child:
-                      widget.habit.recurrence != null &&
+                  child: widget.habit.recurrence != null &&
                           widget.habit.recurrence!.enabled
                       ? Text(
                           '${widget.habit.recurrence!.frequency.displayName} · Cada ${widget.habit.recurrence!.interval} ${_getFrequencyUnit(widget.habit.recurrence!.frequency)}',
@@ -646,9 +642,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             decoration: subtask.completed
                                 ? TextDecoration.lineThrough
                                 : null,
-                            color: subtask.completed
-                                ? Colors.green
-                                : Colors.black,
+                            color:
+                                subtask.completed ? Colors.green : Colors.black,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

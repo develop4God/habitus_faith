@@ -115,9 +115,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
           goalsAsync.when(
             data: (goals) {
               // Filter goals by selected tab
-              final filteredGoals = goals
-                  .where((g) => g.type == _selectedTab)
-                  .toList();
+              final filteredGoals =
+                  goals.where((g) => g.type == _selectedTab).toList();
 
               if (filteredGoals.isEmpty) {
                 return SliverFillRemaining(
@@ -375,9 +374,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               child: Slider(
                 value: goal.progress,
                 onChanged: (val) {
-                  ref
-                      .read(jsonGoalsRepositoryProvider)
-                      .updateGoal(
+                  ref.read(jsonGoalsRepositoryProvider).updateGoal(
                         goal.copyWith(progress: val, isCompleted: val >= 1.0),
                       );
                 },
@@ -624,9 +621,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   void _showEditGoalDialog(BuildContext context, Goal goal) {
     final titleCtrl = TextEditingController(text: goal.title);
     GoalType selectedType = goal.type;
-    DateTime? customDeadline = goal.type == GoalType.custom
-        ? goal.deadline
-        : null;
+    DateTime? customDeadline =
+        goal.type == GoalType.custom ? goal.deadline : null;
 
     showModalBottomSheet(
       context: context,

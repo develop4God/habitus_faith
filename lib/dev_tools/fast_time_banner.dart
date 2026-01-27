@@ -58,10 +58,10 @@ class _FastTimeBannerState extends ConsumerState<FastTimeBanner> {
                     Text(
                       'FAST TIME MODE ACTIVE',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                      ),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
                     ),
                     Text(
                       'Simulated: ${DateFormat('MMM d, y HH:mm:ss').format(now)}',
@@ -81,9 +81,9 @@ class _FastTimeBannerState extends ConsumerState<FastTimeBanner> {
                 child: Text(
                   '288x',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
             ],

@@ -41,10 +41,10 @@ class GeminiService implements IGeminiService {
     required ICacheService cache,
     required IRateLimitService rateLimit,
     BibleDbService? bibleService,
-  }) : _cache = cache,
-       _rateLimit = rateLimit,
-       _bibleService = bibleService,
-       _model = GenerativeModel(model: modelName, apiKey: apiKey);
+  })  : _cache = cache,
+        _rateLimit = rateLimit,
+        _bibleService = bibleService,
+        _model = GenerativeModel(model: modelName, apiKey: apiKey);
 
   @override
   Future<List<MicroHabit>> generateMicroHabits(
@@ -87,9 +87,8 @@ class GeminiService implements IGeminiService {
 
     // 5. Call Gemini API with timeout
     try {
-      final response = await _model
-          .generateContent([Content.text(prompt)])
-          .timeout(AiConfig.requestTimeout);
+      final response = await _model.generateContent(
+          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
 
       // 6. Parse and validate JSON response
       final habits = _parseResponse(response.text, request.languageCode);
@@ -511,9 +510,8 @@ Requisitos estrictos:
     (prompt.length / 4).ceil();
 
     try {
-      final response = await _model
-          .generateContent([Content.text(prompt)])
-          .timeout(AiConfig.requestTimeout);
+      final response = await _model.generateContent(
+          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
 
       final responseText = response.text ?? '';
       (responseText.length / 4).ceil();
@@ -526,10 +524,8 @@ Requisitos estrictos:
       final habitsForCache = habits.map((habit) {
         final habitCopy = Map<String, dynamic>.from(habit);
         if (habitCopy['category'] is HabitCategory) {
-          habitCopy['category'] = habitCopy['category']
-              .toString()
-              .split('.')
-              .last;
+          habitCopy['category'] =
+              habitCopy['category'].toString().split('.').last;
         }
         return habitCopy;
       }).toList();
@@ -592,8 +588,7 @@ Requisitos estrictos:
 
     switch (profile.primaryIntent) {
       case UserIntent.faithBased:
-        prompt =
-            '''
+        prompt = '''
 Usuario cristiano busca fortalecer fe.
 Motivaciones: ${profile.motivations.join(', ')}
 Madurez espiritual: ${profile.spiritualMaturity}
@@ -615,8 +610,7 @@ Ejemplos prácticos de soporte:
         break;
 
       case UserIntent.wellness:
-        prompt =
-            '''
+        prompt = '''
 Usuario busca bienestar secular.
 Objetivos: ${profile.motivations.join(', ')}
 Estado actual: derivado de respuestas
@@ -637,8 +631,7 @@ Ejemplos:
         break;
 
       case UserIntent.both:
-        prompt =
-            '''
+        prompt = '''
 Usuario busca integración fe + bienestar.
 Motivaciones: ${profile.motivations.join(', ')}
 Madurez espiritual: ${profile.spiritualMaturity}
@@ -657,8 +650,7 @@ Ejemplos integrados:
         break;
     }
 
-    prompt +=
-        '''
+    prompt += '''
 
 Compromiso del usuario: "${profile.commitment}"
 

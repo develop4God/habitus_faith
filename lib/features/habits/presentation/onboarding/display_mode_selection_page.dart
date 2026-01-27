@@ -186,9 +186,8 @@ class _ModeCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isSelected
-                  ? const Color(0xff6366f1)
-                  : Colors.grey.shade200,
+              color:
+                  isSelected ? const Color(0xff6366f1) : Colors.grey.shade200,
               width: isSelected ? 3 : 1,
             ),
             boxShadow: [

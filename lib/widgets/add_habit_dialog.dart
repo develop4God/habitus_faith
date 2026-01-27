@@ -143,9 +143,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
 
   Future<void> _saveHabit() async {
     final navigator = Navigator.of(context);
-    await ref
-        .read(habitsNotifierProvider.notifier)
-        .addHabit(
+    await ref.read(habitsNotifierProvider.notifier).addHabit(
           name: nameCtrl.text,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
@@ -534,8 +532,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             color: i < _step
                 ? habitColor
                 : (i == _step
-                      ? habitColor.withValues(alpha: 0.8)
-                      : Colors.grey.shade300),
+                    ? habitColor.withValues(alpha: 0.8)
+                    : Colors.grey.shade300),
             borderRadius: BorderRadius.circular(6),
             border: i == _step ? Border.all(color: habitColor, width: 2) : null,
           ),
@@ -618,9 +616,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected
-              ? color.withValues(alpha: 0.1)
-              : Colors.grey.shade100,
+          color:
+              isSelected ? color.withValues(alpha: 0.1) : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? color : Colors.grey.shade300,
@@ -702,10 +699,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 widget.l10n,
                 h.nameKey,
               );
-              final color =
-                  HabitColors.categoryColors[PredefinedHabitCategoryX(
-                    h.category,
-                  ).toDomainCategory()]!;
+              final color = HabitColors.categoryColors[PredefinedHabitCategoryX(
+                h.category,
+              ).toDomainCategory()]!;
               return InkWell(
                 onTap: () {
                   ref

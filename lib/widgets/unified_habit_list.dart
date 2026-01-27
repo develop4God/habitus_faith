@@ -113,8 +113,7 @@ class UnifiedHabitList extends ConsumerWidget {
                 : null,
             footer: const SizedBox(height: 32),
             shrinkWrap: shrinkWrap,
-            physics:
-                physics ??
+            physics: physics ??
                 (shrinkWrap
                     ? const NeverScrollableScrollPhysics()
                     : const AlwaysScrollableScrollPhysics()),

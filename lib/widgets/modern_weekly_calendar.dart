@@ -93,8 +93,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final day = daysOfWeek[index];
-                  final isToday =
-                      day.year == today.year &&
+                  final isToday = day.year == today.year &&
                       day.month == today.month &&
                       day.day == today.day;
                   final completedHabits = widget.habits
@@ -116,9 +115,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                     curve: Curves.easeInOut,
                     width: 60,
                     decoration: BoxDecoration(
-                      color: isToday
-                          ? Colors.blue.shade100
-                          : Colors.grey.shade100,
+                      color:
+                          isToday ? Colors.blue.shade100 : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: isToday ? Colors.blue : Colors.transparent,
