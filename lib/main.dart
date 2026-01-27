@@ -129,7 +129,8 @@ class MyApp extends ConsumerWidget {
             ),
             debugDisplayAlways: kDebugMode,
             durationUntilAlertAgain: const Duration(hours: 2),
-            minAppVersion: '1.1.6+15', // Force update for any version below this
+            minAppVersion:
+                '1.1.6+15', // Force update for any version below this
           ),
           child: Builder(
             builder: (context) {
@@ -142,10 +143,14 @@ class MyApp extends ConsumerWidget {
                         FutureBuilder<String>(
                           future: _getAppVersion(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.hasData) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('Versión: ${snapshot.data}', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                child: Text('Versión: ${snapshot.data}',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey)),
                               );
                             }
                             return SizedBox.shrink();
