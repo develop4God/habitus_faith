@@ -1327,5 +1327,85 @@
   "tomorrowLabel": "Tomorrow",
   "@tomorrowLabel": {
     "description": "Label for tomorrow's date"
+  },
+  "aboutUs": "About Us",
+  "@aboutUs": {
+    "description": "About Us page title"
+  },
+  "aboutUsTitle": "Habitus Faith",
+  "@aboutUsTitle": {
+    "description": "About Us page main title"
+  },
+  "aboutUsSubtitle": "Building Faith Through Daily Habits",
+  "@aboutUsSubtitle": {
+    "description": "About Us page subtitle"
+  },
+  "aboutUsDescription": "Habitus Faith is an application designed to help you grow in your spiritual journey through the power of consistent daily habits. We believe that small, intentional actions repeated daily can transform your life and deepen your relationship with God.",
+  "@aboutUsDescription": {
+    "description": "About Us main description"
+  },
+  "ourMission": "Our Mission",
+  "@ourMission": {
+    "description": "Our Mission section title"
+  },
+  "ourMissionText": "To empower believers worldwide to build sustainable spiritual habits that strengthen their faith, one day at a time.",
+  "@ourMissionText": {
+    "description": "Our Mission text"
+  },
+  "features": "Features",
+  "@features": {
+    "description": "Features section title"
+  },
+  "featureHabitTracking": "Habit Tracking",
+  "@featureHabitTracking": {
+    "description": "Feature: Habit Tracking"
+  },
+  "featureHabitTrackingDesc": "Track your spiritual, physical, mental, and relational habits with ease.",
+  "@featureHabitTrackingDesc": {
+    "description": "Feature description: Habit Tracking"
+  },
+  "featureBibleReading": "Bible Reading",
+  "@featureBibleReading": {
+    "description": "Feature: Bible Reading"
+  },
+  "featureBibleReadingDesc": "Access the complete Bible with bookmarking and verse-saving capabilities.",
+  "@featureBibleReadingDesc": {
+    "description": "Feature description: Bible Reading"
+  },
+  "featureDailyDevotionals": "Daily Devotionals",
+  "@featureDailyDevotionals": {
+    "description": "Feature: Daily Devotionals"
+  },
+  "featureDailyDevotionalsDesc": "Receive daily spiritual reflections to inspire and guide you.",
+  "@featureDailyDevotionalsDesc": {
+    "description": "Feature description: Daily Devotionals"
+  },
+  "featureAiCoach": "AI-Powered Habit Coach",
+  "@featureAiCoach": {
+    "description": "Feature: AI Coach"
+  },
+  "featureAiCoachDesc": "Get personalized micro-habits generated based on your goals.",
+  "@featureAiCoachDesc": {
+    "description": "Feature description: AI Coach"
+  },
+  "contactUs": "Contact Us",
+  "@contactUs": {
+    "description": "Contact Us section title"
+  },
+  "contactUsText": "We'd love to hear from you! Your feedback helps us improve and serve you better.",
+  "@contactUsText": {
+    "description": "Contact Us text"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email label"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Version label"
+  },
+  "madeWithLove": "Made with ❤️ for the glory of God",
+  "@madeWithLove": {
+    "description": "Footer text"
   }
 }

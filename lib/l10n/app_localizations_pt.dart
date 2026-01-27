@@ -1099,4 +1099,71 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tomorrowLabel => 'Amanhã';
+
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get aboutUsTitle => 'Habitus Faith';
+
+  @override
+  String get aboutUsSubtitle => 'Building Faith Through Daily Habits';
+
+  @override
+  String get aboutUsDescription =>
+      'Habitus Faith is an application designed to help you grow in your spiritual journey through the power of consistent daily habits. We believe that small, intentional actions repeated daily can transform your life and deepen your relationship with God.';
+
+  @override
+  String get ourMission => 'Our Mission';
+
+  @override
+  String get ourMissionText =>
+      'To empower believers worldwide to build sustainable spiritual habits that strengthen their faith, one day at a time.';
+
+  @override
+  String get features => 'Features';
+
+  @override
+  String get featureHabitTracking => 'Habit Tracking';
+
+  @override
+  String get featureHabitTrackingDesc =>
+      'Track your spiritual, physical, mental, and relational habits with ease.';
+
+  @override
+  String get featureBibleReading => 'Bible Reading';
+
+  @override
+  String get featureBibleReadingDesc =>
+      'Access the complete Bible with bookmarking and verse-saving capabilities.';
+
+  @override
+  String get featureDailyDevotionals => 'Daily Devotionals';
+
+  @override
+  String get featureDailyDevotionalsDesc =>
+      'Receive daily spiritual reflections to inspire and guide you.';
+
+  @override
+  String get featureAiCoach => 'AI-Powered Habit Coach';
+
+  @override
+  String get featureAiCoachDesc =>
+      'Get personalized micro-habits generated based on your goals.';
+
+  @override
+  String get contactUs => 'Contact Us';
+
+  @override
+  String get contactUsText =>
+      'We\'d love to hear from you! Your feedback helps us improve and serve you better.';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get madeWithLove => 'Made with ❤️ for the glory of God';
 }

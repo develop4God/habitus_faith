@@ -1103,4 +1103,71 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tomorrowLabel => 'Mañana';
+
+  @override
+  String get aboutUs => 'Acerca de Nosotros';
+
+  @override
+  String get aboutUsTitle => 'Habitus Faith';
+
+  @override
+  String get aboutUsSubtitle => 'Construyendo Fe a Través de Hábitos Diarios';
+
+  @override
+  String get aboutUsDescription =>
+      'Habitus Faith es una aplicación diseñada para ayudarte a crecer en tu camino espiritual a través del poder de hábitos diarios consistentes. Creemos que acciones pequeñas e intencionales, repetidas diariamente, pueden transformar tu vida y profundizar tu relación con Dios.';
+
+  @override
+  String get ourMission => 'Nuestra Misión';
+
+  @override
+  String get ourMissionText =>
+      'Empoderar a creyentes en todo el mundo para construir hábitos espirituales sostenibles que fortalezcan su fe, un día a la vez.';
+
+  @override
+  String get features => 'Características';
+
+  @override
+  String get featureHabitTracking => 'Seguimiento de Hábitos';
+
+  @override
+  String get featureHabitTrackingDesc =>
+      'Rastrea tus hábitos espirituales, físicos, mentales y relacionales con facilidad.';
+
+  @override
+  String get featureBibleReading => 'Lectura Bíblica';
+
+  @override
+  String get featureBibleReadingDesc =>
+      'Accede a la Biblia completa con capacidades de marcadores y guardado de versículos.';
+
+  @override
+  String get featureDailyDevotionals => 'Devocionales Diarios';
+
+  @override
+  String get featureDailyDevotionalsDesc =>
+      'Recibe reflexiones espirituales diarias para inspirarte y guiarte.';
+
+  @override
+  String get featureAiCoach => 'Coach de Hábitos con IA';
+
+  @override
+  String get featureAiCoachDesc =>
+      'Obtén micro-hábitos personalizados generados según tus objetivos.';
+
+  @override
+  String get contactUs => 'Contáctanos';
+
+  @override
+  String get contactUsText =>
+      '¡Nos encantaría saber de ti! Tu retroalimentación nos ayuda a mejorar y servirte mejor.';
+
+  @override
+  String get email => 'Correo Electrónico';
+
+  @override
+  String get version => 'Versión';
+
+  @override
+  String get madeWithLove => 'Hecho con ❤️ para la gloria de Dios';
 }

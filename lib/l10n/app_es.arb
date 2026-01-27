@@ -1327,5 +1327,85 @@
   "completeHabitToReflect": "Completa un hábito para reflexionar sobre él",
   "@completeHabitToReflect": {
     "description": "Mensaje de estado vacío para la página de reflexión"
+  },
+  "aboutUs": "Acerca de Nosotros",
+  "@aboutUs": {
+    "description": "Título de la página Acerca de Nosotros"
+  },
+  "aboutUsTitle": "Habitus Faith",
+  "@aboutUsTitle": {
+    "description": "Título principal de la página Acerca de Nosotros"
+  },
+  "aboutUsSubtitle": "Construyendo Fe a Través de Hábitos Diarios",
+  "@aboutUsSubtitle": {
+    "description": "Subtítulo de la página Acerca de Nosotros"
+  },
+  "aboutUsDescription": "Habitus Faith es una aplicación diseñada para ayudarte a crecer en tu camino espiritual a través del poder de hábitos diarios consistentes. Creemos que acciones pequeñas e intencionales, repetidas diariamente, pueden transformar tu vida y profundizar tu relación con Dios.",
+  "@aboutUsDescription": {
+    "description": "Descripción principal de Acerca de Nosotros"
+  },
+  "ourMission": "Nuestra Misión",
+  "@ourMission": {
+    "description": "Título de la sección Nuestra Misión"
+  },
+  "ourMissionText": "Empoderar a creyentes en todo el mundo para construir hábitos espirituales sostenibles que fortalezcan su fe, un día a la vez.",
+  "@ourMissionText": {
+    "description": "Texto de Nuestra Misión"
+  },
+  "features": "Características",
+  "@features": {
+    "description": "Título de la sección Características"
+  },
+  "featureHabitTracking": "Seguimiento de Hábitos",
+  "@featureHabitTracking": {
+    "description": "Característica: Seguimiento de Hábitos"
+  },
+  "featureHabitTrackingDesc": "Rastrea tus hábitos espirituales, físicos, mentales y relacionales con facilidad.",
+  "@featureHabitTrackingDesc": {
+    "description": "Descripción de característica: Seguimiento de Hábitos"
+  },
+  "featureBibleReading": "Lectura Bíblica",
+  "@featureBibleReading": {
+    "description": "Característica: Lectura Bíblica"
+  },
+  "featureBibleReadingDesc": "Accede a la Biblia completa con capacidades de marcadores y guardado de versículos.",
+  "@featureBibleReadingDesc": {
+    "description": "Descripción de característica: Lectura Bíblica"
+  },
+  "featureDailyDevotionals": "Devocionales Diarios",
+  "@featureDailyDevotionals": {
+    "description": "Característica: Devocionales Diarios"
+  },
+  "featureDailyDevotionalsDesc": "Recibe reflexiones espirituales diarias para inspirarte y guiarte.",
+  "@featureDailyDevotionalsDesc": {
+    "description": "Descripción de característica: Devocionales Diarios"
+  },
+  "featureAiCoach": "Coach de Hábitos con IA",
+  "@featureAiCoach": {
+    "description": "Característica: Coach con IA"
+  },
+  "featureAiCoachDesc": "Obtén micro-hábitos personalizados generados según tus objetivos.",
+  "@featureAiCoachDesc": {
+    "description": "Descripción de característica: Coach con IA"
+  },
+  "contactUs": "Contáctanos",
+  "@contactUs": {
+    "description": "Título de la sección Contáctanos"
+  },
+  "contactUsText": "¡Nos encantaría saber de ti! Tu retroalimentación nos ayuda a mejorar y servirte mejor.",
+  "@contactUsText": {
+    "description": "Texto de Contáctanos"
+  },
+  "email": "Correo Electrónico",
+  "@email": {
+    "description": "Etiqueta de correo electrónico"
+  },
+  "version": "Versión",
+  "@version": {
+    "description": "Etiqueta de versión"
+  },
+  "madeWithLove": "Hecho con ❤️ para la gloria de Dios",
+  "@madeWithLove": {
+    "description": "Texto del pie de página"
   }
 }
