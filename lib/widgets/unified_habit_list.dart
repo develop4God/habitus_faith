@@ -39,10 +39,10 @@ class UnifiedHabitList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
     final l10n = AppLocalizations.of(context)!;
-    
+
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final viewingDate = selectedDate != null 
+    final viewingDate = selectedDate != null
         ? DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day)
         : today;
     final isViewingToday = viewingDate == today;
@@ -91,7 +91,8 @@ class UnifiedHabitList extends ConsumerWidget {
 
         final hasPendingHabits = selectedDate != null && !isViewingToday
             ? sortedHabits.any((h) => !h.completedToday)
-            : sortedHabits.any((h) => h.dailyStatus != HabitDailyStatus.completed);
+            : sortedHabits
+                .any((h) => h.dailyStatus != HabitDailyStatus.completed);
 
         return Theme(
           data: Theme.of(context).copyWith(

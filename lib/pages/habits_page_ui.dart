@@ -49,7 +49,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
     setState(() {
       _selectedDate = date;
     });
-    debugPrint('Selected date: ${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}');
+    debugPrint(
+        'Selected date: ${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}');
   }
 
   void _goToPreviousDay() {
@@ -61,7 +62,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
   void _goToNextDay() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final selected = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final selected =
+        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
     if (selected.isBefore(today)) {
       setState(() {
         _selectedDate = _selectedDate.add(const Duration(days: 1));
@@ -90,7 +92,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
     final daysOfWeek =
         List.generate(7, (i) => weekStart.add(Duration(days: i)));
     final today = DateTime.now();
-    final selectedDay = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final selectedDay =
+        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -162,9 +165,7 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
-                        color: isSelected
-                            ? Colors.white
-                            : Colors.grey.shade600,
+                        color: isSelected ? Colors.white : Colors.grey.shade600,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -210,13 +211,26 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final selected = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+    final selected =
+        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
     final isToday = selected == today;
     final isInFuture = selected.isAfter(today);
 
     // Format selected date
-    final months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    final months = [
+      'Ene',
+      'Feb',
+      'Mar',
+      'Abr',
+      'May',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dic'
+    ];
     final dateText = isToday
         ? 'Hoy'
         : '${_selectedDate.day} ${months[_selectedDate.month - 1]}';
@@ -255,9 +269,8 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
               IconButton(
                 icon: const Icon(Icons.chevron_right, size: 32),
                 onPressed: isInFuture ? null : _goToNextDay,
-                color: isInFuture
-                    ? Colors.grey.shade300
-                    : const Color(0xFF1976D2),
+                color:
+                    isInFuture ? Colors.grey.shade300 : const Color(0xFF1976D2),
               ),
             ],
           ),
