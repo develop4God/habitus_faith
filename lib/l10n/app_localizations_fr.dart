@@ -1046,16 +1046,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get habitDeleted => 'Habitude supprimée';
 
   @override
-  String get dailyReflection => 'PENDING';
+  String get dailyReflection => 'Réflexion quotidienne';
 
   @override
-  String get myReflection => 'PENDING';
+  String get myReflection => 'Ma réflexion';
 
   @override
-  String get globalNote => 'PENDING';
+  String get globalNote => 'Note générale';
 
   @override
-  String get globalNoteHint => 'PENDING';
+  String get globalNoteHint =>
+      'Comment s\'est passée votre communion avec Dieu aujourd\'hui ?';
 
   @override
   String get dailyHabits => 'Habitudes Quotidiennes';
