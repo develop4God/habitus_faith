@@ -1160,5 +1160,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get madeWithLove =>
-      'Made with ❤️\nby develop4God\n\nFor the Glory of God';
+      'Made with ❤️ by Develop4God\n \nFor the Glory of God';
 }
