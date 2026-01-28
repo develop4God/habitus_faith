@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
@@ -39,7 +40,8 @@ void main() async {
     debugPrint('Archivo .env cargado correctamente desde ruta relativa');
   } catch (e) {
     debugPrint(
-        'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}');
+      'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}',
+    );
   }
 
   // Load environment configuration before Firebase
@@ -121,28 +123,65 @@ class MyApp extends ConsumerWidget {
           '/devtools': (context) => const DeveloperDebugPage(),
         },
         home: UpgradeAlert(
-          // Optimized for testing and production
           upgrader: Upgrader(
-            debugDisplayAlways:
-                kDebugMode, // Only show update dialog always in local debug
-            durationUntilAlertAgain:
-                const Duration(hours: 2), // Check more frequently
-            minAppVersion: '1.1.0', // Force update for very old versions
+            appcastConfig: AppcastConfiguration(
+              url: 'https://develop4god.github.io/habits-data/appcast.xml',
+              supportedOS: ['android'],
+            ),
+            debugDisplayAlways: kDebugMode,
+            durationUntilAlertAgain: const Duration(hours: 2),
+            minAppVersion:
+                '1.1.6+15', // Force update for any version below this
           ),
-          child: authInit.when(
-            data: (_) {
-              if (onboardingComplete) {
-                return const LandingPage();
-              }
-              return const SimpleOnboardingFlow();
+          child: Builder(
+            builder: (context) {
+              return authInit.when(
+                data: (_) {
+                  if (onboardingComplete) {
+                    return Column(
+                      children: [
+                        const Expanded(child: LandingPage()),
+                        FutureBuilder<String>(
+                          future: _getAppVersion(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.hasData) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Versión: ${snapshot.data}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      ],
+                    );
+                  }
+                  return const SimpleOnboardingFlow();
+                },
+                loading: () => const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                ),
+                error: (error, stack) =>
+                    Scaffold(body: Center(child: Text('Error: $error'))),
+              );
             },
-            loading: () => const Scaffold(
-                body: Center(child: CircularProgressIndicator())),
-            error: (error, stack) =>
-                Scaffold(body: Center(child: Text('Error: $error'))),
           ),
         ),
       ),
     );
   }
+}
+
+// Helper to get app version from package_info_plus
+Future<String> _getAppVersion() async {
+  final info = await PackageInfo.fromPlatform();
+  return "${info.version}+${info.buildNumber}";
 }

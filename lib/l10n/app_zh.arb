@@ -393,7 +393,7 @@
   "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。",
   "planYourDay": "规划您的一天",
   "skipHabit": "跳过习惯",
-  "markAsNotCompleted": "标记为未完成",
+  "markAsNotCompleted": "未完成",
   "skippedHabit": "已跳过",
   "failedHabit": "失败",
   "repeatReminder": "重复提醒",
@@ -412,10 +412,6 @@
   "notificationOptions": "通知选项",
   "@notificationOptions": {
     "description": "通知选项对话框标题"
-  },
-  "currentTime": "当前时间",
-  "@currentTime": {
-    "description": "当前通知时间标签"
   },
   "turnOffNotification": "关闭通知",
   "@turnOffNotification": {
@@ -444,5 +440,972 @@
   "invalidNotificationConfig": "通知配置无效。请重新设置通知。",
   "@invalidNotificationConfig": {
     "description": "通知数据损坏或无效时显示的错误消息"
+  },
+  "readVerseFirst": "先读经文",
+  "@readVerseFirst": {
+    "description": "在灵修前阅读圣经经文的按钮"
+  },
+  "reflection": "反思",
+  "@reflection": {
+    "description": "灵修反思部分标题"
+  },
+  "forMeditation": "默想要点",
+  "@forMeditation": {
+    "description": "默想要点部分标题"
+  },
+  "prayer": "祷告",
+  "@prayer": {
+    "description": "祷告部分标题"
+  },
+  "todayLabel": "今天",
+  "@todayLabel": {
+    "description": "今天日期的标签"
+  },
+  "tomorrowLabel": "明天",
+  "@tomorrowLabel": {
+    "description": "明天日期的标签"
+  },
+  "aboutUs": "关于我们",
+  "aboutUsTitle": "Habitus Faith",
+  "aboutUsSubtitle": "通过日常习惯建立信心",
+  "aboutUsDescription": "Habitus Faith 是一款旨在通过持续的日常习惯帮助您在属灵旅程中成长的应用程序。我们相信，每天重复的小而有意的行动可以改变您的生活并加深您与神的关系。",
+  "ourMission": "我们的使命",
+  "ourMissionText": "赋予全球信徒建立可持续的属灵习惯的能力，一次一天地加强他们的信心。",
+  "features": "功能",
+  "featureHabitTracking": "习惯跟踪",
+  "featureHabitTrackingDesc": "轻松跟踪您的属灵、身体、心理和社交习惯。",
+  "featureBibleReading": "阅读圣经",
+  "featureBibleReadingDesc": "访问完整的圣经，具有书签和经文保存功能。",
+  "featureDailyDevotionals": "每日灵修",
+  "featureDailyDevotionalsDesc": "接收每日属灵反思，启发并引导您。",
+  "featureAiCoach": "AI 习惯教练",
+  "featureAiCoachDesc": "根据您的目标生成个性化微习惯。",
+  "contactUs": "联系我们",
+  "contactUsText": "我们很乐意听取您的意见！您的反馈有助于我们改进并更好地为您服务。",
+  "email": "电子邮件",
+  "version": "版本",
+  "madeWithLove": "由 Develop4God 用 ❤️ 制作\n \n愿荣耀归于神",
+  "flashTask": "快速任务",
+  "@flashTask": {
+    "description": "Quick task option with only name and emoji"
+  },
+  "flashTaskSubtitle": "快速添加只需名称和表情符号的任务",
+  "@flashTaskSubtitle": {
+    "description": "Description for flash task option"
+  },
+  "dailyReflection": "每日反思",
+  "@dailyReflection": {
+    "description": "Daily reflection section title"
+  },
+  "myReflection": "我的反思",
+  "@myReflection": {
+    "description": "My reflection label"
+  },
+  "globalNote": "全局备注",
+  "@globalNote": {
+    "description": "Global note label for the day"
+  },
+  "globalNoteHint": "为今天添加备注...",
+  "@globalNoteHint": {
+    "description": "Placeholder for global note input"
+  },
+  "dailyHabits": "每日习惯",
+  "@dailyHabits": {
+    "description": "Daily habits section title"
+  },
+  "addReflection": "添加反思",
+  "@addReflection": {
+    "description": "Button to add a reflection"
+  },
+  "completeHabitToReflect": "完成习惯以添加反思",
+  "@completeHabitToReflect": {
+    "description": "Message shown when habit needs to be completed before reflecting"
+  },
+  "@predefinedHabit_morningPrayer_name": {
+    "description": "Name of morning prayer habit"
+  },
+  "@predefinedHabit_morningPrayer_description": {
+    "description": "Description of morning prayer habit"
+  },
+  "@predefinedHabit_bibleReading_name": {
+    "description": "Name of bible reading habit"
+  },
+  "@predefinedHabit_bibleReading_description": {
+    "description": "Description of bible reading habit"
+  },
+  "@predefinedHabit_worship_name": {
+    "description": "Name of worship habit"
+  },
+  "@predefinedHabit_worship_description": {
+    "description": "Description of worship habit"
+  },
+  "@predefinedHabit_gratitude_name": {
+    "description": "Name of gratitude habit"
+  },
+  "@predefinedHabit_gratitude_description": {
+    "description": "Description of gratitude habit"
+  },
+  "@predefinedHabit_exercise_name": {
+    "description": "Name of exercise habit"
+  },
+  "@predefinedHabit_exercise_description": {
+    "description": "Description of exercise habit"
+  },
+  "@predefinedHabit_healthyEating_name": {
+    "description": "Name of healthy eating habit"
+  },
+  "@predefinedHabit_healthyEating_description": {
+    "description": "Description of healthy eating habit"
+  },
+  "@predefinedHabit_sleep_name": {
+    "description": "Name of sleep habit"
+  },
+  "@predefinedHabit_sleep_description": {
+    "description": "Description of sleep habit"
+  },
+  "@predefinedHabit_meditation_name": {
+    "description": "Name of meditation habit"
+  },
+  "@predefinedHabit_meditation_description": {
+    "description": "Description of meditation habit"
+  },
+  "@predefinedHabit_learning_name": {
+    "description": "Name of learning habit"
+  },
+  "@predefinedHabit_learning_description": {
+    "description": "Description of learning habit"
+  },
+  "@predefinedHabit_creativity_name": {
+    "description": "Name of creativity habit"
+  },
+  "@predefinedHabit_creativity_description": {
+    "description": "Description of creativity habit"
+  },
+  "@predefinedHabit_familyTime_name": {
+    "description": "Name of family time habit"
+  },
+  "@predefinedHabit_familyTime_description": {
+    "description": "Description of family time habit"
+  },
+  "@predefinedHabit_service_name": {
+    "description": "Name of service habit"
+  },
+  "@predefinedHabit_service_description": {
+    "description": "Description of service habit"
+  },
+  "@onboardingErrorMessage": {
+    "description": "Error message shown when onboarding fails"
+  },
+  "@retry": {
+    "description": "Button label for retrying an operation"
+  },
+  "@selected": {
+    "description": "Accessibility label indicating an item is selected"
+  },
+  "@category": {
+    "description": "Category label"
+  },
+  "@difficulty": {
+    "description": "Difficulty label"
+  },
+  "@emoji": {
+    "description": "Emoji label"
+  },
+  "@color": {
+    "description": "Color label"
+  },
+  "@optional": {
+    "description": "Optional label"
+  },
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "@uncheck": {
+    "description": "Uncheck button text"
+  },
+  "@save": {
+    "description": "Save button text"
+  },
+  "@editHabit": {
+    "description": "Edit habit dialog title"
+  },
+  "@habitEdited": {
+    "description": "Success message after editing a habit"
+  },
+  "@defaultColor": {
+    "description": "Default color option label"
+  },
+  "@statistics": {
+    "description": "Statistics/Progress page title"
+  },
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "@language": {
+    "description": "Language settings option"
+  },
+  "@notifications": {
+    "description": "Notifications settings option"
+  },
+  "@notificationSettings": {
+    "description": "Notification settings title"
+  },
+  "@languageSettings": {
+    "description": "Language settings title"
+  },
+  "@selectLanguage": {
+    "description": "Select language instruction"
+  },
+  "@languageInfo": {
+    "description": "Language information text"
+  },
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  "@notificationTimeUpdated": {
+    "description": "Notification time updated message"
+  },
+  "@enableNotifications": {
+    "description": "Enable notifications option"
+  },
+  "@notificationsOn": {
+    "description": "Notifications on label"
+  },
+  "@notificationsOff": {
+    "description": "Notifications off label"
+  },
+  "@receiveReminderNotifications": {
+    "description": "Receive reminder notifications description"
+  },
+  "@notificationTime": {
+    "description": "Notification time label"
+  },
+  "@selectNotificationTime": {
+    "description": "Select notification time instruction"
+  },
+  "@currentTime": {
+    "description": "Label for current notification time"
+  },
+  "@notificationInfo": {
+    "description": "Notification information text"
+  },
+  "@highRiskWarning": {
+    "description": "Warning message for high abandonment risk"
+  },
+  "@riskPercentage": {
+    "description": "Display abandonment risk percentage",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  "@completeNow": {
+    "description": "Button text to complete habit immediately"
+  },
+  "@abandonmentNudgeTitle": {
+    "description": "Title for abandonment prediction nudge notification",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
+  },
+  "@abandonmentNudgeBody": {
+    "description": "Body text for abandonment prediction nudge notification",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "@copiedToClipboard": {
+    "description": "Message shown when text is copied to clipboard"
+  },
+  "@versesSaved": {
+    "description": "Message shown when Bible verses are saved"
+  },
+  "@loadingBooks": {
+    "description": "Message shown while loading Bible books"
+  },
+  "@selectBook": {
+    "description": "Hint text for book selection dropdown"
+  },
+  "@selectBookAndChapter": {
+    "description": "Message shown when no book and chapter are selected"
+  },
+  "@habitsCompleted": {
+    "description": "Label for habits completed statistic"
+  },
+  "@habitsCompletedCount": {
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "@error": {
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Connection failed"
+      }
+    }
+  },
+  "@generateMicroHabits": {
+    "description": "Title for micro-habits generator page"
+  },
+  "@aiGeneratedHabits": {
+    "description": "Title for automatically generated habits section"
+  },
+  "@yourGoal": {
+    "description": "Label for user goal input field"
+  },
+  "@goalHint": {
+    "description": "Hint text for goal input field"
+  },
+  "@goalRequired": {
+    "description": "Validation message when goal is empty"
+  },
+  "@goalTooShort": {
+    "description": "Validation message when goal is too short"
+  },
+  "@goalTooLong": {
+    "description": "Validation message when goal is too long"
+  },
+  "@failurePattern": {
+    "description": "Label for failure pattern input field"
+  },
+  "@failurePatternHint": {
+    "description": "Hint text for failure pattern input"
+  },
+  "@generateHabits": {
+    "description": "Button text to generate habits"
+  },
+  "@generating": {
+    "description": "Loading state text while generating"
+  },
+  "@generatingHabits": {
+    "description": "Loading message while habits are being generated"
+  },
+  "@generatedHabitsTitle": {
+    "description": "Title for generated habits results page"
+  },
+  "@selectHabitsToAdd": {
+    "description": "Instructions for selecting habits"
+  },
+  "@saveSelected": {
+    "description": "Button to save selected habits"
+  },
+  "@saving": {
+    "description": "Loading text while saving habits"
+  },
+  "@habitsAdded": {
+    "description": "Success message after adding habits",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@estimatedTime": {
+    "description": "Estimated time for habit completion",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "@bibleVerse": {
+    "description": "Label for bible verse section"
+  },
+  "@purpose": {
+    "description": "Label for habit purpose"
+  },
+  "@remaining": {
+    "description": "Remaining generations count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "@monthlyLimit": {
+    "description": "Information about monthly generation limit",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "@rateLimitReached": {
+    "description": "Error message when rate limit is exceeded"
+  },
+  "@generationFailed": {
+    "description": "Generic error message for generation failure"
+  },
+  "@apiTimeout": {
+    "description": "Error message for API timeout"
+  },
+  "@invalidInput": {
+    "description": "Error message for invalid input"
+  },
+  "@noHabitsSelected": {
+    "description": "Error when trying to save without selecting habits"
+  },
+  "@tryAgain": {
+    "description": "Button to retry after error"
+  },
+  "@generationsRemaining": {
+    "description": "Shows how many generations are left",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "@poweredByGemini": {
+    "description": "Attribution for AI service"
+  },
+  "@chooseYourExperience": {
+    "description": "Title for display mode selection screen"
+  },
+  "@displayModeDescription": {
+    "description": "Description text for display mode selection"
+  },
+  "@compactMode": {
+    "description": "Title for compact display mode"
+  },
+  "@compactModeDescription": {
+    "description": "Description of compact display mode"
+  },
+  "@compactModeFeature1": {
+    "description": "First feature of compact mode"
+  },
+  "@compactModeFeature2": {
+    "description": "Second feature of compact mode"
+  },
+  "@compactModeFeature3": {
+    "description": "Third feature of compact mode"
+  },
+  "@advancedMode": {
+    "description": "Title for advanced display mode"
+  },
+  "@advancedModeDescription": {
+    "description": "Description of advanced display mode"
+  },
+  "@advancedModeFeature1": {
+    "description": "First feature of advanced mode"
+  },
+  "@advancedModeFeature2": {
+    "description": "Second feature of advanced mode"
+  },
+  "@advancedModeFeature3": {
+    "description": "Third feature of advanced mode"
+  },
+  "@changeAnytime": {
+    "description": "Message informing users they can change mode later"
+  },
+  "@selectMode": {
+    "description": "Button text to confirm mode selection"
+  },
+  "@displayMode": {
+    "description": "Display mode setting title"
+  },
+  "@displayModeUpdated": {
+    "description": "Confirmation message when display mode is changed",
+    "placeholders": {
+      "mode": {
+        "type": "String",
+        "example": "Compact"
+      }
+    }
+  },
+  "@compactModeSubtitle": {
+    "description": "Subtitle for compact mode in settings"
+  },
+  "@advancedModeSubtitle": {
+    "description": "Subtitle for advanced mode in settings"
+  },
+  "@addManually": {
+    "description": "Option to add habit manually"
+  },
+  "@createCustomHabit": {
+    "description": "Description for manual habit creation"
+  },
+  "@generateWithAI": {
+    "description": "Option to generate habits automatically"
+  },
+  "@aiCustomHabits": {
+    "description": "Description for automatically generated habits"
+  },
+  "@previewHabitName": {
+    "description": "Placeholder text for habit name in preview"
+  },
+  "@previewHabitDescription": {
+    "description": "Placeholder text for habit description in preview"
+  },
+  "@total": {
+    "description": "Total label for statistics"
+  },
+  "@mlPredictionFailed": {
+    "description": "Error message when ML prediction fails"
+  },
+  "@mlModelNotLoaded": {
+    "description": "Error when ML model is not loaded"
+  },
+  "@mlInsufficientData": {
+    "description": "Error when not enough data for predictions",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "@backgroundSyncFailed": {
+    "description": "Background sync failure message",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "@backgroundSyncNetwork": {
+    "description": "Sync failed due to network"
+  },
+  "@backgroundSyncPermission": {
+    "description": "Sync disabled due to permissions"
+  },
+  "@workmanagerActive": {
+    "description": "WorkManager is active"
+  },
+  "@workmanagerRestricted": {
+    "description": "WorkManager restricted warning"
+  },
+  "@workmanagerDisabled": {
+    "description": "WorkManager disabled"
+  },
+  "@patternWeekend": {
+    "description": "Weekend pattern detected message"
+  },
+  "@patternEvening": {
+    "description": "Evening pattern detected message"
+  },
+  "@optimalTimeFound": {
+    "description": "Optimal time found message",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "8:00 AM"
+      }
+    }
+  },
+  "@networkTimeout": {
+    "description": "Network timeout error"
+  },
+  "@firebasePermissionDenied": {
+    "description": "Firebase permission denied"
+  },
+  "@errorUnknown": {
+    "description": "Generic unknown error"
+  },
+  "@devBannerTitle": {
+    "description": "Dev tools banner title"
+  },
+  "@devBannerLastSync": {
+    "description": "Last sync time in dev banner",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "2m ago"
+      }
+    }
+  },
+  "@devBannerMlStatus": {
+    "description": "ML model status in dev banner",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Loaded"
+      }
+    }
+  },
+  "@devBannerWorkmanager": {
+    "description": "WorkManager status in dev banner",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Active"
+      }
+    }
+  },
+  "@devBannerFastTime": {
+    "description": "Fast time mode in dev banner",
+    "placeholders": {
+      "multiplier": {
+        "type": "String",
+        "example": "288"
+      },
+      "date": {
+        "type": "String",
+        "example": "Nov 7, 2025"
+      }
+    }
+  },
+  "@riskLevelLow": {
+    "description": "Low abandonment risk level"
+  },
+  "@riskLevelMedium": {
+    "description": "Medium abandonment risk level"
+  },
+  "@riskLevelHigh": {
+    "description": "High abandonment risk level"
+  },
+  "@predictorRunning": {
+    "description": "Predictor is running"
+  },
+  "@predictorComplete": {
+    "description": "Predictor completed"
+  },
+  "@syncInProgress": {
+    "description": "Sync in progress"
+  },
+  "@syncComplete": {
+    "description": "Sync completed successfully"
+  },
+  "@mlModelLoaded": {
+    "description": "ML model loaded status"
+  },
+  "@mlModelLoading": {
+    "description": "ML model loading status"
+  },
+  "@mlModelError": {
+    "description": "ML model error status"
+  },
+  "@chooseHabitType": {
+    "description": "Text for choosing habit type when adding"
+  },
+  "@chooseFromPredefined": {
+    "description": "Text for choosing from predefined habits"
+  },
+  "@manual": {
+    "description": "Manual habit option (short label)"
+  },
+  "@custom": {
+    "description": "Custom habit option (short label)"
+  },
+  "@defaultHabit": {
+    "description": "Default/predefined habit option (short label)"
+  },
+  "@addHabitDiscoverySubtitle": {
+    "description": "Explanatory subtitle for the add habit discovery dialog"
+  },
+  "@requiredFieldLabel": {
+    "description": "Label to indicate a field is required"
+  },
+  "@back": {
+    "description": "Button to go back to the previous step in the dialog"
+  },
+  "@selectAll": {
+    "description": "Button to select all habits on the habits page"
+  },
+  "@copy": {
+    "description": "Text for duplicating a habit (swipe action)"
+  },
+  "@copyHabit": {
+    "description": "Dialog title for duplicating a habit"
+  },
+  "@copyHabitConfirm": {
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
+  },
+  "@introMessage": {
+    "description": "Intro message shown on landing page as a motivational quote."
+  },
+  "@todaysVerse": {
+    "description": "Title for today's Bible verse section on home page"
+  },
+  "@todaysHabits": {
+    "description": "Title for today's habits section on home page"
+  },
+  "@allHabitsCompleted": {
+    "description": "Success message when all habits are completed"
+  },
+  "@dayStreak": {
+    "description": "Shows the current streak for a habit",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "@startJourney": {
+    "description": "Message shown when user has no habits yet"
+  },
+  "@buildConsistency": {
+    "description": "Motivational message when no habits are completed"
+  },
+  "@greatProgress": {
+    "description": "Motivational message when some habits are completed"
+  },
+  "@habitsRemaining": {
+    "description": "Shows how many habits remain to be completed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@longestStreakCard": {
+    "description": "Label for longest streak card on home page"
+  },
+  "@weeklyConsistencyCard": {
+    "description": "Label for weekly consistency card on home page"
+  },
+  "@swipeToComplete": {
+    "description": "Hint text showing users how to complete habits"
+  },
+  "@usefulTip": {
+    "description": "Educational tip title"
+  },
+  "@habitsTip": {
+    "description": "Educational tip description"
+  },
+  "@understood": {
+    "description": "Button to close the educational tip"
+  },
+  "@bible": {
+    "description": "Bible title for AppBar"
+  },
+  "@home": {
+    "description": "Home tab label"
+  },
+  "@reminderConfig": {
+    "description": "Reminder configuration dialog title"
+  },
+  "@recurrenceConfig": {
+    "description": "Recurrence configuration dialog title"
+  },
+  "@repeat": {
+    "description": "Repeat reminder toggle label"
+  },
+  "@setCycleForPlan": {
+    "description": "Subtitle for repeat toggle"
+  },
+  "@subtasks": {
+    "description": "Subtasks section label"
+  },
+  "@addSubtask": {
+    "description": "Add subtask hint text"
+  },
+  "@minutesBefore": {
+    "description": "Custom minutes before label"
+  },
+  "@interval": {
+    "description": "Interval label for recurrence"
+  },
+  "@endDate": {
+    "description": "End date label for recurrence"
+  },
+  "@daily": {
+    "description": "Daily frequency option"
+  },
+  "@weekly": {
+    "description": "Weekly frequency option"
+  },
+  "@monthly": {
+    "description": "Monthly frequency option"
+  },
+  "@everyXDays": {
+    "description": "Every X days text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@everyXWeeks": {
+    "description": "Every X weeks text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@everyXMonths": {
+    "description": "Every X months text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@noRepetition": {
+    "description": "No repetition text"
+  },
+  "@reminder": {
+    "description": "Reminder label"
+  },
+  "@repetition": {
+    "description": "Repetition label"
+  },
+  "@eventTime": {
+    "description": "Event time label"
+  },
+  "@invalidMinutes": {
+    "description": "Validation message for invalid custom minutes"
+  },
+  "@invalidInterval": {
+    "description": "Validation message for invalid interval"
+  },
+  "@habitTracking": {
+    "description": "Title for habit tracking calendar page"
+  },
+  "@routine": {
+    "description": "Label for routine option in navigation bar"
+  },
+  "@today": {
+    "description": "Label to show the current day in the habits view"
+  },
+  "@addNote": {
+    "description": "Add note button text"
+  },
+  "@noteHint": {
+    "description": "Placeholder text for note input field"
+  },
+  "@viewNote": {
+    "description": "View note button text"
+  },
+  "@shareNote": {
+    "description": "Share note button text"
+  },
+  "@noteAdded": {
+    "description": "Note added confirmation message"
+  },
+  "@addNoteDialog": {
+    "description": "Add note dialog title"
+  },
+  "@completeWithNote": {
+    "description": "Complete habit with note button text"
+  },
+  "@addEmoji": {
+    "description": "Add emoji button text"
+  },
+  "@hideEmojis": {
+    "description": "Hide emoji picker button text"
+  },
+  "@planYourDay": {
+    "description": "Title for planning the day's habits"
+  },
+  "@skipHabit": {
+    "description": "Option to skip/postpone habit for today"
+  },
+  "@markAsNotCompleted": {
+    "description": "Option to mark habit as failed/not completed"
+  },
+  "@skippedHabit": {
+    "description": "Label for skipped habit"
+  },
+  "@failedHabit": {
+    "description": "Label for failed/not completed habit"
+  },
+  "@repeatReminder": {
+    "description": "Repeat reminder configuration option"
+  },
+  "@habitSkipped": {
+    "description": "Message when habit is skipped"
+  },
+  "@habitMarkedAsNotCompleted": {
+    "description": "Message when habit is marked as failed"
+  },
+  "@habitDeleted": {
+    "description": "Success message after deleting a habit"
+  },
+  "@aboutUs": {
+    "description": "About Us page title"
+  },
+  "@aboutUsTitle": {
+    "description": "About Us page main title"
+  },
+  "@aboutUsSubtitle": {
+    "description": "About Us page subtitle"
+  },
+  "@aboutUsDescription": {
+    "description": "About Us main description"
+  },
+  "@ourMission": {
+    "description": "Our Mission section title"
+  },
+  "@ourMissionText": {
+    "description": "Our Mission text"
+  },
+  "@features": {
+    "description": "Features section title"
+  },
+  "@featureHabitTracking": {
+    "description": "Feature: Habit Tracking"
+  },
+  "@featureHabitTrackingDesc": {
+    "description": "Feature description: Habit Tracking"
+  },
+  "@featureBibleReading": {
+    "description": "Feature: Bible Reading"
+  },
+  "@featureBibleReadingDesc": {
+    "description": "Feature description: Bible Reading"
+  },
+  "@featureDailyDevotionals": {
+    "description": "Feature: Daily Devotionals"
+  },
+  "@featureDailyDevotionalsDesc": {
+    "description": "Feature description: Daily Devotionals"
+  },
+  "@featureAiCoach": {
+    "description": "Feature: AI Coach"
+  },
+  "@featureAiCoachDesc": {
+    "description": "Feature description: AI Coach"
+  },
+  "@contactUs": {
+    "description": "Contact Us section title"
+  },
+  "@contactUsText": {
+    "description": "Contact Us text"
+  },
+  "@email": {
+    "description": "Email label"
+  },
+  "@version": {
+    "description": "Version label"
+  },
+  "@madeWithLove": {
+    "description": "Footer text"
   }
 }

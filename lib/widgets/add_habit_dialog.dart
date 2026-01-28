@@ -69,10 +69,16 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     if (_tabController.index == 0) {
       return LinearGradient(
         colors: [
-          Color.lerp(const Color(0xff7c3aed), const Color(0xffc4b5fd),
-              (sin(t * 2 * pi) + 1) / 2)!,
-          Color.lerp(const Color(0xffc4b5fd), const Color(0xff7c3aed),
-              (cos(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(
+            const Color(0xff7c3aed),
+            const Color(0xffc4b5fd),
+            (sin(t * 2 * pi) + 1) / 2,
+          )!,
+          Color.lerp(
+            const Color(0xffc4b5fd),
+            const Color(0xff7c3aed),
+            (cos(t * 2 * pi) + 1) / 2,
+          )!,
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -80,10 +86,16 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     } else if (_tabController.index == 1) {
       return LinearGradient(
         colors: [
-          Color.lerp(const Color(0xff06b6d4), const Color(0xffa5f3fc),
-              (sin(t * 2 * pi) + 1) / 2)!,
-          Color.lerp(const Color(0xffa5f3fc), const Color(0xff06b6d4),
-              (cos(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(
+            const Color(0xff06b6d4),
+            const Color(0xffa5f3fc),
+            (sin(t * 2 * pi) + 1) / 2,
+          )!,
+          Color.lerp(
+            const Color(0xffa5f3fc),
+            const Color(0xff06b6d4),
+            (cos(t * 2 * pi) + 1) / 2,
+          )!,
         ],
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
@@ -91,10 +103,16 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     } else {
       return LinearGradient(
         colors: [
-          Color.lerp(const Color(0xffffd700), const Color(0xffffa500),
-              (sin(t * 2 * pi) + 1) / 2)!,
-          Color.lerp(const Color(0xffffa500), const Color(0xffffd700),
-              (cos(t * 2 * pi) + 1) / 2)!,
+          Color.lerp(
+            const Color(0xffffd700),
+            const Color(0xffffa500),
+            (sin(t * 2 * pi) + 1) / 2,
+          )!,
+          Color.lerp(
+            const Color(0xffffa500),
+            const Color(0xffffd700),
+            (cos(t * 2 * pi) + 1) / 2,
+          )!,
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -108,7 +126,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     'category',
     'difficulty',
     'color',
-    'recurrence'
+    'recurrence',
   ];
 
   void _nextStep() {
@@ -135,10 +153,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     if (recurrence != null && recurrence!.enabled) {
       final habits = await ref.read(habitsStreamProvider.future);
       final newHabit = habits.firstWhere((h) => h.name == nameCtrl.text);
-      await ref.read(habitsNotifierProvider.notifier).updateHabit(
-            habitId: newHabit.id,
-            recurrence: recurrence,
-          );
+      await ref
+          .read(habitsNotifierProvider.notifier)
+          .updateHabit(habitId: newHabit.id, recurrence: recurrence);
     }
     navigator.pop();
   }
@@ -163,8 +180,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 Container(
                   decoration: BoxDecoration(
                     gradient: _getHeaderGradient(),
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(32)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(32),
+                    ),
                   ),
                   child: Stack(
                     children: [
@@ -172,8 +190,11 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                         top: 0,
                         right: 0,
                         child: IconButton(
-                          icon: const Icon(Icons.close,
-                              size: 32, color: Colors.white),
+                          icon: const Icon(
+                            Icons.close,
+                            size: 32,
+                            color: Colors.white,
+                          ),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
@@ -185,15 +206,17 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                             Text(
                               widget.l10n.addHabit,
                               style: const TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                             const SizedBox(height: 8),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
                               child: Row(
                                 children: [
                                   _OptionTab(
@@ -233,14 +256,17 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: _buildDiscoveryStep(habitColor)),
+                        padding: const EdgeInsets.all(20),
+                        child: _buildDiscoveryStep(habitColor),
+                      ),
                       Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: _buildPredefinedGrid()),
+                        padding: const EdgeInsets.all(16),
+                        child: _buildPredefinedGrid(),
+                      ),
                       Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: _buildFlashTaskView(habitColor)),
+                        padding: const EdgeInsets.all(20),
+                        child: _buildFlashTaskView(habitColor),
+                      ),
                     ],
                   ),
                 ),
@@ -261,7 +287,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       '🏃',
       '💧',
       '✅',
-      '🔥'
+      '🔥',
     ];
 
     return SingleChildScrollView(
@@ -278,8 +304,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             decoration: InputDecoration(
               labelText: '${widget.l10n.name} *',
               border: const OutlineInputBorder(),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
             ),
             onChanged: (value) => setState(() {}),
           ),
@@ -288,9 +316,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           Text(
             '${widget.l10n.emoji} (${widget.l10n.optional})',
             style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade700),
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade700,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -315,28 +344,33 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: quickEmojis
-                        .map((e) => Padding(
-                              padding: const EdgeInsets.only(right: 6),
-                              child: InkWell(
-                                onTap: () => setState(() => emojiCtrl.text = e),
-                                borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: InkWell(
+                              onTap: () => setState(() => emojiCtrl.text = e),
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: emojiCtrl.text == e
+                                      ? habitColor.withValues(alpha: 0.1)
+                                      : Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
                                     color: emojiCtrl.text == e
-                                        ? habitColor.withValues(alpha: 0.1)
-                                        : Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        color: emojiCtrl.text == e
-                                            ? habitColor
-                                            : Colors.grey.shade300),
+                                        ? habitColor
+                                        : Colors.grey.shade300,
                                   ),
-                                  child: Text(e,
-                                      style: const TextStyle(fontSize: 20)),
+                                ),
+                                child: Text(
+                                  e,
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
@@ -350,15 +384,20 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             height: 54,
             child: ElevatedButton.icon(
               icon: const Icon(Icons.check, size: 24),
-              label: Text(widget.l10n.add,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+              label: Text(
+                widget.l10n.add,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: habitColor,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 elevation: 2,
               ),
             ),
@@ -382,11 +421,15 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-                color: habitColor.withValues(alpha: 0.18),
-                shape: BoxShape.circle),
+              color: habitColor.withValues(alpha: 0.18),
+              shape: BoxShape.circle,
+            ),
             child: Center(
-                child: Text(emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
-                    style: const TextStyle(fontSize: 22))),
+              child: Text(
+                emojiCtrl.text.isNotEmpty ? emojiCtrl.text : '✓',
+                style: const TextStyle(fontSize: 22),
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -437,10 +480,12 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         _buildStepBar(habitColor),
         const SizedBox(height: 8),
         Text(
-            '${_step + 1} / ${_steps.length} • ${isRequired ? widget.l10n.requiredFieldLabel : widget.l10n.optional}',
-            style: TextStyle(
-                fontSize: 13,
-                color: isRequired ? Colors.red : Colors.grey.shade600)),
+          '${_step + 1} / ${_steps.length} • ${isRequired ? widget.l10n.requiredFieldLabel : widget.l10n.optional}',
+          style: TextStyle(
+            fontSize: 13,
+            color: isRequired ? Colors.red : Colors.grey.shade600,
+          ),
+        ),
         const SizedBox(height: 16),
         _buildPreviewCard(habitColor),
         const SizedBox(height: 16),
@@ -450,9 +495,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             OutlinedButton.icon(
-                icon: const Icon(Icons.arrow_back),
-                label: Text(widget.l10n.back),
-                onPressed: _step > 0 ? _prevStep : null),
+              icon: const Icon(Icons.arrow_back),
+              label: Text(widget.l10n.back),
+              onPressed: _step > 0 ? _prevStep : null,
+            ),
             if (!isLast)
               ElevatedButton.icon(
                 icon: const Icon(Icons.arrow_forward),
@@ -463,9 +509,10 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
               )
             else
               ElevatedButton.icon(
-                  icon: const Icon(Icons.check),
-                  label: Text(widget.l10n.add),
-                  onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null),
+                icon: const Icon(Icons.check),
+                label: Text(widget.l10n.add),
+                onPressed: nameCtrl.text.isNotEmpty ? _saveHabit : null,
+              ),
           ],
         ),
       ],
@@ -476,23 +523,22 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-          _steps.length,
-          (i) => Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: i == _step ? 28 : 18,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: i < _step
-                      ? habitColor
-                      : (i == _step
-                          ? habitColor.withValues(alpha: 0.8)
-                          : Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(6),
-                  border: i == _step
-                      ? Border.all(color: habitColor, width: 2)
-                      : null,
-                ),
-              )),
+        _steps.length,
+        (i) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: i == _step ? 28 : 18,
+          height: 8,
+          decoration: BoxDecoration(
+            color: i < _step
+                ? habitColor
+                : (i == _step
+                    ? habitColor.withValues(alpha: 0.8)
+                    : Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(6),
+            border: i == _step ? Border.all(color: habitColor, width: 2) : null,
+          ),
+        ),
+      ),
     );
   }
 
@@ -500,45 +546,58 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     switch (stepKey) {
       case 'name':
         return TextField(
-            controller: nameCtrl,
-            autofocus: true,
-            maxLength: 40,
-            decoration: InputDecoration(
-                labelText: '$stepLabel *', border: const OutlineInputBorder()),
-            onChanged: (v) => setState(() {}));
+          controller: nameCtrl,
+          autofocus: true,
+          maxLength: 40,
+          decoration: InputDecoration(
+            labelText: '$stepLabel *',
+            border: const OutlineInputBorder(),
+          ),
+          onChanged: (v) => setState(() {}),
+        );
       case 'emoji':
         return TextField(
-            controller: emojiCtrl,
-            decoration: InputDecoration(
-                labelText: '$stepLabel (${widget.l10n.optional})',
-                border: const OutlineInputBorder()),
-            maxLength: 2,
-            onChanged: (v) => setState(() {}));
+          controller: emojiCtrl,
+          decoration: InputDecoration(
+            labelText: '$stepLabel (${widget.l10n.optional})',
+            border: const OutlineInputBorder(),
+          ),
+          maxLength: 2,
+          onChanged: (v) => setState(() {}),
+        );
       case 'category':
         return DropdownButtonFormField<HabitCategory>(
-            initialValue: selectedCategory,
-            decoration: InputDecoration(
-                labelText: '$stepLabel (${widget.l10n.optional})',
-                border: const OutlineInputBorder()),
-            items: HabitCategory.values
-                .map((c) => DropdownMenuItem(
-                    value: c,
-                    child: Text(
-                        HabitColors.getCategoryDisplayName(c, widget.l10n))))
-                .toList(),
-            onChanged: (v) => setState(() => selectedCategory = v!));
+          initialValue: selectedCategory,
+          decoration: InputDecoration(
+            labelText: '$stepLabel (${widget.l10n.optional})',
+            border: const OutlineInputBorder(),
+          ),
+          items: HabitCategory.values
+              .map(
+                (c) => DropdownMenuItem(
+                  value: c,
+                  child: Text(
+                    HabitColors.getCategoryDisplayName(c, widget.l10n),
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: (v) => setState(() => selectedCategory = v!),
+        );
       case 'difficulty':
         return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: HabitDifficulty.values
-                .map((d) => _buildDifficultyOption(d))
-                .toList());
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: HabitDifficulty.values
+              .map((d) => _buildDifficultyOption(d))
+              .toList(),
+        );
       case 'color':
         return _ColorPickerSection(
-            selectedColor: selectedColor,
-            selectedCategory: selectedCategory,
-            onColorSelected: (c) => setState(() => selectedColor = c),
-            l10n: widget.l10n);
+          selectedColor: selectedColor,
+          selectedCategory: selectedCategory,
+          onColorSelected: (c) => setState(() => selectedColor = c),
+          l10n: widget.l10n,
+        );
       case 'recurrence':
         return _buildRecurrenceCard();
       default:
@@ -557,20 +616,29 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-            color: isSelected
-                ? color.withValues(alpha: 0.1)
-                : Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-                color: isSelected ? color : Colors.grey.shade300, width: 2)),
-        child: Column(children: [
-          Row(
+          color:
+              isSelected ? color.withValues(alpha: 0.1) : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? color : Colors.grey.shade300,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
               children: List.generate(
-                  HabitDifficultyHelper.getDifficultyStars(d),
-                  (i) => Icon(Icons.star,
-                      size: 16, color: isSelected ? color : Colors.grey))),
-          Text(d.displayName, style: const TextStyle(fontSize: 10))
-        ]),
+                HabitDifficultyHelper.getDifficultyStars(d),
+                (i) => Icon(
+                  Icons.star,
+                  size: 16,
+                  color: isSelected ? color : Colors.grey,
+                ),
+              ),
+            ),
+            Text(d.displayName, style: const TextStyle(fontSize: 10)),
+          ],
+        ),
       ),
     );
   }
@@ -581,14 +649,17 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       child: ListTile(
         leading: const Icon(Icons.repeat, color: Colors.green),
         title: Text(widget.l10n.repetition),
-        subtitle: Text(recurrence?.enabled == true
-            ? recurrence!.frequency.displayName
-            : widget.l10n.noRepetition),
+        subtitle: Text(
+          recurrence?.enabled == true
+              ? recurrence!.frequency.displayName
+              : widget.l10n.noRepetition,
+        ),
         onTap: () async {
           final res = await showDialog<HabitRecurrence>(
-              context: context,
-              builder: (c) =>
-                  RecurrenceConfigDialog(initialRecurrence: recurrence));
+            context: context,
+            builder: (c) =>
+                RecurrenceConfigDialog(initialRecurrence: recurrence),
+          );
           if (res != null) setState(() => recurrence = res);
         },
       ),
@@ -598,55 +669,71 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   Widget _buildPredefinedGrid() {
     return Column(
       children: [
-        Row(children: [
-          const Icon(Icons.auto_awesome, color: Color(0xff06b6d4)),
-          const SizedBox(width: 8),
-          Text(widget.l10n.chooseFromPredefined,
+        Row(
+          children: [
+            const Icon(Icons.auto_awesome, color: Color(0xff06b6d4)),
+            const SizedBox(width: 8),
+            Text(
+              widget.l10n.chooseFromPredefined,
               style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff06b6d4)))
-        ]),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff06b6d4),
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: 16),
         Expanded(
-            child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              childAspectRatio: 0.95),
-          itemCount: predefinedHabits.length,
-          itemBuilder: (c, i) {
-            final h = predefinedHabits[i];
-            final name = PredefinedHabitTranslations.getTranslatedName(
-                widget.l10n, h.nameKey);
-            final color = HabitColors.categoryColors[
-                PredefinedHabitCategoryX(h.category).toDomainCategory()]!;
-            return InkWell(
-              onTap: () {
-                ref
-                    .read(habitsNotifierProvider.notifier)
-                    .addHabit(name: name, emoji: h.emoji);
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
+              childAspectRatio: 0.95,
+            ),
+            itemCount: predefinedHabits.length,
+            itemBuilder: (c, i) {
+              final h = predefinedHabits[i];
+              final name = PredefinedHabitTranslations.getTranslatedName(
+                widget.l10n,
+                h.nameKey,
+              );
+              final color = HabitColors.categoryColors[PredefinedHabitCategoryX(
+                h.category,
+              ).toDomainCategory()]!;
+              return InkWell(
+                onTap: () {
+                  ref
+                      .read(habitsNotifierProvider.notifier)
+                      .addHabit(name: name, emoji: h.emoji);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                        color: color.withValues(alpha: 0.7), width: 2.5)),
-                child: Column(
+                      color: color.withValues(alpha: 0.7),
+                      width: 2.5,
+                    ),
+                  ),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(h.emoji, style: const TextStyle(fontSize: 40)),
-                      Text(name,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontWeight: FontWeight.bold))
-                    ]),
-              ),
-            );
-          },
-        )),
+                      Text(
+                        name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -658,12 +745,13 @@ class _OptionTab extends StatelessWidget {
   final bool selected;
   final Color color;
   final VoidCallback onTap;
-  const _OptionTab(
-      {required this.label,
-      required this.icon,
-      required this.selected,
-      required this.color,
-      required this.onTap});
+  const _OptionTab({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.color,
+    required this.onTap,
+  });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -673,18 +761,24 @@ class _OptionTab extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-            color: selected ? color : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withValues(alpha: 0.5))),
-        child: Row(children: [
-          Icon(icon, color: selected ? Colors.white : color, size: 18),
-          const SizedBox(width: 6),
-          Text(label,
+          color: selected ? color : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: selected ? Colors.white : color, size: 18),
+            const SizedBox(width: 6),
+            Text(
+              label,
               style: TextStyle(
-                  color: selected ? Colors.white : color,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14))
-        ]),
+                color: selected ? Colors.white : color,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -695,50 +789,64 @@ class _ColorPickerSection extends StatelessWidget {
   final HabitCategory selectedCategory;
   final ValueChanged<Color?> onColorSelected;
   final AppLocalizations l10n;
-  const _ColorPickerSection(
-      {required this.selectedColor,
-      required this.selectedCategory,
-      required this.onColorSelected,
-      required this.l10n});
+  const _ColorPickerSection({
+    required this.selectedColor,
+    required this.selectedCategory,
+    required this.onColorSelected,
+    required this.l10n,
+  });
   @override
   Widget build(BuildContext context) {
-    final groups = [
-      [const Color(0xff7c3aed), const Color(0xffa78bfa)],
-      [const Color(0xff06b6d4), const Color(0xff67e8f9)],
-      [const Color(0xfff59e42)],
-      [const Color(0xff22c55e)],
-      [const Color(0xff6366f1)]
-    ];
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text('${l10n.color} (${l10n.optional})',
-          style: const TextStyle(fontWeight: FontWeight.bold)),
-      const SizedBox(height: 8),
-      Wrap(spacing: 8, runSpacing: 8, children: [
-        _buildColorOption(null, HabitColors.categoryColors[selectedCategory]!,
-            l10n.defaultColor),
-        ...groups.expand((g) => g.map((c) => _buildColorOption(c, c, null))),
-      ]),
-    ]);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${l10n.color} (${l10n.optional})',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildColorOption(
+              null,
+              HabitColors.categoryColors[selectedCategory]!,
+              l10n.defaultColor,
+            ),
+            ...HabitColors.availableColors.map(
+              (c) => _buildColorOption(c, c, null),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Widget _buildColorOption(Color? v, Color d, String? l) {
     final isS = selectedColor == v;
     return GestureDetector(
       onTap: () => onColorSelected(v),
-      child: Column(children: [
-        Container(
+      child: Column(
+        children: [
+          Container(
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-                color: d,
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: isS ? Colors.black : Colors.transparent, width: 2)),
+              color: d,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isS ? Colors.black : Colors.transparent,
+                width: 2,
+              ),
+            ),
             child: isS
                 ? const Icon(Icons.check, color: Colors.white, size: 16)
-                : null),
-        if (l != null) Text(l, style: const TextStyle(fontSize: 8))
-      ]),
+                : null,
+          ),
+          if (l != null) Text(l, style: const TextStyle(fontSize: 8)),
+        ],
+      ),
     );
   }
 }

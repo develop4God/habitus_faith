@@ -34,10 +34,7 @@ void main() {
           createdAt: DateTime(2024, 1, 1),
           currentStreak: 0,
           lastCompletedAt: DateTime(2024, 1, 10), // 5 days ago
-          completionHistory: [
-            DateTime(2024, 1, 10),
-            DateTime(2024, 1, 9),
-          ],
+          completionHistory: [DateTime(2024, 1, 10), DateTime(2024, 1, 9)],
           reminderTime: '14:00',
         );
 
@@ -61,39 +58,41 @@ void main() {
         }
       });
 
-      test('extremely high risk habit should suggest difficulty reduction',
-          () async {
-        // Arrange: Habit with very poor performance
-        final failingHabit = Habit(
-          id: 'failing1',
-          userId: 'user1',
-          name: 'Failing Habit',
-          category: HabitCategory.physical,
-          createdAt: DateTime(2024, 1, 1),
-          currentStreak: 0,
-          lastCompletedAt: DateTime(2024, 1, 5), // 10 days ago
-          completionHistory: [
-            DateTime(2024, 1, 5),
-            DateTime(2024, 1, 3),
-          ],
-          difficultyLevel: 5, // Very difficult
-          reminderTime: '06:00',
-        );
+      test(
+        'extremely high risk habit should suggest difficulty reduction',
+        () async {
+          // Arrange: Habit with very poor performance
+          final failingHabit = Habit(
+            id: 'failing1',
+            userId: 'user1',
+            name: 'Failing Habit',
+            category: HabitCategory.physical,
+            createdAt: DateTime(2024, 1, 1),
+            currentStreak: 0,
+            lastCompletedAt: DateTime(2024, 1, 5), // 10 days ago
+            completionHistory: [DateTime(2024, 1, 5), DateTime(2024, 1, 3)],
+            difficultyLevel: 5, // Very difficult
+            reminderTime: '06:00',
+          );
 
-        // Act: Get ML prediction
-        final risk = await predictor.predictRisk(failingHabit);
+          // Act: Get ML prediction
+          final risk = await predictor.predictRisk(failingHabit);
 
-        // Assert: Risk should indicate intervention needed
-        expect(risk, greaterThanOrEqualTo(0.0));
+          // Assert: Risk should indicate intervention needed
+          expect(risk, greaterThanOrEqualTo(0.0));
 
-        // Behavioral engine should suggest difficulty reduction
-        final nextDifficulty = behavioralEngine.calculateNextDifficulty(
-          failingHabit,
-        );
+          // Behavioral engine should suggest difficulty reduction
+          final nextDifficulty = behavioralEngine.calculateNextDifficulty(
+            failingHabit,
+          );
 
-        // With success rate < 50%, should reduce difficulty
-        expect(nextDifficulty, lessThanOrEqualTo(failingHabit.difficultyLevel));
-      });
+          // With success rate < 50%, should reduce difficulty
+          expect(
+            nextDifficulty,
+            lessThanOrEqualTo(failingHabit.difficultyLevel),
+          );
+        },
+      );
 
       test('weekend gap pattern detected for coaching advice', () async {
         // Arrange: Habit only completed on weekdays
@@ -119,9 +118,7 @@ void main() {
 
         // Act: Get risk and pattern
         final risk = await predictor.predictRisk(weekdayOnlyHabit);
-        final pattern = behavioralEngine.detectFailurePattern(
-          weekdayOnlyHabit,
-        );
+        final pattern = behavioralEngine.detectFailurePattern(weekdayOnlyHabit);
 
         // Assert: Pattern detection may or may not trigger (depends on data)
         expect(risk, greaterThanOrEqualTo(0.0));

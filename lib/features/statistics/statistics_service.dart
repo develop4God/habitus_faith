@@ -22,7 +22,8 @@ class StatisticsService {
         final user = FirebaseAuth.instance.currentUser;
         if (user == null) {
           debugPrint(
-              '⚠️ [StatisticsService] Usuario no autenticado, no se puede sincronizar con Firestore');
+            '⚠️ [StatisticsService] Usuario no autenticado, no se puede sincronizar con Firestore',
+          );
           return;
         }
         final firestore = FirebaseFirestore.instance;
@@ -31,10 +32,12 @@ class StatisticsService {
             .doc(user.uid)
             .set(stats.toJson());
         debugPrint(
-            '☁️ [StatisticsService] Estadísticas sincronizadas en Firestore para usuario: ${user.uid}');
+          '☁️ [StatisticsService] Estadísticas sincronizadas en Firestore para usuario: ${user.uid}',
+        );
       } catch (e) {
         debugPrint(
-            '❌ [StatisticsService] Error al sincronizar estadísticas en Firestore: $e');
+          '❌ [StatisticsService] Error al sincronizar estadísticas en Firestore: $e',
+        );
       }
     } else {
       debugPrint('🚫 [StatisticsService] Sync con Firestore desactivado');
@@ -60,16 +63,19 @@ class StatisticsService {
         final user = FirebaseAuth.instance.currentUser;
         if (user == null) {
           debugPrint(
-              '⚠️ [StatisticsService] Usuario no autenticado, no se puede borrar en Firestore');
+            '⚠️ [StatisticsService] Usuario no autenticado, no se puede borrar en Firestore',
+          );
           return;
         }
         final firestore = FirebaseFirestore.instance;
         await firestore.collection('user_statistics').doc(user.uid).delete();
         debugPrint(
-            '🗑️☁️ [StatisticsService] Estadísticas eliminadas en Firestore para usuario: ${user.uid}');
+          '🗑️☁️ [StatisticsService] Estadísticas eliminadas en Firestore para usuario: ${user.uid}',
+        );
       } catch (e) {
         debugPrint(
-            '❌ [StatisticsService] Error al borrar estadísticas en Firestore: $e');
+          '❌ [StatisticsService] Error al borrar estadísticas en Firestore: $e',
+        );
       }
     }
   }

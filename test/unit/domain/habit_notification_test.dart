@@ -59,11 +59,7 @@ void main() {
     });
 
     test('Subtask can be created and toggled', () {
-      const subtask = Subtask(
-        id: '1',
-        title: 'Test subtask',
-        completed: false,
-      );
+      const subtask = Subtask(id: '1', title: 'Test subtask', completed: false);
 
       expect(subtask.completed, false);
 
@@ -109,14 +105,16 @@ void main() {
       expect(updatedHabit.subtasks.first.title, 'Complete morning prayer');
     });
 
-    test('NotificationTiming returns correct minutes before for each option',
-        () {
-      expect(NotificationTiming.none.minutesBefore, null);
-      expect(NotificationTiming.atEventTime.minutesBefore, 0);
-      expect(NotificationTiming.tenMinutesBefore.minutesBefore, 10);
-      expect(NotificationTiming.thirtyMinutesBefore.minutesBefore, 30);
-      expect(NotificationTiming.oneHourBefore.minutesBefore, 60);
-      expect(NotificationTiming.custom.minutesBefore, null);
-    });
+    test(
+      'NotificationTiming returns correct minutes before for each option',
+      () {
+        expect(NotificationTiming.none.minutesBefore, null);
+        expect(NotificationTiming.atEventTime.minutesBefore, 0);
+        expect(NotificationTiming.tenMinutesBefore.minutesBefore, 10);
+        expect(NotificationTiming.thirtyMinutesBefore.minutesBefore, 30);
+        expect(NotificationTiming.oneHourBefore.minutesBefore, 60);
+        expect(NotificationTiming.custom.minutesBefore, null);
+      },
+    );
   });
 }

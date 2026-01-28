@@ -7,7 +7,6 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 import '../features/habits/domain/habit.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
-import '../widgets/add_note_dialog.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
 // New providers for JSON-based habits
@@ -36,7 +35,8 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> completeHabitWithNote(String habitId, String? note) async {
     debugPrint(
-        'JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note');
+      'JsonHabitsNotifier.completeHabitWithNote: start -> $habitId, note: $note',
+    );
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -45,12 +45,14 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     result.fold(
       (failure) {
         debugPrint(
-            'JsonHabitsNotifier.completeHabitWithNote: failure -> $failure');
+          'JsonHabitsNotifier.completeHabitWithNote: failure -> $failure',
+        );
         state = AsyncError(failure, StackTrace.current);
       },
       (habit) {
         debugPrint(
-            'JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}');
+          'JsonHabitsNotifier.completeHabitWithNote: success -> ${habit.id}',
+        );
         state = const AsyncData(null);
       },
     );
@@ -82,9 +84,7 @@ class JsonHabitsNotifier extends StateNotifier<AsyncValue<void>> {
     HabitDifficulty difficulty = HabitDifficulty.medium,
     String? emoji,
   }) async {
-    debugPrint(
-      'JsonHabitsNotifier.addHabit: start -> name:$name',
-    );
+    debugPrint('JsonHabitsNotifier.addHabit: start -> name:$name');
     state = const AsyncLoading();
 
     final repository = ref.read(jsonHabitsRepositoryProvider);
@@ -195,7 +195,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       return hours * 60 + minutes;
     } catch (e) {
       debugPrint(
-          'HabitsPage._timeToMinutes: error parseando hora "$timeString": $e');
+        'HabitsPage._timeToMinutes: error parseando hora "$timeString": $e',
+      );
       return 24 * 60; // Error al parsear, va al final
     }
   }
@@ -211,7 +212,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
       final minutesB = _timeToMinutes(timeB);
 
       debugPrint(
-          'HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)');
+        'HabitsPage._sortHabitsByNotificationTime: comparando "${a.name}" (${timeA ?? "sin hora"}, $minutesA min) con "${b.name}" (${timeB ?? "sin hora"}, $minutesB min)',
+      );
 
       return minutesA.compareTo(minutesB);
     });
@@ -236,7 +238,8 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
     } else {
       filtrados = habits.where((h) => h.category == _categoryFilter).toList();
       debugPrint(
-          'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría');
+        'HabitsPage._filterHabits: filtrados ${filtrados.length} hábitos por categoría',
+      );
     }
 
     // Ordenar cronológicamente por hora de notificación
@@ -256,43 +259,20 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
           body: habitsAsync.when(
             data: (habits) {
               debugPrint(
-                  'HabitsPage.build: data recibida con ${habits.length} hábitos');
+                'HabitsPage.build: data recibida con ${habits.length} hábitos',
+              );
               final filtrados = _filterHabits(habits);
               debugPrint(
-                  'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario');
+                'HabitsPage.build: mostrando ${filtrados.length} hábitos en el calendario',
+              );
               return ModernWeeklyCalendar(
                 habits: filtrados,
                 initialDate: DateTime.now(),
                 onComplete: (habitId) async {
                   debugPrint('HabitsPage: completando hábito $habitId');
-                  final l10n = AppLocalizations.of(context)!;
-                  final habit = filtrados.firstWhere((h) => h.id == habitId,
-                      orElse: () => Habit(
-                            id: habitId,
-                            name: l10n.addNote,
-                            category: HabitCategory.mental,
-                            colorValue: null,
-                            difficulty: HabitDifficulty.medium,
-                            emoji: '',
-                            notificationSettings: null,
-                            recurrence: null,
-                            subtasks: [],
-                            completedToday: false,
-                            currentStreak: 0,
-                            longestStreak: 0,
-                            lastCompletedAt: null,
-                            completionHistory: [],
-                            userId: 'local_user',
-                            createdAt: DateTime.now(),
-                          ));
-                  String habitName = habit.name;
-                  final note = await showAddNoteDialog(
-                    context: context,
-                    habitName: habitName,
-                  );
                   await ref
                       .read(jsonHabitsNotifierProvider.notifier)
-                      .completeHabitWithNote(habitId, note);
+                      .completeHabitWithNote(habitId, null);
                 },
                 onUncheck: (habitId) async {
                   debugPrint('HabitsPage: desmarcando hábito $habitId');

@@ -39,9 +39,7 @@ void main() {
       'completeHabit marks habit as completed and creates completion record',
       () async {
         // Create a habit
-        final createResult = await repository.createHabit(
-          name: 'Test Habit',
-        );
+        final createResult = await repository.createHabit(name: 'Test Habit');
         final habitId = createResult.value.id;
 
         // Complete the habit
@@ -58,9 +56,7 @@ void main() {
     test(
       'completeHabit is idempotent - completing twice same day returns same result',
       () async {
-        final createResult = await repository.createHabit(
-          name: 'Test Habit',
-        );
+        final createResult = await repository.createHabit(name: 'Test Habit');
         final habitId = createResult.value.id;
 
         // Complete once
@@ -77,9 +73,7 @@ void main() {
     );
 
     test('streak calculation works correctly for consecutive days', () async {
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-      );
+      final createResult = await repository.createHabit(name: 'Test Habit');
       final habitId = createResult.value.id;
 
       // Simulate completions on multiple consecutive days
@@ -112,9 +106,7 @@ void main() {
     });
 
     test('streak resets when there is a gap', () async {
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-      );
+      final createResult = await repository.createHabit(name: 'Test Habit');
       final habitId = createResult.value.id;
 
       final now = DateTime.now();
@@ -146,9 +138,7 @@ void main() {
     });
 
     test('longestStreak is calculated correctly', () async {
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-      );
+      final createResult = await repository.createHabit(name: 'Test Habit');
       final habitId = createResult.value.id;
 
       final now = DateTime.now();
@@ -213,9 +203,7 @@ void main() {
     });
 
     test('deleteHabit removes habit from storage', () async {
-      final createResult = await repository.createHabit(
-        name: 'Test Habit',
-      );
+      final createResult = await repository.createHabit(name: 'Test Habit');
       final habitId = createResult.value.id;
 
       final deleteResult = await repository.deleteHabit(habitId);

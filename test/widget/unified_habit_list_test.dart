@@ -13,9 +13,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            habitsStreamProvider.overrideWith(
-              (ref) => Stream.value([]),
-            ),
+            habitsStreamProvider.overrideWith((ref) => Stream.value([])),
           ],
           child: MaterialApp(
             localizationsDelegates: const [

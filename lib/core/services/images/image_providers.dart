@@ -12,8 +12,9 @@ final imageNormalizerProvider = Provider<DevotionalImageNormalizer>((ref) {
 /// Provider for the devotional image repository.
 ///
 /// This provider uses dependency injection to provide all required services.
-final devotionalImageRepositoryProvider =
-    Provider<DevotionalImageRepository>((ref) {
+final devotionalImageRepositoryProvider = Provider<DevotionalImageRepository>((
+  ref,
+) {
   final normalizer = ref.watch(imageNormalizerProvider);
   final prefs = ref.watch(sharedPreferencesProvider);
 

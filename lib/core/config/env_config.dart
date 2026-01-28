@@ -31,7 +31,8 @@ class EnvConfig {
   static String get geminiApiKey {
     if (!isDotenvInitialized) {
       throw Exception(
-          'Dotenv no está inicializado. Asegúrate de llamar dotenv.load() en main.dart antes de usar EnvConfig.geminiApiKey.');
+        'Dotenv no está inicializado. Asegúrate de llamar dotenv.load() en main.dart antes de usar EnvConfig.geminiApiKey.',
+      );
     }
     final key = dotenv.env['GEMINI_API_KEY'] ??
         const String.fromEnvironment('GEMINI_API_KEY');

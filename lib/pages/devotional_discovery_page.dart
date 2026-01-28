@@ -50,6 +50,7 @@ class _DevotionalDiscoveryPageState
     final state = ref.watch(devotionalProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
@@ -58,7 +59,7 @@ class _DevotionalDiscoveryPageState
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          AppLocalizations.of(context)!.devotional_reading,
+          l10n.devotional_reading,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 20,
@@ -113,7 +114,7 @@ class _DevotionalDiscoveryPageState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _localizedTodayLabel(context),
+                      l10n.todayLabel,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
@@ -122,9 +123,10 @@ class _DevotionalDiscoveryPageState
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('EEEE, MMMM d',
-                              Localizations.localeOf(context).toString())
-                          .format(DateTime.now()),
+                      DateFormat(
+                        'EEEE, MMMM d',
+                        Localizations.localeOf(context).toString(),
+                      ).format(DateTime.now()),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -271,7 +273,7 @@ class _DevotionalDiscoveryPageState
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Use the new display date method that shows future dates
+    // Use the display date method that shows labels for today/tomorrow only
     final displayDate = _getDisplayDate(devocional);
 
     return Container(
@@ -321,28 +323,33 @@ class _DevotionalDiscoveryPageState
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Date and favorite
+                            // Date bubble and favorite button
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    displayDate,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
+                                if (displayDate != null)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
                                     ),
-                                  ),
-                                ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      displayDate,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  const Spacer(),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.2),
@@ -458,14 +465,14 @@ class _DevotionalDiscoveryPageState
                             ),
                             elevation: 0,
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.auto_stories_outlined, size: 20),
-                              SizedBox(width: 8),
+                              const Icon(Icons.auto_stories_outlined, size: 20),
+                              const SizedBox(width: 8),
                               Text(
-                                'Read Verse First',
-                                style: TextStyle(
+                                AppLocalizations.of(context)!.readVerseFirst,
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -515,19 +522,22 @@ class _DevotionalDiscoveryPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: Text(
                     'Select Bible Version',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const Divider(),
-                ...available.map((version) =>
-                    _buildVersionOption(context, version, version == current)),
+                ...available.map(
+                  (version) =>
+                      _buildVersionOption(context, version, version == current),
+                ),
                 const SizedBox(height: 12),
               ],
             ),
@@ -538,7 +548,10 @@ class _DevotionalDiscoveryPageState
   }
 
   Widget _buildVersionOption(
-      BuildContext context, String versionCode, bool selected) {
+    BuildContext context,
+    String versionCode,
+    bool selected,
+  ) {
     return ListTile(
       title: Text(versionCode),
       trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
@@ -554,7 +567,8 @@ class _DevotionalDiscoveryPageState
   }
 
   // Helper to get display date - converts past dates to future dates
-  String _getDisplayDate(Devocional devocional) {
+  // Only returns "Today" or "Tomorrow" (localized). Returns null for others.
+  String? _getDisplayDate(Devocional devocional) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final devDate = DateTime(
@@ -563,13 +577,15 @@ class _DevotionalDiscoveryPageState
       devocional.date.day,
     );
 
-    // If date is today, show "Today"
+    final l10n = AppLocalizations.of(context)!;
+
+    // If date is today, show "Today" (localized)
     if (devDate == today) {
-      return 'Today';
+      return l10n.todayLabel;
     }
 
     // If date is in the past, project it to the future
-    // by adding years until it's in the future
+    // by adding years until it's in the future (matching month/day)
     DateTime displayDate = devDate;
     while (displayDate.isBefore(today)) {
       displayDate = DateTime(
@@ -579,20 +595,19 @@ class _DevotionalDiscoveryPageState
       );
     }
 
-    // Check if it's tomorrow
+    // Re-check today after projection
+    if (displayDate == today) {
+      return l10n.todayLabel;
+    }
+
+    // Check if it's tomorrow (localized)
     final tomorrow = today.add(const Duration(days: 1));
     if (displayDate == tomorrow) {
-      return 'Tomorrow';
+      return l10n.tomorrowLabel;
     }
 
-    // Check if it's within this week
-    final daysUntil = displayDate.difference(today).inDays;
-    if (daysUntil <= 7 && daysUntil > 1) {
-      return DateFormat('EEEE').format(displayDate); // e.g., "Monday"
-    }
-
-    // Otherwise show the date
-    return DateFormat('MMM dd').format(displayDate);
+    // For the rest, don't show the label
+    return null;
   }
 
   // Extract verse reference (e.g., "John 3:16" or "Marcos 7:20-23")
@@ -791,7 +806,7 @@ class _DevotionalDiscoveryPageState
           // Read verse button
           ElevatedButton.icon(
             icon: const Icon(Icons.menu_book),
-            label: const Text('Read Verse First'),
+            label: Text(AppLocalizations.of(context)!.readVerseFirst),
             onPressed: () {
               Navigator.pop(context);
               _navigateToVerse(context, devocional);
@@ -801,7 +816,7 @@ class _DevotionalDiscoveryPageState
 
           // Reflection
           Text(
-            'Reflection',
+            AppLocalizations.of(context)!.reflection,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -816,7 +831,7 @@ class _DevotionalDiscoveryPageState
           // Meditation points
           if (devocional.paraMeditar.isNotEmpty) ...[
             Text(
-              'For Meditation',
+              AppLocalizations.of(context)!.forMeditation,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -849,7 +864,7 @@ class _DevotionalDiscoveryPageState
 
           // Prayer
           Text(
-            'Prayer',
+            AppLocalizations.of(context)!.prayer,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -871,22 +886,6 @@ class _DevotionalDiscoveryPageState
         ],
       ),
     );
-  }
-
-  String _localizedTodayLabel(BuildContext context) {
-    final code = Localizations.localeOf(context).languageCode;
-    switch (code) {
-      case 'es':
-        return 'Hoy';
-      case 'fr':
-        return "Aujourd'hui";
-      case 'pt':
-        return 'Hoje';
-      case 'zh':
-        return '今天';
-      default:
-        return 'Today';
-    }
   }
 }
 

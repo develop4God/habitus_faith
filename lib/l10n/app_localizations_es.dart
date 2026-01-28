@@ -1016,7 +1016,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get skipHabit => 'Saltar hábito';
 
   @override
-  String get markAsNotCompleted => 'Marcar como no completado';
+  String get markAsNotCompleted => 'No completado';
 
   @override
   String get skippedHabit => 'Saltado';
@@ -1037,25 +1037,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get habitDeleted => 'Hábito eliminado';
 
   @override
-  String get dailyReflection => 'Daily Reflection';
+  String get dailyReflection => 'Reflexión Diaria';
 
   @override
-  String get myReflection => 'My Reflection';
+  String get myReflection => 'Mi Reflexión';
 
   @override
-  String get globalNote => 'General Note';
+  String get globalNote => 'Nota General';
 
   @override
-  String get globalNoteHint => 'How was your communion with God today?';
+  String get globalNoteHint => '¿Cómo estuvo tu comunión con Dios hoy?';
 
   @override
-  String get dailyHabits => 'Daily Habits';
+  String get dailyHabits => 'Hábitos Diarios';
 
   @override
-  String get addReflection => 'Add thoughts specific to your achievements.';
+  String get addReflection =>
+      'Agrega pensamientos específicos sobre tus logros.';
 
   @override
-  String get completeHabitToReflect => 'Complete a habit to reflect on it';
+  String get completeHabitToReflect =>
+      'Completa un hábito para reflexionar sobre él';
 
   @override
   String get notificationOptions => 'Opciones de Notificación';
@@ -1083,4 +1085,89 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get invalidNotificationConfig =>
       'Configuración de notificación inválida. Por favor configure la notificación nuevamente.';
+
+  @override
+  String get readVerseFirst => 'Leer Versículo Primero';
+
+  @override
+  String get reflection => 'Reflexión';
+
+  @override
+  String get forMeditation => 'Para Meditar';
+
+  @override
+  String get prayer => 'Oración';
+
+  @override
+  String get todayLabel => 'Hoy';
+
+  @override
+  String get tomorrowLabel => 'Mañana';
+
+  @override
+  String get aboutUs => 'Acerca de Nosotros';
+
+  @override
+  String get aboutUsTitle => 'Habitus Faith';
+
+  @override
+  String get aboutUsSubtitle => 'Construyendo Fe a Través de Hábitos Diarios';
+
+  @override
+  String get aboutUsDescription =>
+      'Habitus Faith es una aplicación diseñada para ayudarte a crecer en tu camino espiritual a través del poder de hábitos diarios consistentes. Creemos que acciones pequeñas e intencionales, repetidas diariamente, pueden transformar tu vida y profundizar tu relación con Dios.';
+
+  @override
+  String get ourMission => 'Nuestra Misión';
+
+  @override
+  String get ourMissionText =>
+      'Empoderar a creyentes en todo el mundo para construir hábitos espirituales sostenibles que fortalezcan su fe, un día a la vez.';
+
+  @override
+  String get features => 'Características';
+
+  @override
+  String get featureHabitTracking => 'Seguimiento de Hábitos';
+
+  @override
+  String get featureHabitTrackingDesc =>
+      'Rastrea tus hábitos espirituales, físicos, mentales y relacionales con facilidad.';
+
+  @override
+  String get featureBibleReading => 'Lectura Bíblica';
+
+  @override
+  String get featureBibleReadingDesc =>
+      'Accede a la Biblia completa con capacidades de marcadores y guardado de versículos.';
+
+  @override
+  String get featureDailyDevotionals => 'Devocionales Diarios';
+
+  @override
+  String get featureDailyDevotionalsDesc =>
+      'Recibe reflexiones espirituales diarias para inspirarte y guiarte.';
+
+  @override
+  String get featureAiCoach => 'Coach de Hábitos con IA';
+
+  @override
+  String get featureAiCoachDesc =>
+      'Obtén micro-hábitos personalizados generados según tus objetivos.';
+
+  @override
+  String get contactUs => 'Contáctanos';
+
+  @override
+  String get contactUsText =>
+      '¡Nos encantaría saber de ti! Tu retroalimentación nos ayuda a mejorar y servirte mejor.';
+
+  @override
+  String get email => 'Correo Electrónico';
+
+  @override
+  String get version => 'Versión';
+
+  @override
+  String get madeWithLove => 'Hecho con ❤️ para la gloria de Dios';
 }

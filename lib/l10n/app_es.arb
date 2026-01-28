@@ -356,7 +356,7 @@
   },
   "currentTime": "Hora actual",
   "@currentTime": {
-    "description": "Current time label"
+    "description": "Etiqueta para la hora actual de notificación"
   },
   "notificationInfo": "Recibirás un recordatorio diario a la hora seleccionada para completar tus hábitos.",
   "@notificationInfo": {
@@ -1002,7 +1002,7 @@
   "@skipHabit": {
     "description": "Botón para saltar un hábito hoy."
   },
-  "markAsNotCompleted": "Marcar como no completado",
+  "markAsNotCompleted": "No completado",
   "@markAsNotCompleted": {
     "description": "Botón para marcar un hábito como no completado/fallido."
   },
@@ -1244,10 +1244,6 @@
   "@notificationOptions": {
     "description": "Título del diálogo de opciones de notificación"
   },
-  "currentTime": "Hora actual",
-  "@currentTime": {
-    "description": "Etiqueta para la hora actual de notificación"
-  },
   "turnOffNotification": "Desactivar Notificación",
   "@turnOffNotification": {
     "description": "Opción para desactivar la notificación del hábito"
@@ -1279,5 +1275,137 @@
   "habitDeleted": "Hábito eliminado",
   "@habitDeleted": {
     "description": "Mensaje de éxito después de eliminar un hábito"
+  },
+  "readVerseFirst": "Leer Versículo Primero",
+  "@readVerseFirst": {
+    "description": "Botón para leer el versículo bíblico antes del devocional"
+  },
+  "reflection": "Reflexión",
+  "@reflection": {
+    "description": "Título de sección para reflexión devocional"
+  },
+  "forMeditation": "Para Meditar",
+  "@forMeditation": {
+    "description": "Título de sección para puntos de meditación"
+  },
+  "prayer": "Oración",
+  "@prayer": {
+    "description": "Título de sección para oración"
+  },
+  "todayLabel": "Hoy",
+  "@todayLabel": {
+    "description": "Etiqueta para la fecha de hoy"
+  },
+  "tomorrowLabel": "Mañana",
+  "@tomorrowLabel": {
+    "description": "Etiqueta para la fecha de mañana"
+  },
+  "dailyReflection": "Reflexión Diaria",
+  "@dailyReflection": {
+    "description": "Título para la página de reflexión/notas diarias"
+  },
+  "myReflection": "Mi Reflexión",
+  "@myReflection": {
+    "description": "Subtítulo/Encabezado para la reflexión diaria"
+  },
+  "globalNote": "Nota General",
+  "@globalNote": {
+    "description": "Etiqueta para la nota general diaria"
+  },
+  "globalNoteHint": "¿Cómo estuvo tu comunión con Dios hoy?",
+  "@globalNoteHint": {
+    "description": "Sugerencia para la nota general diaria"
+  },
+  "dailyHabits": "Hábitos Diarios",
+  "@dailyHabits": {
+    "description": "Encabezado de sección para hábitos diarios en reflexión"
+  },
+  "addReflection": "Agrega pensamientos específicos sobre tus logros.",
+  "@addReflection": {
+    "description": "Instrucción para reflexiones específicas de hábitos"
+  },
+  "completeHabitToReflect": "Completa un hábito para reflexionar sobre él",
+  "@completeHabitToReflect": {
+    "description": "Mensaje de estado vacío para la página de reflexión"
+  },
+  "aboutUs": "Acerca de Nosotros",
+  "@aboutUs": {
+    "description": "Título de la página Acerca de Nosotros"
+  },
+  "aboutUsTitle": "Habitus Faith",
+  "@aboutUsTitle": {
+    "description": "Título principal de la página Acerca de Nosotros"
+  },
+  "aboutUsSubtitle": "Construyendo Fe a Través de Hábitos Diarios",
+  "@aboutUsSubtitle": {
+    "description": "Subtítulo de la página Acerca de Nosotros"
+  },
+  "aboutUsDescription": "Habitus Faith es una aplicación diseñada para ayudarte a crecer en tu camino espiritual a través del poder de hábitos diarios consistentes. Creemos que acciones pequeñas e intencionales, repetidas diariamente, pueden transformar tu vida y profundizar tu relación con Dios.",
+  "@aboutUsDescription": {
+    "description": "Descripción principal de Acerca de Nosotros"
+  },
+  "ourMission": "Nuestra Misión",
+  "@ourMission": {
+    "description": "Título de la sección Nuestra Misión"
+  },
+  "ourMissionText": "Empoderar a creyentes en todo el mundo para construir hábitos espirituales sostenibles que fortalezcan su fe, un día a la vez.",
+  "@ourMissionText": {
+    "description": "Texto de Nuestra Misión"
+  },
+  "features": "Características",
+  "@features": {
+    "description": "Título de la sección Características"
+  },
+  "featureHabitTracking": "Seguimiento de Hábitos",
+  "@featureHabitTracking": {
+    "description": "Característica: Seguimiento de Hábitos"
+  },
+  "featureHabitTrackingDesc": "Rastrea tus hábitos espirituales, físicos, mentales y relacionales con facilidad.",
+  "@featureHabitTrackingDesc": {
+    "description": "Descripción de característica: Seguimiento de Hábitos"
+  },
+  "featureBibleReading": "Lectura Bíblica",
+  "@featureBibleReading": {
+    "description": "Característica: Lectura Bíblica"
+  },
+  "featureBibleReadingDesc": "Accede a la Biblia completa con capacidades de marcadores y guardado de versículos.",
+  "@featureBibleReadingDesc": {
+    "description": "Descripción de característica: Lectura Bíblica"
+  },
+  "featureDailyDevotionals": "Devocionales Diarios",
+  "@featureDailyDevotionals": {
+    "description": "Característica: Devocionales Diarios"
+  },
+  "featureDailyDevotionalsDesc": "Recibe reflexiones espirituales diarias para inspirarte y guiarte.",
+  "@featureDailyDevotionalsDesc": {
+    "description": "Descripción de característica: Devocionales Diarios"
+  },
+  "featureAiCoach": "Coach de Hábitos con IA",
+  "@featureAiCoach": {
+    "description": "Característica: Coach con IA"
+  },
+  "featureAiCoachDesc": "Obtén micro-hábitos personalizados generados según tus objetivos.",
+  "@featureAiCoachDesc": {
+    "description": "Descripción de característica: Coach con IA"
+  },
+  "contactUs": "Contáctanos",
+  "@contactUs": {
+    "description": "Título de la sección Contáctanos"
+  },
+  "contactUsText": "¡Nos encantaría saber de ti! Tu retroalimentación nos ayuda a mejorar y servirte mejor.",
+  "@contactUsText": {
+    "description": "Texto de Contáctanos"
+  },
+  "email": "Correo Electrónico",
+  "@email": {
+    "description": "Etiqueta de correo electrónico"
+  },
+  "version": "Versión",
+  "@version": {
+    "description": "Etiqueta de versión"
+  },
+  "madeWithLove": "Hecho con ❤️ para la gloria de Dios",
+  "@madeWithLove": {
+    "description": "Texto del pie de página"
   }
 }

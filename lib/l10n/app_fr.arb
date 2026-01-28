@@ -348,7 +348,7 @@
   },
   "currentTime": "Heure actuelle",
   "@currentTime": {
-    "description": "Current time label"
+    "description": "Libellé pour l'heure de notification actuelle"
   },
   "notificationInfo": "Vous recevrez un rappel quotidien à l'heure sélectionnée pour compléter vos habitudes.",
   "@notificationInfo": {
@@ -978,7 +978,7 @@
   "@skipHabit": {
     "description": "Bouton pour ignorer une habitude aujourd'hui."
   },
-  "markAsNotCompleted": "Marquer comme non complétée",
+  "markAsNotCompleted": "Non complétée",
   "@markAsNotCompleted": {
     "description": "Bouton pour marquer une habitude comme non complétée/échouée."
   },
@@ -1236,10 +1236,6 @@
   "@notificationOptions": {
     "description": "Titre de la boîte de dialogue des options de notification"
   },
-  "currentTime": "Heure actuelle",
-  "@currentTime": {
-    "description": "Libellé pour l'heure de notification actuelle"
-  },
   "turnOffNotification": "Désactiver la Notification",
   "@turnOffNotification": {
     "description": "Option pour désactiver la notification d'habitude"
@@ -1271,5 +1267,145 @@
   "habitDeleted": "Habitude supprimée",
   "@habitDeleted": {
     "description": "Message de succès après suppression d'une habitude"
+  },
+  "readVerseFirst": "Lire le Verset d'Abord",
+  "@readVerseFirst": {
+    "description": "Bouton pour lire le verset biblique avant le dévotion"
+  },
+  "reflection": "Réflexion",
+  "@reflection": {
+    "description": "Titre de section pour la réflexion dévotionnelle"
+  },
+  "forMeditation": "Pour Méditer",
+  "@forMeditation": {
+    "description": "Titre de section pour les points de méditation"
+  },
+  "prayer": "Prière",
+  "@prayer": {
+    "description": "Titre de section pour la prière"
+  },
+  "todayLabel": "Aujourd'hui",
+  "@todayLabel": {
+    "description": "Étiquette pour la date d'aujourd'hui"
+  },
+  "tomorrowLabel": "Demain",
+  "@tomorrowLabel": {
+    "description": "Étiquette pour la date de demain"
+  },
+  "flashTask": "Tâche Flash",
+  "@flashTask": {
+    "description": "Option de tâche rapide avec seulement un nom et un emoji"
+  },
+  "flashTaskSubtitle": "Ajoutez rapidement une tâche avec seulement un nom et un emoji",
+  "@flashTaskSubtitle": {
+    "description": "Description de l'option tâche flash"
+  },
+  "dailyHabits": "Habitudes Quotidiennes",
+  "@dailyHabits": {
+    "description": "En-tête de section pour les habitudes quotidiennes dans la réflexion"
+  },
+  "addReflection": "Ajoutez des réflexions spécifiques sur vos réalisations.",
+  "@addReflection": {
+    "description": "Instruction pour les réflexions spécifiques à une habitude"
+  },
+  "completeHabitToReflect": "Complétez une habitude pour réfléchir dessus",
+  "@completeHabitToReflect": {
+    "description": "Message d'état vide pour la page de réflexion"
+  },
+  "aboutUs": "À propos de nous",
+  "@aboutUs": {
+    "description": "Titre de la page À propos de nous"
+  },
+  "aboutUsTitle": "Habitus Faith",
+  "@aboutUsTitle": {
+    "description": "Titre principal de la page À propos de nous"
+  },
+  "aboutUsSubtitle": "Bâtir la foi à travers des habitudes quotidiennes",
+  "@aboutUsSubtitle": {
+    "description": "Sous-titre de la page À propos de nous"
+  },
+  "aboutUsDescription": "Habitus Faith est une application conçue pour vous aider à grandir dans votre cheminement spirituel grâce au pouvoir d'habitudes quotidiennes constantes. Nous croyons que de petites actions intentionnelles répétées quotidiennement peuvent transformer votre vie et approfondir votre relation avec Dieu.",
+  "@aboutUsDescription": {
+    "description": "Description principale de À propos de nous"
+  },
+  "ourMission": "Notre Mission",
+  "@ourMission": {
+    "description": "Titre de la section Notre Mission"
+  },
+  "ourMissionText": "Donner aux croyants du monde entier les moyens de construire des habitudes spirituelles durables qui renforcent leur foi, un jour à la fois.",
+  "@ourMissionText": {
+    "description": "Texte de Notre Mission"
+  },
+  "features": "Caractéristiques",
+  "@features": {
+    "description": "Titre de la section Caractéristiques"
+  },
+  "featureHabitTracking": "Suivi des Habitudes",
+  "@featureHabitTracking": {
+    "description": "Caractéristique : Suivi des Habitudes"
+  },
+  "featureHabitTrackingDesc": "Suivez facilement vos habitudes spirituelles, physiques, mentales et relationnelles.",
+  "@featureHabitTrackingDesc": {
+    "description": "Description de la caractéristique : Suivi des Habitudes"
+  },
+  "featureBibleReading": "Lecture de la Bible",
+  "@featureBibleReading": {
+    "description": "Caractéristique : Lecture de la Bible"
+  },
+  "featureBibleReadingDesc": "Accédez à la Bible complète avec des capacités de mise en signet et de sauvegarde de versets.",
+  "@featureBibleReadingDesc": {
+    "description": "Description de la caractéristique : Lecture de la Bible"
+  },
+  "featureDailyDevotionals": "Dévotionnels Quotidiens",
+  "@featureDailyDevotionals": {
+    "description": "Caractéristique : Dévotionnels Quotidiens"
+  },
+  "featureDailyDevotionalsDesc": "Recevez des réflexions spirituelles quotidiennes pour vous inspirer et vous guider.",
+  "@featureDailyDevotionalsDesc": {
+    "description": "Description de la caractéristique : Dévotionnels Quotidiens"
+  },
+  "featureAiCoach": "Coach d'Habitudes IA",
+  "@featureAiCoach": {
+    "description": "Caractéristique : Coach IA"
+  },
+  "featureAiCoachDesc": "Obtenez des micro-habitudes personnalisées générées en fonction de vos objectifs.",
+  "@featureAiCoachDesc": {
+    "description": "Description de la caractéristique : Coach IA"
+  },
+  "contactUs": "Contactez-nous",
+  "@contactUs": {
+    "description": "Titre de la section Contactez-nous"
+  },
+  "contactUsText": "Nous aimerions avoir de vos nouvelles ! Vos commentaires nous aident à nous améliorer et à mieux vous servir.",
+  "@contactUsText": {
+    "description": "Texte de Contactez-nous"
+  },
+  "email": "E-mail",
+  "@email": {
+    "description": "Étiquette d'e-mail"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Étiquette de version"
+  },
+  "madeWithLove": "Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu",
+  "@madeWithLove": {
+    "description": "Footer text"
+  },
+  "dailyReflection": "Réflexion quotidienne",
+  "@dailyReflection": {
+    "description": "Titre de la page de réflexion/notes quotidiennes"
+  },
+  "myReflection": "Ma réflexion",
+  "@myReflection": {
+    "description": "Sous-titre/En-tête pour la réflexion quotidienne"
+  },
+  "globalNote": "Note générale",
+  "@globalNote": {
+    "description": "Étiquette pour la note quotidienne générale"
+  },
+  "globalNoteHint": "Comment s'est passée votre communion avec Dieu aujourd'hui ?",
+  "@globalNoteHint": {
+    "description": "Indice pour la note quotidienne générale"
   }
 }

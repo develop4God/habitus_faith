@@ -64,7 +64,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
       (habit) {
         debugPrint(
-            'HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}');
+          'HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}',
+        );
         state = const AsyncData(null);
       },
     );
@@ -161,7 +162,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
       (habit) {
         debugPrint(
-            'HabitsNotifier.uncheckHabit: éxito, habit.completedToday=${habit.completedToday}');
+          'HabitsNotifier.uncheckHabit: éxito, habit.completedToday=${habit.completedToday}',
+        );
         state = const AsyncData(null);
       },
     );
@@ -179,7 +181,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
       (habit) {
         debugPrint(
-            'HabitsNotifier.skipHabit: éxito, habit.dailyStatus=${habit.dailyStatus}');
+          'HabitsNotifier.skipHabit: éxito, habit.dailyStatus=${habit.dailyStatus}',
+        );
         state = const AsyncData(null);
       },
     );
@@ -197,7 +200,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
       (habit) {
         debugPrint(
-            'HabitsNotifier.failHabit: éxito, habit.dailyStatus=${habit.dailyStatus}');
+          'HabitsNotifier.failHabit: éxito, habit.dailyStatus=${habit.dailyStatus}',
+        );
         state = const AsyncData(null);
       },
     );
@@ -205,7 +209,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
 
   Future<void> reorderHabits(List<String> habitIds) async {
     debugPrint(
-        'HabitsNotifier.reorderHabits: reordering ${habitIds.length} habits');
+      'HabitsNotifier.reorderHabits: reordering ${habitIds.length} habits',
+    );
     state = const AsyncLoading();
     final repository = ref.read(habitsRepositoryProvider);
     final result = await repository.reorderHabits(habitIds);

@@ -5,13 +5,12 @@ import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/habit_notification.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import 'package:habitus_faith/widgets/unified_habit_list.dart';
+import 'package:habitus_faith/widgets/unified_habit_card.dart';
 import 'package:habitus_faith/pages/home_page.dart';
 import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/pages/edit_habit_dialog.dart';
 import 'package:habitus_faith/widgets/add_habit_dialog.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
-import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
 
 // Helper widget for tests
 class TestAppWrapper extends StatelessWidget {
@@ -54,9 +53,7 @@ void main() {
               return Stream.value(testHabits);
             }),
           ],
-          child: const TestAppWrapper(
-            child: HabitsPage(),
-          ),
+          child: const TestAppWrapper(child: HabitsPage()),
         ),
       );
 
@@ -70,19 +67,19 @@ void main() {
           200.0,
           scrollable: find.byType(Scrollable).first,
         );
-        expect(habitFinder, findsOneWidget,
-            reason: 'All habits should be visible in the habits page');
+        expect(
+          habitFinder,
+          findsOneWidget,
+          reason: 'All habits should be visible in the habits page',
+        );
       }
     });
 
-    testWidgets('2. Home page text is readable over background image',
-        (tester) async {
+    testWidgets('2. Home page text is readable over background image', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: TestAppWrapper(
-            child: HomePage(),
-          ),
-        ),
+        const ProviderScope(child: TestAppWrapper(child: HomePage())),
       );
 
       await tester.pumpAndSettle();
@@ -95,8 +92,11 @@ void main() {
       debugPrint('Text style: \\${textWidget.style}');
 
       // Check that the Text widget exists and has a style
-      expect(textWidget, isNotNull,
-          reason: 'Progress Text widget should exist');
+      expect(
+        textWidget,
+        isNotNull,
+        reason: 'Progress Text widget should exist',
+      );
       expect(textWidget.style, isNotNull, reason: 'Text should have a style');
       // Optionally, check for color or fontWeight if needed
     });
@@ -152,10 +152,16 @@ void main() {
           ? find.text('Cancel')
           : find.text('Cancelar');
 
-      expect(saveButton, findsOneWidget,
-          reason: 'Save button with check icon or save text should be present');
-      expect(cancelButton, findsOneWidget,
-          reason: 'Cancel or Cancelar button should be present');
+      expect(
+        saveButton,
+        findsOneWidget,
+        reason: 'Save button with check icon or save text should be present',
+      );
+      expect(
+        cancelButton,
+        findsOneWidget,
+        reason: 'Cancel or Cancelar button should be present',
+      );
 
       // Get positions
       final savePos = tester.getTopLeft(saveButton);
@@ -169,8 +175,9 @@ void main() {
       );
     });
 
-    testWidgets('4. Subtasks are displayed in expanded habit view',
-        (tester) async {
+    testWidgets('4. Subtasks are displayed in expanded habit view', (
+      tester,
+    ) async {
       final testHabit = Habit.create(
         id: 'test_habit',
         userId: 'test_user',
@@ -192,9 +199,6 @@ void main() {
             habitsStreamProvider.overrideWith((ref) {
               return Stream.value([testHabit]);
             }),
-            displayModeProvider.overrideWith(
-              (ref) => DisplayModeNotifier(ref, DisplayMode.compact),
-            ),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -219,8 +223,9 @@ void main() {
       expect(find.text('Subtask 2'), findsOneWidget);
     });
 
-    testWidgets('5. Add habit includes repetition configuration',
-        (tester) async {
+    testWidgets('5. Add habit includes repetition configuration', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -242,7 +247,9 @@ void main() {
 
       // Enter habit name
       await tester.enterText(
-          find.byKey(const Key('habit_name_input')), 'Daily Exercise');
+        find.byKey(const Key('habit_name_input')),
+        'Daily Exercise',
+      );
       await tester.pumpAndSettle();
 
       // Navigate through steps to reach recurrence
@@ -262,8 +269,9 @@ void main() {
       );
     });
 
-    testWidgets('7. Habits are not ordered by completion status',
-        (tester) async {
+    testWidgets('7. Habits are not ordered by completion status', (
+      tester,
+    ) async {
       final testHabits = [
         Habit.create(
           id: 'habit_1',
@@ -378,11 +386,13 @@ void main() {
       // Verify habits have unique keys for reordering
       final dragListener1 = tester
           .widget<ReorderableDragStartListener>(
-              find.byKey(const Key('habit_drag_habit_1')))
+            find.byKey(const Key('habit_drag_habit_1')),
+          )
           .key;
       final dragListener2 = tester
           .widget<ReorderableDragStartListener>(
-              find.byKey(const Key('habit_drag_habit_2')))
+            find.byKey(const Key('habit_drag_habit_2')),
+          )
           .key;
 
       expect(dragListener1, isNotNull);

@@ -245,10 +245,7 @@ class MLTelemetryService {
   ///
   /// Format matches ml_pipeline/data/ schema for retraining
   /// Returns JSON string ready for file export or API transmission
-  Future<String> exportAllTelemetryAsJson({
-    DateTime? since,
-    int? limit,
-  }) async {
+  Future<String> exportAllTelemetryAsJson({DateTime? since, int? limit}) async {
     if (_firestore == null) {
       debugPrint('MLTelemetryService: Firestore not available');
       return '[]';
@@ -297,10 +294,7 @@ class MLTelemetryService {
   /// Export telemetry data to CSV format
   ///
   /// Format matches ml_pipeline expectations for training
-  Future<String> exportAllTelemetryAsCsv({
-    DateTime? since,
-    int? limit,
-  }) async {
+  Future<String> exportAllTelemetryAsCsv({DateTime? since, int? limit}) async {
     if (_firestore == null) {
       debugPrint('MLTelemetryService: Firestore not available');
       return '';
@@ -354,11 +348,7 @@ class MLTelemetryService {
   /// Useful for monitoring data collection quality
   Future<Map<String, dynamic>> getTelemetryStats() async {
     if (_firestore == null) {
-      return {
-        'total_records': 0,
-        'abandoned_count': 0,
-        'completed_count': 0,
-      };
+      return {'total_records': 0, 'abandoned_count': 0, 'completed_count': 0};
     }
 
     try {

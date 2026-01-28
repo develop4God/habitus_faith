@@ -286,15 +286,21 @@ void main() {
         // Log many to bypass sampling
         for (int i = 0; i < 50; i++) {
           await telemetryService.logPrediction(
-              habit: habit1, predictedRisk: 0.3);
+            habit: habit1,
+            predictedRisk: 0.3,
+          );
         }
         for (int i = 0; i < 50; i++) {
           await telemetryService.logPrediction(
-              habit: habit2, predictedRisk: 0.7);
+            habit: habit2,
+            predictedRisk: 0.7,
+          );
         }
         for (int i = 0; i < 50; i++) {
           await telemetryService.logPrediction(
-              habit: habit1, predictedRisk: 0.2);
+            habit: habit1,
+            predictedRisk: 0.2,
+          );
         }
 
         // Flush to ensure data is in Firestore
@@ -307,10 +313,7 @@ void main() {
 
         // Assert - should have user1 records
         expect(user1Records.length, greaterThan(0));
-        expect(
-          user1Records.every((r) => r['user_id'] == 'user1'),
-          isTrue,
-        );
+        expect(user1Records.every((r) => r['user_id'] == 'user1'), isTrue);
       });
 
       test('respects limit parameter', () async {
@@ -365,7 +368,9 @@ void main() {
         // Log many to bypass sampling
         for (int i = 0; i < 150; i++) {
           await telemetryService.logPrediction(
-              habit: habit, predictedRisk: 0.3);
+            habit: habit,
+            predictedRisk: 0.3,
+          );
         }
 
         // Flush
@@ -436,7 +441,9 @@ void main() {
         // Log many to bypass sampling
         for (int i = 0; i < 150; i++) {
           await telemetryService.logPrediction(
-              habit: habit, predictedRisk: 0.3);
+            habit: habit,
+            predictedRisk: 0.3,
+          );
         }
 
         // Flush
@@ -695,10 +702,7 @@ void main() {
 
         // Act - log 1000 predictions
         for (int i = 0; i < 1000; i++) {
-          await samplingService.logPrediction(
-            habit: habit,
-            predictedRisk: 0.3,
-          );
+          await samplingService.logPrediction(habit: habit, predictedRisk: 0.3);
         }
 
         // Flush remaining

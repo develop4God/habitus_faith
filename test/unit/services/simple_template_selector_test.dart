@@ -47,8 +47,10 @@ void main() {
 
         final templates = SimpleTemplateSelector.selectTemplates(score);
 
-        expect(templates,
-            equals(['morning_prayer', 'bible_reading', 'gratitude']));
+        expect(
+          templates,
+          equals(['morning_prayer', 'bible_reading', 'gratitude']),
+        );
       });
 
       test('wellness + basic -> exercise', () {
@@ -175,15 +177,20 @@ void main() {
 
         // Verify some key combinations exist
         expect(
-            combinations.contains((PrimaryIntent.faithBased, ScoreLevel.basic)),
-            isTrue);
+          combinations.contains((PrimaryIntent.faithBased, ScoreLevel.basic)),
+          isTrue,
+        );
         expect(
-            combinations
-                .contains((PrimaryIntent.wellness, ScoreLevel.intermediate)),
-            isTrue);
+          combinations.contains((
+            PrimaryIntent.wellness,
+            ScoreLevel.intermediate,
+          )),
+          isTrue,
+        );
         expect(
-            combinations.contains((PrimaryIntent.study, ScoreLevel.advanced)),
-            isTrue);
+          combinations.contains((PrimaryIntent.study, ScoreLevel.advanced)),
+          isTrue,
+        );
       });
     });
 
@@ -228,12 +235,12 @@ void main() {
           PrimaryIntent.wellness,
           PrimaryIntent.mixed,
           PrimaryIntent.study,
-          PrimaryIntent.peace
+          PrimaryIntent.peace,
         ];
         final levels = [
           ScoreLevel.basic,
           ScoreLevel.intermediate,
-          ScoreLevel.advanced
+          ScoreLevel.advanced,
         ];
 
         for (final intent in intents) {

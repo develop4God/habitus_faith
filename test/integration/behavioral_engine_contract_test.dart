@@ -87,7 +87,9 @@ void main() {
       expect(() => engine.findOptimalTime(minimalHabit), returnsNormally);
       expect(() => engine.detectFailurePattern(minimalHabit), returnsNormally);
       expect(
-          () => engine.calculateNextDifficulty(minimalHabit), returnsNormally);
+        () => engine.calculateNextDifficulty(minimalHabit),
+        returnsNormally,
+      );
       expect(() => engine.findOptimalDays(minimalHabit), returnsNormally);
 
       // With no data, should return safe defaults
@@ -106,15 +108,14 @@ void main() {
         createdAt: DateTime(2024, 1, 1),
         currentStreak: 10,
         difficultyLevel: BehavioralEngine.maxDifficultyLevel,
-        completionHistory: List.generate(
-          10,
-          (i) => DateTime(2024, 1, 15 - i),
-        ),
+        completionHistory: List.generate(10, (i) => DateTime(2024, 1, 15 - i)),
       );
 
       final nextDifficulty = engine.calculateNextDifficulty(maxDifficultyHabit);
-      expect(nextDifficulty,
-          lessThanOrEqualTo(BehavioralEngine.maxDifficultyLevel));
+      expect(
+        nextDifficulty,
+        lessThanOrEqualTo(BehavioralEngine.maxDifficultyLevel),
+      );
 
       // Test lower boundary
       final minDifficultyHabit = Habit(
@@ -128,10 +129,13 @@ void main() {
         completionHistory: [],
       );
 
-      final nextMinDifficulty =
-          engine.calculateNextDifficulty(minDifficultyHabit);
-      expect(nextMinDifficulty,
-          greaterThanOrEqualTo(BehavioralEngine.minDifficultyLevel));
+      final nextMinDifficulty = engine.calculateNextDifficulty(
+        minDifficultyHabit,
+      );
+      expect(
+        nextMinDifficulty,
+        greaterThanOrEqualTo(BehavioralEngine.minDifficultyLevel),
+      );
     });
 
     test('findOptimalTime with consistent completion times', () {
@@ -177,12 +181,7 @@ void main() {
       final pattern = engine.detectFailurePattern(strugglingHabit);
 
       // Should return a specific pattern or null
-      expect(
-          pattern,
-          anyOf(
-            isA<FailurePattern>(),
-            isNull,
-          ));
+      expect(pattern, anyOf(isA<FailurePattern>(), isNull));
     });
 
     test('interface stability - methods maintain same signatures', () {

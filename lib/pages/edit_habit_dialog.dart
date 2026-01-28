@@ -46,9 +46,11 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
             widget.habit.notificationSettings!.eventTime!.contains(':')
         ? TimeOfDay(
             hour: int.parse(
-                widget.habit.notificationSettings!.eventTime!.split(':')[0]),
+              widget.habit.notificationSettings!.eventTime!.split(':')[0],
+            ),
             minute: int.parse(
-                widget.habit.notificationSettings!.eventTime!.split(':')[1]),
+              widget.habit.notificationSettings!.eventTime!.split(':')[1],
+            ),
           )
         : null;
     selectedColor = widget.habit.colorValue != null
@@ -239,7 +241,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 decoration: InputDecoration(
                   labelText: l10n.name,
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -248,7 +251,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 decoration: InputDecoration(
                   labelText: l10n.emoji,
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
                 maxLength: 2,
               ),
@@ -258,7 +262,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 decoration: InputDecoration(
                   labelText: l10n.category,
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
                 items: HabitCategory.values.map((category) {
                   return DropdownMenuItem(
@@ -293,7 +298,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 decoration: InputDecoration(
                   labelText: l10n.difficulty,
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
                 items: HabitDifficulty.values.map((difficulty) {
                   return DropdownMenuItem(
@@ -317,8 +323,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   itemCount: HabitColors.categoryColors.values.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 12),
                   itemBuilder: (context, idx) {
-                    final color =
-                        HabitColors.categoryColors.values.elementAt(idx);
+                    final color = HabitColors.categoryColors.values.elementAt(
+                      idx,
+                    );
                     final isSelected = selectedColor == color;
                     return GestureDetector(
                       onTap: () {
@@ -341,14 +348,18 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                      color: color.withValues(alpha: 0.4),
-                                      blurRadius: 8)
+                                    color: color.withValues(alpha: 0.4),
+                                    blurRadius: 8,
+                                  ),
                                 ]
                               : [],
                         ),
                         child: isSelected
-                            ? const Icon(Icons.check,
-                                color: Colors.white, size: 24)
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 24,
+                              )
                             : null,
                       ),
                     );
@@ -359,8 +370,10 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 TextButton.icon(
                   onPressed: () => setState(() => selectedColor = null),
                   icon: const Icon(Icons.clear, size: 16),
-                  label: const Text('Limpiar color',
-                      style: TextStyle(fontSize: 12)),
+                  label: const Text(
+                    'Limpiar color',
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ),
               const SizedBox(height: 20),
               Row(
@@ -372,7 +385,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         side: const BorderSide(
-                            color: Colors.blueAccent, width: 2),
+                          color: Colors.blueAccent,
+                          width: 2,
+                        ),
                         backgroundColor: Colors.blue.shade50,
                         foregroundColor: Colors.blue.shade900,
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -388,10 +403,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             eventTimeCtrl.text =
                                 '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
                             if (notificationSettings != null) {
-                              notificationSettings =
-                                  notificationSettings!.copyWith(
-                                eventTime: eventTimeCtrl.text,
-                              );
+                              notificationSettings = notificationSettings!
+                                  .copyWith(eventTime: eventTimeCtrl.text);
                             }
                           });
                         }
@@ -399,15 +412,19 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.access_time,
-                              color: Colors.blueAccent),
+                          const Icon(
+                            Icons.access_time,
+                            color: Colors.blueAccent,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             eventTime != null
                                 ? eventTime!.format(context)
                                 : 'Seleccionar hora',
                             style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
@@ -418,18 +435,25 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               const SizedBox(height: 12),
               ListTile(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 tileColor: Colors.blue.shade50,
-                leading:
-                    const Icon(Icons.notifications, color: Colors.blueAccent),
-                title: Text(l10n.reminder,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                leading: const Icon(
+                  Icons.notifications,
+                  color: Colors.blueAccent,
+                ),
+                title: Text(
+                  l10n.reminder,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 subtitle: Text(
                   notificationSettings?.timing.displayName ?? 'Sin aviso',
                   style: const TextStyle(color: Colors.blueGrey),
                 ),
-                trailing:
-                    const Icon(Icons.chevron_right, color: Colors.blueAccent),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: Colors.blueAccent,
+                ),
                 onTap: () async {
                   final result = await showDialog<HabitNotificationSettings>(
                     context: context,
@@ -450,11 +474,14 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               const SizedBox(height: 12),
               ListTile(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 tileColor: Colors.green.shade50,
                 leading: const Icon(Icons.repeat, color: Colors.green),
-                title: Text(l10n.repetition,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                title: Text(
+                  l10n.repetition,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 subtitle: Text(
                   recurrence?.enabled == true
                       ? '${recurrence!.frequency.displayName} (Cada ${recurrence!.interval} ${_getFrequencyUnit(recurrence!.frequency)})'
@@ -465,9 +492,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 onTap: () async {
                   final result = await showDialog<HabitRecurrence>(
                     context: context,
-                    builder: (context) => RecurrenceConfigDialog(
-                      initialRecurrence: recurrence,
-                    ),
+                    builder: (context) =>
+                        RecurrenceConfigDialog(initialRecurrence: recurrence),
                   );
                   if (result != null) {
                     setState(() {
@@ -489,9 +515,12 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   backgroundColor: Colors.purple,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 16,
+                  ),
                 ),
               ),
             ],

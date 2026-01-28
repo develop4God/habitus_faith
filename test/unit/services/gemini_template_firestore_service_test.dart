@@ -23,11 +23,13 @@ void main() {
       mockDocRef = Mock();
       service = GeminiTemplateFirestoreService(mockFirestore);
       // Stub collection and doc
-      when(() => mockFirestore.collection('habit_templates_master'))
-          .thenReturn(mockCollectionRef);
+      when(
+        () => mockFirestore.collection('habit_templates_master'),
+      ).thenReturn(mockCollectionRef);
       when(() => mockCollectionRef.doc(any())).thenReturn(mockDocRef);
-      when(() => mockDocRef.set(any(), any()))
-          .thenAnswer((_) async => Future.value());
+      when(
+        () => mockDocRef.set(any(), any()),
+      ).thenAnswer((_) async => Future.value());
     });
 
     test('saveGeminiTemplate guarda correctamente el template', () async {
@@ -41,15 +43,22 @@ void main() {
         source: 'gemini',
       );
 
-      verify(() => mockFirestore.collection('habit_templates_master'))
-          .called(1);
+      verify(
+        () => mockFirestore.collection('habit_templates_master'),
+      ).called(1);
       verify(() => mockCollectionRef.doc('test_fp')).called(1);
-      verify(() => mockDocRef.set(
-            any(
-                that: isA<Map<String, dynamic>>()
-                    .having((m) => m['fingerprint'], 'fingerprint', 'test_fp')),
-            any(),
-          )).called(1);
+      verify(
+        () => mockDocRef.set(
+          any(
+            that: isA<Map<String, dynamic>>().having(
+              (m) => m['fingerprint'],
+              'fingerprint',
+              'test_fp',
+            ),
+          ),
+          any(),
+        ),
+      ).called(1);
     });
   });
 }

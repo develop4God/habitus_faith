@@ -124,7 +124,9 @@ class HabitTranslationHelper {
   ///
   /// For now, notification keys match habit name keys
   static String translateNotification(
-      BuildContext context, String notificationKey) {
+    BuildContext context,
+    String notificationKey,
+  ) {
     return translateHabitName(context, notificationKey);
   }
 }

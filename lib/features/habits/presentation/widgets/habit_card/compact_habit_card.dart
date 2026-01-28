@@ -3,11 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habit_modal_sheet.dart';
 import '../../../domain/habit.dart';
 import '../../../domain/models/habit_notification.dart';
-import '../../../data/storage/storage_providers.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../constants/habit_colors.dart';
-import '../../../../../widgets/add_note_dialog.dart';
-import '../../../../../pages/habits_page.dart';
 
 /// Compact habit card with tap-to-expand details
 /// Shows only essential info: name, emoji, streak, completion button
@@ -84,59 +81,35 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     }
   }
 
-  Future<void> _handleAddNote() async {
-    final repository = ref.read(jsonHabitsRepositoryProvider);
-    final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
-
-    final note = await showAddNoteDialog(
-      context: context,
-      habitName: widget.habit.name,
-      existingNote: existingRecord?.notes,
-    );
-
-    if (note != null && mounted) {
-      final notifier = ref.read(jsonHabitsNotifierProvider.notifier);
-      if (!widget.habit.completedToday) {
-        // Complete the habit with the note
-        await notifier.completeHabitWithNote(widget.habit.id, note);
-      } else {
-        // Update existing completion record's note
-        final result = await repository.updateHabitNote(widget.habit.id, note);
-        result.fold(
-          (failure) => debugPrint('Failed to update note: $failure'),
-          (_) => debugPrint('Note updated successfully'),
-        );
-      }
-    }
-  }
-
   @override
   void didUpdateWidget(covariant CompactHabitCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint(
-        'didUpdateWidget: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday} (anterior: ${oldWidget.habit.completedToday})');
+      'didUpdateWidget: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday} (anterior: ${oldWidget.habit.completedToday})',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     debugPrint(
-        'CompactHabitCard.build: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}');
+      'CompactHabitCard.build: habit.id=${widget.habit.id}, completedToday=${widget.habit.completedToday}',
+    );
     debugPrint(
-        'CompactHabitCard.build: checkbox value=${widget.habit.completedToday}, tachado=${widget.habit.completedToday}');
+      'CompactHabitCard.build: checkbox value=${widget.habit.completedToday}, tachado=${widget.habit.completedToday}',
+    );
     final l10n = AppLocalizations.of(context)!;
     final habitColor = HabitColors.getHabitColor(widget.habit);
     final isTached = widget.habit.completedToday || _showLottieTick;
     debugPrint(
-        'CompactHabitCard.build: checkbox value=${widget.habit.completedToday}, tachado=$isTached');
+      'CompactHabitCard.build: checkbox value=${widget.habit.completedToday}, tachado=$isTached',
+    );
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border(
-          left: BorderSide(color: habitColor, width: 4),
-        ),
+        border: Border(left: BorderSide(color: habitColor, width: 4)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -155,7 +128,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                 child: StatefulBuilder(
                   builder: (context, setModalState) {
                     return _buildExpandedContent(
-                        context, l10n, habitColor, setModalState);
+                      context,
+                      l10n,
+                      habitColor,
+                      setModalState,
+                    );
                   },
                 ),
                 maxHeight: 480,
@@ -261,7 +238,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 value: widget.habit.completedToday,
                                 onChanged: (val) {
                                   debugPrint(
-                                      'Checkbox tapped. Valor actual: ${widget.habit.completedToday}. Nuevo valor: $val');
+                                    'Checkbox tapped. Valor actual: ${widget.habit.completedToday}. Nuevo valor: $val',
+                                  );
                                   if (!_isCompleting) {
                                     _handleComplete();
                                     debugPrint('Llamando a _handleComplete()');
@@ -274,7 +252,9 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
                                 visualDensity: const VisualDensity(
-                                    horizontal: 0, vertical: 0),
+                                  horizontal: 0,
+                                  vertical: 0,
+                                ),
                                 side: BorderSide(width: 2, color: habitColor),
                               ),
                             ),
@@ -290,8 +270,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 
-  Widget _buildExpandedContent(BuildContext context, AppLocalizations l10n,
-      Color habitColor, StateSetter setModalState) {
+  Widget _buildExpandedContent(
+    BuildContext context,
+    AppLocalizations l10n,
+    Color habitColor,
+    StateSetter setModalState,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -404,8 +388,10 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                             activeColor: habitColor,
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
-                            visualDensity:
-                                const VisualDensity(horizontal: 0, vertical: 0),
+                            visualDensity: const VisualDensity(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
                             side: BorderSide(width: 2, color: habitColor),
                           ),
                         ),
@@ -445,8 +431,10 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         )
                       : Text(
                           l10n.notificationsOff,
-                          style:
-                              const TextStyle(fontSize: 15, color: Colors.grey),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey,
+                          ),
                         ),
                 ),
               ],
@@ -478,8 +466,10 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         )
                       : Text(
                           l10n.noRepetition,
-                          style:
-                              const TextStyle(fontSize: 15, color: Colors.grey),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey,
+                          ),
                         ),
                 ),
               ],
@@ -524,13 +514,15 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                   onSubmitted: (text) {
                                     if (text.trim().isNotEmpty) {
                                       setModalState(() {
-                                        _subtasks.add(Subtask(
-                                          id: DateTime.now()
-                                              .millisecondsSinceEpoch
-                                              .toString(),
-                                          title: text.trim(),
-                                          completed: false,
-                                        ));
+                                        _subtasks.add(
+                                          Subtask(
+                                            id: DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString(),
+                                            title: text.trim(),
+                                            completed: false,
+                                          ),
+                                        );
                                       });
                                       _subtaskController.clear();
                                       setModalState(() {
@@ -542,19 +534,24 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               ),
                               const SizedBox(width: 8),
                               IconButton(
-                                icon: const Icon(Icons.check,
-                                    color: Colors.purple, size: 28),
+                                icon: const Icon(
+                                  Icons.check,
+                                  color: Colors.purple,
+                                  size: 28,
+                                ),
                                 onPressed: () {
                                   final text = _subtaskController.text.trim();
                                   if (text.isNotEmpty) {
                                     setModalState(() {
-                                      _subtasks.add(Subtask(
-                                        id: DateTime.now()
-                                            .millisecondsSinceEpoch
-                                            .toString(),
-                                        title: text,
-                                        completed: false,
-                                      ));
+                                      _subtasks.add(
+                                        Subtask(
+                                          id: DateTime.now()
+                                              .millisecondsSinceEpoch
+                                              .toString(),
+                                          title: text,
+                                          completed: false,
+                                        ),
+                                      );
                                     });
                                     _subtaskController.clear();
                                     setModalState(() {
@@ -579,8 +576,11 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
                             children: [
-                              const Icon(Icons.add,
-                                  color: Colors.purple, size: 24),
+                              const Icon(
+                                Icons.add,
+                                color: Colors.purple,
+                                size: 24,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -600,56 +600,68 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                 // Lista de subtareas
                 Column(
                   children: [
-                    ..._subtasks.map((subtask) => ListTile(
-                          dense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 0),
-                          leading: Transform.scale(
-                            scale: 1.5,
-                            child: Checkbox(
-                              value: subtask.completed,
-                              onChanged: (val) {
-                                setModalState(() {
-                                  final idx = _subtasks.indexOf(subtask);
-                                  _subtasks[idx] =
-                                      subtask.copyWith(completed: val ?? false);
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              activeColor: Colors.purple,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: const VisualDensity(
-                                  horizontal: 0, vertical: 0),
-                              side: const BorderSide(
-                                  width: 2, color: Colors.purple),
-                            ),
-                          ),
-                          title: Text(
-                            subtask.title,
-                            style: TextStyle(
-                              fontSize: 15,
-                              decoration: subtask.completed
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                              color: subtask.completed
-                                  ? Colors.green
-                                  : Colors.black,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete,
-                                color: Colors.redAccent, size: 20),
-                            onPressed: () {
+                    ..._subtasks.map(
+                      (subtask) => ListTile(
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 0,
+                        ),
+                        leading: Transform.scale(
+                          scale: 1.5,
+                          child: Checkbox(
+                            value: subtask.completed,
+                            onChanged: (val) {
                               setModalState(() {
-                                _subtasks.remove(subtask);
+                                final idx = _subtasks.indexOf(subtask);
+                                _subtasks[idx] = subtask.copyWith(
+                                  completed: val ?? false,
+                                );
                               });
                             },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            activeColor: Colors.purple,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            side: const BorderSide(
+                              width: 2,
+                              color: Colors.purple,
+                            ),
                           ),
-                        )),
+                        ),
+                        title: Text(
+                          subtask.title,
+                          style: TextStyle(
+                            fontSize: 15,
+                            decoration: subtask.completed
+                                ? TextDecoration.lineThrough
+                                : null,
+                            color:
+                                subtask.completed ? Colors.green : Colors.black,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            setModalState(() {
+                              _subtasks.remove(subtask);
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -663,12 +675,16 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 24),
+                        vertical: 12,
+                        horizontal: 24,
+                      ),
                       elevation: 1,
                     ),
                     icon: const Icon(Icons.edit, size: 20),
-                    label:
-                        Text(l10n.edit, style: const TextStyle(fontSize: 16)),
+                    label: Text(
+                      l10n.edit,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                     onPressed: () {
                       Navigator.of(context).pop(); // Close modal first
                       widget.onEdit(); // Then call edit
@@ -678,22 +694,12 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
               ],
             ),
           ],
-          // Add note button - shown when habit is completed
-          if (widget.habit.completedToday) ...[
-            const SizedBox(height: 16),
-            Center(
-              child: _buildNoteButton(habitColor, setModalState),
-            ),
-          ],
           // Action buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               PopupMenuButton<String>(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Colors.grey.shade700,
-                ),
+                icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
                 onSelected: (value) {
                   if (value == 'edit') {
                     widget.onEdit();
@@ -734,11 +740,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                     value: 'delete',
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.delete,
-                          size: 20,
-                          color: Colors.red,
-                        ),
+                        const Icon(Icons.delete, size: 20, color: Colors.red),
                         const SizedBox(width: 12),
                         Text(
                           l10n.delete,
@@ -765,36 +767,5 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
       case RecurrenceFrequency.monthly:
         return 'mes';
     }
-  }
-
-  Widget _buildNoteButton(Color habitColor, StateSetter setModalState) {
-    final l10n = AppLocalizations.of(context)!;
-    final repository = ref.read(jsonHabitsRepositoryProvider);
-    final existingRecord = repository.getTodayCompletionRecord(widget.habit.id);
-    final hasNote = existingRecord?.notes?.isNotEmpty ?? false;
-
-    return ElevatedButton.icon(
-      onPressed: () async {
-        Navigator.of(context).pop(); // Close modal first
-        await _handleAddNote();
-      },
-      icon: Icon(
-        hasNote ? Icons.edit_note : Icons.note_add,
-        size: 20,
-      ),
-      label: Text(
-        hasNote ? l10n.viewNote : l10n.addNote,
-        style: const TextStyle(fontSize: 16),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: habitColor.withAlpha(40),
-        foregroundColor: habitColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-        elevation: 1,
-      ),
-    );
   }
 }

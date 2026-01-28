@@ -11,7 +11,7 @@ enum HabitDailyStatus {
   pending, // Not yet completed
   completed, // Successfully completed
   skipped, // Skipped/postponed - doesn't affect statistics
-  failed; // Marked as not completed - affects statistics negatively
+  failed, // Marked as not completed - affects statistics negatively
 }
 
 enum HabitCategory {

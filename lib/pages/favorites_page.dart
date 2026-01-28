@@ -21,11 +21,7 @@ class FavoritesPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Row(
           children: [
-            Icon(
-              Icons.star,
-              color: Colors.amber,
-              size: 24,
-            ),
+            Icon(Icons.star, color: Colors.amber, size: 24),
             SizedBox(width: 8),
             Text('My Favorites'),
           ],
@@ -215,8 +211,9 @@ class _FavoriteCard extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: isDark
                             ? Colors.grey[800]
-                            : colorScheme.primaryContainer
-                                .withAlpha(77), // 0.3 * 255 = 77
+                            : colorScheme.primaryContainer.withAlpha(
+                                77,
+                              ), // 0.3 * 255 = 77
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(

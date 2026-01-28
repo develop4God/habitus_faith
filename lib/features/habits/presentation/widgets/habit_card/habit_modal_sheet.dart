@@ -7,7 +7,8 @@ class HabitStateManager {
     required void Function(String, bool) onUpdate,
   }) {
     debugPrint(
-        'HabitStateManager.updateCompleted: habitId=$habitId, completed=$completed');
+      'HabitStateManager.updateCompleted: habitId=$habitId, completed=$completed',
+    );
     onUpdate(habitId, completed);
   }
 }
@@ -28,11 +29,17 @@ class HabitModalSheet {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(ctx).viewInsets.bottom,
         ),
-        child: Container(
-          constraints: maxHeight != null
-              ? BoxConstraints(maxHeight: maxHeight)
-              : const BoxConstraints(maxHeight: 480),
-          child: child,
+        child: SafeArea(
+          top: false,
+          left: false,
+          right: false,
+          bottom: true,
+          child: Container(
+            constraints: maxHeight != null
+                ? BoxConstraints(maxHeight: maxHeight)
+                : const BoxConstraints(maxHeight: 480),
+            child: child,
+          ),
         ),
       ),
     );
@@ -73,40 +80,48 @@ class _HabitModalContentState extends State<HabitModalContent> {
     completed = widget.initialCompleted;
     subtasks = List<String>.from(widget.initialSubtasks);
     debugPrint(
-        'HabitModalContent.initState: habitName=${widget.habitName}, initialCompleted=${widget.initialCompleted}');
+      'HabitModalContent.initState: habitName=${widget.habitName}, initialCompleted=${widget.initialCompleted}',
+    );
   }
 
   @override
   void didUpdateWidget(covariant HabitModalContent oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint(
-        'HabitModalContent.didUpdateWidget: INICIO - completed=$completed, widget.initialCompleted=${widget.initialCompleted}, oldWidget.initialCompleted=${oldWidget.initialCompleted}');
+      'HabitModalContent.didUpdateWidget: INICIO - completed=$completed, widget.initialCompleted=${widget.initialCompleted}, oldWidget.initialCompleted=${oldWidget.initialCompleted}',
+    );
     if (completed != widget.initialCompleted) {
       debugPrint(
-          'HabitModalContent.didUpdateWidget: completed cambiado de $completed a ${widget.initialCompleted}');
+        'HabitModalContent.didUpdateWidget: completed cambiado de $completed a ${widget.initialCompleted}',
+      );
       setState(() {
         completed = widget.initialCompleted;
         debugPrint(
-            'HabitModalContent.didUpdateWidget: setState ejecutado, completed=$completed');
+          'HabitModalContent.didUpdateWidget: setState ejecutado, completed=$completed',
+        );
       });
       debugPrint(
-          'HabitModalContent.didUpdateWidget: completed actualizado desde externo');
+        'HabitModalContent.didUpdateWidget: completed actualizado desde externo',
+      );
     }
     if (subtasks != widget.initialSubtasks) {
       debugPrint('HabitModalContent.didUpdateWidget: subtasks cambiadas');
       setState(() {
         subtasks = List<String>.from(widget.initialSubtasks);
         debugPrint(
-            'HabitModalContent.didUpdateWidget: setState ejecutado, subtasks=${subtasks.toString()}');
+          'HabitModalContent.didUpdateWidget: setState ejecutado, subtasks=${subtasks.toString()}',
+        );
       });
     }
     debugPrint(
-        'HabitModalContent.didUpdateWidget: FIN - completed=$completed, widget.initialCompleted=${widget.initialCompleted}');
+      'HabitModalContent.didUpdateWidget: FIN - completed=$completed, widget.initialCompleted=${widget.initialCompleted}',
+    );
   }
 
   void _updateCompleted(bool value) {
     debugPrint(
-        'HabitModalSheet: Checkbox tapped. Valor actual: $completed. Nuevo valor: $value');
+      'HabitModalSheet: Checkbox tapped. Valor actual: $completed. Nuevo valor: $value',
+    );
     setState(() {
       completed = value;
       debugPrint('HabitModalSheet: setState ejecutado, completed=$completed');
@@ -117,7 +132,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
       onUpdate: (id, val) {
         if (widget.onCompletedChanged != null) {
           debugPrint(
-              'HabitModalSheet: onCompletedChanged callback disparado con valor $completed');
+            'HabitModalSheet: onCompletedChanged callback disparado con valor $completed',
+          );
           widget.onCompletedChanged!(completed);
         }
       },
@@ -144,9 +160,11 @@ class _HabitModalContentState extends State<HabitModalContent> {
   @override
   Widget build(BuildContext context) {
     debugPrint(
-        'HabitModalSheet.build: habitName={widget.habitName}, completed=$completed');
+      'HabitModalSheet.build: habitName={widget.habitName}, completed=$completed',
+    );
     debugPrint(
-        'HabitModalSheet.build: checkbox value=$completed, tachado=${completed ? 'true' : 'false'}');
+      'HabitModalSheet.build: checkbox value=$completed, tachado=${completed ? 'true' : 'false'}',
+    );
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -159,10 +177,12 @@ class _HabitModalContentState extends State<HabitModalContent> {
                   value: completed,
                   onChanged: (val) {
                     debugPrint(
-                        'HabitModalSheet: Checkbox onChanged llamado, valor=${val.toString()}');
+                      'HabitModalSheet: Checkbox onChanged llamado, valor=${val.toString()}',
+                    );
                     _updateCompleted(val ?? false);
                     debugPrint(
-                        'HabitModalSheet: Después de _updateCompleted, completed=$completed');
+                      'HabitModalSheet: Después de _updateCompleted, completed=$completed',
+                    );
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
@@ -196,9 +216,12 @@ class _HabitModalContentState extends State<HabitModalContent> {
                               decoration: InputDecoration(
                                 hintText: 'Nueva subtarea...',
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16)),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
                                 contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
                               ),
                               onSubmitted: (text) {
                                 if (text.trim().isNotEmpty) {
@@ -209,8 +232,11 @@ class _HabitModalContentState extends State<HabitModalContent> {
                           ),
                           const SizedBox(width: 8),
                           IconButton(
-                            icon: const Icon(Icons.check,
-                                color: Colors.purple, size: 28),
+                            icon: const Icon(
+                              Icons.check,
+                              color: Colors.purple,
+                              size: 28,
+                            ),
                             onPressed: () {
                               final text = _subtaskController.text.trim();
                               if (text.isNotEmpty) {
@@ -229,10 +255,14 @@ class _HabitModalContentState extends State<HabitModalContent> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
-                              color: Colors.purple.shade100, width: 1),
+                            color: Colors.purple.shade100,
+                            width: 1,
+                          ),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                       ),
                       onPressed: () {
                         setState(() {
@@ -244,24 +274,30 @@ class _HabitModalContentState extends State<HabitModalContent> {
                         children: [
                           const Icon(Icons.add, color: Colors.purple, size: 24),
                           const SizedBox(width: 8),
-                          Text('Subtareas',
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.purple.shade700)),
+                          Text(
+                            'Subtareas',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.purple.shade700,
+                            ),
+                          ),
                           const Spacer(),
                         ],
                       ),
                     ),
             ),
             const SizedBox(height: 12),
-            ...subtasks.map((s) => ListTile(
-                  title: Text(s),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      _removeSubtask(s);
-                    },
-                  ),
-                )),
+            ...subtasks.map(
+              (s) => ListTile(
+                title: Text(s),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    _removeSubtask(s);
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

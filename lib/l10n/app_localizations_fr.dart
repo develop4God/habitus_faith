@@ -834,11 +834,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get today => 'Aujourd\'hui';
 
   @override
-  String get flashTask => 'Flash Task';
+  String get flashTask => 'Tâche Flash';
 
   @override
   String get flashTaskSubtitle =>
-      'Quickly add a task with just a name and emoji';
+      'Ajoutez rapidement une tâche avec seulement un nom et un emoji';
 
   @override
   String get morning_prayer => 'Prière du Matin';
@@ -1024,7 +1024,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get skipHabit => 'Ignorer l\'habitude';
 
   @override
-  String get markAsNotCompleted => 'Marquer comme non complétée';
+  String get markAsNotCompleted => 'Non complétée';
 
   @override
   String get skippedHabit => 'Ignorée';
@@ -1046,25 +1046,28 @@ class AppLocalizationsFr extends AppLocalizations {
   String get habitDeleted => 'Habitude supprimée';
 
   @override
-  String get dailyReflection => 'Daily Reflection';
+  String get dailyReflection => 'Réflexion quotidienne';
 
   @override
-  String get myReflection => 'My Reflection';
+  String get myReflection => 'Ma réflexion';
 
   @override
-  String get globalNote => 'General Note';
+  String get globalNote => 'Note générale';
 
   @override
-  String get globalNoteHint => 'How was your communion with God today?';
+  String get globalNoteHint =>
+      'Comment s\'est passée votre communion avec Dieu aujourd\'hui ?';
 
   @override
-  String get dailyHabits => 'Daily Habits';
+  String get dailyHabits => 'Habitudes Quotidiennes';
 
   @override
-  String get addReflection => 'Add thoughts specific to your achievements.';
+  String get addReflection =>
+      'Ajoutez des réflexions spécifiques sur vos réalisations.';
 
   @override
-  String get completeHabitToReflect => 'Complete a habit to reflect on it';
+  String get completeHabitToReflect =>
+      'Complétez une habitude pour réfléchir dessus';
 
   @override
   String get notificationOptions => 'Options de Notification';
@@ -1092,4 +1095,91 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get invalidNotificationConfig =>
       'Configuration de notification invalide. Veuillez configurer à nouveau la notification.';
+
+  @override
+  String get readVerseFirst => 'Lire le Verset d\'Abord';
+
+  @override
+  String get reflection => 'Réflexion';
+
+  @override
+  String get forMeditation => 'Pour Méditer';
+
+  @override
+  String get prayer => 'Prière';
+
+  @override
+  String get todayLabel => 'Aujourd\'hui';
+
+  @override
+  String get tomorrowLabel => 'Demain';
+
+  @override
+  String get aboutUs => 'À propos de nous';
+
+  @override
+  String get aboutUsTitle => 'Habitus Faith';
+
+  @override
+  String get aboutUsSubtitle =>
+      'Bâtir la foi à travers des habitudes quotidiennes';
+
+  @override
+  String get aboutUsDescription =>
+      'Habitus Faith est une application conçue pour vous aider à grandir dans votre cheminement spirituel grâce au pouvoir d\'habitudes quotidiennes constantes. Nous croyons que de petites actions intentionnelles répétées quotidiennement peuvent transformer votre vie et approfondir votre relation avec Dieu.';
+
+  @override
+  String get ourMission => 'Notre Mission';
+
+  @override
+  String get ourMissionText =>
+      'Donner aux croyants du monde entier les moyens de construire des habitudes spirituelles durables qui renforcent leur foi, un jour à la fois.';
+
+  @override
+  String get features => 'Caractéristiques';
+
+  @override
+  String get featureHabitTracking => 'Suivi des Habitudes';
+
+  @override
+  String get featureHabitTrackingDesc =>
+      'Suivez facilement vos habitudes spirituelles, physiques, mentales et relationnelles.';
+
+  @override
+  String get featureBibleReading => 'Lecture de la Bible';
+
+  @override
+  String get featureBibleReadingDesc =>
+      'Accédez à la Bible complète avec des capacités de mise en signet et de sauvegarde de versets.';
+
+  @override
+  String get featureDailyDevotionals => 'Dévotionnels Quotidiens';
+
+  @override
+  String get featureDailyDevotionalsDesc =>
+      'Recevez des réflexions spirituelles quotidiennes pour vous inspirer et vous guider.';
+
+  @override
+  String get featureAiCoach => 'Coach d\'Habitudes IA';
+
+  @override
+  String get featureAiCoachDesc =>
+      'Obtenez des micro-habitudes personnalisées générées en fonction de vos objectifs.';
+
+  @override
+  String get contactUs => 'Contactez-nous';
+
+  @override
+  String get contactUsText =>
+      'Nous aimerions avoir de vos nouvelles ! Vos commentaires nous aident à nous améliorer et à mieux vous servir.';
+
+  @override
+  String get email => 'E-mail';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get madeWithLove =>
+      'Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu';
 }

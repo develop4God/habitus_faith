@@ -295,7 +295,8 @@ Requisitos estrictos:
       return null;
     }
 
-    return await _bibleService!.getVerse(
+    // Use null-aware operator to avoid unconditional invocation
+    return await _bibleService?.getVerse(
       bookNumber: bookNumber,
       chapter: chapter,
       verse: verse,
@@ -488,8 +489,11 @@ Requisitos estrictos:
   /// Generate habits based on onboarding profile with intent-aware context
   @override
   Future<List<Map<String, dynamic>>> generateHabitsFromProfile(
-      OnboardingProfile profile, String userId,
-      {String language = 'es', bool isOnboarding = false}) async {
+    OnboardingProfile profile,
+    String userId, {
+    String language = 'es',
+    bool isOnboarding = false,
+  }) async {
     // Solo flujo moderno: descarga remota y Gemini
     // Eliminar referencias a fingerprint, Logger, plantillas locales
 
@@ -539,8 +543,9 @@ Requisitos estrictos:
       await prefs.setString(cachedKey, jsonEncode(cacheData));
 
       // Después de parsear los hábitos generados por Gemini:
-      final firestoreService =
-          GeminiTemplateFirestoreService(FirebaseFirestore.instance);
+      final firestoreService = GeminiTemplateFirestoreService(
+        FirebaseFirestore.instance,
+      );
       await firestoreService.saveGeminiTemplate(
         fingerprint:
             '${profile.primaryIntent}_${profile.completedAt.toIso8601String()}',
@@ -552,9 +557,7 @@ Requisitos estrictos:
 
       return habits;
     } on TimeoutException {
-      throw GeminiException(
-        'Request timed out. Please try again.',
-      );
+      throw GeminiException('Request timed out. Please try again.');
     } catch (e) {
       final errorMessage = e.toString();
 
@@ -562,15 +565,17 @@ Requisitos estrictos:
       if (errorMessage.contains('not found') ||
           errorMessage.contains('not supported')) {
         throw GeminiException(
-            'AI model configuration error. Please check app settings. '
-            'Try updating the app or contact support.');
+          'AI model configuration error. Please check app settings. '
+          'Try updating the app or contact support.',
+        );
       }
 
       // Check for API key issues
       if (errorMessage.contains('API_KEY') ||
           errorMessage.contains('INVALID_ARGUMENT')) {
         throw GeminiException(
-            'AI service authentication failed. Please check configuration.');
+          'AI service authentication failed. Please check configuration.',
+        );
       }
 
       if (e is GeminiException) rethrow;
@@ -703,14 +708,18 @@ Requisitos:
 
       if (cleaned.isEmpty) {
         throw GeminiParseException(
-            'Empty response after cleanup', responseText);
+          'Empty response after cleanup',
+          responseText,
+        );
       }
 
       final dynamic json = jsonDecode(cleaned);
 
       if (json is! List) {
         throw GeminiParseException(
-            'Expected JSON array, got ${json.runtimeType}', responseText);
+          'Expected JSON array, got ${json.runtimeType}',
+          responseText,
+        );
       }
 
       // Parse each habit
@@ -749,10 +758,7 @@ Requisitos:
       }).toList();
     } catch (e) {
       if (e is GeminiParseException) rethrow;
-      throw GeminiParseException(
-        'Failed to parse response: $e',
-        responseText,
-      );
+      throw GeminiParseException('Failed to parse response: $e', responseText);
     }
   }
 

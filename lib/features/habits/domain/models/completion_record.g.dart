@@ -7,7 +7,8 @@ part of 'completion_record.dart';
 // **************************************************************************
 
 _$CompletionRecordImpl _$$CompletionRecordImplFromJson(
-        Map<String, dynamic> json) =>
+  Map<String, dynamic> json,
+) =>
     _$CompletionRecordImpl(
       habitId: json['habitId'] as String,
       completedAt: DateTime.parse(json['completedAt'] as String),
@@ -21,7 +22,8 @@ _$CompletionRecordImpl _$$CompletionRecordImplFromJson(
     );
 
 Map<String, dynamic> _$$CompletionRecordImplToJson(
-        _$CompletionRecordImpl instance) =>
+  _$CompletionRecordImpl instance,
+) =>
     <String, dynamic>{
       'habitId': instance.habitId,
       'completedAt': instance.completedAt.toIso8601String(),

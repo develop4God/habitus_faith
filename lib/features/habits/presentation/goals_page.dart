@@ -12,6 +12,8 @@ class GoalsPage extends ConsumerStatefulWidget {
 }
 
 class _GoalsPageState extends ConsumerState<GoalsPage> {
+  GoalType _selectedTab = GoalType.week;
+
   @override
   Widget build(BuildContext context) {
     final goalsAsync = ref.watch(goalsStreamProvider);
@@ -59,6 +61,31 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                         const Center(child: CircularProgressIndicator()),
                     error: (_, __) => const SizedBox.shrink(),
                   ),
+                  const SizedBox(height: 24),
+                  // Tab selector
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(5),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    child: Row(
+                      children: [
+                        _buildTabButton(GoalType.week, 'Semanal'),
+                        const SizedBox(width: 4),
+                        _buildTabButton(GoalType.month, 'Mensual'),
+                        const SizedBox(width: 4),
+                        _buildTabButton(GoalType.custom, 'Personalizado'),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 32),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +114,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
           ),
           goalsAsync.when(
             data: (goals) {
-              if (goals.isEmpty) {
+              // Filter goals by selected tab
+              final filteredGoals =
+                  goals.where((g) => g.type == _selectedTab).toList();
+
+              if (filteredGoals.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: _buildEmptyState(),
@@ -96,24 +127,46 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return _buildGoalCard(goals[index]);
-                    },
-                    childCount: goals.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return _buildGoalCard(filteredGoals[index]);
+                  }, childCount: filteredGoals.length),
                 ),
               );
             },
             loading: () => const SliverFillRemaining(
               child: Center(child: CircularProgressIndicator()),
             ),
-            error: (e, _) => SliverFillRemaining(
-              child: Center(child: Text('Error: $e')),
-            ),
+            error: (e, _) =>
+                SliverFillRemaining(child: Center(child: Text('Error: $e'))),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTabButton(GoalType type, String label) {
+    final isSelected = _selectedTab == type;
+    return Expanded(
+      child: InkWell(
+        onTap: () => setState(() => _selectedTab = type),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.blue.shade700 : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isSelected ? Colors.white : Colors.grey.shade600,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -152,16 +205,20 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   color: Colors.white.withAlpha(40),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child:
-                    const Icon(Icons.auto_graph, color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.auto_graph,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               const Text(
                 'Progreso General',
                 style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500),
+                  color: Colors.white70,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -264,11 +321,16 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, color: Colors.grey),
                   itemBuilder: (context) => [
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
-                        value: 'delete', child: Text('Eliminar')),
+                      value: 'delete',
+                      child: Text('Eliminar'),
+                    ),
                   ],
                   onSelected: (val) {
-                    if (val == 'delete') {
+                    if (val == 'edit') {
+                      _showEditGoalDialog(context, goal);
+                    } else if (val == 'delete') {
                       ref.read(jsonGoalsRepositoryProvider).deleteGoal(goal.id);
                     }
                   },
@@ -284,8 +346,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     child: LinearProgressIndicator(
                       value: goal.progress,
                       backgroundColor: Colors.grey.shade100,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.blue.shade600),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.blue.shade600,
+                      ),
                       minHeight: 6,
                     ),
                   ),
@@ -334,8 +397,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               color: Colors.blue.shade50,
               shape: BoxShape.circle,
             ),
-            child:
-                Icon(Icons.flag_rounded, size: 64, color: Colors.blue.shade300),
+            child: Icon(
+              Icons.flag_rounded,
+              size: 64,
+              color: Colors.blue.shade300,
+            ),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -365,7 +431,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
           ),
         ],
@@ -376,96 +443,385 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   void _showAddGoalDialog(BuildContext context) {
     final titleCtrl = TextEditingController();
     GoalType selectedType = GoalType.month;
+    DateTime? customDeadline;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          top: 32,
-          left: 24,
-          right: 24,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Nueva Meta',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: titleCtrl,
-              autofocus: true,
-              decoration: InputDecoration(
-                labelText: '¿Qué quieres lograr?',
-                hintText: 'Ej: Leer toda la Biblia',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 32,
+            left: 24,
+            right: 24,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Nueva Meta',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text('Plazo', style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            StatefulBuilder(
-              builder: (context, setModalState) => Wrap(
+              const SizedBox(height: 24),
+              TextField(
+                controller: titleCtrl,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: '¿Qué quieres lograr?',
+                  hintText: 'Ej: Leer toda la Biblia',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Plazo',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
                 spacing: 8,
                 children: GoalType.values.map((type) {
                   final isSelected = selectedType == type;
                   return ChoiceChip(
                     label: Text(type.displayName),
                     selected: isSelected,
-                    onSelected: (val) =>
-                        setModalState(() => selectedType = type),
+                    onSelected: (val) {
+                      setDialogState(() => selectedType = type);
+                      if (type == GoalType.custom) {
+                        _selectCustomDeadline(context, customDeadline, (date) {
+                          setDialogState(() => customDeadline = date);
+                        });
+                      }
+                    },
                     selectedColor: Colors.blue.shade700,
                     labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black),
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
                   );
                 }).toList(),
               ),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (titleCtrl.text.isNotEmpty) {
-                    final newGoal = Goal(
-                      id: const Uuid().v4(),
-                      userId: 'local_user',
-                      title: titleCtrl.text,
-                      description: '',
-                      type: selectedType,
-                      deadline: DateTime.now().add(const Duration(days: 30)),
-                      createdAt: DateTime.now(),
-                    );
-                    ref.read(jsonGoalsRepositoryProvider).addGoal(newGoal);
-                    Navigator.pop(context);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade700,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
+              if (selectedType == GoalType.custom &&
+                  customDeadline != null) ...[
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue.shade700,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
+                        style: TextStyle(
+                          color: Colors.blue.shade700,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.edit, size: 18),
+                        onPressed: () {
+                          _selectCustomDeadline(context, customDeadline, (
+                            date,
+                          ) {
+                            setDialogState(() => customDeadline = date);
+                          });
+                        },
+                        color: Colors.blue.shade700,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
+                  ),
                 ),
-                child: const Text('Guardar Meta',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ],
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (titleCtrl.text.isNotEmpty) {
+                      // Validate custom deadline
+                      if (selectedType == GoalType.custom &&
+                          customDeadline == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Por favor selecciona una fecha límite',
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+
+                      DateTime deadline;
+                      if (selectedType == GoalType.custom) {
+                        deadline = customDeadline!;
+                      } else if (selectedType == GoalType.week) {
+                        deadline = DateTime.now().add(const Duration(days: 7));
+                      } else if (selectedType == GoalType.month) {
+                        deadline = DateTime.now().add(const Duration(days: 30));
+                      } else {
+                        deadline = DateTime.now().add(
+                          const Duration(days: 365),
+                        );
+                      }
+
+                      final newGoal = Goal(
+                        id: const Uuid().v4(),
+                        userId: 'local_user',
+                        title: titleCtrl.text,
+                        description: '',
+                        type: selectedType,
+                        deadline: deadline,
+                        createdAt: DateTime.now(),
+                      );
+                      ref.read(jsonGoalsRepositoryProvider).addGoal(newGoal);
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade700,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text(
+                    'Guardar Meta',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
-          ],
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _showEditGoalDialog(BuildContext context, Goal goal) {
+    final titleCtrl = TextEditingController(text: goal.title);
+    GoalType selectedType = goal.type;
+    DateTime? customDeadline =
+        goal.type == GoalType.custom ? goal.deadline : null;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 32,
+            left: 24,
+            right: 24,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Editar Meta',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: titleCtrl,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: '¿Qué quieres lograr?',
+                  hintText: 'Ej: Leer toda la Biblia',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Plazo',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                children: GoalType.values.map((type) {
+                  final isSelected = selectedType == type;
+                  return ChoiceChip(
+                    label: Text(type.displayName),
+                    selected: isSelected,
+                    onSelected: (val) {
+                      setDialogState(() => selectedType = type);
+                      if (type == GoalType.custom) {
+                        _selectCustomDeadline(context, customDeadline, (date) {
+                          setDialogState(() => customDeadline = date);
+                        });
+                      }
+                    },
+                    selectedColor: Colors.blue.shade700,
+                    labelStyle: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                  );
+                }).toList(),
+              ),
+              if (selectedType == GoalType.custom &&
+                  customDeadline != null) ...[
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue.shade700,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
+                        style: TextStyle(
+                          color: Colors.blue.shade700,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.edit, size: 18),
+                        onPressed: () {
+                          _selectCustomDeadline(context, customDeadline, (
+                            date,
+                          ) {
+                            setDialogState(() => customDeadline = date);
+                          });
+                        },
+                        color: Colors.blue.shade700,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (titleCtrl.text.isNotEmpty) {
+                      // Validate custom deadline
+                      if (selectedType == GoalType.custom &&
+                          customDeadline == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Por favor selecciona una fecha límite',
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+
+                      DateTime deadline;
+                      if (selectedType == GoalType.custom) {
+                        deadline = customDeadline!;
+                      } else if (selectedType == GoalType.week) {
+                        deadline = DateTime.now().add(const Duration(days: 7));
+                      } else if (selectedType == GoalType.month) {
+                        deadline = DateTime.now().add(const Duration(days: 30));
+                      } else {
+                        deadline = DateTime.now().add(
+                          const Duration(days: 365),
+                        );
+                      }
+
+                      final updatedGoal = goal.copyWith(
+                        title: titleCtrl.text,
+                        type: selectedType,
+                        deadline: deadline,
+                      );
+                      ref
+                          .read(jsonGoalsRepositoryProvider)
+                          .updateGoal(updatedGoal);
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade700,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text(
+                    'Actualizar Meta',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectCustomDeadline(
+    BuildContext context,
+    DateTime? currentDeadline,
+    Function(DateTime) onDateSelected,
+  ) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate:
+          currentDeadline ?? DateTime.now().add(const Duration(days: 30)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.blue.shade700,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      onDateSelected(picked);
+    }
   }
 }

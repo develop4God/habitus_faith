@@ -6,10 +6,7 @@ import '../l10n/app_localizations.dart';
 class RecurrenceConfigDialog extends ConsumerStatefulWidget {
   final HabitRecurrence? initialRecurrence;
 
-  const RecurrenceConfigDialog({
-    super.key,
-    this.initialRecurrence,
-  });
+  const RecurrenceConfigDialog({super.key, this.initialRecurrence});
 
   @override
   ConsumerState<RecurrenceConfigDialog> createState() =>
@@ -60,9 +57,9 @@ class _RecurrenceConfigDialogState
               const SizedBox(height: 8),
               Text(
                 l10n.recurrenceConfig,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
               // Repeat toggle
@@ -186,8 +183,9 @@ class _RecurrenceConfigDialogState
                           setState(() {
                             hasEndDate = value;
                             if (value && endDate == null) {
-                              endDate =
-                                  DateTime.now().add(const Duration(days: 30));
+                              endDate = DateTime.now().add(
+                                const Duration(days: 30),
+                              );
                             } else if (!value) {
                               endDate = null;
                             }
@@ -228,8 +226,9 @@ class _RecurrenceConfigDialogState
                               context: context,
                               initialDate: endDate!,
                               firstDate: DateTime.now(),
-                              lastDate: DateTime.now()
-                                  .add(const Duration(days: 365 * 2)),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365 * 2),
+                              ),
                             );
                             if (picked != null) {
                               setState(() {
@@ -327,7 +326,7 @@ class _RecurrenceConfigDialogState
       'sep',
       'oct',
       'nov',
-      'dic'
+      'dic',
     ];
     return months[month];
   }

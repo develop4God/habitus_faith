@@ -1919,7 +1919,7 @@ abstract class AppLocalizations {
   /// Option to mark habit as failed/not completed
   ///
   /// In en, this message translates to:
-  /// **'Mark as Not Completed'**
+  /// **'Not Completed'**
   String get markAsNotCompleted;
 
   /// Label for skipped habit
@@ -2047,6 +2047,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid notification configuration. Please set up the notification again.'**
   String get invalidNotificationConfig;
+
+  /// Button to read the Bible verse before the devotional
+  ///
+  /// In en, this message translates to:
+  /// **'Read Verse First'**
+  String get readVerseFirst;
+
+  /// Section title for devotional reflection
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection'**
+  String get reflection;
+
+  /// Section title for meditation points
+  ///
+  /// In en, this message translates to:
+  /// **'For Meditation'**
+  String get forMeditation;
+
+  /// Section title for prayer
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer'**
+  String get prayer;
+
+  /// Label for today's date
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayLabel;
+
+  /// Label for tomorrow's date
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrowLabel;
+
+  /// About Us page title
+  ///
+  /// In en, this message translates to:
+  /// **'About Us'**
+  String get aboutUs;
+
+  /// About Us page main title
+  ///
+  /// In en, this message translates to:
+  /// **'Habitus Faith'**
+  String get aboutUsTitle;
+
+  /// About Us page subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Building Faith Through Daily Habits'**
+  String get aboutUsSubtitle;
+
+  /// About Us main description
+  ///
+  /// In en, this message translates to:
+  /// **'Habitus Faith is an application designed to help you grow in your spiritual journey through the power of consistent daily habits. We believe that small, intentional actions repeated daily can transform your life and deepen your relationship with God.'**
+  String get aboutUsDescription;
+
+  /// Our Mission section title
+  ///
+  /// In en, this message translates to:
+  /// **'Our Mission'**
+  String get ourMission;
+
+  /// Our Mission text
+  ///
+  /// In en, this message translates to:
+  /// **'To empower believers worldwide to build sustainable spiritual habits that strengthen their faith, one day at a time.'**
+  String get ourMissionText;
+
+  /// Features section title
+  ///
+  /// In en, this message translates to:
+  /// **'Features'**
+  String get features;
+
+  /// Feature: Habit Tracking
+  ///
+  /// In en, this message translates to:
+  /// **'Habit Tracking'**
+  String get featureHabitTracking;
+
+  /// Feature description: Habit Tracking
+  ///
+  /// In en, this message translates to:
+  /// **'Track your spiritual, physical, mental, and relational habits with ease.'**
+  String get featureHabitTrackingDesc;
+
+  /// Feature: Bible Reading
+  ///
+  /// In en, this message translates to:
+  /// **'Bible Reading'**
+  String get featureBibleReading;
+
+  /// Feature description: Bible Reading
+  ///
+  /// In en, this message translates to:
+  /// **'Access the complete Bible with bookmarking and verse-saving capabilities.'**
+  String get featureBibleReadingDesc;
+
+  /// Feature: Daily Devotionals
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Devotionals'**
+  String get featureDailyDevotionals;
+
+  /// Feature description: Daily Devotionals
+  ///
+  /// In en, this message translates to:
+  /// **'Receive daily spiritual reflections to inspire and guide you.'**
+  String get featureDailyDevotionalsDesc;
+
+  /// Feature: AI Coach
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Powered Habit Coach'**
+  String get featureAiCoach;
+
+  /// Feature description: AI Coach
+  ///
+  /// In en, this message translates to:
+  /// **'Get personalized micro-habits generated based on your goals.'**
+  String get featureAiCoachDesc;
+
+  /// Contact Us section title
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get contactUs;
+
+  /// Contact Us text
+  ///
+  /// In en, this message translates to:
+  /// **'We\'d love to hear from you! Your feedback helps us improve and serve you better.'**
+  String get contactUsText;
+
+  /// Email label
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// Version label
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// Footer text
+  ///
+  /// In en, this message translates to:
+  /// **'Made with ❤️ by Develop4God\n \nFor the Glory of God'**
+  String get madeWithLove;
 }
 
 class _AppLocalizationsDelegate

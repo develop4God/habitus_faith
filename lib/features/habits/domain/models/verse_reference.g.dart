@@ -15,7 +15,8 @@ _$VerseReferenceImpl _$$VerseReferenceImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$VerseReferenceImplToJson(
-        _$VerseReferenceImpl instance) =>
+  _$VerseReferenceImpl instance,
+) =>
     <String, dynamic>{
       'book': instance.book,
       'chapter': instance.chapter,

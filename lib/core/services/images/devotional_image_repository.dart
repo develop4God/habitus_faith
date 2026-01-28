@@ -45,8 +45,11 @@ class DevotionalImageRepository {
         debugPrint('[ImageRepository] Files received: ${files.length}');
 
         imageUrls = files
-            .where((file) =>
-                file['type'] == 'file' && _isImageFile(file['name'] as String))
+            .where(
+              (file) =>
+                  file['type'] == 'file' &&
+                  _isImageFile(file['name'] as String),
+            )
             .map<String>((file) => file['download_url'] as String)
             .toList();
 
@@ -57,8 +60,11 @@ class DevotionalImageRepository {
           final selected = imageUrls[random.nextInt(imageUrls.length)];
           debugPrint('[ImageRepository] Selected image: $selected');
 
-          final normalized =
-              normalizer.normalize(selected, width: width, height: height);
+          final normalized = normalizer.normalize(
+            selected,
+            width: width,
+            height: height,
+          );
           debugPrint('[ImageRepository] Normalized image: $normalized');
           return normalized;
         } else {
@@ -105,16 +111,22 @@ class DevotionalImageRepository {
       if (response.statusCode == 200) {
         final List<dynamic> files = json.decode(response.body);
         final imageUrls = files
-            .where((file) =>
-                file['type'] == 'file' && _isImageFile(file['name'] as String))
+            .where(
+              (file) =>
+                  file['type'] == 'file' &&
+                  _isImageFile(file['name'] as String),
+            )
             .map<String>((file) => file['download_url'] as String)
             .toList();
 
         if (imageUrls.isNotEmpty) {
           final random = Random();
           final selected = imageUrls[random.nextInt(imageUrls.length)];
-          final normalized =
-              normalizer.normalize(selected, width: width, height: height);
+          final normalized = normalizer.normalize(
+            selected,
+            width: width,
+            height: height,
+          );
 
           await prefs.setString(todayKey, normalized);
           debugPrint('[ImageRepository] Image for today saved: $normalized');

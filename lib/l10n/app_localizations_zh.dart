@@ -779,11 +779,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get today => '今天';
 
   @override
-  String get flashTask => 'Flash Task';
+  String get flashTask => '快速任务';
 
   @override
-  String get flashTaskSubtitle =>
-      'Quickly add a task with just a name and emoji';
+  String get flashTaskSubtitle => '快速添加只需名称和表情符号的任务';
 
   @override
   String get morning_prayer => '晨祷';
@@ -966,7 +965,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get skipHabit => '跳过习惯';
 
   @override
-  String get markAsNotCompleted => '标记为未完成';
+  String get markAsNotCompleted => '未完成';
 
   @override
   String get skippedHabit => '已跳过';
@@ -987,25 +986,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitDeleted => '习惯已删除';
 
   @override
-  String get dailyReflection => 'Daily Reflection';
+  String get dailyReflection => '每日反思';
 
   @override
-  String get myReflection => 'My Reflection';
+  String get myReflection => '我的反思';
 
   @override
-  String get globalNote => 'General Note';
+  String get globalNote => '全局备注';
 
   @override
-  String get globalNoteHint => 'How was your communion with God today?';
+  String get globalNoteHint => '为今天添加备注...';
 
   @override
-  String get dailyHabits => 'Daily Habits';
+  String get dailyHabits => '每日习惯';
 
   @override
-  String get addReflection => 'Add thoughts specific to your achievements.';
+  String get addReflection => '添加反思';
 
   @override
-  String get completeHabitToReflect => 'Complete a habit to reflect on it';
+  String get completeHabitToReflect => '完成习惯以添加反思';
 
   @override
   String get notificationOptions => '通知选项';
@@ -1030,4 +1029,83 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get invalidNotificationConfig => '通知配置无效。请重新设置通知。';
+
+  @override
+  String get readVerseFirst => '先读经文';
+
+  @override
+  String get reflection => '反思';
+
+  @override
+  String get forMeditation => '默想要点';
+
+  @override
+  String get prayer => '祷告';
+
+  @override
+  String get todayLabel => '今天';
+
+  @override
+  String get tomorrowLabel => '明天';
+
+  @override
+  String get aboutUs => '关于我们';
+
+  @override
+  String get aboutUsTitle => 'Habitus Faith';
+
+  @override
+  String get aboutUsSubtitle => '通过日常习惯建立信心';
+
+  @override
+  String get aboutUsDescription =>
+      'Habitus Faith 是一款旨在通过持续的日常习惯帮助您在属灵旅程中成长的应用程序。我们相信，每天重复的小而有意的行动可以改变您的生活并加深您与神的关系。';
+
+  @override
+  String get ourMission => '我们的使命';
+
+  @override
+  String get ourMissionText => '赋予全球信徒建立可持续的属灵习惯的能力，一次一天地加强他们的信心。';
+
+  @override
+  String get features => '功能';
+
+  @override
+  String get featureHabitTracking => '习惯跟踪';
+
+  @override
+  String get featureHabitTrackingDesc => '轻松跟踪您的属灵、身体、心理和社交习惯。';
+
+  @override
+  String get featureBibleReading => '阅读圣经';
+
+  @override
+  String get featureBibleReadingDesc => '访问完整的圣经，具有书签和经文保存功能。';
+
+  @override
+  String get featureDailyDevotionals => '每日灵修';
+
+  @override
+  String get featureDailyDevotionalsDesc => '接收每日属灵反思，启发并引导您。';
+
+  @override
+  String get featureAiCoach => 'AI 习惯教练';
+
+  @override
+  String get featureAiCoachDesc => '根据您的目标生成个性化微习惯。';
+
+  @override
+  String get contactUs => '联系我们';
+
+  @override
+  String get contactUsText => '我们很乐意听取您的意见！您的反馈有助于我们改进并更好地为您服务。';
+
+  @override
+  String get email => '电子邮件';
+
+  @override
+  String get version => '版本';
+
+  @override
+  String get madeWithLove => '由 Develop4God 用 ❤️ 制作\n \n愿荣耀归于神';
 }

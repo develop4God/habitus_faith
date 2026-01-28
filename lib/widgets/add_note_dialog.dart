@@ -39,7 +39,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
     '🌱',
     '☀️',
     '🕊️',
-    '🔥'
+    '🔥',
   ];
 
   @override
@@ -67,8 +67,9 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
     final newText = text.replaceRange(selection.start, selection.end, emoji);
     _noteController.value = TextEditingValue(
       text: newText,
-      selection:
-          TextSelection.collapsed(offset: selection.start + emoji.length),
+      selection: TextSelection.collapsed(
+        offset: selection.start + emoji.length,
+      ),
     );
   }
 
@@ -120,7 +121,9 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                       Text(
                         widget.habitName,
                         style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 15),
+                          color: Colors.grey.shade600,
+                          fontSize: 15,
+                        ),
                       ),
                     ],
                   ),
@@ -141,22 +144,26 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: _quickEmojis
-                    .map((emoji) => Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: InkWell(
-                            onTap: () => _insertEmoji(emoji),
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(emoji,
-                                  style: const TextStyle(fontSize: 22)),
+                    .map(
+                      (emoji) => Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: InkWell(
+                          onTap: () => _insertEmoji(emoji),
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              emoji,
+                              style: const TextStyle(fontSize: 22),
                             ),
                           ),
-                        ))
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
             ),
@@ -198,7 +205,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                       ),
                     ),
@@ -217,7 +225,8 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                           elevation: 0,
                         ),
                       ),
@@ -243,9 +252,7 @@ Future<String?> showAddNoteDialog({
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (context) => AddNoteDialog(
-      habitName: habitName,
-      existingNote: existingNote,
-    ),
+    builder: (context) =>
+        AddNoteDialog(habitName: habitName, existingNote: existingNote),
   );
 }

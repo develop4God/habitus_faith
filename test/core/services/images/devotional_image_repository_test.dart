@@ -38,31 +38,39 @@ void main() {
     });
 
     group('getRandomImageUrl', () {
-      test('returns normalized URL when images are successfully fetched',
-          () async {
-        final mockResponse = MockResponse();
-        const testImageUrl = 'https://example.com/test.jpg';
-        const normalizedUrl = 'https://example.com/test_normalized.jpg';
+      test(
+        'returns normalized URL when images are successfully fetched',
+        () async {
+          final mockResponse = MockResponse();
+          const testImageUrl = 'https://example.com/test.jpg';
+          const normalizedUrl = 'https://example.com/test_normalized.jpg';
 
-        when(() => mockResponse.statusCode).thenReturn(200);
-        when(() => mockResponse.body).thenReturn('''
+          when(() => mockResponse.statusCode).thenReturn(200);
+          when(() => mockResponse.body).thenReturn('''
           [
             {"type": "file", "name": "test.jpg", "download_url": "$testImageUrl"}
           ]
         ''');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
-        when(() => mockNormalizer.normalize(any(),
-            width: any(named: 'width'),
-            height: any(named: 'height'))).thenReturn(normalizedUrl);
+          when(
+            () => mockHttpClient.get(any()),
+          ).thenAnswer((_) async => mockResponse);
+          when(
+            () => mockNormalizer.normalize(
+              any(),
+              width: any(named: 'width'),
+              height: any(named: 'height'),
+            ),
+          ).thenReturn(normalizedUrl);
 
-        final result = await repository.getRandomImageUrl();
+          final result = await repository.getRandomImageUrl();
 
-        expect(result, normalizedUrl);
-        verify(() =>
-                mockNormalizer.normalize(testImageUrl, width: 600, height: 400))
-            .called(1);
-      });
+          expect(result, normalizedUrl);
+          verify(
+            () =>
+                mockNormalizer.normalize(testImageUrl, width: 600, height: 400),
+          ).called(1);
+        },
+      );
 
       test('filters out non-image files', () async {
         final mockResponse = MockResponse();
@@ -77,26 +85,32 @@ void main() {
             {"type": "file", "name": "config.json", "download_url": "https://example.com/config.json"}
           ]
         ''');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
-        when(() => mockNormalizer.normalize(any(),
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockNormalizer.normalize(
+            any(),
             width: any(named: 'width'),
-            height: any(named: 'height'))).thenReturn(normalizedUrl);
+            height: any(named: 'height'),
+          ),
+        ).thenReturn(normalizedUrl);
 
         final result = await repository.getRandomImageUrl();
 
         expect(result, normalizedUrl);
-        verify(() =>
-                mockNormalizer.normalize(testImageUrl, width: 600, height: 400))
-            .called(1);
+        verify(
+          () => mockNormalizer.normalize(testImageUrl, width: 600, height: 400),
+        ).called(1);
       });
 
-      test('supports various image formats (jpg, jpeg, png, avif, webp)',
-          () async {
-        final mockResponse = MockResponse();
+      test(
+        'supports various image formats (jpg, jpeg, png, avif, webp)',
+        () async {
+          final mockResponse = MockResponse();
 
-        when(() => mockResponse.statusCode).thenReturn(200);
-        when(() => mockResponse.body).thenReturn('''
+          when(() => mockResponse.statusCode).thenReturn(200);
+          when(() => mockResponse.body).thenReturn('''
           [
             {"type": "file", "name": "test1.jpg", "download_url": "https://example.com/test1.jpg"},
             {"type": "file", "name": "test2.JPEG", "download_url": "https://example.com/test2.JPEG"},
@@ -105,22 +119,30 @@ void main() {
             {"type": "file", "name": "test5.webp", "download_url": "https://example.com/test5.webp"}
           ]
         ''');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
-        when(() => mockNormalizer.normalize(any(),
-            width: any(named: 'width'),
-            height: any(named: 'height'))).thenReturn('normalized');
+          when(
+            () => mockHttpClient.get(any()),
+          ).thenAnswer((_) async => mockResponse);
+          when(
+            () => mockNormalizer.normalize(
+              any(),
+              width: any(named: 'width'),
+              height: any(named: 'height'),
+            ),
+          ).thenReturn('normalized');
 
-        final result = await repository.getRandomImageUrl();
+          final result = await repository.getRandomImageUrl();
 
-        expect(result, 'normalized');
-        verify(() => mockNormalizer.normalize(any(), width: 600, height: 400))
-            .called(1);
-      });
+          expect(result, 'normalized');
+          verify(
+            () => mockNormalizer.normalize(any(), width: 600, height: 400),
+          ).called(1);
+        },
+      );
 
       test('returns placeholder when HTTP request fails', () async {
-        when(() => mockHttpClient.get(any()))
-            .thenThrow(Exception('Network error'));
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenThrow(Exception('Network error'));
 
         final result = await repository.getRandomImageUrl();
 
@@ -132,8 +154,9 @@ void main() {
 
         when(() => mockResponse.statusCode).thenReturn(200);
         when(() => mockResponse.body).thenReturn('[]');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenAnswer((_) async => mockResponse);
 
         final result = await repository.getRandomImageUrl();
 
@@ -145,8 +168,9 @@ void main() {
 
         when(() => mockResponse.statusCode).thenReturn(404);
         when(() => mockResponse.body).thenReturn('Not found');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenAnswer((_) async => mockResponse);
 
         final result = await repository.getRandomImageUrl();
 
@@ -163,16 +187,23 @@ void main() {
             {"type": "file", "name": "test.jpg", "download_url": "$testImageUrl"}
           ]
         ''');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
-        when(() => mockNormalizer.normalize(any(),
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockNormalizer.normalize(
+            any(),
             width: any(named: 'width'),
-            height: any(named: 'height'))).thenReturn('normalized');
+            height: any(named: 'height'),
+          ),
+        ).thenReturn('normalized');
 
         await repository.getRandomImageUrl(width: 1200, height: 800);
 
-        verify(() => mockNormalizer.normalize(testImageUrl,
-            width: 1200, height: 800)).called(1);
+        verify(
+          () =>
+              mockNormalizer.normalize(testImageUrl, width: 1200, height: 800),
+        ).called(1);
       });
     });
 
@@ -205,13 +236,19 @@ void main() {
             {"type": "file", "name": "new.jpg", "download_url": "$newImageUrl"}
           ]
         ''');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
-        when(() => mockNormalizer.normalize(any(),
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockNormalizer.normalize(
+            any(),
             width: any(named: 'width'),
-            height: any(named: 'height'))).thenReturn(normalizedUrl);
-        when(() => mockPrefs.setString(any(), any()))
-            .thenAnswer((_) async => true);
+            height: any(named: 'height'),
+          ),
+        ).thenReturn(normalizedUrl);
+        when(
+          () => mockPrefs.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         final result = await repository.getImageForToday();
 
@@ -233,13 +270,19 @@ void main() {
             {"type": "file", "name": "new.jpg", "download_url": "$newImageUrl"}
           ]
         ''');
-        when(() => mockHttpClient.get(any()))
-            .thenAnswer((_) async => mockResponse);
-        when(() => mockNormalizer.normalize(any(),
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockNormalizer.normalize(
+            any(),
             width: any(named: 'width'),
-            height: any(named: 'height'))).thenReturn(normalizedUrl);
-        when(() => mockPrefs.setString(any(), any()))
-            .thenAnswer((_) async => true);
+            height: any(named: 'height'),
+          ),
+        ).thenReturn(normalizedUrl);
+        when(
+          () => mockPrefs.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         final result = await repository.getImageForToday();
 
@@ -252,8 +295,9 @@ void main() {
             'devocional_image_${DateTime.now().toIso8601String().substring(0, 10)}';
 
         when(() => mockPrefs.getString(todayKey)).thenReturn(null);
-        when(() => mockHttpClient.get(any()))
-            .thenThrow(Exception('Network error'));
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenThrow(Exception('Network error'));
 
         final result = await repository.getImageForToday();
 
@@ -265,11 +309,14 @@ void main() {
             'devocional_image_${DateTime.now().toIso8601String().substring(0, 10)}';
 
         when(() => mockPrefs.getString(todayKey)).thenReturn(null);
-        when(() => mockHttpClient.get(any()))
-            .thenThrow(Exception('Network error'));
+        when(
+          () => mockHttpClient.get(any()),
+        ).thenThrow(Exception('Network error'));
 
-        final result =
-            await repository.getImageForToday(width: 1200, height: 800);
+        final result = await repository.getImageForToday(
+          width: 1200,
+          height: 800,
+        );
 
         expect(result, 'https://via.placeholder.com/1200x800?text=Devocional');
       });

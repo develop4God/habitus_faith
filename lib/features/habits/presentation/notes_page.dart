@@ -35,7 +35,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     '🏆',
     '🎯',
     '💧',
-    '⛪'
+    '⛪',
   ];
   static const int _minChars = 10;
   static const int _maxChars = 500;
@@ -78,14 +78,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                   const Text(
                     'Mis Notas',
                     style: TextStyle(
-                        color: Color(0xFF1A1C1E), fontWeight: FontWeight.w900),
+                      color: Color(0xFF1A1C1E),
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                   Text(
                     today,
                     style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal),
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ],
               ),
@@ -127,7 +130,8 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               );
             },
             loading: () => const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator())),
+              child: Center(child: CircularProgressIndicator()),
+            ),
             error: (e, _) =>
                 SliverFillRemaining(child: Center(child: Text('Error: $e'))),
           ),
@@ -150,9 +154,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withAlpha(5),
-              blurRadius: 10,
-              offset: const Offset(0, 4))
+            color: Colors.black.withAlpha(5),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
         ],
       ),
       child: Column(
@@ -162,13 +167,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             children: [
               const Icon(Icons.edit_note, color: Colors.orange),
               const SizedBox(width: 8),
-              const Text('Nueva Nota',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text(
+                'Nueva Nota',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
               const Spacer(),
               IconButton(
                 onPressed: canSave ? _saveNote : null,
-                icon: Icon(Icons.send,
-                    color: canSave ? Colors.orange : Colors.grey.shade300),
+                icon: Icon(
+                  Icons.send,
+                  color: canSave ? Colors.orange : Colors.grey.shade300,
+                ),
               ),
             ],
           ),
@@ -185,41 +194,42 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             ),
           ),
           const SizedBox(height: 8),
+          // Character counter row
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                child: Text(
-                  isTooShort
-                      ? 'Mínimo $_minChars caracteres'
-                      : '$charCount / $_maxChars',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: isTooShort
-                        ? Colors.red
-                        : (isTooLong ? Colors.red : Colors.grey),
-                    fontWeight:
-                        isTooShort ? FontWeight.bold : FontWeight.normal,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: _quickEmojis
-                      .map((e) => InkWell(
-                            onTap: () =>
-                                setState(() => _noteController.text += e),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child:
-                                  Text(e, style: const TextStyle(fontSize: 20)),
-                            ),
-                          ))
-                      .toList(),
+              Text(
+                isTooShort
+                    ? 'Mínimo $_minChars caracteres'
+                    : '$charCount / $_maxChars',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: isTooShort
+                      ? Colors.red
+                      : (isTooLong ? Colors.red : Colors.grey),
+                  fontWeight: isTooShort ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 4),
+          // Quick emoji row
+          SizedBox(
+            height: 32,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: _quickEmojis
+                  .map(
+                    (e) => InkWell(
+                      onTap: () => setState(() => _noteController.text += e),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Text(e, style: const TextStyle(fontSize: 20)),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ],
       ),
@@ -242,13 +252,18 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         children: [
           Row(
             children: [
-              Text(dateStr,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              Text(
+                dateStr,
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
               const Spacer(),
               IconButton(
                 onPressed: () => Share.share(note.content),
-                icon: const Icon(Icons.share_outlined,
-                    size: 18, color: Colors.blue),
+                icon: const Icon(
+                  Icons.share_outlined,
+                  size: 18,
+                  color: Colors.blue,
+                ),
                 visualDensity: VisualDensity.compact,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -258,8 +273,11 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 onPressed: () => ref
                     .read(jsonGeneralNotesRepositoryProvider)
                     .deleteNote(note.id),
-                icon: const Icon(Icons.delete_outline,
-                    size: 18, color: Colors.redAccent),
+                icon: const Icon(
+                  Icons.delete_outline,
+                  size: 18,
+                  color: Colors.redAccent,
+                ),
                 visualDensity: VisualDensity.compact,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -270,7 +288,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           Text(
             note.content,
             style: const TextStyle(
-                fontSize: 15, height: 1.5, color: Color(0xFF1A1C1E)),
+              fontSize: 15,
+              height: 1.5,
+              color: Color(0xFF1A1C1E),
+            ),
           ),
         ],
       ),
@@ -282,14 +303,20 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.sticky_note_2_outlined,
-              size: 64, color: Colors.grey.shade300),
+          Icon(
+            Icons.sticky_note_2_outlined,
+            size: 64,
+            color: Colors.grey.shade300,
+          ),
           const SizedBox(height: 16),
-          const Text('No hay notas guardadas',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text('Tus pensamientos aparecerán aquí.',
-              style: TextStyle(color: Colors.grey, fontSize: 13)),
+          const Text(
+            'No hay notas guardadas',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+          ),
+          const Text(
+            'Tus pensamientos aparecerán aquí.',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
         ],
       ),
     );

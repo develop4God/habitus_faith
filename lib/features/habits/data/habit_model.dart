@@ -104,7 +104,8 @@ class HabitModel {
       // Notification and recurrence fields
       notificationSettings: data['notificationSettings'] != null
           ? HabitNotificationSettings.fromJson(
-              data['notificationSettings'] as Map<String, dynamic>)
+              data['notificationSettings'] as Map<String, dynamic>,
+            )
           : null,
       recurrence: data['recurrence'] != null
           ? HabitRecurrence.fromJson(data['recurrence'] as Map<String, dynamic>)
@@ -225,7 +226,8 @@ class HabitModel {
           : null,
       notificationSettings: data['notificationSettings'] != null
           ? HabitNotificationSettings.fromJson(
-              data['notificationSettings'] as Map<String, dynamic>)
+              data['notificationSettings'] as Map<String, dynamic>,
+            )
           : null,
       recurrence: data['recurrence'] != null
           ? HabitRecurrence.fromJson(data['recurrence'] as Map<String, dynamic>)

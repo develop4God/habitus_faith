@@ -29,7 +29,9 @@ void main() {
 
       expect(habit.notificationSettings, isNotNull);
       expect(
-          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+        habit.notificationSettings!.timing,
+        NotificationTiming.atEventTime,
+      );
       expect(habit.notificationSettings!.eventTime, '07:00');
       // UI should show orange bell icon (notifications_active)
     });
@@ -84,7 +86,9 @@ void main() {
       );
 
       expect(
-          updatedHabit.notificationSettings!.timing, NotificationTiming.none);
+        updatedHabit.notificationSettings!.timing,
+        NotificationTiming.none,
+      );
       // Backend should cancel local notification
       // UI should show gray bell icon
     });
@@ -111,8 +115,10 @@ void main() {
         ),
       );
 
-      expect(updatedHabit.notificationSettings!.timing,
-          NotificationTiming.atEventTime);
+      expect(
+        updatedHabit.notificationSettings!.timing,
+        NotificationTiming.atEventTime,
+      );
       expect(updatedHabit.notificationSettings!.eventTime, '08:30');
       // Backend should reschedule local notification for new time
       // UI should keep orange bell icon
@@ -129,8 +135,10 @@ void main() {
         ),
       );
 
-      expect(habitWithNoneNotification.notificationSettings!.timing,
-          NotificationTiming.none);
+      expect(
+        habitWithNoneNotification.notificationSettings!.timing,
+        NotificationTiming.none,
+      );
       // UI should show gray bell icon (same as null notificationSettings)
       // Tapping should show time picker (same as OFF behavior)
     });
@@ -148,7 +156,9 @@ void main() {
       );
 
       expect(
-          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+        habit.notificationSettings!.timing,
+        NotificationTiming.atEventTime,
+      );
       expect(habit.notificationSettings!.eventTime, '07:00');
       expect(habit.notificationSettings!.timing.minutesBefore, 0);
 
@@ -213,7 +223,9 @@ void main() {
       );
 
       expect(
-          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+        habit.notificationSettings!.timing,
+        NotificationTiming.atEventTime,
+      );
 
       // Turn OFF
       habit = habit.copyWith(
@@ -233,7 +245,9 @@ void main() {
       );
 
       expect(
-          habit.notificationSettings!.timing, NotificationTiming.atEventTime);
+        habit.notificationSettings!.timing,
+        NotificationTiming.atEventTime,
+      );
       expect(habit.notificationSettings!.eventTime, '08:00');
 
       // Notification should be rescheduled at new time

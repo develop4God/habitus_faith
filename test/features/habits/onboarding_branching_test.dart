@@ -177,10 +177,14 @@ void main() {
     });
 
     test('strong support users get no encouragement message', () {
-      final faithMessage =
-          getEncouragementMessage(UserIntent.faithBased, 'strong');
-      final wellnessMessage =
-          getEncouragementMessage(UserIntent.wellness, 'strong');
+      final faithMessage = getEncouragementMessage(
+        UserIntent.faithBased,
+        'strong',
+      );
+      final wellnessMessage = getEncouragementMessage(
+        UserIntent.wellness,
+        'strong',
+      );
       final bothMessage = getEncouragementMessage(UserIntent.both, 'strong');
 
       expect(faithMessage, isNull);
@@ -252,8 +256,11 @@ void main() {
 
       for (final question in allQuestions) {
         for (final option in question.options) {
-          expect(option.emoji.isNotEmpty, isTrue,
-              reason: 'Option ${option.id} should have emoji');
+          expect(
+            option.emoji.isNotEmpty,
+            isTrue,
+            reason: 'Option ${option.id} should have emoji',
+          );
         }
       }
     });

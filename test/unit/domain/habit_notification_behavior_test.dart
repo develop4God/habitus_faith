@@ -20,8 +20,10 @@ void main() {
         final updatedHabit = habit.copyWith(notificationSettings: settings);
 
         expect(updatedHabit.notificationSettings, isNotNull);
-        expect(updatedHabit.notificationSettings!.timing,
-            NotificationTiming.atEventTime);
+        expect(
+          updatedHabit.notificationSettings!.timing,
+          NotificationTiming.atEventTime,
+        );
         expect(updatedHabit.notificationSettings!.eventTime, '07:00');
       });
 
@@ -336,8 +338,10 @@ void main() {
         final updated = habit.copyWith(notificationSettings: newSettings);
 
         expect(updated.notificationSettings!.eventTime, '08:00');
-        expect(updated.notificationSettings!.timing,
-            NotificationTiming.tenMinutesBefore);
+        expect(
+          updated.notificationSettings!.timing,
+          NotificationTiming.tenMinutesBefore,
+        );
       });
 
       test('User disables then re-enables recurrence', () {

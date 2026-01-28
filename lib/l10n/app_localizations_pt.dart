@@ -557,7 +557,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backgroundSyncPermission =>
-      'Sincronização em segundo plano desativada. Ative nas configurações.';
+      'Sincronização em segundo plano deshabilitada. Ative nas configurações.';
 
   @override
   String get workmanagerActive => 'Sincronização em segundo plano ativa';
@@ -778,7 +778,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get weekly => 'Semanal';
 
   @override
-  String get monthly => 'Mensal';
+  String get monthly => 'Mensual';
 
   @override
   String everyXDays(int count) {
@@ -823,11 +823,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get today => 'Hoje';
 
   @override
-  String get flashTask => 'Flash Task';
+  String get flashTask => 'Tarefa Rápida';
 
   @override
   String get flashTaskSubtitle =>
-      'Quickly add a task with just a name and emoji';
+      'Adicione rapidamente uma tarefa apenas com nome e emoji';
 
   @override
   String get morning_prayer => 'Oração matinal';
@@ -1012,7 +1012,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get skipHabit => 'Pular hábito';
 
   @override
-  String get markAsNotCompleted => 'Marcar como não concluído';
+  String get markAsNotCompleted => 'Não concluído';
 
   @override
   String get skippedHabit => 'Hábito pulado';
@@ -1033,25 +1033,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitDeleted => 'Hábito excluído';
 
   @override
-  String get dailyReflection => 'Daily Reflection';
+  String get dailyReflection => 'Reflexão Diaria';
 
   @override
-  String get myReflection => 'My Reflection';
+  String get myReflection => 'Minha Reflexão';
 
   @override
-  String get globalNote => 'General Note';
+  String get globalNote => 'Nota Geral';
 
   @override
-  String get globalNoteHint => 'How was your communion with God today?';
+  String get globalNoteHint => 'Como foi sua comunhão com Deus hoje?';
 
   @override
-  String get dailyHabits => 'Daily Habits';
+  String get dailyHabits => 'Hábitos Diários';
 
   @override
-  String get addReflection => 'Add thoughts specific to your achievements.';
+  String get addReflection =>
+      'Adicione pensamentos específicos sobre suas conquistas.';
 
   @override
-  String get completeHabitToReflect => 'Complete a habit to reflect on it';
+  String get completeHabitToReflect =>
+      'Complete um hábito para refletir sobre ele';
 
   @override
   String get notificationOptions => 'Opções de Notificação';
@@ -1079,4 +1081,90 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get invalidNotificationConfig =>
       'Configuração de notificação inválida. Por favor, configure a notificação novamente.';
+
+  @override
+  String get readVerseFirst => 'Ler Versículo Primeiro';
+
+  @override
+  String get reflection => 'Reflexão';
+
+  @override
+  String get forMeditation => 'Para Meditar';
+
+  @override
+  String get prayer => 'Oração';
+
+  @override
+  String get todayLabel => 'Hoje';
+
+  @override
+  String get tomorrowLabel => 'Amanhã';
+
+  @override
+  String get aboutUs => 'Sobre nós';
+
+  @override
+  String get aboutUsTitle => 'Habitus Faith';
+
+  @override
+  String get aboutUsSubtitle => 'Construindo fé através de hábitos diários';
+
+  @override
+  String get aboutUsDescription =>
+      'Habitus Faith é um aplicativo projetado para ajudá-lo a crescer em sua jornada espiritual através do poder de hábitos diários consistentes. Acreditamos que pequenas ações intencionais repetidas diariamente podem transformar sua vida e aprofundar seu relacionamento com Deus.';
+
+  @override
+  String get ourMission => 'Nossa Missão';
+
+  @override
+  String get ourMissionText =>
+      'Capacitar crentes em todo o mundo a construir hábitos espirituais sustentáveis que fortaleçam sua fé, um dia de cada vez.';
+
+  @override
+  String get features => 'Funcionalidades';
+
+  @override
+  String get featureHabitTracking => 'Rastreamento de Hábitos';
+
+  @override
+  String get featureHabitTrackingDesc =>
+      'Rastreie seus hábitos espirituais, físicos, mentais e relacionais com facilidade.';
+
+  @override
+  String get featureBibleReading => 'Leitura da Bíblia';
+
+  @override
+  String get featureBibleReadingDesc =>
+      'Acesse a Bíblia completa com recursos de marcação e salvamento de versículos.';
+
+  @override
+  String get featureDailyDevotionals => 'Devocionais Diários';
+
+  @override
+  String get featureDailyDevotionalsDesc =>
+      'Receba reflexões espirituais diárias para inspirá-lo e guiá-lo.';
+
+  @override
+  String get featureAiCoach => 'Coach de Hábitos com IA';
+
+  @override
+  String get featureAiCoachDesc =>
+      'Obtenha micro-hábitos personalizados gerados com base em seus objetivos.';
+
+  @override
+  String get contactUs => 'Contate-nos';
+
+  @override
+  String get contactUsText =>
+      'Gostaríamos muito de ouvir você! Seu feedback nos ajuda a melhorar e atendê-lo melhor.';
+
+  @override
+  String get email => 'E-mail';
+
+  @override
+  String get version => 'Versão';
+
+  @override
+  String get madeWithLove =>
+      'Feito com ❤️ por Develop4God\n \nPara a Glória de Deus';
 }

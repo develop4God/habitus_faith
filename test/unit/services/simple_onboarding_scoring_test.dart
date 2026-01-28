@@ -25,8 +25,10 @@ void main() {
 
         expect(score.totalScore, equals(12)); // 3*2 + 3 + 3 = 12
         expect(score.level, equals(ScoreLevel.advanced));
-        expect(score.primaryIntent,
-            equals(PrimaryIntent.faithBased)); // Faith has priority
+        expect(
+          score.primaryIntent,
+          equals(PrimaryIntent.faithBased),
+        ); // Faith has priority
       });
 
       test('intermediate score (8): 2 goals + medium time + growing', () {
@@ -38,8 +40,10 @@ void main() {
 
         expect(score.totalScore, equals(8)); // 2*2 + 2 + 2 = 8
         expect(score.level, equals(ScoreLevel.intermediate));
-        expect(score.primaryIntent,
-            equals(PrimaryIntent.wellness)); // Wellness has priority
+        expect(
+          score.primaryIntent,
+          equals(PrimaryIntent.wellness),
+        ); // Wellness has priority
       });
 
       test('score level boundaries: basic (4-6)', () {
@@ -170,7 +174,7 @@ void main() {
               GoalType.faith,
               GoalType.wellness,
               GoalType.study,
-              GoalType.peace
+              GoalType.peace,
             ],
             timeCommitment: TimeCommitment.medium,
             experienceLevel: ExperienceLevel.growing,
@@ -210,7 +214,9 @@ void main() {
         );
 
         expect(
-            score.getScoreLevelLabel(), equals('Creciendo · Ritmo sostenible'));
+          score.getScoreLevelLabel(),
+          equals('Creciendo · Ritmo sostenible'),
+        );
       });
 
       test('advanced level label', () {
@@ -220,8 +226,10 @@ void main() {
           experienceLevel: ExperienceLevel.consistent,
         );
 
-        expect(score.getScoreLevelLabel(),
-            equals('Comprometido · Desafío constante'));
+        expect(
+          score.getScoreLevelLabel(),
+          equals('Comprometido · Desafío constante'),
+        );
       });
     });
 
@@ -231,9 +239,11 @@ void main() {
 
         // Test various combinations
         for (final goalCount in [1, 2, 3]) {
-          final goals = [GoalType.faith, GoalType.wellness, GoalType.study]
-              .take(goalCount)
-              .toList();
+          final goals = [
+            GoalType.faith,
+            GoalType.wellness,
+            GoalType.study,
+          ].take(goalCount).toList();
 
           for (final time in TimeCommitment.values) {
             for (final level in ExperienceLevel.values) {
