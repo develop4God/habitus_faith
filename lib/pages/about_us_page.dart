@@ -245,7 +245,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
               _buildFeatureItem(
                 l10n.featureBibleReading,
                 l10n.featureBibleReadingDesc,
-                Icons.menu_book,
+                Icons.local_library_outlined,
                 theme,
               ),
               _buildFeatureItem(
