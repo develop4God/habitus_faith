@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/language_provider.dart';
-import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:habitus_faith/pages/language_settings_page.dart';
 import 'package:habitus_faith/pages/notifications_settings_page.dart';
 import 'package:habitus_faith/pages/about_us_page.dart';
 import 'package:habitus_faith/pages/home_page.dart';
-import 'package:habitus_faith/widgets/display_mode_modal.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -18,7 +15,6 @@ class SettingsPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final currentLanguage =
         ref.watch(appLanguageProvider.notifier).currentLanguage;
-    final currentMode = ref.watch(displayModeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -66,24 +62,6 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(
-              currentMode == DisplayMode.compact
-                  ? Icons.check_circle_outline
-                  : Icons.insights,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            title: Text(l10n.displayMode),
-            subtitle: Text(
-              currentMode == DisplayMode.compact
-                  ? l10n.compactModeSubtitle
-                  : l10n.advancedModeSubtitle,
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () =>
-                _showDisplayModeDialog(context, ref, l10n, currentMode),
-          ),
-          const Divider(),
-          ListTile(
             leading: const Icon(Icons.info_outline),
             title: Text(l10n.aboutUs),
             trailing: const Icon(Icons.arrow_forward_ios),
@@ -99,20 +77,6 @@ class SettingsPage extends ConsumerWidget {
           // Removed: Developer Settings option is now only accessible via About page easter egg
         ],
       ),
-    );
-  }
-
-  void _showDisplayModeDialog(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-    DisplayMode currentMode,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return DisplayModeModal(currentMode: currentMode, ref: ref, l10n: l10n);
-      },
     );
   }
 }
