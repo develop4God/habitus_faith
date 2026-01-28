@@ -1009,7 +1009,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get skipHabit => 'Skip for Today';
 
   @override
-  String get markAsNotCompleted => 'Mark as Not Completed';
+  String get markAsNotCompleted => 'Not Completed';
 
   @override
   String get skippedHabit => 'Skipped';
