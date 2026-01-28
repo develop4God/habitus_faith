@@ -16,7 +16,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
   int _logoTapCount = 0;
   bool _devUnlocked = false;
 
-  bool get _isDebugMode => kDebugMode && !const bool.fromEnvironment('dart.vm.product');
+  bool get _isDebugMode =>
+      kDebugMode && !const bool.fromEnvironment('dart.vm.product');
 
   @override
   void initState() {
@@ -89,7 +90,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                               Positioned(
                                 bottom: 8,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
                                     color: Colors.deepPurple,
                                     borderRadius: BorderRadius.circular(8),
