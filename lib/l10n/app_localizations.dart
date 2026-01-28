@@ -2201,7 +2201,7 @@ abstract class AppLocalizations {
   /// Footer text
   ///
   /// In en, this message translates to:
-  /// **'Made with ❤️\nby develop4God\n\nFor the Glory of God'**
+  /// **'Made with ❤️ by Develop4God\n \nFor the Glory of God'**
   String get madeWithLove;
 }
 
