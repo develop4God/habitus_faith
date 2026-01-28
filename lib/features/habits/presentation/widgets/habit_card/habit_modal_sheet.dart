@@ -26,12 +26,20 @@ class HabitModalSheet {
       enableDrag: true,
       isDismissible: true,
       builder: (ctx) => Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
-        child: Container(
-          constraints: maxHeight != null
-              ? BoxConstraints(maxHeight: maxHeight)
-              : const BoxConstraints(maxHeight: 480),
-          child: child,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
+        ),
+        child: SafeArea(
+          top: false,
+          left: false,
+          right: false,
+          bottom: true,
+          child: Container(
+            constraints: maxHeight != null
+                ? BoxConstraints(maxHeight: maxHeight)
+                : const BoxConstraints(maxHeight: 480),
+            child: child,
+          ),
         ),
       ),
     );
