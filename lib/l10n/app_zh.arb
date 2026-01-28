@@ -393,7 +393,7 @@
   "onboardingCouldNotCreateHabits": "无法创建习惯。请重试。",
   "planYourDay": "规划您的一天",
   "skipHabit": "跳过习惯",
-  "markAsNotCompleted": "标记为未完成",
+  "markAsNotCompleted": "未完成",
   "skippedHabit": "已跳过",
   "failedHabit": "失败",
   "repeatReminder": "重复提醒",
