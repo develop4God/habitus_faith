@@ -485,6 +485,42 @@
   "email": "电子邮件",
   "version": "版本",
   "madeWithLove": "由 Develop4God 用 ❤️ 制作\n \n愿荣耀归于神",
+  "flashTask": "快速任务",
+  "@flashTask": {
+    "description": "Quick task option with only name and emoji"
+  },
+  "flashTaskSubtitle": "快速添加只需名称和表情符号的任务",
+  "@flashTaskSubtitle": {
+    "description": "Description for flash task option"
+  },
+  "dailyReflection": "每日反思",
+  "@dailyReflection": {
+    "description": "Daily reflection section title"
+  },
+  "myReflection": "我的反思",
+  "@myReflection": {
+    "description": "My reflection label"
+  },
+  "globalNote": "全局备注",
+  "@globalNote": {
+    "description": "Global note label for the day"
+  },
+  "globalNoteHint": "为今天添加备注...",
+  "@globalNoteHint": {
+    "description": "Placeholder for global note input"
+  },
+  "dailyHabits": "每日习惯",
+  "@dailyHabits": {
+    "description": "Daily habits section title"
+  },
+  "addReflection": "添加反思",
+  "@addReflection": {
+    "description": "Button to add a reflection"
+  },
+  "completeHabitToReflect": "完成习惯以添加反思",
+  "@completeHabitToReflect": {
+    "description": "Message shown when habit needs to be completed before reflecting"
+  },
   "@predefinedHabit_morningPrayer_name": {
     "description": "PENDING"
   },
@@ -660,16 +696,34 @@
     "description": "PENDING"
   },
   "@riskPercentage": {
-    "description": "PENDING"
+    "description": "Display abandonment risk percentage",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
+    }
   },
   "@completeNow": {
     "description": "PENDING"
   },
   "@abandonmentNudgeTitle": {
-    "description": "PENDING"
+    "description": "Title for abandonment prediction nudge notification",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
   },
   "@abandonmentNudgeBody": {
-    "description": "PENDING"
+    "description": "Body text for abandonment prediction nudge notification",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "10"
+      }
+    }
   },
   "@copiedToClipboard": {
     "description": "PENDING"
@@ -690,10 +744,26 @@
     "description": "PENDING"
   },
   "@habitsCompletedCount": {
-    "description": "PENDING"
+    "description": "Shows number of completed habits out of total",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
   },
   "@error": {
-    "description": "PENDING"
+    "description": "Error message template",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Connection failed"
+      }
+    }
   },
   "@generateMicroHabits": {
     "description": "PENDING"
@@ -744,10 +814,22 @@
     "description": "PENDING"
   },
   "@habitsAdded": {
-    "description": "PENDING"
+    "description": "Success message after adding habits",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
   },
   "@estimatedTime": {
-    "description": "PENDING"
+    "description": "Estimated time for habit completion",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "5"
+      }
+    }
   },
   "@bibleVerse": {
     "description": "PENDING"
@@ -756,10 +838,22 @@
     "description": "PENDING"
   },
   "@remaining": {
-    "description": "PENDING"
+    "description": "Remaining generations count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
   },
   "@monthlyLimit": {
-    "description": "PENDING"
+    "description": "Information about monthly generation limit",
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
   },
   "@rateLimitReached": {
     "description": "PENDING"
@@ -780,7 +874,13 @@
     "description": "PENDING"
   },
   "@generationsRemaining": {
-    "description": "PENDING"
+    "description": "Shows how many generations are left",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
   },
   "@poweredByGemini": {
     "description": "PENDING"
@@ -831,7 +931,13 @@
     "description": "PENDING"
   },
   "@displayModeUpdated": {
-    "description": "PENDING"
+    "description": "Confirmation message when display mode is changed",
+    "placeholders": {
+      "mode": {
+        "type": "String",
+        "example": "Compact"
+      }
+    }
   },
   "@compactModeSubtitle": {
     "description": "PENDING"
@@ -867,10 +973,22 @@
     "description": "PENDING"
   },
   "@mlInsufficientData": {
-    "description": "PENDING"
+    "description": "Error when not enough data for predictions",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
   },
   "@backgroundSyncFailed": {
-    "description": "PENDING"
+    "description": "Background sync failure message",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
   },
   "@backgroundSyncNetwork": {
     "description": "PENDING"
@@ -894,7 +1012,13 @@
     "description": "PENDING"
   },
   "@optimalTimeFound": {
-    "description": "PENDING"
+    "description": "Optimal time found message",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "8:00 AM"
+      }
+    }
   },
   "@networkTimeout": {
     "description": "PENDING"
@@ -909,16 +1033,44 @@
     "description": "PENDING"
   },
   "@devBannerLastSync": {
-    "description": "PENDING"
+    "description": "Last sync time in dev banner",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "2m ago"
+      }
+    }
   },
   "@devBannerMlStatus": {
-    "description": "PENDING"
+    "description": "ML model status in dev banner",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Loaded"
+      }
+    }
   },
   "@devBannerWorkmanager": {
-    "description": "PENDING"
+    "description": "WorkManager status in dev banner",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Active"
+      }
+    }
   },
   "@devBannerFastTime": {
-    "description": "PENDING"
+    "description": "Fast time mode in dev banner",
+    "placeholders": {
+      "multiplier": {
+        "type": "String",
+        "example": "288"
+      },
+      "date": {
+        "type": "String",
+        "example": "Nov 7, 2025"
+      }
+    }
   },
   "@riskLevelLow": {
     "description": "PENDING"
@@ -984,7 +1136,13 @@
     "description": "PENDING"
   },
   "@copyHabitConfirm": {
-    "description": "PENDING"
+    "description": "Confirmation message for duplicating a habit",
+    "placeholders": {
+      "habitName": {
+        "type": "String",
+        "example": "Morning Prayer"
+      }
+    }
   },
   "@introMessage": {
     "description": "PENDING"
@@ -999,7 +1157,13 @@
     "description": "PENDING"
   },
   "@dayStreak": {
-    "description": "PENDING"
+    "description": "Shows the current streak for a habit",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
   },
   "@startJourney": {
     "description": "PENDING"
@@ -1011,7 +1175,13 @@
     "description": "PENDING"
   },
   "@habitsRemaining": {
-    "description": "PENDING"
+    "description": "Shows how many habits remain to be completed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
   },
   "@longestStreakCard": {
     "description": "PENDING"
@@ -1074,13 +1244,28 @@
     "description": "PENDING"
   },
   "@everyXDays": {
-    "description": "PENDING"
+    "description": "Every X days text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "@everyXWeeks": {
-    "description": "PENDING"
+    "description": "Every X weeks text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "@everyXMonths": {
-    "description": "PENDING"
+    "description": "Every X months text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "@noRepetition": {
     "description": "PENDING"
@@ -1107,14 +1292,6 @@
     "description": "PENDING"
   },
   "@today": {
-    "description": "PENDING"
-  },
-  "flashTask": "PENDING",
-  "@flashTask": {
-    "description": "PENDING"
-  },
-  "flashTaskSubtitle": "PENDING",
-  "@flashTaskSubtitle": {
     "description": "PENDING"
   },
   "@addNote": {
@@ -1169,34 +1346,6 @@
     "description": "PENDING"
   },
   "@habitDeleted": {
-    "description": "PENDING"
-  },
-  "dailyReflection": "PENDING",
-  "@dailyReflection": {
-    "description": "PENDING"
-  },
-  "myReflection": "PENDING",
-  "@myReflection": {
-    "description": "PENDING"
-  },
-  "globalNote": "PENDING",
-  "@globalNote": {
-    "description": "PENDING"
-  },
-  "globalNoteHint": "PENDING",
-  "@globalNoteHint": {
-    "description": "PENDING"
-  },
-  "dailyHabits": "PENDING",
-  "@dailyHabits": {
-    "description": "PENDING"
-  },
-  "addReflection": "PENDING",
-  "@addReflection": {
-    "description": "PENDING"
-  },
-  "completeHabitToReflect": "PENDING",
-  "@completeHabitToReflect": {
     "description": "PENDING"
   },
   "@aboutUs": {
