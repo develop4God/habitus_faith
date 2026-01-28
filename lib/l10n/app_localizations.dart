@@ -1919,7 +1919,7 @@ abstract class AppLocalizations {
   /// Option to mark habit as failed/not completed
   ///
   /// In en, this message translates to:
-  /// **'Mark as Not Completed'**
+  /// **'Not Completed'**
   String get markAsNotCompleted;
 
   /// Label for skipped habit

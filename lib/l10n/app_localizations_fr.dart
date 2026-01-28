@@ -1024,7 +1024,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get skipHabit => 'Ignorer l\'habitude';
 
   @override
-  String get markAsNotCompleted => 'Marquer comme non complétée';
+  String get markAsNotCompleted => 'Non complétée';
 
   @override
   String get skippedHabit => 'Ignorée';

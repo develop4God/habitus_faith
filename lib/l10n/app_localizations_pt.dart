@@ -1012,7 +1012,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get skipHabit => 'Pular hábito';
 
   @override
-  String get markAsNotCompleted => 'Marcar como não concluído';
+  String get markAsNotCompleted => 'Não concluído';
 
   @override
   String get skippedHabit => 'Hábito pulado';
