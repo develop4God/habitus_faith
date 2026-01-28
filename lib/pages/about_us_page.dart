@@ -141,7 +141,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
               const SizedBox(height: 12),
               Card(
                 elevation: 2,
-                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                color:
+                    theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -205,7 +206,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.contactUsText, style: theme.textTheme.bodyLarge),
+                      Text(l10n.contactUsText,
+                          style: theme.textTheme.bodyLarge),
                       const SizedBox(height: 16),
                       InkWell(
                         onTap: _launchEmail,
@@ -219,7 +221,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                                 children: [
                                   Text(
                                     l10n.email,
-                                    style: theme.textTheme.labelMedium?.copyWith(
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
                                       color: Colors.grey[600],
                                     ),
                                   ),
