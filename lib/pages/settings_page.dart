@@ -96,15 +96,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           // Developer Settings button (only in debug mode)
-          if (!const bool.fromEnvironment('dart.vm.product'))
-            ListTile(
-              leading: const Icon(Icons.bug_report, color: Colors.deepPurple),
-              title: const Text('Developer Settings'),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                Navigator.of(context).pushNamed('/devtools');
-              },
-            ),
+          // Removed: Developer Settings option is now only accessible via About page easter egg
         ],
       ),
     );

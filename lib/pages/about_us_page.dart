@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
@@ -12,6 +13,10 @@ class AboutUsPage extends StatefulWidget {
 
 class _AboutUsPageState extends State<AboutUsPage> {
   String _version = '';
+  int _logoTapCount = 0;
+  bool _devUnlocked = false;
+
+  bool get _isDebugMode => kDebugMode && !const bool.fromEnvironment('dart.vm.product');
 
   @override
   void initState() {
@@ -55,18 +60,66 @@ class _AboutUsPageState extends State<AboutUsPage> {
               Center(
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(20),
+                    if (_isDebugMode)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _logoTapCount++;
+                            if (_logoTapCount >= 7) {
+                              _devUnlocked = true;
+                            }
+                          });
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Image.asset(
+                                'assets/icons/app_icon.png',
+                                width: 80,
+                                height: 80,
+                              ),
+                            ),
+                            if (_devUnlocked)
+                              Positioned(
+                                bottom: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.deepPurple,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Text(
+                                    'DEV',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
+                    else
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Image.asset(
+                          'assets/icons/app_icon.png',
+                          width: 80,
+                          height: 80,
+                        ),
                       ),
-                      child: Image.asset(
-                        'assets/icons/app_icon.png',
-                        width: 80,
-                        height: 80,
-                      ),
-                    ),
                     const SizedBox(height: 16),
                     Text(
                       l10n.aboutUsTitle,
@@ -117,6 +170,17 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         ),
                       ),
                     ),
+                    if (_isDebugMode && _devUnlocked)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.bug_report),
+                          label: const Text('Developer Settings'),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/devtools');
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),
