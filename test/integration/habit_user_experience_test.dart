@@ -11,8 +11,8 @@ import 'package:habitus_faith/pages/habits_page.dart';
 import 'package:habitus_faith/pages/edit_habit_dialog.dart';
 import 'package:habitus_faith/widgets/add_habit_dialog.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
-import 'package:habitus_faith/features/habits/presentation/onboarding/display_mode_provider.dart';
-import 'package:habitus_faith/features/habits/domain/models/display_mode.dart';
+
+
 
 // Helper widget for tests
 class TestAppWrapper extends StatelessWidget {
@@ -201,9 +201,8 @@ void main() {
             habitsStreamProvider.overrideWith((ref) {
               return Stream.value([testHabit]);
             }),
-            displayModeProvider.overrideWith(
-              (ref) => DisplayModeNotifier(ref, DisplayMode.compact),
-            ),
+
+
           ],
           child: MaterialApp(
             home: Scaffold(
