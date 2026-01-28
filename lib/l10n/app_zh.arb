@@ -522,178 +522,178 @@
     "description": "Message shown when habit needs to be completed before reflecting"
   },
   "@predefinedHabit_morningPrayer_name": {
-    "description": "PENDING"
+    "description": "Name of morning prayer habit"
   },
   "@predefinedHabit_morningPrayer_description": {
-    "description": "PENDING"
+    "description": "Description of morning prayer habit"
   },
   "@predefinedHabit_bibleReading_name": {
-    "description": "PENDING"
+    "description": "Name of bible reading habit"
   },
   "@predefinedHabit_bibleReading_description": {
-    "description": "PENDING"
+    "description": "Description of bible reading habit"
   },
   "@predefinedHabit_worship_name": {
-    "description": "PENDING"
+    "description": "Name of worship habit"
   },
   "@predefinedHabit_worship_description": {
-    "description": "PENDING"
+    "description": "Description of worship habit"
   },
   "@predefinedHabit_gratitude_name": {
-    "description": "PENDING"
+    "description": "Name of gratitude habit"
   },
   "@predefinedHabit_gratitude_description": {
-    "description": "PENDING"
+    "description": "Description of gratitude habit"
   },
   "@predefinedHabit_exercise_name": {
-    "description": "PENDING"
+    "description": "Name of exercise habit"
   },
   "@predefinedHabit_exercise_description": {
-    "description": "PENDING"
+    "description": "Description of exercise habit"
   },
   "@predefinedHabit_healthyEating_name": {
-    "description": "PENDING"
+    "description": "Name of healthy eating habit"
   },
   "@predefinedHabit_healthyEating_description": {
-    "description": "PENDING"
+    "description": "Description of healthy eating habit"
   },
   "@predefinedHabit_sleep_name": {
-    "description": "PENDING"
+    "description": "Name of sleep habit"
   },
   "@predefinedHabit_sleep_description": {
-    "description": "PENDING"
+    "description": "Description of sleep habit"
   },
   "@predefinedHabit_meditation_name": {
-    "description": "PENDING"
+    "description": "Name of meditation habit"
   },
   "@predefinedHabit_meditation_description": {
-    "description": "PENDING"
+    "description": "Description of meditation habit"
   },
   "@predefinedHabit_learning_name": {
-    "description": "PENDING"
+    "description": "Name of learning habit"
   },
   "@predefinedHabit_learning_description": {
-    "description": "PENDING"
+    "description": "Description of learning habit"
   },
   "@predefinedHabit_creativity_name": {
-    "description": "PENDING"
+    "description": "Name of creativity habit"
   },
   "@predefinedHabit_creativity_description": {
-    "description": "PENDING"
+    "description": "Description of creativity habit"
   },
   "@predefinedHabit_familyTime_name": {
-    "description": "PENDING"
+    "description": "Name of family time habit"
   },
   "@predefinedHabit_familyTime_description": {
-    "description": "PENDING"
+    "description": "Description of family time habit"
   },
   "@predefinedHabit_service_name": {
-    "description": "PENDING"
+    "description": "Name of service habit"
   },
   "@predefinedHabit_service_description": {
-    "description": "PENDING"
+    "description": "Description of service habit"
   },
   "@onboardingErrorMessage": {
-    "description": "PENDING"
+    "description": "Error message shown when onboarding fails"
   },
   "@retry": {
-    "description": "PENDING"
+    "description": "Button label for retrying an operation"
   },
   "@selected": {
-    "description": "PENDING"
+    "description": "Accessibility label indicating an item is selected"
   },
   "@category": {
-    "description": "PENDING"
+    "description": "Category label"
   },
   "@difficulty": {
-    "description": "PENDING"
+    "description": "Difficulty label"
   },
   "@emoji": {
-    "description": "PENDING"
+    "description": "Emoji label"
   },
   "@color": {
-    "description": "PENDING"
+    "description": "Color label"
   },
   "@optional": {
-    "description": "PENDING"
+    "description": "Optional label"
   },
   "@edit": {
-    "description": "PENDING"
+    "description": "Edit button text"
   },
   "@uncheck": {
-    "description": "PENDING"
+    "description": "Uncheck button text"
   },
   "@save": {
-    "description": "PENDING"
+    "description": "Save button text"
   },
   "@editHabit": {
-    "description": "PENDING"
+    "description": "Edit habit dialog title"
   },
   "@habitEdited": {
-    "description": "PENDING"
+    "description": "Success message after editing a habit"
   },
   "@defaultColor": {
-    "description": "PENDING"
+    "description": "Default color option label"
   },
   "@statistics": {
-    "description": "PENDING"
+    "description": "Statistics/Progress page title"
   },
   "@settings": {
-    "description": "PENDING"
+    "description": "Settings page title"
   },
   "@language": {
-    "description": "PENDING"
+    "description": "Language settings option"
   },
   "@notifications": {
-    "description": "PENDING"
+    "description": "Notifications settings option"
   },
   "@notificationSettings": {
-    "description": "PENDING"
+    "description": "Notification settings title"
   },
   "@languageSettings": {
-    "description": "PENDING"
+    "description": "Language settings title"
   },
   "@selectLanguage": {
-    "description": "PENDING"
+    "description": "Select language instruction"
   },
   "@languageInfo": {
-    "description": "PENDING"
+    "description": "Language information text"
   },
   "@notificationsEnabled": {
-    "description": "PENDING"
+    "description": "Notifications enabled message"
   },
   "@notificationsDisabled": {
-    "description": "PENDING"
+    "description": "Notifications disabled message"
   },
   "@notificationTimeUpdated": {
-    "description": "PENDING"
+    "description": "Notification time updated message"
   },
   "@enableNotifications": {
-    "description": "PENDING"
+    "description": "Enable notifications option"
   },
   "@notificationsOn": {
-    "description": "PENDING"
+    "description": "Notifications on label"
   },
   "@notificationsOff": {
-    "description": "PENDING"
+    "description": "Notifications off label"
   },
   "@receiveReminderNotifications": {
-    "description": "PENDING"
+    "description": "Receive reminder notifications description"
   },
   "@notificationTime": {
-    "description": "PENDING"
+    "description": "Notification time label"
   },
   "@selectNotificationTime": {
-    "description": "PENDING"
+    "description": "Select notification time instruction"
   },
   "@currentTime": {
-    "description": "PENDING"
+    "description": "Label for current notification time"
   },
   "@notificationInfo": {
-    "description": "PENDING"
+    "description": "Notification information text"
   },
   "@highRiskWarning": {
-    "description": "PENDING"
+    "description": "Warning message for high abandonment risk"
   },
   "@riskPercentage": {
     "description": "Display abandonment risk percentage",
@@ -705,7 +705,7 @@
     }
   },
   "@completeNow": {
-    "description": "PENDING"
+    "description": "Button text to complete habit immediately"
   },
   "@abandonmentNudgeTitle": {
     "description": "Title for abandonment prediction nudge notification",
@@ -726,22 +726,22 @@
     }
   },
   "@copiedToClipboard": {
-    "description": "PENDING"
+    "description": "Message shown when text is copied to clipboard"
   },
   "@versesSaved": {
-    "description": "PENDING"
+    "description": "Message shown when Bible verses are saved"
   },
   "@loadingBooks": {
-    "description": "PENDING"
+    "description": "Message shown while loading Bible books"
   },
   "@selectBook": {
-    "description": "PENDING"
+    "description": "Hint text for book selection dropdown"
   },
   "@selectBookAndChapter": {
-    "description": "PENDING"
+    "description": "Message shown when no book and chapter are selected"
   },
   "@habitsCompleted": {
-    "description": "PENDING"
+    "description": "Label for habits completed statistic"
   },
   "@habitsCompletedCount": {
     "description": "Shows number of completed habits out of total",
@@ -766,52 +766,52 @@
     }
   },
   "@generateMicroHabits": {
-    "description": "PENDING"
+    "description": "Title for micro-habits generator page"
   },
   "@aiGeneratedHabits": {
-    "description": "PENDING"
+    "description": "Title for automatically generated habits section"
   },
   "@yourGoal": {
-    "description": "PENDING"
+    "description": "Label for user goal input field"
   },
   "@goalHint": {
-    "description": "PENDING"
+    "description": "Hint text for goal input field"
   },
   "@goalRequired": {
-    "description": "PENDING"
+    "description": "Validation message when goal is empty"
   },
   "@goalTooShort": {
-    "description": "PENDING"
+    "description": "Validation message when goal is too short"
   },
   "@goalTooLong": {
-    "description": "PENDING"
+    "description": "Validation message when goal is too long"
   },
   "@failurePattern": {
-    "description": "PENDING"
+    "description": "Label for failure pattern input field"
   },
   "@failurePatternHint": {
-    "description": "PENDING"
+    "description": "Hint text for failure pattern input"
   },
   "@generateHabits": {
-    "description": "PENDING"
+    "description": "Button text to generate habits"
   },
   "@generating": {
-    "description": "PENDING"
+    "description": "Loading state text while generating"
   },
   "@generatingHabits": {
-    "description": "PENDING"
+    "description": "Loading message while habits are being generated"
   },
   "@generatedHabitsTitle": {
-    "description": "PENDING"
+    "description": "Title for generated habits results page"
   },
   "@selectHabitsToAdd": {
-    "description": "PENDING"
+    "description": "Instructions for selecting habits"
   },
   "@saveSelected": {
-    "description": "PENDING"
+    "description": "Button to save selected habits"
   },
   "@saving": {
-    "description": "PENDING"
+    "description": "Loading text while saving habits"
   },
   "@habitsAdded": {
     "description": "Success message after adding habits",
@@ -832,10 +832,10 @@
     }
   },
   "@bibleVerse": {
-    "description": "PENDING"
+    "description": "Label for bible verse section"
   },
   "@purpose": {
-    "description": "PENDING"
+    "description": "Label for habit purpose"
   },
   "@remaining": {
     "description": "Remaining generations count",
@@ -856,22 +856,22 @@
     }
   },
   "@rateLimitReached": {
-    "description": "PENDING"
+    "description": "Error message when rate limit is exceeded"
   },
   "@generationFailed": {
-    "description": "PENDING"
+    "description": "Generic error message for generation failure"
   },
   "@apiTimeout": {
-    "description": "PENDING"
+    "description": "Error message for API timeout"
   },
   "@invalidInput": {
-    "description": "PENDING"
+    "description": "Error message for invalid input"
   },
   "@noHabitsSelected": {
-    "description": "PENDING"
+    "description": "Error when trying to save without selecting habits"
   },
   "@tryAgain": {
-    "description": "PENDING"
+    "description": "Button to retry after error"
   },
   "@generationsRemaining": {
     "description": "Shows how many generations are left",
@@ -883,52 +883,52 @@
     }
   },
   "@poweredByGemini": {
-    "description": "PENDING"
+    "description": "Attribution for AI service"
   },
   "@chooseYourExperience": {
-    "description": "PENDING"
+    "description": "Title for display mode selection screen"
   },
   "@displayModeDescription": {
-    "description": "PENDING"
+    "description": "Description text for display mode selection"
   },
   "@compactMode": {
-    "description": "PENDING"
+    "description": "Title for compact display mode"
   },
   "@compactModeDescription": {
-    "description": "PENDING"
+    "description": "Description of compact display mode"
   },
   "@compactModeFeature1": {
-    "description": "PENDING"
+    "description": "First feature of compact mode"
   },
   "@compactModeFeature2": {
-    "description": "PENDING"
+    "description": "Second feature of compact mode"
   },
   "@compactModeFeature3": {
-    "description": "PENDING"
+    "description": "Third feature of compact mode"
   },
   "@advancedMode": {
-    "description": "PENDING"
+    "description": "Title for advanced display mode"
   },
   "@advancedModeDescription": {
-    "description": "PENDING"
+    "description": "Description of advanced display mode"
   },
   "@advancedModeFeature1": {
-    "description": "PENDING"
+    "description": "First feature of advanced mode"
   },
   "@advancedModeFeature2": {
-    "description": "PENDING"
+    "description": "Second feature of advanced mode"
   },
   "@advancedModeFeature3": {
-    "description": "PENDING"
+    "description": "Third feature of advanced mode"
   },
   "@changeAnytime": {
-    "description": "PENDING"
+    "description": "Message informing users they can change mode later"
   },
   "@selectMode": {
-    "description": "PENDING"
+    "description": "Button text to confirm mode selection"
   },
   "@displayMode": {
-    "description": "PENDING"
+    "description": "Display mode setting title"
   },
   "@displayModeUpdated": {
     "description": "Confirmation message when display mode is changed",
@@ -940,37 +940,37 @@
     }
   },
   "@compactModeSubtitle": {
-    "description": "PENDING"
+    "description": "Subtitle for compact mode in settings"
   },
   "@advancedModeSubtitle": {
-    "description": "PENDING"
+    "description": "Subtitle for advanced mode in settings"
   },
   "@addManually": {
-    "description": "PENDING"
+    "description": "Option to add habit manually"
   },
   "@createCustomHabit": {
-    "description": "PENDING"
+    "description": "Description for manual habit creation"
   },
   "@generateWithAI": {
-    "description": "PENDING"
+    "description": "Option to generate habits automatically"
   },
   "@aiCustomHabits": {
-    "description": "PENDING"
+    "description": "Description for automatically generated habits"
   },
   "@previewHabitName": {
-    "description": "PENDING"
+    "description": "Placeholder text for habit name in preview"
   },
   "@previewHabitDescription": {
-    "description": "PENDING"
+    "description": "Placeholder text for habit description in preview"
   },
   "@total": {
-    "description": "PENDING"
+    "description": "Total label for statistics"
   },
   "@mlPredictionFailed": {
-    "description": "PENDING"
+    "description": "Error message when ML prediction fails"
   },
   "@mlModelNotLoaded": {
-    "description": "PENDING"
+    "description": "Error when ML model is not loaded"
   },
   "@mlInsufficientData": {
     "description": "Error when not enough data for predictions",
@@ -991,25 +991,25 @@
     }
   },
   "@backgroundSyncNetwork": {
-    "description": "PENDING"
+    "description": "Sync failed due to network"
   },
   "@backgroundSyncPermission": {
-    "description": "PENDING"
+    "description": "Sync disabled due to permissions"
   },
   "@workmanagerActive": {
-    "description": "PENDING"
+    "description": "WorkManager is active"
   },
   "@workmanagerRestricted": {
-    "description": "PENDING"
+    "description": "WorkManager restricted warning"
   },
   "@workmanagerDisabled": {
-    "description": "PENDING"
+    "description": "WorkManager disabled"
   },
   "@patternWeekend": {
-    "description": "PENDING"
+    "description": "Weekend pattern detected message"
   },
   "@patternEvening": {
-    "description": "PENDING"
+    "description": "Evening pattern detected message"
   },
   "@optimalTimeFound": {
     "description": "Optimal time found message",
@@ -1021,16 +1021,16 @@
     }
   },
   "@networkTimeout": {
-    "description": "PENDING"
+    "description": "Network timeout error"
   },
   "@firebasePermissionDenied": {
-    "description": "PENDING"
+    "description": "Firebase permission denied"
   },
   "@errorUnknown": {
-    "description": "PENDING"
+    "description": "Generic unknown error"
   },
   "@devBannerTitle": {
-    "description": "PENDING"
+    "description": "Dev tools banner title"
   },
   "@devBannerLastSync": {
     "description": "Last sync time in dev banner",
@@ -1073,67 +1073,67 @@
     }
   },
   "@riskLevelLow": {
-    "description": "PENDING"
+    "description": "Low abandonment risk level"
   },
   "@riskLevelMedium": {
-    "description": "PENDING"
+    "description": "Medium abandonment risk level"
   },
   "@riskLevelHigh": {
-    "description": "PENDING"
+    "description": "High abandonment risk level"
   },
   "@predictorRunning": {
-    "description": "PENDING"
+    "description": "Predictor is running"
   },
   "@predictorComplete": {
-    "description": "PENDING"
+    "description": "Predictor completed"
   },
   "@syncInProgress": {
-    "description": "PENDING"
+    "description": "Sync in progress"
   },
   "@syncComplete": {
-    "description": "PENDING"
+    "description": "Sync completed successfully"
   },
   "@mlModelLoaded": {
-    "description": "PENDING"
+    "description": "ML model loaded status"
   },
   "@mlModelLoading": {
-    "description": "PENDING"
+    "description": "ML model loading status"
   },
   "@mlModelError": {
-    "description": "PENDING"
+    "description": "ML model error status"
   },
   "@chooseHabitType": {
-    "description": "PENDING"
+    "description": "Text for choosing habit type when adding"
   },
   "@chooseFromPredefined": {
-    "description": "PENDING"
+    "description": "Text for choosing from predefined habits"
   },
   "@manual": {
-    "description": "PENDING"
+    "description": "Manual habit option (short label)"
   },
   "@custom": {
-    "description": "PENDING"
+    "description": "Custom habit option (short label)"
   },
   "@defaultHabit": {
-    "description": "PENDING"
+    "description": "Default/predefined habit option (short label)"
   },
   "@addHabitDiscoverySubtitle": {
-    "description": "PENDING"
+    "description": "Explanatory subtitle for the add habit discovery dialog"
   },
   "@requiredFieldLabel": {
-    "description": "PENDING"
+    "description": "Label to indicate a field is required"
   },
   "@back": {
-    "description": "PENDING"
+    "description": "Button to go back to the previous step in the dialog"
   },
   "@selectAll": {
-    "description": "PENDING"
+    "description": "Button to select all habits on the habits page"
   },
   "@copy": {
-    "description": "PENDING"
+    "description": "Text for duplicating a habit (swipe action)"
   },
   "@copyHabit": {
-    "description": "PENDING"
+    "description": "Dialog title for duplicating a habit"
   },
   "@copyHabitConfirm": {
     "description": "Confirmation message for duplicating a habit",
@@ -1145,16 +1145,16 @@
     }
   },
   "@introMessage": {
-    "description": "PENDING"
+    "description": "Intro message shown on landing page as a motivational quote."
   },
   "@todaysVerse": {
-    "description": "PENDING"
+    "description": "Title for today's Bible verse section on home page"
   },
   "@todaysHabits": {
-    "description": "PENDING"
+    "description": "Title for today's habits section on home page"
   },
   "@allHabitsCompleted": {
-    "description": "PENDING"
+    "description": "Success message when all habits are completed"
   },
   "@dayStreak": {
     "description": "Shows the current streak for a habit",
@@ -1166,13 +1166,13 @@
     }
   },
   "@startJourney": {
-    "description": "PENDING"
+    "description": "Message shown when user has no habits yet"
   },
   "@buildConsistency": {
-    "description": "PENDING"
+    "description": "Motivational message when no habits are completed"
   },
   "@greatProgress": {
-    "description": "PENDING"
+    "description": "Motivational message when some habits are completed"
   },
   "@habitsRemaining": {
     "description": "Shows how many habits remain to be completed",
@@ -1184,64 +1184,64 @@
     }
   },
   "@longestStreakCard": {
-    "description": "PENDING"
+    "description": "Label for longest streak card on home page"
   },
   "@weeklyConsistencyCard": {
-    "description": "PENDING"
+    "description": "Label for weekly consistency card on home page"
   },
   "@swipeToComplete": {
-    "description": "PENDING"
+    "description": "Hint text showing users how to complete habits"
   },
   "@usefulTip": {
-    "description": "PENDING"
+    "description": "Educational tip title"
   },
   "@habitsTip": {
-    "description": "PENDING"
+    "description": "Educational tip description"
   },
   "@understood": {
-    "description": "PENDING"
+    "description": "Button to close the educational tip"
   },
   "@bible": {
-    "description": "PENDING"
+    "description": "Bible title for AppBar"
   },
   "@home": {
-    "description": "PENDING"
+    "description": "Home tab label"
   },
   "@reminderConfig": {
-    "description": "PENDING"
+    "description": "Reminder configuration dialog title"
   },
   "@recurrenceConfig": {
-    "description": "PENDING"
+    "description": "Recurrence configuration dialog title"
   },
   "@repeat": {
-    "description": "PENDING"
+    "description": "Repeat reminder toggle label"
   },
   "@setCycleForPlan": {
-    "description": "PENDING"
+    "description": "Subtitle for repeat toggle"
   },
   "@subtasks": {
-    "description": "PENDING"
+    "description": "Subtasks section label"
   },
   "@addSubtask": {
-    "description": "PENDING"
+    "description": "Add subtask hint text"
   },
   "@minutesBefore": {
-    "description": "PENDING"
+    "description": "Custom minutes before label"
   },
   "@interval": {
-    "description": "PENDING"
+    "description": "Interval label for recurrence"
   },
   "@endDate": {
-    "description": "PENDING"
+    "description": "End date label for recurrence"
   },
   "@daily": {
-    "description": "PENDING"
+    "description": "Daily frequency option"
   },
   "@weekly": {
-    "description": "PENDING"
+    "description": "Weekly frequency option"
   },
   "@monthly": {
-    "description": "PENDING"
+    "description": "Monthly frequency option"
   },
   "@everyXDays": {
     "description": "Every X days text",
@@ -1268,144 +1268,144 @@
     }
   },
   "@noRepetition": {
-    "description": "PENDING"
+    "description": "No repetition text"
   },
   "@reminder": {
-    "description": "PENDING"
+    "description": "Reminder label"
   },
   "@repetition": {
-    "description": "PENDING"
+    "description": "Repetition label"
   },
   "@eventTime": {
-    "description": "PENDING"
+    "description": "Event time label"
   },
   "@invalidMinutes": {
-    "description": "PENDING"
+    "description": "Validation message for invalid custom minutes"
   },
   "@invalidInterval": {
-    "description": "PENDING"
+    "description": "Validation message for invalid interval"
   },
   "@habitTracking": {
-    "description": "PENDING"
+    "description": "Title for habit tracking calendar page"
   },
   "@routine": {
-    "description": "PENDING"
+    "description": "Label for routine option in navigation bar"
   },
   "@today": {
-    "description": "PENDING"
+    "description": "Label to show the current day in the habits view"
   },
   "@addNote": {
-    "description": "PENDING"
+    "description": "Add note button text"
   },
   "@noteHint": {
-    "description": "PENDING"
+    "description": "Placeholder text for note input field"
   },
   "@viewNote": {
-    "description": "PENDING"
+    "description": "View note button text"
   },
   "@shareNote": {
-    "description": "PENDING"
+    "description": "Share note button text"
   },
   "@noteAdded": {
-    "description": "PENDING"
+    "description": "Note added confirmation message"
   },
   "@addNoteDialog": {
-    "description": "PENDING"
+    "description": "Add note dialog title"
   },
   "@completeWithNote": {
-    "description": "PENDING"
+    "description": "Complete habit with note button text"
   },
   "@addEmoji": {
-    "description": "PENDING"
+    "description": "Add emoji button text"
   },
   "@hideEmojis": {
-    "description": "PENDING"
+    "description": "Hide emoji picker button text"
   },
   "@planYourDay": {
-    "description": "PENDING"
+    "description": "Title for planning the day's habits"
   },
   "@skipHabit": {
-    "description": "PENDING"
+    "description": "Option to skip/postpone habit for today"
   },
   "@markAsNotCompleted": {
-    "description": "PENDING"
+    "description": "Option to mark habit as failed/not completed"
   },
   "@skippedHabit": {
-    "description": "PENDING"
+    "description": "Label for skipped habit"
   },
   "@failedHabit": {
-    "description": "PENDING"
+    "description": "Label for failed/not completed habit"
   },
   "@repeatReminder": {
-    "description": "PENDING"
+    "description": "Repeat reminder configuration option"
   },
   "@habitSkipped": {
-    "description": "PENDING"
+    "description": "Message when habit is skipped"
   },
   "@habitMarkedAsNotCompleted": {
-    "description": "PENDING"
+    "description": "Message when habit is marked as failed"
   },
   "@habitDeleted": {
-    "description": "PENDING"
+    "description": "Success message after deleting a habit"
   },
   "@aboutUs": {
-    "description": "PENDING"
+    "description": "About Us page title"
   },
   "@aboutUsTitle": {
-    "description": "PENDING"
+    "description": "About Us page main title"
   },
   "@aboutUsSubtitle": {
-    "description": "PENDING"
+    "description": "About Us page subtitle"
   },
   "@aboutUsDescription": {
-    "description": "PENDING"
+    "description": "About Us main description"
   },
   "@ourMission": {
-    "description": "PENDING"
+    "description": "Our Mission section title"
   },
   "@ourMissionText": {
-    "description": "PENDING"
+    "description": "Our Mission text"
   },
   "@features": {
-    "description": "PENDING"
+    "description": "Features section title"
   },
   "@featureHabitTracking": {
-    "description": "PENDING"
+    "description": "Feature: Habit Tracking"
   },
   "@featureHabitTrackingDesc": {
-    "description": "PENDING"
+    "description": "Feature description: Habit Tracking"
   },
   "@featureBibleReading": {
-    "description": "PENDING"
+    "description": "Feature: Bible Reading"
   },
   "@featureBibleReadingDesc": {
-    "description": "PENDING"
+    "description": "Feature description: Bible Reading"
   },
   "@featureDailyDevotionals": {
-    "description": "PENDING"
+    "description": "Feature: Daily Devotionals"
   },
   "@featureDailyDevotionalsDesc": {
-    "description": "PENDING"
+    "description": "Feature description: Daily Devotionals"
   },
   "@featureAiCoach": {
-    "description": "PENDING"
+    "description": "Feature: AI Coach"
   },
   "@featureAiCoachDesc": {
-    "description": "PENDING"
+    "description": "Feature description: AI Coach"
   },
   "@contactUs": {
-    "description": "PENDING"
+    "description": "Contact Us section title"
   },
   "@contactUsText": {
-    "description": "PENDING"
+    "description": "Contact Us text"
   },
   "@email": {
-    "description": "PENDING"
+    "description": "Email label"
   },
   "@version": {
-    "description": "PENDING"
+    "description": "Version label"
   },
   "@madeWithLove": {
-    "description": "PENDING"
+    "description": "Footer text"
   }
 }
