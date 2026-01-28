@@ -966,7 +966,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get skipHabit => '跳过习惯';
 
   @override
-  String get markAsNotCompleted => '标记为未完成';
+  String get markAsNotCompleted => '未完成';
 
   @override
   String get skippedHabit => '已跳过';
