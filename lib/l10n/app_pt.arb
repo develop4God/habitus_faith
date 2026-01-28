@@ -1208,7 +1208,7 @@
   "@skipHabit": {
     "description": "Botão para pular o hábito do dia."
   },
-  "markAsNotCompleted": "Marcar como não concluído",
+  "markAsNotCompleted": "Não concluído",
   "@markAsNotCompleted": {
     "description": "Botão para marcar hábito como não concluído/fracassado."
   },

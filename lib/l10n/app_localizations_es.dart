@@ -1016,7 +1016,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get skipHabit => 'Saltar hábito';
 
   @override
-  String get markAsNotCompleted => 'Marcar como no completado';
+  String get markAsNotCompleted => 'No completado';
 
   @override
   String get skippedHabit => 'Saltado';

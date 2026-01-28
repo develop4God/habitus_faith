@@ -979,7 +979,7 @@
   "@skipHabit": {
     "description": "Bouton pour ignorer une habitude aujourd'hui."
   },
-  "markAsNotCompleted": "Marquer comme non complétée",
+  "markAsNotCompleted": "Non complétée",
   "@markAsNotCompleted": {
     "description": "Bouton pour marquer une habitude comme non complétée/échouée."
   },

@@ -804,16 +804,16 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: SizedBox(
-              height: 32,
+              height: 36,
               child: AutoSizeText(
                 label,
                 textAlign: TextAlign.center,
                 maxLines: 2,
-                minFontSize: 7,
+                minFontSize: 13,
                 style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade600,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade800,
                 ),
               ),
             ),

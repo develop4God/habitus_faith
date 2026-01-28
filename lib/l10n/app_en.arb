@@ -1216,7 +1216,7 @@
   "@skipHabit": {
     "description": "Option to skip/postpone habit for today"
   },
-  "markAsNotCompleted": "Mark as Not Completed",
+  "markAsNotCompleted": "Not Completed",
   "@markAsNotCompleted": {
     "description": "Option to mark habit as failed/not completed"
   },

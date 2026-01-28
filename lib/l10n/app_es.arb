@@ -1002,7 +1002,7 @@
   "@skipHabit": {
     "description": "Botón para saltar un hábito hoy."
   },
-  "markAsNotCompleted": "Marcar como no completado",
+  "markAsNotCompleted": "No completado",
   "@markAsNotCompleted": {
     "description": "Botón para marcar un hábito como no completado/fallido."
   },
