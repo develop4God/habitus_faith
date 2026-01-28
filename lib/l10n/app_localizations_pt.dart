@@ -1165,5 +1165,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get madeWithLove => 'Made with ❤️ for the glory of God';
+  String get madeWithLove =>
+      'Made with ❤️\nby develop4God\n\nFor the Glory of God';
 }
