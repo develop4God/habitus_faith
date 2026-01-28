@@ -12,8 +12,6 @@ import 'package:habitus_faith/pages/edit_habit_dialog.dart';
 import 'package:habitus_faith/widgets/add_habit_dialog.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 
-
-
 // Helper widget for tests
 class TestAppWrapper extends StatelessWidget {
   final Widget child;
@@ -201,8 +199,6 @@ void main() {
             habitsStreamProvider.overrideWith((ref) {
               return Stream.value([testHabit]);
             }),
-
-
           ],
           child: MaterialApp(
             home: Scaffold(
