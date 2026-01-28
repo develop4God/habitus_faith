@@ -73,7 +73,6 @@
   "welcomeToHabitusFaith": "Bienvenue à Habitus Foi",
   "@welcomeToHabitusFaith": {
     "description": "Onboarding welcome title"
-
   },
   "selectUpToThreeHabits": "Sélectionnez jusqu'à 3 habitudes pour commencer votre voyage",
   "@selectUpToThreeHabits": {
@@ -1392,5 +1391,21 @@
   "madeWithLove": "Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu",
   "@madeWithLove": {
     "description": "Footer text"
+  },
+  "dailyReflection": "Réflexion quotidienne",
+  "@dailyReflection": {
+    "description": "Titre de la page de réflexion/notes quotidiennes"
+  },
+  "myReflection": "Ma réflexion",
+  "@myReflection": {
+    "description": "Sous-titre/En-tête pour la réflexion quotidienne"
+  },
+  "globalNote": "Note générale",
+  "@globalNote": {
+    "description": "Étiquette pour la note quotidienne générale"
+  },
+  "globalNoteHint": "Comment s'est passée votre communion avec Dieu aujourd'hui ?",
+  "@globalNoteHint": {
+    "description": "Indice pour la note quotidienne générale"
   }
 }
