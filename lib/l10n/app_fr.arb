@@ -73,6 +73,7 @@
   "welcomeToHabitusFaith": "Bienvenue à Habitus Foi",
   "@welcomeToHabitusFaith": {
     "description": "Onboarding welcome title"
+
   },
   "selectUpToThreeHabits": "Sélectionnez jusqu'à 3 habitudes pour commencer votre voyage",
   "@selectUpToThreeHabits": {
@@ -1311,5 +1312,85 @@
   "completeHabitToReflect": "Complétez une habitude pour réfléchir dessus",
   "@completeHabitToReflect": {
     "description": "Message d'état vide pour la page de réflexion"
+  },
+  "aboutUs": "À propos de nous",
+  "@aboutUs": {
+    "description": "Titre de la page À propos de nous"
+  },
+  "aboutUsTitle": "Habitus Faith",
+  "@aboutUsTitle": {
+    "description": "Titre principal de la page À propos de nous"
+  },
+  "aboutUsSubtitle": "Bâtir la foi à travers des habitudes quotidiennes",
+  "@aboutUsSubtitle": {
+    "description": "Sous-titre de la page À propos de nous"
+  },
+  "aboutUsDescription": "Habitus Faith est une application conçue pour vous aider à grandir dans votre cheminement spirituel grâce au pouvoir d'habitudes quotidiennes constantes. Nous croyons que de petites actions intentionnelles répétées quotidiennement peuvent transformer votre vie et approfondir votre relation avec Dieu.",
+  "@aboutUsDescription": {
+    "description": "Description principale de À propos de nous"
+  },
+  "ourMission": "Notre Mission",
+  "@ourMission": {
+    "description": "Titre de la section Notre Mission"
+  },
+  "ourMissionText": "Donner aux croyants du monde entier les moyens de construire des habitudes spirituelles durables qui renforcent leur foi, un jour à la fois.",
+  "@ourMissionText": {
+    "description": "Texte de Notre Mission"
+  },
+  "features": "Caractéristiques",
+  "@features": {
+    "description": "Titre de la section Caractéristiques"
+  },
+  "featureHabitTracking": "Suivi des Habitudes",
+  "@featureHabitTracking": {
+    "description": "Caractéristique : Suivi des Habitudes"
+  },
+  "featureHabitTrackingDesc": "Suivez facilement vos habitudes spirituelles, physiques, mentales et relationnelles.",
+  "@featureHabitTrackingDesc": {
+    "description": "Description de la caractéristique : Suivi des Habitudes"
+  },
+  "featureBibleReading": "Lecture de la Bible",
+  "@featureBibleReading": {
+    "description": "Caractéristique : Lecture de la Bible"
+  },
+  "featureBibleReadingDesc": "Accédez à la Bible complète avec des capacités de mise en signet et de sauvegarde de versets.",
+  "@featureBibleReadingDesc": {
+    "description": "Description de la caractéristique : Lecture de la Bible"
+  },
+  "featureDailyDevotionals": "Dévotionnels Quotidiens",
+  "@featureDailyDevotionals": {
+    "description": "Caractéristique : Dévotionnels Quotidiens"
+  },
+  "featureDailyDevotionalsDesc": "Recevez des réflexions spirituelles quotidiennes pour vous inspirer et vous guider.",
+  "@featureDailyDevotionalsDesc": {
+    "description": "Description de la caractéristique : Dévotionnels Quotidiens"
+  },
+  "featureAiCoach": "Coach d'Habitudes IA",
+  "@featureAiCoach": {
+    "description": "Caractéristique : Coach IA"
+  },
+  "featureAiCoachDesc": "Obtenez des micro-habitudes personnalisées générées en fonction de vos objectifs.",
+  "@featureAiCoachDesc": {
+    "description": "Description de la caractéristique : Coach IA"
+  },
+  "contactUs": "Contactez-nous",
+  "@contactUs": {
+    "description": "Titre de la section Contactez-nous"
+  },
+  "contactUsText": "Nous aimerions avoir de vos nouvelles ! Vos commentaires nous aident à nous améliorer et à mieux vous servir.",
+  "@contactUsText": {
+    "description": "Texte de Contactez-nous"
+  },
+  "email": "E-mail",
+  "@email": {
+    "description": "Étiquette d'e-mail"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Étiquette de version"
+  },
+  "madeWithLove": "Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu",
+  "@madeWithLove": {
+    "description": "Footer text"
   }
 }

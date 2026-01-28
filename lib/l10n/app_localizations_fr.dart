@@ -1114,70 +1114,71 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tomorrowLabel => 'Demain';
 
   @override
-  String get aboutUs => 'About Us';
+  String get aboutUs => 'À propos de nous';
 
   @override
   String get aboutUsTitle => 'Habitus Faith';
 
   @override
-  String get aboutUsSubtitle => 'Building Faith Through Daily Habits';
+  String get aboutUsSubtitle =>
+      'Bâtir la foi à travers des habitudes quotidiennes';
 
   @override
   String get aboutUsDescription =>
-      'Habitus Faith is an application designed to help you grow in your spiritual journey through the power of consistent daily habits. We believe that small, intentional actions repeated daily can transform your life and deepen your relationship with God.';
+      'Habitus Faith est une application conçue pour vous aider à grandir dans votre cheminement spirituel grâce au pouvoir d\'habitudes quotidiennes constantes. Nous croyons que de petites actions intentionnelles répétées quotidiennement peuvent transformer votre vie et approfondir votre relation avec Dieu.';
 
   @override
-  String get ourMission => 'Our Mission';
+  String get ourMission => 'Notre Mission';
 
   @override
   String get ourMissionText =>
-      'To empower believers worldwide to build sustainable spiritual habits that strengthen their faith, one day at a time.';
+      'Donner aux croyants du monde entier les moyens de construire des habitudes spirituelles durables qui renforcent leur foi, un jour à la fois.';
 
   @override
-  String get features => 'Features';
+  String get features => 'Caractéristiques';
 
   @override
-  String get featureHabitTracking => 'Habit Tracking';
+  String get featureHabitTracking => 'Suivi des Habitudes';
 
   @override
   String get featureHabitTrackingDesc =>
-      'Track your spiritual, physical, mental, and relational habits with ease.';
+      'Suivez facilement vos habitudes spirituelles, physiques, mentales et relationnelles.';
 
   @override
-  String get featureBibleReading => 'Bible Reading';
+  String get featureBibleReading => 'Lecture de la Bible';
 
   @override
   String get featureBibleReadingDesc =>
-      'Access the complete Bible with bookmarking and verse-saving capabilities.';
+      'Accédez à la Bible complète avec des capacités de mise en signet et de sauvegarde de versets.';
 
   @override
-  String get featureDailyDevotionals => 'Daily Devotionals';
+  String get featureDailyDevotionals => 'Dévotionnels Quotidiens';
 
   @override
   String get featureDailyDevotionalsDesc =>
-      'Receive daily spiritual reflections to inspire and guide you.';
+      'Recevez des réflexions spirituelles quotidiennes pour vous inspirer et vous guider.';
 
   @override
-  String get featureAiCoach => 'AI-Powered Habit Coach';
+  String get featureAiCoach => 'Coach d\'Habitudes IA';
 
   @override
   String get featureAiCoachDesc =>
-      'Get personalized micro-habits generated based on your goals.';
+      'Obtenez des micro-habitudes personnalisées générées en fonction de vos objectifs.';
 
   @override
-  String get contactUs => 'Contact Us';
+  String get contactUs => 'Contactez-nous';
 
   @override
   String get contactUsText =>
-      'We\'d love to hear from you! Your feedback helps us improve and serve you better.';
+      'Nous aimerions avoir de vos nouvelles ! Vos commentaires nous aident à nous améliorer et à mieux vous servir.';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
   String get version => 'Version';
 
   @override
   String get madeWithLove =>
-      'Made with ❤️ by Develop4God\n \nFor the Glory of God';
+      'Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu';
 }

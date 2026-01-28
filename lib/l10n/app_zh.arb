@@ -413,9 +413,6 @@
   "@notificationOptions": {
     "description": "通知选项对话框标题"
   },
-  "@currentTime": {
-    "description": "当前通知时间标签"
-  },
   "turnOffNotification": "关闭通知",
   "@turnOffNotification": {
     "description": "关闭习惯通知选项"
@@ -467,5 +464,25 @@
   "tomorrowLabel": "明天",
   "@tomorrowLabel": {
     "description": "明天日期的标签"
-  }
+  },
+  "aboutUs": "关于我们",
+  "aboutUsTitle": "Habitus Faith",
+  "aboutUsSubtitle": "通过日常习惯建立信心",
+  "aboutUsDescription": "Habitus Faith 是一款旨在通过持续的日常习惯帮助您在属灵旅程中成长的应用程序。我们相信，每天重复的小而有意的行动可以改变您的生活并加深您与神的关系。",
+  "ourMission": "我们的使命",
+  "ourMissionText": "赋予全球信徒建立可持续的属灵习惯的能力，一次一天地加强他们的信心。",
+  "features": "功能",
+  "featureHabitTracking": "习惯跟踪",
+  "featureHabitTrackingDesc": "轻松跟踪您的属灵、身体、心理和社交习惯。",
+  "featureBibleReading": "阅读圣经",
+  "featureBibleReadingDesc": "访问完整的圣经，具有书签和经文保存功能。",
+  "featureDailyDevotionals": "每日灵修",
+  "featureDailyDevotionalsDesc": "接收每日属灵反思，启发并引导您。",
+  "featureAiCoach": "AI 习惯教练",
+  "featureAiCoachDesc": "根据您的目标生成个性化微习惯。",
+  "contactUs": "联系我们",
+  "contactUsText": "我们很乐意听取您的意见！您的反馈有助于我们改进并更好地为您服务。",
+  "email": "电子邮件",
+  "version": "版本",
+  "madeWithLove": "由 Develop4God 用 ❤️ 制作\n \n愿荣耀归于神"
 }

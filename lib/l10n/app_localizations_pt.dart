@@ -557,7 +557,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backgroundSyncPermission =>
-      'Sincronização em segundo plano desativada. Ative nas configurações.';
+      'Sincronização em segundo plano deshabilitada. Ative nas configurações.';
 
   @override
   String get workmanagerActive => 'Sincronização em segundo plano ativa';
@@ -778,7 +778,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get weekly => 'Semanal';
 
   @override
-  String get monthly => 'Mensal';
+  String get monthly => 'Mensual';
 
   @override
   String everyXDays(int count) {
@@ -1033,7 +1033,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitDeleted => 'Hábito excluído';
 
   @override
-  String get dailyReflection => 'Reflexão Diária';
+  String get dailyReflection => 'Reflexão Diaria';
 
   @override
   String get myReflection => 'Minha Reflexão';
@@ -1101,70 +1101,70 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tomorrowLabel => 'Amanhã';
 
   @override
-  String get aboutUs => 'About Us';
+  String get aboutUs => 'Sobre nós';
 
   @override
   String get aboutUsTitle => 'Habitus Faith';
 
   @override
-  String get aboutUsSubtitle => 'Building Faith Through Daily Habits';
+  String get aboutUsSubtitle => 'Construindo fé através de hábitos diários';
 
   @override
   String get aboutUsDescription =>
-      'Habitus Faith is an application designed to help you grow in your spiritual journey through the power of consistent daily habits. We believe that small, intentional actions repeated daily can transform your life and deepen your relationship with God.';
+      'Habitus Faith é um aplicativo projetado para ajudá-lo a crescer em sua jornada espiritual através do poder de hábitos diários consistentes. Acreditamos que pequenas ações intencionais repetidas diariamente podem transformar sua vida e aprofundar seu relacionamento com Deus.';
 
   @override
-  String get ourMission => 'Our Mission';
+  String get ourMission => 'Nossa Missão';
 
   @override
   String get ourMissionText =>
-      'To empower believers worldwide to build sustainable spiritual habits that strengthen their faith, one day at a time.';
+      'Capacitar crentes em todo o mundo a construir hábitos espirituais sustentáveis que fortaleçam sua fé, um dia de cada vez.';
 
   @override
-  String get features => 'Features';
+  String get features => 'Funcionalidades';
 
   @override
-  String get featureHabitTracking => 'Habit Tracking';
+  String get featureHabitTracking => 'Rastreamento de Hábitos';
 
   @override
   String get featureHabitTrackingDesc =>
-      'Track your spiritual, physical, mental, and relational habits with ease.';
+      'Rastreie seus hábitos espirituais, físicos, mentais e relacionais com facilidade.';
 
   @override
-  String get featureBibleReading => 'Bible Reading';
+  String get featureBibleReading => 'Leitura da Bíblia';
 
   @override
   String get featureBibleReadingDesc =>
-      'Access the complete Bible with bookmarking and verse-saving capabilities.';
+      'Acesse a Bíblia completa com recursos de marcação e salvamento de versículos.';
 
   @override
-  String get featureDailyDevotionals => 'Daily Devotionals';
+  String get featureDailyDevotionals => 'Devocionais Diários';
 
   @override
   String get featureDailyDevotionalsDesc =>
-      'Receive daily spiritual reflections to inspire and guide you.';
+      'Receba reflexões espirituais diárias para inspirá-lo e guiá-lo.';
 
   @override
-  String get featureAiCoach => 'AI-Powered Habit Coach';
+  String get featureAiCoach => 'Coach de Hábitos com IA';
 
   @override
   String get featureAiCoachDesc =>
-      'Get personalized micro-habits generated based on your goals.';
+      'Obtenha micro-hábitos personalizados gerados com base em seus objetivos.';
 
   @override
-  String get contactUs => 'Contact Us';
+  String get contactUs => 'Contate-nos';
 
   @override
   String get contactUsText =>
-      'We\'d love to hear from you! Your feedback helps us improve and serve you better.';
+      'Gostaríamos muito de ouvir você! Seu feedback nos ajuda a melhorar e atendê-lo melhor.';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
-  String get version => 'Version';
+  String get version => 'Versão';
 
   @override
   String get madeWithLove =>
-      'Made with ❤️ by Develop4God\n \nFor the Glory of God';
+      'Feito com ❤️ por Develop4God\n \nPara a Glória de Deus';
 }

@@ -642,7 +642,7 @@
   "mlInsufficientData": "Precisa de pelo menos {days} dias de dados para previsões",
   "backgroundSyncFailed": "Falha na sincronização: {reason}",
   "backgroundSyncNetwork": "Sem conexão com a internet. As alterações serão sincronizadas quando estiver online.",
-  "backgroundSyncPermission": "Sincronização em segundo plano desativada. Ative nas configurações.",
+  "backgroundSyncPermission": "Sincronização em segundo plano deshabilitada. Ative nas configurações.",
   "workmanagerActive": "Sincronização em segundo plano ativa",
   "workmanagerRestricted": "A sincronização em segundo plano pode ser limitada pela otimização da bateria",
   "workmanagerDisabled": "Sincronização em segundo plano desativada nas configurações do sistema",
@@ -1084,9 +1084,9 @@
   "@weekly": {
     "description": "Opção de frequência semanal."
   },
-  "monthly": "Mensal",
+  "monthly": "Mensual",
   "@monthly": {
-    "description": "Opção de frequência mensal."
+    "description": "Opção de frequência mensual."
   },
   "everyXDays": "A cada {count} dias",
   "@everyXDays": {
@@ -1300,7 +1300,7 @@
   "@flashTaskSubtitle": {
     "description": "Descrição da opção de tarefa rápida"
   },
-  "dailyReflection": "Reflexão Diária",
+  "dailyReflection": "Reflexão Diaria",
   "@dailyReflection": {
     "description": "Título para a página de reflexão/notas diárias"
   },
@@ -1327,5 +1327,85 @@
   "completeHabitToReflect": "Complete um hábito para refletir sobre ele",
   "@completeHabitToReflect": {
     "description": "Mensagem de estado vazio para a página de reflexão"
+  },
+  "aboutUs": "Sobre nós",
+  "@aboutUs": {
+    "description": "Title for About Us page"
+  },
+  "aboutUsTitle": "Habitus Faith",
+  "@aboutUsTitle": {
+    "description": "Main title for About Us page"
+  },
+  "aboutUsSubtitle": "Construindo fé através de hábitos diários",
+  "@aboutUsSubtitle": {
+    "description": "Subtitle for About Us page"
+  },
+  "aboutUsDescription": "Habitus Faith é um aplicativo projetado para ajudá-lo a crescer em sua jornada espiritual através do poder de hábitos diários consistentes. Acreditamos que pequenas ações intencionais repetidas diariamente podem transformar sua vida e aprofundar seu relacionamento com Deus.",
+  "@aboutUsDescription": {
+    "description": "Main description for About Us"
+  },
+  "ourMission": "Nossa Missão",
+  "@ourMission": {
+    "description": "Our Mission section title"
+  },
+  "ourMissionText": "Capacitar crentes em todo o mundo a construir hábitos espirituais sustentáveis que fortaleçam sua fé, um dia de cada vez.",
+  "@ourMissionText": {
+    "description": "Our Mission text"
+  },
+  "features": "Funcionalidades",
+  "@features": {
+    "description": "Features section title"
+  },
+  "featureHabitTracking": "Rastreamento de Hábitos",
+  "@featureHabitTracking": {
+    "description": "Feature: Habit Tracking"
+  },
+  "featureHabitTrackingDesc": "Rastreie seus hábitos espirituais, físicos, mentais e relacionais com facilidade.",
+  "@featureHabitTrackingDesc": {
+    "description": "Feature description: Habit Tracking"
+  },
+  "featureBibleReading": "Leitura da Bíblia",
+  "@featureBibleReading": {
+    "description": "Feature: Bible Reading"
+  },
+  "featureBibleReadingDesc": "Acesse a Bíblia completa com recursos de marcação e salvamento de versículos.",
+  "@featureBibleReadingDesc": {
+    "description": "Feature description: Bible Reading"
+  },
+  "featureDailyDevotionals": "Devocionais Diários",
+  "@featureDailyDevotionals": {
+    "description": "Feature: Daily Devotionals"
+  },
+  "featureDailyDevotionalsDesc": "Receba reflexões espirituais diárias para inspirá-lo e guiá-lo.",
+  "@featureDailyDevotionalsDesc": {
+    "description": "Feature description: Daily Devotionals"
+  },
+  "featureAiCoach": "Coach de Hábitos com IA",
+  "@featureAiCoach": {
+    "description": "Feature: AI Coach"
+  },
+  "featureAiCoachDesc": "Obtenha micro-hábitos personalizados gerados com base em seus objetivos.",
+  "@featureAiCoachDesc": {
+    "description": "Feature description: AI Coach"
+  },
+  "contactUs": "Contate-nos",
+  "@contactUs": {
+    "description": "Contact Us section title"
+  },
+  "contactUsText": "Gostaríamos muito de ouvir você! Seu feedback nos ajuda a melhorar e atendê-lo melhor.",
+  "@contactUsText": {
+    "description": "Contact Us text"
+  },
+  "email": "E-mail",
+  "@email": {
+    "description": "Email label"
+  },
+  "version": "Versão",
+  "@version": {
+    "description": "Version label"
+  },
+  "madeWithLove": "Feito com ❤️ por Develop4God\n \nPara a Glória de Deus",
+  "@madeWithLove": {
+    "description": "Footer text"
   }
 }
