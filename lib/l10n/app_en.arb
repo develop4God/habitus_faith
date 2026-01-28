@@ -1404,7 +1404,7 @@
   "@version": {
     "description": "Version label"
   },
-  "madeWithLove": "Made with ❤️\nby develop4God\n\nFor the Glory of God",
+  "madeWithLove": "Made with ❤️ by Develop4God\n \nFor the Glory of God",
   "@madeWithLove": {
     "description": "Footer text"
   }
