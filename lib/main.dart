@@ -110,83 +110,85 @@ class MyApp extends ConsumerWidget {
     // Reschedule habit notifications when app starts
     ref.watch(habitNotificationsSchedulerProvider);
 
-    return WithFastTimeBanner(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: currentLocale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', ''),
-          Locale('es', ''),
-          Locale('fr', ''),
-          Locale('pt', ''),
-          Locale('zh', ''),
-        ],
-        routes: {
-          '/home': (context) => const HomePage(),
-          '/onboarding': (context) => const SimpleOnboardingFlow(),
-          '/habits': (context) => const HomePage(),
-          '/devtools': (context) => const DeveloperDebugPage(),
-        },
-        home: UpgradeAlert(
-          upgrader: Upgrader(
-            appcastConfig: AppcastConfiguration(
-              url: 'https://develop4god.github.io/habits-data/appcast.xml',
-              supportedOS: ['android'],
-            ),
-            debugDisplayAlways: kDebugMode,
-            durationUntilAlertAgain: const Duration(hours: 2),
-            minAppVersion:
-                '1.1.6+15', // Force update for any version below this
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: currentLocale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('es', ''),
+        Locale('fr', ''),
+        Locale('pt', ''),
+        Locale('zh', ''),
+      ],
+      routes: {
+        '/home': (context) => const HomePage(),
+        '/onboarding': (context) => const SimpleOnboardingFlow(),
+        '/habits': (context) => const HomePage(),
+        '/devtools': (context) => const DeveloperDebugPage(),
+      },
+      home: UpgradeAlert(
+        upgrader: Upgrader(
+          appcastConfig: AppcastConfiguration(
+            url: 'https://develop4god.github.io/habits-data/appcast.xml',
+            supportedOS: ['android'],
           ),
-          child: Builder(
-            builder: (context) {
-              return authInit.when(
-                data: (_) {
-                  if (onboardingComplete) {
-                    return Column(
-                      children: [
-                        const Expanded(child: LandingPage()),
-                        FutureBuilder<String>(
-                          future: _getAppVersion(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Versión: ${snapshot.data}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
+          debugDisplayAlways: kDebugMode,
+          durationUntilAlertAgain: const Duration(hours: 2),
+          minAppVersion:
+              '1.1.6+15', // Force update for any version below this
+        ),
+        child: Builder(
+          builder: (context) {
+            return authInit.when(
+              data: (_) {
+                if (onboardingComplete) {
+                  return Column(
+                    children: [
+                      const Expanded(child: LandingPage()),
+                      FutureBuilder<String>(
+                        future: _getAppVersion(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Versión: ${snapshot.data}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
                                 ),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                      ],
-                    );
-                  }
-                  return const SimpleOnboardingFlow();
-                },
-                loading: () => const Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
-                ),
-                error: (error, stack) =>
-                    Scaffold(body: Center(child: Text('Error: $error'))),
-              );
-            },
-          ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  );
+                }
+                return const SimpleOnboardingFlow();
+              },
+              loading: () => const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              ),
+              error: (error, stack) =>
+                  Scaffold(body: Center(child: Text('Error: $error'))),
+            );
+          },
         ),
       ),
+      // Add builder to wrap all screens with FastTimeBanner
+      builder: (context, child) {
+        return WithFastTimeBanner(child: child ?? const SizedBox.shrink());
+      },
     );
   }
 }

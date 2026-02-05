@@ -197,6 +197,38 @@ class DeveloperDebugPage extends ConsumerWidget {
                   )
                 : null,
           ),
+          // Fast Acceleration Toggle Button (debug mode only)
+          if (kDebugMode)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton.icon(
+                icon: Icon(fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
+                label: Text(fastTimeEnabled
+                    ? 'Disable Fast Acceleration'
+                    : 'Enable Fast Acceleration'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: fastTimeEnabled
+                      ? Colors.orange.shade100
+                      : Colors.grey.shade300,
+                  foregroundColor: fastTimeEnabled
+                      ? Colors.orange
+                      : Colors.black,
+                ),
+                onPressed: () {
+                  // This toggles the mode for the session (does not persist or affect global env)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(fastTimeEnabled
+                          ? 'Fast Acceleration DISABLED'
+                          : 'Fast Acceleration ENABLED (1 week in 35 min)'),
+                      backgroundColor: fastTimeEnabled
+                          ? Colors.grey
+                          : Colors.orange,
+                    ),
+                  );
+                },
+              ),
+            ),
           if (fastTimeEnabled && clock is DebugClock)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
