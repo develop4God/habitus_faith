@@ -210,8 +210,8 @@ class DeveloperDebugPage extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ElevatedButton.icon(
                 icon:
-                    Icon(fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
-                label: Text(fastTimeEnabled
+                    const Icon(fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
+                label: const Text(fastTimeEnabled
                     ? 'Disable Fast Acceleration'
                     : 'Enable Fast Acceleration'),
                 style: ElevatedButton.styleFrom(
@@ -224,7 +224,7 @@ class DeveloperDebugPage extends ConsumerWidget {
                 onPressed: () {
                   // This toggles the mode for the session (does not persist or affect global env)
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text(fastTimeEnabled
                           ? 'Fast Acceleration DISABLED'
                           : 'Fast Acceleration ENABLED (1 week in 35 min)'),
