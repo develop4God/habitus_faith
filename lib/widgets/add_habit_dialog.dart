@@ -34,6 +34,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
   Color? selectedColor;
   HabitRecurrence? recurrence;
 
+  // Add ScrollController for flash task
+  final ScrollController _flashTaskScrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +50,18 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         setState(() {
           _step = 0;
         });
+        // Autofix: Scroll to top when flash task tab is selected
+        if (_tabController.index == 2) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_flashTaskScrollController.hasClients) {
+              _flashTaskScrollController.animateTo(
+                0,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+          });
+        }
       }
     });
     _gradientController = AnimationController(
@@ -61,6 +76,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     _gradientController.dispose();
     nameCtrl.dispose();
     emojiCtrl.dispose();
+    _flashTaskScrollController.dispose();
     super.dispose();
   }
 
@@ -265,7 +281,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                       ),
                       Padding(
                         padding: const EdgeInsets.all(20),
-                        child: _buildFlashTaskView(habitColor),
+                        child: _buildFlashTaskView(habitColor, _flashTaskScrollController),
                       ),
                     ],
                   ),
@@ -278,7 +294,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     );
   }
 
-  Widget _buildFlashTaskView(Color habitColor) {
+  Widget _buildFlashTaskView(Color habitColor, ScrollController controller) {
     final List<String> quickEmojis = [
       '⚡',
       '🙏',
@@ -291,6 +307,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     ];
 
     return SingleChildScrollView(
+      controller: controller,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
