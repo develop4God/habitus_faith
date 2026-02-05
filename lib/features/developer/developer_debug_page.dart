@@ -6,38 +6,19 @@ import 'package:habitus_faith/core/providers/clock_provider.dart';
 import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
 import 'package:habitus_faith/core/providers/background_task_service_provider.dart';
 import 'package:habitus_faith/core/services/time/clock.dart';
+import 'package:habitus_faith/core/services/notifications/notification_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:habitus_faith/core/providers/scheduled_hour_provider.dart';
 
 import '../../widgets/notification_bell_button.dart';
 
 /// A page for developer/debug tools, only visible in debug mode.
-class DeveloperDebugPage extends ConsumerStatefulWidget {
+class DeveloperDebugPage extends ConsumerWidget {
   const DeveloperDebugPage({super.key});
 
   @override
-  ConsumerState<DeveloperDebugPage> createState() => _DeveloperDebugPageState();
-}
-
-class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
-  int _scheduledHour = 6;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadScheduledHour();
-  }
-
-  Future<void> _loadScheduledHour() async {
-    final service = ref.read(backgroundTaskServiceProvider);
-    final hour = await service.getScheduledHour();
-    setState(() {
-      _scheduledHour = hour;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) {
       // Prevent access in release mode
       return const Scaffold(
@@ -48,6 +29,7 @@ class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
     }
     const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
     final clock = ref.watch(clockProvider);
+    final backgroundTaskService = ref.watch(backgroundTaskServiceProvider);
     
     return Scaffold(
       appBar: AppBar(
@@ -62,28 +44,56 @@ class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          ListTile(
-            leading: const Icon(Icons.access_time, color: Colors.blue),
-            title: const Text('Change Prediction Hour'),
-            subtitle: Text('Currently scheduled for: $_scheduledHour:00'),
-            trailing: const Icon(Icons.edit),
-            onTap: () async {
-              final TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay(hour: _scheduledHour, minute: 0),
+          // Replace FutureBuilder with Riverpod async provider usage
+          Consumer(
+            builder: (context, ref, child) {
+              final scheduledHourAsync = ref.watch(scheduledHourProvider);
+
+              return scheduledHourAsync.when(
+                data: (scheduledHour) => ListTile(
+                  leading: const Icon(Icons.access_time, color: Colors.blue),
+                  title: const Text('Change Prediction Hour'),
+                  subtitle: Text('Currently scheduled for: $scheduledHour:00'),
+                  trailing: const Icon(Icons.edit),
+                  onTap: () async {
+                    final TimeOfDay? picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay(hour: scheduledHour, minute: 0),
+                    );
+                    if (picked != null) {
+                      try {
+                        await backgroundTaskService.setScheduledHour(picked.hour);
+                        ref.invalidate(scheduledHourProvider); // Refresh the provider
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Scheduled hour updated to ${picked.hour}:00')),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Failed to update hour: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    }
+                  },
+                ),
+                loading: () => const ListTile(
+                  leading: Icon(Icons.access_time, color: Colors.grey),
+                  title: Text('Change Prediction Hour'),
+                  subtitle: Text('Loading...'),
+                  enabled: false,
+                ),
+                error: (e, _) => ListTile(
+                  leading: const Icon(Icons.error, color: Colors.red),
+                  title: const Text('Change Prediction Hour'),
+                  subtitle: Text('Error loading hour: $e'),
+                ),
               );
-              if (picked != null) {
-                final service = ref.read(backgroundTaskServiceProvider);
-                await service.setScheduledHour(picked.hour);
-                setState(() {
-                  _scheduledHour = picked.hour;
-                });
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Scheduled hour updated to ${picked.hour}:00')),
-                  );
-                }
-              }
             },
           ),
           ListTile(
@@ -118,8 +128,8 @@ class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               final prefs = await SharedPreferences.getInstance();
-              // Find and remove all nudge sent flags (keys starting with 'nudge_sent_')
-              final keys = prefs.getKeys().where((k) => k.startsWith('nudge_sent_')).toList();
+              final prefix = NotificationService.nudgeSentPrefix;
+              final keys = prefs.getKeys().where((k) => k.startsWith(prefix)).toList();
               for (final key in keys) {
                 await prefs.remove(key);
               }

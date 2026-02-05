@@ -175,9 +175,37 @@ class BackgroundTaskService {
 
   /// Set scheduled hour for predictions (Only for Debug)
   Future<void> setScheduledHour(int hour) async {
+    assert(kDebugMode, 'setScheduledHour should only be called in debug mode');
+    assert(hour >= 0 && hour <= 23, 'Hour must be between 0-23');
+
+    if (hour < 0 || hour > 23) {
+      throw ArgumentError('Hour must be between 0-23');
+    }
+
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_mlPredictionHourKey, hour);
-    await scheduleDailyPrediction();
+    final previousHour = prefs.getInt(_mlPredictionHourKey);
+
+    try {
+      await prefs.setInt(_mlPredictionHourKey, hour);
+      final success = await scheduleDailyPrediction();
+      if (!success) {
+        throw Exception('Failed to reschedule background task');
+      }
+    } catch (e) {
+      developer.log(
+        'BackgroundTaskService: Failed to update scheduled hour, rolling back',
+        name: 'BackgroundTaskService',
+        error: e,
+      );
+      // Rollback logic
+      if (previousHour != null) {
+        await prefs.setInt(_mlPredictionHourKey, previousHour);
+      } else {
+        await prefs.remove(_mlPredictionHourKey);
+      }
+      await scheduleDailyPrediction();
+      rethrow;
+    }
   }
 
   /// Get status of last prediction run

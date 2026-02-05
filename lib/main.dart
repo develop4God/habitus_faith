@@ -97,7 +97,14 @@ class MyApp extends ConsumerWidget {
 
     ref.watch(notificationInitProvider);
 
-    // Initialize background tasks and schedule daily predictions
+    // Initialize background tasks and schedule daily predictions with error handling
+    ref.listen(backgroundTaskInitProvider, (previous, next) {
+      next.when(
+        data: (_) => debugPrint('BackgroundTaskService: Initialized successfully'),
+        error: (err, stack) => debugPrint('BackgroundTaskService: Initialization failed: $err'),
+        loading: () => debugPrint('BackgroundTaskService: Initializing...'),
+      );
+    });
     ref.watch(backgroundTaskInitProvider);
 
     // Reschedule habit notifications when app starts

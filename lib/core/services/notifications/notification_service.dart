@@ -44,6 +44,9 @@ class NotificationService {
   static const String _notificationTimeKey = 'notification_time';
   static const String defaultNotificationTime = '09:00';
   static const String _fcmTokenKey = 'fcm_token';
+  
+  /// Prefix for nudge notification tracking keys in SharedPreferences
+  static const String nudgeSentPrefix = 'nudge_sent_';
 
   Function(String? payload)? onNotificationTapped;
 
