@@ -88,26 +88,46 @@ class BackgroundTaskService {
       // Get scheduled hour (default to 6 AM)
       final scheduledHour = prefs.getInt(_mlPredictionHourKey) ?? 6;
 
-      // Schedule daily task
-      final now = DateTime.now();
-      var nextRun = DateTime(now.year, now.month, now.day, scheduledHour, 0);
+      // Check if FAST_TIME is enabled (for accelerated testing)
+      const fastTime = bool.fromEnvironment('FAST_TIME');
+      
+      Duration frequency;
+      Duration initialDelay;
+      
+      if (fastTime && kDebugMode) {
+        // In FAST_TIME mode (288x speed), run every 5 minutes to check if it's time
+        // This allows predictions to run at the correct accelerated time
+        // 5 real minutes = 24 simulated hours at 288x speed
+        frequency = const Duration(minutes: 5);
+        initialDelay = const Duration(seconds: 30); // Start checking soon
+        
+        developer.log(
+          'BackgroundTaskService: FAST_TIME enabled - scheduling frequent checks (every 5 min)',
+          name: 'BackgroundTaskService',
+        );
+      } else {
+        // Normal mode: schedule for specific time of day
+        final now = clock.now();
+        var nextRun = DateTime(now.year, now.month, now.day, scheduledHour, 0);
 
-      // If scheduled time already passed today, schedule for tomorrow
-      if (nextRun.isBefore(now)) {
-        nextRun = nextRun.add(const Duration(days: 1));
+        // If scheduled time already passed today, schedule for tomorrow
+        if (nextRun.isBefore(now)) {
+          nextRun = nextRun.add(const Duration(days: 1));
+        }
+
+        initialDelay = nextRun.difference(now);
+        frequency = const Duration(days: 1);
       }
-
-      final initialDelay = nextRun.difference(now);
 
       await Workmanager().registerPeriodicTask(
         _dailyPredictionTask,
         _dailyPredictionTask,
-        frequency: const Duration(days: 1),
+        frequency: frequency,
         initialDelay: initialDelay,
         existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(
           networkType: NetworkType.notRequired,
-          requiresBatteryNotLow: true,
+          requiresBatteryNotLow: !fastTime, // Ignore battery in fast mode
           requiresCharging: false,
           requiresDeviceIdle: false,
           requiresStorageNotLow: false,
@@ -118,7 +138,7 @@ class BackgroundTaskService {
       );
 
       developer.log(
-        'BackgroundTaskService: Daily prediction task scheduled successfully for $scheduledHour:00 AM (next run: $nextRun)',
+        'BackgroundTaskService: Daily prediction task scheduled successfully for $scheduledHour:00 (frequency: $frequency, initial delay: $initialDelay)',
         name: 'BackgroundTaskService',
       );
 
@@ -322,6 +342,39 @@ Future<bool> _executeDailyPrediction() async {
         name: 'BackgroundTaskService',
       );
       return true; // Not an error, just disabled
+    }
+
+    // Check if we should run based on time
+    const fastTime = bool.fromEnvironment('FAST_TIME');
+    if (fastTime && kDebugMode) {
+      // In FAST_TIME mode, check if enough time has passed since last run
+      // This prevents running too frequently when WorkManager checks every 5 minutes
+      const lastRunKey = 'ml_last_run_time';
+      final lastRunStr = prefs.getString(lastRunKey);
+      final scheduledHour = prefs.getInt('ml_prediction_hour') ?? 6;
+      
+      if (lastRunStr != null) {
+        final lastRun = DateTime.parse(lastRunStr);
+        final now = DateTime.now();
+        
+        // In FAST_TIME (288x), 1 day = 5 minutes
+        // Only run if at least 4.5 minutes have passed (to allow some margin)
+        if (now.difference(lastRun).inMinutes < 4) {
+          developer.log(
+            'BackgroundTaskService: FAST_TIME - skipping, last run was ${now.difference(lastRun).inMinutes} minutes ago',
+            name: 'BackgroundTaskService',
+          );
+          return true; // Not time yet
+        }
+      }
+      
+      // Store this run time
+      await prefs.setString(lastRunKey, DateTime.now().toIso8601String());
+      
+      developer.log(
+        'BackgroundTaskService: FAST_TIME - running predictions (scheduled hour: $scheduledHour)',
+        name: 'BackgroundTaskService',
+      );
     }
 
     // Initialize ProviderContainer in isolate
