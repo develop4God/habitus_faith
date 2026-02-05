@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/clock_provider.dart';
+import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
+import 'package:habitus_faith/core/providers/background_task_service_provider.dart';
 import 'package:habitus_faith/core/services/time/clock.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,11 +12,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/notification_bell_button.dart';
 
 /// A page for developer/debug tools, only visible in debug mode.
-class DeveloperDebugPage extends ConsumerWidget {
+class DeveloperDebugPage extends ConsumerStatefulWidget {
   const DeveloperDebugPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DeveloperDebugPage> createState() => _DeveloperDebugPageState();
+}
+
+class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
+  int _scheduledHour = 6;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadScheduledHour();
+  }
+
+  Future<void> _loadScheduledHour() async {
+    final service = ref.read(backgroundTaskServiceProvider);
+    final hour = await service.getScheduledHour();
+    setState(() {
+      _scheduledHour = hour;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if (!kDebugMode) {
       // Prevent access in release mode
       return const Scaffold(
@@ -25,6 +48,7 @@ class DeveloperDebugPage extends ConsumerWidget {
     }
     const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
     final clock = ref.watch(clockProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Developer Debug Tools'),
@@ -34,10 +58,85 @@ class DeveloperDebugPage extends ConsumerWidget {
         padding: const EdgeInsets.all(24),
         children: [
           const Text(
-            'Developer Tools',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            'ML & Background Tasks',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
+          ListTile(
+            leading: const Icon(Icons.access_time, color: Colors.blue),
+            title: const Text('Change Prediction Hour'),
+            subtitle: Text('Currently scheduled for: $_scheduledHour:00'),
+            trailing: const Icon(Icons.edit),
+            onTap: () async {
+              final TimeOfDay? picked = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay(hour: _scheduledHour, minute: 0),
+              );
+              if (picked != null) {
+                final service = ref.read(backgroundTaskServiceProvider);
+                await service.setScheduledHour(picked.hour);
+                setState(() {
+                  _scheduledHour = picked.hour;
+                });
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Scheduled hour updated to ${picked.hour}:00')),
+                  );
+                }
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.psychology, color: Colors.blue),
+            title: const Text('Run ML Predictor Now'),
+            subtitle: const Text('Force runs the daily abandonment prediction'),
+            onTap: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                final predictor = ref.read(habitPredictorProvider);
+                await predictor.runDailyPredictions();
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('ML Predictions completed successfully'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } catch (e) {
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text('ML Prediction failed: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.notification_important, color: Colors.orange),
+            title: const Text('Reset Nudge Cooldown'),
+            subtitle: const Text('Allows sending the same nudge notification immediately'),
+            onTap: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final prefs = await SharedPreferences.getInstance();
+              // Find and remove all nudge sent flags (keys starting with 'nudge_sent_')
+              final keys = prefs.getKeys().where((k) => k.startsWith('nudge_sent_')).toList();
+              for (final key in keys) {
+                await prefs.remove(key);
+              }
+              messenger.showSnackBar(
+                const SnackBar(
+                  content: Text('Nudge cooldowns reset successfully'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+          ),
+          const Divider(),
+          const Text(
+            'System Tools',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
           ListTile(
             leading: const Icon(Icons.bug_report, color: Colors.deepPurple),
             title: const Text('Show App Info'),
@@ -46,7 +145,7 @@ class DeveloperDebugPage extends ConsumerWidget {
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('App Info'),
-                  content: Text('Date: \\${DateTime.now()}\nMode: DEBUG'),
+                  content: Text('Date: ${DateTime.now()}\nMode: DEBUG'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
@@ -57,7 +156,6 @@ class DeveloperDebugPage extends ConsumerWidget {
               );
             },
           ),
-          const Divider(),
           ListTile(
             leading: const Icon(
               fastTimeEnabled ? Icons.fast_forward : Icons.schedule,
@@ -79,10 +177,10 @@ class DeveloperDebugPage extends ConsumerWidget {
                       color: Colors.orange.shade100,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
+                    child: const Text(
                       '288x',
                       style: TextStyle(
-                        color: Colors.orange.shade900,
+                        color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -93,13 +191,12 @@ class DeveloperDebugPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                'Current simulated time: \\${clock.now()}',
+                'Current simulated time: ${clock.now()}',
                 style: Theme.of(
                   context,
                 ).textTheme.bodySmall?.copyWith(color: Colors.orange),
               ),
             ),
-          const Divider(),
           ListTile(
             leading: const Icon(Icons.restart_alt, color: Colors.red),
             title: const Text('Reset Onboarding Completion'),
@@ -132,7 +229,6 @@ class DeveloperDebugPage extends ConsumerWidget {
             title: const Text('Test Notification Bell'),
             subtitle: const Text('Open notification config dialog'),
             onTap: () async {
-              // Show the NotificationBellButton in a dialog for demo
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -162,65 +258,57 @@ class DeveloperDebugPage extends ConsumerWidget {
               );
             },
           ),
-          const Divider(),
-          // Export statistics (JSON) button migrated from SettingsPage
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 8.0,
             ),
-            child: Builder(
-              builder: (context) {
-                return ElevatedButton.icon(
-                  icon: const Icon(Icons.download),
-                  label: const Text('Exportar estadísticas (JSON)'),
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    final navigator = Navigator.of(context);
-                    final prefs = await SharedPreferences.getInstance();
-                    final statsJson = prefs.getString('user_statistics');
-                    if (statsJson == null) {
-                      if (navigator.mounted) {
-                        messenger.showSnackBar(
-                          const SnackBar(
-                            content: Text('No hay estadísticas para exportar.'),
-                          ),
-                        );
-                      }
-                      return;
-                    }
-                    try {
-                      final downloadsDir = await getExternalStorageDirectory();
-                      final now = DateTime.now();
-                      final formatted =
-                          '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
-                      final file = File(
-                        '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$formatted.json',
-                      );
-                      await file.writeAsString(statsJson);
-                      if (navigator.mounted) {
-                        messenger.showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Estadísticas exportadas en: \n${file.path}',
-                            ),
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (navigator.mounted) {
-                        messenger.showSnackBar(
-                          SnackBar(content: Text('Error al exportar: $e')),
-                        );
-                      }
-                    }
-                  },
-                );
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.download),
+              label: const Text('Exportar estadísticas (JSON)'),
+              onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                final navigator = Navigator.of(context);
+                final prefs = await SharedPreferences.getInstance();
+                final statsJson = prefs.getString('user_statistics');
+                if (statsJson == null) {
+                  if (navigator.mounted) {
+                    messenger.showSnackBar(
+                      const SnackBar(
+                        content: Text('No hay estadísticas para exportar.'),
+                      ),
+                    );
+                  }
+                  return;
+                }
+                try {
+                  final downloadsDir = await getExternalStorageDirectory();
+                  final now = DateTime.now();
+                  final formatted =
+                      '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
+                  final file = File(
+                    '${downloadsDir?.path ?? '/storage/emulated/0/Download'}/statistics_export_$formatted.json',
+                  );
+                  await file.writeAsString(statsJson);
+                  if (navigator.mounted) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Estadísticas exportadas en: \n${file.path}',
+                        ),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (navigator.mounted) {
+                    messenger.showSnackBar(
+                      SnackBar(content: Text('Error al exportar: $e')),
+                    );
+                  }
+                }
               },
             ),
           ),
-          const Divider(),
-          // Add more developer tools here as needed
         ],
       ),
     );

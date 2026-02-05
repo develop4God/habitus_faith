@@ -16,6 +16,7 @@ class BackgroundTaskService {
   static const String _dailyPredictionTask = 'dailyAbandonmentPrediction';
   static const String _predictionTaskTag = 'daily_prediction_6am';
   static const String _mlPredictionsEnabledKey = 'ml_predictions_enabled';
+  static const String _mlPredictionHourKey = 'ml_prediction_hour';
 
   bool _initialized = false;
 
@@ -55,7 +56,7 @@ class BackgroundTaskService {
     }
   }
 
-  /// Schedule daily prediction task at 6:00 AM
+  /// Schedule daily prediction task at configured hour (default 6:00 AM)
   /// Respects battery optimization and user settings
   /// Returns true if scheduled successfully, false otherwise
   Future<bool> scheduleDailyPrediction() async {
@@ -84,12 +85,14 @@ class BackgroundTaskService {
       // Cancel any existing task first
       await Workmanager().cancelByTag(_predictionTaskTag);
 
-      // Schedule daily task at 6:00 AM
-      // initialDelay calculates time until next 6 AM
-      final now = DateTime.now();
-      var nextRun = DateTime(now.year, now.month, now.day, 6, 0);
+      // Get scheduled hour (default to 6 AM)
+      final scheduledHour = prefs.getInt(_mlPredictionHourKey) ?? 6;
 
-      // If 6 AM already passed today, schedule for tomorrow
+      // Schedule daily task
+      final now = DateTime.now();
+      var nextRun = DateTime(now.year, now.month, now.day, scheduledHour, 0);
+
+      // If scheduled time already passed today, schedule for tomorrow
       if (nextRun.isBefore(now)) {
         nextRun = nextRun.add(const Duration(days: 1));
       }
@@ -115,7 +118,7 @@ class BackgroundTaskService {
       );
 
       developer.log(
-        'BackgroundTaskService: Daily prediction task scheduled successfully for 6:00 AM (next run: $nextRun)',
+        'BackgroundTaskService: Daily prediction task scheduled successfully for $scheduledHour:00 AM (next run: $nextRun)',
         name: 'BackgroundTaskService',
       );
 
@@ -162,6 +165,19 @@ class BackgroundTaskService {
   Future<bool> arePredictionsEnabled() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_mlPredictionsEnabledKey) ?? true;
+  }
+
+  /// Get scheduled hour for predictions
+  Future<int> getScheduledHour() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_mlPredictionHourKey) ?? 6;
+  }
+
+  /// Set scheduled hour for predictions (Only for Debug)
+  Future<void> setScheduledHour(int hour) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_mlPredictionHourKey, hour);
+    await scheduleDailyPrediction();
   }
 
   /// Get status of last prediction run
