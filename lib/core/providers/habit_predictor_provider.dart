@@ -175,6 +175,7 @@ class HabitPredictorService {
   }
 
   /// Show nudge notification suggesting difficulty reduction
+  /// Implements a 24-hour cooldown per habit to avoid notification spam
   Future<void> _showNudgeNotification({
     required String habitName,
     required int currentMinutes,
@@ -184,6 +185,30 @@ class HabitPredictorService {
     try {
       // Get locale from SharedPreferences (since we're in background/isolate)
       final prefs = await SharedPreferences.getInstance();
+      
+      // Check cooldown - don't send same nudge more than once per 24 hours
+      final cooldownKey = '${NotificationService.nudgeSentPrefix}$habitId';
+      final lastSentStr = prefs.getString(cooldownKey);
+      
+      if (lastSentStr != null) {
+        final lastSent = DateTime.parse(lastSentStr);
+        final hoursSinceLastSent = clock.now().difference(lastSent).inHours;
+        
+        // In FAST_TIME mode (288x speed), 24 hours = 5 minutes
+        // So cooldown should be proportionally shorter
+        const fastTime = bool.fromEnvironment('FAST_TIME');
+        const cooldownHours = fastTime ? 0 : 24; // No cooldown in FAST_TIME for testing
+        
+        if (hoursSinceLastSent < cooldownHours) {
+          developer.log(
+            'HabitPredictorService: Nudge notification for habit "$habitName" skipped '
+            '(cooldown: sent $hoursSinceLastSent hours ago)',
+            name: 'HabitPredictorService',
+          );
+          return; // Skip notification - cooldown not expired
+        }
+      }
+      
       final localeCode = prefs.getString('locale') ?? 'es';
 
       // Load localized strings without BuildContext
@@ -202,6 +227,9 @@ class HabitPredictorService {
         payload: 'habit_nudge:$habitId:$suggestedMinutes',
         id: habitId.hashCode,
       );
+      
+      // Store timestamp of sent notification for cooldown tracking
+      await prefs.setString(cooldownKey, clock.now().toIso8601String());
 
       developer.log(
         'HabitPredictorService: Nudge notification sent for habit "$habitName" (locale: $localeCode)',
