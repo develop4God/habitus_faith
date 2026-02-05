@@ -33,6 +33,9 @@ class HabitPredictorService {
   final AbandonmentPredictor predictor;
   final Clock clock;
 
+  // Nudge notification cooldown (hours)
+  static const int _nudgeCooldownHours = 24; // Don't send same nudge more than once per day
+
   HabitPredictorService({
     required this.habitsRepository,
     required this.predictor,
@@ -194,10 +197,10 @@ class HabitPredictorService {
         final lastSent = DateTime.parse(lastSentStr);
         final hoursSinceLastSent = clock.now().difference(lastSent).inHours;
         
-        // In FAST_TIME mode (288x speed), 24 hours = 5 minutes
-        // So cooldown should be proportionally shorter
+        // In FAST_TIME mode (288x speed), disable cooldown for rapid testing
+        // In normal mode, use standard 24-hour cooldown
         const fastTime = bool.fromEnvironment('FAST_TIME');
-        const cooldownHours = fastTime ? 0 : 24; // No cooldown in FAST_TIME for testing
+        const cooldownHours = fastTime ? 0 : _nudgeCooldownHours;
         
         if (hoursSinceLastSent < cooldownHours) {
           developer.log(

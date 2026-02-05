@@ -18,6 +18,10 @@ class BackgroundTaskService {
   static const String _mlPredictionsEnabledKey = 'ml_predictions_enabled';
   static const String _mlPredictionHourKey = 'ml_prediction_hour';
 
+  // FAST_TIME mode constants (288x speed: 1 week in 35 minutes, 1 day in 5 minutes)
+  // Minimum 4 real minutes between runs (allows ~80% of a simulated day margin)
+  static const int _fastTimeMinCooldownMinutes = 4;
+
   bool _initialized = false;
 
   /// Constructor with dependency injection
@@ -358,8 +362,8 @@ Future<bool> _executeDailyPrediction() async {
         final now = DateTime.now();
         
         // In FAST_TIME (288x), 1 day = 5 minutes
-        // Only run if at least 4.5 minutes have passed (to allow some margin)
-        if (now.difference(lastRun).inMinutes < 4) {
+        // Only run if at least 4 minutes have passed (allows ~80% of a simulated day margin)
+        if (now.difference(lastRun).inMinutes < BackgroundTaskService._fastTimeMinCooldownMinutes) {
           developer.log(
             'BackgroundTaskService: FAST_TIME - skipping, last run was ${now.difference(lastRun).inMinutes} minutes ago',
             name: 'BackgroundTaskService',
