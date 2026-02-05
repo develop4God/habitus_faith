@@ -96,6 +96,26 @@ class JsonHabitsRepository implements HabitsRepository {
       return dateOnly == today;
     });
 
+    // Sync dailyStatus based on historical records for today
+    final skippedToday = habit.skippedDates.any((date) {
+      final dateOnly = DateTime(date.year, date.month, date.day);
+      return dateOnly == today;
+    });
+
+    final failedToday = habit.failedDates.any((date) {
+      final dateOnly = DateTime(date.year, date.month, date.day);
+      return dateOnly == today;
+    });
+
+    HabitDailyStatus status = HabitDailyStatus.pending;
+    if (completedToday) {
+      status = HabitDailyStatus.completed;
+    } else if (skippedToday) {
+      status = HabitDailyStatus.skipped;
+    } else if (failedToday) {
+      status = HabitDailyStatus.failed;
+    }
+
     final currentStreak = _calculateCurrentStreak(completionDates);
     final longestStreak = _calculateLongestStreak(completionDates);
     final lastCompletedAt = completionDates.isNotEmpty
@@ -104,6 +124,7 @@ class JsonHabitsRepository implements HabitsRepository {
 
     return habit.copyWith(
       completedToday: completedToday,
+      dailyStatus: status,
       currentStreak: currentStreak,
       longestStreak: longestStreak > habit.longestStreak
           ? longestStreak
@@ -157,10 +178,14 @@ class JsonHabitsRepository implements HabitsRepository {
         .toList()
       ..sort((a, b) => b.compareTo(a));
 
-    if (sortedDates.first != today) return 0;
+    if (sortedDates.first != today) {
+      // If not completed today, check if it was completed yesterday to maintain streak
+      final yesterday = today.subtract(const Duration(days: 1));
+      if (sortedDates.first != yesterday) return 0;
+    }
 
     int streak = 1;
-    DateTime expectedDate = today.subtract(const Duration(days: 1));
+    DateTime expectedDate = sortedDates.first.subtract(const Duration(days: 1));
 
     for (int i = 1; i < sortedDates.length; i++) {
       if (sortedDates[i] == expectedDate) {
@@ -328,6 +353,8 @@ class JsonHabitsRepository implements HabitsRepository {
       );
       await _saveCompletionRecord(completionRecord);
       debugPrint('completeHabitWithNote: registro de completado guardado');
+      
+      // If the habit was skipped or failed, completing it overrides that state
       final updatedHabit = _loadHabitWithCompletions(habit);
       debugPrint(
         'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}',
