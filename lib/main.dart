@@ -142,8 +142,7 @@ class MyApp extends ConsumerWidget {
           ),
           debugDisplayAlways: kDebugMode,
           durationUntilAlertAgain: const Duration(hours: 2),
-          minAppVersion:
-              '1.1.6+15', // Force update for any version below this
+          minAppVersion: '1.1.6+15', // Force update for any version below this
         ),
         child: Builder(
           builder: (context) {

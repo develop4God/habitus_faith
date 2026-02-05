@@ -209,7 +209,8 @@ class DeveloperDebugPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ElevatedButton.icon(
-                icon: Icon(fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
+                icon:
+                    Icon(fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
                 label: Text(fastTimeEnabled
                     ? 'Disable Fast Acceleration'
                     : 'Enable Fast Acceleration'),
@@ -217,9 +218,8 @@ class DeveloperDebugPage extends ConsumerWidget {
                   backgroundColor: fastTimeEnabled
                       ? Colors.orange.shade100
                       : Colors.grey.shade300,
-                  foregroundColor: fastTimeEnabled
-                      ? Colors.orange
-                      : Colors.black,
+                  foregroundColor:
+                      fastTimeEnabled ? Colors.orange : Colors.black,
                 ),
                 onPressed: () {
                   // This toggles the mode for the session (does not persist or affect global env)
@@ -228,9 +228,8 @@ class DeveloperDebugPage extends ConsumerWidget {
                       content: Text(fastTimeEnabled
                           ? 'Fast Acceleration DISABLED'
                           : 'Fast Acceleration ENABLED (1 week in 35 min)'),
-                      backgroundColor: fastTimeEnabled
-                          ? Colors.grey
-                          : Colors.orange,
+                      backgroundColor:
+                          fastTimeEnabled ? Colors.grey : Colors.orange,
                     ),
                   );
                 },
