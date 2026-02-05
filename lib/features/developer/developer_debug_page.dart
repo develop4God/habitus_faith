@@ -30,7 +30,7 @@ class DeveloperDebugPage extends ConsumerWidget {
     const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
     final clock = ref.watch(clockProvider);
     final backgroundTaskService = ref.watch(backgroundTaskServiceProvider);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Developer Debug Tools'),
@@ -62,11 +62,15 @@ class DeveloperDebugPage extends ConsumerWidget {
                     );
                     if (picked != null) {
                       try {
-                        await backgroundTaskService.setScheduledHour(picked.hour);
-                        ref.invalidate(scheduledHourProvider); // Refresh the provider
+                        await backgroundTaskService
+                            .setScheduledHour(picked.hour);
+                        ref.invalidate(
+                            scheduledHourProvider); // Refresh the provider
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Scheduled hour updated to ${picked.hour}:00')),
+                            SnackBar(
+                                content: Text(
+                                    'Scheduled hour updated to ${picked.hour}:00')),
                           );
                         }
                       } catch (e) {
@@ -122,14 +126,17 @@ class DeveloperDebugPage extends ConsumerWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.notification_important, color: Colors.orange),
+            leading:
+                const Icon(Icons.notification_important, color: Colors.orange),
             title: const Text('Reset Nudge Cooldown'),
-            subtitle: const Text('Allows sending the same nudge notification immediately'),
+            subtitle: const Text(
+                'Allows sending the same nudge notification immediately'),
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               final prefs = await SharedPreferences.getInstance();
               final prefix = NotificationService.nudgeSentPrefix;
-              final keys = prefs.getKeys().where((k) => k.startsWith(prefix)).toList();
+              final keys =
+                  prefs.getKeys().where((k) => k.startsWith(prefix)).toList();
               for (final key in keys) {
                 await prefs.remove(key);
               }
