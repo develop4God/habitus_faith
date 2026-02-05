@@ -77,7 +77,7 @@ class UnifiedHabitList extends ConsumerWidget {
           final bDone = selectedDate != null && !isViewingToday
               ? b.completedToday
               : b.dailyStatus != HabitDailyStatus.pending;
-              
+
           if (aDone != bDone) {
             return aDone ? 1 : -1;
           }
