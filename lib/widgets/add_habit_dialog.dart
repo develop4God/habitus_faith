@@ -161,6 +161,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     final navigator = Navigator.of(context);
     await ref.read(habitsNotifierProvider.notifier).addHabit(
           name: nameCtrl.text,
+          category: selectedCategory,
           emoji: emojiCtrl.text.isNotEmpty ? emojiCtrl.text : null,
           colorValue: selectedColor?.toARGB32(),
           difficulty: selectedDifficulty,
