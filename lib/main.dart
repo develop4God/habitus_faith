@@ -18,6 +18,7 @@ import 'core/config/env_config.dart';
 import 'core/providers/auth_provider.dart';
 import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
+import 'core/providers/background_task_service_provider.dart';
 import 'core/services/ml/model_updater.dart';
 
 import 'features/habits/presentation/onboarding/simple_onboarding_flow.dart';
@@ -95,6 +96,9 @@ class MyApp extends ConsumerWidget {
     });
 
     ref.watch(notificationInitProvider);
+
+    // Initialize background tasks and schedule daily predictions
+    ref.watch(backgroundTaskInitProvider);
 
     // Reschedule habit notifications when app starts
     ref.watch(habitNotificationsSchedulerProvider);

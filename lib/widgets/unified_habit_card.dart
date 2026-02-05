@@ -6,6 +6,7 @@ import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dart';
 import '../features/habits/presentation/habits_providers.dart';
+import '../features/habits/presentation/widgets/abandonment_risk_indicator.dart';
 import '../l10n/app_localizations.dart';
 import 'notification_options_dialog.dart';
 
@@ -243,6 +244,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     fontSize: 13,
                                     color: Colors.grey.shade600,
                                   ),
+                                ),
+                                const SizedBox(width: 8),
+                                AbandonmentRiskIndicator(
+                                  risk: habit.abandonmentRisk,
                                 ),
                                 if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 12),
@@ -613,7 +618,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   decoration: isCompleted ? TextDecoration.lineThrough : null,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 8),
+              AbandonmentRiskIndicator(risk: habit.abandonmentRisk),
+              const SizedBox(height: 16),
             ],
           ),
           Row(
