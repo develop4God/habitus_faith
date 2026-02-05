@@ -282,7 +282,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                       ),
                       Padding(
                         padding: const EdgeInsets.all(20),
-                        child: _buildFlashTaskView(habitColor, _flashTaskScrollController),
+                        child: _buildFlashTaskView(
+                            habitColor, _flashTaskScrollController),
                       ),
                     ],
                   ),

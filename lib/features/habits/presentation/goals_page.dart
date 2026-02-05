@@ -586,7 +586,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
                       } else if (selectedType == GoalType.year) {
-                        deadline = DateTime.now().add(const Duration(days: 365));
+                        deadline =
+                            DateTime.now().add(const Duration(days: 365));
                       } else {
                         deadline = DateTime.now().add(
                           const Duration(days: 365),
@@ -772,7 +773,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
                       } else if (selectedType == GoalType.year) {
-                        deadline = DateTime.now().add(const Duration(days: 365));
+                        deadline =
+                            DateTime.now().add(const Duration(days: 365));
                       } else {
                         deadline = DateTime.now().add(
                           const Duration(days: 365),

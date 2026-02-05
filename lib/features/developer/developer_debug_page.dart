@@ -48,7 +48,7 @@ class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
     }
     const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
     final clock = ref.watch(clockProvider);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Developer Debug Tools'),
@@ -80,7 +80,9 @@ class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
                 });
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Scheduled hour updated to ${picked.hour}:00')),
+                    SnackBar(
+                        content: Text(
+                            'Scheduled hour updated to ${picked.hour}:00')),
                   );
                 }
               }
@@ -112,14 +114,19 @@ class _DeveloperDebugPageState extends ConsumerState<DeveloperDebugPage> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.notification_important, color: Colors.orange),
+            leading:
+                const Icon(Icons.notification_important, color: Colors.orange),
             title: const Text('Reset Nudge Cooldown'),
-            subtitle: const Text('Allows sending the same nudge notification immediately'),
+            subtitle: const Text(
+                'Allows sending the same nudge notification immediately'),
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               final prefs = await SharedPreferences.getInstance();
               // Find and remove all nudge sent flags (keys starting with 'nudge_sent_')
-              final keys = prefs.getKeys().where((k) => k.startsWith('nudge_sent_')).toList();
+              final keys = prefs
+                  .getKeys()
+                  .where((k) => k.startsWith('nudge_sent_'))
+                  .toList();
               for (final key in keys) {
                 await prefs.remove(key);
               }
