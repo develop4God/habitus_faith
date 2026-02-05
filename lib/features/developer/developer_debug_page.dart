@@ -134,7 +134,7 @@ class DeveloperDebugPage extends ConsumerWidget {
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               final prefs = await SharedPreferences.getInstance();
-              final prefix = NotificationService.nudgeSentPrefix;
+              const prefix = NotificationService.nudgeSentPrefix;
               final keys =
                   prefs.getKeys().where((k) => k.startsWith(prefix)).toList();
               for (final key in keys) {
