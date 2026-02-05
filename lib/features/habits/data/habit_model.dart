@@ -182,6 +182,20 @@ class HabitModel {
       reminderTime: data['reminderTime'] as String?,
       predefinedId: data['predefinedId'] as String?,
       completedToday: data['completedToday'] as bool? ?? false,
+      dailyStatus: data['dailyStatus'] != null
+          ? HabitDailyStatus.values.firstWhere(
+              (e) => e.name == data['dailyStatus'],
+              orElse: () => HabitDailyStatus.pending,
+            )
+          : HabitDailyStatus.pending,
+      skippedDates: (data['skippedDates'] as List<dynamic>?)
+              ?.map((e) => DateTime.parse(e as String))
+              .toList() ??
+          [],
+      failedDates: (data['failedDates'] as List<dynamic>?)
+              ?.map((e) => DateTime.parse(e as String))
+              .toList() ??
+          [],
       currentStreak: data['currentStreak'] as int? ?? 0,
       longestStreak: data['longestStreak'] as int? ?? 0,
       lastCompletedAt: data['lastCompletedAt'] != null
@@ -251,6 +265,11 @@ class HabitModel {
       'reminderTime': habit.reminderTime,
       'predefinedId': habit.predefinedId,
       'completedToday': habit.completedToday,
+      'dailyStatus': habit.dailyStatus.name,
+      'skippedDates':
+          habit.skippedDates.map((date) => date.toIso8601String()).toList(),
+      'failedDates':
+          habit.failedDates.map((date) => date.toIso8601String()).toList(),
       'currentStreak': habit.currentStreak,
       'longestStreak': habit.longestStreak,
       'lastCompletedAt': habit.lastCompletedAt?.toIso8601String(),

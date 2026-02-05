@@ -214,7 +214,10 @@ class JsonHabitsRepository implements HabitsRepository {
 
   Future<void> _updateStatistics() async {
     final habits = _loadHabits();
-    int total = habits.length;
+    // Exclude skipped habits from the total count for the day to avoid penalizing success percentage
+    int total = habits
+        .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
+        .length;
     int completed = habits.where((h) => h.completedToday).length;
     int currentStreak = 0;
     int longestStreak = 0;
