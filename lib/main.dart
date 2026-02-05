@@ -100,8 +100,10 @@ class MyApp extends ConsumerWidget {
     // Initialize background tasks and schedule daily predictions with error handling
     ref.listen(backgroundTaskInitProvider, (previous, next) {
       next.when(
-        data: (_) => debugPrint('BackgroundTaskService: Initialized successfully'),
-        error: (err, stack) => debugPrint('BackgroundTaskService: Initialization failed: $err'),
+        data: (_) =>
+            debugPrint('BackgroundTaskService: Initialized successfully'),
+        error: (err, stack) =>
+            debugPrint('BackgroundTaskService: Initialization failed: $err'),
         loading: () => debugPrint('BackgroundTaskService: Initializing...'),
       );
     });
