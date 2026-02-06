@@ -44,7 +44,8 @@ class UnifiedHabitList extends ConsumerWidget {
     final isViewingToday = viewingDate == today;
     final isFuture = viewingDate.isAfter(today);
 
-    debugPrint('🗓️ UnifiedHabitList: today=$today, viewingDate=$viewingDate, isViewingToday=$isViewingToday, isFuture=$isFuture');
+    debugPrint(
+        '🗓️ UnifiedHabitList: today=$today, viewingDate=$viewingDate, isViewingToday=$isViewingToday, isFuture=$isFuture');
 
     return habitsAsync.when(
       data: (habits) {
@@ -65,12 +66,14 @@ class UnifiedHabitList extends ConsumerWidget {
         // For future dates, always show as uncompleted
         final displayHabits = selectedDate != null
             ? habits.map((habit) {
-                final viewingDate = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day);
+                final viewingDate = DateTime(
+                    selectedDate!.year, selectedDate!.month, selectedDate!.day);
                 final isFuture = viewingDate.isAfter(today);
 
                 if (isFuture) {
                   // Future dates: always show as uncompleted
-                  debugPrint('🗓️ Habit "${habit.name}" on future date: completedToday=false (forced)');
+                  debugPrint(
+                      '🗓️ Habit "${habit.name}" on future date: completedToday=false (forced)');
                   return habit.copyWith(completedToday: false);
                 } else {
                   // Past or today: check completion history
@@ -78,7 +81,8 @@ class UnifiedHabitList extends ConsumerWidget {
                     final historyDay = DateTime(dt.year, dt.month, dt.day);
                     return historyDay == viewingDate;
                   });
-                  debugPrint('🗓️ Habit "${habit.name}" on $viewingDate: completedToday=$wasCompletedOnDate');
+                  debugPrint(
+                      '🗓️ Habit "${habit.name}" on $viewingDate: completedToday=$wasCompletedOnDate');
                   return habit.copyWith(completedToday: wasCompletedOnDate);
                 }
               }).toList()

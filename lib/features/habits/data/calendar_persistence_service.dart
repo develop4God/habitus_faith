@@ -9,7 +9,8 @@ class CalendarPersistenceService {
   CalendarPersistenceService(this.prefs);
 
   // Save logs for a specific date
-  Future<void> saveLogsForDate(DateTime date, List<CalendarCompletionLog> logs) async {
+  Future<void> saveLogsForDate(
+      DateTime date, List<CalendarCompletionLog> logs) async {
     final allLogs = await _getAllLogs();
     final dateKey = _dateKey(date);
     allLogs[dateKey] = logs.map((log) => log.toJson()).toList();
@@ -22,11 +23,14 @@ class CalendarPersistenceService {
     final dateKey = _dateKey(date);
     final logsJson = allLogs[dateKey] as List<dynamic>?;
     if (logsJson == null) return [];
-    return logsJson.map((json) => CalendarCompletionLog.fromJson(json)).toList();
+    return logsJson
+        .map((json) => CalendarCompletionLog.fromJson(json))
+        .toList();
   }
 
   // Retrieve logs for a date range (inclusive)
-  Future<Map<String, List<CalendarCompletionLog>>> getLogsForRange(DateTime start, DateTime end) async {
+  Future<Map<String, List<CalendarCompletionLog>>> getLogsForRange(
+      DateTime start, DateTime end) async {
     final allLogs = await _getAllLogs();
     final result = <String, List<CalendarCompletionLog>>{};
     DateTime current = start;
@@ -34,7 +38,9 @@ class CalendarPersistenceService {
       final dateKey = _dateKey(current);
       final logsJson = allLogs[dateKey] as List<dynamic>?;
       if (logsJson != null) {
-        result[dateKey] = logsJson.map((json) => CalendarCompletionLog.fromJson(json)).toList();
+        result[dateKey] = logsJson
+            .map((json) => CalendarCompletionLog.fromJson(json))
+            .toList();
       }
       current = current.add(const Duration(days: 1));
     }
