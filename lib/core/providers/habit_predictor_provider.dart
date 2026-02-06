@@ -60,9 +60,11 @@ class HabitPredictorService {
     try {
       // Get all active (non-archived) habits
       final habits = await habitsRepository.getHabits();
-      debugPrint('PREDICTOR 🧠 runDailyPredictions: getHabits returned \\${habits.length} habits.');
+      debugPrint(
+          'PREDICTOR 🧠 runDailyPredictions: getHabits returned \\${habits.length} habits.');
       final activeHabits = habits.where((h) => !h.isArchived).toList();
-      debugPrint('PREDICTOR 🧠 runDailyPredictions: \\${activeHabits.length} active habits.');
+      debugPrint(
+          'PREDICTOR 🧠 runDailyPredictions: \\${activeHabits.length} active habits.');
 
       developer.log(
         'HabitPredictorService: Processing \\${activeHabits.length} active habits',
@@ -74,7 +76,8 @@ class HabitPredictorService {
 
       for (final habit in activeHabits) {
         try {
-          debugPrint('PREDICTOR 🧠 Processing habit: id=\\${habit.id}, name=\\${habit.name}, completedToday=\\${habit.completedToday}');
+          debugPrint(
+              'PREDICTOR 🧠 Processing habit: id=\\${habit.id}, name=\\${habit.name}, completedToday=\\${habit.completedToday}');
           await _processSingleHabit(habit);
           processedCount++;
 
@@ -109,7 +112,8 @@ class HabitPredictorService {
   Future<void> _processSingleHabit(Habit habit) async {
     // Skip habits already completed today
     if (habit.completedToday) {
-      debugPrint('PREDICTOR 🧠 Skipping habit (already completed today): id=\\${habit.id}, name=\\${habit.name}');
+      debugPrint(
+          'PREDICTOR 🧠 Skipping habit (already completed today): id=\\${habit.id}, name=\\${habit.name}');
       developer.log(
         'HabitPredictorService: Skipping habit \\${habit.name} (already completed)',
         name: 'HabitPredictorService',
@@ -119,7 +123,8 @@ class HabitPredictorService {
 
     // Predict abandonment risk
     final risk = await predictor.predictRisk(habit);
-    debugPrint('PREDICTOR 🧠 Habit id=\\${habit.id}, name=\\${habit.name}, predicted risk=\\${risk.toStringAsFixed(3)}');
+    debugPrint(
+        'PREDICTOR 🧠 Habit id=\\${habit.id}, name=\\${habit.name}, predicted risk=\\${risk.toStringAsFixed(3)}');
 
     developer.log(
       'HabitPredictorService: Habit "\\${habit.name}" risk: \\${(risk * 100).toStringAsFixed(1)}%',

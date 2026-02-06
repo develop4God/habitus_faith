@@ -145,11 +145,13 @@ class DeveloperDebugPage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('ML Predictor Telemetry', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text('ML Predictor Telemetry',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
                       Text('Predictions: \\${telemetry['prediction_count']}'),
                       Text('Errors: \\${telemetry['error_count']}'),
-                      Text('Last prediction: \\${telemetry['last_prediction'] ?? 'N/A'}'),
+                      Text(
+                          'Last prediction: \\${telemetry['last_prediction'] ?? 'N/A'}'),
                     ],
                   ),
                 ),
@@ -157,7 +159,8 @@ class DeveloperDebugPage extends ConsumerWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.notification_important, color: Colors.orange),
+            leading:
+                const Icon(Icons.notification_important, color: Colors.orange),
             title: const Text('Reset Nudge Cooldown'),
             subtitle: const Text(
                 'Allows sending the same nudge notification immediately'),
