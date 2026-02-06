@@ -34,7 +34,8 @@ class HabitPredictorService {
   final Clock clock;
 
   // Nudge notification cooldown (hours)
-  static const int _nudgeCooldownHours = 24; // Don't send same nudge more than once per day
+  static const int _nudgeCooldownHours =
+      24; // Don't send same nudge more than once per day
 
   HabitPredictorService({
     required this.habitsRepository,
@@ -188,20 +189,20 @@ class HabitPredictorService {
     try {
       // Get locale from SharedPreferences (since we're in background/isolate)
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Check cooldown - don't send same nudge more than once per 24 hours
       final cooldownKey = '${NotificationService.nudgeSentPrefix}$habitId';
       final lastSentStr = prefs.getString(cooldownKey);
-      
+
       if (lastSentStr != null) {
         final lastSent = DateTime.parse(lastSentStr);
         final hoursSinceLastSent = clock.now().difference(lastSent).inHours;
-        
+
         // In FAST_TIME mode (288x speed), disable cooldown for rapid testing
         // In normal mode, use standard 24-hour cooldown
         const fastTime = bool.fromEnvironment('FAST_TIME');
         const cooldownHours = fastTime ? 0 : _nudgeCooldownHours;
-        
+
         if (hoursSinceLastSent < cooldownHours) {
           developer.log(
             'HabitPredictorService: Nudge notification for habit "$habitName" skipped '
@@ -211,7 +212,7 @@ class HabitPredictorService {
           return; // Skip notification - cooldown not expired
         }
       }
-      
+
       final localeCode = prefs.getString('locale') ?? 'es';
 
       // Load localized strings without BuildContext
@@ -230,7 +231,7 @@ class HabitPredictorService {
         payload: 'habit_nudge:$habitId:$suggestedMinutes',
         id: habitId.hashCode,
       );
-      
+
       // Store timestamp of sent notification for cooldown tracking
       await prefs.setString(cooldownKey, clock.now().toIso8601String());
 

@@ -209,8 +209,8 @@ class DeveloperDebugPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ElevatedButton.icon(
-                icon:
-                    const Icon(fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
+                icon: const Icon(
+                    fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
                 label: const Text(fastTimeEnabled
                     ? 'Disable Fast Acceleration'
                     : 'Enable Fast Acceleration'),

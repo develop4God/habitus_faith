@@ -94,17 +94,17 @@ class BackgroundTaskService {
 
       // Check if FAST_TIME is enabled (for accelerated testing)
       const fastTime = bool.fromEnvironment('FAST_TIME');
-      
+
       Duration frequency;
       Duration initialDelay;
-      
+
       if (fastTime && kDebugMode) {
         // In FAST_TIME mode (288x speed), run every 5 minutes to check if it's time
         // This allows predictions to run at the correct accelerated time
         // 5 real minutes = 24 simulated hours at 288x speed
         frequency = const Duration(minutes: 5);
         initialDelay = const Duration(seconds: 30); // Start checking soon
-        
+
         developer.log(
           'BackgroundTaskService: FAST_TIME enabled - scheduling frequent checks (every 5 min)',
           name: 'BackgroundTaskService',
@@ -356,14 +356,15 @@ Future<bool> _executeDailyPrediction() async {
       const lastRunKey = 'ml_last_run_time';
       final lastRunStr = prefs.getString(lastRunKey);
       final scheduledHour = prefs.getInt('ml_prediction_hour') ?? 6;
-      
+
       if (lastRunStr != null) {
         final lastRun = DateTime.parse(lastRunStr);
         final now = DateTime.now();
-        
+
         // In FAST_TIME (288x), 1 day = 5 minutes
         // Only run if at least 4 minutes have passed (allows ~80% of a simulated day margin)
-        if (now.difference(lastRun).inMinutes < BackgroundTaskService._fastTimeMinCooldownMinutes) {
+        if (now.difference(lastRun).inMinutes <
+            BackgroundTaskService._fastTimeMinCooldownMinutes) {
           developer.log(
             'BackgroundTaskService: FAST_TIME - skipping, last run was ${now.difference(lastRun).inMinutes} minutes ago',
             name: 'BackgroundTaskService',
@@ -371,10 +372,10 @@ Future<bool> _executeDailyPrediction() async {
           return true; // Not time yet
         }
       }
-      
+
       // Store this run time
       await prefs.setString(lastRunKey, DateTime.now().toIso8601String());
-      
+
       developer.log(
         'BackgroundTaskService: FAST_TIME - running predictions (scheduled hour: $scheduledHour)',
         name: 'BackgroundTaskService',
