@@ -113,8 +113,10 @@ class HabitPredictorService {
       // Just update the risk value
       final result = await habitsRepository.updateHabitInstance(updatedHabit);
       result.fold(
-        (failure) => debugPrint('PREDICTOR 🧠 ❌ Failed to update habit ${habit.id}: $failure'),
-        (success) => debugPrint('PREDICTOR 🧠 ✅ Updated "${habit.name}" with risk ${risk.toStringAsFixed(3)}'),
+        (failure) => debugPrint(
+            'PREDICTOR 🧠 ❌ Failed to update habit ${habit.id}: $failure'),
+        (success) => debugPrint(
+            'PREDICTOR 🧠 ✅ Updated "${habit.name}" with risk ${risk.toStringAsFixed(3)}'),
       );
     }
   }
@@ -157,8 +159,10 @@ class HabitPredictorService {
       // Update habit with new abandonment risk
       final result = await habitsRepository.updateHabitInstance(habit);
       result.fold(
-        (failure) => debugPrint('PREDICTOR 🧠 ❌ Failed to update habit ${habit.id} during intervention: $failure'),
-        (success) => debugPrint('PREDICTOR 🧠 ✅ Successfully updated habit "${habit.name}" with intervention'),
+        (failure) => debugPrint(
+            'PREDICTOR 🧠 ❌ Failed to update habit ${habit.id} during intervention: $failure'),
+        (success) => debugPrint(
+            'PREDICTOR 🧠 ✅ Successfully updated habit "${habit.name}" with intervention'),
       );
     } catch (e) {
       developer.log(

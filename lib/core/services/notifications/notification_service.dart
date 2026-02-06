@@ -831,7 +831,8 @@ class NotificationService {
       final title = _getLocalizedNudgeTitle(habitName, localeCode);
       final body = _getLocalizedNudgeBody(suggestedMinutes, localeCode);
 
-      const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      const AndroidNotificationDetails androidDetails =
+          AndroidNotificationDetails(
         'nudge_habitus',
         'Habitus Faith Nudges',
         channelDescription: 'ML-based habit adjustment suggestions',
