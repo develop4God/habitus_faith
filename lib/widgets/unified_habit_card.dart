@@ -49,11 +49,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     if (_isCompleting) return;
     setState(() => _isCompleting = true);
     try {
-      final habit = getLatestHabit(ref);
-      if (habit.completedToday) {
-        await widget.onUncheck(habit.id);
+      // Use the habit prop directly which has the correct completedToday for selected date
+      if (widget.habit.completedToday) {
+        await widget.onUncheck(widget.habit.id);
       } else {
-        await widget.onComplete(habit.id);
+        await widget.onComplete(widget.habit.id);
       }
     } finally {
       if (mounted) setState(() => _isCompleting = false);
@@ -62,7 +62,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -100,7 +100,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleSkip() async {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
     await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
     if (!mounted) return;
     Navigator.of(context).pop();
@@ -114,7 +114,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleFail() async {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
     await ref.read(habitsNotifierProvider.notifier).failHabit(habit.id);
     if (!mounted) return;
     Navigator.of(context).pop();
@@ -129,7 +129,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    // Use widget.habit directly to respect the selected date's completion status
+    final habit = widget.habit;
     final habitColor = HabitColors.getHabitColor(habit);
     final isCompleted = habit.completedToday;
     final isSkipped = habit.dailyStatus == HabitDailyStatus.skipped;
@@ -581,7 +582,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     AppLocalizations l10n,
     Color habitColor,
   ) {
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
     final isCompleted = habit.dailyStatus == HabitDailyStatus.completed;
 
     return Padding(

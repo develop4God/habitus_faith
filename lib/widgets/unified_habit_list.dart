@@ -42,6 +42,9 @@ class UnifiedHabitList extends ConsumerWidget {
         ? DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day)
         : today;
     final isViewingToday = viewingDate == today;
+    final isFuture = viewingDate.isAfter(today);
+
+    debugPrint('🗓️ UnifiedHabitList: today=$today, viewingDate=$viewingDate, isViewingToday=$isViewingToday, isFuture=$isFuture');
 
     return habitsAsync.when(
       data: (habits) {
@@ -58,13 +61,26 @@ class UnifiedHabitList extends ConsumerWidget {
           );
         }
 
-        final displayHabits = selectedDate != null && !isViewingToday
+        // For any non-today date, check completion history
+        // For future dates, always show as uncompleted
+        final displayHabits = selectedDate != null
             ? habits.map((habit) {
-                final wasCompletedOnDate = habit.completionHistory.any((dt) {
-                  final historyDay = DateTime(dt.year, dt.month, dt.day);
-                  return historyDay == viewingDate;
-                });
-                return habit.copyWith(completedToday: wasCompletedOnDate);
+                final viewingDate = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day);
+                final isFuture = viewingDate.isAfter(today);
+
+                if (isFuture) {
+                  // Future dates: always show as uncompleted
+                  debugPrint('🗓️ Habit "${habit.name}" on future date: completedToday=false (forced)');
+                  return habit.copyWith(completedToday: false);
+                } else {
+                  // Past or today: check completion history
+                  final wasCompletedOnDate = habit.completionHistory.any((dt) {
+                    final historyDay = DateTime(dt.year, dt.month, dt.day);
+                    return historyDay == viewingDate;
+                  });
+                  debugPrint('🗓️ Habit "${habit.name}" on $viewingDate: completedToday=$wasCompletedOnDate');
+                  return habit.copyWith(completedToday: wasCompletedOnDate);
+                }
               }).toList()
             : habits;
 
