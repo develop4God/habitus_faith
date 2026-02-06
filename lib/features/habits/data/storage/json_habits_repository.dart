@@ -11,6 +11,7 @@ import '../habit_model.dart';
 import 'json_storage_service.dart';
 import '../../../statistics/statistics_service.dart';
 import '../../../statistics/statistics_model.dart';
+import '../../../../core/services/time/time.dart';
 
 /// Repository implementation using JSON storage (SharedPreferences)
 class JsonHabitsRepository implements HabitsRepository {
@@ -18,6 +19,7 @@ class JsonHabitsRepository implements HabitsRepository {
   final String _userId;
   final String Function() _idGenerator;
   final FirebaseFirestore? _firestore;
+  final Clock _clock;
 
   static const String _habitsKey = 'habits';
   static const String _completionsKey = 'completions';
@@ -29,10 +31,12 @@ class JsonHabitsRepository implements HabitsRepository {
     required String userId,
     required String Function() idGenerator,
     FirebaseFirestore? firestore,
+    Clock? clock,
   })  : _storage = storage,
         _userId = userId,
         _idGenerator = idGenerator,
-        _firestore = firestore {
+        _firestore = firestore,
+        _clock = clock ?? const Clock.system() {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
         debugPrint(
@@ -88,7 +92,7 @@ class JsonHabitsRepository implements HabitsRepository {
     final completions = _loadCompletionsForHabit(habit.id);
     final completionDates = completions.map((c) => c.completedAt).toList();
 
-    final now = DateTime.now();
+    final now = _clock.now();
     final today = DateTime(now.year, now.month, now.day);
 
     final completedToday = completionDates.any((date) {
@@ -169,7 +173,7 @@ class JsonHabitsRepository implements HabitsRepository {
   int _calculateCurrentStreak(List<DateTime> completionDates) {
     if (completionDates.isEmpty) return 0;
 
-    final now = DateTime.now();
+    final now = _clock.now();
     final today = DateTime(now.year, now.month, now.day);
 
     final sortedDates = completionDates
@@ -256,7 +260,7 @@ class JsonHabitsRepository implements HabitsRepository {
         lastCompletion = h.lastCompletedAt!;
       }
     }
-    if (lastCompletion.year == 2000) lastCompletion = DateTime.now();
+    if (lastCompletion.year == 2000) lastCompletion = _clock.now();
     final stats = StatisticsModel(
       totalHabits: total,
       completedHabits: completed,
@@ -334,7 +338,7 @@ class JsonHabitsRepository implements HabitsRepository {
         debugPrint('completeHabitWithNote: hábito no encontrado "$habitId"');
         return Failure(HabitFailure.notFound('Habit not found: $habitId'));
       }
-      final now = DateTime.now();
+      final now = _clock.now();
       final habit = habits[index];
       debugPrint(
         'completeHabitWithNote: estado completedToday antes: ${habit.completedToday}',
@@ -393,7 +397,7 @@ class JsonHabitsRepository implements HabitsRepository {
   ) async {
     debugPrint('updateHabitNote: inicio para habitId=$habitId, note=$note');
     try {
-      final now = DateTime.now();
+      final now = _clock.now();
       final today = DateTime(now.year, now.month, now.day);
       final todayKey =
           '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
@@ -450,7 +454,7 @@ class JsonHabitsRepository implements HabitsRepository {
       return;
     }
 
-    final now = DateTime.now();
+    final now = _clock.now();
 
     final record = CompletionRecord(
       habitId: habitId,
@@ -576,7 +580,7 @@ class JsonHabitsRepository implements HabitsRepository {
         debugPrint('uncheckHabit: hábito "$habitId" no completado hoy');
         return Success(habit);
       }
-      final now = DateTime.now();
+      final now = _clock.now();
       final today = DateTime(now.year, now.month, now.day);
       final updatedHistory = habit.completionHistory.where((date) {
         final completionDay = DateTime(date.year, date.month, date.day);
@@ -735,7 +739,7 @@ class JsonHabitsRepository implements HabitsRepository {
 
   @override
   CompletionRecord? getTodayCompletionRecord(String habitId) {
-    final now = DateTime.now();
+    final now = _clock.now();
     final today = DateTime(now.year, now.month, now.day);
     final todayKey =
         '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';

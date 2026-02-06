@@ -5,8 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/clock_provider.dart';
 import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
 import 'package:habitus_faith/core/providers/background_task_service_provider.dart';
+import 'package:habitus_faith/core/providers/notification_provider.dart';
+import 'package:habitus_faith/core/providers/ai_providers.dart';
 import 'package:habitus_faith/core/services/time/clock.dart';
 import 'package:habitus_faith/core/services/notifications/notification_service.dart';
+import 'package:habitus_faith/features/habits/domain/models/generation_request.dart';
+import 'package:habitus_faith/features/habits/presentation/ai_generator/micro_habit_generator_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/core/providers/scheduled_hour_provider.dart';
@@ -177,6 +181,142 @@ class DeveloperDebugPage extends ConsumerWidget {
                 const SnackBar(
                   content: Text('Nudge cooldowns reset successfully'),
                   backgroundColor: Colors.green,
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications_active, color: Colors.purple),
+            title: const Text('Schedule Test Nudge (in 1 min)'),
+            subtitle: const Text('Test nudge notification with 1-minute delay'),
+            onTap: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                final notificationService = ref.read(notificationServiceProvider);
+
+                // Schedule a test nudge notification in 1 minute
+                await notificationService.scheduleNudgeNotification(
+                  habitId: 'test_habit_123',
+                  habitName: 'Test Habit',
+                  suggestedMinutes: 10,
+                  delayMinutes: 1,
+                );
+
+                debugPrint('PREDICTOR 🧠 📅 Scheduled test nudge notification for 1 minute from now');
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Test nudge scheduled for 1 minute from now'),
+                    backgroundColor: Colors.blue,
+                  ),
+                );
+              } catch (e) {
+                debugPrint('PREDICTOR 🧠 ❌ Failed to schedule test nudge: $e');
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to schedule nudge: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+          const Divider(),
+          const Text(
+            'AI & Gemini Features',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          ListTile(
+            leading: const Icon(Icons.auto_awesome, color: Colors.purple),
+            title: const Text('Test Gemini Micro Habits Generator'),
+            subtitle: const Text('Generate AI-powered micro-habits'),
+            onTap: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                debugPrint('GEMINI 🤖 Starting micro-habits generation test...');
+                final generatorNotifier = ref.read(microHabitGeneratorProvider.notifier);
+
+                // Test generation request
+                await generatorNotifier.generate(
+                  const GenerationRequest(
+                    userGoal: 'Orar más consistentemente',
+                    failurePattern: 'Olvido en las mañanas ocupadas',
+                    faithContext: 'Cristiano',
+                    languageCode: 'es',
+                  ),
+                );
+
+                final state = ref.read(microHabitGeneratorProvider);
+                state.when(
+                  data: (habits) {
+                    debugPrint('GEMINI 🤖 ✅ Generated ${habits.length} micro-habits successfully');
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text('Generated ${habits.length} habits successfully!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  },
+                  loading: () {
+                    debugPrint('GEMINI 🤖 ⏳ Loading...');
+                  },
+                  error: (error, stack) {
+                    debugPrint('GEMINI 🤖 ❌ Error: $error');
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text('Generation failed: $error'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  },
+                );
+              } catch (e) {
+                debugPrint('GEMINI 🤖 ❌ Failed to generate habits: $e');
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to generate: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+          Consumer(
+            builder: (context, ref, child) {
+              final generatorNotifier = ref.watch(microHabitGeneratorProvider.notifier);
+              final remainingRequests = generatorNotifier.remainingRequests;
+
+              return Card(
+                color: Colors.purple.shade50,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Gemini API Status', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text('Remaining requests: $remainingRequests/month'),
+                      const SizedBox(height: 4),
+                      ref.watch(microHabitGeneratorProvider).when(
+                        data: (habits) => Text('Last generation: ${habits.length} habits'),
+                        loading: () => const Text('Status: Generating...'),
+                        error: (error, _) => Text('Last error: ${error.toString().substring(0, 50)}...'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.psychology_alt, color: Colors.deepPurple),
+            title: const Text('Open Gemini Coach UI'),
+            subtitle: const Text('Navigate to Micro Habit Generator page'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const MicroHabitGeneratorPage(),
                 ),
               );
             },

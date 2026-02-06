@@ -4,7 +4,8 @@ import 'package:habitus_faith/features/habits/data/storage/json_habits_repositor
 import 'package:habitus_faith/features/habits/data/storage/json_storage_service.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/calendar_completion_log.dart';
-import 'package:habitus_faith/features/habits/data/storage/calendar_persistence_service.dart';
+import 'package:habitus_faith/features/habits/data/calendar_persistence_service.dart';
+import 'package:habitus_faith/core/services/time/time.dart';
 
 void main() {
   group('Calendar Navigation and Persistence Tests', () {
@@ -194,6 +195,7 @@ void main() {
         storage: storageService,
         userId: 'test_user',
         idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
+        clock: const Clock.system(),
       );
       calendarService = CalendarPersistenceService(prefs);
     });
