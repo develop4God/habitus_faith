@@ -52,10 +52,6 @@ class HabitPredictorService {
   /// 3. If risk >= intervention threshold: calculate new difficulty and show nudge notification
   Future<void> runDailyPredictions() async {
     debugPrint('PREDICTOR 🧠 runDailyPredictions: Fetching all habits...');
-    developer.log(
-      'HabitPredictorService: Starting daily predictions',
-      name: 'HabitPredictorService',
-    );
 
     try {
       // Get all active (non-archived) habits
@@ -65,11 +61,6 @@ class HabitPredictorService {
       final activeHabits = habits.where((h) => !h.isArchived).toList();
       debugPrint(
           'PREDICTOR 🧠 runDailyPredictions: \\${activeHabits.length} active habits.');
-
-      developer.log(
-        'HabitPredictorService: Processing \\${activeHabits.length} active habits',
-        name: 'HabitPredictorService',
-      );
 
       int processedCount = 0;
       int highRiskCount = 0;
@@ -86,25 +77,15 @@ class HabitPredictorService {
             highRiskCount++;
           }
         } catch (e) {
-          developer.log(
-            'HabitPredictorService: Error processing habit \\${habit.id}: $e',
-            name: 'HabitPredictorService',
-            error: e,
-          );
+          debugPrint('PREDICTOR 🧠 ❌ Error processing habit \\${habit.id}: $e');
         }
       }
 
-      developer.log(
-        'HabitPredictorService: Daily predictions complete. '
-        'Processed: \\$processedCount, High-risk: \\$highRiskCount',
-        name: 'HabitPredictorService',
+      debugPrint(
+        'PREDICTOR 🧠 ✅ Daily predictions complete. Processed: $processedCount, High-risk: $highRiskCount',
       );
     } catch (e) {
-      developer.log(
-        'HabitPredictorService: Daily predictions failed: $e',
-        name: 'HabitPredictorService',
-        error: e,
-      );
+      debugPrint('PREDICTOR 🧠 ❌ Daily predictions failed: $e');
     }
   }
 
@@ -113,23 +94,14 @@ class HabitPredictorService {
     // Skip habits already completed today
     if (habit.completedToday) {
       debugPrint(
-          'PREDICTOR 🧠 Skipping habit (already completed today): id=\\${habit.id}, name=\\${habit.name}');
-      developer.log(
-        'HabitPredictorService: Skipping habit \\${habit.name} (already completed)',
-        name: 'HabitPredictorService',
-      );
+          'PREDICTOR 🧠 ⏭️ Skipping habit (already completed today): id=\\${habit.id}, name=\\${habit.name}');
       return;
     }
 
     // Predict abandonment risk
     final risk = await predictor.predictRisk(habit);
     debugPrint(
-        'PREDICTOR 🧠 Habit id=\\${habit.id}, name=\\${habit.name}, predicted risk=\\${risk.toStringAsFixed(3)}');
-
-    developer.log(
-      'HabitPredictorService: Habit "\\${habit.name}" risk: \\${(risk * 100).toStringAsFixed(1)}%',
-      name: 'HabitPredictorService',
-    );
+        'PREDICTOR 🧠 📊 Habit "${habit.name}" predicted risk: ${(risk * 100).toStringAsFixed(1)}%');
 
     // Update abandonmentRisk field
     final updatedHabit = habit.copyWith(abandonmentRisk: risk);
@@ -139,7 +111,11 @@ class HabitPredictorService {
       await _applyIntervention(updatedHabit);
     } else {
       // Just update the risk value
-      await habitsRepository.updateHabit(updatedHabit);
+      final result = await habitsRepository.updateHabitInstance(updatedHabit);
+      result.fold(
+        (failure) => debugPrint('PREDICTOR 🧠 ❌ Failed to update habit ${habit.id}: $failure'),
+        (success) => debugPrint('PREDICTOR 🧠 ✅ Updated "${habit.name}" with risk ${risk.toStringAsFixed(3)}'),
+      );
     }
   }
 
@@ -179,7 +155,11 @@ class HabitPredictorService {
       }
 
       // Update habit with new abandonment risk
-      await habitsRepository.updateHabit(habit);
+      final result = await habitsRepository.updateHabitInstance(habit);
+      result.fold(
+        (failure) => debugPrint('PREDICTOR 🧠 ❌ Failed to update habit ${habit.id} during intervention: $failure'),
+        (success) => debugPrint('PREDICTOR 🧠 ✅ Successfully updated habit "${habit.name}" with intervention'),
+      );
     } catch (e) {
       developer.log(
         'HabitPredictorService: Error applying intervention for habit ${habit.id}: $e',
@@ -269,7 +249,7 @@ class HabitPredictorService {
     try {
       if (accepted) {
         // User accepted: apply the difficulty reduction
-        final habits = await habitsRepository.getAllHabits();
+        final habits = await habitsRepository.getHabits();
         final habit = habits.firstWhere((h) => h.id == habitId);
 
         // Calculate new difficulty level from suggested minutes
@@ -286,7 +266,7 @@ class HabitPredictorService {
           lastAdjustedAt: clock.now(),
         );
 
-        await habitsRepository.updateHabit(updatedHabit);
+        await habitsRepository.updateHabitInstance(updatedHabit);
 
         developer.log(
           'HabitPredictorService: User accepted nudge for habit ${habit.name}',

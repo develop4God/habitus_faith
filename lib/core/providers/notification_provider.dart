@@ -36,5 +36,5 @@ final habitNotificationsSchedulerProvider = FutureProvider<void>((ref) async {
 
   // Reschedule all habit notifications
   final notificationService = ref.read(notificationServiceProvider);
-  await notificationService.rescheduleAllHabitNotifications(habitsAsync);
+  await notificationService.rescheduleHabitNotifications(habitsAsync);
 });
