@@ -532,6 +532,27 @@ class JsonHabitsRepository implements HabitsRepository {
     }
   }
 
+  /// Update a habit instance directly (used by ML predictor and other services)
+  Future<Result<Habit, HabitFailure>> updateHabitInstance(Habit updatedHabit) async {
+    try {
+      final habits = _loadHabits();
+      final index = habits.indexWhere((h) => h.id == updatedHabit.id);
+      if (index == -1) {
+        debugPrint(
+          'JsonHabitsRepository.updateHabitInstance: Habit not found "${updatedHabit.id}"',
+        );
+        return Failure(HabitFailure.notFound('Habit not found: ${updatedHabit.id}'));
+      }
+      habits[index] = updatedHabit;
+      debugPrint('JsonHabitsRepository.updateHabitInstance: Updated habit "${updatedHabit.id}"');
+      await _saveHabits(habits);
+      return Success(updatedHabit);
+    } catch (e) {
+      debugPrint('JsonHabitsRepository.updateHabitInstance: Failure: $e');
+      return Failure(HabitFailure.persistence('Failed to update habit: $e'));
+    }
+  }
+
   @override
   Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId) async {
     debugPrint('uncheckHabit: inicio para habitId=$habitId');
