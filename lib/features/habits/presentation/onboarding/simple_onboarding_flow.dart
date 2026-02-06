@@ -392,7 +392,8 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
                     ),
                     child: const Text(
                       'Continuar',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
