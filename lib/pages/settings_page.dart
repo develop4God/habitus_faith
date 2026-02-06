@@ -6,7 +6,6 @@ import 'package:habitus_faith/pages/language_settings_page.dart';
 import 'package:habitus_faith/pages/notifications_settings_page.dart';
 import 'package:habitus_faith/pages/about_us_page.dart';
 
-
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
