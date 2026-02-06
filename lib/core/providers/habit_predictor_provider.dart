@@ -96,7 +96,7 @@ class HabitPredictorService {
 
       developer.log(
         'HabitPredictorService: Daily predictions complete. '
-        'Processed: \\${processedCount}, High-risk: \\${highRiskCount}',
+        'Processed: \\$processedCount, High-risk: \\$highRiskCount',
         name: 'HabitPredictorService',
       );
     } catch (e) {
