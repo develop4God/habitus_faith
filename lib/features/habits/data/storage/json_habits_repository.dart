@@ -533,7 +533,8 @@ class JsonHabitsRepository implements HabitsRepository {
   }
 
   /// Update a habit instance directly (used by ML predictor and other services)
-  Future<Result<Habit, HabitFailure>> updateHabitInstance(Habit updatedHabit) async {
+  Future<Result<Habit, HabitFailure>> updateHabitInstance(
+      Habit updatedHabit) async {
     try {
       final habits = _loadHabits();
       final index = habits.indexWhere((h) => h.id == updatedHabit.id);
@@ -541,10 +542,12 @@ class JsonHabitsRepository implements HabitsRepository {
         debugPrint(
           'JsonHabitsRepository.updateHabitInstance: Habit not found "${updatedHabit.id}"',
         );
-        return Failure(HabitFailure.notFound('Habit not found: ${updatedHabit.id}'));
+        return Failure(
+            HabitFailure.notFound('Habit not found: ${updatedHabit.id}'));
       }
       habits[index] = updatedHabit;
-      debugPrint('JsonHabitsRepository.updateHabitInstance: Updated habit "${updatedHabit.id}"');
+      debugPrint(
+          'JsonHabitsRepository.updateHabitInstance: Updated habit "${updatedHabit.id}"');
       await _saveHabits(habits);
       return Success(updatedHabit);
     } catch (e) {
