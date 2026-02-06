@@ -186,13 +186,15 @@ class DeveloperDebugPage extends ConsumerWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.notifications_active, color: Colors.purple),
+            leading:
+                const Icon(Icons.notifications_active, color: Colors.purple),
             title: const Text('Schedule Test Nudge (in 1 min)'),
             subtitle: const Text('Test nudge notification with 1-minute delay'),
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {
-                final notificationService = ref.read(notificationServiceProvider);
+                final notificationService =
+                    ref.read(notificationServiceProvider);
 
                 // Schedule a test nudge notification in 1 minute
                 await notificationService.scheduleNudgeNotification(
@@ -202,7 +204,8 @@ class DeveloperDebugPage extends ConsumerWidget {
                   delayMinutes: 1,
                 );
 
-                debugPrint('PREDICTOR 🧠 📅 Scheduled test nudge notification for 1 minute from now');
+                debugPrint(
+                    'PREDICTOR 🧠 📅 Scheduled test nudge notification for 1 minute from now');
                 messenger.showSnackBar(
                   const SnackBar(
                     content: Text('Test nudge scheduled for 1 minute from now'),
@@ -233,8 +236,10 @@ class DeveloperDebugPage extends ConsumerWidget {
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {
-                debugPrint('GEMINI 🤖 Starting micro-habits generation test...');
-                final generatorNotifier = ref.read(microHabitGeneratorProvider.notifier);
+                debugPrint(
+                    'GEMINI 🤖 Starting micro-habits generation test...');
+                final generatorNotifier =
+                    ref.read(microHabitGeneratorProvider.notifier);
 
                 // Test generation request
                 await generatorNotifier.generate(
@@ -249,10 +254,12 @@ class DeveloperDebugPage extends ConsumerWidget {
                 final state = ref.read(microHabitGeneratorProvider);
                 state.when(
                   data: (habits) {
-                    debugPrint('GEMINI 🤖 ✅ Generated ${habits.length} micro-habits successfully');
+                    debugPrint(
+                        'GEMINI 🤖 ✅ Generated ${habits.length} micro-habits successfully');
                     messenger.showSnackBar(
                       SnackBar(
-                        content: Text('Generated ${habits.length} habits successfully!'),
+                        content: Text(
+                            'Generated ${habits.length} habits successfully!'),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -283,7 +290,8 @@ class DeveloperDebugPage extends ConsumerWidget {
           ),
           Consumer(
             builder: (context, ref, child) {
-              final generatorNotifier = ref.watch(microHabitGeneratorProvider.notifier);
+              final generatorNotifier =
+                  ref.watch(microHabitGeneratorProvider.notifier);
               final remainingRequests = generatorNotifier.remainingRequests;
 
               return Card(
@@ -294,15 +302,18 @@ class DeveloperDebugPage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Gemini API Status', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text('Gemini API Status',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
                       Text('Remaining requests: $remainingRequests/month'),
                       const SizedBox(height: 4),
                       ref.watch(microHabitGeneratorProvider).when(
-                        data: (habits) => Text('Last generation: ${habits.length} habits'),
-                        loading: () => const Text('Status: Generating...'),
-                        error: (error, _) => Text('Last error: ${error.toString().substring(0, 50)}...'),
-                      ),
+                            data: (habits) => Text(
+                                'Last generation: ${habits.length} habits'),
+                            loading: () => const Text('Status: Generating...'),
+                            error: (error, _) => Text(
+                                'Last error: ${error.toString().substring(0, 50)}...'),
+                          ),
                     ],
                   ),
                 ),
