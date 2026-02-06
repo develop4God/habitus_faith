@@ -51,6 +51,7 @@ class HabitPredictorService {
   /// 2. Update abandonmentRisk field
   /// 3. If risk >= intervention threshold: calculate new difficulty and show nudge notification
   Future<void> runDailyPredictions() async {
+    debugPrint('PREDICTOR 🧠 runDailyPredictions: Fetching all habits...');
     developer.log(
       'HabitPredictorService: Starting daily predictions',
       name: 'HabitPredictorService',
@@ -58,11 +59,13 @@ class HabitPredictorService {
 
     try {
       // Get all active (non-archived) habits
-      final habits = await habitsRepository.getAllHabits();
+      final habits = await habitsRepository.getHabits();
+      debugPrint('PREDICTOR 🧠 runDailyPredictions: getHabits returned \\${habits.length} habits.');
       final activeHabits = habits.where((h) => !h.isArchived).toList();
+      debugPrint('PREDICTOR 🧠 runDailyPredictions: \\${activeHabits.length} active habits.');
 
       developer.log(
-        'HabitPredictorService: Processing ${activeHabits.length} active habits',
+        'HabitPredictorService: Processing \\${activeHabits.length} active habits',
         name: 'HabitPredictorService',
       );
 
@@ -71,6 +74,7 @@ class HabitPredictorService {
 
       for (final habit in activeHabits) {
         try {
+          debugPrint('PREDICTOR 🧠 Processing habit: id=\\${habit.id}, name=\\${habit.name}, completedToday=\\${habit.completedToday}');
           await _processSingleHabit(habit);
           processedCount++;
 
@@ -80,7 +84,7 @@ class HabitPredictorService {
           }
         } catch (e) {
           developer.log(
-            'HabitPredictorService: Error processing habit ${habit.id}: $e',
+            'HabitPredictorService: Error processing habit \\${habit.id}: $e',
             name: 'HabitPredictorService',
             error: e,
           );
@@ -89,7 +93,7 @@ class HabitPredictorService {
 
       developer.log(
         'HabitPredictorService: Daily predictions complete. '
-        'Processed: $processedCount, High-risk: $highRiskCount',
+        'Processed: \\${processedCount}, High-risk: \\${highRiskCount}',
         name: 'HabitPredictorService',
       );
     } catch (e) {
@@ -105,8 +109,9 @@ class HabitPredictorService {
   Future<void> _processSingleHabit(Habit habit) async {
     // Skip habits already completed today
     if (habit.completedToday) {
+      debugPrint('PREDICTOR 🧠 Skipping habit (already completed today): id=\\${habit.id}, name=\\${habit.name}');
       developer.log(
-        'HabitPredictorService: Skipping habit ${habit.name} (already completed)',
+        'HabitPredictorService: Skipping habit \\${habit.name} (already completed)',
         name: 'HabitPredictorService',
       );
       return;
@@ -114,9 +119,10 @@ class HabitPredictorService {
 
     // Predict abandonment risk
     final risk = await predictor.predictRisk(habit);
+    debugPrint('PREDICTOR 🧠 Habit id=\\${habit.id}, name=\\${habit.name}, predicted risk=\\${risk.toStringAsFixed(3)}');
 
     developer.log(
-      'HabitPredictorService: Habit "${habit.name}" risk: ${(risk * 100).toStringAsFixed(1)}%',
+      'HabitPredictorService: Habit "\\${habit.name}" risk: \\${(risk * 100).toStringAsFixed(1)}%',
       name: 'HabitPredictorService',
     );
 

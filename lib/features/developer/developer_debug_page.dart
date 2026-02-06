@@ -107,8 +107,14 @@ class DeveloperDebugPage extends ConsumerWidget {
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {
+                debugPrint('PREDICTOR 🧠 Starting ML Predictions...');
                 final predictor = ref.read(habitPredictorProvider);
                 await predictor.runDailyPredictions();
+                // Print telemetry for developer validation
+                debugPrint('PREDICTOR 🧠 ML Predictions completed. Telemetry: '
+                    '\nPredictions: \\${predictor.predictor.telemetry['prediction_count']}, '
+                    'Errors: \\${predictor.predictor.telemetry['error_count']}, '
+                    'Last prediction: \\${predictor.predictor.telemetry['last_prediction']}');
                 messenger.showSnackBar(
                   const SnackBar(
                     content: Text('ML Predictions completed successfully'),
@@ -116,6 +122,7 @@ class DeveloperDebugPage extends ConsumerWidget {
                   ),
                 );
               } catch (e) {
+                debugPrint('PREDICTOR 🧠 ML Prediction failed: $e');
                 messenger.showSnackBar(
                   SnackBar(
                     content: Text('ML Prediction failed: $e'),
@@ -125,9 +132,32 @@ class DeveloperDebugPage extends ConsumerWidget {
               }
             },
           ),
+          // ML Predictor Telemetry Display
+          Builder(
+            builder: (context) {
+              final predictor = ref.watch(habitPredictorProvider);
+              final telemetry = predictor.predictor.telemetry;
+              return Card(
+                color: Colors.blue.shade50,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('ML Predictor Telemetry', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text('Predictions: \\${telemetry['prediction_count']}'),
+                      Text('Errors: \\${telemetry['error_count']}'),
+                      Text('Last prediction: \\${telemetry['last_prediction'] ?? 'N/A'}'),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
           ListTile(
-            leading:
-                const Icon(Icons.notification_important, color: Colors.orange),
+            leading: const Icon(Icons.notification_important, color: Colors.orange),
             title: const Text('Reset Nudge Cooldown'),
             subtitle: const Text(
                 'Allows sending the same nudge notification immediately'),

@@ -356,7 +356,7 @@ class JsonHabitsRepository implements HabitsRepository {
       // If the habit was skipped or failed, completing it overrides that state
       final updatedHabit = _loadHabitWithCompletions(habit);
       debugPrint(
-        'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}',
+        'completeHabitWithNote: estado completedToday después: \\${updatedHabit.completedToday}',
       );
       habits[index] = updatedHabit;
       debugPrint('completeHabitWithNote: hábito actualizado en la lista');
@@ -733,5 +733,10 @@ class JsonHabitsRepository implements HabitsRepository {
       );
       return null;
     }
+  }
+
+  /// Public method to fetch all habits for the current user (non-archived)
+  Future<List<Habit>> getHabits() async {
+    return _loadHabits();
   }
 }
