@@ -31,7 +31,7 @@ class DeveloperDebugPage extends ConsumerWidget {
         ),
       );
     }
-    const fastTimeEnabled = bool.fromEnvironment('FAST_TIME');
+    const fastTimeEnabled = true;
     final clock = ref.watch(clockProvider);
     final backgroundTaskService = ref.watch(backgroundTaskServiceProvider);
 
@@ -364,17 +364,14 @@ class DeveloperDebugPage extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(
-              fastTimeEnabled ? Icons.fast_forward : Icons.schedule,
-              color: fastTimeEnabled ? Colors.orange : Colors.grey,
+              Icons.fast_forward,
+              color: Colors.orange,
             ),
             title: const Text('Time Acceleration'),
             subtitle: const Text(
-              fastTimeEnabled
-                  ? 'ENABLED: 288x speed (1 week in 35 min)'
-                  : 'Disabled (use --dart-define=FAST_TIME=true)',
+              'ENABLED: 288x speed (1 week in 35 min)',
             ),
-            trailing: fastTimeEnabled
-                ? Container(
+            trailing: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,
@@ -390,8 +387,7 @@ class DeveloperDebugPage extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
-                : null,
+                  ),
           ),
           // Fast Acceleration Toggle Button (debug mode only)
           if (kDebugMode)
@@ -399,26 +395,20 @@ class DeveloperDebugPage extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ElevatedButton.icon(
                 icon: const Icon(
-                    fastTimeEnabled ? Icons.fast_forward : Icons.schedule),
-                label: const Text(fastTimeEnabled
-                    ? 'Disable Fast Acceleration'
-                    : 'Enable Fast Acceleration'),
+                    Icons.fast_forward),
+                label: const Text('Disable Fast Acceleration'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: fastTimeEnabled
-                      ? Colors.orange.shade100
-                      : Colors.grey.shade300,
+                  backgroundColor: Colors.orange.shade100,
                   foregroundColor:
-                      fastTimeEnabled ? Colors.orange : Colors.black,
+                      Colors.orange,
                 ),
                 onPressed: () {
                   // This toggles the mode for the session (does not persist or affect global env)
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text(fastTimeEnabled
-                          ? 'Fast Acceleration DISABLED'
-                          : 'Fast Acceleration ENABLED (1 week in 35 min)'),
+                      content: Text('Fast Acceleration DISABLED'),
                       backgroundColor:
-                          fastTimeEnabled ? Colors.grey : Colors.orange,
+                          Colors.grey,
                     ),
                   );
                 },

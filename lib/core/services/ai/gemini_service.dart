@@ -139,33 +139,42 @@ class GeminiService implements IGeminiService {
     String languageCode,
   ) {
     return '''
-Usuario quiere: "$userGoal"
-Falla típicamente: ${failurePattern ?? 'desconocido'}
-Fe: $faithContext
-Idioma respuesta: $languageCode
+El usuario quiere lograr: "$userGoal"
+${failurePattern != null ? 'Patrón de falla: $failurePattern' : ''}
+Contexto de fe: $faithContext
+Idioma: $languageCode
 
-Genera EXACTAMENTE ${AiConfig.habitsPerGeneration} micro-hábitos cristianos. Cada hábito debe:
-1. Ser completable en ${AiConfig.maxHabitMinutes} minutos o menos
-2. Incluir acción específica y medible
-3. Incluir versículo bíblico relevante (referencia + texto completo)
-4. Explicar propósito espiritual en UNA oración
+IMPORTANTE: Genera EXACTAMENTE ${AiConfig.habitsPerGeneration} micro-hábitos LÓGICOS y DIRECTAMENTE relacionados con el objetivo del usuario.
+
+Cada hábito debe:
+1. Ser una acción ESPECÍFICA, MEDIBLE y REALISTA que ayude a lograr el objetivo
+2. Completarse en máximo ${AiConfig.maxHabitMinutes} minutos
+3. Estar DIRECTAMENTE relacionado con "$userGoal" (no sugerencias genéricas)
+4. Incluir UN versículo bíblico como referencia inspiracional (no necesariamente literal)
+5. Explicar claramente POR QUÉ este hábito ayuda a lograr el objetivo
+
+Ejemplos de hábitos LÓGICOS:
+- Objetivo: "Leer toda la Biblia" → "Leer 3 capítulos cada mañana antes del desayuno"
+- Objetivo: "Comer mejor sin saltar comidas" → "Preparar 3 comidas balanceadas el domingo para la semana"
+- Objetivo: "Hacer más ejercicio" → "Caminar 15 minutos después del almuerzo"
 
 Responde SOLO con JSON válido (sin markdown, sin ```json):
 [
   {
-    "action": "Acción específica en infinitivo (ej: 'Orar 3min al despertar')",
+    "action": "Acción específica y medible relacionada directamente con el objetivo",
     "verse": "Libro capítulo:versículo",
-    "verseText": "Texto completo del versículo",
-    "purpose": "Por qué este hábito honra a Dios (1 oración)",
-    "estimatedMinutes": 3
+    "verseText": "Texto completo del versículo bíblico",
+    "purpose": "Explicación clara de cómo esta acción específica ayuda a lograr el objetivo del usuario",
+    "estimatedMinutes": número entero entre 1 y ${AiConfig.maxHabitMinutes}
   }
 ]
 
-Requisitos estrictos:
-- Acciones deben ser ESPECÍFICAS (no "orar más" sino "orar 3min después de café")
-- Versículos deben ser EXACTOS (formato: Libro número:número)
-- Propósito debe conectar con $faithContext
-- Tono: motivacional, práctico, esperanzador
+REGLAS ESTRICTAS:
+- NO sugieras hábitos genéricos no relacionados con el objetivo
+- Las acciones deben ser CONCRETAS: incluir números, horarios, o triggers específicos
+- El propósito debe explicar la CONEXIÓN LÓGICA entre la acción y el objetivo
+- El versículo es referencia inspiracional, no debe ser el foco principal
+- Tono: práctico, motivacional, centrado en el objetivo del usuario
 ''';
   }
 
