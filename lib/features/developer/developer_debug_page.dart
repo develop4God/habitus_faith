@@ -372,43 +372,40 @@ class DeveloperDebugPage extends ConsumerWidget {
               'ENABLED: 288x speed (1 week in 35 min)',
             ),
             trailing: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      '288x',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                '288x',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
           // Fast Acceleration Toggle Button (debug mode only)
           if (kDebugMode)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ElevatedButton.icon(
-                icon: const Icon(
-                    Icons.fast_forward),
+                icon: const Icon(Icons.fast_forward),
                 label: const Text('Disable Fast Acceleration'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange.shade100,
-                  foregroundColor:
-                      Colors.orange,
+                  foregroundColor: Colors.orange,
                 ),
                 onPressed: () {
                   // This toggles the mode for the session (does not persist or affect global env)
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Fast Acceleration DISABLED'),
-                      backgroundColor:
-                          Colors.grey,
+                      backgroundColor: Colors.grey,
                     ),
                   );
                 },
