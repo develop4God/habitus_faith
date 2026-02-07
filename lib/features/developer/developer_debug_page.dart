@@ -25,7 +25,7 @@ class DeveloperDebugPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) {
       // Prevent access in release mode
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text('Developer tools are only available in debug mode.'),
         ),
@@ -550,12 +550,14 @@ class DeveloperDebugPage extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.refresh, color: Colors.orange),
             title: const Text('Reset Gemini Request State'),
-            subtitle: const Text('Clear Gemini cache and reset request counters for testing'),
+            subtitle: const Text(
+                'Clear Gemini cache and reset request counters for testing'),
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {
                 debugPrint('GEMINI 🤖 Resetting Gemini request state...');
-                final generatorNotifier = ref.read(microHabitGeneratorProvider.notifier);
+                final generatorNotifier =
+                    ref.read(microHabitGeneratorProvider.notifier);
                 await generatorNotifier.reset();
                 messenger.showSnackBar(
                   const SnackBar(

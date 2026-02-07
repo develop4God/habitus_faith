@@ -798,13 +798,16 @@ Requisitos:
   /// Validate if the response is logical for the goal
   bool _isLogicalForGoal(String userGoal, List<MicroHabit> habits) {
     final goal = userGoal.toLowerCase();
-    if (goal.contains('toda la biblia') || goal.contains('whole bible') || goal.contains('leer la biblia')) {
+    if (goal.contains('toda la biblia') ||
+        goal.contains('whole bible') ||
+        goal.contains('leer la biblia')) {
       // Look for a plan, schedule, or multi-step reading suggestion
-      return habits.any((h) => h.action.toLowerCase().contains('plan') ||
-        h.action.toLowerCase().contains('capítulo') ||
-        h.action.toLowerCase().contains('cronológico') ||
-        h.action.toLowerCase().contains('lectura diaria') ||
-        h.action.toLowerCase().contains('leer la biblia'));
+      return habits.any((h) =>
+          h.action.toLowerCase().contains('plan') ||
+          h.action.toLowerCase().contains('capítulo') ||
+          h.action.toLowerCase().contains('cronológico') ||
+          h.action.toLowerCase().contains('lectura diaria') ||
+          h.action.toLowerCase().contains('leer la biblia'));
     }
     // For other goals, just check that actions are not empty
     return habits.every((h) => h.action.isNotEmpty);
@@ -826,7 +829,8 @@ Respond ONLY with valid JSON (no markdown, no ```json):
   }
 
   /// Generate a logical plan or micro-habits based on the goal
-  Future<List<MicroHabit>> generateLogicalHabitsOrPlan(GenerationRequest request) async {
+  Future<List<MicroHabit>> generateLogicalHabitsOrPlan(
+      GenerationRequest request) async {
     final sanitizedGoal = _sanitizeInput(request.userGoal, 'userGoal');
     final sanitizedPattern = request.failurePattern != null
         ? _sanitizeInput(request.failurePattern!, 'failurePattern')
@@ -847,28 +851,39 @@ Respond ONLY with valid JSON (no markdown, no ```json):
     }
     // Detect if the goal is a full-plan goal
     final goal = sanitizedGoal.toLowerCase();
-    if (goal.contains('toda la biblia') || goal.contains('whole bible') || goal.contains('leer la biblia')) {
+    if (goal.contains('toda la biblia') ||
+        goal.contains('whole bible') ||
+        goal.contains('leer la biblia')) {
       // Use full plan prompt
       final prompt = _buildFullPlanPrompt(sanitizedGoal, request.languageCode);
-      final response = await _model.generateContent([Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+      final response = await _model.generateContent(
+          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
       // For now, just log and throw, or you can parse and return as needed
       throw GeminiException('Full plan response: \\n${response.text}');
     } else {
       // Use micro-habit prompt
-      final prompt = _buildPrompt(sanitizedGoal, sanitizedPattern, request.faithContext, request.languageCode);
+      final prompt = _buildPrompt(sanitizedGoal, sanitizedPattern,
+          request.faithContext, request.languageCode);
       try {
-        final response = await _model.generateContent([Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+        final response = await _model.generateContent(
+            [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
         final habits = _parseResponse(response.text, request.languageCode);
         // Filter forbidden content
-        final safeHabits = habits.where((h) => !_containsForbiddenContent(h.action) && !_containsForbiddenContent(h.purpose)).toList();
+        final safeHabits = habits
+            .where((h) =>
+                !_containsForbiddenContent(h.action) &&
+                !_containsForbiddenContent(h.purpose))
+            .toList();
         if (!_isLogicalForGoal(request.userGoal, safeHabits)) {
-          throw GeminiException('Response not logical for goal: ${request.userGoal}');
+          throw GeminiException(
+              'Response not logical for goal: ${request.userGoal}');
         }
         final enrichedHabits = await _enrichWithVerseText(safeHabits);
         await _cache.set(cacheKey, enrichedHabits, ttl: AiConfig.cacheTtl);
         return enrichedHabits;
       } on TimeoutException {
-        throw GeminiException('Request timed out after {AiConfig.requestTimeout.inSeconds} seconds. Please try again.');
+        throw GeminiException(
+            'Request timed out after {AiConfig.requestTimeout.inSeconds} seconds. Please try again.');
       } catch (e) {
         if (e is GeminiException) rethrow;
         throw GeminiException('Failed to generate habits: $e');

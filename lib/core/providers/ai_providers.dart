@@ -91,7 +91,8 @@ class MicroHabitGenerator extends _$MicroHabitGenerator {
   }
 
   /// Get remaining API requests for the current month
-  int get remainingRequests => ref.read(rateLimitServiceProvider).getRemainingRequests();
+  int get remainingRequests =>
+      ref.read(rateLimitServiceProvider).getRemainingRequests();
 
   /// Reset the generator state and counters for testing
   Future<void> reset() async {
