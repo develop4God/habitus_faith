@@ -35,7 +35,9 @@ class MicroHabit with _$MicroHabit {
       verseText: json['verseText'] as String?,
       purpose: json['purpose'] as String? ?? '',
       estimatedMinutes: minutes,
-      generatedAt: json['generatedAt'] == null ? null : DateTime.tryParse(json['generatedAt'].toString()),
+      generatedAt: json['generatedAt'] == null
+          ? null
+          : DateTime.tryParse(json['generatedAt'].toString()),
     );
   }
 }
