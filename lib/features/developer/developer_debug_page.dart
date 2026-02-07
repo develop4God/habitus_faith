@@ -25,7 +25,7 @@ class DeveloperDebugPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) {
       // Prevent access in release mode
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text('Developer tools are only available in debug mode.'),
         ),
