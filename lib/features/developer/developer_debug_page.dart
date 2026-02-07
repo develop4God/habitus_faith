@@ -550,12 +550,14 @@ class DeveloperDebugPage extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.refresh, color: Colors.orange),
             title: const Text('Reset Gemini Request State'),
-            subtitle: const Text('Clear Gemini cache and reset request counters for testing'),
+            subtitle: const Text(
+                'Clear Gemini cache and reset request counters for testing'),
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {
                 debugPrint('GEMINI 🤖 Resetting Gemini request state...');
-                final generatorNotifier = ref.read(microHabitGeneratorProvider.notifier);
+                final generatorNotifier =
+                    ref.read(microHabitGeneratorProvider.notifier);
                 await generatorNotifier.reset();
                 messenger.showSnackBar(
                   const SnackBar(
