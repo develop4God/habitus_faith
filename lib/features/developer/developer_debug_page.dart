@@ -25,7 +25,7 @@ class DeveloperDebugPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) {
       // Prevent access in release mode
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: Text('Developer tools are only available in debug mode.'),
         ),
@@ -307,13 +307,18 @@ class DeveloperDebugPage extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text('Remaining requests: $remainingRequests/month'),
                       const SizedBox(height: 4),
-                      ref.watch(microHabitGeneratorProvider).when(
+                      Builder(
+                        builder: (context) {
+                          final state = ref.watch(microHabitGeneratorProvider);
+                          return state.when(
                             data: (habits) => Text(
-                                'Last generation: ${habits.length} habits'),
+                                'Last generation: \\${habits.length} habits'),
                             loading: () => const Text('Status: Generating...'),
                             error: (error, _) => Text(
-                                'Last error: ${error.toString().substring(0, 50)}...'),
-                          ),
+                                'Last error: \\${error.toString().substring(0, 50)}...'),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -540,6 +545,34 @@ class DeveloperDebugPage extends ConsumerWidget {
                 }
               },
             ),
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.refresh, color: Colors.orange),
+            title: const Text('Reset Gemini Request State'),
+            subtitle: const Text('Clear Gemini cache and reset request counters for testing'),
+            onTap: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                debugPrint('GEMINI 🤖 Resetting Gemini request state...');
+                final generatorNotifier = ref.read(microHabitGeneratorProvider.notifier);
+                await generatorNotifier.reset();
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Gemini request state reset!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } catch (e) {
+                debugPrint('GEMINI 🤖 ❌ Failed to reset Gemini state: $e');
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to reset: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

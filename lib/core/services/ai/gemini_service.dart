@@ -777,4 +777,102 @@ Requisitos:
         return HabitCategory.other;
     }
   }
+
+  /// Forbidden content keywords (violence, sex, etc.)
+  static const List<String> _forbiddenKeywords = [
+    'violence', 'kill', 'murder', 'suicide', 'sex', 'sexual', 'abuse',
+    'drugs', 'weapon', 'assault', 'rape', 'porn', 'erotic', 'terror',
+    'self-harm', 'harm', 'abduct', 'exploit', 'molest', 'incest',
+    // Spanish
+    'violencia', 'matar', 'asesinar', 'suicidio', 'sexo', 'sexual', 'abuso',
+    'drogas', 'arma', 'asalto', 'violación', 'porno', 'erótico', 'terror',
+    'autolesión', 'dañar', 'secuestrar', 'explotar', 'acosar', 'incesto',
+  ];
+
+  /// Check for forbidden content in a string
+  bool _containsForbiddenContent(String text) {
+    final lower = text.toLowerCase();
+    return _forbiddenKeywords.any((word) => lower.contains(word));
+  }
+
+  /// Validate if the response is logical for the goal
+  bool _isLogicalForGoal(String userGoal, List<MicroHabit> habits) {
+    final goal = userGoal.toLowerCase();
+    if (goal.contains('toda la biblia') || goal.contains('whole bible') || goal.contains('leer la biblia')) {
+      // Look for a plan, schedule, or multi-step reading suggestion
+      return habits.any((h) => h.action.toLowerCase().contains('plan') ||
+        h.action.toLowerCase().contains('capítulo') ||
+        h.action.toLowerCase().contains('cronológico') ||
+        h.action.toLowerCase().contains('lectura diaria') ||
+        h.action.toLowerCase().contains('leer la biblia'));
+    }
+    // For other goals, just check that actions are not empty
+    return habits.every((h) => h.action.isNotEmpty);
+  }
+
+  /// New prompt for full-plan goals (language-agnostic, not hardcoded for Bible)
+  String _buildFullPlanPrompt(String userGoal, String languageCode) {
+    return '''
+The user wants: "$userGoal"
+Generate EXACTLY 3 logical, actionable tasks that will help the user achieve this goal. Each task should be clear, specific, and directly related to the user's request. For each task, provide a brief explanation of why it is important or how it helps achieve the goal.
+
+Respond ONLY with valid JSON (no markdown, no ```json):
+[
+  {"task": "First logical task", "explanation": "Why this task is important"},
+  {"task": "Second logical task", "explanation": "Why this task is important"},
+  {"task": "Third logical task", "explanation": "Why this task is important"}
+]
+''';
+  }
+
+  /// Generate a logical plan or micro-habits based on the goal
+  Future<List<MicroHabit>> generateLogicalHabitsOrPlan(GenerationRequest request) async {
+    final sanitizedGoal = _sanitizeInput(request.userGoal, 'userGoal');
+    final sanitizedPattern = request.failurePattern != null
+        ? _sanitizeInput(request.failurePattern!, 'failurePattern')
+        : null;
+    await _rateLimit.waitIfNeeded();
+    if (!_rateLimit.canMakeRequest()) {
+      throw RateLimitExceededException(
+        'Monthly limit of {AiConfig.monthlyRequestLimit} requests reached. '
+        'Limit will reset next month.',
+      );
+    }
+    _rateLimit.recordRequest();
+    _rateLimit.getRemainingRequests();
+    final cacheKey = request.toCacheKey();
+    final cached = await _cache.get<List<MicroHabit>>(cacheKey);
+    if (cached != null) {
+      return cached;
+    }
+    // Detect if the goal is a full-plan goal
+    final goal = sanitizedGoal.toLowerCase();
+    if (goal.contains('toda la biblia') || goal.contains('whole bible') || goal.contains('leer la biblia')) {
+      // Use full plan prompt
+      final prompt = _buildFullPlanPrompt(sanitizedGoal, request.languageCode);
+      final response = await _model.generateContent([Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+      // For now, just log and throw, or you can parse and return as needed
+      throw GeminiException('Full plan response: \\n${response.text}');
+    } else {
+      // Use micro-habit prompt
+      final prompt = _buildPrompt(sanitizedGoal, sanitizedPattern, request.faithContext, request.languageCode);
+      try {
+        final response = await _model.generateContent([Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+        final habits = _parseResponse(response.text, request.languageCode);
+        // Filter forbidden content
+        final safeHabits = habits.where((h) => !_containsForbiddenContent(h.action) && !_containsForbiddenContent(h.purpose)).toList();
+        if (!_isLogicalForGoal(request.userGoal, safeHabits)) {
+          throw GeminiException('Response not logical for goal: ${request.userGoal}');
+        }
+        final enrichedHabits = await _enrichWithVerseText(safeHabits);
+        await _cache.set(cacheKey, enrichedHabits, ttl: AiConfig.cacheTtl);
+        return enrichedHabits;
+      } on TimeoutException {
+        throw GeminiException('Request timed out after {AiConfig.requestTimeout.inSeconds} seconds. Please try again.');
+      } catch (e) {
+        if (e is GeminiException) rethrow;
+        throw GeminiException('Failed to generate habits: $e');
+      }
+    }
+  }
 }
