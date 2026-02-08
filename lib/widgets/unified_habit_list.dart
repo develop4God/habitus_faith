@@ -42,6 +42,10 @@ class UnifiedHabitList extends ConsumerWidget {
         ? DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day)
         : today;
     final isViewingToday = viewingDate == today;
+    final isFuture = viewingDate.isAfter(today);
+
+    debugPrint(
+        '🗓️ UnifiedHabitList: today=$today, viewingDate=$viewingDate, isViewingToday=$isViewingToday, isFuture=$isFuture');
 
     return habitsAsync.when(
       data: (habits) {
@@ -58,34 +62,53 @@ class UnifiedHabitList extends ConsumerWidget {
           );
         }
 
-        final displayHabits = selectedDate != null && !isViewingToday
+        // For any non-today date, check completion history
+        // For future dates, always show as uncompleted
+        final displayHabits = selectedDate != null
             ? habits.map((habit) {
-                final wasCompletedOnDate = habit.completionHistory.any((dt) {
-                  final historyDay = DateTime(dt.year, dt.month, dt.day);
-                  return historyDay == viewingDate;
-                });
-                return habit.copyWith(completedToday: wasCompletedOnDate);
+                final viewingDate = DateTime(
+                    selectedDate!.year, selectedDate!.month, selectedDate!.day);
+                final isFuture = viewingDate.isAfter(today);
+
+                if (isFuture) {
+                  // Future dates: always show as uncompleted
+                  debugPrint(
+                      '🗓️ Habit "${habit.name}" on future date: completedToday=false (forced)');
+                  return habit.copyWith(completedToday: false);
+                } else {
+                  // Past or today: check completion history
+                  final wasCompletedOnDate = habit.completionHistory.any((dt) {
+                    final historyDay = DateTime(dt.year, dt.month, dt.day);
+                    return historyDay == viewingDate;
+                  });
+                  debugPrint(
+                      '🗓️ Habit "${habit.name}" on $viewingDate: completedToday=$wasCompletedOnDate');
+                  return habit.copyWith(completedToday: wasCompletedOnDate);
+                }
               }).toList()
             : habits;
 
         final sortedHabits = [...displayHabits];
         sortedHabits.sort((a, b) {
-          final aCompleted = selectedDate != null && !isViewingToday
+          // A habit is considered "done" if it's completed, skipped, or failed for today
+          final aDone = selectedDate != null && !isViewingToday
               ? a.completedToday
-              : a.dailyStatus == HabitDailyStatus.completed;
-          final bCompleted = selectedDate != null && !isViewingToday
+              : a.dailyStatus != HabitDailyStatus.pending;
+          final bDone = selectedDate != null && !isViewingToday
               ? b.completedToday
-              : b.dailyStatus == HabitDailyStatus.completed;
-          if (aCompleted != bCompleted) {
-            return aCompleted ? 1 : -1;
+              : b.dailyStatus != HabitDailyStatus.pending;
+
+          if (aDone != bDone) {
+            return aDone ? 1 : -1;
           }
           return a.order.compareTo(b.order);
         });
 
+        // Pending habits are those with 'pending' status
         final hasPendingHabits = selectedDate != null && !isViewingToday
             ? sortedHabits.any((h) => !h.completedToday)
             : sortedHabits.any(
-                (h) => h.dailyStatus != HabitDailyStatus.completed,
+                (h) => h.dailyStatus == HabitDailyStatus.pending,
               );
 
         return Theme(
@@ -147,17 +170,17 @@ class UnifiedHabitList extends ConsumerWidget {
               }
 
               final movedHabit = sortedHabits[oldIndex];
-              final movedIsCompleted =
-                  movedHabit.dailyStatus == HabitDailyStatus.completed;
-              final completedStartIndex = sortedHabits.indexWhere(
-                (h) => h.dailyStatus == HabitDailyStatus.completed,
+              final movedIsDone =
+                  movedHabit.dailyStatus != HabitDailyStatus.pending;
+              final doneStartIndex = sortedHabits.indexWhere(
+                (h) => h.dailyStatus != HabitDailyStatus.pending,
               );
 
-              if (completedStartIndex != -1) {
-                if (movedIsCompleted && newIndex < completedStartIndex) {
+              if (doneStartIndex != -1) {
+                if (movedIsDone && newIndex < doneStartIndex) {
                   return;
                 }
-                if (!movedIsCompleted && newIndex >= completedStartIndex) {
+                if (!movedIsDone && newIndex >= doneStartIndex) {
                   return;
                 }
               }

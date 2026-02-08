@@ -115,20 +115,23 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
             day.month == today.month &&
             day.day == today.day;
         final isSelected = dayOnly == selectedDay;
-        final completedHabits = widget.habits
-            .where(
-              (h) => h.completionHistory.any(
-                (dt) =>
-                    dt.year == day.year &&
-                    dt.month == day.month &&
-                    dt.day == day.day,
-              ),
-            )
-            .length;
+        final isFutureDay = day.isAfter(today);
+        final completedHabits = isFutureDay
+            ? 0
+            : widget.habits
+                .where(
+                  (h) => h.completionHistory.any(
+                    (dt) =>
+                        dt.year == day.year &&
+                        dt.month == day.month &&
+                        dt.day == day.day,
+                  ),
+                )
+                .length;
         final totalHabits = widget.habits.length;
         final progress = totalHabits > 0 ? completedHabits / totalHabits : 0.0;
         debugPrint(
-          'ModernWeeklyCalendar._buildWeek: día ${day.day}/${day.month} - completados: $completedHabits/$totalHabits, progreso: $progress',
+          '🗓️ ModernWeeklyCalendar._buildWeek: day=$day, completedHabits=$completedHabits, totalHabits=$totalHabits, progress=$progress',
         );
 
         return Expanded(

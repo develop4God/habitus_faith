@@ -16,6 +16,11 @@ class BackgroundTaskService {
   static const String _dailyPredictionTask = 'dailyAbandonmentPrediction';
   static const String _predictionTaskTag = 'daily_prediction_6am';
   static const String _mlPredictionsEnabledKey = 'ml_predictions_enabled';
+  static const String _mlPredictionHourKey = 'ml_prediction_hour';
+
+  // FAST_TIME mode constants (288x speed: 1 week in 35 minutes, 1 day in 5 minutes)
+  // Minimum 4 real minutes between runs (allows ~80% of a simulated day margin)
+  static const int _fastTimeMinCooldownMinutes = 4;
 
   bool _initialized = false;
 
@@ -55,7 +60,7 @@ class BackgroundTaskService {
     }
   }
 
-  /// Schedule daily prediction task at 6:00 AM
+  /// Schedule daily prediction task at configured hour (default 6:00 AM)
   /// Respects battery optimization and user settings
   /// Returns true if scheduled successfully, false otherwise
   Future<bool> scheduleDailyPrediction() async {
@@ -84,27 +89,49 @@ class BackgroundTaskService {
       // Cancel any existing task first
       await Workmanager().cancelByTag(_predictionTaskTag);
 
-      // Schedule daily task at 6:00 AM
-      // initialDelay calculates time until next 6 AM
-      final now = DateTime.now();
-      var nextRun = DateTime(now.year, now.month, now.day, 6, 0);
+      // Get scheduled hour (default to 6 AM)
+      final scheduledHour = prefs.getInt(_mlPredictionHourKey) ?? 6;
 
-      // If 6 AM already passed today, schedule for tomorrow
-      if (nextRun.isBefore(now)) {
-        nextRun = nextRun.add(const Duration(days: 1));
+      // Check if FAST_TIME is enabled (for accelerated testing)
+      const fastTime = bool.fromEnvironment('FAST_TIME');
+
+      Duration frequency;
+      Duration initialDelay;
+
+      if (fastTime && kDebugMode) {
+        // In FAST_TIME mode (288x speed), run every 5 minutes to check if it's time
+        // This allows predictions to run at the correct accelerated time
+        // 5 real minutes = 24 simulated hours at 288x speed
+        frequency = const Duration(minutes: 5);
+        initialDelay = const Duration(seconds: 30); // Start checking soon
+
+        developer.log(
+          'BackgroundTaskService: FAST_TIME enabled - scheduling frequent checks (every 5 min)',
+          name: 'BackgroundTaskService',
+        );
+      } else {
+        // Normal mode: schedule for specific time of day
+        final now = clock.now();
+        var nextRun = DateTime(now.year, now.month, now.day, scheduledHour, 0);
+
+        // If scheduled time already passed today, schedule for tomorrow
+        if (nextRun.isBefore(now)) {
+          nextRun = nextRun.add(const Duration(days: 1));
+        }
+
+        initialDelay = nextRun.difference(now);
+        frequency = const Duration(days: 1);
       }
-
-      final initialDelay = nextRun.difference(now);
 
       await Workmanager().registerPeriodicTask(
         _dailyPredictionTask,
         _dailyPredictionTask,
-        frequency: const Duration(days: 1),
+        frequency: frequency,
         initialDelay: initialDelay,
         existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(
           networkType: NetworkType.notRequired,
-          requiresBatteryNotLow: true,
+          requiresBatteryNotLow: !fastTime, // Ignore battery in fast mode
           requiresCharging: false,
           requiresDeviceIdle: false,
           requiresStorageNotLow: false,
@@ -115,7 +142,7 @@ class BackgroundTaskService {
       );
 
       developer.log(
-        'BackgroundTaskService: Daily prediction task scheduled successfully for 6:00 AM (next run: $nextRun)',
+        'BackgroundTaskService: Daily prediction task scheduled successfully for $scheduledHour:00 (frequency: $frequency, initial delay: $initialDelay)',
         name: 'BackgroundTaskService',
       );
 
@@ -162,6 +189,47 @@ class BackgroundTaskService {
   Future<bool> arePredictionsEnabled() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_mlPredictionsEnabledKey) ?? true;
+  }
+
+  /// Get scheduled hour for predictions
+  Future<int> getScheduledHour() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_mlPredictionHourKey) ?? 6;
+  }
+
+  /// Set scheduled hour for predictions (Only for Debug)
+  Future<void> setScheduledHour(int hour) async {
+    assert(kDebugMode, 'setScheduledHour should only be called in debug mode');
+    assert(hour >= 0 && hour <= 23, 'Hour must be between 0-23');
+
+    if (hour < 0 || hour > 23) {
+      throw ArgumentError('Hour must be between 0-23');
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final previousHour = prefs.getInt(_mlPredictionHourKey);
+
+    try {
+      await prefs.setInt(_mlPredictionHourKey, hour);
+      final success = await scheduleDailyPrediction();
+      if (!success) {
+        throw Exception('Failed to reschedule background task');
+      }
+    } catch (e) {
+      developer.log(
+        'BackgroundTaskService: Failed to update scheduled hour, rolling back',
+        name: 'BackgroundTaskService',
+        error: e,
+      );
+      // Rollback logic
+      if (previousHour != null) {
+        await prefs.setInt(_mlPredictionHourKey, previousHour);
+      } else {
+        await prefs.remove(_mlPredictionHourKey);
+      }
+      await scheduleDailyPrediction();
+      rethrow;
+    }
   }
 
   /// Get status of last prediction run
@@ -278,6 +346,40 @@ Future<bool> _executeDailyPrediction() async {
         name: 'BackgroundTaskService',
       );
       return true; // Not an error, just disabled
+    }
+
+    // Check if we should run based on time
+    const fastTime = bool.fromEnvironment('FAST_TIME');
+    if (fastTime && kDebugMode) {
+      // In FAST_TIME mode, check if enough time has passed since last run
+      // This prevents running too frequently when WorkManager checks every 5 minutes
+      const lastRunKey = 'ml_last_run_time';
+      final lastRunStr = prefs.getString(lastRunKey);
+      final scheduledHour = prefs.getInt('ml_prediction_hour') ?? 6;
+
+      if (lastRunStr != null) {
+        final lastRun = DateTime.parse(lastRunStr);
+        final now = DateTime.now();
+
+        // In FAST_TIME (288x), 1 day = 5 minutes
+        // Only run if at least 4 minutes have passed (allows ~80% of a simulated day margin)
+        if (now.difference(lastRun).inMinutes <
+            BackgroundTaskService._fastTimeMinCooldownMinutes) {
+          developer.log(
+            'BackgroundTaskService: FAST_TIME - skipping, last run was ${now.difference(lastRun).inMinutes} minutes ago',
+            name: 'BackgroundTaskService',
+          );
+          return true; // Not time yet
+        }
+      }
+
+      // Store this run time
+      await prefs.setString(lastRunKey, DateTime.now().toIso8601String());
+
+      developer.log(
+        'BackgroundTaskService: FAST_TIME - running predictions (scheduled hour: $scheduledHour)',
+        name: 'BackgroundTaskService',
+      );
     }
 
     // Initialize ProviderContainer in isolate

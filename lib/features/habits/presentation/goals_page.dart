@@ -82,7 +82,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                         const SizedBox(width: 4),
                         _buildTabButton(GoalType.month, 'Mensual'),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.custom, 'Personalizado'),
+                        _buildTabButton(GoalType.year, 'Anual'),
+                        const SizedBox(width: 4),
+                        _buildTabButton(GoalType.custom, 'Personal'),
                       ],
                     ),
                   ),
@@ -489,7 +491,12 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
-                children: GoalType.values.map((type) {
+                children: [
+                  GoalType.week,
+                  GoalType.month,
+                  GoalType.year,
+                  GoalType.custom,
+                ].map((type) {
                   final isSelected = selectedType == type;
                   return ChoiceChip(
                     label: Text(type.displayName),
@@ -578,6 +585,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                         deadline = DateTime.now().add(const Duration(days: 7));
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
+                      } else if (selectedType == GoalType.year) {
+                        deadline =
+                            DateTime.now().add(const Duration(days: 365));
                       } else {
                         deadline = DateTime.now().add(
                           const Duration(days: 365),
@@ -668,7 +678,12 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
-                children: GoalType.values.map((type) {
+                children: [
+                  GoalType.week,
+                  GoalType.month,
+                  GoalType.year,
+                  GoalType.custom,
+                ].map((type) {
                   final isSelected = selectedType == type;
                   return ChoiceChip(
                     label: Text(type.displayName),
@@ -757,6 +772,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                         deadline = DateTime.now().add(const Duration(days: 7));
                       } else if (selectedType == GoalType.month) {
                         deadline = DateTime.now().add(const Duration(days: 30));
+                      } else if (selectedType == GoalType.year) {
+                        deadline =
+                            DateTime.now().add(const Duration(days: 365));
                       } else {
                         deadline = DateTime.now().add(
                           const Duration(days: 365),

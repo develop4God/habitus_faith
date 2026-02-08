@@ -17,6 +17,27 @@ class MicroHabit with _$MicroHabit {
     DateTime? generatedAt,
   }) = _MicroHabit;
 
-  factory MicroHabit.fromJson(Map<String, dynamic> json) =>
-      _$MicroHabitFromJson(json);
+  factory MicroHabit.fromJson(Map<String, dynamic> json) {
+    // Fix: allow estimatedMinutes to be double or int
+    final raw = json['estimatedMinutes'];
+    int minutes = 5;
+    if (raw is int) {
+      minutes = raw;
+    } else if (raw is double) {
+      minutes = raw.round();
+    } else if (raw != null) {
+      minutes = int.tryParse(raw.toString()) ?? 5;
+    }
+    return _MicroHabit(
+      id: json['id'] as String? ?? '',
+      action: json['action'] as String? ?? '',
+      verse: json['verse'] as String? ?? '',
+      verseText: json['verseText'] as String?,
+      purpose: json['purpose'] as String? ?? '',
+      estimatedMinutes: minutes,
+      generatedAt: json['generatedAt'] == null
+          ? null
+          : DateTime.tryParse(json['generatedAt'].toString()),
+    );
+  }
 }

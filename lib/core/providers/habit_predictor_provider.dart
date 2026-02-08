@@ -33,6 +33,10 @@ class HabitPredictorService {
   final AbandonmentPredictor predictor;
   final Clock clock;
 
+  // Nudge notification cooldown (hours)
+  static const int _nudgeCooldownHours =
+      24; // Don't send same nudge more than once per day
+
   HabitPredictorService({
     required this.habitsRepository,
     required this.predictor,
@@ -47,26 +51,24 @@ class HabitPredictorService {
   /// 2. Update abandonmentRisk field
   /// 3. If risk >= intervention threshold: calculate new difficulty and show nudge notification
   Future<void> runDailyPredictions() async {
-    developer.log(
-      'HabitPredictorService: Starting daily predictions',
-      name: 'HabitPredictorService',
-    );
+    debugPrint('PREDICTOR 🧠 runDailyPredictions: Fetching all habits...');
 
     try {
       // Get all active (non-archived) habits
-      final habits = await habitsRepository.getAllHabits();
+      final habits = await habitsRepository.getHabits();
+      debugPrint(
+          'PREDICTOR 🧠 runDailyPredictions: getHabits returned \\${habits.length} habits.');
       final activeHabits = habits.where((h) => !h.isArchived).toList();
-
-      developer.log(
-        'HabitPredictorService: Processing ${activeHabits.length} active habits',
-        name: 'HabitPredictorService',
-      );
+      debugPrint(
+          'PREDICTOR 🧠 runDailyPredictions: \\${activeHabits.length} active habits.');
 
       int processedCount = 0;
       int highRiskCount = 0;
 
       for (final habit in activeHabits) {
         try {
+          debugPrint(
+              'PREDICTOR 🧠 Processing habit: id=\\${habit.id}, name=\\${habit.name}, completedToday=\\${habit.completedToday}');
           await _processSingleHabit(habit);
           processedCount++;
 
@@ -75,25 +77,15 @@ class HabitPredictorService {
             highRiskCount++;
           }
         } catch (e) {
-          developer.log(
-            'HabitPredictorService: Error processing habit ${habit.id}: $e',
-            name: 'HabitPredictorService',
-            error: e,
-          );
+          debugPrint('PREDICTOR 🧠 ❌ Error processing habit \\${habit.id}: $e');
         }
       }
 
-      developer.log(
-        'HabitPredictorService: Daily predictions complete. '
-        'Processed: $processedCount, High-risk: $highRiskCount',
-        name: 'HabitPredictorService',
+      debugPrint(
+        'PREDICTOR 🧠 ✅ Daily predictions complete. Processed: $processedCount, High-risk: $highRiskCount',
       );
     } catch (e) {
-      developer.log(
-        'HabitPredictorService: Daily predictions failed: $e',
-        name: 'HabitPredictorService',
-        error: e,
-      );
+      debugPrint('PREDICTOR 🧠 ❌ Daily predictions failed: $e');
     }
   }
 
@@ -101,20 +93,15 @@ class HabitPredictorService {
   Future<void> _processSingleHabit(Habit habit) async {
     // Skip habits already completed today
     if (habit.completedToday) {
-      developer.log(
-        'HabitPredictorService: Skipping habit ${habit.name} (already completed)',
-        name: 'HabitPredictorService',
-      );
+      debugPrint(
+          'PREDICTOR 🧠 ⏭️ Skipping habit (already completed today): id=\\${habit.id}, name=\\${habit.name}');
       return;
     }
 
     // Predict abandonment risk
     final risk = await predictor.predictRisk(habit);
-
-    developer.log(
-      'HabitPredictorService: Habit "${habit.name}" risk: ${(risk * 100).toStringAsFixed(1)}%',
-      name: 'HabitPredictorService',
-    );
+    debugPrint(
+        'PREDICTOR 🧠 📊 Habit "${habit.name}" predicted risk: ${(risk * 100).toStringAsFixed(1)}%');
 
     // Update abandonmentRisk field
     final updatedHabit = habit.copyWith(abandonmentRisk: risk);
@@ -124,7 +111,13 @@ class HabitPredictorService {
       await _applyIntervention(updatedHabit);
     } else {
       // Just update the risk value
-      await habitsRepository.updateHabit(updatedHabit);
+      final result = await habitsRepository.updateHabitInstance(updatedHabit);
+      result.fold(
+        (failure) => debugPrint(
+            'PREDICTOR 🧠 ❌ Failed to update habit ${habit.id}: $failure'),
+        (success) => debugPrint(
+            'PREDICTOR 🧠 ✅ Updated "${habit.name}" with risk ${risk.toStringAsFixed(3)}'),
+      );
     }
   }
 
@@ -164,7 +157,13 @@ class HabitPredictorService {
       }
 
       // Update habit with new abandonment risk
-      await habitsRepository.updateHabit(habit);
+      final result = await habitsRepository.updateHabitInstance(habit);
+      result.fold(
+        (failure) => debugPrint(
+            'PREDICTOR 🧠 ❌ Failed to update habit ${habit.id} during intervention: $failure'),
+        (success) => debugPrint(
+            'PREDICTOR 🧠 ✅ Successfully updated habit "${habit.name}" with intervention'),
+      );
     } catch (e) {
       developer.log(
         'HabitPredictorService: Error applying intervention for habit ${habit.id}: $e',
@@ -175,6 +174,7 @@ class HabitPredictorService {
   }
 
   /// Show nudge notification suggesting difficulty reduction
+  /// Implements a 24-hour cooldown per habit to avoid notification spam
   Future<void> _showNudgeNotification({
     required String habitName,
     required int currentMinutes,
@@ -184,6 +184,30 @@ class HabitPredictorService {
     try {
       // Get locale from SharedPreferences (since we're in background/isolate)
       final prefs = await SharedPreferences.getInstance();
+
+      // Check cooldown - don't send same nudge more than once per 24 hours
+      final cooldownKey = '${NotificationService.nudgeSentPrefix}$habitId';
+      final lastSentStr = prefs.getString(cooldownKey);
+
+      if (lastSentStr != null) {
+        final lastSent = DateTime.parse(lastSentStr);
+        final hoursSinceLastSent = clock.now().difference(lastSent).inHours;
+
+        // In FAST_TIME mode (288x speed), disable cooldown for rapid testing
+        // In normal mode, use standard 24-hour cooldown
+        const fastTime = bool.fromEnvironment('FAST_TIME');
+        const cooldownHours = fastTime ? 0 : _nudgeCooldownHours;
+
+        if (hoursSinceLastSent < cooldownHours) {
+          developer.log(
+            'HabitPredictorService: Nudge notification for habit "$habitName" skipped '
+            '(cooldown: sent $hoursSinceLastSent hours ago)',
+            name: 'HabitPredictorService',
+          );
+          return; // Skip notification - cooldown not expired
+        }
+      }
+
       final localeCode = prefs.getString('locale') ?? 'es';
 
       // Load localized strings without BuildContext
@@ -202,6 +226,9 @@ class HabitPredictorService {
         payload: 'habit_nudge:$habitId:$suggestedMinutes',
         id: habitId.hashCode,
       );
+
+      // Store timestamp of sent notification for cooldown tracking
+      await prefs.setString(cooldownKey, clock.now().toIso8601String());
 
       developer.log(
         'HabitPredictorService: Nudge notification sent for habit "$habitName" (locale: $localeCode)',
@@ -226,7 +253,7 @@ class HabitPredictorService {
     try {
       if (accepted) {
         // User accepted: apply the difficulty reduction
-        final habits = await habitsRepository.getAllHabits();
+        final habits = await habitsRepository.getHabits();
         final habit = habits.firstWhere((h) => h.id == habitId);
 
         // Calculate new difficulty level from suggested minutes
@@ -243,7 +270,7 @@ class HabitPredictorService {
           lastAdjustedAt: clock.now(),
         );
 
-        await habitsRepository.updateHabit(updatedHabit);
+        await habitsRepository.updateHabitInstance(updatedHabit);
 
         developer.log(
           'HabitPredictorService: User accepted nudge for habit ${habit.name}',

@@ -139,33 +139,42 @@ class GeminiService implements IGeminiService {
     String languageCode,
   ) {
     return '''
-Usuario quiere: "$userGoal"
-Falla típicamente: ${failurePattern ?? 'desconocido'}
-Fe: $faithContext
-Idioma respuesta: $languageCode
+El usuario quiere lograr: "$userGoal"
+${failurePattern != null ? 'Patrón de falla: $failurePattern' : ''}
+Contexto de fe: $faithContext
+Idioma: $languageCode
 
-Genera EXACTAMENTE ${AiConfig.habitsPerGeneration} micro-hábitos cristianos. Cada hábito debe:
-1. Ser completable en ${AiConfig.maxHabitMinutes} minutos o menos
-2. Incluir acción específica y medible
-3. Incluir versículo bíblico relevante (referencia + texto completo)
-4. Explicar propósito espiritual en UNA oración
+IMPORTANTE: Genera EXACTAMENTE ${AiConfig.habitsPerGeneration} micro-hábitos LÓGICOS y DIRECTAMENTE relacionados con el objetivo del usuario.
+
+Cada hábito debe:
+1. Ser una acción ESPECÍFICA, MEDIBLE y REALISTA que ayude a lograr el objetivo
+2. Completarse en máximo ${AiConfig.maxHabitMinutes} minutos
+3. Estar DIRECTAMENTE relacionado con "$userGoal" (no sugerencias genéricas)
+4. Incluir UN versículo bíblico como referencia inspiracional (no necesariamente literal)
+5. Explicar claramente POR QUÉ este hábito ayuda a lograr el objetivo
+
+Ejemplos de hábitos LÓGICOS:
+- Objetivo: "Leer toda la Biblia" → "Leer 3 capítulos cada mañana antes del desayuno"
+- Objetivo: "Comer mejor sin saltar comidas" → "Preparar 3 comidas balanceadas el domingo para la semana"
+- Objetivo: "Hacer más ejercicio" → "Caminar 15 minutos después del almuerzo"
 
 Responde SOLO con JSON válido (sin markdown, sin ```json):
 [
   {
-    "action": "Acción específica en infinitivo (ej: 'Orar 3min al despertar')",
+    "action": "Acción específica y medible relacionada directamente con el objetivo",
     "verse": "Libro capítulo:versículo",
-    "verseText": "Texto completo del versículo",
-    "purpose": "Por qué este hábito honra a Dios (1 oración)",
-    "estimatedMinutes": 3
+    "verseText": "Texto completo del versículo bíblico",
+    "purpose": "Explicación clara de cómo esta acción específica ayuda a lograr el objetivo del usuario",
+    "estimatedMinutes": número entero entre 1 y ${AiConfig.maxHabitMinutes}
   }
 ]
 
-Requisitos estrictos:
-- Acciones deben ser ESPECÍFICAS (no "orar más" sino "orar 3min después de café")
-- Versículos deben ser EXACTOS (formato: Libro número:número)
-- Propósito debe conectar con $faithContext
-- Tono: motivacional, práctico, esperanzador
+REGLAS ESTRICTAS:
+- NO sugieras hábitos genéricos no relacionados con el objetivo
+- Las acciones deben ser CONCRETAS: incluir números, horarios, o triggers específicos
+- El propósito debe explicar la CONEXIÓN LÓGICA entre la acción y el objetivo
+- El versículo es referencia inspiracional, no debe ser el foco principal
+- Tono: práctico, motivacional, centrado en el objetivo del usuario
 ''';
   }
 
@@ -775,6 +784,119 @@ Requisitos:
         return HabitCategory.relational;
       default:
         return HabitCategory.other;
+    }
+  }
+
+  /// Forbidden content keywords (violence, sex, etc.)
+  static const List<String> _forbiddenKeywords = [
+    'violence', 'kill', 'murder', 'suicide', 'sex', 'sexual', 'abuse',
+    'drugs', 'weapon', 'assault', 'rape', 'porn', 'erotic', 'terror',
+    'self-harm', 'harm', 'abduct', 'exploit', 'molest', 'incest',
+    // Spanish
+    'violencia', 'matar', 'asesinar', 'suicidio', 'sexo', 'sexual', 'abuso',
+    'drogas', 'arma', 'asalto', 'violación', 'porno', 'erótico', 'terror',
+    'autolesión', 'dañar', 'secuestrar', 'explotar', 'acosar', 'incesto',
+  ];
+
+  /// Check for forbidden content in a string
+  bool _containsForbiddenContent(String text) {
+    final lower = text.toLowerCase();
+    return _forbiddenKeywords.any((word) => lower.contains(word));
+  }
+
+  /// Validate if the response is logical for the goal
+  bool _isLogicalForGoal(String userGoal, List<MicroHabit> habits) {
+    final goal = userGoal.toLowerCase();
+    if (goal.contains('toda la biblia') ||
+        goal.contains('whole bible') ||
+        goal.contains('leer la biblia')) {
+      // Look for a plan, schedule, or multi-step reading suggestion
+      return habits.any((h) =>
+          h.action.toLowerCase().contains('plan') ||
+          h.action.toLowerCase().contains('capítulo') ||
+          h.action.toLowerCase().contains('cronológico') ||
+          h.action.toLowerCase().contains('lectura diaria') ||
+          h.action.toLowerCase().contains('leer la biblia'));
+    }
+    // For other goals, just check that actions are not empty
+    return habits.every((h) => h.action.isNotEmpty);
+  }
+
+  /// New prompt for full-plan goals (language-agnostic, not hardcoded for Bible)
+  String _buildFullPlanPrompt(String userGoal, String languageCode) {
+    return '''
+The user wants: "$userGoal"
+Generate EXACTLY 3 logical, actionable tasks that will help the user achieve this goal. Each task should be clear, specific, and directly related to the user's request. For each task, provide a brief explanation of why it is important or how it helps achieve the goal.
+
+Respond ONLY with valid JSON (no markdown, no ```json):
+[
+  {"task": "First logical task", "explanation": "Why this task is important"},
+  {"task": "Second logical task", "explanation": "Why this task is important"},
+  {"task": "Third logical task", "explanation": "Why this task is important"}
+]
+''';
+  }
+
+  /// Generate a logical plan or micro-habits based on the goal
+  Future<List<MicroHabit>> generateLogicalHabitsOrPlan(
+      GenerationRequest request) async {
+    final sanitizedGoal = _sanitizeInput(request.userGoal, 'userGoal');
+    final sanitizedPattern = request.failurePattern != null
+        ? _sanitizeInput(request.failurePattern!, 'failurePattern')
+        : null;
+    await _rateLimit.waitIfNeeded();
+    if (!_rateLimit.canMakeRequest()) {
+      throw RateLimitExceededException(
+        'Monthly limit of {AiConfig.monthlyRequestLimit} requests reached. '
+        'Limit will reset next month.',
+      );
+    }
+    _rateLimit.recordRequest();
+    _rateLimit.getRemainingRequests();
+    final cacheKey = request.toCacheKey();
+    final cached = await _cache.get<List<MicroHabit>>(cacheKey);
+    if (cached != null) {
+      return cached;
+    }
+    // Detect if the goal is a full-plan goal
+    final goal = sanitizedGoal.toLowerCase();
+    if (goal.contains('toda la biblia') ||
+        goal.contains('whole bible') ||
+        goal.contains('leer la biblia')) {
+      // Use full plan prompt
+      final prompt = _buildFullPlanPrompt(sanitizedGoal, request.languageCode);
+      final response = await _model.generateContent(
+          [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+      // For now, just log and throw, or you can parse and return as needed
+      throw GeminiException('Full plan response: \\n${response.text}');
+    } else {
+      // Use micro-habit prompt
+      final prompt = _buildPrompt(sanitizedGoal, sanitizedPattern,
+          request.faithContext, request.languageCode);
+      try {
+        final response = await _model.generateContent(
+            [Content.text(prompt)]).timeout(AiConfig.requestTimeout);
+        final habits = _parseResponse(response.text, request.languageCode);
+        // Filter forbidden content
+        final safeHabits = habits
+            .where((h) =>
+                !_containsForbiddenContent(h.action) &&
+                !_containsForbiddenContent(h.purpose))
+            .toList();
+        if (!_isLogicalForGoal(request.userGoal, safeHabits)) {
+          throw GeminiException(
+              'Response not logical for goal: ${request.userGoal}');
+        }
+        final enrichedHabits = await _enrichWithVerseText(safeHabits);
+        await _cache.set(cacheKey, enrichedHabits, ttl: AiConfig.cacheTtl);
+        return enrichedHabits;
+      } on TimeoutException {
+        throw GeminiException(
+            'Request timed out after {AiConfig.requestTimeout.inSeconds} seconds. Please try again.');
+      } catch (e) {
+        if (e is GeminiException) rethrow;
+        throw GeminiException('Failed to generate habits: $e');
+      }
     }
   }
 }

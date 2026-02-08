@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/habits/data/storage/json_storage_service.dart';
 import 'package:habitus_faith/features/habits/data/storage/json_habits_repository.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
+import 'package:habitus_faith/core/services/time/time.dart';
 
 void main() {
   late JsonHabitsRepository repository;
@@ -18,6 +19,7 @@ void main() {
       storage: storage,
       userId: 'test_user',
       idGenerator: () => 'habit_${idCounter++}',
+      clock: const Clock.system(),
     );
   });
 

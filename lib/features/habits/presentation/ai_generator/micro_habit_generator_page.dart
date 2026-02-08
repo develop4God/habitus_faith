@@ -70,6 +70,7 @@ class _MicroHabitGeneratorPageState
         },
         loading: () {},
         error: (error, _) {
+          debugPrint('GEMINI 🤖 ❌ Error in MicroHabitGeneratorPage: $error');
           if (mounted) {
             String errorMessage = l10n.generationFailed;
 

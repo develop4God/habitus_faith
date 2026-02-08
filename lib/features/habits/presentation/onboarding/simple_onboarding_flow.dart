@@ -321,89 +321,99 @@ class _SimpleOnboardingFlowState extends ConsumerState<SimpleOnboardingFlow>
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '¿Qué quieres mejorar?',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color(0xff1e293b),
-            ),
+      child: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height * 0.8,
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Selecciona hasta 3 objetivos',
-            style: TextStyle(fontSize: 16, color: Color(0xff64748b)),
-          ),
-          const SizedBox(height: 32),
-
-          // Goal options
-          _buildGoalOption(
-            goal: GoalType.faith,
-            emoji: '🙏',
-            text: 'Fe',
-            isSelected: selectedGoals.contains(GoalType.faith),
-          ),
-          const SizedBox(height: 16),
-          _buildGoalOption(
-            goal: GoalType.wellness,
-            emoji: '💪',
-            text: 'Salud',
-            isSelected: selectedGoals.contains(GoalType.wellness),
-          ),
-          const SizedBox(height: 16),
-          _buildGoalOption(
-            goal: GoalType.study,
-            emoji: '📖',
-            text: 'Estudio',
-            isSelected: selectedGoals.contains(GoalType.study),
-          ),
-          const SizedBox(height: 16),
-          _buildGoalOption(
-            goal: GoalType.peace,
-            emoji: '😌',
-            text: 'Paz mental',
-            isSelected: selectedGoals.contains(GoalType.peace),
-          ),
-
-          const Spacer(),
-
-          // Continue button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: selectedGoals.isEmpty ? null : _nextQuestion,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff6366f1),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '¿Qué quieres mejorar?',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff1e293b),
+                  ),
                 ),
-                disabledBackgroundColor: const Color(0xffe2e8f0),
-              ),
-              child: const Text(
-                'Continuar',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
+                const SizedBox(height: 8),
+                const Text(
+                  'Selecciona hasta 3 objetivos',
+                  style: TextStyle(fontSize: 16, color: Color(0xff64748b)),
+                ),
+                const SizedBox(height: 32),
 
-          // Skip button
-          Center(
-            child: TextButton(
-              onPressed: _skipOnboarding,
-              child: const Text(
-                'Saltar por ahora',
-                style: TextStyle(color: Color(0xff64748b), fontSize: 14),
-              ),
+                // Goal options
+                _buildGoalOption(
+                  goal: GoalType.faith,
+                  emoji: '🙏',
+                  text: 'Fe',
+                  isSelected: selectedGoals.contains(GoalType.faith),
+                ),
+                const SizedBox(height: 16),
+                _buildGoalOption(
+                  goal: GoalType.wellness,
+                  emoji: '💪',
+                  text: 'Salud',
+                  isSelected: selectedGoals.contains(GoalType.wellness),
+                ),
+                const SizedBox(height: 16),
+                _buildGoalOption(
+                  goal: GoalType.study,
+                  emoji: '📖',
+                  text: 'Estudio',
+                  isSelected: selectedGoals.contains(GoalType.study),
+                ),
+                const SizedBox(height: 16),
+                _buildGoalOption(
+                  goal: GoalType.peace,
+                  emoji: '😌',
+                  text: 'Paz mental',
+                  isSelected: selectedGoals.contains(GoalType.peace),
+                ),
+
+                const Spacer(),
+
+                // Continue button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: selectedGoals.isEmpty ? null : _nextQuestion,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff6366f1),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      disabledBackgroundColor: const Color(0xffe2e8f0),
+                    ),
+                    child: const Text(
+                      'Continuar',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Skip button
+                Center(
+                  child: TextButton(
+                    onPressed: _skipOnboarding,
+                    child: const Text(
+                      'Saltar por ahora',
+                      style: TextStyle(color: Color(0xff64748b), fontSize: 14),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
-          const SizedBox(height: 24),
-        ],
+        ),
       ),
     );
   }

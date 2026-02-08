@@ -1,6 +1,6 @@
 name: habitus_faith
 description: App para llevar hábitos sanos + fortalecer tu fe día a día.
-version: 1.1.8+17
+version: 1.1.12+21
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -69,8 +69,7 @@ dev_dependencies:
   envied_generator: 1.1.1
   flutter_launcher_icons: ^0.13.1
 
-dependency_overrides:
-  vector_math: ^2.2.0
+
 
 flutter:
   uses-material-design: true

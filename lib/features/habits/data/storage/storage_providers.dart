@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'json_storage_service.dart';
 import 'json_habits_repository.dart';
 import '../../domain/habits_repository.dart';
+import '../../../../core/providers/clock_provider.dart';
 
 /// Provider for SharedPreferences instance
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
@@ -29,11 +30,13 @@ final localUserIdProvider = Provider<String>((ref) {
 final jsonHabitsRepositoryProvider = Provider<HabitsRepository>((ref) {
   final storage = ref.watch(jsonStorageServiceProvider);
   final userId = ref.watch(localUserIdProvider);
+  final clock = ref.watch(clockProvider);
 
   return JsonHabitsRepository(
     storage: storage,
     userId: userId,
     idGenerator: () => const Uuid().v4(),
+    clock: clock,
   );
 });
 

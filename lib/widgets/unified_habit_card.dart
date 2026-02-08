@@ -6,6 +6,7 @@ import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dart';
 import '../features/habits/presentation/habits_providers.dart';
+import '../features/habits/presentation/widgets/abandonment_risk_indicator.dart';
 import '../l10n/app_localizations.dart';
 import 'notification_options_dialog.dart';
 
@@ -48,11 +49,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     if (_isCompleting) return;
     setState(() => _isCompleting = true);
     try {
-      final habit = getLatestHabit(ref);
-      if (habit.completedToday) {
-        await widget.onUncheck(habit.id);
+      // Use the habit prop directly which has the correct completedToday for selected date
+      if (widget.habit.completedToday) {
+        await widget.onUncheck(widget.habit.id);
       } else {
-        await widget.onComplete(habit.id);
+        await widget.onComplete(widget.habit.id);
       }
     } finally {
       if (mounted) setState(() => _isCompleting = false);
@@ -61,7 +62,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -99,7 +100,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleSkip() async {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
     await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
     if (!mounted) return;
     Navigator.of(context).pop();
@@ -113,7 +114,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Future<void> _handleFail() async {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
     await ref.read(habitsNotifierProvider.notifier).failHabit(habit.id);
     if (!mounted) return;
     Navigator.of(context).pop();
@@ -128,7 +129,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final habit = getLatestHabit(ref);
+    // Use widget.habit directly to respect the selected date's completion status
+    final habit = widget.habit;
     final habitColor = HabitColors.getHabitColor(habit);
     final isCompleted = habit.completedToday;
     final isSkipped = habit.dailyStatus == HabitDailyStatus.skipped;
@@ -243,6 +245,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     fontSize: 13,
                                     color: Colors.grey.shade600,
                                   ),
+                                ),
+                                const SizedBox(width: 8),
+                                AbandonmentRiskIndicator(
+                                  risk: habit.abandonmentRisk,
                                 ),
                                 if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 12),
@@ -576,154 +582,158 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     AppLocalizations l10n,
     Color habitColor,
   ) {
-    final habit = getLatestHabit(ref);
+    final habit = widget.habit;
     final isCompleted = habit.dailyStatus == HabitDailyStatus.completed;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  color: habitColor.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    habit.emoji ?? '✓',
-                    style: const TextStyle(fontSize: 36),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: habitColor.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      habit.emoji ?? '✓',
+                      style: const TextStyle(fontSize: 36),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              AutoSizeText(
-                habit.name,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                minFontSize: 16,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.grey.shade900,
-                  decoration: isCompleted ? TextDecoration.lineThrough : null,
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-          Row(
-            children: [
-              _buildModernStatCard(
-                Icons.local_fire_department,
-                l10n.currentStreak,
-                '${habit.currentStreak}',
-                Colors.orange,
-              ),
-              const SizedBox(width: 8),
-              _buildModernStatCard(
-                Icons.emoji_events,
-                l10n.longestStreak,
-                '${habit.longestStreak}',
-                Colors.blue,
-              ),
-              const SizedBox(width: 8),
-              _buildModernStatCard(
-                Icons.check_circle_rounded,
-                l10n.total,
-                '${habit.completionHistory.length}',
-                Colors.green,
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          if (!isCompleted)
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _handleComplete();
-                },
-                icon: const Icon(Icons.check_rounded, size: 28),
-                label: Text(
-                  l10n.completeNow,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 12),
+                AutoSizeText(
+                  habit.name,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  minFontSize: 16,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey.shade900,
+                    decoration: isCompleted ? TextDecoration.lineThrough : null,
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: habitColor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 0,
-                ),
-              ),
-            )
-          else
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _handleComplete();
-                },
-                icon: const Icon(Icons.undo_rounded),
-                label: Text(l10n.uncheck),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.grey.shade700,
-                  side: BorderSide(color: Colors.grey.shade300),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
+                const SizedBox(height: 8),
+                AbandonmentRiskIndicator(risk: habit.abandonmentRisk),
+                const SizedBox(height: 16),
+              ],
             ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildCircularAction(
-                Icons.edit_rounded,
-                l10n.edit,
-                Colors.blueGrey.shade600,
-                () {
-                  Navigator.of(context).pop();
-                  widget.onEdit?.call(habit);
-                },
+            Row(
+              children: [
+                _buildModernStatCard(
+                  Icons.local_fire_department,
+                  l10n.currentStreak,
+                  '${habit.currentStreak}',
+                  Colors.orange,
+                ),
+                const SizedBox(width: 8),
+                _buildModernStatCard(
+                  Icons.emoji_events,
+                  l10n.longestStreak,
+                  '${habit.longestStreak}',
+                  Colors.blue,
+                ),
+                const SizedBox(width: 8),
+                _buildModernStatCard(
+                  Icons.check_circle_rounded,
+                  l10n.total,
+                  '${habit.completionHistory.length}',
+                  Colors.green,
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            if (!isCompleted)
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _handleComplete();
+                  },
+                  icon: const Icon(Icons.check_rounded, size: 28),
+                  label: Text(
+                    l10n.completeNow,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: habitColor,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                  ),
+                ),
+              )
+            else
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _handleComplete();
+                  },
+                  icon: const Icon(Icons.undo_rounded),
+                  label: Text(l10n.uncheck),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.grey.shade700,
+                    side: BorderSide(color: Colors.grey.shade300),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
               ),
-              _buildCircularAction(
-                Icons.fast_forward_rounded,
-                l10n.skipHabit,
-                Colors.orange.shade700,
-                _handleSkip,
-              ),
-              _buildCircularAction(
-                Icons.close_rounded,
-                l10n.markAsNotCompleted,
-                Colors.red.shade700,
-                _handleFail,
-              ),
-              _buildCircularAction(
-                Icons.delete_outline_rounded,
-                l10n.delete,
-                Colors.red.shade400,
-                _handleDelete,
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-        ],
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCircularAction(
+                  Icons.edit_rounded,
+                  l10n.edit,
+                  Colors.blueGrey.shade600,
+                  () {
+                    Navigator.of(context).pop();
+                    widget.onEdit?.call(habit);
+                  },
+                ),
+                _buildCircularAction(
+                  Icons.fast_forward_rounded,
+                  l10n.skipHabit,
+                  Colors.orange.shade700,
+                  _handleSkip,
+                ),
+                _buildCircularAction(
+                  Icons.close_rounded,
+                  l10n.markAsNotCompleted,
+                  Colors.red.shade700,
+                  _handleFail,
+                ),
+                _buildCircularAction(
+                  Icons.delete_outline_rounded,
+                  l10n.delete,
+                  Colors.red.shade400,
+                  _handleDelete,
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }

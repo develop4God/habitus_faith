@@ -84,7 +84,6 @@ class MicroHabitGenerator extends _$MicroHabitGenerator {
   /// Generate micro-habits based on user request
   Future<void> generate(GenerationRequest request) async {
     state = const AsyncValue.loading();
-
     state = await AsyncValue.guard(() async {
       final service = await ref.read(geminiServiceProvider.future);
       return await service.generateMicroHabits(request);
@@ -94,4 +93,14 @@ class MicroHabitGenerator extends _$MicroHabitGenerator {
   /// Get remaining API requests for the current month
   int get remainingRequests =>
       ref.read(rateLimitServiceProvider).getRemainingRequests();
+
+  /// Reset the generator state and counters for testing
+  Future<void> reset() async {
+    state = const AsyncValue.data([]);
+    // Manually clear request counters in SharedPreferences
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setInt('gemini_requests', 0);
+    await prefs.setStringList('gemini_timestamps', []);
+    await prefs.remove('gemini_last_request');
+  }
 }

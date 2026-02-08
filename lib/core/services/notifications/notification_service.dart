@@ -45,6 +45,9 @@ class NotificationService {
   static const String defaultNotificationTime = '09:00';
   static const String _fcmTokenKey = 'fcm_token';
 
+  /// Prefix for nudge notification tracking keys in SharedPreferences
+  static const String nudgeSentPrefix = 'nudge_sent_';
+
   Function(String? payload)? onNotificationTapped;
 
   /// Update lastLogin field when user enters the app
@@ -802,9 +805,118 @@ class NotificationService {
     }
   }
 
+  /// Schedule a nudge notification for testing (developer/QA feature)
+  /// Schedules a nudge notification to appear after [delayMinutes]
+  Future<void> scheduleNudgeNotification({
+    required String habitId,
+    required String habitName,
+    required int suggestedMinutes,
+    int delayMinutes = 1,
+  }) async {
+    try {
+      // Get current language for localization
+      final prefs = await SharedPreferences.getInstance();
+      final localeCode = prefs.getString('locale') ?? 'es';
+
+      developer.log(
+        'NotificationService: Scheduling nudge notification for habit "$habitName" in $delayMinutes minute(s)',
+        name: 'NotificationService',
+      );
+
+      // Calculate scheduled time
+      final now = tz.TZDateTime.now(tz.local);
+      final scheduledDate = now.add(Duration(minutes: delayMinutes));
+
+      // Get localized strings
+      final title = _getLocalizedNudgeTitle(habitName, localeCode);
+      final body = _getLocalizedNudgeBody(suggestedMinutes, localeCode);
+
+      const AndroidNotificationDetails androidDetails =
+          AndroidNotificationDetails(
+        'nudge_habitus',
+        'Habitus Faith Nudges',
+        channelDescription: 'ML-based habit adjustment suggestions',
+        importance: Importance.high,
+        priority: Priority.high,
+        icon: '@mipmap/ic_launcher',
+        styleInformation: BigTextStyleInformation(''),
+      );
+
+      const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+        sound: 'default',
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      );
+
+      const NotificationDetails platformDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      );
+
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        habitId.hashCode, // Use habit ID hash as notification ID
+        title,
+        body,
+        scheduledDate,
+        platformDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: 'habit_nudge:$habitId:$suggestedMinutes',
+      );
+
+      developer.log(
+        'NotificationService: Nudge notification scheduled for $scheduledDate (in $delayMinutes min)',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        'ERROR in scheduleNudgeNotification: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+    }
+  }
+
+  /// Helper to get localized nudge title
+  String _getLocalizedNudgeTitle(String habitName, String localeCode) {
+    switch (localeCode) {
+      case 'en':
+        return 'Reduce "$habitName"?';
+      case 'es':
+        return '¿Reducir "$habitName"?';
+      case 'fr':
+        return 'Réduire "$habitName"?';
+      case 'pt':
+        return 'Reduzir "$habitName"?';
+      case 'zh':
+        return '减少"$habitName"?';
+      default:
+        return '¿Reducir "$habitName"?';
+    }
+  }
+
+  /// Helper to get localized nudge body
+  String _getLocalizedNudgeBody(int minutes, String localeCode) {
+    switch (localeCode) {
+      case 'en':
+        return 'Reduce to $minutes minutes? We noticed you might abandon this habit.';
+      case 'es':
+        return '¿Reducir a $minutes minutos? Notamos que podrías abandonar este hábito.';
+      case 'fr':
+        return 'Réduire à $minutes minutes? Nous avons remarqué que vous pourriez abandonner cette habitude.';
+      case 'pt':
+        return 'Reduzir para $minutes minutos? Notamos que você pode abandonar este hábito.';
+      case 'zh':
+        return '减少到$minutes分钟？我们注意到您可能会放弃这个习惯。';
+      default:
+        return '¿Reducir a $minutes minutos? Notamos que podrías abandonar este hábito.';
+    }
+  }
+
   /// Reschedule all habit notifications
-  /// This should be called when the app starts to ensure all habit notifications are scheduled
-  Future<void> rescheduleAllHabitNotifications(List<Habit> habits) async {
+  Future<void> rescheduleHabitNotifications(List<Habit> habits) async {
     try {
       developer.log(
         'NotificationService: Rescheduling notifications for ${habits.length} habits',

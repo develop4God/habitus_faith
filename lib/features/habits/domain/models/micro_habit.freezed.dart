@@ -12,8 +12,7 @@ part of 'micro_habit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 MicroHabit _$MicroHabitFromJson(Map<String, dynamic> json) {
   return _MicroHabit.fromJson(json);
@@ -45,19 +44,17 @@ mixin _$MicroHabit {
 /// @nodoc
 abstract class $MicroHabitCopyWith<$Res> {
   factory $MicroHabitCopyWith(
-    MicroHabit value,
-    $Res Function(MicroHabit) then,
-  ) = _$MicroHabitCopyWithImpl<$Res, MicroHabit>;
+          MicroHabit value, $Res Function(MicroHabit) then) =
+      _$MicroHabitCopyWithImpl<$Res, MicroHabit>;
   @useResult
-  $Res call({
-    String id,
-    String action,
-    String verse,
-    String? verseText,
-    String purpose,
-    int estimatedMinutes,
-    DateTime? generatedAt,
-  });
+  $Res call(
+      {String id,
+      String action,
+      String verse,
+      String? verseText,
+      String purpose,
+      int estimatedMinutes,
+      DateTime? generatedAt});
 }
 
 /// @nodoc
@@ -83,38 +80,36 @@ class _$MicroHabitCopyWithImpl<$Res, $Val extends MicroHabit>
     Object? estimatedMinutes = null,
     Object? generatedAt = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-        action: null == action
-            ? _value.action
-            : action // ignore: cast_nullable_to_non_nullable
-                as String,
-        verse: null == verse
-            ? _value.verse
-            : verse // ignore: cast_nullable_to_non_nullable
-                as String,
-        verseText: freezed == verseText
-            ? _value.verseText
-            : verseText // ignore: cast_nullable_to_non_nullable
-                as String?,
-        purpose: null == purpose
-            ? _value.purpose
-            : purpose // ignore: cast_nullable_to_non_nullable
-                as String,
-        estimatedMinutes: null == estimatedMinutes
-            ? _value.estimatedMinutes
-            : estimatedMinutes // ignore: cast_nullable_to_non_nullable
-                as int,
-        generatedAt: freezed == generatedAt
-            ? _value.generatedAt
-            : generatedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime?,
-      ) as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      action: null == action
+          ? _value.action
+          : action // ignore: cast_nullable_to_non_nullable
+              as String,
+      verse: null == verse
+          ? _value.verse
+          : verse // ignore: cast_nullable_to_non_nullable
+              as String,
+      verseText: freezed == verseText
+          ? _value.verseText
+          : verseText // ignore: cast_nullable_to_non_nullable
+              as String?,
+      purpose: null == purpose
+          ? _value.purpose
+          : purpose // ignore: cast_nullable_to_non_nullable
+              as String,
+      estimatedMinutes: null == estimatedMinutes
+          ? _value.estimatedMinutes
+          : estimatedMinutes // ignore: cast_nullable_to_non_nullable
+              as int,
+      generatedAt: freezed == generatedAt
+          ? _value.generatedAt
+          : generatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ) as $Val);
   }
 }
 
@@ -122,20 +117,18 @@ class _$MicroHabitCopyWithImpl<$Res, $Val extends MicroHabit>
 abstract class _$$MicroHabitImplCopyWith<$Res>
     implements $MicroHabitCopyWith<$Res> {
   factory _$$MicroHabitImplCopyWith(
-    _$MicroHabitImpl value,
-    $Res Function(_$MicroHabitImpl) then,
-  ) = __$$MicroHabitImplCopyWithImpl<$Res>;
+          _$MicroHabitImpl value, $Res Function(_$MicroHabitImpl) then) =
+      __$$MicroHabitImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String id,
-    String action,
-    String verse,
-    String? verseText,
-    String purpose,
-    int estimatedMinutes,
-    DateTime? generatedAt,
-  });
+  $Res call(
+      {String id,
+      String action,
+      String verse,
+      String? verseText,
+      String purpose,
+      int estimatedMinutes,
+      DateTime? generatedAt});
 }
 
 /// @nodoc
@@ -143,9 +136,8 @@ class __$$MicroHabitImplCopyWithImpl<$Res>
     extends _$MicroHabitCopyWithImpl<$Res, _$MicroHabitImpl>
     implements _$$MicroHabitImplCopyWith<$Res> {
   __$$MicroHabitImplCopyWithImpl(
-    _$MicroHabitImpl _value,
-    $Res Function(_$MicroHabitImpl) _then,
-  ) : super(_value, _then);
+      _$MicroHabitImpl _value, $Res Function(_$MicroHabitImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of MicroHabit
   /// with the given fields replaced by the non-null parameter values.
@@ -160,53 +152,50 @@ class __$$MicroHabitImplCopyWithImpl<$Res>
     Object? estimatedMinutes = null,
     Object? generatedAt = freezed,
   }) {
-    return _then(
-      _$MicroHabitImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-        action: null == action
-            ? _value.action
-            : action // ignore: cast_nullable_to_non_nullable
-                as String,
-        verse: null == verse
-            ? _value.verse
-            : verse // ignore: cast_nullable_to_non_nullable
-                as String,
-        verseText: freezed == verseText
-            ? _value.verseText
-            : verseText // ignore: cast_nullable_to_non_nullable
-                as String?,
-        purpose: null == purpose
-            ? _value.purpose
-            : purpose // ignore: cast_nullable_to_non_nullable
-                as String,
-        estimatedMinutes: null == estimatedMinutes
-            ? _value.estimatedMinutes
-            : estimatedMinutes // ignore: cast_nullable_to_non_nullable
-                as int,
-        generatedAt: freezed == generatedAt
-            ? _value.generatedAt
-            : generatedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime?,
-      ),
-    );
+    return _then(_$MicroHabitImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      action: null == action
+          ? _value.action
+          : action // ignore: cast_nullable_to_non_nullable
+              as String,
+      verse: null == verse
+          ? _value.verse
+          : verse // ignore: cast_nullable_to_non_nullable
+              as String,
+      verseText: freezed == verseText
+          ? _value.verseText
+          : verseText // ignore: cast_nullable_to_non_nullable
+              as String?,
+      purpose: null == purpose
+          ? _value.purpose
+          : purpose // ignore: cast_nullable_to_non_nullable
+              as String,
+      estimatedMinutes: null == estimatedMinutes
+          ? _value.estimatedMinutes
+          : estimatedMinutes // ignore: cast_nullable_to_non_nullable
+              as int,
+      generatedAt: freezed == generatedAt
+          ? _value.generatedAt
+          : generatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$MicroHabitImpl implements _MicroHabit {
-  const _$MicroHabitImpl({
-    required this.id,
-    required this.action,
-    required this.verse,
-    this.verseText,
-    required this.purpose,
-    this.estimatedMinutes = 5,
-    this.generatedAt,
-  });
+  const _$MicroHabitImpl(
+      {required this.id,
+      required this.action,
+      required this.verse,
+      this.verseText,
+      required this.purpose,
+      this.estimatedMinutes = 5,
+      this.generatedAt});
 
   factory _$MicroHabitImpl.fromJson(Map<String, dynamic> json) =>
       _$$MicroHabitImplFromJson(json);
@@ -215,16 +204,16 @@ class _$MicroHabitImpl implements _MicroHabit {
   final String id;
   @override
   final String action;
-  // "Orar 3min al despertar antes del teléfono"
+// "Orar 3min al despertar antes del teléfono"
   @override
   final String verse;
-  // "Salmos 5:3"
+// "Salmos 5:3"
   @override
   final String? verseText;
-  // "Oh Jehová, de mañana oirás mi voz..."
+// "Oh Jehová, de mañana oirás mi voz..."
   @override
   final String purpose;
-  // "Comenzar el día reconociendo a Dios"
+// "Comenzar el día reconociendo a Dios"
   @override
   @JsonKey()
   final int estimatedMinutes;
@@ -255,16 +244,8 @@ class _$MicroHabitImpl implements _MicroHabit {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-        runtimeType,
-        id,
-        action,
-        verse,
-        verseText,
-        purpose,
-        estimatedMinutes,
-        generatedAt,
-      );
+  int get hashCode => Object.hash(runtimeType, id, action, verse, verseText,
+      purpose, estimatedMinutes, generatedAt);
 
   /// Create a copy of MicroHabit
   /// with the given fields replaced by the non-null parameter values.
@@ -276,20 +257,21 @@ class _$MicroHabitImpl implements _MicroHabit {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MicroHabitImplToJson(this);
+    return _$$MicroHabitImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _MicroHabit implements MicroHabit {
-  const factory _MicroHabit({
-    required final String id,
-    required final String action,
-    required final String verse,
-    final String? verseText,
-    required final String purpose,
-    final int estimatedMinutes,
-    final DateTime? generatedAt,
-  }) = _$MicroHabitImpl;
+  const factory _MicroHabit(
+      {required final String id,
+      required final String action,
+      required final String verse,
+      final String? verseText,
+      required final String purpose,
+      final int estimatedMinutes,
+      final DateTime? generatedAt}) = _$MicroHabitImpl;
 
   factory _MicroHabit.fromJson(Map<String, dynamic> json) =
       _$MicroHabitImpl.fromJson;

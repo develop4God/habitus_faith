@@ -11,6 +11,7 @@ import '../habit_model.dart';
 import 'json_storage_service.dart';
 import '../../../statistics/statistics_service.dart';
 import '../../../statistics/statistics_model.dart';
+import '../../../../core/services/time/time.dart';
 
 /// Repository implementation using JSON storage (SharedPreferences)
 class JsonHabitsRepository implements HabitsRepository {
@@ -18,6 +19,7 @@ class JsonHabitsRepository implements HabitsRepository {
   final String _userId;
   final String Function() _idGenerator;
   final FirebaseFirestore? _firestore;
+  final Clock _clock;
 
   static const String _habitsKey = 'habits';
   static const String _completionsKey = 'completions';
@@ -29,10 +31,12 @@ class JsonHabitsRepository implements HabitsRepository {
     required String userId,
     required String Function() idGenerator,
     FirebaseFirestore? firestore,
+    Clock? clock,
   })  : _storage = storage,
         _userId = userId,
         _idGenerator = idGenerator,
-        _firestore = firestore {
+        _firestore = firestore,
+        _clock = clock ?? const Clock.system() {
     _habitsController = StreamController<List<Habit>>.broadcast(
       onListen: () {
         debugPrint(
@@ -88,13 +92,37 @@ class JsonHabitsRepository implements HabitsRepository {
     final completions = _loadCompletionsForHabit(habit.id);
     final completionDates = completions.map((c) => c.completedAt).toList();
 
-    final now = DateTime.now();
+    final now = _clock.now();
     final today = DateTime(now.year, now.month, now.day);
+    debugPrint(
+        '🗓️ _loadHabitWithCompletions: now=$_clock.now(), today=$today, completionDates=${completionDates.map((d) => d.toIso8601String()).toList()}');
 
     final completedToday = completionDates.any((date) {
       final dateOnly = DateTime(date.year, date.month, date.day);
+      debugPrint(
+          '🗓️ _loadHabitWithCompletions: comparing dateOnly=$dateOnly to today=$today');
       return dateOnly == today;
     });
+
+    // Sync dailyStatus based on historical records for today
+    final skippedToday = habit.skippedDates.any((date) {
+      final dateOnly = DateTime(date.year, date.month, date.day);
+      return dateOnly == today;
+    });
+
+    final failedToday = habit.failedDates.any((date) {
+      final dateOnly = DateTime(date.year, date.month, date.day);
+      return dateOnly == today;
+    });
+
+    HabitDailyStatus status = HabitDailyStatus.pending;
+    if (completedToday) {
+      status = HabitDailyStatus.completed;
+    } else if (skippedToday) {
+      status = HabitDailyStatus.skipped;
+    } else if (failedToday) {
+      status = HabitDailyStatus.failed;
+    }
 
     final currentStreak = _calculateCurrentStreak(completionDates);
     final longestStreak = _calculateLongestStreak(completionDates);
@@ -104,6 +132,7 @@ class JsonHabitsRepository implements HabitsRepository {
 
     return habit.copyWith(
       completedToday: completedToday,
+      dailyStatus: status,
       currentStreak: currentStreak,
       longestStreak: longestStreak > habit.longestStreak
           ? longestStreak
@@ -148,7 +177,7 @@ class JsonHabitsRepository implements HabitsRepository {
   int _calculateCurrentStreak(List<DateTime> completionDates) {
     if (completionDates.isEmpty) return 0;
 
-    final now = DateTime.now();
+    final now = _clock.now();
     final today = DateTime(now.year, now.month, now.day);
 
     final sortedDates = completionDates
@@ -157,10 +186,14 @@ class JsonHabitsRepository implements HabitsRepository {
         .toList()
       ..sort((a, b) => b.compareTo(a));
 
-    if (sortedDates.first != today) return 0;
+    if (sortedDates.first != today) {
+      // If not completed today, check if it was completed yesterday to maintain streak
+      final yesterday = today.subtract(const Duration(days: 1));
+      if (sortedDates.first != yesterday) return 0;
+    }
 
     int streak = 1;
-    DateTime expectedDate = today.subtract(const Duration(days: 1));
+    DateTime expectedDate = sortedDates.first.subtract(const Duration(days: 1));
 
     for (int i = 1; i < sortedDates.length; i++) {
       if (sortedDates[i] == expectedDate) {
@@ -214,7 +247,9 @@ class JsonHabitsRepository implements HabitsRepository {
 
   Future<void> _updateStatistics() async {
     final habits = _loadHabits();
-    int total = habits.length;
+    // Exclude skipped habits from the total count for the day to avoid penalizing success percentage
+    int total =
+        habits.where((h) => h.dailyStatus != HabitDailyStatus.skipped).length;
     int completed = habits.where((h) => h.completedToday).length;
     int currentStreak = 0;
     int longestStreak = 0;
@@ -229,7 +264,7 @@ class JsonHabitsRepository implements HabitsRepository {
         lastCompletion = h.lastCompletedAt!;
       }
     }
-    if (lastCompletion.year == 2000) lastCompletion = DateTime.now();
+    if (lastCompletion.year == 2000) lastCompletion = _clock.now();
     final stats = StatisticsModel(
       totalHabits: total,
       completedHabits: completed,
@@ -307,7 +342,8 @@ class JsonHabitsRepository implements HabitsRepository {
         debugPrint('completeHabitWithNote: hábito no encontrado "$habitId"');
         return Failure(HabitFailure.notFound('Habit not found: $habitId'));
       }
-      final now = DateTime.now();
+      final now = _clock.now();
+      debugPrint('✅ completeHabitWithNote: now=$now, habitId=$habitId');
       final habit = habits[index];
       debugPrint(
         'completeHabitWithNote: estado completedToday antes: ${habit.completedToday}',
@@ -323,21 +359,24 @@ class JsonHabitsRepository implements HabitsRepository {
         completedAt: now,
         notes: note,
       );
+      debugPrint(
+          '✅ completeHabitWithNote: completionRecord.completedAt=${completionRecord.completedAt}');
       await _saveCompletionRecord(completionRecord);
-      debugPrint('completeHabitWithNote: registro de completado guardado');
+      debugPrint('✅ completeHabitWithNote: registro de completado guardado');
+
+      // If the habit was skipped or failed, completing it overrides that state
       final updatedHabit = _loadHabitWithCompletions(habit);
       debugPrint(
-        'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}',
+        'completeHabitWithNote: estado completedToday después: \\${updatedHabit.completedToday}',
       );
       habits[index] = updatedHabit;
-      debugPrint('completeHabitWithNote: hábito actualizado en la lista');
+      debugPrint('✅ completeHabitWithNote: hábito actualizado en la lista');
       await _saveHabits(habits);
-      debugPrint('completeHabitWithNote: hábitos guardados');
+      debugPrint('✅ completeHabitWithNote: hábitos guardados');
       await _updateStatistics();
-      debugPrint('completeHabitWithNote: estadísticas actualizadas');
+      debugPrint('✅ completeHabitWithNote: estadísticas actualizadas');
       debugPrint(
-        'Happy path: completeHabitWithNote retornando Success con updatedHabit.completedToday=${updatedHabit.completedToday}',
-      );
+          '✅ completeHabitWithNote: Happy path, returning Success with updatedHabit.completedToday=${updatedHabit.completedToday}');
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('completeHabitWithNote: error: $e');
@@ -364,7 +403,7 @@ class JsonHabitsRepository implements HabitsRepository {
   ) async {
     debugPrint('updateHabitNote: inicio para habitId=$habitId, note=$note');
     try {
-      final now = DateTime.now();
+      final now = _clock.now();
       final today = DateTime(now.year, now.month, now.day);
       final todayKey =
           '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
@@ -421,7 +460,7 @@ class JsonHabitsRepository implements HabitsRepository {
       return;
     }
 
-    final now = DateTime.now();
+    final now = _clock.now();
 
     final record = CompletionRecord(
       habitId: habitId,
@@ -503,6 +542,30 @@ class JsonHabitsRepository implements HabitsRepository {
     }
   }
 
+  /// Update a habit instance directly (used by ML predictor and other services)
+  Future<Result<Habit, HabitFailure>> updateHabitInstance(
+      Habit updatedHabit) async {
+    try {
+      final habits = _loadHabits();
+      final index = habits.indexWhere((h) => h.id == updatedHabit.id);
+      if (index == -1) {
+        debugPrint(
+          'JsonHabitsRepository.updateHabitInstance: Habit not found "${updatedHabit.id}"',
+        );
+        return Failure(
+            HabitFailure.notFound('Habit not found: ${updatedHabit.id}'));
+      }
+      habits[index] = updatedHabit;
+      debugPrint(
+          'JsonHabitsRepository.updateHabitInstance: Updated habit "${updatedHabit.id}"');
+      await _saveHabits(habits);
+      return Success(updatedHabit);
+    } catch (e) {
+      debugPrint('JsonHabitsRepository.updateHabitInstance: Failure: $e');
+      return Failure(HabitFailure.persistence('Failed to update habit: $e'));
+    }
+  }
+
   @override
   Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId) async {
     debugPrint('uncheckHabit: inicio para habitId=$habitId');
@@ -523,10 +586,13 @@ class JsonHabitsRepository implements HabitsRepository {
         debugPrint('uncheckHabit: hábito "$habitId" no completado hoy');
         return Success(habit);
       }
-      final now = DateTime.now();
+      final now = _clock.now();
       final today = DateTime(now.year, now.month, now.day);
+      debugPrint('🗓️ uncheckHabit: now=$now, today=$today');
       final updatedHistory = habit.completionHistory.where((date) {
         final completionDay = DateTime(date.year, date.month, date.day);
+        debugPrint(
+            '🗓️ uncheckHabit: comparing completionDay=$completionDay to today=$today');
         return completionDay != today;
       }).toList();
       final newCurrentStreak = _calculateCurrentStreak(updatedHistory);
@@ -682,10 +748,12 @@ class JsonHabitsRepository implements HabitsRepository {
 
   @override
   CompletionRecord? getTodayCompletionRecord(String habitId) {
-    final now = DateTime.now();
+    final now = _clock.now();
     final today = DateTime(now.year, now.month, now.day);
     final todayKey =
         '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    debugPrint(
+        '🗓️ getTodayCompletionRecord: now=$now, today=$today, todayKey=$todayKey');
 
     final completionsData = _storage.getJson(_completionsKey) ?? {};
     final habitCompletions = completionsData[habitId] as Map<String, dynamic>?;
@@ -704,5 +772,10 @@ class JsonHabitsRepository implements HabitsRepository {
       );
       return null;
     }
+  }
+
+  /// Public method to fetch all habits for the current user (non-archived)
+  Future<List<Habit>> getHabits() async {
+    return _loadHabits();
   }
 }

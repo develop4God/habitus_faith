@@ -5,7 +5,6 @@ import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:habitus_faith/pages/language_settings_page.dart';
 import 'package:habitus_faith/pages/notifications_settings_page.dart';
 import 'package:habitus_faith/pages/about_us_page.dart';
-import 'package:habitus_faith/pages/home_page.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -16,67 +15,53 @@ class SettingsPage extends ConsumerWidget {
     final currentLanguage =
         ref.watch(appLanguageProvider.notifier).currentLanguage;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomePage()),
-              (route) => false,
+    return ListView(
+      children: [
+        ListTile(
+          leading: const Icon(Icons.language),
+          title: Text(l10n.language),
+          subtitle: Text('${currentLanguage.flag} ${currentLanguage.name}'),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LanguageSettingsPage(),
+              ),
             );
           },
         ),
-        title: Text(l10n.settings),
-      ),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: Text(l10n.language),
-            subtitle: Text('${currentLanguage.flag} ${currentLanguage.name}'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LanguageSettingsPage(),
-                ),
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.notifications),
-            title: Text(l10n.notifications),
-            subtitle: Text(l10n.notificationSettings),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationsSettingsPage(),
-                ),
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(l10n.aboutUs),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AboutUsPage()),
-              );
-            },
-          ),
-          const Divider(),
-          // Developer Settings button (only in debug mode)
-          // Removed: Developer Settings option is now only accessible via About page easter egg
-        ],
-      ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.notifications),
+          title: Text(l10n.notifications),
+          subtitle: Text(l10n.notificationSettings),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NotificationsSettingsPage(),
+              ),
+            );
+          },
+        ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.info_outline),
+          title: Text(l10n.aboutUs),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AboutUsPage()),
+            );
+          },
+        ),
+        const Divider(),
+        // Developer Settings button (only in debug mode)
+        // Removed: Developer Settings option is now only accessible via About page easter egg
+      ],
     );
   }
 }
