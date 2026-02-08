@@ -36,6 +36,18 @@ void main() {
       repository.dispose();
     });
 
+    /// Helper function to calculate progress excluding skipped habits
+    int calculateProgress(List<Habit> allHabits) {
+      final activeHabits = allHabits
+          .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
+          .toList();
+      final completedHabits = activeHabits.where((h) => h.completedToday).length;
+      final totalHabits = activeHabits.length;
+      return totalHabits > 0
+          ? (completedHabits / totalHabits * 100).round()
+          : 0;
+    }
+
     test(
       'Daily progress should be 100% when all active habits are completed and one is skipped',
       () async {
@@ -102,17 +114,15 @@ void main() {
         expect(h4.dailyStatus, equals(HabitDailyStatus.skipped));
         expect(h4.completedToday, isFalse);
 
-        // Calculate progress (excluding skipped habits)
+        // Calculate progress using helper function
+        final completionPercentage = calculateProgress(habits);
         final activeHabits = habits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
         final completedHabits = activeHabits.where((h) => h.completedToday).length;
-        final totalHabits = activeHabits.length;
-        final completionPercentage =
-            totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
         // Should be 100% (3 completed out of 3 active habits)
-        expect(totalHabits, equals(3),
+        expect(activeHabits.length, equals(3),
             reason: 'Should have 3 active habits (skipped excluded)');
         expect(completedHabits, equals(3),
             reason: 'Should have 3 completed habits');
@@ -172,17 +182,15 @@ void main() {
         // Get all habits and calculate progress
         final habits = await repository.watchHabits().first;
 
-        // Calculate progress (no skipped habits)
+        // Calculate progress using helper function
+        final completionPercentage = calculateProgress(habits);
         final activeHabits = habits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
         final completedHabits = activeHabits.where((h) => h.completedToday).length;
-        final totalHabits = activeHabits.length;
-        final completionPercentage =
-            totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
         // Should be 75% (3 completed out of 4 active habits)
-        expect(totalHabits, equals(4),
+        expect(activeHabits.length, equals(4),
             reason: 'Should have 4 active habits');
         expect(completedHabits, equals(3),
             reason: 'Should have 3 completed habits');
@@ -252,17 +260,15 @@ void main() {
         // Get all habits and calculate progress
         final allHabits = await repository.watchHabits().first;
 
-        // Calculate progress (excluding skipped habits)
+        // Calculate progress using helper function
+        final completionPercentage = calculateProgress(allHabits);
         final activeHabits = allHabits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
         final completedHabits = activeHabits.where((h) => h.completedToday).length;
-        final totalHabits = activeHabits.length;
-        final completionPercentage =
-            totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
         // Should be 67% (2 completed out of 3 active habits: 2 completed + 1 pending)
-        expect(totalHabits, equals(3),
+        expect(activeHabits.length, equals(3),
             reason: 'Should have 3 active habits (2 skipped excluded)');
         expect(completedHabits, equals(2),
             reason: 'Should have 2 completed habits');
@@ -301,16 +307,14 @@ void main() {
         // Get all habits and calculate progress
         final allHabits = await repository.watchHabits().first;
 
-        // Calculate progress (excluding skipped habits)
+        // Calculate progress using helper function
+        final completionPercentage = calculateProgress(allHabits);
         final activeHabits = allHabits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
-        final totalHabits = activeHabits.length;
-        final completionPercentage =
-            totalHabits > 0 ? (activeHabits.where((h) => h.completedToday).length / totalHabits * 100).round() : 0;
 
         // Should be 0% (no active habits)
-        expect(totalHabits, equals(0),
+        expect(activeHabits.length, equals(0),
             reason: 'Should have 0 active habits (all skipped)');
         expect(completionPercentage, equals(0),
             reason: 'Should have 0% progress when all habits are skipped');
