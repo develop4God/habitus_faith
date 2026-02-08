@@ -59,8 +59,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     // Hábitos de hoy
     final habitsAsync = ref.watch(habitsStreamProvider);
     final habits = habitsAsync.asData?.value ?? [];
-    final completedHabits = habits.where((h) => h.completedToday).length;
-    final totalHabits = habits.length;
+    // Exclude skipped habits from both completed and total counts
+    final activeHabits =
+        habits.where((h) => h.dailyStatus != HabitDailyStatus.skipped).toList();
+    final completedHabits = activeHabits.where((h) => h.completedToday).length;
+    final totalHabits = activeHabits.length;
     final completionPercentage =
         totalHabits > 0 ? (completedHabits / totalHabits * 100).round() : 0;
 
