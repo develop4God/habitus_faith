@@ -1,0 +1,4 @@
+Error detected in pubspec.yaml:
+No file or variants found for asset: .env.
+
+Error: Failed to build asset bundle
