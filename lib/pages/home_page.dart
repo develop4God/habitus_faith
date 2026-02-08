@@ -11,6 +11,7 @@ import '../features/statistics/statistics_page.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../features/habits/presentation/habits_providers.dart';
+import '../features/habits/domain/habit.dart'; // Import for HabitDailyStatus
 import '../core/models/devocional_model.dart';
 import '../utils/date_format_utils.dart';
 import '../widgets/unified_habit_list.dart';
