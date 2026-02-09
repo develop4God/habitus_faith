@@ -1244,6 +1244,10 @@
   "@habitDeleted": {
     "description": "Success message after deleting a habit"
   },
+  "habitCreated": "Habit created successfully",
+  "@habitCreated": {
+    "description": "Success message after creating a habit"
+  },
   "dailyReflection": "Daily Reflection",
   "@dailyReflection": {
     "description": "Title for the daily reflection/notes page"

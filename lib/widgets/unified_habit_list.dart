@@ -88,21 +88,9 @@ class UnifiedHabitList extends ConsumerWidget {
               }).toList()
             : habits;
 
+        // Sort habits only by user-defined order (no automatic reordering based on completion)
         final sortedHabits = [...displayHabits];
-        sortedHabits.sort((a, b) {
-          // A habit is considered "done" if it's completed, skipped, or failed for today
-          final aDone = selectedDate != null && !isViewingToday
-              ? a.completedToday
-              : a.dailyStatus != HabitDailyStatus.pending;
-          final bDone = selectedDate != null && !isViewingToday
-              ? b.completedToday
-              : b.dailyStatus != HabitDailyStatus.pending;
-
-          if (aDone != bDone) {
-            return aDone ? 1 : -1;
-          }
-          return a.order.compareTo(b.order);
-        });
+        sortedHabits.sort((a, b) => a.order.compareTo(b.order));
 
         // Pending habits are those with 'pending' status
         final hasPendingHabits = selectedDate != null && !isViewingToday
@@ -167,22 +155,6 @@ class UnifiedHabitList extends ConsumerWidget {
             onReorder: (oldIndex, newIndex) async {
               if (newIndex > oldIndex) {
                 newIndex -= 1;
-              }
-
-              final movedHabit = sortedHabits[oldIndex];
-              final movedIsDone =
-                  movedHabit.dailyStatus != HabitDailyStatus.pending;
-              final doneStartIndex = sortedHabits.indexWhere(
-                (h) => h.dailyStatus != HabitDailyStatus.pending,
-              );
-
-              if (doneStartIndex != -1) {
-                if (movedIsDone && newIndex < doneStartIndex) {
-                  return;
-                }
-                if (!movedIsDone && newIndex >= doneStartIndex) {
-                  return;
-                }
               }
 
               final reorderedHabits = [...sortedHabits];

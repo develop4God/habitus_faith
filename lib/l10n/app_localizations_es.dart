@@ -1037,6 +1037,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get habitDeleted => 'Hábito eliminado';
 
   @override
+  String get habitCreated => 'Hábito creado exitosamente';
+
+  @override
   String get dailyReflection => 'Reflexión Diaria';
 
   @override

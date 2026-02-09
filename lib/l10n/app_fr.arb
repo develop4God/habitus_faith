@@ -1268,6 +1268,10 @@
   "@habitDeleted": {
     "description": "Message de succès après suppression d'une habitude"
   },
+  "habitCreated": "Habitude créée avec succès",
+  "@habitCreated": {
+    "description": "Message de succès après création d'une habitude"
+  },
   "readVerseFirst": "Lire le Verset d'Abord",
   "@readVerseFirst": {
     "description": "Bouton pour lire le verset biblique avant le dévotion"

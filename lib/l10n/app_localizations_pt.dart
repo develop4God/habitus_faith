@@ -1033,6 +1033,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitDeleted => 'Hábito excluído';
 
   @override
+  String get habitCreated => 'Hábito criado com sucesso';
+
+  @override
   String get dailyReflection => 'Reflexão Diaria';
 
   @override
