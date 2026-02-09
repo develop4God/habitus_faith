@@ -8,6 +8,7 @@ import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dar
 import '../features/habits/presentation/habits_providers.dart';
 import '../features/habits/presentation/widgets/abandonment_risk_indicator.dart';
 import '../l10n/app_localizations.dart';
+import '../core/utils/global_snackbar.dart';
 import 'notification_options_dialog.dart';
 
 class UnifiedHabitCard extends ConsumerStatefulWidget {
@@ -87,42 +88,24 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     debugPrint('UnifiedHabitCard: delete dialog result = $confirmed');
 
     if (confirmed == true) {
-      debugPrint('UnifiedHabitCard: deleting habit ${habit.id}');
-      await widget.onDelete(habit.id);
-      debugPrint('UnifiedHabitCard: delete completed for habit ${habit.id}');
-      if (!mounted) {
-        debugPrint('UnifiedHabitCard: widget not mounted after delete');
-        return;
-      }
-      // Close the modal sheet
+      if (!mounted) return;
+
+      // Close the modal with proper animation
       debugPrint('UnifiedHabitCard: popping modal sheet for habit ${habit.id}');
       Navigator.of(context).pop();
       debugPrint('UnifiedHabitCard: modal sheet popped for habit ${habit.id}');
-      // Show snackbar
-      if (!mounted) {
-        debugPrint('UnifiedHabitCard: widget not mounted after modal pop');
-        return;
-      }
+
+      // Wait for modal close animation to complete (typically 250-300ms)
+      await Future.delayed(const Duration(milliseconds: 300));
+
+      // Perform the deletion
+      debugPrint('UnifiedHabitCard: deleting habit ${habit.id}');
+      await widget.onDelete(habit.id);
+      debugPrint('UnifiedHabitCard: delete completed for habit ${habit.id}');
+
+      // Show snackbar using the global utility
       debugPrint('UnifiedHabitCard: showing snackbar for habit ${habit.id}');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.delete_outline, color: Colors.white),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(l10n.habitDeleted),
-              ),
-            ],
-          ),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.red.shade600,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
+      GlobalSnackbar.showError(l10n.habitDeleted);
       debugPrint('UnifiedHabitCard: snackbar shown for habit ${habit.id}');
     }
   }
@@ -130,28 +113,20 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleSkip() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = widget.habit;
-    await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
+
     if (!mounted) return;
+
+    // Close the modal first
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.fast_forward, color: Colors.white),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(l10n.habitSkipped),
-            ),
-          ],
-        ),
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.orange.shade600,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    );
+
+    // Wait for modal close animation to complete
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    // Perform the skip operation
+    await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
+
+    // Show snackbar using the global utility
+    GlobalSnackbar.showWarning(l10n.habitSkipped);
   }
 
   @override

@@ -30,6 +30,10 @@ import 'dev_tools/fast_time_banner.dart';
 import 'features/developer/developer_debug_page.dart';
 import 'providers/devotional_providers.dart';
 
+// Global ScaffoldMessenger key for showing snackbars from anywhere
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -113,6 +117,7 @@ class MyApp extends ConsumerWidget {
     ref.watch(habitNotificationsSchedulerProvider);
 
     return MaterialApp(
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       locale: currentLocale,
       localizationsDelegates: const [
