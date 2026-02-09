@@ -86,8 +86,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     if (confirmed == true) {
       await widget.onDelete(habit.id);
       if (!mounted) return;
-      // Always pop the modal sheet after deletion
+
+      // Close the modal sheet
       Navigator.of(context).pop();
+
+      // Show snackbar
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -137,20 +141,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     );
   }
 
-  Future<void> _handleFail() async {
-    final l10n = AppLocalizations.of(context)!;
-    final habit = widget.habit;
-    await ref.read(habitsNotifierProvider.notifier).failHabit(habit.id);
-    if (!mounted) return;
-    Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l10n.habitMarkedAsNotCompleted),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -190,7 +180,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             onTap: () async {
               await HabitModalSheet.show(
                 context: context,
-                child: _buildExpandedContent(context, l10n, habitColor),
+                child: Builder(
+                  builder: (modalContext) =>
+                      _buildExpandedContent(modalContext, l10n, habitColor),
+                ),
                 maxHeight: 520,
               );
               if (!mounted) return;
@@ -741,12 +734,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   l10n.skipHabit,
                   Colors.orange.shade700,
                   _handleSkip,
-                ),
-                _buildCircularAction(
-                  Icons.close_rounded,
-                  l10n.markAsNotCompleted,
-                  Colors.red.shade700,
-                  _handleFail,
                 ),
                 _buildCircularAction(
                   Icons.delete_outline_rounded,
