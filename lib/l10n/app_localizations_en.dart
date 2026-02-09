@@ -1030,6 +1030,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get habitDeleted => 'Habit deleted';
 
   @override
+  String get habitCreated => 'Habit created successfully';
+
+  @override
   String get dailyReflection => 'Daily Reflection';
 
   @override

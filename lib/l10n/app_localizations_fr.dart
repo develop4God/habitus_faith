@@ -1046,6 +1046,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get habitDeleted => 'Habitude supprimée';
 
   @override
+  String get habitCreated => 'Habitude créée avec succès';
+
+  @override
   String get dailyReflection => 'Réflexion quotidienne';
 
   @override

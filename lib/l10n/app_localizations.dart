@@ -1958,6 +1958,12 @@ abstract class AppLocalizations {
   /// **'Habit deleted'**
   String get habitDeleted;
 
+  /// Success message after creating a habit
+  ///
+  /// In en, this message translates to:
+  /// **'Habit created successfully'**
+  String get habitCreated;
+
   /// Title for the daily reflection/notes page
   ///
   /// In en, this message translates to:

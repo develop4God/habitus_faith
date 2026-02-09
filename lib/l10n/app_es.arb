@@ -1276,6 +1276,10 @@
   "@habitDeleted": {
     "description": "Mensaje de éxito después de eliminar un hábito"
   },
+  "habitCreated": "Hábito creado exitosamente",
+  "@habitCreated": {
+    "description": "Mensaje de éxito después de crear un hábito"
+  },
   "readVerseFirst": "Leer Versículo Primero",
   "@readVerseFirst": {
     "description": "Botón para leer el versículo bíblico antes del devocional"

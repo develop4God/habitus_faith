@@ -409,6 +409,7 @@
   "addEmoji": "添加表情符号",
   "hideEmojis": "隐藏表情符号",
   "habitDeleted": "习惯已删除",
+  "habitCreated": "习惯创建成功",
   "notificationOptions": "通知选项",
   "@notificationOptions": {
     "description": "通知选项对话框标题"

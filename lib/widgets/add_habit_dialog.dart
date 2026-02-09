@@ -159,6 +159,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
 
   Future<void> _saveHabit() async {
     final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     await ref.read(habitsNotifierProvider.notifier).addHabit(
           name: nameCtrl.text,
           category: selectedCategory,
@@ -175,6 +176,25 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           .updateHabit(habitId: newHabit.id, recurrence: recurrence);
     }
     navigator.pop();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(widget.l10n.habitCreated),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.green.shade600,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
   }
 
   @override
@@ -722,11 +742,32 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 h.category,
               ).toDomainCategory()]!;
               return InkWell(
-                onTap: () {
-                  ref
+                onTap: () async {
+                  final navigator = Navigator.of(context);
+                  final messenger = ScaffoldMessenger.of(context);
+                  await ref
                       .read(habitsNotifierProvider.notifier)
                       .addHabit(name: name, emoji: h.emoji);
-                  Navigator.pop(context);
+                  navigator.pop();
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          const Icon(Icons.check_circle, color: Colors.white),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(widget.l10n.habitCreated),
+                          ),
+                        ],
+                      ),
+                      duration: const Duration(seconds: 2),
+                      backgroundColor: Colors.green.shade600,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(

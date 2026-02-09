@@ -86,13 +86,25 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     if (confirmed == true) {
       await widget.onDelete(habit.id);
       if (!mounted) return;
-      if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-      }
+      // Always pop the modal sheet after deletion
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.habitDeleted),
+          content: Row(
+            children: [
+              const Icon(Icons.delete_outline, color: Colors.white),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(l10n.habitDeleted),
+              ),
+            ],
+          ),
           duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red.shade600,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       );
     }
@@ -106,8 +118,21 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(l10n.habitSkipped),
+        content: Row(
+          children: [
+            const Icon(Icons.fast_forward, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(l10n.habitSkipped),
+            ),
+          ],
+        ),
         duration: const Duration(seconds: 2),
+        backgroundColor: Colors.orange.shade600,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
     );
   }

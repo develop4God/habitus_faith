@@ -986,6 +986,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitDeleted => '习惯已删除';
 
   @override
+  String get habitCreated => '习惯创建成功';
+
+  @override
   String get dailyReflection => '每日反思';
 
   @override
