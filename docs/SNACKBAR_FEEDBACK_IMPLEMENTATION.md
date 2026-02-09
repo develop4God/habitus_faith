@@ -53,28 +53,37 @@ Modified the `_saveHabit()` method to show the same snackbar after creating a cu
 
 **File**: `lib/widgets/unified_habit_card.dart`
 
-Enhanced the existing delete snackbar with better styling:
+Enhanced the existing delete snackbar with better styling and **fixed the modal closing issue**:
+
+- Removed the `Navigator.of(context).canPop()` check that was preventing the modal from closing
+- The modal now always closes after successful deletion
 
 ```dart
-ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Row(
-      children: [
-        const Icon(Icons.delete_outline, color: Colors.white),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(l10n.habitDeleted),
-        ),
-      ],
+if (confirmed == true) {
+  await widget.onDelete(habit.id);
+  if (!mounted) return;
+  // Always pop the modal sheet after deletion
+  Navigator.of(context).pop();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Row(
+        children: [
+          const Icon(Icons.delete_outline, color: Colors.white),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(l10n.habitDeleted),
+          ),
+        ],
+      ),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.red.shade600,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
     ),
-    duration: const Duration(seconds: 2),
-    backgroundColor: Colors.red.shade600,
-    behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-  ),
-);
+  );
+}
 ```
 
 ### 4. Skip Habit Feedback
