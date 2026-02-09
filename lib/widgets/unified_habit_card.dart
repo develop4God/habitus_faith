@@ -63,6 +63,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = widget.habit;
+    debugPrint('UnifiedHabitCard: delete button pressed for habit ${habit.id}');
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -83,15 +84,26 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       ),
     );
 
+    debugPrint('UnifiedHabitCard: delete dialog result = $confirmed');
+
     if (confirmed == true) {
+      debugPrint('UnifiedHabitCard: deleting habit ${habit.id}');
       await widget.onDelete(habit.id);
-      if (!mounted) return;
-
+      debugPrint('UnifiedHabitCard: delete completed for habit ${habit.id}');
+      if (!mounted) {
+        debugPrint('UnifiedHabitCard: widget not mounted after delete');
+        return;
+      }
       // Close the modal sheet
+      debugPrint('UnifiedHabitCard: popping modal sheet for habit ${habit.id}');
       Navigator.of(context).pop();
-
+      debugPrint('UnifiedHabitCard: modal sheet popped for habit ${habit.id}');
       // Show snackbar
-      if (!mounted) return;
+      if (!mounted) {
+        debugPrint('UnifiedHabitCard: widget not mounted after modal pop');
+        return;
+      }
+      debugPrint('UnifiedHabitCard: showing snackbar for habit ${habit.id}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -111,6 +123,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           ),
         ),
       );
+      debugPrint('UnifiedHabitCard: snackbar shown for habit ${habit.id}');
     }
   }
 

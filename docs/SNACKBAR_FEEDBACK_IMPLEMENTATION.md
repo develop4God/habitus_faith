@@ -55,15 +55,35 @@ Modified the `_saveHabit()` method to show the same snackbar after creating a cu
 
 Enhanced the existing delete snackbar with better styling and **fixed the modal closing issue**:
 
-- Removed the `Navigator.of(context).canPop()` check that was preventing the modal from closing
-- The modal now always closes after successful deletion
+#### Context Issue Fix
+The main issue was that the context passed to `_buildExpandedContent()` was from the card widget, not the modal sheet itself. This caused `Navigator.of(context).pop()` to fail silently because it couldn't find the modal sheet in the navigation stack.
 
+**Solution**: Wrapped the modal content in a `Builder` widget to capture the correct modal context:
+
+```dart
+await HabitModalSheet.show(
+  context: context,
+  child: Builder(
+    builder: (modalContext) =>
+        _buildExpandedContent(modalContext, l10n, habitColor),
+  ),
+  maxHeight: 520,
+);
+```
+
+Now when `_handleDelete()` calls `Navigator.of(context).pop()`, it uses the modal's context and properly closes the modal sheet.
+
+#### Delete Handler
 ```dart
 if (confirmed == true) {
   await widget.onDelete(habit.id);
   if (!mounted) return;
-  // Always pop the modal sheet after deletion
+  
+  // Close the modal sheet
   Navigator.of(context).pop();
+  
+  // Show snackbar
+  if (!mounted) return;
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Row(
@@ -184,6 +204,20 @@ All snackbars follow a consistent design pattern:
 5. **Localization**:
    - Test snackbar messages in all supported languages
    - Verify text is properly translated
+
+## Additional Changes
+
+### Removed "Mark as Not Completed" Button
+
+**File**: `lib/widgets/unified_habit_card.dart`
+
+The "Mark as Not Completed" (fail habit) button was removed from the bottom modal sheet as it was deemed unnecessary. The modal now only shows three action buttons:
+
+1. **Edit** - Opens the edit dialog
+2. **Skip for Today** - Skips the habit without affecting statistics
+3. **Delete** - Permanently deletes the habit
+
+**Note**: Visual indicators for failed/not completed habits remain in place for habits that were previously marked as failed.
 
 ## Status
 
