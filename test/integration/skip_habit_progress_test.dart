@@ -41,7 +41,8 @@ void main() {
       final activeHabits = allHabits
           .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
           .toList();
-      final completedHabits = activeHabits.where((h) => h.completedToday).length;
+      final completedHabits =
+          activeHabits.where((h) => h.completedToday).length;
       final totalHabits = activeHabits.length;
       return totalHabits > 0
           ? (completedHabits / totalHabits * 100).round()
@@ -119,7 +120,8 @@ void main() {
         final activeHabits = habits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
-        final completedHabits = activeHabits.where((h) => h.completedToday).length;
+        final completedHabits =
+            activeHabits.where((h) => h.completedToday).length;
 
         // Should be 100% (3 completed out of 3 active habits)
         expect(activeHabits.length, equals(3),
@@ -127,7 +129,8 @@ void main() {
         expect(completedHabits, equals(3),
             reason: 'Should have 3 completed habits');
         expect(completionPercentage, equals(100),
-            reason: 'Should have 100% progress when all active habits are completed');
+            reason:
+                'Should have 100% progress when all active habits are completed');
       },
     );
 
@@ -187,7 +190,8 @@ void main() {
         final activeHabits = habits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
-        final completedHabits = activeHabits.where((h) => h.completedToday).length;
+        final completedHabits =
+            activeHabits.where((h) => h.completedToday).length;
 
         // Should be 75% (3 completed out of 4 active habits)
         expect(activeHabits.length, equals(4),
@@ -195,7 +199,8 @@ void main() {
         expect(completedHabits, equals(3),
             reason: 'Should have 3 completed habits');
         expect(completionPercentage, equals(75),
-            reason: 'Should have 75% progress when 3 out of 4 habits are completed');
+            reason:
+                'Should have 75% progress when 3 out of 4 habits are completed');
       },
     );
 
@@ -265,7 +270,8 @@ void main() {
         final activeHabits = allHabits
             .where((h) => h.dailyStatus != HabitDailyStatus.skipped)
             .toList();
-        final completedHabits = activeHabits.where((h) => h.completedToday).length;
+        final completedHabits =
+            activeHabits.where((h) => h.completedToday).length;
 
         // Should be 67% (2 completed out of 3 active habits: 2 completed + 1 pending)
         expect(activeHabits.length, equals(3),
