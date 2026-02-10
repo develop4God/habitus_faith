@@ -160,6 +160,8 @@ class NotificationsListPage extends ConsumerWidget {
         return Icons.psychology;
       case HabitCategory.relational:
         return Icons.people;
+      case HabitCategory.household:
+        return Icons.home_rounded;
       case HabitCategory.other:
         return Icons.category;
     }

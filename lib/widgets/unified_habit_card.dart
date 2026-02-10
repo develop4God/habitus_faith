@@ -132,7 +132,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   void _showTimer(
       BuildContext context, Color habitColor, AppLocalizations l10n) async {
-    debugPrint('🕐 _showTimer called, habit: ${widget.habit.name}, completed: ${widget.habit.completedToday}');
+    debugPrint(
+        '🕐 _showTimer called, habit: ${widget.habit.name}, completed: ${widget.habit.completedToday}');
 
     // Check if habit is already completed
     if (widget.habit.completedToday) {
@@ -275,8 +276,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   Row(
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width < 360 ? 40 : 48,
-                        height: MediaQuery.of(context).size.width < 360 ? 40 : 48,
+                        width:
+                            MediaQuery.of(context).size.width < 360 ? 40 : 48,
+                        height:
+                            MediaQuery.of(context).size.width < 360 ? 40 : 48,
                         decoration: BoxDecoration(
                           color: habitColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -285,12 +288,16 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                           child: Text(
                             widget.habit.emoji ?? '✓',
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width < 360 ? 20 : 24,
+                              fontSize: MediaQuery.of(context).size.width < 360
+                                  ? 20
+                                  : 24,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(width: MediaQuery.of(context).size.width < 360 ? 8 : 12),
+                      SizedBox(
+                          width:
+                              MediaQuery.of(context).size.width < 360 ? 8 : 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -118,15 +118,17 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
   String _getCategoryEmoji(HabitCategory cat) {
     switch (cat) {
       case HabitCategory.spiritual:
-        return '🙏';
+        return '\ud83d\ude4f';
       case HabitCategory.physical:
-        return '💪';
+        return '\ud83d\udcaa';
       case HabitCategory.mental:
-        return '🧠';
+        return '\ud83e\udde0';
       case HabitCategory.relational:
-        return '❤️';
+        return '\u2764\ufe0f';
+      case HabitCategory.household:
+        return '\ud83c\udfe0';
       case HabitCategory.other:
-        return '⭐';
+        return '\u2b50';
     }
   }
 
@@ -310,17 +312,17 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
   String _getCategoryEmoji(HabitCategory cat) {
     switch (cat) {
       case HabitCategory.spiritual:
-        return '🙏';
+        return '\ud83d\ude4f';
       case HabitCategory.physical:
-        return '💪';
+        return '\ud83d\udcaa';
       case HabitCategory.mental:
-        return '🧠';
+        return '\ud83e\udde0';
       case HabitCategory.relational:
-        return '❤️';
+        return '\u2764\ufe0f';
       case HabitCategory.household:
-        return '🏠';
+        return '\ud83c\udfe0';
       case HabitCategory.other:
-        return '⭐';
+        return '\u2b50';
     }
   }
 
@@ -334,6 +336,8 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
         return l10n.mental;
       case HabitCategory.relational:
         return l10n.relational;
+      case HabitCategory.household:
+        return 'Hogar'; // Household
       case HabitCategory.other:
         return 'Other'; // Fallback category
     }

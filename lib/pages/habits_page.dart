@@ -304,8 +304,9 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
 
               // Check if there are household tasks
               final hasHouseholdTasks = habitsAsync.value?.any(
-                (h) => h.category == HabitCategory.household,
-              ) ?? false;
+                    (h) => h.category == HabitCategory.household,
+                  ) ??
+                  false;
 
               if (hasHouseholdTasks) {
                 // Show multiple FABs when household tasks exist

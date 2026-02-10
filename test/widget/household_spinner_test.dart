@@ -342,13 +342,12 @@ void main() {
         // Verify modern UI elements
         expect(find.byType(Container), findsWidgets);
         expect(find.byType(ElevatedButton), findsWidgets);
-        
+
         // Check for gradient containers (spinner wheel)
         final containers = tester.widgetList<Container>(find.byType(Container));
         final hasGradient = containers.any((container) {
           final decoration = container.decoration;
-          return decoration is BoxDecoration &&
-              decoration.gradient != null;
+          return decoration is BoxDecoration && decoration.gradient != null;
         });
         expect(hasGradient, isTrue);
       },
@@ -444,4 +443,3 @@ void main() {
     );
   });
 }
-
