@@ -19,6 +19,7 @@ enum HabitCategory {
   physical, // exercise, sleep, nutrition, health
   mental, // learning, meditation, reading, creativity
   relational, // family time, friendships, community, service
+  household, // chores, cleaning, organizing, maintenance
   other; // user-defined or uncategorized
 
   String get displayName {
@@ -31,6 +32,8 @@ enum HabitCategory {
         return 'Mental';
       case HabitCategory.relational:
         return 'Relacional';
+      case HabitCategory.household:
+        return 'Hogar';
       case HabitCategory.other:
         return 'Otros';
     }

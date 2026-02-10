@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-MicroHabit _$MicroHabitFromJson(Map<String, dynamic> json) {
-  return _MicroHabit.fromJson(json);
-}
-
 /// @nodoc
 mixin _$MicroHabit {
   String get id => throw _privateConstructorUsedError;
@@ -30,9 +26,6 @@ mixin _$MicroHabit {
       throw _privateConstructorUsedError; // "Comenzar el día reconociendo a Dios"
   int get estimatedMinutes => throw _privateConstructorUsedError;
   DateTime? get generatedAt => throw _privateConstructorUsedError;
-
-  /// Serializes this MicroHabit to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of MicroHabit
   /// with the given fields replaced by the non-null parameter values.
@@ -186,7 +179,7 @@ class __$$MicroHabitImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$MicroHabitImpl implements _MicroHabit {
   const _$MicroHabitImpl(
       {required this.id,
@@ -196,9 +189,6 @@ class _$MicroHabitImpl implements _MicroHabit {
       required this.purpose,
       this.estimatedMinutes = 5,
       this.generatedAt});
-
-  factory _$MicroHabitImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MicroHabitImplFromJson(json);
 
   @override
   final String id;
@@ -242,7 +232,6 @@ class _$MicroHabitImpl implements _MicroHabit {
                 other.generatedAt == generatedAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, action, verse, verseText,
       purpose, estimatedMinutes, generatedAt);
@@ -254,13 +243,6 @@ class _$MicroHabitImpl implements _MicroHabit {
   @pragma('vm:prefer-inline')
   _$$MicroHabitImplCopyWith<_$MicroHabitImpl> get copyWith =>
       __$$MicroHabitImplCopyWithImpl<_$MicroHabitImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MicroHabitImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _MicroHabit implements MicroHabit {
@@ -272,9 +254,6 @@ abstract class _MicroHabit implements MicroHabit {
       required final String purpose,
       final int estimatedMinutes,
       final DateTime? generatedAt}) = _$MicroHabitImpl;
-
-  factory _MicroHabit.fromJson(Map<String, dynamic> json) =
-      _$MicroHabitImpl.fromJson;
 
   @override
   String get id;

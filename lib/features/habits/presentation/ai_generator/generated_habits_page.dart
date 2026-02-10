@@ -44,6 +44,13 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
       return HabitCategory.relational;
     }
 
+    // Household keywords
+    if (RegExp(
+      r'limpiar|lavar|cocinar|ordenar|fregar|barrer|trapear|planchar|clean|wash|cook|organize|sweep|mop|iron|dishes|laundry|vacuum',
+    ).hasMatch(lower)) {
+      return HabitCategory.household;
+    }
+
     // Spiritual (default for most Bible-based habits)
     return HabitCategory.spiritual;
   }
@@ -310,6 +317,8 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
         return '🧠';
       case HabitCategory.relational:
         return '❤️';
+      case HabitCategory.household:
+        return '🏠';
       case HabitCategory.other:
         return '⭐';
     }

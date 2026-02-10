@@ -24,6 +24,7 @@ class HabitModel {
       'physical': HabitCategory.physical,
       'mental': HabitCategory.mental,
       'relational': HabitCategory.relational,
+      'household': HabitCategory.household,
       'other': HabitCategory.other,
     };
 

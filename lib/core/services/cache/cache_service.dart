@@ -52,7 +52,16 @@ class CacheService implements ICacheService {
 
     String jsonStr;
     if (value is List<MicroHabit>) {
-      jsonStr = jsonEncode(value.map((h) => h.toJson()).toList());
+      // Manual serialization since MicroHabit doesn't have toJson generated
+      jsonStr = jsonEncode(value.map((h) => {
+        'id': h.id,
+        'action': h.action,
+        'verse': h.verse,
+        'verseText': h.verseText,
+        'purpose': h.purpose,
+        'estimatedMinutes': h.estimatedMinutes,
+        'generatedAt': h.generatedAt?.toIso8601String(),
+      }).toList());
     } else {
       jsonStr = jsonEncode(value);
     }

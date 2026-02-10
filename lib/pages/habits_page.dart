@@ -6,6 +6,7 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 
 import '../features/habits/domain/habit.dart';
 import '../features/habits/presentation/habits_providers.dart';
+import '../features/habits/presentation/household_spinner/household_spinner_page.dart';
 import '../widgets/add_habit_discovery_dialog.dart';
 import 'habits_page_ui.dart'; // Nuevo import
 
@@ -300,6 +301,56 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
           floatingActionButton: Builder(
             builder: (context) {
               final l10n = AppLocalizations.of(context)!;
+
+              // Check if there are household tasks
+              final hasHouseholdTasks = habitsAsync.value?.any(
+                (h) => h.category == HabitCategory.household,
+              ) ?? false;
+
+              if (hasHouseholdTasks) {
+                // Show multiple FABs when household tasks exist
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Household spinner button
+                    FloatingActionButton(
+                      heroTag: 'household_spinner_fab',
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const HouseholdSpinnerPage(),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.orange.shade400,
+                      tooltip: 'Girar tareas del hogar',
+                      child: const Icon(
+                        Icons.refresh_rounded,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Add habit button
+                    FloatingActionButton(
+                      key: const Key('add_habit_fab'),
+                      heroTag: 'add_habit_fab',
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AddHabitDiscoveryDialog(l10n: l10n),
+                        );
+                      },
+                      backgroundColor: Colors.purple,
+                      tooltip: l10n.addHabit,
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ],
+                );
+              }
+
+              // Default single FAB
               return FloatingActionButton(
                 key: const Key('add_habit_fab'),
                 onPressed: () {

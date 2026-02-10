@@ -104,7 +104,7 @@ final geminiServiceProvider =
 // ignore: unused_element
 typedef GeminiServiceRef = AutoDisposeFutureProviderRef<IGeminiService>;
 String _$microHabitGeneratorHash() =>
-    r'b5aed6ac919630cda694ca409fa413449e11022f';
+    r'3a016c9f33480614025d3953d40003b3c2801636';
 
 /// State provider for micro-habit generation
 ///

@@ -37,4 +37,5 @@ const _$PredefinedHabitCategoryEnumMap = {
   PredefinedHabitCategory.physical: 'physical',
   PredefinedHabitCategory.mental: 'mental',
   PredefinedHabitCategory.relational: 'relational',
+  PredefinedHabitCategory.household: 'household',
 };

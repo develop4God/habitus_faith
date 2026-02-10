@@ -922,6 +922,8 @@ extension PredefinedHabitCategoryX on PredefinedHabitCategory {
         return HabitCategory.mental;
       case PredefinedHabitCategory.relational:
         return HabitCategory.relational;
+      case PredefinedHabitCategory.household:
+        return HabitCategory.household;
     }
   }
 }

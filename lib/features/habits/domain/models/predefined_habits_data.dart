@@ -135,6 +135,48 @@ final List<PredefinedHabit> predefinedHabits = [
     verse: VerseReference(book: 'Galatians', chapter: 5, verse: 13),
     suggestedTime: 'anytime',
   ),
+
+  // ===== HOUSEHOLD (5) =====
+  const PredefinedHabit(
+    id: 'wash_dishes',
+    emoji: '🍽️',
+    nameKey: 'predefinedHabit_washDishes_name',
+    descriptionKey: 'predefinedHabit_washDishes_description',
+    category: PredefinedHabitCategory.household,
+    suggestedTime: 'evening',
+  ),
+  const PredefinedHabit(
+    id: 'clean_room',
+    emoji: '🧹',
+    nameKey: 'predefinedHabit_cleanRoom_name',
+    descriptionKey: 'predefinedHabit_cleanRoom_description',
+    category: PredefinedHabitCategory.household,
+    suggestedTime: 'morning',
+  ),
+  const PredefinedHabit(
+    id: 'do_laundry',
+    emoji: '👕',
+    nameKey: 'predefinedHabit_doLaundry_name',
+    descriptionKey: 'predefinedHabit_doLaundry_description',
+    category: PredefinedHabitCategory.household,
+    suggestedTime: 'anytime',
+  ),
+  const PredefinedHabit(
+    id: 'organize_space',
+    emoji: '📦',
+    nameKey: 'predefinedHabit_organizeSpace_name',
+    descriptionKey: 'predefinedHabit_organizeSpace_description',
+    category: PredefinedHabitCategory.household,
+    suggestedTime: 'anytime',
+  ),
+  const PredefinedHabit(
+    id: 'clean_bathroom',
+    emoji: '🚿',
+    nameKey: 'predefinedHabit_cleanBathroom_name',
+    descriptionKey: 'predefinedHabit_cleanBathroom_description',
+    category: PredefinedHabitCategory.household,
+    suggestedTime: 'anytime',
+  ),
 ];
 
 extension PredefinedHabitCategoryX on PredefinedHabitCategory {
@@ -148,6 +190,8 @@ extension PredefinedHabitCategoryX on PredefinedHabitCategory {
         return HabitCategory.mental;
       case PredefinedHabitCategory.relational:
         return HabitCategory.relational;
+      case PredefinedHabitCategory.household:
+        return HabitCategory.household;
     }
   }
 }
