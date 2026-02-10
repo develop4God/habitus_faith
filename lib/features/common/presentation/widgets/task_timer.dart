@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 
 class TaskTimer extends StatefulWidget {
   final int initialSeconds;
@@ -162,14 +163,15 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
               letterSpacing: -2,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            _isRunning ? "FOCUSING" : "PAUSED",
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 2,
-              color: widget.activeColor.withValues(alpha: 0.6),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 80,
+            width: 80,
+            child: Lottie.asset(
+              'assets/lottie/sand_hourglass_pink.json',
+              animate: _isRunning,
+              repeat: true,
+              fit: BoxFit.contain,
             ),
           ),
         ],
