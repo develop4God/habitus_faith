@@ -380,7 +380,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generatingHabits =>
-      'Generando micro-hábitos personalizados para ti...';
+      'Generando micro-habits personalizados para ti...';
 
   @override
   String get generatedHabitsTitle => 'Tus Micro-Hábitos Personalizados';
@@ -1063,31 +1063,30 @@ class AppLocalizationsEs extends AppLocalizations {
       'Completa un hábito para reflexionar sobre él';
 
   @override
-  String get notificationOptions => 'Opciones de Notificación';
+  String get notificationOptions => 'Notification Options';
 
   @override
-  String get turnOffNotification => 'Desactivar Notificación';
+  String get turnOffNotification => 'Turn Off Notification';
 
   @override
-  String get turnOffNotificationDesc =>
-      'Desactivar recordatorio diario para este hábito';
+  String get turnOffNotificationDesc => 'Disable daily reminder for this habit';
 
   @override
-  String get changeNotificationTime => 'Cambiar Hora';
+  String get changeNotificationTime => 'Change Time';
 
   @override
   String get changeNotificationTimeDesc =>
-      'Actualizar cuándo quieres que te recuerden';
+      'Update when you want to be reminded';
 
   @override
-  String get notificationTurnedOff => 'Notificación desactivada';
+  String get notificationTurnedOff => 'Notification turned off';
 
   @override
-  String get notificationTimeChanged => 'Hora de notificación actualizada';
+  String get notificationTimeChanged => 'Notification time updated';
 
   @override
   String get invalidNotificationConfig =>
-      'Configuración de notificación inválida. Por favor configure la notificación nuevamente.';
+      'Invalid notification configuration. Please set up the notification again.';
 
   @override
   String get readVerseFirst => 'Leer Versículo Primero';
@@ -1175,27 +1174,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get madeWithLove => 'Hecho con ❤️ para la gloria de Dios';
 
   @override
-  String get faithJourney => 'Faith Journey';
+  String get faithJourney => 'Camino de Fe';
 
   @override
   String get faithJourneyDescription =>
-      'Track your progress, earn faith points, and unlock badges!';
+      '¡Sigue tu progreso, gana puntos de fe y desbloquea insignias!';
 
   @override
-  String get startTimer => 'Start Timer';
+  String get startTimer => 'Iniciar Temporizador';
 
   @override
-  String get timerRunning => 'Timer Running';
+  String get timerRunning => 'Temporizador en Marcha';
 
   @override
-  String get timeToFocus => 'Time to Focus';
+  String get timeToFocus => 'Tiempo de Concentración';
 
   @override
-  String get focusComplete => 'Focus session complete!';
+  String get focusComplete => '¡Sesión de concentración completa!';
 
   @override
-  String get goalReached => 'Goal Reached!';
+  String get goalReached => '¡Meta Alcanzada!';
 
   @override
-  String get timer => 'Timer';
+  String get timer => 'Temporizador';
 }
