@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../domain/models/badge.dart';
+import '../../domain/models/badge.dart' as gamification;
 
 /// Widget to display the collection of badges
 class BadgeCollectionGrid extends StatelessWidget {
-  final List<Badge> badges;
+  final List<gamification.Badge> badges;
   final VoidCallback? onBadgeTap;
 
   const BadgeCollectionGrid({
@@ -53,7 +53,7 @@ class BadgeCollectionGrid extends StatelessWidget {
 }
 
 class _BadgeItem extends StatelessWidget {
-  final Badge badge;
+  final gamification.Badge badge;
   final VoidCallback? onTap;
 
   const _BadgeItem({

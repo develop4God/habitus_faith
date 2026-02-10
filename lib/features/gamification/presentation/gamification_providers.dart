@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../core/providers/storage_providers.dart';
+import '../../../core/providers/shared_preferences_provider.dart';
 import '../data/faith_points_repository.dart';
 import '../data/journey_level_repository.dart';
 import '../data/badge_repository.dart';
@@ -9,7 +9,7 @@ import '../domain/services/faith_points_service.dart';
 import '../domain/services/badge_service.dart';
 import '../domain/services/task_spinner_service.dart';
 import '../domain/models/journey_level.dart';
-import '../domain/models/badge.dart';
+import '../domain/models/badge.dart' as gamification;
 import '../domain/models/task_spinner.dart';
 
 // Repository Providers
@@ -66,13 +66,13 @@ final journeyLevelProvider = FutureProvider.family<JourneyLevel, String>((ref, u
 });
 
 /// Provider for current user's badges
-final badgesProvider = FutureProvider.family<List<Badge>, String>((ref, userId) async {
+final badgesProvider = FutureProvider.family<List<gamification.Badge>, String>((ref, userId) async {
   final service = ref.watch(badgeServiceProvider);
   return await service.getBadges(userId);
 });
 
 /// Provider for unlocked badges
-final unlockedBadgesProvider = FutureProvider.family<List<Badge>, String>((ref, userId) async {
+final unlockedBadgesProvider = FutureProvider.family<List<gamification.Badge>, String>((ref, userId) async {
   final service = ref.watch(badgeServiceProvider);
   return await service.getUnlockedBadges(userId);
 });

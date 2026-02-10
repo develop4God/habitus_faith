@@ -1,7 +1,6 @@
 import '../../data/badge_repository.dart';
 import '../../data/journey_level_repository.dart';
 import '../models/badge.dart';
-import '../models/journey_level.dart';
 
 /// Service for checking and unlocking badges
 class BadgeService {
