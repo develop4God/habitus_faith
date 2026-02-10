@@ -27,7 +27,8 @@ class TaskTimer extends StatefulWidget {
   State<TaskTimer> createState() => _TaskTimerState();
 }
 
-class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMixin {
+class _TaskTimerState extends State<TaskTimer>
+    with SingleTickerProviderStateMixin {
   Timer? _timer;
   int _secondsRemaining = 0;
   int _totalDuration = 0;
@@ -53,7 +54,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
       return;
     }
     if (_secondsRemaining <= 0) return;
-    
+
     HapticFeedback.mediumImpact();
     if (_isRunning) {
       _pauseTimer();
@@ -120,11 +121,13 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final progressValue = _totalDuration > 0 
-        ? (_secondsRemaining / _totalDuration).clamp(0.0, 1.0) 
+    final progressValue = _totalDuration > 0
+        ? (_secondsRemaining / _totalDuration).clamp(0.0, 1.0)
         : 0.0;
 
-    final ringColor = _isCompleted ? Colors.green : (_isRunning ? widget.activeColor : Colors.grey.shade300);
+    final ringColor = _isCompleted
+        ? Colors.green
+        : (_isRunning ? widget.activeColor : Colors.grey.shade300);
 
     return SafeArea(
       child: Padding(
@@ -154,7 +157,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
               ),
               const SizedBox(height: 8),
             ],
-            
+
             Text(
               widget.habitName,
               style: TextStyle(
@@ -162,7 +165,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
                 color: Colors.grey.shade600,
               ),
             ),
-            
+
             const SizedBox(height: 40),
 
             SizedBox(
@@ -182,18 +185,20 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
                       strokeCap: StrokeCap.round,
                     ),
                   ),
-                  
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
-                    transitionBuilder: (Widget child, Animation<double> animation) {
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
                       return FadeTransition(
                         opacity: animation,
                         child: ScaleTransition(scale: animation, child: child),
                       );
                     },
-                    child: _isCompleted 
+                    child: _isCompleted
                         ? _buildCelebrationDisplay()
-                        : (_isRunning || (_secondsRemaining < _totalDuration && _secondsRemaining > 0)
+                        : (_isRunning ||
+                                (_secondsRemaining < _totalDuration &&
+                                    _secondsRemaining > 0)
                             ? _buildCountdownDisplay()
                             : _buildPickerDisplay()),
                   ),
@@ -297,7 +302,6 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
           iconColor: Colors.grey.shade600,
         ),
         const SizedBox(width: 40),
-        
         GestureDetector(
           onTap: _toggleTimer,
           child: AnimatedContainer(
@@ -305,31 +309,32 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
             width: 84,
             height: 84,
             decoration: BoxDecoration(
-              color: _isCompleted 
+              color: _isCompleted
                   ? Colors.green.withValues(alpha: 0.1)
-                  : (_isRunning 
-                      ? Colors.orange.withValues(alpha: 0.1) 
+                  : (_isRunning
+                      ? Colors.orange.withValues(alpha: 0.1)
                       : widget.activeColor.withValues(alpha: 0.1)),
               shape: BoxShape.circle,
               border: Border.all(
-                color: _isCompleted 
-                    ? Colors.green 
+                color: _isCompleted
+                    ? Colors.green
                     : (_isRunning ? Colors.orange : widget.activeColor),
                 width: 2,
               ),
             ),
             child: Icon(
-              _isCompleted 
+              _isCompleted
                   ? Icons.check_rounded
-                  : (_isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded),
+                  : (_isRunning
+                      ? Icons.pause_rounded
+                      : Icons.play_arrow_rounded),
               size: 48,
-              color: _isCompleted 
-                  ? Colors.green 
+              color: _isCompleted
+                  ? Colors.green
                   : (_isRunning ? Colors.orange : widget.activeColor),
             ),
           ),
         ),
-        
         const SizedBox(width: 40),
         const SizedBox(width: 56),
       ],
