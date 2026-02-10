@@ -32,9 +32,26 @@ class UnifiedHabitCard extends ConsumerStatefulWidget {
   ConsumerState<UnifiedHabitCard> createState() => _UnifiedHabitCardState();
 }
 
-class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
+class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
+    with SingleTickerProviderStateMixin {
   bool _isCompleting = false;
   bool _isExpanded = false;
+  late final AnimationController _timerPulseController;
+
+  @override
+  void initState() {
+    super.initState();
+    _timerPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _timerPulseController.dispose();
+    super.dispose();
+  }
 
   Habit getLatestHabit(WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
@@ -130,55 +147,43 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     GlobalSnackbar.showWarning(l10n.habitSkipped);
   }
 
-  void _showTimer(
-      BuildContext context, Color habitColor, AppLocalizations l10n) async {
-    debugPrint(
-        '🕐 _showTimer called, habit: ${widget.habit.name}, completed: ${widget.habit.completedToday}');
+  Future<void> _handleDuplicate() async {
+    final l10n = AppLocalizations.of(context)!;
+    final habit = widget.habit;
 
-    // Check if habit is already completed
-    if (widget.habit.completedToday) {
-      debugPrint('✅ Habit already completed, showing confirmation dialog');
-      final shouldContinue = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(l10n.habitCompleted),
-          content: Text(l10n.habitAlreadyCompletedStartAgain),
-          actions: [
-            TextButton(
-              onPressed: () {
-                debugPrint('❌ User tapped Cancel on dialog');
-                Navigator.of(ctx).pop(false);
-              },
-              child: Text(l10n.cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                debugPrint('✅ User tapped Yes on dialog');
-                Navigator.of(ctx).pop(true);
-              },
-              style: TextButton.styleFrom(foregroundColor: habitColor),
-              child: Text(l10n.yes),
-            ),
-          ],
-        ),
-      );
+    if (!mounted) return;
 
-      debugPrint('🎯 Dialog result: $shouldContinue');
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.copyHabit),
+        content: Text(l10n.copyHabitConfirm(habit.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.copy),
+          ),
+        ],
+      ),
+    );
 
-      if (shouldContinue != true) {
-        debugPrint('🚫 User cancelled, not opening timer');
-        return;
-      }
-
-      debugPrint('🎉 User confirmed, proceeding to open timer');
-    }
-
-    if (!context.mounted) {
-      debugPrint('⚠️ Context not mounted, cannot show timer');
+    if (confirmed != true) {
       return;
     }
 
-    debugPrint('🚀 Opening timer modal...');
+    if (!mounted) return;
+    Navigator.of(context).pop();
+    await Future.delayed(const Duration(milliseconds: 300));
+    await ref.read(habitsNotifierProvider.notifier).duplicateHabit(habit.id);
+    GlobalSnackbar.showSuccess(l10n.copy);
+  }
+
+  void _showTimer(
+      BuildContext context, Color habitColor, AppLocalizations l10n) async {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -186,32 +191,19 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
-      builder: (ctx) {
-        debugPrint('🎨 Timer modal builder called');
-        return TaskTimer(
-          habitName: widget.habit.name,
-          initialSeconds: widget.habit.targetMinutes * 60,
-          activeColor: habitColor,
-          onCompleted: () {
-            debugPrint('⏰ Timer completed for habit: ${widget.habit.name}');
-            // If habit was already completed, just show success message
-            // Don't toggle completion status
-            if (!widget.habit.completedToday) {
-              debugPrint('✨ Marking habit as complete');
-              _handleComplete();
-            } else {
-              debugPrint('ℹ️ Habit already completed, skipping toggle');
-            }
-            GlobalSnackbar.showSuccess(l10n.focusComplete);
-          },
-          onFinish: () {
-            debugPrint('🏁 Timer finished/closed');
-            Navigator.pop(ctx);
-          },
-        );
-      },
+      builder: (ctx) => TaskTimer(
+        habitName: widget.habit.name,
+        initialSeconds: widget.habit.targetMinutes * 60,
+        activeColor: habitColor,
+        onCompleted: () {
+          _handleComplete();
+          GlobalSnackbar.showSuccess(l10n.focusComplete);
+        },
+        onFinish: () {
+          Navigator.pop(ctx);
+        },
+      ),
     );
-    debugPrint('✅ Timer modal opened successfully');
   }
 
   @override
@@ -229,10 +221,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       duration: const Duration(milliseconds: 150),
       curve: Curves.easeInOut,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width < 360 ? 12 : 20,
-          vertical: 6,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Container(
           decoration: BoxDecoration(
             color: isCompleted
@@ -267,19 +256,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             },
             borderRadius: BorderRadius.circular(16),
             child: Padding(
-              padding: EdgeInsets.all(
-                MediaQuery.of(context).size.width < 360 ? 12 : 16,
-              ),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
                       Container(
-                        width:
-                            MediaQuery.of(context).size.width < 360 ? 40 : 48,
-                        height:
-                            MediaQuery.of(context).size.width < 360 ? 40 : 48,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
                           color: habitColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -287,17 +272,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         child: Center(
                           child: Text(
                             widget.habit.emoji ?? '✓',
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width < 360
-                                  ? 20
-                                  : 24,
-                            ),
+                            style: const TextStyle(fontSize: 24),
                           ),
                         ),
                       ),
-                      SizedBox(
-                          width:
-                              MediaQuery.of(context).size.width < 360 ? 8 : 12),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,10 +284,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: AutoSizeText(
+                                  child: Text(
                                     widget.habit.name,
-                                    maxLines: 2,
-                                    minFontSize: 12,
+                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -327,9 +305,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   const SizedBox(width: 4),
                                   Flexible(
                                     child: _buildStatusBadge(
-                                      isSkipped
-                                          ? l10n.skippedHabit
-                                          : l10n.failedHabit,
+                                      isSkipped ? l10n.skippedHabit : l10n.failedHabit,
                                       isSkipped ? Colors.orange : Colors.red,
                                     ),
                                   ),
@@ -347,15 +323,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                       : Colors.grey.shade400,
                                 ),
                                 const SizedBox(width: 4),
-                                Flexible(
-                                  child: AutoSizeText(
-                                    l10n.dayStreak(widget.habit.currentStreak),
-                                    maxLines: 1,
-                                    minFontSize: 10,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey.shade600,
-                                    ),
+                                Text(
+                                  l10n.dayStreak(widget.habit.currentStreak),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey.shade600,
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -455,10 +427,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: AutoSizeText(
+                    child: Text(
                       subtask.title,
-                      maxLines: 2,
-                      minFontSize: 11,
                       style: TextStyle(
                         fontSize: 14,
                         decoration: subtask.completed
@@ -500,10 +470,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               ),
             ),
             const SizedBox(width: 12),
-            AutoSizeText(
+            Text(
               '$completedCount/$totalCount',
-              maxLines: 1,
-              minFontSize: 10,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -523,10 +491,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         color: color.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: AutoSizeText(
+      child: Text(
         text,
         maxLines: 1,
-        minFontSize: 8,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: 10,
@@ -718,42 +685,49 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               right: 0,
               child: InkWell(
                 onTap: () async {
-                  debugPrint('⏱️ Timer button tapped in modal');
                   Navigator.of(context).pop();
-                  debugPrint('📱 Modal closed, waiting for animation...');
-                  // Wait for modal to close
-                  await Future.delayed(const Duration(milliseconds: 300));
-                  debugPrint('🔍 Checking if widget is still mounted...');
-                  if (!mounted) {
-                    debugPrint('⚠️ Widget not mounted, cannot show timer');
-                    return;
-                  }
-                  debugPrint('✅ Widget mounted, calling _showTimer');
-                  // Use the widget's context which is still valid
-                  if (!context.mounted) {
-                    debugPrint('⚠️ Context not mounted, trying widget context');
-                  }
                   _showTimer(this.context, habitColor, l10n);
                 },
                 borderRadius: BorderRadius.circular(30),
-                child: Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: habitColor.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: habitColor.withValues(alpha: 0.3),
-                      width: 2,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: habitColor.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                child: AnimatedBuilder(
+                  animation: _timerPulseController,
+                  builder: (context, child) {
+                    final pulse =
+                        0.95 + 0.07 * Curves.easeInOut.transform(_timerPulseController.value);
+                    final shadowOpacity =
+                        0.15 + 0.25 * _timerPulseController.value;
+                    return Transform.scale(
+                      scale: pulse,
+                      child: Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              habitColor.withValues(alpha: 0.4),
+                              habitColor.withValues(alpha: 0.15),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: habitColor.withValues(alpha: 0.5),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: habitColor.withValues(alpha: shadowOpacity),
+                              blurRadius: 14,
+                              spreadRadius: 2,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: child,
                       ),
-                    ],
-                  ),
+                    );
+                  },
                   child: Icon(
                     Icons.timer_outlined,
                     color: habitColor,
@@ -791,8 +765,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: Colors.grey.shade900,
-                        decoration:
-                            isCompleted ? TextDecoration.lineThrough : null,
+                        decoration: isCompleted ? TextDecoration.lineThrough : null,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -835,10 +808,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         _handleComplete();
                       },
                       icon: const Icon(Icons.check_rounded, size: 28),
-                      label: AutoSizeText(
+                      label: Text(
                         l10n.completeNow,
-                        maxLines: 1,
-                        minFontSize: 14,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -864,11 +835,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         _handleComplete();
                       },
                       icon: const Icon(Icons.undo_rounded),
-                      label: AutoSizeText(
-                        l10n.uncheck,
-                        maxLines: 1,
-                        minFontSize: 14,
-                      ),
+                      label: Text(l10n.uncheck),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.grey.shade700,
                         side: BorderSide(color: Colors.grey.shade300),
@@ -897,6 +864,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                       l10n.skipHabit,
                       Colors.orange.shade700,
                       _handleSkip,
+                    ),
+                    _buildCircularAction(
+                      Icons.copy_rounded,
+                      l10n.copy,
+                      Colors.purple.shade500,
+                      _handleDuplicate,
                     ),
                     _buildCircularAction(
                       Icons.delete_outline_rounded,
@@ -933,10 +906,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           children: [
             Icon(icon, color: color, size: 24),
             const SizedBox(height: 4),
-            AutoSizeText(
+            Text(
               value,
-              maxLines: 1,
-              minFontSize: 14,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w900,
