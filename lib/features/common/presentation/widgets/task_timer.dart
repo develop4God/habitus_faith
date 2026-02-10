@@ -18,7 +18,8 @@ class TaskTimer extends StatefulWidget {
   State<TaskTimer> createState() => _TaskTimerState();
 }
 
-class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMixin {
+class _TaskTimerState extends State<TaskTimer>
+    with SingleTickerProviderStateMixin {
   Timer? _timer;
   int _seconds = 0;
   bool _isRunning = false;
@@ -87,8 +88,8 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    final progress = widget.targetSeconds > 0 
-        ? (_seconds / widget.targetSeconds).clamp(0.0, 1.0) 
+    final progress = widget.targetSeconds > 0
+        ? (_seconds / widget.targetSeconds).clamp(0.0, 1.0)
         : 0.0;
 
     return Column(
@@ -101,7 +102,9 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
               width: 200,
               height: 200,
               child: CircularProgressIndicator(
-                value: progress > 0 ? progress : null, // Indeterminate if no target
+                value: progress > 0
+                    ? progress
+                    : null, // Indeterminate if no target
                 strokeWidth: 8,
                 backgroundColor: widget.activeColor.withValues(alpha: 0.1),
                 valueColor: AlwaysStoppedAnimation<Color>(widget.activeColor),
@@ -185,7 +188,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
     final h = seconds ~/ 3600;
     final m = (seconds % 3600) ~/ 60;
     final s = seconds % 60;
-    
+
     if (h > 0) {
       return '${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
     }

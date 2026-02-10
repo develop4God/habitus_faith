@@ -79,12 +79,12 @@ class _TaskSpinnerWheelState extends State<TaskSpinnerWheel>
                 end: Alignment.bottomRight,
                 colors: [
                   theme.primaryColor,
-                  theme.primaryColor.withValues(alpha:0.6),
+                  theme.primaryColor.withValues(alpha: 0.6),
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha:0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

@@ -130,7 +130,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     GlobalSnackbar.showWarning(l10n.habitSkipped);
   }
 
-  void _showTimer(BuildContext context, Color habitColor, AppLocalizations l10n) {
+  void _showTimer(
+      BuildContext context, Color habitColor, AppLocalizations l10n) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -282,7 +283,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   const SizedBox(width: 4),
                                   Flexible(
                                     child: _buildStatusBadge(
-                                      isSkipped ? l10n.skippedHabit : l10n.failedHabit,
+                                      isSkipped
+                                          ? l10n.skippedHabit
+                                          : l10n.failedHabit,
                                       isSkipped ? Colors.orange : Colors.red,
                                     ),
                                   ),
@@ -699,7 +702,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: Colors.grey.shade900,
-                        decoration: isCompleted ? TextDecoration.lineThrough : null,
+                        decoration:
+                            isCompleted ? TextDecoration.lineThrough : null,
                       ),
                     ),
                     const SizedBox(height: 8),
