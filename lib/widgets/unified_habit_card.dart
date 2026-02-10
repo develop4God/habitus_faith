@@ -178,7 +178,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     if (!mounted) return;
     Navigator.of(context).pop();
     await Future.delayed(const Duration(milliseconds: 300));
-    await ref.read(habitsNotifierProvider.notifier).duplicateHabit(habit.id);
+    debugPrint('UnifiedHabitCard._handleDuplicate: invoking duplicateHabitFromData for ${habit.id}');
+    await ref.read(habitsNotifierProvider.notifier).duplicateHabitFromData(habit);
     GlobalSnackbar.showSuccess(l10n.copy);
   }
 

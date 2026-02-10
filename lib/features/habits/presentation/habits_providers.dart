@@ -269,8 +269,13 @@ class HabitsNotifier extends AsyncNotifier<void> {
     final repository = ref.read(habitsRepositoryProvider);
 
     try {
-      // Use a direct fetch rather than the stream to avoid timing/race issues
-      final habits = await repository.getHabits();
+      // Try a dynamic invocation of getHabits(); if it fails, fall back to watchHabits().first
+      List<Habit> habits;
+      try {
+        habits = await (repository as dynamic).getHabits();
+      } catch (_) {
+        habits = await repository.watchHabits().first;
+      }
       debugPrint('HabitsNotifier.duplicateHabit: loaded ${habits.length} habits from repository');
 
       Habit? habitToDuplicate;

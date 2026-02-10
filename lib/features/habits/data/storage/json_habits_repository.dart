@@ -774,6 +774,7 @@ class JsonHabitsRepository implements HabitsRepository {
     }
   }
 
+  @override
   /// Public method to fetch all habits for the current user (non-archived)
   Future<List<Habit>> getHabits() async {
     return _loadHabits();
