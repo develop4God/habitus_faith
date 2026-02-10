@@ -340,30 +340,24 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
         foregroundColor: const Color(0xFF1a202c),
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          child: habitsAsync.when(
-            data: (allHabits) {
-              final householdTasks = allHabits
-                  .where((h) => h.category == HabitCategory.household)
-                  .toList();
+      body: habitsAsync.when(
+        data: (allHabits) {
+          final householdTasks = allHabits
+              .where((h) => h.category == HabitCategory.household)
+              .toList();
 
-              if (householdTasks.isEmpty) {
-                return _buildEmptyState();
-              }
+          if (householdTasks.isEmpty) {
+            return _buildEmptyState();
+          }
 
-              if (_isWorking && _selectedTask != null) {
-                return _buildWorkingView(_selectedTask!);
-              }
+          if (_isWorking && _selectedTask != null) {
+            return _buildWorkingView(_selectedTask!);
+          }
 
-              return _buildSpinnerView(householdTasks);
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(child: Text('Error: $error')),
-          ),
-        ),
+          return _buildSpinnerView(householdTasks);
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
@@ -500,7 +494,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
                             ),
                     ),
                   ),
-                },
+                ),
               ),
             ),
             const SizedBox(height: 48),
