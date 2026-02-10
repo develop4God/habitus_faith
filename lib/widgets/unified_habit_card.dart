@@ -161,7 +161,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             ),
             const SizedBox(height: 40),
             TaskTimer(
-              targetSeconds: widget.habit.targetMinutes * 60,
+              initialSeconds: widget.habit.targetMinutes * 60,
               activeColor: habitColor,
               onCompleted: () {
                 // We don't automatically pop to let user see "Goal Reached"
