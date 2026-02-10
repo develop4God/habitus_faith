@@ -139,22 +139,17 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-        child: TaskTimer(
-          habitName: widget.habit.name,
-          initialSeconds: widget.habit.targetMinutes * 60,
-          activeColor: habitColor,
-          onCompleted: () {
-            // Trigger completion but keep timer open for celebration
-            _handleComplete();
-            GlobalSnackbar.showSuccess(l10n.focusComplete);
-          },
-          onFinish: () {
-            // Close the timer modal
-            Navigator.pop(ctx);
-          },
-        ),
+      builder: (ctx) => TaskTimer(
+        habitName: widget.habit.name,
+        initialSeconds: widget.habit.targetMinutes * 60,
+        activeColor: habitColor,
+        onCompleted: () {
+          _handleComplete();
+          GlobalSnackbar.showSuccess(l10n.focusComplete);
+        },
+        onFinish: () {
+          Navigator.pop(ctx);
+        },
       ),
     );
   }
@@ -174,7 +169,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       duration: const Duration(milliseconds: 150),
       curve: Curves.easeInOut,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width < 360 ? 12 : 20,
+          vertical: 6,
+        ),
         child: Container(
           decoration: BoxDecoration(
             color: isCompleted
@@ -209,15 +207,17 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             },
             borderRadius: BorderRadius.circular(16),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(
+                MediaQuery.of(context).size.width < 360 ? 12 : 16,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: MediaQuery.of(context).size.width < 360 ? 40 : 48,
+                        height: MediaQuery.of(context).size.width < 360 ? 40 : 48,
                         decoration: BoxDecoration(
                           color: habitColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -225,11 +225,13 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         child: Center(
                           child: Text(
                             widget.habit.emoji ?? '✓',
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.width < 360 ? 20 : 24,
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: MediaQuery.of(context).size.width < 360 ? 8 : 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,9 +239,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Text(
+                                  child: AutoSizeText(
                                     widget.habit.name,
-                                    maxLines: 1,
+                                    maxLines: 2,
+                                    minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -278,11 +281,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                       : Colors.grey.shade400,
                                 ),
                                 const SizedBox(width: 4),
-                                Text(
-                                  l10n.dayStreak(widget.habit.currentStreak),
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey.shade600,
+                                Flexible(
+                                  child: AutoSizeText(
+                                    l10n.dayStreak(widget.habit.currentStreak),
+                                    maxLines: 1,
+                                    minFontSize: 10,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey.shade600,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -382,8 +389,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(
+                    child: AutoSizeText(
                       subtask.title,
+                      maxLines: 2,
+                      minFontSize: 11,
                       style: TextStyle(
                         fontSize: 14,
                         decoration: subtask.completed
@@ -425,8 +434,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               ),
             ),
             const SizedBox(width: 12),
-            Text(
+            AutoSizeText(
               '$completedCount/$totalCount',
+              maxLines: 1,
+              minFontSize: 10,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -446,9 +457,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
         color: color.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
+      child: AutoSizeText(
         text,
         maxLines: 1,
+        minFontSize: 8,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: 10,
@@ -638,14 +650,21 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
             Positioned(
               top: 0,
               right: 0,
-              child: _buildCircularAction(
-                Icons.timer_outlined,
-                l10n.timer,
-                habitColor,
-                () {
+              child: InkWell(
+                onTap: () {
                   Navigator.of(context).pop();
                   _showTimer(context, habitColor, l10n);
                 },
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: habitColor.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.timer_outlined, color: habitColor, size: 24),
+                ),
               ),
             ),
             Column(
@@ -721,8 +740,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         _handleComplete();
                       },
                       icon: const Icon(Icons.check_rounded, size: 28),
-                      label: Text(
+                      label: AutoSizeText(
                         l10n.completeNow,
+                        maxLines: 1,
+                        minFontSize: 14,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -748,7 +769,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                         _handleComplete();
                       },
                       icon: const Icon(Icons.undo_rounded),
-                      label: Text(l10n.uncheck),
+                      label: AutoSizeText(
+                        l10n.uncheck,
+                        maxLines: 1,
+                        minFontSize: 14,
+                      ),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.grey.shade700,
                         side: BorderSide(color: Colors.grey.shade300),
@@ -813,8 +838,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           children: [
             Icon(icon, color: color, size: 24),
             const SizedBox(height: 4),
-            Text(
+            AutoSizeText(
               value,
+              maxLines: 1,
+              minFontSize: 14,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w900,

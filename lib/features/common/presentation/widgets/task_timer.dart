@@ -69,6 +69,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
       setState(() {
         if (_secondsRemaining > 0) {
           _secondsRemaining--;
+          // Modern iOS-style tick feel
           HapticFeedback.selectionClick();
         } else {
           _timer?.cancel();
@@ -170,6 +171,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
               child: Stack(
                 alignment: Alignment.center,
                 children: [
+                  // Outer Progress Ring
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
                     width: 260,
@@ -183,6 +185,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
                     ),
                   ),
                   
+                  // Main Display: Picker -> Countdown -> Celebration
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
                     transitionBuilder: (Widget child, Animation<double> animation) {
@@ -202,7 +205,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
             ),
             const SizedBox(height: 48),
             _buildControls(),
-            const SizedBox(height: 16), // Added bottom padding
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -223,35 +226,39 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
   }
 
   Widget _buildCountdownDisplay() {
-    return ScaleTransition(
-      key: const ValueKey('countdown'),
-      scale: Tween(begin: 1.0, end: 1.02).animate(_pulseController),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            _formatTime(_secondsRemaining),
-            style: TextStyle(
-              fontSize: 84,
-              fontWeight: FontWeight.w200,
-              fontFamily: 'monospace',
-              color: Colors.grey.shade900,
-              letterSpacing: -4,
-              height: 0.9,
+    return GestureDetector(
+      onTap: _resetTimer, // Tap the timer to change time and start over
+      behavior: HitTestBehavior.opaque,
+      child: ScaleTransition(
+        key: const ValueKey('countdown'),
+        scale: Tween(begin: 1.0, end: 1.02).animate(_pulseController),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _formatTime(_secondsRemaining),
+              style: TextStyle(
+                fontSize: 84,
+                fontWeight: FontWeight.w200,
+                fontFamily: 'monospace',
+                color: Colors.grey.shade900,
+                letterSpacing: -4,
+                height: 0.9,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 110,
-            width: 110,
-            child: Lottie.asset(
-              'assets/lottie/sand_hourglass_pink.json',
-              animate: _isRunning,
-              repeat: true,
-              fit: BoxFit.contain,
+            SizedBox(
+              height: 110,
+              width: 110,
+              child: Lottie.asset(
+                'assets/lottie/sand_hourglass_pink.json',
+                animate: _isRunning,
+                repeat: true,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -290,6 +297,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Reset Button
         _ControlCircle(
           onTap: _resetTimer,
           icon: Icons.refresh_rounded,
@@ -298,12 +306,13 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
         ),
         const SizedBox(width: 40),
         
+        // Start/Pause/Check Button
         GestureDetector(
           onTap: _toggleTimer,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            width: 84,
-            height: 84,
+            width: 70,
+            height: 70,
             decoration: BoxDecoration(
               color: _isCompleted 
                   ? Colors.green.withValues(alpha: 0.1)
