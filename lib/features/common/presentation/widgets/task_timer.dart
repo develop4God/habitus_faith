@@ -19,7 +19,8 @@ class TaskTimer extends StatefulWidget {
   State<TaskTimer> createState() => _TaskTimerState();
 }
 
-class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMixin {
+class _TaskTimerState extends State<TaskTimer>
+    with SingleTickerProviderStateMixin {
   Timer? _timer;
   int _secondsRemaining = 0;
   int _totalDuration = 0;
@@ -39,7 +40,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   void _toggleTimer() {
     if (_secondsRemaining <= 0) return;
-    
+
     HapticFeedback.mediumImpact();
     if (_isRunning) {
       _pauseTimer();
@@ -103,8 +104,8 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    final progressValue = _totalDuration > 0 
-        ? (_secondsRemaining / _totalDuration).clamp(0.0, 1.0) 
+    final progressValue = _totalDuration > 0
+        ? (_secondsRemaining / _totalDuration).clamp(0.0, 1.0)
         : 0.0;
 
     return Column(
@@ -129,11 +130,13 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
                   strokeCap: StrokeCap.round,
                 ),
               ),
-              
+
               // iOS Style Picker or Large Countdown
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 400),
-                child: _isRunning || (_secondsRemaining < _totalDuration && _secondsRemaining > 0)
+                child: _isRunning ||
+                        (_secondsRemaining < _totalDuration &&
+                            _secondsRemaining > 0)
                     ? _buildCountdownDisplay()
                     : _buildPickerDisplay(),
               ),
@@ -218,7 +221,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
           iconColor: Colors.grey.shade600,
         ),
         const SizedBox(width: 40),
-        
+
         // Start/Pause Button
         GestureDetector(
           onTap: _toggleTimer,
@@ -226,8 +229,8 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
             width: 84,
             height: 84,
             decoration: BoxDecoration(
-              color: _isRunning 
-                  ? Colors.orange.withValues(alpha: 0.1) 
+              color: _isRunning
+                  ? Colors.orange.withValues(alpha: 0.1)
                   : widget.activeColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
               border: Border.all(
@@ -242,13 +245,13 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
             ),
           ),
         ),
-        
+
         const SizedBox(width: 40),
         // Close/Complete placeholder or empty space for symmetry
         _ControlCircle(
           onTap: () {
             if (_secondsRemaining < _totalDuration) {
-               _resetTimer();
+              _resetTimer();
             }
           },
           icon: Icons.stop_rounded,
