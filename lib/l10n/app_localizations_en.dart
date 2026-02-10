@@ -1171,4 +1171,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get faithJourneyDescription =>
       'Track your progress, earn faith points, and unlock badges!';
+
+  @override
+  String get startTimer => 'Start Timer';
+
+  @override
+  String get timerRunning => 'Timer Running';
+
+  @override
+  String get timeToFocus => 'Time to Focus';
+
+  @override
+  String get focusComplete => 'Focus session complete!';
+
+  @override
+  String get goalReached => 'Goal Reached!';
+
+  @override
+  String get timer => 'Timer';
 }

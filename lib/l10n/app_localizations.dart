@@ -2221,6 +2221,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Track your progress, earn faith points, and unlock badges!'**
   String get faithJourneyDescription;
+
+  /// No description provided for @startTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Timer'**
+  String get startTimer;
+
+  /// No description provided for @timerRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Running'**
+  String get timerRunning;
+
+  /// No description provided for @timeToFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to Focus'**
+  String get timeToFocus;
+
+  /// No description provided for @focusComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus session complete!'**
+  String get focusComplete;
+
+  /// No description provided for @goalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Reached!'**
+  String get goalReached;
+
+  /// No description provided for @timer.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get timer;
 }
 
 class _AppLocalizationsDelegate
