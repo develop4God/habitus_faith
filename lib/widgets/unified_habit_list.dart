@@ -88,28 +88,28 @@ class UnifiedHabitList extends ConsumerWidget {
               }).toList()
             : habits;
 
-         final baseHabits = [...displayHabits];
-         baseHabits.sort((a, b) => a.order.compareTo(b.order));
+        final baseHabits = [...displayHabits];
+        baseHabits.sort((a, b) => a.order.compareTo(b.order));
 
-         final sortedHabits = [...baseHabits];
-         if (isViewingToday) {
-           sortedHabits.sort((a, b) {
-             final aDone = a.dailyStatus != HabitDailyStatus.pending ||
-                 a.completedToday;
-             final bDone = b.dailyStatus != HabitDailyStatus.pending ||
-                 b.completedToday;
-             if (aDone != bDone) {
-               return aDone ? 1 : -1;
-             }
-             return a.order.compareTo(b.order);
-           });
-         }
+        final sortedHabits = [...baseHabits];
+        if (isViewingToday) {
+          sortedHabits.sort((a, b) {
+            final aDone =
+                a.dailyStatus != HabitDailyStatus.pending || a.completedToday;
+            final bDone =
+                b.dailyStatus != HabitDailyStatus.pending || b.completedToday;
+            if (aDone != bDone) {
+              return aDone ? 1 : -1;
+            }
+            return a.order.compareTo(b.order);
+          });
+        }
 
-         final hasPendingHabits = selectedDate != null && !isViewingToday
-             ? sortedHabits.any((h) => !h.completedToday)
-             : sortedHabits.any(
-                 (h) => h.dailyStatus == HabitDailyStatus.pending,
-               );
+        final hasPendingHabits = selectedDate != null && !isViewingToday
+            ? sortedHabits.any((h) => !h.completedToday)
+            : sortedHabits.any(
+                (h) => h.dailyStatus == HabitDailyStatus.pending,
+              );
 
         return Theme(
           data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
@@ -165,52 +165,53 @@ class UnifiedHabitList extends ConsumerWidget {
             },
             onReorderStart: (_) => HapticFeedback.mediumImpact(),
             onReorder: (oldIndex, newIndex) async {
-               if (newIndex > oldIndex) {
-                 newIndex -= 1;
-               }
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
 
-               if (isViewingToday) {
-                 final movedHabit = sortedHabits[oldIndex];
-                 final movedIsDone =
-                     movedHabit.dailyStatus != HabitDailyStatus.pending ||
-                         movedHabit.completedToday;
-                 final doneStartIndex = sortedHabits.indexWhere(
-                   (h) => h.dailyStatus != HabitDailyStatus.pending ||
-                       h.completedToday,
-                 );
-                 if (doneStartIndex != -1) {
-                   if (movedIsDone && newIndex < doneStartIndex) {
-                     return;
-                   }
-                   if (!movedIsDone && newIndex >= doneStartIndex) {
-                     return;
-                   }
-                 }
-               }
+              if (isViewingToday) {
+                final movedHabit = sortedHabits[oldIndex];
+                final movedIsDone =
+                    movedHabit.dailyStatus != HabitDailyStatus.pending ||
+                        movedHabit.completedToday;
+                final doneStartIndex = sortedHabits.indexWhere(
+                  (h) =>
+                      h.dailyStatus != HabitDailyStatus.pending ||
+                      h.completedToday,
+                );
+                if (doneStartIndex != -1) {
+                  if (movedIsDone && newIndex < doneStartIndex) {
+                    return;
+                  }
+                  if (!movedIsDone && newIndex >= doneStartIndex) {
+                    return;
+                  }
+                }
+              }
 
-               final reorderedHabits = [...sortedHabits];
-               final item = reorderedHabits.removeAt(oldIndex);
-               reorderedHabits.insert(newIndex, item);
+              final reorderedHabits = [...sortedHabits];
+              final item = reorderedHabits.removeAt(oldIndex);
+              reorderedHabits.insert(newIndex, item);
 
-               HapticFeedback.lightImpact();
-               await ref
-                   .read(habitsNotifierProvider.notifier)
-                   .reorderHabits(reorderedHabits.map((h) => h.id).toList());
-             },
-             itemBuilder: (context, index) {
-               final habit = sortedHabits[index];
-               return ReorderableDelayedDragStartListener(
-                 key: Key('habit_drag_${habit.id}'),
-                 index: index,
-                 child: UnifiedHabitCard(
+              HapticFeedback.lightImpact();
+              await ref
+                  .read(habitsNotifierProvider.notifier)
+                  .reorderHabits(reorderedHabits.map((h) => h.id).toList());
+            },
+            itemBuilder: (context, index) {
+              final habit = sortedHabits[index];
+              return ReorderableDelayedDragStartListener(
+                key: Key('habit_drag_${habit.id}'),
+                index: index,
+                child: UnifiedHabitCard(
                   habit: habit,
                   onComplete: onComplete,
                   onUncheck: onUncheck,
                   onDelete: onDelete,
                   onEdit: onEdit,
                 ),
-               );
-             },
+              );
+            },
           ),
         );
       },

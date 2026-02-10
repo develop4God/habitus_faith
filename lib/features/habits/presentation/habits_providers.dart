@@ -276,7 +276,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
       } catch (_) {
         habits = await repository.watchHabits().first;
       }
-      debugPrint('HabitsNotifier.duplicateHabit: loaded ${habits.length} habits from repository');
+      debugPrint(
+          'HabitsNotifier.duplicateHabit: loaded ${habits.length} habits from repository');
 
       Habit? habitToDuplicate;
       for (final h in habits) {
@@ -287,7 +288,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
       }
 
       if (habitToDuplicate == null) {
-        debugPrint('HabitsNotifier.duplicateHabit: habit not found -> $habitId');
+        debugPrint(
+            'HabitsNotifier.duplicateHabit: habit not found -> $habitId');
         // Nothing to do - keep UI stable
         state = const AsyncData(null);
         return;
@@ -324,7 +326,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
   /// This is useful to avoid timing/race issues when the in-memory
   /// stream may not yet reflect the latest storage state.
   Future<void> duplicateHabitFromData(Habit habitToDuplicate) async {
-    debugPrint('HabitsNotifier.duplicateHabitFromData: start -> ${habitToDuplicate.id}');
+    debugPrint(
+        'HabitsNotifier.duplicateHabitFromData: start -> ${habitToDuplicate.id}');
     state = const AsyncLoading();
 
     final repository = ref.read(habitsRepositoryProvider);
@@ -342,11 +345,13 @@ class HabitsNotifier extends AsyncNotifier<void> {
 
       result.fold(
         (failure) {
-          debugPrint('HabitsNotifier.duplicateHabitFromData: failure -> $failure');
+          debugPrint(
+              'HabitsNotifier.duplicateHabitFromData: failure -> $failure');
           state = AsyncError(failure, StackTrace.current);
         },
         (habit) {
-          debugPrint('HabitsNotifier.duplicateHabitFromData: success -> ${habit.id}');
+          debugPrint(
+              'HabitsNotifier.duplicateHabitFromData: success -> ${habit.id}');
           state = const AsyncData(null);
         },
       );
