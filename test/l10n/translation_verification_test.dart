@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:habitus_faith/features/habits/presentation/constants/habit_colors.dart';
+import 'package:habitus_faith/features/habits/domain/habit.dart';
 
 void main() {
   group('Translation Homologation Verification', () {
@@ -116,6 +118,17 @@ void main() {
         expect(l10n.predefinedHabit_worship_description, isNotEmpty);
         expect(l10n.predefinedHabit_exercise_name, isNotEmpty);
         expect(l10n.predefinedHabit_exercise_description, isNotEmpty);
+        // HOUSEHOLD predefined habit translations
+        expect(l10n.predefinedHabit_washDishes_name, isNotEmpty);
+        expect(l10n.predefinedHabit_cleanRoom_name, isNotEmpty);
+        expect(l10n.predefinedHabit_doLaundry_name, isNotEmpty);
+        expect(l10n.predefinedHabit_organizeSpace_name, isNotEmpty);
+        expect(l10n.predefinedHabit_cleanBathroom_name, isNotEmpty);
+        expect(l10n.predefinedHabit_cookMeal_name, isNotEmpty);
+        expect(l10n.predefinedHabit_vacuumFloors_name, isNotEmpty);
+        expect(l10n.predefinedHabit_makeBreakfast_name, isNotEmpty);
+        expect(l10n.predefinedHabit_bedMaking_name, isNotEmpty);
+        expect(l10n.predefinedHabit_helpKidsHomework_name, isNotEmpty);
       }
     });
 
@@ -144,6 +157,12 @@ void main() {
           l10n.relational,
           isNotEmpty,
           reason: 'relational should not be empty for $locale',
+        );
+        // HOUSEHOLD category translation (via display helper)
+        expect(
+          HabitColors.getCategoryDisplayName(HabitCategory.household, l10n),
+          isNotEmpty,
+          reason: 'household should not be empty for $locale',
         );
       }
     });

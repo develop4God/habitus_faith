@@ -249,35 +249,38 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                               ),
                             ),
                             const SizedBox(height: 8),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              child: Row(
-                                children: [
-                                  _OptionTab(
-                                    label: widget.l10n.custom,
-                                    icon: Icons.edit_note,
-                                    selected: _tabController.index == 0,
-                                    color: const Color(0xff7c3aed),
-                                    onTap: () => _tabController.animateTo(0),
-                                  ),
-                                  _OptionTab(
-                                    label: widget.l10n.defaultHabit,
-                                    icon: Icons.checklist_outlined,
-                                    selected: _tabController.index == 1,
-                                    color: const Color(0xff06b6d4),
-                                    onTap: () => _tabController.animateTo(1),
-                                  ),
-                                  _OptionTab(
-                                    label: widget.l10n.flashTask,
-                                    icon: Icons.bolt,
-                                    selected: _tabController.index == 2,
-                                    color: const Color(0xffb45309),
-                                    onTap: () => _tabController.animateTo(2),
-                                  ),
-                                ],
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Row(
+                                  children: [
+                                    _OptionTab(
+                                      label: widget.l10n.custom,
+                                      icon: Icons.edit_note,
+                                      selected: _tabController.index == 0,
+                                      color: const Color(0xff7c3aed),
+                                      onTap: () => _tabController.animateTo(0),
+                                    ),
+                                    _OptionTab(
+                                      label: widget.l10n.defaultHabit,
+                                      icon: Icons.checklist_outlined,
+                                      selected: _tabController.index == 1,
+                                      color: const Color(0xff06b6d4),
+                                      onTap: () => _tabController.animateTo(1),
+                                    ),
+                                    _OptionTab(
+                                      label: widget.l10n.flashTask,
+                                      icon: Icons.bolt,
+                                      selected: _tabController.index == 2,
+                                      color: const Color(0xffb45309),
+                                      onTap: () => _tabController.animateTo(2),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -745,47 +748,54 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
           ),
           const SizedBox(height: 12),
           // Category tabs
-          TabBar(
-            isScrollable: true,
-            labelColor: const Color(0xff06b6d4),
-            unselectedLabelColor: Colors.grey.shade600,
-            indicatorColor: const Color(0xff06b6d4),
-            indicatorWeight: 3,
-            labelStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.normal,
-            ),
-            tabs: categoryOrder.map((category) {
-              final categoryName = HabitColors.getCategoryDisplayName(
-                PredefinedHabitCategoryX(category).toDomainCategory(),
-                widget.l10n,
-              );
-              final habits = habitsByCategory[category] ?? [];
-              final color = HabitColors.categoryColors[
-                  PredefinedHabitCategoryX(category).toDomainCategory()]!;
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TabBar(
+              isScrollable: true,
+              labelColor: const Color(0xff06b6d4),
+              unselectedLabelColor: Colors.grey.shade600,
+              indicatorColor: const Color(0xff06b6d4),
+              indicatorWeight: 3,
+              labelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
+              ),
+              tabs: categoryOrder.map((category) {
+                final categoryName = HabitColors.getCategoryDisplayName(
+                  PredefinedHabitCategoryX(category).toDomainCategory(),
+                  widget.l10n,
+                );
+                final habits = habitsByCategory[category] ?? [];
+                final color = HabitColors.categoryColors[
+                    PredefinedHabitCategoryX(category).toDomainCategory()]!;
 
-              return Tab(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
+                return Tab(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text('$categoryName (${habits.length})'),
-                  ],
-                ),
-              );
-            }).toList(),
+                      const SizedBox(width: 6),
+                      // Auto-fit tab label for small screens / large fonts
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('$categoryName (${habits.length})'),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
           ),
           const SizedBox(height: 12),
           // Tab content
@@ -809,8 +819,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                   builder: (context, constraints) {
                     // Calculate optimal grid size based on available width
                     // Minimum 120px per card for accessibility, maximum 4 columns
-                    final cardMinWidth = 120.0;
-                    final spacing = 10.0;
+                    const cardMinWidth = 120.0;
+                    const spacing = 10.0;
                     final availableWidth = constraints.maxWidth;
 
                     int crossAxisCount =
@@ -844,7 +854,11 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                             final messenger = ScaffoldMessenger.of(context);
                             await ref
                                 .read(habitsNotifierProvider.notifier)
-                                .addHabit(name: name, emoji: h.emoji);
+                                .addHabit(
+                                  name: name,
+                                  emoji: h.emoji,
+                                  category: h.category.toDomainCategory(),
+                                );
                             navigator.pop();
                             messenger.showSnackBar(
                               SnackBar(
@@ -946,12 +960,16 @@ class _OptionTab extends StatelessWidget {
           children: [
             Icon(icon, color: selected ? Colors.white : color, size: 18),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                color: selected ? Colors.white : color,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+            // Auto-fit option tab label
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: selected ? Colors.white : color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ),
           ],
@@ -1025,22 +1043,5 @@ class _ColorPickerSection extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-extension PredefinedHabitCategoryX on PredefinedHabitCategory {
-  HabitCategory toDomainCategory() {
-    switch (this) {
-      case PredefinedHabitCategory.spiritual:
-        return HabitCategory.spiritual;
-      case PredefinedHabitCategory.physical:
-        return HabitCategory.physical;
-      case PredefinedHabitCategory.mental:
-        return HabitCategory.mental;
-      case PredefinedHabitCategory.relational:
-        return HabitCategory.relational;
-      case PredefinedHabitCategory.household:
-        return HabitCategory.household;
-    }
   }
 }
