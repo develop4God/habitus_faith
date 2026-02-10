@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/gamification/data/task_spinner_repository.dart';
@@ -76,7 +75,7 @@ void main() {
 
     test('spin considers task weights based on completion', () async {
       // Arrange - Add multiple tasks with different priorities
-      final task1 = await service.addTask(
+      await service.addTask(
         userId: testUserId,
         taskName: 'High Priority',
         priority: 5,
@@ -177,7 +176,7 @@ void main() {
 
     test('getActiveTasks returns only active tasks', () async {
       // Arrange
-      final task1 = await service.addTask(
+      await service.addTask(
         userId: testUserId,
         taskName: 'Active Task',
       );

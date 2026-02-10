@@ -58,7 +58,7 @@ class BadgeService {
   Future<BadgeProgress> getNextBadgeProgress(String userId) async {
     final level = await _levelRepo.getLevel(userId);
     if (level == null) {
-      return BadgeProgress(
+      return const BadgeProgress(
         nextBadge: null,
         progress: 0.0,
         pointsNeeded: 0,
@@ -67,7 +67,7 @@ class BadgeService {
 
     final lockedBadges = await getLockedBadges(userId);
     if (lockedBadges.isEmpty) {
-      return BadgeProgress(
+      return const BadgeProgress(
         nextBadge: null,
         progress: 1.0,
         pointsNeeded: 0,

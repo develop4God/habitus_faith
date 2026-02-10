@@ -212,7 +212,7 @@ void main() {
       expect(level.currentStage, JourneyStage.promisedLand);
 
       // And multiple badges should be unlocked
-      final unlockedBadges = await badgeService.checkAndUnlockBadges(userId);
+      await badgeService.checkAndUnlockBadges(userId);
       final allBadges = await badgeService.getUnlockedBadges(userId);
       expect(allBadges.length, greaterThan(3)); // Should have multiple badges
     });

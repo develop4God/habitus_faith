@@ -6,7 +6,6 @@ import '../data/storage/storage_providers.dart';
 import '../../../core/services/notifications/notification_service.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../gamification/presentation/gamification_providers.dart';
-import '../../gamification/domain/services/badge_service.dart';
 
 /// Repository provider with injectable ID generator
 final habitsRepositoryProvider = jsonHabitsRepositoryProvider;

@@ -1,21 +1,45 @@
 {
   "es": [
-    "faithJourney",
-    "faithJourneyDescription"
+    "notificationOptions",
+    "turnOffNotification",
+    "turnOffNotificationDesc",
+    "changeNotificationTime",
+    "changeNotificationTimeDesc",
+    "notificationTurnedOff",
+    "notificationTimeChanged",
+    "invalidNotificationConfig"
   ],
 
   "fr": [
     "faithJourney",
-    "faithJourneyDescription"
+    "faithJourneyDescription",
+    "startTimer",
+    "timerRunning",
+    "timeToFocus",
+    "focusComplete",
+    "goalReached",
+    "timer"
   ],
 
   "pt": [
     "faithJourney",
-    "faithJourneyDescription"
+    "faithJourneyDescription",
+    "startTimer",
+    "timerRunning",
+    "timeToFocus",
+    "focusComplete",
+    "goalReached",
+    "timer"
   ],
 
   "zh": [
     "faithJourney",
-    "faithJourneyDescription"
+    "faithJourneyDescription",
+    "startTimer",
+    "timerRunning",
+    "timeToFocus",
+    "focusComplete",
+    "goalReached",
+    "timer"
   ]
 }

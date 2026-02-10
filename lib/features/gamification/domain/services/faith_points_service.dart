@@ -53,9 +53,7 @@ class FaithPointsService {
 
     // Update journey level
     var level = await _levelRepo.getLevel(userId);
-    if (level == null) {
-      level = await _levelRepo.initializeForUser(userId);
-    }
+    level ??= await _levelRepo.initializeForUser(userId);
 
     final oldStage = level.currentStage;
     final newLevel = level.addPoints(points, now);
@@ -80,9 +78,7 @@ class FaithPointsService {
   /// Get current journey level for a user
   Future<JourneyLevel> getJourneyLevel(String userId) async {
     var level = await _levelRepo.getLevel(userId);
-    if (level == null) {
-      level = await _levelRepo.initializeForUser(userId);
-    }
+    level ??= await _levelRepo.initializeForUser(userId);
     return level;
   }
 

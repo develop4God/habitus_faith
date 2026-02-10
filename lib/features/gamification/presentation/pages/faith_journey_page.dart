@@ -23,6 +23,7 @@ class FaithJourneyPage extends ConsumerWidget {
 
     final journeyLevelAsync = ref.watch(journeyLevelProvider(userId));
     final badgesAsync = ref.watch(badgesProvider(userId));
+    // ignore: unused_local_variable
     final totalPointsAsync = ref.watch(totalFaithPointsProvider(userId));
     final pointsTodayAsync = ref.watch(pointsTodayProvider(userId));
 
