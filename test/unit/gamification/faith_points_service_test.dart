@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/gamification/data/faith_points_repository.dart';
 import 'package:habitus_faith/features/gamification/data/journey_level_repository.dart';
-import 'package:habitus_faith/features/gamification/domain/models/faith_point.dart';
 import 'package:habitus_faith/features/gamification/domain/models/journey_level.dart';
 import 'package:habitus_faith/features/gamification/domain/services/faith_points_service.dart';
 import 'package:uuid/uuid.dart';

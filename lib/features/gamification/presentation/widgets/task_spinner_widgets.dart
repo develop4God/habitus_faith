@@ -247,9 +247,9 @@ class _TaskItem extends StatelessWidget {
         ),
         trailing: PopupMenuButton(
           itemBuilder: (context) => [
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'complete',
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(Icons.check_circle),
                   SizedBox(width: 8),
