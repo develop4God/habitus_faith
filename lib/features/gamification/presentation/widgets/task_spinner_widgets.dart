@@ -79,12 +79,12 @@ class _TaskSpinnerWheelState extends State<TaskSpinnerWheel>
                 end: Alignment.bottomRight,
                 colors: [
                   theme.primaryColor,
-                  theme.primaryColor.withOpacity(0.6),
+                  theme.primaryColor.withValues(alpha:0.6),
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha:0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -246,9 +246,9 @@ class _TaskItem extends StatelessWidget {
         ),
         trailing: PopupMenuButton(
           itemBuilder: (context) => [
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'complete',
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(Icons.check_circle),
                   SizedBox(width: 8),
