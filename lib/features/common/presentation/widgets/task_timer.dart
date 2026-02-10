@@ -3,16 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TaskTimer extends StatefulWidget {
   final int initialSeconds;
   final VoidCallback? onCompleted;
+  final VoidCallback? onReset;
   final Color activeColor;
 
   const TaskTimer({
     super.key,
     this.initialSeconds = 0,
     this.onCompleted,
+    this.onReset,
     this.activeColor = Colors.purple,
   });
 
@@ -25,6 +28,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
   int _secondsRemaining = 0;
   int _totalDuration = 0;
   bool _isRunning = false;
+  bool _isCompleted = false;
   late AnimationController _pulseController;
 
   @override
@@ -39,6 +43,10 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
   }
 
   void _toggleTimer() {
+    if (_isCompleted) {
+      _resetTimer();
+      return;
+    }
     if (_secondsRemaining <= 0) return;
     
     HapticFeedback.mediumImpact();
@@ -57,12 +65,12 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
         if (_secondsRemaining > 0) {
           _secondsRemaining--;
           // Modern iOS-style tick feel
-          if (_secondsRemaining % 1 == 0) {
-            HapticFeedback.selectionClick();
-          }
+          HapticFeedback.selectionClick();
         } else {
           _timer?.cancel();
+          _timer = null;
           _isRunning = false;
+          _isCompleted = true;
           _pulseController.stop();
           widget.onCompleted?.call();
           HapticFeedback.heavyImpact();
@@ -71,6 +79,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
     });
     setState(() {
       _isRunning = true;
+      _isCompleted = false;
     });
     _pulseController.repeat(reverse: true);
   }
@@ -91,8 +100,10 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
     setState(() {
       _secondsRemaining = _totalDuration;
       _isRunning = false;
+      _isCompleted = false;
     });
     _pulseController.reset();
+    widget.onReset?.call();
   }
 
   @override
@@ -104,39 +115,61 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final progressValue = _totalDuration > 0 
         ? (_secondsRemaining / _totalDuration).clamp(0.0, 1.0) 
         : 0.0;
 
+    final ringColor = _isCompleted ? Colors.green : (_isRunning ? widget.activeColor : Colors.grey.shade300);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // Habit Completed text outside the circle, between name and circle
+        if (_isCompleted) ...[
+          Text(
+            l10n.habitCompleted,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
         SizedBox(
           height: 280,
           child: Stack(
             alignment: Alignment.center,
             children: [
               // Outer Progress Ring
-              SizedBox(
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
                 width: 260,
                 height: 260,
                 child: CircularProgressIndicator(
-                  value: progressValue,
-                  strokeWidth: 4,
-                  backgroundColor: widget.activeColor.withValues(alpha: 0.05),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    _isRunning ? widget.activeColor : Colors.grey.shade300,
-                  ),
+                  value: _isCompleted ? 1.0 : progressValue,
+                  strokeWidth: _isCompleted ? 8 : 4,
+                  backgroundColor: ringColor.withValues(alpha: 0.05),
+                  valueColor: AlwaysStoppedAnimation<Color>(ringColor),
                   strokeCap: StrokeCap.round,
                 ),
               ),
               
-              // iOS Style Picker or Large Countdown
+              // Main Display: Picker -> Countdown -> Celebration
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                child: _isRunning || (_secondsRemaining < _totalDuration && _secondsRemaining > 0)
-                    ? _buildCountdownDisplay()
-                    : _buildPickerDisplay(),
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: ScaleTransition(scale: animation, child: child),
+                  );
+                },
+                child: _isCompleted 
+                    ? _buildCelebrationDisplay()
+                    : (_isRunning || (_secondsRemaining < _totalDuration && _secondsRemaining > 0)
+                        ? _buildCountdownDisplay()
+                        : _buildPickerDisplay()),
               ),
             ],
           ),
@@ -147,8 +180,22 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
     );
   }
 
+  Widget _buildCelebrationDisplay() {
+    return SizedBox(
+      key: const ValueKey('celebration'),
+      height: 160,
+      width: 160,
+      child: Lottie.asset(
+        'assets/lottie/Congratulation _ Success batch.json',
+        repeat: false,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
   Widget _buildCountdownDisplay() {
     return ScaleTransition(
+      key: const ValueKey('countdown'),
       scale: Tween(begin: 1.0, end: 1.02).animate(_pulseController),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -157,16 +204,16 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
           Text(
             _formatTime(_secondsRemaining),
             style: TextStyle(
-              fontSize: 75, // Bigger font
+              fontSize: 84,
               fontWeight: FontWeight.w200,
               fontFamily: 'monospace',
               color: Colors.grey.shade900,
               letterSpacing: -4,
-              height: 0.9, // Tighter line height to bring Lottie closer
+              height: 0.9,
             ),
           ),
           SizedBox(
-            height: 110, // Significantly bigger Lottie
+            height: 110,
             width: 110,
             child: Lottie.asset(
               'assets/lottie/sand_hourglass_pink.json',
@@ -182,6 +229,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   Widget _buildPickerDisplay() {
     return SizedBox(
+      key: const ValueKey('picker'),
       width: 200,
       height: 200,
       child: CupertinoTheme(
@@ -198,7 +246,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
           mode: CupertinoTimerPickerMode.ms,
           initialTimerDuration: Duration(seconds: _totalDuration),
           onTimerDurationChanged: (Duration duration) {
-            HapticFeedback.selectionClick(); // Tick sound/feel
+            HapticFeedback.selectionClick();
             setState(() {
               _totalDuration = duration.inSeconds;
               _secondsRemaining = _totalDuration;
@@ -225,39 +273,39 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
         // Start/Pause Button
         GestureDetector(
           onTap: _toggleTimer,
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 84,
             height: 84,
             decoration: BoxDecoration(
-              color: _isRunning 
-                  ? Colors.orange.withValues(alpha: 0.1) 
-                  : widget.activeColor.withValues(alpha: 0.1),
+              color: _isCompleted 
+                  ? Colors.green.withValues(alpha: 0.1)
+                  : (_isRunning 
+                      ? Colors.orange.withValues(alpha: 0.1) 
+                      : widget.activeColor.withValues(alpha: 0.1)),
               shape: BoxShape.circle,
               border: Border.all(
-                color: _isRunning ? Colors.orange : widget.activeColor,
+                color: _isCompleted 
+                    ? Colors.green 
+                    : (_isRunning ? Colors.orange : widget.activeColor),
                 width: 2,
               ),
             ),
             child: Icon(
-              _isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded,
+              _isCompleted 
+                  ? Icons.check_rounded
+                  : (_isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded),
               size: 48,
-              color: _isRunning ? Colors.orange : widget.activeColor,
+              color: _isCompleted 
+                  ? Colors.green 
+                  : (_isRunning ? Colors.orange : widget.activeColor),
             ),
           ),
         ),
         
         const SizedBox(width: 40),
-        // Stop Button
-        _ControlCircle(
-          onTap: () {
-            if (_secondsRemaining < _totalDuration) {
-               _resetTimer();
-            }
-          },
-          icon: Icons.stop_rounded,
-          color: Colors.grey.shade100,
-          iconColor: Colors.grey.shade400,
-        ),
+        // Placeholder for symmetry
+        const SizedBox(width: 56),
       ],
     );
   }
