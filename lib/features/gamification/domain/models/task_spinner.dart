@@ -57,11 +57,11 @@ class TaskSpinnerItem {
     // Priority 1-5 → weight 1-5
     // Tasks not done today get 2x weight boost
     final baseWeight = priority.toDouble();
-    
+
     if (lastCompletedAt == null) {
       return baseWeight * 2; // Never completed, boost weight
     }
-    
+
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final lastCompleted = DateTime(
@@ -69,11 +69,11 @@ class TaskSpinnerItem {
       lastCompletedAt!.month,
       lastCompletedAt!.day,
     );
-    
+
     if (lastCompleted == today) {
       return baseWeight * 0.5; // Already done today, reduce weight
     }
-    
+
     return baseWeight * 2; // Not done today, boost weight
   }
 
@@ -130,8 +130,8 @@ class SpinResult {
 
   factory SpinResult.fromJson(Map<String, dynamic> json) {
     return SpinResult(
-      selectedTask:
-          TaskSpinnerItem.fromJson(json['selectedTask'] as Map<String, dynamic>),
+      selectedTask: TaskSpinnerItem.fromJson(
+          json['selectedTask'] as Map<String, dynamic>),
       spunAt: DateTime.parse(json['spunAt'] as String),
       pointsAwarded: json['pointsAwarded'] as int? ?? 10,
     );

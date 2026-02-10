@@ -31,7 +31,7 @@ class TaskSpinnerRepository {
   Future<void> updateTask(TaskSpinnerItem task) async {
     final tasks = await getTasks(task.userId);
     final index = tasks.indexWhere((t) => t.id == task.id);
-    
+
     if (index != -1) {
       tasks[index] = task;
       await _saveTasks(task.userId, tasks);

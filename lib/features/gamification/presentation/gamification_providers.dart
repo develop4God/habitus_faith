@@ -59,43 +59,51 @@ final taskSpinnerServiceProvider = Provider<TaskSpinnerService>((ref) {
 // State Providers
 
 /// Provider for current user's journey level
-final journeyLevelProvider = FutureProvider.family<JourneyLevel, String>((ref, userId) async {
+final journeyLevelProvider =
+    FutureProvider.family<JourneyLevel, String>((ref, userId) async {
   final service = ref.watch(faithPointsServiceProvider);
   return await service.getJourneyLevel(userId);
 });
 
 /// Provider for current user's badges
-final badgesProvider = FutureProvider.family<List<gamification.Badge>, String>((ref, userId) async {
+final badgesProvider = FutureProvider.family<List<gamification.Badge>, String>(
+    (ref, userId) async {
   final service = ref.watch(badgeServiceProvider);
   return await service.getBadges(userId);
 });
 
 /// Provider for unlocked badges
-final unlockedBadgesProvider = FutureProvider.family<List<gamification.Badge>, String>((ref, userId) async {
+final unlockedBadgesProvider =
+    FutureProvider.family<List<gamification.Badge>, String>(
+        (ref, userId) async {
   final service = ref.watch(badgeServiceProvider);
   return await service.getUnlockedBadges(userId);
 });
 
 /// Provider for total faith points
-final totalFaithPointsProvider = FutureProvider.family<int, String>((ref, userId) async {
+final totalFaithPointsProvider =
+    FutureProvider.family<int, String>((ref, userId) async {
   final service = ref.watch(faithPointsServiceProvider);
   return await service.getTotalPoints(userId);
 });
 
 /// Provider for points earned today
-final pointsTodayProvider = FutureProvider.family<int, String>((ref, userId) async {
+final pointsTodayProvider =
+    FutureProvider.family<int, String>((ref, userId) async {
   final service = ref.watch(faithPointsServiceProvider);
   return await service.getPointsToday(userId);
 });
 
 /// Provider for task spinner items
-final spinnerTasksProvider = FutureProvider.family<List<TaskSpinnerItem>, String>((ref, userId) async {
+final spinnerTasksProvider =
+    FutureProvider.family<List<TaskSpinnerItem>, String>((ref, userId) async {
   final service = ref.watch(taskSpinnerServiceProvider);
   return await service.getTasks(userId);
 });
 
 /// Provider for active spinner tasks
-final activeSpinnerTasksProvider = FutureProvider.family<List<TaskSpinnerItem>, String>((ref, userId) async {
+final activeSpinnerTasksProvider =
+    FutureProvider.family<List<TaskSpinnerItem>, String>((ref, userId) async {
   final service = ref.watch(taskSpinnerServiceProvider);
   return await service.getActiveTasks(userId);
 });

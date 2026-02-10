@@ -29,7 +29,7 @@ class FaithPointsService {
     DateTime? timestamp,
   }) async {
     final now = timestamp ?? DateTime.now();
-    
+
     // Calculate points
     final points = FaithPoint.calculatePoints(
       difficultyLevel: difficultyLevel,
@@ -83,7 +83,8 @@ class FaithPointsService {
   }
 
   /// Get recent points history
-  Future<List<FaithPoint>> getRecentPoints(String userId, {int limit = 10}) async {
+  Future<List<FaithPoint>> getRecentPoints(String userId,
+      {int limit = 10}) async {
     final allPoints = await _pointsRepo.getPoints(userId);
     allPoints.sort((a, b) => b.earnedAt.compareTo(a.earnedAt));
     return allPoints.take(limit).toList();
@@ -94,13 +95,13 @@ class FaithPointsService {
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
-    
+
     final todayPoints = await _pointsRepo.getPointsInPeriod(
       userId,
       startOfDay,
       endOfDay,
     );
-    
+
     return todayPoints.fold<int>(0, (sum, p) => sum + p.points);
   }
 }

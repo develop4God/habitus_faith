@@ -109,7 +109,8 @@ class _TaskSpinnerWheelState extends State<TaskSpinnerWheel>
                             ),
                             const SizedBox(height: 8),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
                                 widget.selectedTask!.taskName,
                                 style: theme.textTheme.bodyMedium?.copyWith(

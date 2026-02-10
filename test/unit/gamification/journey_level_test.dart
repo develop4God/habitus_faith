@@ -72,7 +72,8 @@ void main() {
       expect(level.nextStage, null);
     });
 
-    test('canLevelUp returns true when points exceed next stage requirement', () {
+    test('canLevelUp returns true when points exceed next stage requirement',
+        () {
       final level = JourneyLevel(
         userId: 'user-123',
         currentStage: JourneyStage.wilderness,

@@ -44,7 +44,8 @@ void main() {
       );
 
       // Assert
-      expect(result.pointsAwarded, 70); // 30 base + 50% spiritual (45) + 25 streak
+      expect(
+          result.pointsAwarded, 70); // 30 base + 50% spiritual (45) + 25 streak
       expect(result.newTotalPoints, 70);
       expect(result.currentStage, JourneyStage.wilderness);
       expect(result.leveledUp, false);

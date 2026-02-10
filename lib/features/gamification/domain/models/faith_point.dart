@@ -26,15 +26,15 @@ class FaithPoint {
   }) {
     // Base points from difficulty (1-5 → 10-50 points)
     int basePoints = difficultyLevel * 10;
-    
+
     // Spiritual habits get 50% bonus
     if (isSpiritual) {
       basePoints = (basePoints * 1.5).round();
     }
-    
+
     // Streak bonus: +5 points per streak day (capped at 50)
     int streakBonus = (currentStreak * 5).clamp(0, 50);
-    
+
     return basePoints + streakBonus;
   }
 
