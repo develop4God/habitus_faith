@@ -290,9 +290,10 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.auto_mode_rounded, size: 32),
+                icon: const Icon(Icons.chevron_right, size: 32),
                 onPressed: isInFuture ? null : _goToNextDay,
-                color: isInFuture ? Colors.grey.shade300 : Colors.amber.shade700,
+                color:
+                    isInFuture ? Colors.grey.shade300 : const Color(0xFF1976D2),
               ),
             ],
           ),

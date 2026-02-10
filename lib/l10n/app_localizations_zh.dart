@@ -47,11 +47,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancel => '取消';
 
   @override
-  String get yes => 'Yes';
+  String get yes => '确定';
 
   @override
-  String get habitAlreadyCompletedStartAgain =>
-      'This habit is already completed. Do you want to start the timer again?';
+  String get habitAlreadyCompletedStartAgain => '该习惯已完成。是否要重新开始计时？';
 
   @override
   String get delete => '删除';
@@ -1120,27 +1119,26 @@ class AppLocalizationsZh extends AppLocalizations {
   String get madeWithLove => '由 Develop4God 用 ❤️ 制作\n \n愿荣耀归于神';
 
   @override
-  String get faithJourney => 'Faith Journey';
+  String get faithJourney => '信仰旅程';
 
   @override
-  String get faithJourneyDescription =>
-      'Track your progress, earn faith points, and unlock badges!';
+  String get faithJourneyDescription => '追踪你的进度，赢取信仰点并解锁徽章！';
 
   @override
-  String get startTimer => 'Start Timer';
+  String get startTimer => '开始计时';
 
   @override
-  String get timerRunning => 'Timer Running';
+  String get timerRunning => '计时进行中';
 
   @override
-  String get timeToFocus => 'Time to Focus';
+  String get timeToFocus => '专注时间';
 
   @override
-  String get focusComplete => 'Focus session complete!';
+  String get focusComplete => '专注时段完成！';
 
   @override
-  String get goalReached => 'Goal Reached!';
+  String get goalReached => '目标达成！';
 
   @override
-  String get timer => 'Timer';
+  String get timer => '计时器';
 }
