@@ -152,21 +152,22 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
       scale: Tween(begin: 1.0, end: 1.02).animate(_pulseController),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             _formatTime(_secondsRemaining),
             style: TextStyle(
-              fontSize: 72,
-              fontWeight: FontWeight.w200, // Thinner iOS style
+              fontSize: 75, // Bigger font
+              fontWeight: FontWeight.w200,
               fontFamily: 'monospace',
               color: Colors.grey.shade900,
-              letterSpacing: -2,
+              letterSpacing: -4,
+              height: 0.9, // Tighter line height to bring Lottie closer
             ),
           ),
-          const SizedBox(height: 8),
           SizedBox(
-            height: 80,
-            width: 80,
+            height: 110, // Significantly bigger Lottie
+            width: 110,
             child: Lottie.asset(
               'assets/lottie/sand_hourglass_pink.json',
               animate: _isRunning,
@@ -246,7 +247,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
         ),
         
         const SizedBox(width: 40),
-        // Close/Complete placeholder or empty space for symmetry
+        // Stop Button
         _ControlCircle(
           onTap: () {
             if (_secondsRemaining < _totalDuration) {
