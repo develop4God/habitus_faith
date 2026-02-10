@@ -4,6 +4,9 @@ import '../domain/habit.dart';
 import '../domain/models/habit_notification.dart';
 import '../data/storage/storage_providers.dart';
 import '../../../core/services/notifications/notification_service.dart';
+import '../../../core/providers/auth_provider.dart';
+import '../../gamification/presentation/gamification_providers.dart';
+import '../../gamification/domain/services/badge_service.dart';
 
 /// Repository provider with injectable ID generator
 final habitsRepositoryProvider = jsonHabitsRepositoryProvider;
@@ -62,11 +65,45 @@ class HabitsNotifier extends AsyncNotifier<void> {
         debugPrint('HabitsNotifier.completeHabit: error: $failure');
         state = AsyncError(failure, StackTrace.current);
       },
-      (habit) {
+      (habit) async {
         debugPrint(
           'HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}',
         );
         state = const AsyncData(null);
+        
+        // Award faith points for completing the habit
+        final userId = ref.read(userIdProvider);
+        if (userId != null) {
+          try {
+            final faithPointsService = ref.read(faithPointsServiceProvider);
+            final awardResult = await faithPointsService.awardPointsForHabit(
+              userId: userId,
+              habitId: habit.id,
+              habitName: habit.name,
+              difficultyLevel: habit.difficultyLevel,
+              isSpiritual: habit.category == HabitCategory.spiritual,
+              currentStreak: habit.currentStreak,
+            );
+            
+            debugPrint(
+              'Faith points awarded: ${awardResult.pointsAwarded}, '
+              'Total: ${awardResult.newTotalPoints}, '
+              'Stage: ${awardResult.currentStage.displayName}',
+            );
+            
+            // Check and unlock badges
+            if (awardResult.leveledUp) {
+              final badgeService = ref.read(badgeServiceProvider);
+              final newBadges = await badgeService.checkAndUnlockBadges(userId);
+              if (newBadges.isNotEmpty) {
+                debugPrint('New badges unlocked: ${newBadges.length}');
+              }
+            }
+          } catch (e) {
+            debugPrint('Error awarding faith points: $e');
+            // Don't fail the habit completion if gamification fails
+          }
+        }
       },
     );
   }
