@@ -722,165 +722,196 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
       PredefinedHabitCategory.household,
     ];
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Icon(Icons.auto_awesome, color: Color(0xff06b6d4)),
-            const SizedBox(width: 8),
-            Text(
-              widget.l10n.chooseFromPredefined,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff06b6d4),
+    return DefaultTabController(
+      length: categoryOrder.length,
+      child: Column(
+        children: [
+          // Header with title
+          Row(
+            children: [
+              const Icon(Icons.auto_awesome, color: Color(0xff06b6d4)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  widget.l10n.chooseFromPredefined,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff06b6d4),
+                  ),
+                ),
               ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Category tabs
+          TabBar(
+            isScrollable: true,
+            labelColor: const Color(0xff06b6d4),
+            unselectedLabelColor: Colors.grey.shade600,
+            indicatorColor: const Color(0xff06b6d4),
+            indicatorWeight: 3,
+            labelStyle: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: ListView.builder(
-            itemCount: categoryOrder.length,
-            itemBuilder: (context, categoryIndex) {
-              final category = categoryOrder[categoryIndex];
-              final habits = habitsByCategory[category] ?? [];
-              if (habits.isEmpty) return const SizedBox.shrink();
-
+            unselectedLabelStyle: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.normal,
+            ),
+            tabs: categoryOrder.map((category) {
               final categoryName = HabitColors.getCategoryDisplayName(
                 PredefinedHabitCategoryX(category).toDomainCategory(),
                 widget.l10n,
               );
-              final categoryColor = HabitColors.categoryColors[
+              final habits = habitsByCategory[category] ?? [];
+              final color = HabitColors.categoryColors[
                   PredefinedHabitCategoryX(category).toDomainCategory()]!;
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (categoryIndex > 0) const SizedBox(height: 16),
-                  // Category header
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 4,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: categoryColor,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          categoryName,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: categoryColor,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '(${habits.length})',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
+              return Tab(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                  // Habits grid for this category
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.95,
+                    const SizedBox(width: 6),
+                    Text('$categoryName (${habits.length})'),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 12),
+          // Tab content
+          Expanded(
+            child: TabBarView(
+              children: categoryOrder.map((category) {
+                final habits = habitsByCategory[category] ?? [];
+                if (habits.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No habits in this category',
+                      style: TextStyle(color: Colors.grey.shade500),
                     ),
-                    itemCount: habits.length,
-                    itemBuilder: (c, i) {
-                      final h = habits[i];
-                      final name =
-                          PredefinedHabitTranslations.getTranslatedName(
-                        widget.l10n,
-                        h.nameKey,
-                      );
-                      return InkWell(
-                        onTap: () async {
-                          final navigator = Navigator.of(context);
-                          final messenger = ScaffoldMessenger.of(context);
-                          await ref
-                              .read(habitsNotifierProvider.notifier)
-                              .addHabit(name: name, emoji: h.emoji);
-                          navigator.pop();
-                          messenger.showSnackBar(
-                            SnackBar(
-                              content: Row(
-                                children: [
-                                  const Icon(Icons.check_circle,
-                                      color: Colors.white),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(widget.l10n.habitCreated),
-                                  ),
-                                ],
-                              ),
-                              duration: const Duration(seconds: 2),
-                              backgroundColor: Colors.green.shade600,
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: categoryColor.withValues(alpha: 0.7),
-                              width: 2.5,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(h.emoji,
-                                  style: const TextStyle(fontSize: 40)),
-                              const SizedBox(height: 4),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  name,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                  );
+                }
+
+                final categoryColor = HabitColors.categoryColors[
+                    PredefinedHabitCategoryX(category).toDomainCategory()]!;
+
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate optimal grid size based on available width
+                    // Minimum 120px per card for accessibility, maximum 4 columns
+                    final cardMinWidth = 120.0;
+                    final spacing = 10.0;
+                    final availableWidth = constraints.maxWidth;
+
+                    int crossAxisCount =
+                        (availableWidth / (cardMinWidth + spacing)).floor();
+                    crossAxisCount = crossAxisCount.clamp(2, 4);
+
+                    // Adjust card size for smaller screens or large fonts
+                    final aspectRatio = crossAxisCount <= 2 ? 0.8 : 0.9;
+                    final fontSize = crossAxisCount <= 2 ? 11.0 : 12.0;
+                    final emojiSize = crossAxisCount <= 2 ? 32.0 : 36.0;
+
+                    return GridView.builder(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: spacing,
+                        mainAxisSpacing: spacing,
+                        childAspectRatio: aspectRatio,
+                      ),
+                      itemCount: habits.length,
+                      itemBuilder: (c, i) {
+                        final h = habits[i];
+                        final name =
+                            PredefinedHabitTranslations.getTranslatedName(
+                          widget.l10n,
+                          h.nameKey,
+                        );
+                        return InkWell(
+                          onTap: () async {
+                            final navigator = Navigator.of(context);
+                            final messenger = ScaffoldMessenger.of(context);
+                            await ref
+                                .read(habitsNotifierProvider.notifier)
+                                .addHabit(name: name, emoji: h.emoji);
+                            navigator.pop();
+                            messenger.showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    const Icon(Icons.check_circle,
+                                        color: Colors.white),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(widget.l10n.habitCreated),
+                                    ),
+                                  ],
+                                ),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: Colors.green.shade600,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                            ],
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: categoryColor.withValues(alpha: 0.7),
+                                width: 2,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  h.emoji,
+                                  style: TextStyle(fontSize: emojiSize),
+                                ),
+                                const SizedBox(height: 2),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6),
+                                  child: Text(
+                                    name,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: fontSize,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
+                        );
+                      },
+                    );
+                  },
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
