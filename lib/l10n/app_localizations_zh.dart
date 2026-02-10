@@ -1111,4 +1111,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get madeWithLove => '由 Develop4God 用 ❤️ 制作\n \n愿荣耀归于神';
+
+  @override
+  String get faithJourney => 'Faith Journey';
+
+  @override
+  String get faithJourneyDescription =>
+      'Track your progress, earn faith points, and unlock badges!';
 }

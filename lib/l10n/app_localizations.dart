@@ -2209,6 +2209,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Made with ❤️ by Develop4God\n \nFor the Glory of God'**
   String get madeWithLove;
+
+  /// No description provided for @faithJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Faith Journey'**
+  String get faithJourney;
+
+  /// No description provided for @faithJourneyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your progress, earn faith points, and unlock badges!'**
+  String get faithJourneyDescription;
 }
 
 class _AppLocalizationsDelegate

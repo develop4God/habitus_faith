@@ -1,1 +1,21 @@
-{}
+{
+  "es": [
+    "faithJourney",
+    "faithJourneyDescription"
+  ],
+
+  "fr": [
+    "faithJourney",
+    "faithJourneyDescription"
+  ],
+
+  "pt": [
+    "faithJourney",
+    "faithJourneyDescription"
+  ],
+
+  "zh": [
+    "faithJourney",
+    "faithJourneyDescription"
+  ]
+}

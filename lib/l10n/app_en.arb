@@ -1411,5 +1411,13 @@
   "madeWithLove": "Made with ❤️ by Develop4God\n \nFor the Glory of God",
   "@madeWithLove": {
     "description": "Footer text"
-  }
+  },
+  "faithJourney": "Faith Journey",
+  "faithJourneyDescription": "Track your progress, earn faith points, and unlock badges!",
+  "startTimer": "Start Timer",
+  "timerRunning": "Timer Running",
+  "timeToFocus": "Time to Focus",
+  "focusComplete": "Focus session complete!",
+  "goalReached": "Goal Reached!",
+  "timer": "Timer"
 }

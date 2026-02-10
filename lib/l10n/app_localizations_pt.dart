@@ -1170,4 +1170,11 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get madeWithLove =>
       'Feito com ❤️ por Develop4God\n \nPara a Glória de Deus';
+
+  @override
+  String get faithJourney => 'Faith Journey';
+
+  @override
+  String get faithJourneyDescription =>
+      'Track your progress, earn faith points, and unlock badges!';
 }
