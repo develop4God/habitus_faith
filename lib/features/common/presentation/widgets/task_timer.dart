@@ -7,15 +7,19 @@ import '../../../../l10n/app_localizations.dart';
 
 class TaskTimer extends StatefulWidget {
   final int initialSeconds;
+  final String habitName;
   final VoidCallback? onCompleted;
   final VoidCallback? onReset;
+  final VoidCallback? onFinish;
   final Color activeColor;
 
   const TaskTimer({
     super.key,
+    required this.habitName,
     this.initialSeconds = 0,
     this.onCompleted,
     this.onReset,
+    this.onFinish,
     this.activeColor = Colors.purple,
   });
 
@@ -44,7 +48,8 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   void _toggleTimer() {
     if (_isCompleted) {
-      _resetTimer();
+      HapticFeedback.mediumImpact();
+      widget.onFinish?.call();
       return;
     }
     if (_secondsRemaining <= 0) return;
@@ -64,7 +69,6 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
       setState(() {
         if (_secondsRemaining > 0) {
           _secondsRemaining--;
-          // Modern iOS-style tick feel
           HapticFeedback.selectionClick();
         } else {
           _timer?.cancel();
@@ -122,61 +126,86 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
     final ringColor = _isCompleted ? Colors.green : (_isRunning ? widget.activeColor : Colors.grey.shade300);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Habit Completed text outside the circle, between name and circle
-        if (_isCompleted) ...[
-          Text(
-            l10n.habitCompleted,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-          const SizedBox(height: 16),
-        ],
-        SizedBox(
-          height: 280,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Outer Progress Ring
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                width: 260,
-                height: 260,
-                child: CircularProgressIndicator(
-                  value: _isCompleted ? 1.0 : progressValue,
-                  strokeWidth: _isCompleted ? 8 : 4,
-                  backgroundColor: ringColor.withValues(alpha: 0.05),
-                  valueColor: AlwaysStoppedAnimation<Color>(ringColor),
-                  strokeCap: StrokeCap.round,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header Info
+            if (_isCompleted) ...[
+              Text(
+                l10n.habitCompleted,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
                 ),
               ),
-              
-              // Main Display: Picker -> Countdown -> Celebration
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: ScaleTransition(scale: animation, child: child),
-                  );
-                },
-                child: _isCompleted 
-                    ? _buildCelebrationDisplay()
-                    : (_isRunning || (_secondsRemaining < _totalDuration && _secondsRemaining > 0)
-                        ? _buildCountdownDisplay()
-                        : _buildPickerDisplay()),
+              const SizedBox(height: 8),
+            ] else ...[
+              Text(
+                l10n.timeToFocus,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              const SizedBox(height: 8),
             ],
-          ),
+            
+            Text(
+              widget.habitName,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            
+            const SizedBox(height: 40),
+
+            SizedBox(
+              height: 280,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    width: 260,
+                    height: 260,
+                    child: CircularProgressIndicator(
+                      value: _isCompleted ? 1.0 : progressValue,
+                      strokeWidth: _isCompleted ? 8 : 4,
+                      backgroundColor: ringColor.withValues(alpha: 0.05),
+                      valueColor: AlwaysStoppedAnimation<Color>(ringColor),
+                      strokeCap: StrokeCap.round,
+                    ),
+                  ),
+                  
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder: (Widget child, Animation<double> animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: ScaleTransition(scale: animation, child: child),
+                      );
+                    },
+                    child: _isCompleted 
+                        ? _buildCelebrationDisplay()
+                        : (_isRunning || (_secondsRemaining < _totalDuration && _secondsRemaining > 0)
+                            ? _buildCountdownDisplay()
+                            : _buildPickerDisplay()),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 48),
+            _buildControls(),
+            const SizedBox(height: 16), // Added bottom padding
+          ],
         ),
-        const SizedBox(height: 48),
-        _buildControls(),
-      ],
+      ),
     );
   }
 
@@ -261,7 +290,6 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Reset Button
         _ControlCircle(
           onTap: _resetTimer,
           icon: Icons.refresh_rounded,
@@ -270,7 +298,6 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
         ),
         const SizedBox(width: 40),
         
-        // Start/Pause Button
         GestureDetector(
           onTap: _toggleTimer,
           child: AnimatedContainer(
@@ -304,7 +331,6 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
         ),
         
         const SizedBox(width: 40),
-        // Placeholder for symmetry
         const SizedBox(width: 56),
       ],
     );

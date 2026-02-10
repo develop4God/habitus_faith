@@ -141,44 +141,19 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       ),
       builder: (ctx) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.timeToFocus,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.habit.name,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            const SizedBox(height: 40),
-            TaskTimer(
-              initialSeconds: widget.habit.targetMinutes * 60,
-              activeColor: habitColor,
-              onCompleted: () {
-                // We don't automatically pop to let user see "Goal Reached"
-                // but we trigger completion
-                _handleComplete();
-                GlobalSnackbar.showSuccess(l10n.focusComplete);
-              },
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: Text(l10n.cancel),
-              ),
-            ),
-          ],
+        child: TaskTimer(
+          habitName: widget.habit.name,
+          initialSeconds: widget.habit.targetMinutes * 60,
+          activeColor: habitColor,
+          onCompleted: () {
+            // Trigger completion but keep timer open for celebration
+            _handleComplete();
+            GlobalSnackbar.showSuccess(l10n.focusComplete);
+          },
+          onFinish: () {
+            // Close the timer modal
+            Navigator.pop(ctx);
+          },
         ),
       ),
     );
