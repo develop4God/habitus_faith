@@ -105,7 +105,7 @@ class FaithPointsService {
       endOfDay,
     );
     
-    return todayPoints.fold(0, (sum, p) => sum + p.points);
+    return todayPoints.fold<int>(0, (sum, p) => sum + p.points);
   }
 }
 
