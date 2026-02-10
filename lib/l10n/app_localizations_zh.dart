@@ -185,6 +185,66 @@ class AppLocalizationsZh extends AppLocalizations {
   String get predefinedHabit_service_description => '以爱和同情服务他人';
 
   @override
+  String get predefinedHabit_washDishes_name => '洗碗';
+
+  @override
+  String get predefinedHabit_washDishes_description => '保持厨房清洁有序';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => '打扫房间';
+
+  @override
+  String get predefinedHabit_cleanRoom_description => '整理和组织您的空间';
+
+  @override
+  String get predefinedHabit_doLaundry_name => '洗衣服';
+
+  @override
+  String get predefinedHabit_doLaundry_description => '洗涤和折叠衣物';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => '整理空间';
+
+  @override
+  String get predefinedHabit_organizeSpace_description => '清理和整理您的生活区域';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => '打扫浴室';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description => '保持浴室清洁卫生';
+
+  @override
+  String get predefinedHabit_cookMeal_name => '做饭';
+
+  @override
+  String get predefinedHabit_cookMeal_description => '准备健康的家常菜';
+
+  @override
+  String get predefinedHabit_vacuumFloors_name => '吸尘';
+
+  @override
+  String get predefinedHabit_vacuumFloors_description => '保持地板清洁无尘';
+
+  @override
+  String get predefinedHabit_makeBreakfast_name => '做早餐';
+
+  @override
+  String get predefinedHabit_makeBreakfast_description => '以营养餐开始新的一天';
+
+  @override
+  String get predefinedHabit_bedMaking_name => '整理床铺';
+
+  @override
+  String get predefinedHabit_bedMaking_description => '每天整理床铺开始新的一天';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_name => '帮助孩子做作业';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_description => '支持孩子的学习';
+
+  @override
   String get onboardingErrorMessage => '保存习惯失败。请重试。';
 
   @override

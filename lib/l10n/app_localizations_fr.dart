@@ -200,6 +200,76 @@ class AppLocalizationsFr extends AppLocalizations {
       'Servez les autres avec amour et compassion';
 
   @override
+  String get predefinedHabit_washDishes_name => 'Laver la Vaisselle';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Gardez la cuisine propre et organisée';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Nettoyer la Chambre';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Rangez et organisez votre espace';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Faire la Lessive';
+
+  @override
+  String get predefinedHabit_doLaundry_description =>
+      'Lavez et pliez les vêtements';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organiser l\'Espace';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Désencombrez et arrangez votre espace de vie';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Nettoyer la Salle de Bain';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Maintenez une salle de bain propre et hygiénique';
+
+  @override
+  String get predefinedHabit_cookMeal_name => 'Cuisiner un Repas';
+
+  @override
+  String get predefinedHabit_cookMeal_description =>
+      'Préparez des aliments sains faits maison';
+
+  @override
+  String get predefinedHabit_vacuumFloors_name => 'Passer l\'Aspirateur';
+
+  @override
+  String get predefinedHabit_vacuumFloors_description =>
+      'Gardez les sols propres et sans poussière';
+
+  @override
+  String get predefinedHabit_makeBreakfast_name => 'Préparer le Petit-déjeuner';
+
+  @override
+  String get predefinedHabit_makeBreakfast_description =>
+      'Commencez la journée avec un repas nutritif';
+
+  @override
+  String get predefinedHabit_bedMaking_name => 'Faire le Lit';
+
+  @override
+  String get predefinedHabit_bedMaking_description =>
+      'Commencez votre journée en faisant votre lit';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_name => 'Aider aux Devoirs';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_description =>
+      'Soutenez les enfants dans leurs études';
+
+  @override
   String get onboardingErrorMessage =>
       'Échec de la sauvegarde des habitudes. Veuillez réessayer.';
 

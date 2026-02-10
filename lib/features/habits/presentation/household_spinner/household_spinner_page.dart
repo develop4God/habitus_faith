@@ -19,6 +19,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   Habit? _selectedTask;
   bool _isSpinning = false;
   bool _isWorking = false;
+  bool _isCompleting = false;
   late AnimationController _spinController;
   late AnimationController _celebrationController;
 
@@ -179,23 +180,45 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   }
 
   Future<void> _completeTask() async {
-    if (_selectedTask == null) return;
+    if (_selectedTask == null || _isCompleting) return;
 
-    // Complete the habit
-    await ref.read(habitsNotifierProvider.notifier).completeHabit(
-          _selectedTask!.id,
-        );
+    setState(() {
+      _isCompleting = true;
+    });
 
-    // Show celebration
-    _celebrationController.reset();
-    _celebrationController.forward();
+    try {
+      // Complete the habit
+      await ref.read(habitsNotifierProvider.notifier).completeHabit(
+            _selectedTask!.id,
+          );
 
-    await Future.delayed(const Duration(seconds: 2));
+      // Show celebration
+      _celebrationController.reset();
+      _celebrationController.forward();
 
-    if (!mounted) return;
+      await Future.delayed(const Duration(seconds: 2));
 
-    // Show completion dialog
-    _showCompletionDialog();
+      if (!mounted) return;
+
+      // Show completion dialog
+      _showCompletionDialog();
+    } catch (e) {
+      if (!mounted) return;
+
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al completar la tarea: $e'),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCompleting = false;
+        });
+      }
+    }
   }
 
   void _showCompletionDialog() {
@@ -603,7 +626,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 OutlinedButton(
-                  onPressed: _cancelTask,
+                  onPressed: _isCompleting ? null : _cancelTask,
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 32,
@@ -617,11 +640,23 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton.icon(
-                  onPressed: _completeTask,
-                  icon: const Icon(Icons.check_circle),
-                  label: const Text('Completar'),
+                  onPressed: _isCompleting ? null : _completeTask,
+                  icon: _isCompleting
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Icon(Icons.check_circle),
+                  label: Text(_isCompleting ? 'Completando...' : 'Completar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green.shade500,
+                    backgroundColor: _isCompleting
+                        ? Colors.grey.shade400
+                        : Colors.green.shade500,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 32,

@@ -200,6 +200,75 @@ class AppLocalizationsEs extends AppLocalizations {
       'Sirve a otros con amor y compasión';
 
   @override
+  String get predefinedHabit_washDishes_name => 'Lavar los Platos';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Mantén la cocina limpia y organizada';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Limpiar la Habitación';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Ordena y organiza tu espacio';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Lavar la Ropa';
+
+  @override
+  String get predefinedHabit_doLaundry_description => 'Lava y dobla la ropa';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organizar Espacio';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Ordena y arregla tu área de vida';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Limpiar el Baño';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Mantén un baño limpio e higiénico';
+
+  @override
+  String get predefinedHabit_cookMeal_name => 'Cocinar una Comida';
+
+  @override
+  String get predefinedHabit_cookMeal_description =>
+      'Prepara alimentos saludables caseros';
+
+  @override
+  String get predefinedHabit_vacuumFloors_name => 'Aspirar el Piso';
+
+  @override
+  String get predefinedHabit_vacuumFloors_description =>
+      'Mantén los pisos limpios y sin polvo';
+
+  @override
+  String get predefinedHabit_makeBreakfast_name => 'Preparar Desayuno';
+
+  @override
+  String get predefinedHabit_makeBreakfast_description =>
+      'Comienza el día con una comida nutritiva';
+
+  @override
+  String get predefinedHabit_bedMaking_name => 'Tender la Cama';
+
+  @override
+  String get predefinedHabit_bedMaking_description =>
+      'Comienza tu día tendiendo tu cama';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_name => 'Ayudar con Tareas';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_description =>
+      'Apoya a los niños con sus estudios';
+
+  @override
   String get onboardingErrorMessage =>
       'Error al guardar los hábitos. Por favor, inténtalo de nuevo.';
 

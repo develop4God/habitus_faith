@@ -452,6 +452,126 @@ abstract class AppLocalizations {
   /// **'Serve others with love and compassion'**
   String get predefinedHabit_service_description;
 
+  /// Name of wash dishes habit
+  ///
+  /// In en, this message translates to:
+  /// **'Wash Dishes'**
+  String get predefinedHabit_washDishes_name;
+
+  /// Description of wash dishes habit
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the kitchen clean and organized'**
+  String get predefinedHabit_washDishes_description;
+
+  /// Name of clean room habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Room'**
+  String get predefinedHabit_cleanRoom_name;
+
+  /// Description of clean room habit
+  ///
+  /// In en, this message translates to:
+  /// **'Tidy up and organize your space'**
+  String get predefinedHabit_cleanRoom_description;
+
+  /// Name of do laundry habit
+  ///
+  /// In en, this message translates to:
+  /// **'Do Laundry'**
+  String get predefinedHabit_doLaundry_name;
+
+  /// Description of do laundry habit
+  ///
+  /// In en, this message translates to:
+  /// **'Wash and fold clothes'**
+  String get predefinedHabit_doLaundry_description;
+
+  /// Name of organize space habit
+  ///
+  /// In en, this message translates to:
+  /// **'Organize Space'**
+  String get predefinedHabit_organizeSpace_name;
+
+  /// Description of organize space habit
+  ///
+  /// In en, this message translates to:
+  /// **'Declutter and arrange your living area'**
+  String get predefinedHabit_organizeSpace_description;
+
+  /// Name of clean bathroom habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Bathroom'**
+  String get predefinedHabit_cleanBathroom_name;
+
+  /// Description of clean bathroom habit
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain a clean and hygienic bathroom'**
+  String get predefinedHabit_cleanBathroom_description;
+
+  /// Name of cook meal habit
+  ///
+  /// In en, this message translates to:
+  /// **'Cook a Meal'**
+  String get predefinedHabit_cookMeal_name;
+
+  /// Description of cook meal habit
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare healthy home-cooked food'**
+  String get predefinedHabit_cookMeal_description;
+
+  /// Name of vacuum floors habit
+  ///
+  /// In en, this message translates to:
+  /// **'Vacuum Floors'**
+  String get predefinedHabit_vacuumFloors_name;
+
+  /// Description of vacuum floors habit
+  ///
+  /// In en, this message translates to:
+  /// **'Keep floors clean and dust-free'**
+  String get predefinedHabit_vacuumFloors_description;
+
+  /// Name of make breakfast habit
+  ///
+  /// In en, this message translates to:
+  /// **'Make Breakfast'**
+  String get predefinedHabit_makeBreakfast_name;
+
+  /// Description of make breakfast habit
+  ///
+  /// In en, this message translates to:
+  /// **'Start the day with a nutritious meal'**
+  String get predefinedHabit_makeBreakfast_description;
+
+  /// Name of bed making habit
+  ///
+  /// In en, this message translates to:
+  /// **'Make the Bed'**
+  String get predefinedHabit_bedMaking_name;
+
+  /// Description of bed making habit
+  ///
+  /// In en, this message translates to:
+  /// **'Start your day by making your bed'**
+  String get predefinedHabit_bedMaking_description;
+
+  /// Name of help kids homework habit
+  ///
+  /// In en, this message translates to:
+  /// **'Help Kids with Homework'**
+  String get predefinedHabit_helpKidsHomework_name;
+
+  /// Description of help kids homework habit
+  ///
+  /// In en, this message translates to:
+  /// **'Support children with their studies'**
+  String get predefinedHabit_helpKidsHomework_description;
+
   /// Error message shown when onboarding fails
   ///
   /// In en, this message translates to:

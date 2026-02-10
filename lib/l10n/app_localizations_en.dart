@@ -200,6 +200,75 @@ class AppLocalizationsEn extends AppLocalizations {
       'Serve others with love and compassion';
 
   @override
+  String get predefinedHabit_washDishes_name => 'Wash Dishes';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Keep the kitchen clean and organized';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Clean Room';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Tidy up and organize your space';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Do Laundry';
+
+  @override
+  String get predefinedHabit_doLaundry_description => 'Wash and fold clothes';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organize Space';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Declutter and arrange your living area';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Clean Bathroom';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Maintain a clean and hygienic bathroom';
+
+  @override
+  String get predefinedHabit_cookMeal_name => 'Cook a Meal';
+
+  @override
+  String get predefinedHabit_cookMeal_description =>
+      'Prepare healthy home-cooked food';
+
+  @override
+  String get predefinedHabit_vacuumFloors_name => 'Vacuum Floors';
+
+  @override
+  String get predefinedHabit_vacuumFloors_description =>
+      'Keep floors clean and dust-free';
+
+  @override
+  String get predefinedHabit_makeBreakfast_name => 'Make Breakfast';
+
+  @override
+  String get predefinedHabit_makeBreakfast_description =>
+      'Start the day with a nutritious meal';
+
+  @override
+  String get predefinedHabit_bedMaking_name => 'Make the Bed';
+
+  @override
+  String get predefinedHabit_bedMaking_description =>
+      'Start your day by making your bed';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_name => 'Help Kids with Homework';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_description =>
+      'Support children with their studies';
+
+  @override
   String get onboardingErrorMessage =>
       'Failed to save habits. Please try again.';
 
