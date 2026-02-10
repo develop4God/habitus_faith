@@ -7,6 +7,7 @@ import '../features/habits/presentation/constants/habit_colors.dart';
 import '../features/habits/presentation/widgets/habit_card/habit_modal_sheet.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../features/habits/presentation/widgets/abandonment_risk_indicator.dart';
+import '../features/common/presentation/widgets/task_timer.dart';
 import '../l10n/app_localizations.dart';
 import '../core/utils/global_snackbar.dart';
 import 'notification_options_dialog.dart';
@@ -127,6 +128,59 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
     // Show snackbar using the global utility
     GlobalSnackbar.showWarning(l10n.habitSkipped);
+  }
+
+  void _showTimer(BuildContext context, Color habitColor, AppLocalizations l10n) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.timeToFocus,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.habit.name,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 40),
+            TaskTimer(
+              targetSeconds: widget.habit.targetMinutes * 60,
+              activeColor: habitColor,
+              onCompleted: () {
+                // We don't automatically pop to let user see "Goal Reached"
+                // but we trigger completion
+                _handleComplete();
+                GlobalSnackbar.showSuccess(l10n.focusComplete);
+              },
+            ),
+            const SizedBox(height: 40),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text(l10n.cancel),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -708,6 +762,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildCircularAction(
+                  Icons.timer_outlined,
+                  l10n.timer,
+                  habitColor,
+                  () {
+                    Navigator.of(context).pop();
+                    _showTimer(context, habitColor, l10n);
+                  },
+                ),
                 _buildCircularAction(
                   Icons.edit_rounded,
                   l10n.edit,
