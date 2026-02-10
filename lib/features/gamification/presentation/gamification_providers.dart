@@ -3,13 +3,10 @@ import '../../habits/data/storage/storage_providers.dart';
 import '../data/faith_points_repository.dart';
 import '../data/journey_level_repository.dart';
 import '../data/badge_repository.dart';
-import '../data/task_spinner_repository.dart';
 import '../domain/services/faith_points_service.dart';
 import '../domain/services/badge_service.dart';
-import '../domain/services/task_spinner_service.dart';
 import '../domain/models/journey_level.dart';
 import '../domain/models/badge.dart' as gamification;
-import '../domain/models/task_spinner.dart';
 
 // Repository Providers
 final faithPointsRepositoryProvider = Provider<FaithPointsRepository>((ref) {
@@ -25,11 +22,6 @@ final journeyLevelRepositoryProvider = Provider<JourneyLevelRepository>((ref) {
 final badgeRepositoryProvider = Provider<BadgeRepository>((ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   return BadgeRepository(prefs);
-});
-
-final taskSpinnerRepositoryProvider = Provider<TaskSpinnerRepository>((ref) {
-  final prefs = ref.watch(sharedPreferencesProvider);
-  return TaskSpinnerRepository(prefs);
 });
 
 // Service Providers
@@ -49,11 +41,6 @@ final badgeServiceProvider = Provider<BadgeService>((ref) {
     badgeRepository: badgeRepo,
     levelRepository: levelRepo,
   );
-});
-
-final taskSpinnerServiceProvider = Provider<TaskSpinnerService>((ref) {
-  final repo = ref.watch(taskSpinnerRepositoryProvider);
-  return TaskSpinnerService(repository: repo);
 });
 
 // State Providers
@@ -92,18 +79,4 @@ final pointsTodayProvider =
     FutureProvider.family<int, String>((ref, userId) async {
   final service = ref.watch(faithPointsServiceProvider);
   return await service.getPointsToday(userId);
-});
-
-/// Provider for task spinner items
-final spinnerTasksProvider =
-    FutureProvider.family<List<TaskSpinnerItem>, String>((ref, userId) async {
-  final service = ref.watch(taskSpinnerServiceProvider);
-  return await service.getTasks(userId);
-});
-
-/// Provider for active spinner tasks
-final activeSpinnerTasksProvider =
-    FutureProvider.family<List<TaskSpinnerItem>, String>((ref, userId) async {
-  final service = ref.watch(taskSpinnerServiceProvider);
-  return await service.getActiveTasks(userId);
 });
