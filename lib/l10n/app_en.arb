@@ -54,6 +54,14 @@
   "@cancel": {
     "description": "Cancel button text"
   },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes button text"
+  },
+  "habitAlreadyCompletedStartAgain": "This habit is already completed. Do you want to start the timer again?",
+  "@habitAlreadyCompletedStartAgain": {
+    "description": "Confirmation message when user tries to start timer for already completed habit"
+  },
   "delete": "Delete",
   "@delete": {
     "description": "Delete button text"
@@ -229,6 +237,86 @@
   "predefinedHabit_service_description": "Serve others with love and compassion",
   "@predefinedHabit_service_description": {
     "description": "Description of service habit"
+  },
+  "predefinedHabit_washDishes_name": "Wash Dishes",
+  "@predefinedHabit_washDishes_name": {
+    "description": "Name of wash dishes habit"
+  },
+  "predefinedHabit_washDishes_description": "Keep the kitchen clean and organized",
+  "@predefinedHabit_washDishes_description": {
+    "description": "Description of wash dishes habit"
+  },
+  "predefinedHabit_cleanRoom_name": "Clean Room",
+  "@predefinedHabit_cleanRoom_name": {
+    "description": "Name of clean room habit"
+  },
+  "predefinedHabit_cleanRoom_description": "Tidy up and organize your space",
+  "@predefinedHabit_cleanRoom_description": {
+    "description": "Description of clean room habit"
+  },
+  "predefinedHabit_doLaundry_name": "Do Laundry",
+  "@predefinedHabit_doLaundry_name": {
+    "description": "Name of do laundry habit"
+  },
+  "predefinedHabit_doLaundry_description": "Wash and fold clothes",
+  "@predefinedHabit_doLaundry_description": {
+    "description": "Description of do laundry habit"
+  },
+  "predefinedHabit_organizeSpace_name": "Organize Space",
+  "@predefinedHabit_organizeSpace_name": {
+    "description": "Name of organize space habit"
+  },
+  "predefinedHabit_organizeSpace_description": "Declutter and arrange your living area",
+  "@predefinedHabit_organizeSpace_description": {
+    "description": "Description of organize space habit"
+  },
+  "predefinedHabit_cleanBathroom_name": "Clean Bathroom",
+  "@predefinedHabit_cleanBathroom_name": {
+    "description": "Name of clean bathroom habit"
+  },
+  "predefinedHabit_cleanBathroom_description": "Maintain a clean and hygienic bathroom",
+  "@predefinedHabit_cleanBathroom_description": {
+    "description": "Description of clean bathroom habit"
+  },
+  "predefinedHabit_cookMeal_name": "Cook a Meal",
+  "@predefinedHabit_cookMeal_name": {
+    "description": "Name of cook meal habit"
+  },
+  "predefinedHabit_cookMeal_description": "Prepare healthy home-cooked food",
+  "@predefinedHabit_cookMeal_description": {
+    "description": "Description of cook meal habit"
+  },
+  "predefinedHabit_vacuumFloors_name": "Vacuum Floors",
+  "@predefinedHabit_vacuumFloors_name": {
+    "description": "Name of vacuum floors habit"
+  },
+  "predefinedHabit_vacuumFloors_description": "Keep floors clean and dust-free",
+  "@predefinedHabit_vacuumFloors_description": {
+    "description": "Description of vacuum floors habit"
+  },
+  "predefinedHabit_makeBreakfast_name": "Make Breakfast",
+  "@predefinedHabit_makeBreakfast_name": {
+    "description": "Name of make breakfast habit"
+  },
+  "predefinedHabit_makeBreakfast_description": "Start the day with a nutritious meal",
+  "@predefinedHabit_makeBreakfast_description": {
+    "description": "Description of make breakfast habit"
+  },
+  "predefinedHabit_bedMaking_name": "Make the Bed",
+  "@predefinedHabit_bedMaking_name": {
+    "description": "Name of bed making habit"
+  },
+  "predefinedHabit_bedMaking_description": "Start your day by making your bed",
+  "@predefinedHabit_bedMaking_description": {
+    "description": "Description of bed making habit"
+  },
+  "predefinedHabit_helpKidsHomework_name": "Help Kids with Homework",
+  "@predefinedHabit_helpKidsHomework_name": {
+    "description": "Name of help kids homework habit"
+  },
+  "predefinedHabit_helpKidsHomework_description": "Support children with their studies",
+  "@predefinedHabit_helpKidsHomework_description": {
+    "description": "Description of help kids homework habit"
   },
   "onboardingErrorMessage": "Failed to save habits. Please try again.",
   "@onboardingErrorMessage": {
@@ -1411,5 +1499,13 @@
   "madeWithLove": "Made with ❤️ by Develop4God\n \nFor the Glory of God",
   "@madeWithLove": {
     "description": "Footer text"
-  }
+  },
+  "faithJourney": "Faith Journey",
+  "faithJourneyDescription": "Track your progress, earn faith points, and unlock badges!",
+  "startTimer": "Start Timer",
+  "timerRunning": "Timer Running",
+  "timeToFocus": "Time to Focus",
+  "focusComplete": "Focus session complete!",
+  "goalReached": "Goal Reached!",
+  "timer": "Timer"
 }

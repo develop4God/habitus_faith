@@ -54,6 +54,14 @@
   "@cancel": {
     "description": "Cancel button text"
   },
+  "yes": "Sí",
+  "@yes": {
+    "description": "Yes button text"
+  },
+  "habitAlreadyCompletedStartAgain": "Este hábito ya está completado. ¿Quieres iniciar el temporizador de nuevo?",
+  "@habitAlreadyCompletedStartAgain": {
+    "description": "Confirmation message when user tries to start timer for already completed habit"
+  },
   "delete": "Eliminar",
   "@delete": {
     "description": "Delete button text"
@@ -229,6 +237,86 @@
   "predefinedHabit_service_description": "Sirve a otros con amor y compasión",
   "@predefinedHabit_service_description": {
     "description": "Description of service habit"
+  },
+  "predefinedHabit_washDishes_name": "Lavar los Platos",
+  "@predefinedHabit_washDishes_name": {
+    "description": "Name of wash dishes habit"
+  },
+  "predefinedHabit_washDishes_description": "Mantén la cocina limpia y organizada",
+  "@predefinedHabit_washDishes_description": {
+    "description": "Description of wash dishes habit"
+  },
+  "predefinedHabit_cleanRoom_name": "Limpiar la Habitación",
+  "@predefinedHabit_cleanRoom_name": {
+    "description": "Name of clean room habit"
+  },
+  "predefinedHabit_cleanRoom_description": "Ordena y organiza tu espacio",
+  "@predefinedHabit_cleanRoom_description": {
+    "description": "Description of clean room habit"
+  },
+  "predefinedHabit_doLaundry_name": "Lavar la Ropa",
+  "@predefinedHabit_doLaundry_name": {
+    "description": "Name of do laundry habit"
+  },
+  "predefinedHabit_doLaundry_description": "Lava y dobla la ropa",
+  "@predefinedHabit_doLaundry_description": {
+    "description": "Description of do laundry habit"
+  },
+  "predefinedHabit_organizeSpace_name": "Organizar Espacio",
+  "@predefinedHabit_organizeSpace_name": {
+    "description": "Name of organize space habit"
+  },
+  "predefinedHabit_organizeSpace_description": "Ordena y arregla tu área de vida",
+  "@predefinedHabit_organizeSpace_description": {
+    "description": "Description of organize space habit"
+  },
+  "predefinedHabit_cleanBathroom_name": "Limpiar el Baño",
+  "@predefinedHabit_cleanBathroom_name": {
+    "description": "Name of clean bathroom habit"
+  },
+  "predefinedHabit_cleanBathroom_description": "Mantén un baño limpio e higiénico",
+  "@predefinedHabit_cleanBathroom_description": {
+    "description": "Description of clean bathroom habit"
+  },
+  "predefinedHabit_cookMeal_name": "Cocinar una Comida",
+  "@predefinedHabit_cookMeal_name": {
+    "description": "Name of cook meal habit"
+  },
+  "predefinedHabit_cookMeal_description": "Prepara alimentos saludables caseros",
+  "@predefinedHabit_cookMeal_description": {
+    "description": "Description of cook meal habit"
+  },
+  "predefinedHabit_vacuumFloors_name": "Aspirar el Piso",
+  "@predefinedHabit_vacuumFloors_name": {
+    "description": "Name of vacuum floors habit"
+  },
+  "predefinedHabit_vacuumFloors_description": "Mantén los pisos limpios y sin polvo",
+  "@predefinedHabit_vacuumFloors_description": {
+    "description": "Description of vacuum floors habit"
+  },
+  "predefinedHabit_makeBreakfast_name": "Preparar Desayuno",
+  "@predefinedHabit_makeBreakfast_name": {
+    "description": "Name of make breakfast habit"
+  },
+  "predefinedHabit_makeBreakfast_description": "Comienza el día con una comida nutritiva",
+  "@predefinedHabit_makeBreakfast_description": {
+    "description": "Description of make breakfast habit"
+  },
+  "predefinedHabit_bedMaking_name": "Tender la Cama",
+  "@predefinedHabit_bedMaking_name": {
+    "description": "Name of bed making habit"
+  },
+  "predefinedHabit_bedMaking_description": "Comienza tu día tendiendo tu cama",
+  "@predefinedHabit_bedMaking_description": {
+    "description": "Description of bed making habit"
+  },
+  "predefinedHabit_helpKidsHomework_name": "Ayudar con Tareas",
+  "@predefinedHabit_helpKidsHomework_name": {
+    "description": "Name of help kids homework habit"
+  },
+  "predefinedHabit_helpKidsHomework_description": "Apoya a los niños con sus estudios",
+  "@predefinedHabit_helpKidsHomework_description": {
+    "description": "Description of help kids homework habit"
   },
   "onboardingErrorMessage": "Error al guardar los hábitos. Por favor, inténtalo de nuevo.",
   "@onboardingErrorMessage": {
@@ -444,7 +532,7 @@
   "@generating": {
     "description": "Texto de estado de carga mientras se genera"
   },
-  "generatingHabits": "Generando micro-hábitos personalizados para ti...",
+  "generatingHabits": "Generando micro-habits personalizados para ti...",
   "@generatingHabits": {
     "description": "Mensaje de carga mientras se generan los hábitos"
   },
@@ -1026,252 +1114,6 @@
   "@habitMarkedAsNotCompleted": {
     "description": "Mensaje de éxito al marcar un hábito como no completado/fallido."
   },
-  "@chooseYourExperience": {
-    "description": "Título para elegir la experiencia del usuario."
-  },
-  "@displayModeDescription": {
-    "description": "Descripción de la selección del modo de visualización."
-  },
-  "@compactMode": {
-    "description": "Nombre del modo compacto."
-  },
-  "@compactModeDescription": {
-    "description": "Descripción del modo compacto."
-  },
-  "@compactModeFeature1": {
-    "description": "Interfaz limpia y minimalista."
-  },
-  "@compactModeFeature2": {
-    "description": "Seguimiento rápido de hábitos."
-  },
-  "@compactModeFeature3": {
-    "description": "Estadísticas básicas."
-  },
-  "@advancedMode": {
-    "description": "Nombre del modo avanzado."
-  },
-  "@advancedModeDescription": {
-    "description": "Descripción del modo avanzado."
-  },
-  "@advancedModeFeature1": {
-    "description": "Análisis detallado de hábitos."
-  },
-  "@advancedModeFeature2": {
-    "description": "Información avanzada y personalizada."
-  },
-  "@advancedModeFeature3": {
-    "description": "Personalización avanzada."
-  },
-  "@changeAnytime": {
-    "description": "Indica que la configuración puede cambiarse en cualquier momento."
-  },
-  "@selectMode": {
-    "description": "Instrucción para seleccionar el modo de visualización."
-  },
-  "@displayMode": {
-    "description": "Etiqueta para el modo de visualización."
-  },
-  "@compactModeSubtitle": {
-    "description": "Subtítulo para el modo compacto."
-  },
-  "@advancedModeSubtitle": {
-    "description": "Subtítulo para el modo avanzado."
-  },
-  "@mlPredictionFailed": {
-    "description": "Mensaje de error cuando la predicción de ML falla."
-  },
-  "@mlModelNotLoaded": {
-    "description": "Mensaje de error cuando el modelo ML no está cargado."
-  },
-  "@backgroundSyncNetwork": {
-    "description": "Mensaje mostrado cuando la sincronización falla por problemas de red."
-  },
-  "@backgroundSyncPermission": {
-    "description": "Mensaje mostrado cuando la sincronización en segundo plano está desactivada."
-  },
-  "@workmanagerActive": {
-    "description": "Sincronización en segundo plano activa."
-  },
-  "@workmanagerRestricted": {
-    "description": "Sincronización puede estar limitada por la optimización de batería."
-  },
-  "@workmanagerDisabled": {
-    "description": "Sincronización en segundo plano desactivada en la configuración del sistema."
-  },
-  "@patternWeekend": {
-    "description": "Sueles saltar los fines de semana. ¿Quieres configurar un recordatorio?"
-  },
-  "@patternEvening": {
-    "description": "La tasa de finalización por la noche es baja. Considera hábitos matutinos."
-  },
-  "@optimalTimeFound": {
-    "description": "Se ha encontrado tu mejor horario de finalización.",
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "example": "08:00"
-      }
-    }
-  },
-  "@networkTimeout": {
-    "description": "Tiempo de espera agotado. Verifica tu conexión."
-  },
-  "@firebasePermissionDenied": {
-    "description": "Acceso denegado a Firebase. Inicia sesión nuevamente."
-  },
-  "@errorUnknown": {
-    "description": "Ha ocurrido un error inesperado. Intenta nuevamente."
-  },
-  "@devBannerTitle": {
-    "description": "Título para la barra de herramientas de desarrollo."
-  },
-  "@devBannerLastSync": {
-    "description": "Indica la última sincronización.",
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "example": "2026-01-08 12:00"
-      }
-    }
-  },
-  "@devBannerMlStatus": {
-    "description": "Estado del modelo ML.",
-    "placeholders": {
-      "status": {
-        "type": "String",
-        "example": "Cargado"
-      }
-    }
-  },
-  "@devBannerWorkmanager": {
-    "description": "Estado del gestor de segundo plano.",
-    "placeholders": {
-      "status": {
-        "type": "String",
-        "example": "Activo"
-      }
-    }
-  },
-  "@devBannerFastTime": {
-    "description": "Indica el multiplicador de tiempo y la fecha simulada.",
-    "placeholders": {
-      "multiplier": {
-        "type": "String",
-        "example": "2"
-      },
-      "date": {
-        "type": "String",
-        "example": "2026-01-08"
-      }
-    }
-  },
-  "@riskLevelLow": {
-    "description": "Indica bajo riesgo."
-  },
-  "@riskLevelMedium": {
-    "description": "Indica riesgo medio."
-  },
-  "@riskLevelHigh": {
-    "description": "Indica alto riesgo."
-  },
-  "@predictorRunning": {
-    "description": "Analizando hábitos..."
-  },
-  "@predictorComplete": {
-    "description": "Análisis de hábitos completado."
-  },
-  "@syncInProgress": {
-    "description": "Sincronizando..."
-  },
-  "@syncComplete": {
-    "description": "Sincronización completada."
-  },
-  "@mlModelLoaded": {
-    "description": "Modelo ML cargado."
-  },
-  "@mlModelLoading": {
-    "description": "Cargando modelo ML..."
-  },
-  "@mlModelError": {
-    "description": "Error en el modelo ML."
-  },
-  "@addNote": {
-    "description": "Agregar nota."
-  },
-  "@noteHint": {
-    "description": "Texto de ayuda para nota."
-  },
-  "@viewNote": {
-    "description": "Ver nota."
-  },
-  "@shareNote": {
-    "description": "Compartir nota."
-  },
-  "@noteAdded": {
-    "description": "Nota agregada."
-  },
-  "@addNoteDialog": {
-    "description": "Diálogo para agregar nota."
-  },
-  "@completeWithNote": {
-    "description": "Completar y agregar nota."
-  },
-  "@addEmoji": {
-    "description": "Agregar emoji."
-  },
-  "@hideEmojis": {
-    "description": "Ocultar emojis."
-  },
-  "@mlInsufficientData": {
-    "description": "Mensaje mostrado cuando no hay suficientes días de datos para predicciones de ML.",
-    "placeholders": {
-      "days": {
-        "type": "int",
-        "example": "7"
-      }
-    }
-  },
-  "@backgroundSyncFailed": {
-    "description": "Mensaje mostrado cuando la sincronización en segundo plano falla.",
-    "placeholders": {
-      "reason": {
-        "type": "String",
-        "example": "Sin conexión a internet"
-      }
-    }
-  },
-  "notificationOptions": "Opciones de Notificación",
-  "@notificationOptions": {
-    "description": "Título del diálogo de opciones de notificación"
-  },
-  "turnOffNotification": "Desactivar Notificación",
-  "@turnOffNotification": {
-    "description": "Opción para desactivar la notificación del hábito"
-  },
-  "turnOffNotificationDesc": "Desactivar recordatorio diario para este hábito",
-  "@turnOffNotificationDesc": {
-    "description": "Descripción de la opción de desactivar notificación"
-  },
-  "changeNotificationTime": "Cambiar Hora",
-  "@changeNotificationTime": {
-    "description": "Opción para cambiar la hora de notificación"
-  },
-  "changeNotificationTimeDesc": "Actualizar cuándo quieres que te recuerden",
-  "@changeNotificationTimeDesc": {
-    "description": "Descripción de la opción de cambiar hora de notificación"
-  },
-  "notificationTurnedOff": "Notificación desactivada",
-  "@notificationTurnedOff": {
-    "description": "Mensaje mostrado cuando la notificación se desactiva"
-  },
-  "notificationTimeChanged": "Hora de notificación actualizada",
-  "@notificationTimeChanged": {
-    "description": "Mensaje mostrado cuando se cambia la hora de notificación"
-  },
-  "invalidNotificationConfig": "Configuración de notificación inválida. Por favor configure la notificación nuevamente.",
-  "@invalidNotificationConfig": {
-    "description": "Mensaje de error cuando los datos de notificación están corruptos o inválidos"
-  },
   "habitDeleted": "Hábito eliminado",
   "@habitDeleted": {
     "description": "Mensaje de éxito después de eliminar un hábito"
@@ -1411,5 +1253,45 @@
   "madeWithLove": "Hecho con ❤️ para la gloria de Dios",
   "@madeWithLove": {
     "description": "Texto del pie de página"
+  },
+  "faithJourney": "Camino de Fe",
+  "faithJourneyDescription": "¡Sigue tu progreso, gana puntos de fe y desbloquea insignias!",
+  "startTimer": "Iniciar Temporizador",
+  "timerRunning": "Temporizador en Marcha",
+  "timeToFocus": "Tiempo de Concentración",
+  "focusComplete": "¡Sesión de concentración completa!",
+  "goalReached": "¡Meta Alcanzada!",
+  "timer": "Temporizador",
+  "changeNotificationTime": "Change Time",
+  "@changeNotificationTime": {
+    "description": "Autogenerated placeholder for changeNotificationTime"
+  },
+  "changeNotificationTimeDesc": "Update when you want to be reminded",
+  "@changeNotificationTimeDesc": {
+    "description": "Autogenerated placeholder for changeNotificationTimeDesc"
+  },
+  "invalidNotificationConfig": "Invalid notification configuration. Please set up the notification again.",
+  "@invalidNotificationConfig": {
+    "description": "Autogenerated placeholder for invalidNotificationConfig"
+  },
+  "notificationOptions": "Notification Options",
+  "@notificationOptions": {
+    "description": "Autogenerated placeholder for notificationOptions"
+  },
+  "notificationTimeChanged": "Notification time updated",
+  "@notificationTimeChanged": {
+    "description": "Autogenerated placeholder for notificationTimeChanged"
+  },
+  "notificationTurnedOff": "Notification turned off",
+  "@notificationTurnedOff": {
+    "description": "Autogenerated placeholder for notificationTurnedOff"
+  },
+  "turnOffNotification": "Turn Off Notification",
+  "@turnOffNotification": {
+    "description": "Autogenerated placeholder for turnOffNotification"
+  },
+  "turnOffNotificationDesc": "Disable daily reminder for this habit",
+  "@turnOffNotificationDesc": {
+    "description": "Autogenerated placeholder for turnOffNotificationDesc"
   }
 }

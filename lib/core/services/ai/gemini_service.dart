@@ -782,6 +782,8 @@ Requisitos:
         return HabitCategory.mental;
       case 'relational':
         return HabitCategory.relational;
+      case 'household':
+        return HabitCategory.household;
       default:
         return HabitCategory.other;
     }

@@ -47,6 +47,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
+  String get yes => 'Sí';
+
+  @override
+  String get habitAlreadyCompletedStartAgain =>
+      'Este hábito ya está completado. ¿Quieres iniciar el temporizador de nuevo?';
+
+  @override
   String get delete => 'Eliminar';
 
   @override
@@ -191,6 +198,75 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get predefinedHabit_service_description =>
       'Sirve a otros con amor y compasión';
+
+  @override
+  String get predefinedHabit_washDishes_name => 'Lavar los Platos';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Mantén la cocina limpia y organizada';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Limpiar la Habitación';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Ordena y organiza tu espacio';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Lavar la Ropa';
+
+  @override
+  String get predefinedHabit_doLaundry_description => 'Lava y dobla la ropa';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organizar Espacio';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Ordena y arregla tu área de vida';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Limpiar el Baño';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Mantén un baño limpio e higiénico';
+
+  @override
+  String get predefinedHabit_cookMeal_name => 'Cocinar una Comida';
+
+  @override
+  String get predefinedHabit_cookMeal_description =>
+      'Prepara alimentos saludables caseros';
+
+  @override
+  String get predefinedHabit_vacuumFloors_name => 'Aspirar el Piso';
+
+  @override
+  String get predefinedHabit_vacuumFloors_description =>
+      'Mantén los pisos limpios y sin polvo';
+
+  @override
+  String get predefinedHabit_makeBreakfast_name => 'Preparar Desayuno';
+
+  @override
+  String get predefinedHabit_makeBreakfast_description =>
+      'Comienza el día con una comida nutritiva';
+
+  @override
+  String get predefinedHabit_bedMaking_name => 'Tender la Cama';
+
+  @override
+  String get predefinedHabit_bedMaking_description =>
+      'Comienza tu día tendiendo tu cama';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_name => 'Ayudar con Tareas';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_description =>
+      'Apoya a los niños con sus estudios';
 
   @override
   String get onboardingErrorMessage =>
@@ -380,7 +456,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generatingHabits =>
-      'Generando micro-hábitos personalizados para ti...';
+      'Generando micro-habits personalizados para ti...';
 
   @override
   String get generatedHabitsTitle => 'Tus Micro-Hábitos Personalizados';
@@ -1063,31 +1139,30 @@ class AppLocalizationsEs extends AppLocalizations {
       'Completa un hábito para reflexionar sobre él';
 
   @override
-  String get notificationOptions => 'Opciones de Notificación';
+  String get notificationOptions => 'Notification Options';
 
   @override
-  String get turnOffNotification => 'Desactivar Notificación';
+  String get turnOffNotification => 'Turn Off Notification';
 
   @override
-  String get turnOffNotificationDesc =>
-      'Desactivar recordatorio diario para este hábito';
+  String get turnOffNotificationDesc => 'Disable daily reminder for this habit';
 
   @override
-  String get changeNotificationTime => 'Cambiar Hora';
+  String get changeNotificationTime => 'Change Time';
 
   @override
   String get changeNotificationTimeDesc =>
-      'Actualizar cuándo quieres que te recuerden';
+      'Update when you want to be reminded';
 
   @override
-  String get notificationTurnedOff => 'Notificación desactivada';
+  String get notificationTurnedOff => 'Notification turned off';
 
   @override
-  String get notificationTimeChanged => 'Hora de notificación actualizada';
+  String get notificationTimeChanged => 'Notification time updated';
 
   @override
   String get invalidNotificationConfig =>
-      'Configuración de notificación inválida. Por favor configure la notificación nuevamente.';
+      'Invalid notification configuration. Please set up the notification again.';
 
   @override
   String get readVerseFirst => 'Leer Versículo Primero';
@@ -1173,4 +1248,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get madeWithLove => 'Hecho con ❤️ para la gloria de Dios';
+
+  @override
+  String get faithJourney => 'Camino de Fe';
+
+  @override
+  String get faithJourneyDescription =>
+      '¡Sigue tu progreso, gana puntos de fe y desbloquea insignias!';
+
+  @override
+  String get startTimer => 'Iniciar Temporizador';
+
+  @override
+  String get timerRunning => 'Temporizador en Marcha';
+
+  @override
+  String get timeToFocus => 'Tiempo de Concentración';
+
+  @override
+  String get focusComplete => '¡Sesión de concentración completa!';
+
+  @override
+  String get goalReached => '¡Meta Alcanzada!';
+
+  @override
+  String get timer => 'Temporizador';
 }

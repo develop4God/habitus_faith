@@ -88,11 +88,23 @@ class UnifiedHabitList extends ConsumerWidget {
               }).toList()
             : habits;
 
-        // Sort habits only by user-defined order (no automatic reordering based on completion)
-        final sortedHabits = [...displayHabits];
-        sortedHabits.sort((a, b) => a.order.compareTo(b.order));
+        final baseHabits = [...displayHabits];
+        baseHabits.sort((a, b) => a.order.compareTo(b.order));
 
-        // Pending habits are those with 'pending' status
+        final sortedHabits = [...baseHabits];
+        if (isViewingToday) {
+          sortedHabits.sort((a, b) {
+            final aDone =
+                a.dailyStatus != HabitDailyStatus.pending || a.completedToday;
+            final bDone =
+                b.dailyStatus != HabitDailyStatus.pending || b.completedToday;
+            if (aDone != bDone) {
+              return aDone ? 1 : -1;
+            }
+            return a.order.compareTo(b.order);
+          });
+        }
+
         final hasPendingHabits = selectedDate != null && !isViewingToday
             ? sortedHabits.any((h) => !h.completedToday)
             : sortedHabits.any(
@@ -157,6 +169,26 @@ class UnifiedHabitList extends ConsumerWidget {
                 newIndex -= 1;
               }
 
+              if (isViewingToday) {
+                final movedHabit = sortedHabits[oldIndex];
+                final movedIsDone =
+                    movedHabit.dailyStatus != HabitDailyStatus.pending ||
+                        movedHabit.completedToday;
+                final doneStartIndex = sortedHabits.indexWhere(
+                  (h) =>
+                      h.dailyStatus != HabitDailyStatus.pending ||
+                      h.completedToday,
+                );
+                if (doneStartIndex != -1) {
+                  if (movedIsDone && newIndex < doneStartIndex) {
+                    return;
+                  }
+                  if (!movedIsDone && newIndex >= doneStartIndex) {
+                    return;
+                  }
+                }
+              }
+
               final reorderedHabits = [...sortedHabits];
               final item = reorderedHabits.removeAt(oldIndex);
               reorderedHabits.insert(newIndex, item);
@@ -169,7 +201,7 @@ class UnifiedHabitList extends ConsumerWidget {
             itemBuilder: (context, index) {
               final habit = sortedHabits[index];
               return ReorderableDelayedDragStartListener(
-                key: Key('habit_${habit.id}'),
+                key: Key('habit_drag_${habit.id}'),
                 index: index,
                 child: UnifiedHabitCard(
                   habit: habit,

@@ -10,6 +10,7 @@ class HabitColors {
     HabitCategory.physical: Color(0xFF10B981), // Green - Physical health
     HabitCategory.mental: Color(0xFF2563EB), // Blue - Mental growth
     HabitCategory.relational: Color(0xFFEF4444), // Red - Relationships/Love
+    HabitCategory.household: Color(0xFFFF9800), // Orange - Household
     HabitCategory.other: Color(0xFFF59E0B), // Amber - Other
   };
 
@@ -52,6 +53,8 @@ class HabitColors {
         return l10n.mental;
       case HabitCategory.relational:
         return l10n.relational;
+      case HabitCategory.household:
+        return 'Hogar'; // Household
       case HabitCategory.other:
         return 'Otros'; // Or use l10n.other if you add it to your localizations
     }
@@ -68,6 +71,8 @@ class HabitColors {
         return Icons.psychology;
       case HabitCategory.relational:
         return Icons.volunteer_activism;
+      case HabitCategory.household:
+        return Icons.home_rounded;
       case HabitCategory.other:
         return Icons.star;
     }

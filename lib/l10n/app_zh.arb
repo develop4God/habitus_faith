@@ -158,6 +158,26 @@
   "predefinedHabit_familyTime_description": "与亲人共度美好时光",
   "predefinedHabit_service_name": "服务行动",
   "predefinedHabit_service_description": "以爱和同情服务他人",
+  "predefinedHabit_washDishes_name": "洗碗",
+  "predefinedHabit_washDishes_description": "保持厨房清洁有序",
+  "predefinedHabit_cleanRoom_name": "打扫房间",
+  "predefinedHabit_cleanRoom_description": "整理和组织您的空间",
+  "predefinedHabit_doLaundry_name": "洗衣服",
+  "predefinedHabit_doLaundry_description": "洗涤和折叠衣物",
+  "predefinedHabit_organizeSpace_name": "整理空间",
+  "predefinedHabit_organizeSpace_description": "清理和整理您的生活区域",
+  "predefinedHabit_cleanBathroom_name": "打扫浴室",
+  "predefinedHabit_cleanBathroom_description": "保持浴室清洁卫生",
+  "predefinedHabit_cookMeal_name": "做饭",
+  "predefinedHabit_cookMeal_description": "准备健康的家常菜",
+  "predefinedHabit_vacuumFloors_name": "吸尘",
+  "predefinedHabit_vacuumFloors_description": "保持地板清洁无尘",
+  "predefinedHabit_makeBreakfast_name": "做早餐",
+  "predefinedHabit_makeBreakfast_description": "以营养餐开始新的一天",
+  "predefinedHabit_bedMaking_name": "整理床铺",
+  "predefinedHabit_bedMaking_description": "每天整理床铺开始新的一天",
+  "predefinedHabit_helpKidsHomework_name": "帮助孩子做作业",
+  "predefinedHabit_helpKidsHomework_description": "支持孩子的学习",
   "onboardingErrorMessage": "保存习惯失败。请重试。",
   "retry": "重试",
   "selected": "已选择",
@@ -1408,5 +1428,45 @@
   },
   "@madeWithLove": {
     "description": "Footer text"
+  },
+  "faithJourney": "信仰旅程",
+  "@faithJourney": {
+    "description": "No description provided for @faithJourney."
+  },
+  "faithJourneyDescription": "追踪你的进度，赢取信仰点并解锁徽章！",
+  "@faithJourneyDescription": {
+    "description": "No description provided for @faithJourneyDescription."
+  },
+  "startTimer": "开始计时",
+  "@startTimer": {
+    "description": "No description provided for @startTimer."
+  },
+  "timerRunning": "计时进行中",
+  "@timerRunning": {
+    "description": "No description provided for @timerRunning."
+  },
+  "timeToFocus": "专注时间",
+  "@timeToFocus": {
+    "description": "No description provided for @timeToFocus."
+  },
+  "focusComplete": "专注时段完成！",
+  "@focusComplete": {
+    "description": "No description provided for @focusComplete."
+  },
+  "goalReached": "目标达成！",
+  "@goalReached": {
+    "description": "No description provided for @goalReached."
+  },
+  "timer": "计时器",
+  "@timer": {
+    "description": "No description provided for @timer."
+  },
+  "yes": "确定",
+  "@yes": {
+    "description": "No description provided for @yes."
+  },
+  "habitAlreadyCompletedStartAgain": "该习惯已完成。是否要重新开始计时？",
+  "@habitAlreadyCompletedStartAgain": {
+    "description": "No description provided for @habitAlreadyCompletedStartAgain."
   }
 }

@@ -353,4 +353,18 @@ class FirestoreHabitsRepository implements HabitsRepository {
     // This feature is primarily for local JSON storage
     return const Success(null);
   }
+
+  @override
+  Future<List<Habit>> getHabits() async {
+    if (userId == null) return [];
+
+    final snapshot = await firestore
+        .collection('habits')
+        .where('userId', isEqualTo: userId)
+        .where('isArchived', isEqualTo: false)
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    return snapshot.docs.map((doc) => HabitModel.fromFirestore(doc)).toList();
+  }
 }

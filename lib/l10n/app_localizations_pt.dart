@@ -47,6 +47,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
+  String get yes => 'Yes';
+
+  @override
+  String get habitAlreadyCompletedStartAgain =>
+      'This habit is already completed. Do you want to start the timer again?';
+
+  @override
   String get delete => 'Excluir';
 
   @override
@@ -190,6 +197,76 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get predefinedHabit_service_description =>
       'Sirva aos outros com amor e compaixão';
+
+  @override
+  String get predefinedHabit_washDishes_name => 'Lavar a Louça';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Mantenha a cozinha limpa e organizada';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Limpar o Quarto';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Arrume e organize seu espaço';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Lavar Roupa';
+
+  @override
+  String get predefinedHabit_doLaundry_description => 'Lave e dobre as roupas';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organizar Espaço';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Desocupe e arrume sua área de estar';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Limpar o Banheiro';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Mantenha um banheiro limpo e higiênico';
+
+  @override
+  String get predefinedHabit_cookMeal_name => 'Cozinhar uma Refeição';
+
+  @override
+  String get predefinedHabit_cookMeal_description =>
+      'Prepare alimentos saudáveis caseiros';
+
+  @override
+  String get predefinedHabit_vacuumFloors_name => 'Aspirar o Chão';
+
+  @override
+  String get predefinedHabit_vacuumFloors_description =>
+      'Mantenha os pisos limpos e sem poeira';
+
+  @override
+  String get predefinedHabit_makeBreakfast_name => 'Fazer o Café da Manhã';
+
+  @override
+  String get predefinedHabit_makeBreakfast_description =>
+      'Comece o dia com uma refeição nutritiva';
+
+  @override
+  String get predefinedHabit_bedMaking_name => 'Arrumar a Cama';
+
+  @override
+  String get predefinedHabit_bedMaking_description =>
+      'Comece seu dia arrumando sua cama';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_name =>
+      'Ajudar com Lição de Casa';
+
+  @override
+  String get predefinedHabit_helpKidsHomework_description =>
+      'Apoie as crianças em seus estudos';
 
   @override
   String get onboardingErrorMessage =>
@@ -1170,4 +1247,29 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get madeWithLove =>
       'Feito com ❤️ por Develop4God\n \nPara a Glória de Deus';
+
+  @override
+  String get faithJourney => 'Faith Journey';
+
+  @override
+  String get faithJourneyDescription =>
+      'Track your progress, earn faith points, and unlock badges!';
+
+  @override
+  String get startTimer => 'Start Timer';
+
+  @override
+  String get timerRunning => 'Timer Running';
+
+  @override
+  String get timeToFocus => 'Time to Focus';
+
+  @override
+  String get focusComplete => 'Focus session complete!';
+
+  @override
+  String get goalReached => 'Goal Reached!';
+
+  @override
+  String get timer => 'Timer';
 }

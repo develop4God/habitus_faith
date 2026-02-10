@@ -176,6 +176,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// Yes button text
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// Confirmation message when user tries to start timer for already completed habit
+  ///
+  /// In en, this message translates to:
+  /// **'This habit is already completed. Do you want to start the timer again?'**
+  String get habitAlreadyCompletedStartAgain;
+
   /// Delete button text
   ///
   /// In en, this message translates to:
@@ -439,6 +451,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Serve others with love and compassion'**
   String get predefinedHabit_service_description;
+
+  /// Name of wash dishes habit
+  ///
+  /// In en, this message translates to:
+  /// **'Wash Dishes'**
+  String get predefinedHabit_washDishes_name;
+
+  /// Description of wash dishes habit
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the kitchen clean and organized'**
+  String get predefinedHabit_washDishes_description;
+
+  /// Name of clean room habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Room'**
+  String get predefinedHabit_cleanRoom_name;
+
+  /// Description of clean room habit
+  ///
+  /// In en, this message translates to:
+  /// **'Tidy up and organize your space'**
+  String get predefinedHabit_cleanRoom_description;
+
+  /// Name of do laundry habit
+  ///
+  /// In en, this message translates to:
+  /// **'Do Laundry'**
+  String get predefinedHabit_doLaundry_name;
+
+  /// Description of do laundry habit
+  ///
+  /// In en, this message translates to:
+  /// **'Wash and fold clothes'**
+  String get predefinedHabit_doLaundry_description;
+
+  /// Name of organize space habit
+  ///
+  /// In en, this message translates to:
+  /// **'Organize Space'**
+  String get predefinedHabit_organizeSpace_name;
+
+  /// Description of organize space habit
+  ///
+  /// In en, this message translates to:
+  /// **'Declutter and arrange your living area'**
+  String get predefinedHabit_organizeSpace_description;
+
+  /// Name of clean bathroom habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Bathroom'**
+  String get predefinedHabit_cleanBathroom_name;
+
+  /// Description of clean bathroom habit
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain a clean and hygienic bathroom'**
+  String get predefinedHabit_cleanBathroom_description;
+
+  /// Name of cook meal habit
+  ///
+  /// In en, this message translates to:
+  /// **'Cook a Meal'**
+  String get predefinedHabit_cookMeal_name;
+
+  /// Description of cook meal habit
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare healthy home-cooked food'**
+  String get predefinedHabit_cookMeal_description;
+
+  /// Name of vacuum floors habit
+  ///
+  /// In en, this message translates to:
+  /// **'Vacuum Floors'**
+  String get predefinedHabit_vacuumFloors_name;
+
+  /// Description of vacuum floors habit
+  ///
+  /// In en, this message translates to:
+  /// **'Keep floors clean and dust-free'**
+  String get predefinedHabit_vacuumFloors_description;
+
+  /// Name of make breakfast habit
+  ///
+  /// In en, this message translates to:
+  /// **'Make Breakfast'**
+  String get predefinedHabit_makeBreakfast_name;
+
+  /// Description of make breakfast habit
+  ///
+  /// In en, this message translates to:
+  /// **'Start the day with a nutritious meal'**
+  String get predefinedHabit_makeBreakfast_description;
+
+  /// Name of bed making habit
+  ///
+  /// In en, this message translates to:
+  /// **'Make the Bed'**
+  String get predefinedHabit_bedMaking_name;
+
+  /// Description of bed making habit
+  ///
+  /// In en, this message translates to:
+  /// **'Start your day by making your bed'**
+  String get predefinedHabit_bedMaking_description;
+
+  /// Name of help kids homework habit
+  ///
+  /// In en, this message translates to:
+  /// **'Help Kids with Homework'**
+  String get predefinedHabit_helpKidsHomework_name;
+
+  /// Description of help kids homework habit
+  ///
+  /// In en, this message translates to:
+  /// **'Support children with their studies'**
+  String get predefinedHabit_helpKidsHomework_description;
 
   /// Error message shown when onboarding fails
   ///
@@ -2209,6 +2341,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Made with ❤️ by Develop4God\n \nFor the Glory of God'**
   String get madeWithLove;
+
+  /// No description provided for @faithJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Faith Journey'**
+  String get faithJourney;
+
+  /// No description provided for @faithJourneyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your progress, earn faith points, and unlock badges!'**
+  String get faithJourneyDescription;
+
+  /// No description provided for @startTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Timer'**
+  String get startTimer;
+
+  /// No description provided for @timerRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Running'**
+  String get timerRunning;
+
+  /// No description provided for @timeToFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to Focus'**
+  String get timeToFocus;
+
+  /// No description provided for @focusComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus session complete!'**
+  String get focusComplete;
+
+  /// No description provided for @goalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Reached!'**
+  String get goalReached;
+
+  /// No description provided for @timer.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get timer;
 }
 
 class _AppLocalizationsDelegate

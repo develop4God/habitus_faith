@@ -96,4 +96,7 @@ abstract class HabitsRepository {
 
   /// Get today's completion record for a habit (including notes)
   CompletionRecord? getTodayCompletionRecord(String habitId);
+
+  /// Fetch all habits for the current user (non-archived)
+  Future<List<Habit>> getHabits();
 }
