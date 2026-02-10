@@ -900,8 +900,8 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                                 ),
                                 const SizedBox(height: 2),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
                                   child: Text(
                                     name,
                                     textAlign: TextAlign.center,
