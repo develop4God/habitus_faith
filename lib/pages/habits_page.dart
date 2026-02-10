@@ -327,7 +327,7 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                       backgroundColor: Colors.orange.shade400,
                       tooltip: 'Girar tareas del hogar',
                       child: const Icon(
-                        Icons.refresh_rounded,
+                        Icons.auto_mode_rounded,
                         color: Colors.white,
                         size: 28,
                       ),
