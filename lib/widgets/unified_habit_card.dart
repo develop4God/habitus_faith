@@ -305,7 +305,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                   const SizedBox(width: 4),
                                   Flexible(
                                     child: _buildStatusBadge(
-                                      isSkipped ? l10n.skippedHabit : l10n.failedHabit,
+                                      isSkipped
+                                          ? l10n.skippedHabit
+                                          : l10n.failedHabit,
                                       isSkipped ? Colors.orange : Colors.red,
                                     ),
                                   ),
@@ -692,8 +694,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                 child: AnimatedBuilder(
                   animation: _timerPulseController,
                   builder: (context, child) {
-                    final pulse =
-                        0.95 + 0.07 * Curves.easeInOut.transform(_timerPulseController.value);
+                    final pulse = 0.95 +
+                        0.07 *
+                            Curves.easeInOut
+                                .transform(_timerPulseController.value);
                     final shadowOpacity =
                         0.15 + 0.25 * _timerPulseController.value;
                     return Transform.scale(
@@ -717,7 +721,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: habitColor.withValues(alpha: shadowOpacity),
+                              color:
+                                  habitColor.withValues(alpha: shadowOpacity),
                               blurRadius: 14,
                               spreadRadius: 2,
                               offset: const Offset(0, 4),
@@ -765,7 +770,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: Colors.grey.shade900,
-                        decoration: isCompleted ? TextDecoration.lineThrough : null,
+                        decoration:
+                            isCompleted ? TextDecoration.lineThrough : null,
                       ),
                     ),
                     const SizedBox(height: 8),

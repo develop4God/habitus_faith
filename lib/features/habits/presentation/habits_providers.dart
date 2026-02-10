@@ -261,6 +261,95 @@ class HabitsNotifier extends AsyncNotifier<void> {
       },
     );
   }
+
+  Future<void> duplicateHabit(String habitId) async {
+    debugPrint('HabitsNotifier.duplicateHabit: start -> $habitId');
+    state = const AsyncLoading();
+
+    final repository = ref.read(habitsRepositoryProvider);
+
+    try {
+      // Use a direct fetch rather than the stream to avoid timing/race issues
+      final habits = await repository.getHabits();
+      debugPrint('HabitsNotifier.duplicateHabit: loaded ${habits.length} habits from repository');
+
+      Habit? habitToDuplicate;
+      for (final h in habits) {
+        if (h.id == habitId) {
+          habitToDuplicate = h;
+          break;
+        }
+      }
+
+      if (habitToDuplicate == null) {
+        debugPrint('HabitsNotifier.duplicateHabit: habit not found -> $habitId');
+        // Nothing to do - keep UI stable
+        state = const AsyncData(null);
+        return;
+      }
+
+      // Create a new habit with the same properties but a new ID
+      final result = await repository.createHabit(
+        name: '${habitToDuplicate.name} (Copy)',
+        category: habitToDuplicate.category,
+        emoji: habitToDuplicate.emoji,
+        colorValue: habitToDuplicate.colorValue,
+        difficulty: habitToDuplicate.difficulty,
+        notificationSettings: habitToDuplicate.notificationSettings,
+        targetMinutes: habitToDuplicate.targetMinutes,
+      );
+
+      result.fold(
+        (failure) {
+          debugPrint('HabitsNotifier.duplicateHabit: failure -> $failure');
+          state = AsyncError(failure, StackTrace.current);
+        },
+        (habit) {
+          debugPrint('HabitsNotifier.duplicateHabit: success -> ${habit.id}');
+          state = const AsyncData(null);
+        },
+      );
+    } catch (e, st) {
+      debugPrint('HabitsNotifier.duplicateHabit: exception -> $e');
+      state = AsyncError(e, st);
+    }
+  }
+
+  /// Duplicate a habit using the provided Habit object directly.
+  /// This is useful to avoid timing/race issues when the in-memory
+  /// stream may not yet reflect the latest storage state.
+  Future<void> duplicateHabitFromData(Habit habitToDuplicate) async {
+    debugPrint('HabitsNotifier.duplicateHabitFromData: start -> ${habitToDuplicate.id}');
+    state = const AsyncLoading();
+
+    final repository = ref.read(habitsRepositoryProvider);
+
+    try {
+      final result = await repository.createHabit(
+        name: '${habitToDuplicate.name} (Copy)',
+        category: habitToDuplicate.category,
+        emoji: habitToDuplicate.emoji,
+        colorValue: habitToDuplicate.colorValue,
+        difficulty: habitToDuplicate.difficulty,
+        notificationSettings: habitToDuplicate.notificationSettings,
+        targetMinutes: habitToDuplicate.targetMinutes,
+      );
+
+      result.fold(
+        (failure) {
+          debugPrint('HabitsNotifier.duplicateHabitFromData: failure -> $failure');
+          state = AsyncError(failure, StackTrace.current);
+        },
+        (habit) {
+          debugPrint('HabitsNotifier.duplicateHabitFromData: success -> ${habit.id}');
+          state = const AsyncData(null);
+        },
+      );
+    } catch (e, st) {
+      debugPrint('HabitsNotifier.duplicateHabitFromData: exception -> $e');
+      state = AsyncError(e, st);
+    }
+  }
 }
 
 final habitsNotifierProvider = AsyncNotifierProvider<HabitsNotifier, void>(() {
