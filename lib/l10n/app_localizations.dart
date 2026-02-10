@@ -452,6 +452,66 @@ abstract class AppLocalizations {
   /// **'Serve others with love and compassion'**
   String get predefinedHabit_service_description;
 
+  /// Name of wash dishes habit
+  ///
+  /// In en, this message translates to:
+  /// **'Wash Dishes'**
+  String get predefinedHabit_washDishes_name;
+
+  /// Description of wash dishes habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean dishes after meals'**
+  String get predefinedHabit_washDishes_description;
+
+  /// Name of clean room habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Room'**
+  String get predefinedHabit_cleanRoom_name;
+
+  /// Description of clean room habit
+  ///
+  /// In en, this message translates to:
+  /// **'Tidy up and sweep or vacuum your room'**
+  String get predefinedHabit_cleanRoom_description;
+
+  /// Name of do laundry habit
+  ///
+  /// In en, this message translates to:
+  /// **'Do Laundry'**
+  String get predefinedHabit_doLaundry_name;
+
+  /// Description of do laundry habit
+  ///
+  /// In en, this message translates to:
+  /// **'Wash, dry and fold clothes'**
+  String get predefinedHabit_doLaundry_description;
+
+  /// Name of organize space habit
+  ///
+  /// In en, this message translates to:
+  /// **'Organize Space'**
+  String get predefinedHabit_organizeSpace_name;
+
+  /// Description of organize space habit
+  ///
+  /// In en, this message translates to:
+  /// **'Declutter and organize a small area'**
+  String get predefinedHabit_organizeSpace_description;
+
+  /// Name of clean bathroom habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Bathroom'**
+  String get predefinedHabit_cleanBathroom_name;
+
+  /// Description of clean bathroom habit
+  ///
+  /// In en, this message translates to:
+  /// **'Clean sink, toilet and shower'**
+  String get predefinedHabit_cleanBathroom_description;
+
   /// Error message shown when onboarding fails
   ///
   /// In en, this message translates to:

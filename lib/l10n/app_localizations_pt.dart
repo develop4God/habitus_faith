@@ -1202,4 +1202,39 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get timer => 'Timer';
+
+  @override
+  String get predefinedHabit_washDishes_name => 'Lavar a louça';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Lave a louça após as refeições';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Limpar o quarto';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Arrumar e varrer ou aspirar o quarto';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Lavar roupas';
+
+  @override
+  String get predefinedHabit_doLaundry_description =>
+      'Lavar, secar e dobrar as roupas';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organizar espaço';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Destralhar e organizar uma pequena área';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Limpar o banheiro';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Limpar pia, vaso sanitário e chuveiro';
 }

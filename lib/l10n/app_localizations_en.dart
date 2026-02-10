@@ -200,6 +200,41 @@ class AppLocalizationsEn extends AppLocalizations {
       'Serve others with love and compassion';
 
   @override
+  String get predefinedHabit_washDishes_name => 'Wash Dishes';
+
+  @override
+  String get predefinedHabit_washDishes_description =>
+      'Clean dishes after meals';
+
+  @override
+  String get predefinedHabit_cleanRoom_name => 'Clean Room';
+
+  @override
+  String get predefinedHabit_cleanRoom_description =>
+      'Tidy up and sweep or vacuum your room';
+
+  @override
+  String get predefinedHabit_doLaundry_name => 'Do Laundry';
+
+  @override
+  String get predefinedHabit_doLaundry_description =>
+      'Wash, dry and fold clothes';
+
+  @override
+  String get predefinedHabit_organizeSpace_name => 'Organize Space';
+
+  @override
+  String get predefinedHabit_organizeSpace_description =>
+      'Declutter and organize a small area';
+
+  @override
+  String get predefinedHabit_cleanBathroom_name => 'Clean Bathroom';
+
+  @override
+  String get predefinedHabit_cleanBathroom_description =>
+      'Clean sink, toilet and shower';
+
+  @override
   String get onboardingErrorMessage =>
       'Failed to save habits. Please try again.';
 
