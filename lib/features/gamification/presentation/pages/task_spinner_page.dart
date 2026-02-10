@@ -18,7 +18,7 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
   bool _isSpinning = false;
 
   Future<void> _spin() async {
-    final pageContext = context; // capture before any await
+    final messenger = ScaffoldMessenger.of(context);
     final userId = ref.read(userIdProvider);
     if (userId == null) return;
 
@@ -41,8 +41,10 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
         _isSpinning = false;
       });
 
-      // Show result dialog using the captured pageContext
-      _showResultDialog(pageContext, result.selectedTask);
+      // Show result dialog - context is safe here after mounted check
+      if (mounted) {
+        _showResultDialog(context, result.selectedTask);
+      }
     } else {
       if (!mounted) return;
 
@@ -50,7 +52,7 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
         _isSpinning = false;
       });
 
-      ScaffoldMessenger.of(pageContext).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(
           content: Text('No active tasks. Add some tasks first!'),
         ),
@@ -58,21 +60,24 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
     }
   }
 
-  void _showResultDialog(BuildContext pageContext, TaskSpinnerItem task) {
+  void _showResultDialog(BuildContext dialogContext, TaskSpinnerItem task) {
     showDialog(
-      context: pageContext,
-      builder: (dialogContext) => AlertDialog(
+      context: dialogContext,
+      builder: (context) => AlertDialog(
         title: Text('${task.emoji ?? '\u{1F3AF}'} ${task.taskName}'),
         content: const Text('Ready to tackle this task?'),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(dialogContext).pop();
+              Navigator.of(context).pop();
             },
             child: const Text('Not Now'),
           ),
           ElevatedButton(
             onPressed: () async {
+              final navigator = Navigator.of(context);
+              final messenger = ScaffoldMessenger.of(context);
+
               final userId = ref.read(userIdProvider);
               if (userId != null) {
                 final service = ref.read(taskSpinnerServiceProvider);
@@ -82,9 +87,9 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
 
               if (!mounted) return;
 
-              // Close the dialog and show a snackbar using the page context.
-              Navigator.of(pageContext).pop();
-              ScaffoldMessenger.of(pageContext).showSnackBar(
+              // Close the dialog and show a snackbar
+              navigator.pop();
+              messenger.showSnackBar(
                 SnackBar(
                   content: Text('${task.taskName} completed! +10 points'),
                   backgroundColor: Colors.green,
@@ -102,10 +107,9 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
     final taskNameController = TextEditingController();
     final emojiController = TextEditingController();
     int priority = 3;
-    final pageContext = context;
 
     showDialog(
-      context: pageContext,
+      context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (dialogContext, setState) => AlertDialog(
           title: const Text('Add Task'),
@@ -159,6 +163,8 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
             ElevatedButton(
               onPressed: () async {
                 if (taskNameController.text.isNotEmpty) {
+                  final navigator = Navigator.of(dialogContext);
+
                   final userId = ref.read(userIdProvider);
                   if (userId != null) {
                     final service = ref.read(taskSpinnerServiceProvider);
@@ -174,7 +180,7 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
                   }
 
                   if (!mounted) return;
-                  Navigator.of(pageContext).pop();
+                  navigator.pop();
                 }
               },
               child: const Text('Add'),
@@ -187,7 +193,6 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final pageContext = context; // capture once for the closures below
     final userId = ref.watch(userIdProvider);
 
     if (userId == null) {
@@ -235,11 +240,13 @@ class _TaskSpinnerPageState extends ConsumerState<TaskSpinnerPage> {
                 TaskSpinnerList(
                   tasks: tasks,
                   onComplete: (task) async {
+                    final messenger = ScaffoldMessenger.of(context);
+
                     final service = ref.read(taskSpinnerServiceProvider);
                     await service.completeTask(userId, task.id);
                     ref.invalidate(spinnerTasksProvider(userId));
                     if (!mounted) return;
-                    ScaffoldMessenger.of(pageContext).showSnackBar(
+                    messenger.showSnackBar(
                       SnackBar(
                         content: Text('${task.taskName} completed!'),
                       ),

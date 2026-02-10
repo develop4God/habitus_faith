@@ -253,7 +253,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,6 +263,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                 Expanded(
                                   child: Text(
                                     widget.habit.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -276,16 +278,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                     ),
                                   ),
                                 ),
-                                if (isSkipped)
-                                  _buildStatusBadge(
-                                    l10n.skippedHabit,
-                                    Colors.orange,
-                                  )
-                                else if (isFailed)
-                                  _buildStatusBadge(
-                                    l10n.failedHabit,
-                                    Colors.red,
+                                if (isSkipped || isFailed) ...[
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: _buildStatusBadge(
+                                      isSkipped ? l10n.skippedHabit : l10n.failedHabit,
+                                      isSkipped ? Colors.orange : Colors.red,
+                                    ),
                                   ),
+                                ],
                               ],
                             ),
                             const SizedBox(height: 4),
@@ -311,7 +312,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                   risk: habit.abandonmentRisk,
                                 ),
                                 if (habit.subtasks.isNotEmpty) ...[
-                                  const SizedBox(width: 12),
+                                  const SizedBox(width: 8),
                                   InkWell(
                                     onTap: () {
                                       setState(
@@ -331,7 +332,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                                         _isExpanded
                                             ? Icons.expand_less
                                             : Icons.expand_more,
-                                        size: 22,
+                                        size: 20,
                                         color: habitColor,
                                       ),
                                     ),
@@ -462,13 +463,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
 
   Widget _buildStatusBadge(String text, MaterialColor color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: color.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: 10,
           color: color.shade900,
@@ -487,12 +490,16 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     Color habitColor,
   ) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
+          constraints: const BoxConstraints(),
+          padding: const EdgeInsets.all(8),
           icon: Icon(
             habit.hasActiveNotification
                 ? Icons.notifications_active
                 : Icons.notifications_none,
+            size: 22,
             color: habit.hasActiveNotification ? Colors.orange : Colors.grey,
           ),
           onPressed: () => _handleNotification(context, ref, l10n, habit),
@@ -501,14 +508,14 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
           onTap: _isCompleting ? null : _handleComplete,
           borderRadius: BorderRadius.circular(8),
           child: Container(
-            width: 40,
-            height: 40,
-            padding: const EdgeInsets.all(4),
+            width: 36,
+            height: 36,
+            padding: const EdgeInsets.all(2),
             child: _isCompleting
                 ? Center(
                     child: SizedBox(
-                      width: 24,
-                      height: 24,
+                      width: 20,
+                      height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(habitColor),
@@ -516,7 +523,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
                     ),
                   )
                 : Transform.scale(
-                    scale: 1.3,
+                    scale: 1.1,
                     child: Checkbox(
                       value: isCompleted,
                       onChanged: (_) => _handleComplete(),
@@ -648,153 +655,161 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
           children: [
-            Column(
-              children: [
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: habitColor.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      habit.emoji ?? '✓',
-                      style: const TextStyle(fontSize: 36),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                AutoSizeText(
-                  habit.name,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  minFontSize: 16,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.grey.shade900,
-                    decoration: isCompleted ? TextDecoration.lineThrough : null,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                AbandonmentRiskIndicator(risk: habit.abandonmentRisk),
-                const SizedBox(height: 16),
-              ],
-            ),
-            Row(
-              children: [
-                _buildModernStatCard(
-                  Icons.local_fire_department,
-                  l10n.currentStreak,
-                  '${habit.currentStreak}',
-                  Colors.orange,
-                ),
-                const SizedBox(width: 8),
-                _buildModernStatCard(
-                  Icons.emoji_events,
-                  l10n.longestStreak,
-                  '${habit.longestStreak}',
-                  Colors.blue,
-                ),
-                const SizedBox(width: 8),
-                _buildModernStatCard(
-                  Icons.check_circle_rounded,
-                  l10n.total,
-                  '${habit.completionHistory.length}',
-                  Colors.green,
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            if (!isCompleted)
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _handleComplete();
-                  },
-                  icon: const Icon(Icons.check_rounded, size: 28),
-                  label: Text(
-                    l10n.completeNow,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: habitColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
-                ),
-              )
-            else
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _handleComplete();
-                  },
-                  icon: const Icon(Icons.undo_rounded),
-                  label: Text(l10n.uncheck),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.grey.shade700,
-                    side: BorderSide(color: Colors.grey.shade300),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: _buildCircularAction(
+                Icons.timer_outlined,
+                l10n.timer,
+                habitColor,
+                () {
+                  Navigator.of(context).pop();
+                  _showTimer(context, habitColor, l10n);
+                },
               ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _buildCircularAction(
-                  Icons.timer_outlined,
-                  l10n.timer,
-                  habitColor,
-                  () {
-                    Navigator.of(context).pop();
-                    _showTimer(context, habitColor, l10n);
-                  },
+                Column(
+                  children: [
+                    Container(
+                      width: 72,
+                      height: 72,
+                      decoration: BoxDecoration(
+                        color: habitColor.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          habit.emoji ?? '✓',
+                          style: const TextStyle(fontSize: 36),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    AutoSizeText(
+                      habit.name,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      minFontSize: 16,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.grey.shade900,
+                        decoration: isCompleted ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    AbandonmentRiskIndicator(risk: habit.abandonmentRisk),
+                    const SizedBox(height: 16),
+                  ],
                 ),
-                _buildCircularAction(
-                  Icons.edit_rounded,
-                  l10n.edit,
-                  Colors.blueGrey.shade600,
-                  () {
-                    Navigator.of(context).pop();
-                    widget.onEdit?.call(habit);
-                  },
+                Row(
+                  children: [
+                    _buildModernStatCard(
+                      Icons.local_fire_department,
+                      l10n.currentStreak,
+                      '${habit.currentStreak}',
+                      Colors.orange,
+                    ),
+                    const SizedBox(width: 8),
+                    _buildModernStatCard(
+                      Icons.emoji_events,
+                      l10n.longestStreak,
+                      '${habit.longestStreak}',
+                      Colors.blue,
+                    ),
+                    const SizedBox(width: 8),
+                    _buildModernStatCard(
+                      Icons.check_circle_rounded,
+                      l10n.total,
+                      '${habit.completionHistory.length}',
+                      Colors.green,
+                    ),
+                  ],
                 ),
-                _buildCircularAction(
-                  Icons.fast_forward_rounded,
-                  l10n.skipHabit,
-                  Colors.orange.shade700,
-                  _handleSkip,
+                const SizedBox(height: 32),
+                if (!isCompleted)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _handleComplete();
+                      },
+                      icon: const Icon(Icons.check_rounded, size: 28),
+                      label: Text(
+                        l10n.completeNow,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: habitColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  )
+                else
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _handleComplete();
+                      },
+                      icon: const Icon(Icons.undo_rounded),
+                      label: Text(l10n.uncheck),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.grey.shade700,
+                        side: BorderSide(color: Colors.grey.shade300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildCircularAction(
+                      Icons.edit_rounded,
+                      l10n.edit,
+                      Colors.blueGrey.shade600,
+                      () {
+                        Navigator.of(context).pop();
+                        widget.onEdit?.call(habit);
+                      },
+                    ),
+                    _buildCircularAction(
+                      Icons.fast_forward_rounded,
+                      l10n.skipHabit,
+                      Colors.orange.shade700,
+                      _handleSkip,
+                    ),
+                    _buildCircularAction(
+                      Icons.delete_outline_rounded,
+                      l10n.delete,
+                      Colors.red.shade400,
+                      _handleDelete,
+                    ),
+                  ],
                 ),
-                _buildCircularAction(
-                  Icons.delete_outline_rounded,
-                  l10n.delete,
-                  Colors.red.shade400,
-                  _handleDelete,
-                ),
+                const SizedBox(height: 24),
               ],
             ),
-            const SizedBox(height: 24),
           ],
         ),
       ),

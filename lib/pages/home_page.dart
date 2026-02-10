@@ -18,6 +18,7 @@ import '../widgets/unified_habit_list.dart';
 import '../widgets/background_image_card.dart';
 import 'edit_habit_dialog.dart';
 import '../features/gamification/presentation/pages/faith_journey_page.dart';
+import '../features/gamification/presentation/pages/task_spinner_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -448,78 +449,192 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 20),
 
-              // New Faith Journey Card Button
+              // Gamification Section Header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const FaithJourneyPage(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha:0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.emoji_events,
+                      color: Colors.purple.shade600,
+                      size: 24,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.circular(12),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Your Faith Journey',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Gamification Cards - Faith Journey & Task Spinner
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    // Faith Journey Card
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const FaithJourneyPage(),
                             ),
-                            child: Icon(
-                              Icons.star_border,
-                              color: Colors.blue.shade600,
-                              size: 28,
+                          );
+                        },
+                        child: Container(
+                          height: 160,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.purple.shade400,
+                                Colors.purple.shade600,
+                              ],
                             ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.purple.shade200.withAlpha(128),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  l10n.faithJourney,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blue.shade800,
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withAlpha(51),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.auto_awesome,
+                                    color: Colors.white,
+                                    size: 28,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  l10n.faithJourneyDescription,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black54,
-                                  ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Faith\nJourney',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      'Track progress →',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white.withAlpha(204),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                          const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.blue,
-                            size: 20,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 12),
+                    // Task Spinner Card
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const TaskSpinnerPage(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 160,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.orange.shade400,
+                                Colors.deepOrange.shade500,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.orange.shade200.withAlpha(128),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withAlpha(51),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.psychology,
+                                    color: Colors.white,
+                                    size: 28,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Task\nSpinner',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      'Spin for task →',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white.withAlpha(204),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
