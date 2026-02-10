@@ -38,23 +38,24 @@ class BadgeRepository {
   /// Save badges
   Future<void> saveBadges(List<Badge> badges) async {
     if (badges.isEmpty) return;
-    
+
     final userId = badges.first.userId;
     final jsonList = badges.map((b) => b.toJson()).toList();
     await _prefs.setString('${_badgesKey}_$userId', json.encode(jsonList));
   }
 
   /// Unlock a specific badge
-  Future<Badge> unlockBadge(String userId, FruitOfSpirit fruit, DateTime timestamp) async {
+  Future<Badge> unlockBadge(
+      String userId, FruitOfSpirit fruit, DateTime timestamp) async {
     final badges = await getBadges(userId);
     final index = badges.indexWhere((b) => b.fruit == fruit);
-    
+
     if (index != -1) {
       badges[index] = badges[index].unlock(timestamp);
       await saveBadges(badges);
       return badges[index];
     }
-    
+
     throw Exception('Badge not found: ${fruit.name}');
   }
 

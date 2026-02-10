@@ -40,14 +40,14 @@ class TaskSpinnerService {
   /// Spin the wheel and select a task
   Future<SpinResult?> spin(String userId) async {
     final activeTasks = await _repository.getActiveTasks(userId);
-    
+
     if (activeTasks.isEmpty) {
       return null; // No tasks to spin
     }
 
     // Use weighted random selection
     final selectedTask = _selectWeightedRandom(activeTasks);
-    
+
     return SpinResult(
       selectedTask: selectedTask,
       spunAt: DateTime.now(),
@@ -58,10 +58,10 @@ class TaskSpinnerService {
   Future<TaskSpinnerItem> completeTask(String userId, String taskId) async {
     final tasks = await _repository.getTasks(userId);
     final task = tasks.firstWhere((t) => t.id == taskId);
-    
+
     final completedTask = task.complete(DateTime.now());
     await _repository.updateTask(completedTask);
-    
+
     return completedTask;
   }
 
@@ -69,10 +69,10 @@ class TaskSpinnerService {
   Future<TaskSpinnerItem> toggleTaskActive(String userId, String taskId) async {
     final tasks = await _repository.getTasks(userId);
     final task = tasks.firstWhere((t) => t.id == taskId);
-    
+
     final updatedTask = task.toggleActive();
     await _repository.updateTask(updatedTask);
-    
+
     return updatedTask;
   }
 
@@ -94,11 +94,12 @@ class TaskSpinnerService {
   /// Select a task using weighted random selection
   TaskSpinnerItem _selectWeightedRandom(List<TaskSpinnerItem> tasks) {
     // Calculate total weight
-    final totalWeight = tasks.fold(0.0, (sum, task) => sum + task.spinnerWeight);
-    
+    final totalWeight =
+        tasks.fold(0.0, (sum, task) => sum + task.spinnerWeight);
+
     // Generate random value
     final randomValue = _random.nextDouble() * totalWeight;
-    
+
     // Select task based on weight
     double currentWeight = 0.0;
     for (final task in tasks) {
@@ -107,7 +108,7 @@ class TaskSpinnerService {
         return task;
       }
     }
-    
+
     // Fallback (should never reach here)
     return tasks.last;
   }
@@ -120,7 +121,7 @@ class TaskSpinnerService {
   }) async {
     final tasks = await _repository.getTasks(userId);
     final task = tasks.firstWhere((t) => t.id == taskId);
-    
+
     final updatedTask = TaskSpinnerItem(
       id: task.id,
       userId: task.userId,
@@ -132,7 +133,7 @@ class TaskSpinnerService {
       timesCompleted: task.timesCompleted,
       isActive: task.isActive,
     );
-    
+
     await _repository.updateTask(updatedTask);
     return updatedTask;
   }

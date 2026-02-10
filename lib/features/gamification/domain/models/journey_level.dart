@@ -79,13 +79,13 @@ class JourneyLevel {
     if (currentStageIndex == JourneyStage.values.length - 1) {
       return 1.0; // At max level
     }
-    
+
     final nextStage = JourneyStage.values[currentStageIndex + 1];
     final currentRequired = currentStage.requiredPoints;
     final nextRequired = nextStage.requiredPoints;
     final pointsInCurrentLevel = totalPoints - currentRequired;
     final pointsNeededForNext = nextRequired - currentRequired;
-    
+
     return (pointsInCurrentLevel / pointsNeededForNext).clamp(0.0, 1.0);
   }
 
@@ -109,7 +109,7 @@ class JourneyLevel {
   JourneyLevel addPoints(int points, DateTime timestamp) {
     final newTotal = totalPoints + points;
     final newStage = _calculateStage(newTotal);
-    
+
     return JourneyLevel(
       userId: userId,
       currentStage: newStage,

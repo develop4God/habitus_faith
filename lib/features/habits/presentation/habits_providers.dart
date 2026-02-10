@@ -70,7 +70,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
           'HabitsNotifier.completeHabit: éxito, habit.completedToday=${habit.completedToday}',
         );
         state = const AsyncData(null);
-        
+
         // Award faith points for completing the habit
         final userId = ref.read(userIdProvider);
         if (userId != null) {
@@ -84,13 +84,13 @@ class HabitsNotifier extends AsyncNotifier<void> {
               isSpiritual: habit.category == HabitCategory.spiritual,
               currentStreak: habit.currentStreak,
             );
-            
+
             debugPrint(
               'Faith points awarded: ${awardResult.pointsAwarded}, '
               'Total: ${awardResult.newTotalPoints}, '
               'Stage: ${awardResult.currentStage.displayName}',
             );
-            
+
             // Check and unlock badges
             if (awardResult.leveledUp) {
               final badgeService = ref.read(badgeServiceProvider);

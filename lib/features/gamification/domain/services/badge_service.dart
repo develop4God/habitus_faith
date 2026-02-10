@@ -17,14 +17,15 @@ class BadgeService {
   Future<List<Badge>> checkAndUnlockBadges(String userId) async {
     final badges = await _badgeRepo.getBadges(userId);
     final level = await _levelRepo.getLevel(userId);
-    
+
     if (level == null) return [];
 
     final newlyUnlocked = <Badge>[];
     final now = DateTime.now();
 
     for (final badge in badges) {
-      if (!badge.isUnlocked && level.totalPoints >= badge.fruit.requiredPoints) {
+      if (!badge.isUnlocked &&
+          level.totalPoints >= badge.fruit.requiredPoints) {
         final unlockedBadge = await _badgeRepo.unlockBadge(
           userId,
           badge.fruit,
@@ -75,14 +76,13 @@ class BadgeService {
     }
 
     // Find the badge with lowest required points
-    lockedBadges.sort((a, b) => 
-      a.fruit.requiredPoints.compareTo(b.fruit.requiredPoints)
-    );
-    
+    lockedBadges.sort(
+        (a, b) => a.fruit.requiredPoints.compareTo(b.fruit.requiredPoints));
+
     final nextBadge = lockedBadges.first;
     final pointsNeeded = nextBadge.fruit.requiredPoints - level.totalPoints;
-    final progress = (level.totalPoints / nextBadge.fruit.requiredPoints)
-        .clamp(0.0, 1.0);
+    final progress =
+        (level.totalPoints / nextBadge.fruit.requiredPoints).clamp(0.0, 1.0);
 
     return BadgeProgress(
       nextBadge: nextBadge,

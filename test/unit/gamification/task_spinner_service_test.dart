@@ -156,7 +156,8 @@ void main() {
       expect(tasks.length, 0);
     });
 
-    test('updateTaskPriority changes priority and clamps to valid range', () async {
+    test('updateTaskPriority changes priority and clamps to valid range',
+        () async {
       // Arrange
       final task = await service.addTask(
         userId: testUserId,
