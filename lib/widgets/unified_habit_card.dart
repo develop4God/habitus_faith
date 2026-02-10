@@ -131,7 +131,53 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
   }
 
   void _showTimer(
-      BuildContext context, Color habitColor, AppLocalizations l10n) {
+      BuildContext context, Color habitColor, AppLocalizations l10n) async {
+    debugPrint('🕐 _showTimer called, habit: ${widget.habit.name}, completed: ${widget.habit.completedToday}');
+
+    // Check if habit is already completed
+    if (widget.habit.completedToday) {
+      debugPrint('✅ Habit already completed, showing confirmation dialog');
+      final shouldContinue = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10n.habitCompleted),
+          content: Text(l10n.habitAlreadyCompletedStartAgain),
+          actions: [
+            TextButton(
+              onPressed: () {
+                debugPrint('❌ User tapped Cancel on dialog');
+                Navigator.of(ctx).pop(false);
+              },
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                debugPrint('✅ User tapped Yes on dialog');
+                Navigator.of(ctx).pop(true);
+              },
+              style: TextButton.styleFrom(foregroundColor: habitColor),
+              child: Text(l10n.yes),
+            ),
+          ],
+        ),
+      );
+
+      debugPrint('🎯 Dialog result: $shouldContinue');
+
+      if (shouldContinue != true) {
+        debugPrint('🚫 User cancelled, not opening timer');
+        return;
+      }
+
+      debugPrint('🎉 User confirmed, proceeding to open timer');
+    }
+
+    if (!context.mounted) {
+      debugPrint('⚠️ Context not mounted, cannot show timer');
+      return;
+    }
+
+    debugPrint('🚀 Opening timer modal...');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -139,19 +185,32 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
-      builder: (ctx) => TaskTimer(
-        habitName: widget.habit.name,
-        initialSeconds: widget.habit.targetMinutes * 60,
-        activeColor: habitColor,
-        onCompleted: () {
-          _handleComplete();
-          GlobalSnackbar.showSuccess(l10n.focusComplete);
-        },
-        onFinish: () {
-          Navigator.pop(ctx);
-        },
-      ),
+      builder: (ctx) {
+        debugPrint('🎨 Timer modal builder called');
+        return TaskTimer(
+          habitName: widget.habit.name,
+          initialSeconds: widget.habit.targetMinutes * 60,
+          activeColor: habitColor,
+          onCompleted: () {
+            debugPrint('⏰ Timer completed for habit: ${widget.habit.name}');
+            // If habit was already completed, just show success message
+            // Don't toggle completion status
+            if (!widget.habit.completedToday) {
+              debugPrint('✨ Marking habit as complete');
+              _handleComplete();
+            } else {
+              debugPrint('ℹ️ Habit already completed, skipping toggle');
+            }
+            GlobalSnackbar.showSuccess(l10n.focusComplete);
+          },
+          onFinish: () {
+            debugPrint('🏁 Timer finished/closed');
+            Navigator.pop(ctx);
+          },
+        );
+      },
     );
+    debugPrint('✅ Timer modal opened successfully');
   }
 
   @override
@@ -651,19 +710,48 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard> {
               top: 0,
               right: 0,
               child: InkWell(
-                onTap: () {
+                onTap: () async {
+                  debugPrint('⏱️ Timer button tapped in modal');
                   Navigator.of(context).pop();
-                  _showTimer(context, habitColor, l10n);
+                  debugPrint('📱 Modal closed, waiting for animation...');
+                  // Wait for modal to close
+                  await Future.delayed(const Duration(milliseconds: 300));
+                  debugPrint('🔍 Checking if widget is still mounted...');
+                  if (!mounted) {
+                    debugPrint('⚠️ Widget not mounted, cannot show timer');
+                    return;
+                  }
+                  debugPrint('✅ Widget mounted, calling _showTimer');
+                  // Use the widget's context which is still valid
+                  if (!context.mounted) {
+                    debugPrint('⚠️ Context not mounted, trying widget context');
+                  }
+                  _showTimer(this.context, habitColor, l10n);
                 },
                 borderRadius: BorderRadius.circular(30),
                 child: Container(
-                  width: 48,
-                  height: 48,
+                  width: 64,
+                  height: 64,
                   decoration: BoxDecoration(
-                    color: habitColor.withValues(alpha: 0.08),
+                    color: habitColor.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
+                    border: Border.all(
+                      color: habitColor.withValues(alpha: 0.3),
+                      width: 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: habitColor.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  child: Icon(Icons.timer_outlined, color: habitColor, size: 24),
+                  child: Icon(
+                    Icons.timer_outlined,
+                    color: habitColor,
+                    size: 32,
+                  ),
                 ),
               ),
             ),

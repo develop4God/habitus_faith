@@ -11,6 +11,8 @@
   ],
 
   "fr": [
+    "yes",
+    "habitAlreadyCompletedStartAgain",
     "faithJourney",
     "faithJourneyDescription",
     "startTimer",
@@ -22,6 +24,8 @@
   ],
 
   "pt": [
+    "yes",
+    "habitAlreadyCompletedStartAgain",
     "faithJourney",
     "faithJourneyDescription",
     "startTimer",
@@ -33,6 +37,8 @@
   ],
 
   "zh": [
+    "yes",
+    "habitAlreadyCompletedStartAgain",
     "faithJourney",
     "faithJourneyDescription",
     "startTimer",

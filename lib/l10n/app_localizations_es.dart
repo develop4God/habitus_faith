@@ -47,6 +47,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
+  String get yes => 'Sí';
+
+  @override
+  String get habitAlreadyCompletedStartAgain =>
+      'Este hábito ya está completado. ¿Quieres iniciar el temporizador de nuevo?';
+
+  @override
   String get delete => 'Eliminar';
 
   @override

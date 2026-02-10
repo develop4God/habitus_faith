@@ -54,6 +54,14 @@
   "@cancel": {
     "description": "Cancel button text"
   },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes button text"
+  },
+  "habitAlreadyCompletedStartAgain": "This habit is already completed. Do you want to start the timer again?",
+  "@habitAlreadyCompletedStartAgain": {
+    "description": "Confirmation message when user tries to start timer for already completed habit"
+  },
   "delete": "Delete",
   "@delete": {
     "description": "Delete button text"

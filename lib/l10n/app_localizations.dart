@@ -176,6 +176,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// Yes button text
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// Confirmation message when user tries to start timer for already completed habit
+  ///
+  /// In en, this message translates to:
+  /// **'This habit is already completed. Do you want to start the timer again?'**
+  String get habitAlreadyCompletedStartAgain;
+
   /// Delete button text
   ///
   /// In en, this message translates to:

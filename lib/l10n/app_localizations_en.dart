@@ -47,6 +47,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get yes => 'Yes';
+
+  @override
+  String get habitAlreadyCompletedStartAgain =>
+      'This habit is already completed. Do you want to start the timer again?';
+
+  @override
   String get delete => 'Delete';
 
   @override

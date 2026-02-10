@@ -47,6 +47,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancel => '取消';
 
   @override
+  String get yes => 'Yes';
+
+  @override
+  String get habitAlreadyCompletedStartAgain =>
+      'This habit is already completed. Do you want to start the timer again?';
+
+  @override
   String get delete => '删除';
 
   @override

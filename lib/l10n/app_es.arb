@@ -54,6 +54,14 @@
   "@cancel": {
     "description": "Cancel button text"
   },
+  "yes": "Sí",
+  "@yes": {
+    "description": "Yes button text"
+  },
+  "habitAlreadyCompletedStartAgain": "Este hábito ya está completado. ¿Quieres iniciar el temporizador de nuevo?",
+  "@habitAlreadyCompletedStartAgain": {
+    "description": "Confirmation message when user tries to start timer for already completed habit"
+  },
   "delete": "Eliminar",
   "@delete": {
     "description": "Delete button text"
