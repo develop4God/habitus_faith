@@ -43,7 +43,11 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
   }
 
   void _startTimer() {
+    // If we're at or past goal, but target is set, reset if restarting?
+    // Actually, just keep counting up.
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
       setState(() {
         _seconds++;
         if (widget.targetSeconds > 0 && _seconds >= widget.targetSeconds) {
@@ -62,6 +66,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   void _pauseTimer() {
     _timer?.cancel();
+    _timer = null; // Ensure it's cleared
     setState(() {
       _isRunning = false;
     });
@@ -71,6 +76,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
   void _resetTimer() {
     HapticFeedback.mediumImpact();
     _timer?.cancel();
+    _timer = null;
     setState(() {
       _seconds = 0;
       _isRunning = false;
@@ -87,9 +93,10 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    final progress = widget.targetSeconds > 0 
-        ? (_seconds / widget.targetSeconds).clamp(0.0, 1.0) 
-        : 0.0;
+    // If targetSeconds is 0 or less, we don't have a goal progress
+    final double? progressValue = (widget.targetSeconds > 0)
+        ? (_seconds / widget.targetSeconds).clamp(0.0, 1.0)
+        : null;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -101,7 +108,7 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
               width: 200,
               height: 200,
               child: CircularProgressIndicator(
-                value: progress > 0 ? progress : null, // Indeterminate if no target
+                value: progressValue,
                 strokeWidth: 8,
                 backgroundColor: widget.activeColor.withValues(alpha: 0.1),
                 valueColor: AlwaysStoppedAnimation<Color>(widget.activeColor),
@@ -172,7 +179,9 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
             const SizedBox(width: 24),
             _ActionButton(
               icon: Icons.stop_rounded,
-              onPressed: _pauseTimer,
+              onPressed: () {
+                _resetTimer(); // Stop now also acts as a full reset/stop
+              },
               color: Colors.grey.shade400,
             ),
           ],
