@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/providers/shared_preferences_provider.dart';
+import '../../habits/data/storage/storage_providers.dart';
 import '../data/faith_points_repository.dart';
 import '../data/journey_level_repository.dart';
 import '../data/badge_repository.dart';
