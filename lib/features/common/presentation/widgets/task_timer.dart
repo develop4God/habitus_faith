@@ -239,17 +239,17 @@ class _TaskTimerState extends State<TaskTimer> with SingleTickerProviderStateMix
             Text(
               _formatTime(_secondsRemaining),
               style: TextStyle(
-                fontSize: 84,
-                fontWeight: FontWeight.w200,
+                fontSize: 64,
+                fontWeight: FontWeight.w300,
                 fontFamily: 'monospace',
                 color: Colors.grey.shade900,
-                letterSpacing: -4,
-                height: 0.9,
+                letterSpacing: -2,
+                height: 1.0,
               ),
             ),
             SizedBox(
-              height: 110,
-              width: 110,
+              height: 90,
+              width: 90,
               child: Lottie.asset(
                 'assets/lottie/sand_hourglass_pink.json',
                 animate: _isRunning,
