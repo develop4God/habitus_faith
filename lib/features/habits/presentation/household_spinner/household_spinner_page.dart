@@ -51,7 +51,12 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
-    )..repeat(reverse: true);
+    );
+    
+    // Only start pulse animation if not in test mode
+    if (!_isInTest) {
+      _pulseController.repeat(reverse: true);
+    }
   }
 
   @override
