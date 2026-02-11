@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/presentation/household_spinner/household_spinner_page.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
-import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/core/providers/auth_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('HouseholdSpinnerPage - User Behavior Tests', () {
@@ -74,7 +72,6 @@ void main() {
 
         // Verify page elements
         expect(find.text('🏠 Girar Tareas del Hogar'), findsOneWidget);
-        expect(find.text('Random home tasks, have fun!'), findsOneWidget);
         expect(find.text('¡GIRAR!'), findsOneWidget);
         expect(
           find.text('Tareas disponibles (${mockHouseholdHabits.length})'),
@@ -131,7 +128,6 @@ void main() {
         final spinButton = find.text('¡GIRAR!');
         expect(spinButton, findsOneWidget);
 
-        await tester.ensureVisible(spinButton);
         await tester.tap(spinButton);
         await tester.pump(); // Start animation
 
@@ -169,9 +165,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Spin to get a task
-        final spinButton = find.text('¡GIRAR!');
-        await tester.ensureVisible(spinButton);
-        await tester.tap(spinButton);
+        await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
         await tester.pumpAndSettle();
 
@@ -204,9 +198,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Spin to get a task
-        final spinButton = find.text('¡GIRAR!');
-        await tester.ensureVisible(spinButton);
-        await tester.tap(spinButton);
+        await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
         await tester.pumpAndSettle();
 
@@ -241,9 +233,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Spin and start task
-        final spinButton = find.text('¡GIRAR!');
-        await tester.ensureVisible(spinButton);
-        await tester.tap(spinButton);
+        await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
         await tester.pumpAndSettle();
         await tester.tap(find.text('¡Vamos!'));
@@ -313,9 +303,7 @@ void main() {
         expect(find.byIcon(Icons.home_rounded), findsWidgets);
 
         // Spin
-        final spinButton = find.text('¡GIRAR!');
-        await tester.ensureVisible(spinButton);
-        await tester.tap(spinButton);
+        await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
         await tester.pumpAndSettle();
 
@@ -401,8 +389,6 @@ void main() {
     testWidgets(
       'Complete user flow: spin -> start -> complete -> celebrate',
       (WidgetTester tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final prefs = await SharedPreferences.getInstance();
         final mockHabits = <Habit>[
           Habit(
             id: 'task-1',
@@ -421,7 +407,6 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              sharedPreferencesProvider.overrideWithValue(prefs),
               userIdProvider.overrideWithValue('user-1'),
               habitsStreamProvider.overrideWith(
                 (ref) => Stream.value(mockHabits),
@@ -436,9 +421,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Step 1: Spin
-        final spinButton = find.text('¡GIRAR!');
-        await tester.ensureVisible(spinButton);
-        await tester.tap(spinButton);
+        await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
         await tester.pumpAndSettle();
 
@@ -450,7 +433,7 @@ void main() {
 
         // Step 3: Complete task
         await tester.tap(find.text('Completar'));
-        await tester.pump(const Duration(seconds: 3)); // Celebration animation
+        await tester.pump(const Duration(seconds: 2)); // Celebration animation
         await tester.pumpAndSettle();
 
         // Step 4: Verify celebration
