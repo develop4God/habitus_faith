@@ -8,11 +8,15 @@ import 'package:habitus_faith/features/habits/presentation/household_spinner/hou
 
 void main() {
   testWidgets('Household spinner page screenshot', (tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(800, 1400);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      final view = TestWidgetsFlutterBinding.ensureInitialized()
+          .platformDispatcher
+          .views
+          .first;
+      view.resetPhysicalSize();
+      view.resetDevicePixelRatio();
     });
 
     final mockHouseholdHabits = [
