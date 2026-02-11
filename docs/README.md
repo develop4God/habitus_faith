@@ -2,6 +2,16 @@
 
 Welcome to the Habitus Faith documentation! This guide will help you navigate through all available documentation organized by category.
 
+## 📋 Critical Reports
+
+### Technical Due Diligence
+- **[Executive Summary](../EXECUTIVE_SUMMARY_DUE_DILIGENCE.md)** - 2-page overview for stakeholders (Grade: B+)
+- **[Full Technical Report](../TECHNICAL_DUE_DILIGENCE_REPORT.md)** - Comprehensive 37-page analysis
+
+These reports provide a complete assessment of the codebase for enterprise scaling and acquisition scenarios.
+
+---
+
 ## 📑 Table of Contents
 
 - [Quick Start](#quick-start)
