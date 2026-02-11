@@ -60,17 +60,11 @@ void main() {
 
     test('all dependent providers are properly typed', () {
       // Verify all notification-related providers have correct types
-      final providerTypes = {
-        'notificationServiceProvider': notificationServiceProvider is Provider<NotificationService>,
-        'notificationInitProvider': notificationInitProvider is FutureProvider<void>,
-        'notificationsEnabledProvider': notificationsEnabledProvider is FutureProvider<bool>,
-        'notificationTimeProvider': notificationTimeProvider is FutureProvider<String>,
-        'habitNotificationsSchedulerProvider': habitNotificationsSchedulerProvider is FutureProvider<void>,
-      };
-
-      // All should be properly typed
-      expect(providerTypes.values.every((isCorrectType) => isCorrectType), isTrue,
-          reason: 'All providers should have correct types: $providerTypes');
+      expect(notificationServiceProvider, isA<Provider<NotificationService>>());
+      expect(notificationInitProvider, isA<FutureProvider<void>>());
+      expect(notificationsEnabledProvider, isA<FutureProvider<bool>>());
+      expect(notificationTimeProvider, isA<FutureProvider<String>>());
+      expect(habitNotificationsSchedulerProvider, isA<FutureProvider<void>>());
     });
   });
 
@@ -104,4 +98,3 @@ void main() {
     });
   });
 }
-
