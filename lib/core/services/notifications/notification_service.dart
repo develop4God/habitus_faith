@@ -59,12 +59,21 @@ class NotificationService {
   Future<void> updateLastLogin() async {
     final User? user = _auth.currentUser;
     if (user != null) {
+      developer.log(
+        '📅 NotificationService: Updating lastLogin timestamp for user ${user.uid}...',
+        name: 'NotificationService',
+      );
       final userDocRef = _firestore.collection('users').doc(user.uid);
       await userDocRef.set({
         'lastLogin': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       developer.log(
-        'NotificationService: lastLogin updated for user ${user.uid}',
+        '✅ NotificationService: lastLogin timestamp updated successfully for user ${user.uid}',
+        name: 'NotificationService',
+      );
+    } else {
+      developer.log(
+        '⚠️ NotificationService: Cannot update lastLogin - no authenticated user',
         name: 'NotificationService',
       );
     }
@@ -109,19 +118,38 @@ class NotificationService {
       _auth.authStateChanges().listen((user) async {
         if (user != null) {
           developer.log(
-            'NotificationService: Authenticated user detected: ${user.uid}',
+            '🔐 NotificationService: Authenticated user detected: ${user.uid}',
+            name: 'NotificationService',
+          );
+
+          // Update lastLogin when user is authenticated (on app start)
+          developer.log(
+            '📝 NotificationService: Updating lastLogin for user ${user.uid}...',
+            name: 'NotificationService',
+          );
+          await updateLastLogin();
+          developer.log(
+            '✅ NotificationService: lastLogin updated successfully',
             name: 'NotificationService',
           );
 
           // Initialize FCM and manage token only if there's a user
+          developer.log(
+            '🔔 NotificationService: Initializing FCM...',
+            name: 'NotificationService',
+          );
           await _initializeFCM();
+          developer.log(
+            '✅ NotificationService: FCM initialization complete',
+            name: 'NotificationService',
+          );
 
           // Handle initial message if app was opened from a notification
           final RemoteMessage? initialMessage =
               await _firebaseMessaging.getInitialMessage();
           if (initialMessage != null) {
             developer.log(
-              'NotificationService: App opened from initial notification: ${initialMessage.messageId}',
+              '📩 NotificationService: App opened from initial notification: ${initialMessage.messageId}',
               name: 'NotificationService',
             );
             _handleMessage(initialMessage);
@@ -131,6 +159,11 @@ class NotificationService {
           final userId = user.uid;
           final currentDeviceTimezone =
               await FlutterTimezone.getLocalTimezone();
+
+          developer.log(
+            '⚙️ NotificationService: Loading/saving Firestore settings for user $userId, timezone: $currentDeviceTimezone',
+            name: 'NotificationService',
+          );
 
           try {
             final settingsDoc = await _firestore
@@ -151,22 +184,33 @@ class NotificationService {
                 ? (settingsDoc.data()?['userTimezone'] ?? currentDeviceTimezone)
                 : currentDeviceTimezone;
 
+            developer.log(
+              '💾 NotificationService: Saving settings - Enabled: $initialNotificationsEnabled, Time: $initialNotificationTime, Timezone: $initialUserTimezone',
+              name: 'NotificationService',
+            );
+
             await _saveNotificationSettingsToFirestore(
               userId,
               initialNotificationsEnabled,
               initialNotificationTime,
               initialUserTimezone,
             );
+
+            developer.log(
+              '✅ NotificationService: Firestore settings saved successfully',
+              name: 'NotificationService',
+            );
           } catch (e) {
             developer.log(
-              'NotificationService: Failed to read/save Firestore settings (using defaults): $e',
+              '⚠️ NotificationService: Failed to read/save Firestore settings (using defaults): $e',
               name: 'NotificationService',
+              error: e,
             );
             // Continue with default settings if Firestore access fails
           }
         } else {
           developer.log(
-            'NotificationService: No authenticated user.',
+            '🚫 NotificationService: No authenticated user.',
             name: 'NotificationService',
           );
         }
@@ -316,13 +360,18 @@ class NotificationService {
       final User? user = _auth.currentUser;
       if (user == null) {
         developer.log(
-          'NotificationService: User not authenticated, cannot save FCM token.',
+          '⚠️ NotificationService: User not authenticated, cannot save FCM token.',
           name: 'NotificationService',
         );
         return;
       }
 
-      // Esperar propagación del token de auth
+      developer.log(
+        '🔑 NotificationService: Saving FCM token for user ${user.uid}: ${token.substring(0, 20)}...',
+        name: 'NotificationService',
+      );
+
+      // Wait for auth token propagation
       await Future.delayed(const Duration(milliseconds: 500));
 
       final userDocRef = _firestore.collection('users').doc(user.uid);
@@ -334,6 +383,11 @@ class NotificationService {
         'createdAt': FieldValue.serverTimestamp(),
         'platform': defaultTargetPlatform.toString(),
       }, SetOptions(merge: true));
+
+      developer.log(
+        '✅ NotificationService: FCM token saved to Firestore successfully',
+        name: 'NotificationService',
+      );
 
       developer.log(
         'NotificationService: FCM token saved to Firestore for user ${user.uid}',
