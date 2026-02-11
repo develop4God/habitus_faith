@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
+import '../features/habits/presentation/pets_providers.dart';
 
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
@@ -448,6 +449,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
               const SizedBox(height: 20),
 
+              // Pets Section
+              _buildPetsSection(),
+
+              const SizedBox(height: 20),
+
               // Gamification Section Header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -619,6 +625,91 @@ class _HomePageState extends ConsumerState<HomePage> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,
+    );
+  }
+
+  Widget _buildPetsSection() {
+    final petsAsync = ref.watch(petsNotifierProvider);
+    
+    return petsAsync.when(
+      data: (pets) {
+        if (pets.isEmpty) return const SizedBox.shrink();
+        
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.pets,
+                    color: Colors.pink.shade600,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Mis Mascotas',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: pets.length,
+                  itemBuilder: (context, index) {
+                    final pet = pets[index];
+                    return Container(
+                      width: 100,
+                      margin: const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.pink.shade50, Colors.purple.shade50],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.pink.shade200),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            pet.emoji,
+                            style: const TextStyle(fontSize: 36),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            pet.name,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey.shade800,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

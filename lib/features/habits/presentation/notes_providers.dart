@@ -71,7 +71,7 @@ class JsonGeneralNotesRepository {
 
   Stream<List<GeneralNote>> watchNotes() => _controller.stream;
 
-  Future<void> addNote(String content) async {
+  Future<void> addNote(String content, {String? petId}) async {
     final list = _load();
     final newNote = GeneralNote(
       id: const Uuid().v4(),
@@ -79,6 +79,7 @@ class JsonGeneralNotesRepository {
       content: content,
       date: DateTime.now(),
       createdAt: DateTime.now(),
+      petId: petId,
     );
     list.add(newNote);
     await _save(list);

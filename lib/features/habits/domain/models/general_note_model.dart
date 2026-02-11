@@ -4,6 +4,7 @@ class GeneralNote {
   final String content;
   final DateTime date;
   final DateTime createdAt;
+  final String? petId;
 
   const GeneralNote({
     required this.id,
@@ -11,6 +12,7 @@ class GeneralNote {
     required this.content,
     required this.date,
     required this.createdAt,
+    this.petId,
   });
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,7 @@ class GeneralNote {
       'content': content,
       'date': date.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
+      if (petId != null) 'petId': petId,
     };
   }
 
@@ -30,6 +33,7 @@ class GeneralNote {
       content: json['content'] as String,
       date: DateTime.parse(json['date'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
+      petId: json['petId'] as String?,
     );
   }
 
