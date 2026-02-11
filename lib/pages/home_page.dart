@@ -630,11 +630,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildPetsSection() {
     final petsAsync = ref.watch(petsNotifierProvider);
-    
+
     return petsAsync.when(
       data: (pets) {
         if (pets.isEmpty) return const SizedBox.shrink();
-        
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
