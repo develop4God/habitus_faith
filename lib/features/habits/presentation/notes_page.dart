@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'notes_providers.dart';
 import 'pets_providers.dart';
 import '../domain/models/general_note_model.dart';
+import '../domain/models/pet_model.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -462,8 +463,12 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     
     return petsAsync.when(
       data: (pets) {
-        final pet = pets.where((p) => p.id == petId).firstOrNull;
-        if (pet == null) return const SizedBox.shrink();
+        Pet? pet;
+        try {
+          pet = pets.firstWhere((p) => p.id == petId);
+        } catch (e) {
+          return const SizedBox.shrink();
+        }
         
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
