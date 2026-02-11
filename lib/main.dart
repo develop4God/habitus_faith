@@ -1,17 +1,13 @@
 import 'dart:async' show unawaited;
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'pages/landing_page.dart';
 import 'core/config/env_config.dart';
@@ -35,61 +31,38 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
+  // Performance tracking
+  final startTime = DateTime.now();
+
   WidgetsFlutterBinding.ensureInitialized();
 
-  debugPrint('Directorio de trabajo actual: ${Directory.current.path}');
+  debugPrint('🚀 [Startup] App initialization started');
 
-  // Manejo de error para dotenv con ruta relativa
-  try {
-    await dotenv.load(fileName: ".env");
-    debugPrint('Archivo .env cargado correctamente desde ruta relativa');
-  } catch (e) {
-    debugPrint(
-      'Advertencia: No se pudo cargar el archivo .env en la raíz del proyecto. Error: ${e.runtimeType} - ${e.toString()}',
-    );
-  }
+  // PHASE 1: Load critical resources in parallel
+  final results = await Future.wait([
+    _loadDotenv(),
+    SharedPreferences.getInstance(),
+    EnvConfig.load(),
+  ]);
 
-  // Load environment configuration before Firebase
-  await EnvConfig.load();
+  final prefs = results[1] as SharedPreferences;
 
-  // Initialize Firebase (handle case where native code already initialized it)
-  try {
-    if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      debugPrint('Firebase initialized successfully');
-    } else {
-      debugPrint('Firebase already initialized (${Firebase.apps.length} apps)');
-    }
-  } catch (e) {
-    // Handle the case where Firebase was initialized by native code
-    // but Dart doesn't see it yet
-    if (e.toString().contains('duplicate-app')) {
-      debugPrint('Firebase already initialized by native code, continuing...');
-    } else {
-      debugPrint('Firebase initialization error: $e');
-      rethrow;
-    }
-  }
-
-  // Initialize core services for synchronous overrides
-  final prefs = await SharedPreferences.getInstance();
+  // PHASE 2: Initialize core services synchronously (required before runApp)
   final storageService = JsonStorageService(prefs);
   const userId = 'local_user';
-  final firestore = FirebaseFirestore.instance;
+
+  // Create repository - Firestore will be injected later via provider
   final habitsRepository = JsonHabitsRepository(
     storage: storageService,
     userId: userId,
     idGenerator: () => DateTime.now().microsecondsSinceEpoch.toString(),
-    firestore: firestore,
+    firestore: null, // Will be set by provider when Firebase initializes
   );
 
-  // Non-blocking ML model update check
-  unawaited(ModelUpdater().checkAndUpdateModel());
+  final initTime = DateTime.now().difference(startTime).inMilliseconds;
+  debugPrint('✅ [Startup] Critical init complete in ${initTime}ms');
 
-  // Only for testing update logic: Upgrader.clearSavedSettings();
-
+  // PHASE 3: Start the app immediately
   runApp(
     ProviderScope(
       overrides: [
@@ -100,6 +73,46 @@ void main() async {
       child: const MyApp(),
     ),
   );
+
+  // PHASE 4: Schedule deferred initialization after first frame
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final totalTime = DateTime.now().difference(startTime).inMilliseconds;
+    debugPrint('🎉 [Startup] First frame rendered in ${totalTime}ms');
+
+    // Defer non-critical operations
+    _scheduleDeferredInitialization();
+  });
+}
+
+/// Load .env file with error handling
+Future<void> _loadDotenv() async {
+  try {
+    await dotenv.load(fileName: ".env");
+    debugPrint('📄 [Config] .env loaded');
+  } catch (e) {
+    debugPrint('⚠️ [Config] .env not found (optional)');
+  }
+}
+
+/// Schedule deferred initialization for non-critical features
+void _scheduleDeferredInitialization() {
+  // Use microtask to run after current frame but before next frame
+  Future.microtask(() async {
+    debugPrint('🔧 [Deferred] Starting background tasks');
+
+    // Wait a bit to let UI settle
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    // ML model update check (very low priority)
+    unawaited(
+      ModelUpdater().checkAndUpdateModel().catchError((error) {
+        debugPrint('⚠️ [ML] Model update failed: $error');
+        return null;
+      }),
+    );
+
+    debugPrint('✅ [Deferred] Background tasks scheduled');
+  });
 }
 
 class MyApp extends ConsumerWidget {
