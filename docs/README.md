@@ -4,6 +4,7 @@ Welcome to the Habitus Faith documentation! This guide will help you navigate th
 
 ## 📑 Table of Contents
 
+- [🏢 Technical Due Diligence](#-technical-due-diligence)
 - [Quick Start](#quick-start)
 - [Features](#features)
 - [Implementation](#implementation)
@@ -11,6 +12,26 @@ Welcome to the Habitus Faith documentation! This guide will help you navigate th
 - [Architecture](#architecture)
 - [Testing](#testing)
 - [Reports](#reports)
+
+---
+
+## 🏢 Technical Due Diligence
+
+Comprehensive enterprise readiness and scalability assessment:
+
+- **[📊 Quick Reference Card](DUE_DILIGENCE_QUICK_REF.md)** - One-page summary with key metrics and scores
+- **[📋 Executive Summary](EXECUTIVE_SUMMARY_DUE_DILIGENCE.md)** - High-level findings and recommendations for decision makers
+- **[📖 Full Technical Report](TECHNICAL_DUE_DILIGENCE_REPORT.md)** - Complete 40+ page technical analysis covering:
+  - Architecture & Design Assessment (8.0/10)
+  - Security Audit (4.5/10 - Critical Issues)
+  - Scalability Analysis (4.0/10 - Critical Issues)
+  - Code Quality Metrics (6.5/10)
+  - Testing Strategy Evaluation (7.5/10)
+  - DevOps & CI/CD Review (7.0/10)
+  - Investment Requirements & ROI
+  - Remediation Roadmap
+
+**Overall Score: 6.8/10 - CONDITIONAL PROCEED** ⚠️
 
 ---
 
