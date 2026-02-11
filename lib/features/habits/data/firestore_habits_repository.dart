@@ -49,6 +49,20 @@ class FirestoreHabitsRepository implements HabitsRepository {
         return const Failure(UserNotAuthenticatedFailure());
       }
 
+      // Get current habits to calculate next order
+      final habitsSnapshot = await firestore
+          .collection('habits')
+          .where('userId', isEqualTo: userId)
+          .where('isArchived', isEqualTo: false)
+          .get();
+      
+      final maxOrder = habitsSnapshot.docs.isEmpty
+          ? 0
+          : habitsSnapshot.docs
+              .map((doc) => (doc.data()['order'] as int?) ?? 0)
+              .reduce((a, b) => a > b ? a : b);
+      final nextOrder = maxOrder + 1;
+
       final habit = Habit.create(
         id: idGenerator(),
         userId: userId!,
@@ -59,7 +73,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
         difficulty: difficulty,
         notificationSettings: notificationSettings,
         targetMinutes: targetMinutes, // Pass to Habit.create if supported
-      );
+      ).copyWith(order: nextOrder);
 
       await firestore
           .collection('habits')

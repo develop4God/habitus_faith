@@ -295,6 +295,11 @@ class JsonHabitsRepository implements HabitsRepository {
   }) async {
     try {
       final habits = _loadHabits();
+      
+      // Calculate next order value (max + 1 to place at end)
+      final maxOrder = habits.isEmpty ? 0 : habits.map((h) => h.order).reduce((a, b) => a > b ? a : b);
+      final nextOrder = maxOrder + 1;
+      
       final newHabit = Habit.create(
         id: _idGenerator(),
         userId: _userId,
@@ -305,11 +310,11 @@ class JsonHabitsRepository implements HabitsRepository {
         difficulty: difficulty,
         notificationSettings: notificationSettings,
         targetMinutes: targetMinutes,
-      );
+      ).copyWith(order: nextOrder);
 
       habits.add(newHabit);
       debugPrint(
-        'JsonHabitsRepository.createHabit: Added new habit "${newHabit.id}"',
+        'JsonHabitsRepository.createHabit: Added new habit "${newHabit.id}" with order $nextOrder',
       );
       await _saveHabits(habits);
 
