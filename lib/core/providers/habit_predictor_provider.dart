@@ -9,6 +9,7 @@ import '../services/ml/abandonment_predictor.dart';
 import '../services/ai/behavioral_engine.dart';
 import '../services/notifications/notification_service.dart';
 import '../providers/ml_providers.dart';
+import '../providers/remote_config_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../services/time/time.dart';
 import 'clock_provider.dart';
@@ -19,11 +20,13 @@ final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
   final habitsRepository = ref.watch(jsonHabitsRepositoryProvider);
   final predictor = ref.watch(abandonmentPredictorProvider);
   final clock = ref.watch(clockProvider);
+  final remoteConfig = ref.watch(remoteConfigServiceProvider);
 
   return HabitPredictorService(
     habitsRepository: habitsRepository,
     predictor: predictor,
     clock: clock,
+    remoteConfigFuture: remoteConfig,
   );
 });
 
@@ -32,6 +35,7 @@ class HabitPredictorService {
   final dynamic habitsRepository; // JsonHabitsRepository
   final AbandonmentPredictor predictor;
   final Clock clock;
+  final AsyncValue<dynamic> remoteConfigFuture; // RemoteConfigService
 
   // Nudge notification cooldown (hours)
   static const int _nudgeCooldownHours =
@@ -41,6 +45,7 @@ class HabitPredictorService {
     required this.habitsRepository,
     required this.predictor,
     required this.clock,
+    required this.remoteConfigFuture,
   });
 
   /// Run daily predictions for all habits
@@ -54,13 +59,22 @@ class HabitPredictorService {
     debugPrint('PREDICTOR 🧠 runDailyPredictions: Fetching all habits...');
 
     try {
+      // Check if ML predictor is enabled via Remote Config
+      final remoteConfig = remoteConfigFuture.value;
+      if (remoteConfig == null) {
+        debugPrint('PREDICTOR 🧠 ⚠️ Remote Config not available, using default (enabled)');
+      } else if (!remoteConfig.isMLPredictorEnabled) {
+        debugPrint('PREDICTOR 🧠 ⏭️ ML Predictor disabled via Remote Config');
+        return;
+      }
+
       // Get all active (non-archived) habits
       final habits = await habitsRepository.getHabits();
       debugPrint(
-          'PREDICTOR 🧠 runDailyPredictions: getHabits returned \\${habits.length} habits.');
+          'PREDICTOR 🧠 runDailyPredictions: getHabits returned ${habits.length} habits.');
       final activeHabits = habits.where((h) => !h.isArchived).toList();
       debugPrint(
-          'PREDICTOR 🧠 runDailyPredictions: \\${activeHabits.length} active habits.');
+          'PREDICTOR 🧠 runDailyPredictions: ${activeHabits.length} active habits.');
 
       int processedCount = 0;
       int highRiskCount = 0;
