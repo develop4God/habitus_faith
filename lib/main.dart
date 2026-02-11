@@ -52,8 +52,26 @@ void main() async {
   // Load environment configuration before Firebase
   await EnvConfig.load();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Initialize Firebase (handle case where native code already initialized it)
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      debugPrint('Firebase initialized successfully');
+    } else {
+      debugPrint('Firebase already initialized (${Firebase.apps.length} apps)');
+    }
+  } catch (e) {
+    // Handle the case where Firebase was initialized by native code
+    // but Dart doesn't see it yet
+    if (e.toString().contains('duplicate-app')) {
+      debugPrint('Firebase already initialized by native code, continuing...');
+    } else {
+      debugPrint('Firebase initialization error: $e');
+      rethrow;
+    }
+  }
 
   // Initialize core services for synchronous overrides
   final prefs = await SharedPreferences.getInstance();
