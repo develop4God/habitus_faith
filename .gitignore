@@ -44,7 +44,7 @@ Thumbs.db # Windows
 *.log
 *.tmp
 *.bak
-
+*.swift
 # Archivos de entorno y configuración sensible
 .env # Si usas archivos .env para variables de entorno
 key.properties # ¡Importante! El archivo de clave de firma de Android
