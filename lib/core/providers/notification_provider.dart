@@ -1,18 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/services/notifications/notification_service.dart';
-import 'package:habitus_faith/core/services/service_locator.dart';
 import '../../features/habits/presentation/habits_providers.dart';
 
-// Provider for NotificationService instance
-// Uses ServiceLocator if available, falls back to singleton
+// Provider for NotificationService instance - Pure Riverpod DI
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  try {
-    // Try to get from ServiceLocator first (DI pattern)
-    return getService<NotificationService>();
-  } catch (e) {
-    // Fallback to singleton pattern for backward compatibility
-    return NotificationService();
-  }
+  return NotificationService.create();
 });
 
 // Provider for NotificationService initialization

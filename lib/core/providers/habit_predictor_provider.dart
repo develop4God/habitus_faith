@@ -10,6 +10,7 @@ import '../services/ai/behavioral_engine.dart';
 import '../services/notifications/notification_service.dart';
 import '../providers/ml_providers.dart';
 import '../providers/remote_config_provider.dart';
+import '../providers/notification_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../services/time/time.dart';
 import 'clock_provider.dart';
@@ -21,12 +22,14 @@ final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
   final predictor = ref.watch(abandonmentPredictorProvider);
   final clock = ref.watch(clockProvider);
   final remoteConfig = ref.watch(remoteConfigServiceProvider);
+  final notificationService = ref.watch(notificationServiceProvider);
 
   return HabitPredictorService(
     habitsRepository: habitsRepository,
     predictor: predictor,
     clock: clock,
     remoteConfigFuture: remoteConfig,
+    notificationService: notificationService,
   );
 });
 
@@ -36,6 +39,7 @@ class HabitPredictorService {
   final AbandonmentPredictor predictor;
   final Clock clock;
   final AsyncValue<dynamic> remoteConfigFuture; // RemoteConfigService
+  final NotificationService notificationService;
 
   // Nudge notification cooldown (hours)
   static const int _nudgeCooldownHours =
@@ -46,6 +50,7 @@ class HabitPredictorService {
     required this.predictor,
     required this.clock,
     required this.remoteConfigFuture,
+    required this.notificationService,
   });
 
   /// Run daily predictions for all habits
@@ -233,7 +238,6 @@ class HabitPredictorService {
       final title = localizations.abandonmentNudgeTitle(habitName);
       final body = localizations.abandonmentNudgeBody(suggestedMinutes);
 
-      final notificationService = NotificationService();
 
       await notificationService.showImmediateNotification(
         title,

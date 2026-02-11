@@ -16,7 +16,6 @@ import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
 import 'core/providers/background_task_service_provider.dart';
 import 'core/services/ml/model_updater.dart';
-import 'core/services/service_locator.dart';
 
 import 'features/habits/presentation/onboarding/simple_onboarding_flow.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
@@ -48,9 +47,6 @@ void main() async {
 
   final prefs = results[1] as SharedPreferences;
 
-  // PHASE 1.5: Setup Service Locator for Dependency Injection
-  setupServiceLocator();
-  debugPrint('✅ [Startup] ServiceLocator initialized');
 
   // PHASE 2: Initialize core services synchronously (required before runApp)
   final storageService = JsonStorageService(prefs);
@@ -135,6 +131,18 @@ class MyApp extends ConsumerWidget {
       }
     });
 
+    // Initialize NotificationService with error handling
+    ref.listen(notificationInitProvider, (previous, next) {
+      next.when(
+        data: (_) =>
+            debugPrint('✅ NotificationService: Initialized successfully'),
+        error: (err, stack) {
+          debugPrint('❌ NotificationService: Initialization failed: $err');
+          debugPrint('Stack trace: $stack');
+        },
+        loading: () => debugPrint('🔄 NotificationService: Initializing...'),
+      );
+    });
     ref.watch(notificationInitProvider);
 
     // Initialize background tasks and schedule daily predictions with error handling
@@ -150,6 +158,17 @@ class MyApp extends ConsumerWidget {
     ref.watch(backgroundTaskInitProvider);
 
     // Reschedule habit notifications when app starts
+    ref.listen(habitNotificationsSchedulerProvider, (previous, next) {
+      next.when(
+        data: (_) =>
+            debugPrint('✅ HabitNotifications: Rescheduled successfully'),
+        error: (err, stack) {
+          debugPrint('❌ HabitNotifications: Rescheduling failed: $err');
+          debugPrint('Stack trace: $stack');
+        },
+        loading: () => debugPrint('🔄 HabitNotifications: Rescheduling...'),
+      );
+    });
     ref.watch(habitNotificationsSchedulerProvider);
 
     return MaterialApp(

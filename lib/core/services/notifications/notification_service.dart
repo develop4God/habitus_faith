@@ -28,15 +28,11 @@ void flutterLocalNotificationsBackgroundHandler(
 
 class NotificationService {
   // Private constructor to prevent direct instantiation
-  // Always use getService<NotificationService>() or ServiceLocator.get<NotificationService>()
   NotificationService._();
 
-  // Factory constructor for ServiceLocator registration
+  // Single factory pattern for Riverpod
   factory NotificationService.create() => NotificationService._();
 
-  // Singleton instance (for backward compatibility)
-  static final NotificationService _instance = NotificationService._();
-  factory NotificationService() => _instance;
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
