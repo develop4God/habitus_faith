@@ -123,7 +123,7 @@ class NotificationService {
     }
   }
 
-  Future<void> initialize() async {
+  Future<void> initialize({String? languageCode}) async {
     try {
       // Initialize timezones
       tzdata.initializeTimeZones();
@@ -238,6 +238,7 @@ class NotificationService {
               initialNotificationsEnabled,
               initialNotificationTime,
               initialUserTimezone,
+              languageCode ?? 'en', // Use provided language or default to 'en'
             );
 
             developer.log(
@@ -457,12 +458,12 @@ class NotificationService {
     bool notificationsEnabled,
     String notificationTime,
     String userTimezone,
+    String languageCode,
   ) async {
     try {
       // Ensure user document exists first
       await _ensureUserDocument(userId);
 
-      String currentLanguage = await _getCurrentAppLanguage();
       final docRef = _firestore
           .collection('users')
           .doc(userId)
@@ -474,11 +475,11 @@ class NotificationService {
         'notificationTime': notificationTime,
         'userTimezone': userTimezone,
         'lastUpdated': FieldValue.serverTimestamp(),
-        'preferredLanguage': currentLanguage,
+        'preferredLanguage': languageCode,
       }, SetOptions(merge: true));
       developer.log(
         'NotificationService: Notification settings saved for $userId: '
-        'Enabled: $notificationsEnabled, Time: $notificationTime, Timezone: $userTimezone, Language: $currentLanguage',
+        'Enabled: $notificationsEnabled, Time: $notificationTime, Timezone: $userTimezone, Language: $languageCode',
         name: 'NotificationService',
       );
     } catch (e) {
@@ -548,7 +549,7 @@ class NotificationService {
     return prefs.getBool(_notificationsEnabledKey) ?? true;
   }
 
-  Future<void> setNotificationsEnabled(bool enabled) async {
+  Future<void> setNotificationsEnabled(bool enabled, {String? languageCode}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, enabled);
     developer.log(
@@ -569,12 +570,14 @@ class NotificationService {
             settingsDoc.data()?['notificationTime'] ?? defaultNotificationTime;
         String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
+        String currentLanguage = settingsDoc.data()?['preferredLanguage'] ?? languageCode ?? 'en';
 
         await _saveNotificationSettingsToFirestore(
           user.uid,
           enabled,
           currentNotificationTime,
           currentUserTimezone,
+          currentLanguage,
         );
         developer.log(
           'NotificationService: Notification state ($enabled) saved to Firestore for user ${user.uid}',
@@ -595,7 +598,7 @@ class NotificationService {
     return prefs.getString(_notificationTimeKey) ?? defaultNotificationTime;
   }
 
-  Future<void> setNotificationTime(String time) async {
+  Future<void> setNotificationTime(String time, {String? languageCode}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_notificationTimeKey, time);
     developer.log(
@@ -616,12 +619,14 @@ class NotificationService {
             settingsDoc.data()?['notificationsEnabled'] ?? true;
         String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
+        String currentLanguage = settingsDoc.data()?['preferredLanguage'] ?? languageCode ?? 'en';
 
         await _saveNotificationSettingsToFirestore(
           user.uid,
           currentNotificationsEnabled,
           time,
           currentUserTimezone,
+          currentLanguage,
         );
         developer.log(
           'NotificationService: Notification time ($time) saved to Firestore for user ${user.uid}',
@@ -827,19 +832,6 @@ class NotificationService {
     );
   }
 
-  // Get current app language from SharedPreferences
-  Future<String> _getCurrentAppLanguage() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString('locale') ?? 'en';
-    } catch (e) {
-      developer.log(
-        'Error getting current language: $e',
-        name: 'NotificationService',
-      );
-      return 'en';
-    }
-  }
 
   /// Schedule a notification for a specific habit
   Future<void> scheduleHabitNotification({

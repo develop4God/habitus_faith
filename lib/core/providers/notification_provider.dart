@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:habitus_faith/core/services/notifications/notification_service.dart';
 import 'package:habitus_faith/core/providers/firebase_init_provider.dart';
+import 'package:habitus_faith/core/providers/language_provider.dart';
 import '../../features/habits/presentation/habits_providers.dart';
 
 // Provider for NotificationService instance - Pure Riverpod DI
@@ -24,9 +25,13 @@ final notificationInitProvider = FutureProvider<void>((ref) async {
   await ref.watch(firebaseInitProvider.future);
   debugPrint('🔥 NotificationService: Firebase ready, creating service...');
 
+  // Get current language from the app language provider
+  final currentLocale = ref.read(appLanguageProvider);
+  final languageCode = currentLocale.languageCode;
+
   // Now it's safe to create and initialize the notification service
   final notificationService = ref.read(notificationServiceProvider);
-  await notificationService.initialize();
+  await notificationService.initialize(languageCode: languageCode);
 });
 
 // Provider for checking if notifications are enabled
