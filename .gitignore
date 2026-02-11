@@ -50,6 +50,7 @@ Thumbs.db # Windows
 key.properties # ¡Importante! El archivo de clave de firma de Android
 google-services.json # Firebase Android config
 GoogleService-Info.plist # Firebase iOS/macOS config
+firebase_options.dart # Generated Firebase options with API keys
 firebase_options.dart.backup # Backup of generated Firebase options
 
 # IDE specific files
