@@ -71,12 +71,13 @@ class JsonGeneralNotesRepository {
 
   Stream<List<GeneralNote>> watchNotes() => _controller.stream;
 
-  Future<void> addNote(String content) async {
+  Future<void> addNote(String content, {String? petEmoji}) async {
     final list = _load();
     final newNote = GeneralNote(
       id: const Uuid().v4(),
       userId: _userId,
       content: content,
+      petEmoji: petEmoji,
       date: DateTime.now(),
       createdAt: DateTime.now(),
     );

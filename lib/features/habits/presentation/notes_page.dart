@@ -37,6 +37,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     '💧',
     '⛪',
   ];
+  final List<String> _petEmojis = [
+    '🐶',
+    '🐱',
+    '🐰',
+    '🐦',
+    '🐹',
+    '🐠',
+    '🐢',
+    '🐕‍🦺',
+  ];
+  String? _selectedPetEmoji;
   static const int _minChars = 10;
   static const int _maxChars = 500;
 
@@ -49,8 +60,13 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   void _saveNote() {
     final text = _noteController.text.trim();
     if (text.length >= _minChars && text.length <= _maxChars) {
-      ref.read(jsonGeneralNotesRepositoryProvider).addNote(text);
+      ref
+          .read(jsonGeneralNotesRepositoryProvider)
+          .addNote(text, petEmoji: _selectedPetEmoji);
       _noteController.clear();
+      setState(() {
+        _selectedPetEmoji = null;
+      });
       FocusScope.of(context).unfocus();
     }
   }
@@ -213,6 +229,35 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             ],
           ),
           const SizedBox(height: 4),
+          const Text(
+            'Mascota',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _petEmojis.map((pet) {
+              final isSelected = pet == _selectedPetEmoji;
+              return ChoiceChip(
+                selected: isSelected,
+                onSelected: (_) => setState(() {
+                  _selectedPetEmoji = isSelected ? null : pet;
+                }),
+                label: Text(pet, style: const TextStyle(fontSize: 18)),
+                selectedColor: Colors.orange.shade100,
+                backgroundColor: Colors.grey.shade100,
+                shape: StadiumBorder(
+                  side: BorderSide(
+                    color: isSelected
+                        ? Colors.orange.shade400
+                        : Colors.grey.shade200,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 12),
           // Quick emoji row
           SizedBox(
             height: 32,
@@ -252,6 +297,19 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         children: [
           Row(
             children: [
+              if (note.petEmoji != null)
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    note.petEmoji!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              if (note.petEmoji != null) const SizedBox(width: 8),
               Text(
                 dateStr,
                 style: const TextStyle(color: Colors.grey, fontSize: 12),

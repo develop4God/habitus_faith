@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
+import '../features/habits/presentation/notes_providers.dart';
 
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
@@ -106,6 +107,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     final longestStreak = habits.isNotEmpty
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
+    final notesAsync = ref.watch(generalNotesStreamProvider);
+    final petEmojis = notesAsync.asData?.value
+            .map((note) => note.petEmoji)
+            .whereType<String>()
+            .toSet()
+            .toList() ??
+        [];
 
     final List<Widget> pages = [
       Scaffold(
@@ -176,6 +184,14 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
 
               const SizedBox(height: 20),
+
+              if (petEmojis.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _buildPetsSection(petEmojis),
+                ),
+                const SizedBox(height: 20),
+              ],
 
               // A. DAILY PROGRESS inside BackgroundImageCard
               Padding(
@@ -619,6 +635,66 @@ class _HomePageState extends ConsumerState<HomePage> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,
+    );
+  }
+
+  Widget _buildPetsSection(List<String> petEmojis) {
+    final petsToShow = petEmojis.take(6).toList();
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.orange.shade100),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orange.shade100.withAlpha(80),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.pets, color: Colors.orange.shade600, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Mascotas',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: petsToShow
+                .map(
+                  (emoji) => Container(
+                    width: 44,
+                    height: 44,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade50,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      emoji,
+                      style: const TextStyle(fontSize: 22),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
+      ),
     );
   }
 }
