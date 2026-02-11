@@ -385,12 +385,7 @@ class NotificationService {
       }, SetOptions(merge: true));
 
       developer.log(
-        '✅ NotificationService: FCM token saved to Firestore successfully',
-        name: 'NotificationService',
-      );
-
-      developer.log(
-        'NotificationService: FCM token saved to Firestore for user ${user.uid}',
+        '✅ NotificationService: FCM token saved to Firestore successfully for user ${user.uid}',
         name: 'NotificationService',
       );
 
