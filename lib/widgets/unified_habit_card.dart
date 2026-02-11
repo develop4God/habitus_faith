@@ -290,7 +290,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                 Expanded(
                                   child: Text(
                                     widget.habit.name,
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -768,8 +768,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                     AutoSizeText(
                       habit.name,
                       textAlign: TextAlign.center,
-                      maxLines: 2,
-                      minFontSize: 16,
+                      maxLines: 4,
+                      minFontSize: 12,
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
