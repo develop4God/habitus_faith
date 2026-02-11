@@ -18,7 +18,8 @@ final firebaseInitProvider = FutureProvider<FirebaseApp>((ref) async {
       debugPrint('🔥 [Firebase] Initialized in ${duration}ms');
       return app;
     } else {
-      debugPrint('🔥 [Firebase] Already initialized (${Firebase.apps.length} apps)');
+      debugPrint(
+          '🔥 [Firebase] Already initialized (${Firebase.apps.length} apps)');
       return Firebase.app();
     }
   } catch (e) {
@@ -47,4 +48,3 @@ final firebaseReadyProvider = Provider<bool>((ref) {
   final firebaseAsync = ref.watch(firebaseInitProvider);
   return firebaseAsync.hasValue;
 });
-
