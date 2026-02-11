@@ -55,7 +55,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
           .where('userId', isEqualTo: userId)
           .where('isArchived', isEqualTo: false)
           .get();
-      
+
       final maxOrder = habitsSnapshot.docs.isEmpty
           ? 0
           : habitsSnapshot.docs

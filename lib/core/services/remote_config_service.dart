@@ -6,10 +6,10 @@ import 'package:flutter/foundation.dart';
 class RemoteConfigService {
   static RemoteConfigService? _instance;
   final FirebaseRemoteConfig _remoteConfig;
-  
+
   // Private constructor for singleton
   RemoteConfigService._(this._remoteConfig);
-  
+
   /// Get singleton instance
   static Future<RemoteConfigService> getInstance() async {
     if (_instance == null) {
@@ -19,7 +19,7 @@ class RemoteConfigService {
     }
     return _instance!;
   }
-  
+
   /// Initialize Remote Config with defaults and settings
   static Future<void> _initializeConfig(FirebaseRemoteConfig config) async {
     try {
@@ -30,7 +30,7 @@ class RemoteConfigService {
           minimumFetchInterval: const Duration(hours: 1),
         ),
       );
-      
+
       // Set default values
       await config.setDefaults({
         'enable_ml_predictor': true,
@@ -39,17 +39,17 @@ class RemoteConfigService {
         'enable_analytics': true,
         'enable_crashlytics': true,
       });
-      
+
       // Fetch and activate latest values
       await config.fetchAndActivate();
-      
+
       debugPrint('RemoteConfigService: Initialized successfully');
     } catch (e) {
       debugPrint('RemoteConfigService: Error initializing - $e');
       // Continue with defaults if remote config fails
     }
   }
-  
+
   /// Check if ML predictor feature is enabled
   bool get isMLPredictorEnabled {
     try {
@@ -59,7 +59,7 @@ class RemoteConfigService {
       return true; // Default to enabled
     }
   }
-  
+
   /// Get minimum number of habits required for ML predictions
   int get mlPredictorMinHabits {
     try {
@@ -69,7 +69,7 @@ class RemoteConfigService {
       return 3; // Default
     }
   }
-  
+
   /// Get ML prediction threshold (0.0-1.0)
   double get mlPredictionThreshold {
     try {
@@ -79,7 +79,7 @@ class RemoteConfigService {
       return 0.7; // Default
     }
   }
-  
+
   /// Check if analytics is enabled
   bool get isAnalyticsEnabled {
     try {
@@ -89,7 +89,7 @@ class RemoteConfigService {
       return true; // Default to enabled
     }
   }
-  
+
   /// Check if crashlytics is enabled
   bool get isCrashlyticsEnabled {
     try {
@@ -99,7 +99,7 @@ class RemoteConfigService {
       return true; // Default to enabled
     }
   }
-  
+
   /// Force fetch latest config (call sparingly)
   Future<void> refresh() async {
     try {
@@ -109,7 +109,7 @@ class RemoteConfigService {
       debugPrint('RemoteConfigService: Error refreshing config - $e');
     }
   }
-  
+
   /// Get all current values for debugging
   Map<String, dynamic> getAllValues() {
     return {

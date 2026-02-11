@@ -62,7 +62,8 @@ class HabitPredictorService {
       // Check if ML predictor is enabled via Remote Config
       final remoteConfig = remoteConfigFuture.value;
       if (remoteConfig == null) {
-        debugPrint('PREDICTOR 🧠 ⚠️ Remote Config not available, using default (enabled)');
+        debugPrint(
+            'PREDICTOR 🧠 ⚠️ Remote Config not available, using default (enabled)');
       } else if (!remoteConfig.isMLPredictorEnabled) {
         debugPrint('PREDICTOR 🧠 ⏭️ ML Predictor disabled via Remote Config');
         return;

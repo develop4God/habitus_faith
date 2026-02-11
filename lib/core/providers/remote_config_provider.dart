@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/remote_config_service.dart';
 
 /// Provider for Remote Config service singleton
-final remoteConfigServiceProvider = FutureProvider<RemoteConfigService>((ref) async {
+final remoteConfigServiceProvider =
+    FutureProvider<RemoteConfigService>((ref) async {
   return await RemoteConfigService.getInstance();
 });
 
