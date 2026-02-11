@@ -27,11 +27,16 @@ void flutterLocalNotificationsBackgroundHandler(
 }
 
 class NotificationService {
-  static final NotificationService _instance = NotificationService._internal();
+  // Private constructor to prevent direct instantiation
+  // Always use getService<NotificationService>() or ServiceLocator.get<NotificationService>()
+  NotificationService._();
 
+  // Factory constructor for ServiceLocator registration
+  factory NotificationService.create() => NotificationService._();
+
+  // Singleton instance (for backward compatibility)
+  static final NotificationService _instance = NotificationService._();
   factory NotificationService() => _instance;
-
-  NotificationService._internal();
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -195,14 +200,50 @@ class NotificationService {
         name: 'NotificationService',
       );
 
-      // Get FCM token
-      String? token = await _firebaseMessaging.getToken();
-      developer.log(
-        'NotificationService: FCM token obtained: $token',
-        name: 'NotificationService',
-      );
+      // Get FCM token with retry logic (max 3 attempts)
+      String? token;
+      const int maxAttempts = 3;
+      for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          token = await _firebaseMessaging.getToken();
+          if (token != null) {
+            developer.log(
+              'NotificationService: FCM token obtained on attempt $attempt: $token',
+              name: 'NotificationService',
+            );
+            break;
+          } else {
+            developer.log(
+              'NotificationService: FCM token null on attempt $attempt',
+              name: 'NotificationService',
+            );
+          }
+        } catch (e) {
+          final msg = e.toString();
+          developer.log(
+            'NotificationService: Error getting token (attempt $attempt): $msg',
+            name: 'NotificationService',
+            error: e,
+          );
+          if (msg.contains('SERVICE_NOT_AVAILABLE') && attempt < maxAttempts) {
+            await Future.delayed(Duration(milliseconds: 600 * attempt));
+            continue;
+          } else {
+            rethrow;
+          }
+        }
+        if (token == null && attempt < maxAttempts) {
+          await Future.delayed(Duration(milliseconds: 400 * attempt));
+        }
+      }
+
       if (token != null) {
         await _saveFcmToken(token);
+      } else {
+        developer.log(
+          'NotificationService: Could not obtain FCM token after $maxAttempts attempts (token still null).',
+          name: 'NotificationService',
+        );
       }
 
       // Listen for token changes

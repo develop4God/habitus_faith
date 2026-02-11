@@ -16,6 +16,7 @@ import 'core/providers/language_provider.dart';
 import 'core/providers/notification_provider.dart';
 import 'core/providers/background_task_service_provider.dart';
 import 'core/services/ml/model_updater.dart';
+import 'core/services/service_locator.dart';
 
 import 'features/habits/presentation/onboarding/simple_onboarding_flow.dart';
 import 'features/habits/data/storage/json_storage_service.dart';
@@ -46,6 +47,10 @@ void main() async {
   ]);
 
   final prefs = results[1] as SharedPreferences;
+
+  // PHASE 1.5: Setup Service Locator for Dependency Injection
+  setupServiceLocator();
+  debugPrint('✅ [Startup] ServiceLocator initialized');
 
   // PHASE 2: Initialize core services synchronously (required before runApp)
   final storageService = JsonStorageService(prefs);
