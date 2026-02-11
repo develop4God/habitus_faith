@@ -51,22 +51,70 @@ class NotificationService {
 
   Function(String? payload)? onNotificationTapped;
 
+  /// Ensure user document exists in Firestore
+  /// Creates a minimal user document if it doesn't exist
+  Future<void> _ensureUserDocument(String userId) async {
+    try {
+      final userDocRef = _firestore.collection('users').doc(userId);
+      final docSnapshot = await userDocRef.get();
+
+      if (!docSnapshot.exists) {
+        developer.log(
+          '📝 NotificationService: Creating user document for $userId...',
+          name: 'NotificationService',
+        );
+
+        // Create a minimal user document
+        await userDocRef.set({
+          'createdAt': FieldValue.serverTimestamp(),
+          'lastLogin': FieldValue.serverTimestamp(),
+        });
+
+        developer.log(
+          '✅ NotificationService: User document created for $userId',
+          name: 'NotificationService',
+        );
+      }
+    } catch (e) {
+      developer.log(
+        '⚠️ NotificationService: Failed to ensure user document: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+      // Don't rethrow - we'll try to proceed anyway
+    }
+  }
+
   /// Update lastLogin field when user enters the app
   Future<void> updateLastLogin() async {
     final User? user = _auth.currentUser;
     if (user != null) {
-      developer.log(
-        '📅 NotificationService: Updating lastLogin timestamp for user ${user.uid}...',
-        name: 'NotificationService',
-      );
-      final userDocRef = _firestore.collection('users').doc(user.uid);
-      await userDocRef.set({
-        'lastLogin': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-      developer.log(
-        '✅ NotificationService: lastLogin timestamp updated successfully for user ${user.uid}',
-        name: 'NotificationService',
-      );
+      try {
+        developer.log(
+          '📅 NotificationService: Updating lastLogin timestamp for user ${user.uid}...',
+          name: 'NotificationService',
+        );
+
+        // Ensure user document exists first
+        await _ensureUserDocument(user.uid);
+
+        final userDocRef = _firestore.collection('users').doc(user.uid);
+        await userDocRef.set({
+          'lastLogin': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+        developer.log(
+          '✅ NotificationService: lastLogin timestamp updated successfully for user ${user.uid}',
+          name: 'NotificationService',
+        );
+      } catch (e) {
+        developer.log(
+          '⚠️ NotificationService: Failed to update lastLogin: $e',
+          name: 'NotificationService',
+          error: e,
+        );
+        // Don't throw - this is not critical for app functionality
+        // The user can still use the app even if lastLogin fails
+      }
     } else {
       developer.log(
         '⚠️ NotificationService: Cannot update lastLogin - no authenticated user',
@@ -367,6 +415,9 @@ class NotificationService {
         name: 'NotificationService',
       );
 
+      // Ensure user document exists first
+      await _ensureUserDocument(user.uid);
+
       // Wait for auth token propagation
       await Future.delayed(const Duration(milliseconds: 500));
 
@@ -408,6 +459,9 @@ class NotificationService {
     String userTimezone,
   ) async {
     try {
+      // Ensure user document exists first
+      await _ensureUserDocument(userId);
+
       String currentLanguage = await _getCurrentAppLanguage();
       final docRef = _firestore
           .collection('users')
