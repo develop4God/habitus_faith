@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/habit.dart';
 import '../domain/models/habit_notification.dart';
+import '../domain/habits_repository.dart';
 import '../data/storage/storage_providers.dart';
 import '../../../core/services/notifications/notification_service.dart';
 import '../../../core/providers/auth_provider.dart';
@@ -262,6 +263,18 @@ class HabitsNotifier extends AsyncNotifier<void> {
     );
   }
 
+  Future<List<Habit>> _loadHabitsForOrdering(
+    HabitsRepository repository,
+  ) async {
+    return repository.getHabits();
+  }
+
+  List<String> _sortedHabitIds(List<Habit> habits) {
+    final orderedHabits = [...habits]
+      ..sort((a, b) => a.order.compareTo(b.order));
+    return orderedHabits.map((habit) => habit.id).toList();
+  }
+
   Future<void> duplicateHabit(String habitId) async {
     debugPrint('HabitsNotifier.duplicateHabit: start -> $habitId');
     state = const AsyncLoading();
@@ -270,12 +283,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
 
     try {
       // Try a dynamic invocation of getHabits(); if it fails, fall back to watchHabits().first
-      List<Habit> habits;
-      try {
-        habits = await (repository as dynamic).getHabits();
-      } catch (_) {
-        habits = await repository.watchHabits().first;
-      }
+      final habits = await _loadHabitsForOrdering(repository);
       debugPrint(
           'HabitsNotifier.duplicateHabit: loaded ${habits.length} habits from repository');
 
@@ -295,6 +303,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
         return;
       }
 
+      final orderedHabitIds = _sortedHabitIds(habits);
+
       // Create a new habit with the same properties but a new ID
       final result = await repository.createHabit(
         name: '${habitToDuplicate.name} (Copy)',
@@ -306,16 +316,22 @@ class HabitsNotifier extends AsyncNotifier<void> {
         targetMinutes: habitToDuplicate.targetMinutes,
       );
 
-      result.fold(
-        (failure) {
+      switch (result) {
+        case Failure(:final failure):
           debugPrint('HabitsNotifier.duplicateHabit: failure -> $failure');
           state = AsyncError(failure, StackTrace.current);
-        },
-        (habit) {
-          debugPrint('HabitsNotifier.duplicateHabit: success -> ${habit.id}');
+          return;
+        case Success(:final data):
+          debugPrint('HabitsNotifier.duplicateHabit: success -> ${data.id}');
+          final reorderResult =
+              await repository.reorderHabits([...orderedHabitIds, data.id]);
+          if (reorderResult case Failure(:final failure)) {
+            debugPrint(
+              'HabitsNotifier.duplicateHabit: reorder failure -> $failure',
+            );
+          }
           state = const AsyncData(null);
-        },
-      );
+      }
     } catch (e, st) {
       debugPrint('HabitsNotifier.duplicateHabit: exception -> $e');
       state = AsyncError(e, st);
@@ -333,6 +349,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
     final repository = ref.read(habitsRepositoryProvider);
 
     try {
+      final habits = await _loadHabitsForOrdering(repository);
+      final orderedHabitIds = _sortedHabitIds(habits);
       final result = await repository.createHabit(
         name: '${habitToDuplicate.name} (Copy)',
         category: habitToDuplicate.category,
@@ -343,18 +361,25 @@ class HabitsNotifier extends AsyncNotifier<void> {
         targetMinutes: habitToDuplicate.targetMinutes,
       );
 
-      result.fold(
-        (failure) {
+      switch (result) {
+        case Failure(:final failure):
           debugPrint(
-              'HabitsNotifier.duplicateHabitFromData: failure -> $failure');
+            'HabitsNotifier.duplicateHabitFromData: failure -> $failure',
+          );
           state = AsyncError(failure, StackTrace.current);
-        },
-        (habit) {
+          return;
+        case Success(:final data):
           debugPrint(
-              'HabitsNotifier.duplicateHabitFromData: success -> ${habit.id}');
+              'HabitsNotifier.duplicateHabitFromData: success -> ${data.id}');
+          final reorderResult =
+              await repository.reorderHabits([...orderedHabitIds, data.id]);
+          if (reorderResult case Failure(:final failure)) {
+            debugPrint(
+              'HabitsNotifier.duplicateHabitFromData: reorder failure -> $failure',
+            );
+          }
           state = const AsyncData(null);
-        },
-      );
+      }
     } catch (e, st) {
       debugPrint('HabitsNotifier.duplicateHabitFromData: exception -> $e');
       state = AsyncError(e, st);

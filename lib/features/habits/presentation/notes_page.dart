@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'notes_providers.dart';
+import 'pets_providers.dart';
 import '../domain/models/general_note_model.dart';
+import '../domain/models/pet_model.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -15,6 +17,7 @@ class NotesPage extends ConsumerStatefulWidget {
 
 class _NotesPageState extends ConsumerState<NotesPage> {
   final TextEditingController _noteController = TextEditingController();
+  String? _selectedPetId;
   final List<String> _quickEmojis = [
     '🙏',
     '✨',
@@ -49,8 +52,11 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   void _saveNote() {
     final text = _noteController.text.trim();
     if (text.length >= _minChars && text.length <= _maxChars) {
-      ref.read(jsonGeneralNotesRepositoryProvider).addNote(text);
+      ref
+          .read(jsonGeneralNotesRepositoryProvider)
+          .addNote(text, petId: _selectedPetId);
       _noteController.clear();
+      setState(() => _selectedPetId = null);
       FocusScope.of(context).unfocus();
     }
   }
@@ -213,6 +219,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             ],
           ),
           const SizedBox(height: 4),
+          // Pet selector
+          _buildPetSelector(),
+          const SizedBox(height: 8),
           // Quick emoji row
           SizedBox(
             height: 32,
@@ -232,6 +241,168 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPetSelector() {
+    final petsAsync = ref.watch(petsNotifierProvider);
+
+    return petsAsync.when(
+      data: (pets) {
+        if (pets.isEmpty) {
+          return Row(
+            children: [
+              Icon(Icons.pets, size: 16, color: Colors.grey.shade400),
+              const SizedBox(width: 8),
+              TextButton.icon(
+                onPressed: _showAddPetDialog,
+                icon: const Icon(Icons.add, size: 16),
+                label: const Text('Agregar mascota',
+                    style: TextStyle(fontSize: 12)),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.pets, size: 16, color: Colors.grey.shade600),
+                const SizedBox(width: 8),
+                const Text('Mascota:',
+                    style:
+                        TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: _showAddPetDialog,
+                  icon: const Icon(Icons.add, size: 14),
+                  label: const Text('Agregar', style: TextStyle(fontSize: 11)),
+                  style: TextButton.styleFrom(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            SizedBox(
+              height: 44,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  // None option
+                  _buildPetChip(null, '❌', 'Ninguna'),
+                  ...pets
+                      .map((pet) => _buildPetChip(pet.id, pet.emoji, pet.name)),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildPetChip(String? petId, String emoji, String label) {
+    final isSelected = _selectedPetId == petId;
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: FilterChip(
+        selected: isSelected,
+        label: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 16)),
+            const SizedBox(width: 4),
+            Text(label, style: const TextStyle(fontSize: 12)),
+          ],
+        ),
+        onSelected: (_) => setState(() => _selectedPetId = petId),
+        backgroundColor: Colors.grey.shade100,
+        selectedColor: Colors.orange.shade100,
+        checkmarkColor: Colors.orange.shade700,
+      ),
+    );
+  }
+
+  Future<void> _showAddPetDialog() async {
+    final nameController = TextEditingController();
+    String selectedEmoji = '🐕';
+    final petEmojis = ['🐕', '🐈', '🐦', '🐠', '🐰', '🐹', '🐢', '🦎', '🐍'];
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Agregar Mascota'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nombre',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('Selecciona un emoji:',
+                  style: TextStyle(fontWeight: FontWeight.w500)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: petEmojis
+                    .map((emoji) => InkWell(
+                          onTap: () =>
+                              setDialogState(() => selectedEmoji = emoji),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: selectedEmoji == emoji
+                                    ? Colors.orange
+                                    : Colors.grey.shade300,
+                                width: selectedEmoji == emoji ? 2 : 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(emoji,
+                                style: const TextStyle(fontSize: 24)),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (nameController.text.trim().isNotEmpty) {
+                  await ref.read(petsNotifierProvider.notifier).addPet(
+                        nameController.text.trim(),
+                        selectedEmoji,
+                      );
+                  if (mounted) Navigator.pop(ctx);
+                }
+              },
+              child: const Text('Agregar'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -256,6 +427,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 dateStr,
                 style: const TextStyle(color: Colors.grey, fontSize: 12),
               ),
+              if (note.petId != null) ...[
+                const SizedBox(width: 8),
+                _buildNotePetBadge(note.petId!),
+              ],
               const Spacer(),
               IconButton(
                 onPressed: () => Share.share(note.content),
@@ -295,6 +470,47 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildNotePetBadge(String petId) {
+    final petsAsync = ref.watch(petsNotifierProvider);
+
+    return petsAsync.when(
+      data: (pets) {
+        Pet? pet;
+        try {
+          pet = pets.firstWhere((p) => p.id == petId);
+        } catch (e) {
+          return const SizedBox.shrink();
+        }
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.orange.shade200),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(pet.emoji, style: const TextStyle(fontSize: 12)),
+              const SizedBox(width: 4),
+              Text(
+                pet.name,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.orange.shade900,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 

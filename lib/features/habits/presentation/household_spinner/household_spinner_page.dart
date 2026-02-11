@@ -31,6 +31,11 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   bool _isCompleting = false;
   late AnimationController _spinController;
   late AnimationController _celebrationController;
+  late AnimationController _pulseController;
+
+  // Customization options
+  Color _wheelColor1 = Colors.orange.shade400;
+  Color _wheelColor2 = Colors.deepOrange.shade500;
 
   @override
   void initState() {
@@ -43,12 +48,22 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
       vsync: this,
       duration: const Duration(seconds: 2),
     );
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    // Only start pulse animation if not in test mode
+    if (!_isInTest) {
+      _pulseController.repeat(reverse: true);
+    }
   }
 
   @override
   void dispose() {
     _spinController.dispose();
     _celebrationController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -123,10 +138,11 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
               ),
               const SizedBox(height: 8),
               Text(
-                '¡Es hora de esta tarea!',
+                '¡Tareas al azar del hogar, diviértete!',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 32),
@@ -421,81 +437,122 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            const SizedBox(height: 32),
-            // Spinner wheel
+            // Fun message
             Container(
-              width: 300,
-              height: 300,
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
                 gradient: LinearGradient(
+                  colors: [Colors.blue.shade50, Colors.purple.shade50],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Colors.orange.shade400,
-                    Colors.deepOrange.shade500,
-                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.orange.shade200.withValues(alpha: 0.5),
-                    blurRadius: 20,
-                    spreadRadius: 5,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.celebration, color: Colors.orange, size: 28),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      '¡Tareas al azar del hogar, diviértete!',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1a202c),
+                      ),
+                    ),
                   ),
                 ],
               ),
-              child: AnimatedBuilder(
-                animation: _spinController,
-                builder: (context, child) {
-                  return Transform.rotate(
-                    angle: _spinController.value * 2 * math.pi * 5,
-                    child: child,
-                  );
-                },
-                child: Center(
+            ),
+            const SizedBox(height: 24),
+            // Color customization
+            _buildColorPicker(),
+            const SizedBox(height: 32),
+            // Spinner wheel
+            AnimatedBuilder(
+              animation: _pulseController,
+              builder: (context, child) {
+                final scale = 1.0 + (_pulseController.value * 0.05);
+                return Transform.scale(
+                  scale: _isSpinning ? 1.0 : scale,
                   child: Container(
-                    width: 260,
-                    height: 260,
-                    decoration: const BoxDecoration(
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          _wheelColor1,
+                          _wheelColor2,
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _wheelColor1.withValues(alpha: 0.5),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ],
                     ),
-                    child: Center(
-                      child: _selectedTask != null
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _selectedTask!.emoji ?? '🏠',
-                                  style: const TextStyle(fontSize: 64),
-                                ),
-                                const SizedBox(height: 8),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
+                    child: AnimatedBuilder(
+                      animation: _spinController,
+                      builder: (context, child) {
+                        return Transform.rotate(
+                          angle: _spinController.value * 2 * math.pi * 5,
+                          child: child,
+                        );
+                      },
+                      child: Center(
+                        child: Container(
+                          width: 260,
+                          height: 260,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: Center(
+                            child: _selectedTask != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _selectedTask!.emoji ?? '🏠',
+                                        style: const TextStyle(fontSize: 64),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        child: Text(
+                                          _selectedTask!.name,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const Icon(
+                                    Icons.home_rounded,
+                                    size: 80,
+                                    color: Colors.orange,
                                   ),
-                                  child: Text(
-                                    _selectedTask!.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : const Icon(
-                              Icons.home_rounded,
-                              size: 80,
-                              color: Colors.orange,
-                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
             const SizedBox(height: 48),
             // Spin button
@@ -694,6 +751,99 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildColorPicker() {
+    final colorOptions = [
+      {
+        'colors': [Colors.orange.shade400, Colors.deepOrange.shade500],
+        'label': '🟠'
+      },
+      {
+        'colors': [Colors.blue.shade400, Colors.indigo.shade500],
+        'label': '🔵'
+      },
+      {
+        'colors': [Colors.green.shade400, Colors.teal.shade500],
+        'label': '🟢'
+      },
+      {
+        'colors': [Colors.purple.shade400, Colors.deepPurple.shade500],
+        'label': '🟣'
+      },
+      {
+        'colors': [Colors.pink.shade400, Colors.red.shade500],
+        'label': '🔴'
+      },
+      {
+        'colors': [Colors.amber.shade400, Colors.yellow.shade600],
+        'label': '🟡'
+      },
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Color de la rueda:',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 50,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: colorOptions.length,
+            itemBuilder: (context, index) {
+              final option = colorOptions[index];
+              final colors = option['colors'] as List<Color>;
+              final isSelected = colors[0] == _wheelColor1;
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _wheelColor1 = colors[0];
+                    _wheelColor2 = colors[1];
+                  });
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  margin: const EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected ? Colors.black : Colors.grey.shade300,
+                      width: isSelected ? 3 : 1,
+                    ),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: colors[0].withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Center(
+                    child: Text(
+                      option['label'] as String,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
