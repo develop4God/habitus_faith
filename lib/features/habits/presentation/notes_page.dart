@@ -6,7 +6,6 @@ import 'package:share_plus/share_plus.dart';
 import 'notes_providers.dart';
 import 'pets_providers.dart';
 import '../domain/models/general_note_model.dart';
-import '../domain/models/pet_model.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});

@@ -2,30 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../data/pet_repository.dart';
 import '../domain/models/pet_model.dart';
-import '../../core/providers/user_provider.dart';
+import '../../../../core/providers/auth_provider.dart';
 
 final petRepositoryProvider = Provider<PetRepository>((ref) {
   return PetRepository();
 });
 
-final petsProvider = StreamProvider<List<Pet>>((ref) async* {
-  final user = ref.watch(currentUserProvider);
+final petsProvider = FutureProvider<List<Pet>>((ref) async {
+  final userAsync = ref.watch(currentUserProvider);
+  final user = userAsync.value;
+  
   if (user == null) {
-    yield [];
-    return;
+    return [];
   }
   
-  final repository = ref.watch(petRepositoryProvider);
-  
-  // Initial load
-  yield await repository.getPets(user.uid);
-  
-  // For now, we'll just reload periodically
-  // In a real app, you might use Firestore streams
-  while (true) {
-    await Future.delayed(const Duration(seconds: 5));
-    yield await repository.getPets(user.uid);
-  }
+  final repository = ref.read(petRepositoryProvider);
+  return repository.getPets(user.uid);
 });
 
 final petsNotifierProvider = StateNotifierProvider<PetsNotifier, AsyncValue<List<Pet>>>((ref) {
@@ -42,7 +34,8 @@ class PetsNotifier extends StateNotifier<AsyncValue<List<Pet>>> {
   Future<void> _loadPets() async {
     state = const AsyncValue.loading();
     try {
-      final user = ref.read(currentUserProvider);
+      final userAsync = ref.read(currentUserProvider);
+      final user = userAsync.value;
       if (user == null) {
         state = const AsyncValue.data([]);
         return;
@@ -57,7 +50,8 @@ class PetsNotifier extends StateNotifier<AsyncValue<List<Pet>>> {
   }
   
   Future<void> addPet(String name, String emoji) async {
-    final user = ref.read(currentUserProvider);
+    final userAsync = ref.read(currentUserProvider);
+    final user = userAsync.value;
     if (user == null) return;
     
     final pet = Pet(
@@ -74,7 +68,8 @@ class PetsNotifier extends StateNotifier<AsyncValue<List<Pet>>> {
   }
   
   Future<void> deletePet(String petId) async {
-    final user = ref.read(currentUserProvider);
+    final userAsync = ref.read(currentUserProvider);
+    final user = userAsync.value;
     if (user == null) return;
     
     final repository = ref.read(petRepositoryProvider);
