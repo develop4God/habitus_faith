@@ -39,7 +39,7 @@ const NOTIFICATION_TRANSLATIONS = {
   },
 };
 
-const NOTIFICATION_IMAGE_URL = "https://cdn.jsdelivr.net/gh/develop4God/Devocional_nuevo@main/assets/images/notification_images/cross_sky_400x200.jpg";
+const NOTIFICATION_IMAGE_URL = "https://cdn.jsdelivr.net/gh/develop4God/Devocionales-assets@main/images/habitus/long_road.avif";
 
 // Configuración global
 setGlobalOptions({region: "us-central1"});
