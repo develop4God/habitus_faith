@@ -52,7 +52,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   void _saveNote() {
     final text = _noteController.text.trim();
     if (text.length >= _minChars && text.length <= _maxChars) {
-      ref.read(jsonGeneralNotesRepositoryProvider).addNote(text, petId: _selectedPetId);
+      ref
+          .read(jsonGeneralNotesRepositoryProvider)
+          .addNote(text, petId: _selectedPetId);
       _noteController.clear();
       setState(() => _selectedPetId = null);
       FocusScope.of(context).unfocus();
@@ -245,7 +247,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   Widget _buildPetSelector() {
     final petsAsync = ref.watch(petsNotifierProvider);
-    
+
     return petsAsync.when(
       data: (pets) {
         if (pets.isEmpty) {
@@ -256,15 +258,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               TextButton.icon(
                 onPressed: _showAddPetDialog,
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Agregar mascota', style: TextStyle(fontSize: 12)),
+                label: const Text('Agregar mascota',
+                    style: TextStyle(fontSize: 12)),
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 ),
               ),
             ],
           );
         }
-        
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -272,14 +276,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               children: [
                 Icon(Icons.pets, size: 16, color: Colors.grey.shade600),
                 const SizedBox(width: 8),
-                const Text('Mascota:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                const Text('Mascota:',
+                    style:
+                        TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
                 const Spacer(),
                 TextButton.icon(
                   onPressed: _showAddPetDialog,
                   icon: const Icon(Icons.add, size: 14),
                   label: const Text('Agregar', style: TextStyle(fontSize: 11)),
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   ),
                 ),
               ],
@@ -292,7 +299,8 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 children: [
                   // None option
                   _buildPetChip(null, '❌', 'Ninguna'),
-                  ...pets.map((pet) => _buildPetChip(pet.id, pet.emoji, pet.name)),
+                  ...pets
+                      .map((pet) => _buildPetChip(pet.id, pet.emoji, pet.name)),
                 ],
               ),
             ),
@@ -303,10 +311,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       error: (_, __) => const SizedBox.shrink(),
     );
   }
-  
+
   Widget _buildPetChip(String? petId, String emoji, String label) {
     final isSelected = _selectedPetId == petId;
-    
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
@@ -326,12 +334,12 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       ),
     );
   }
-  
+
   Future<void> _showAddPetDialog() async {
     final nameController = TextEditingController();
     String selectedEmoji = '🐕';
     final petEmojis = ['🐕', '🐈', '🐦', '🐠', '🐰', '🐹', '🐢', '🦎', '🐍'];
-    
+
     await showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
@@ -348,24 +356,31 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Selecciona un emoji:', style: TextStyle(fontWeight: FontWeight.w500)),
+              const Text('Selecciona un emoji:',
+                  style: TextStyle(fontWeight: FontWeight.w500)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
-                children: petEmojis.map((emoji) => InkWell(
-                  onTap: () => setDialogState(() => selectedEmoji = emoji),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: selectedEmoji == emoji ? Colors.orange : Colors.grey.shade300,
-                        width: selectedEmoji == emoji ? 2 : 1,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(emoji, style: const TextStyle(fontSize: 24)),
-                  ),
-                )).toList(),
+                children: petEmojis
+                    .map((emoji) => InkWell(
+                          onTap: () =>
+                              setDialogState(() => selectedEmoji = emoji),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: selectedEmoji == emoji
+                                    ? Colors.orange
+                                    : Colors.grey.shade300,
+                                width: selectedEmoji == emoji ? 2 : 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(emoji,
+                                style: const TextStyle(fontSize: 24)),
+                          ),
+                        ))
+                    .toList(),
               ),
             ],
           ),
@@ -378,9 +393,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               onPressed: () async {
                 if (nameController.text.trim().isNotEmpty) {
                   await ref.read(petsNotifierProvider.notifier).addPet(
-                    nameController.text.trim(),
-                    selectedEmoji,
-                  );
+                        nameController.text.trim(),
+                        selectedEmoji,
+                      );
                   if (mounted) Navigator.pop(ctx);
                 }
               },
@@ -460,7 +475,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   Widget _buildNotePetBadge(String petId) {
     final petsAsync = ref.watch(petsNotifierProvider);
-    
+
     return petsAsync.when(
       data: (pets) {
         Pet? pet;
@@ -469,7 +484,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         } catch (e) {
           return const SizedBox.shrink();
         }
-        
+
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(

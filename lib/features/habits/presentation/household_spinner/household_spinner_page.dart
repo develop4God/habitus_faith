@@ -32,7 +32,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   late AnimationController _spinController;
   late AnimationController _celebrationController;
   late AnimationController _pulseController;
-  
+
   // Customization options
   Color _wheelColor1 = Colors.orange.shade400;
   Color _wheelColor2 = Colors.deepOrange.shade500;
@@ -52,7 +52,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
-    
+
     // Only start pulse animation if not in test mode
     if (!_isInTest) {
       _pulseController.repeat(reverse: true);
@@ -449,11 +449,11 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: Colors.blue.shade200),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Icon(Icons.celebration, color: Colors.orange, size: 28),
-                  const SizedBox(width: 12),
-                  const Expanded(
+                  Icon(Icons.celebration, color: Colors.orange, size: 28),
+                  SizedBox(width: 12),
+                  Expanded(
                     child: Text(
                       '¡Tareas al azar del hogar, diviértete!',
                       style: TextStyle(
@@ -756,12 +756,30 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
 
   Widget _buildColorPicker() {
     final colorOptions = [
-      {'colors': [Colors.orange.shade400, Colors.deepOrange.shade500], 'label': '🟠'},
-      {'colors': [Colors.blue.shade400, Colors.indigo.shade500], 'label': '🔵'},
-      {'colors': [Colors.green.shade400, Colors.teal.shade500], 'label': '🟢'},
-      {'colors': [Colors.purple.shade400, Colors.deepPurple.shade500], 'label': '🟣'},
-      {'colors': [Colors.pink.shade400, Colors.red.shade500], 'label': '🔴'},
-      {'colors': [Colors.amber.shade400, Colors.yellow.shade600], 'label': '🟡'},
+      {
+        'colors': [Colors.orange.shade400, Colors.deepOrange.shade500],
+        'label': '🟠'
+      },
+      {
+        'colors': [Colors.blue.shade400, Colors.indigo.shade500],
+        'label': '🔵'
+      },
+      {
+        'colors': [Colors.green.shade400, Colors.teal.shade500],
+        'label': '🟢'
+      },
+      {
+        'colors': [Colors.purple.shade400, Colors.deepPurple.shade500],
+        'label': '🟣'
+      },
+      {
+        'colors': [Colors.pink.shade400, Colors.red.shade500],
+        'label': '🔴'
+      },
+      {
+        'colors': [Colors.amber.shade400, Colors.yellow.shade600],
+        'label': '🟡'
+      },
     ];
 
     return Column(
@@ -781,7 +799,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
               final option = colorOptions[index];
               final colors = option['colors'] as List<Color>;
               final isSelected = colors[0] == _wheelColor1;
-              
+
               return GestureDetector(
                 onTap: () {
                   setState(() {
