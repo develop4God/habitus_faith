@@ -639,6 +639,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildPetsSection(List<String> petEmojis) {
+    const petShadowAlpha = 80;
     final petsToShow = petEmojis.take(6).toList();
     return Container(
       padding: const EdgeInsets.all(16),
@@ -648,7 +649,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         border: Border.all(color: Colors.orange.shade100),
         boxShadow: [
           BoxShadow(
-            color: Colors.orange.shade100.withAlpha(80),
+            color: Colors.orange.shade100.withAlpha(petShadowAlpha),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
