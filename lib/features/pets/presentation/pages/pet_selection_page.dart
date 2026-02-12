@@ -57,9 +57,12 @@ class PetSelectionPage extends ConsumerWidget {
                       Hero(
                         tag: 'selected_pet',
                         child: ColorFiltered(
-                          colorFilter: previewPet.isUnlocked 
-                            ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
-                            : ColorFilter.mode(Colors.black.withValues(alpha: 0.3), BlendMode.srcATop),
+                          colorFilter: previewPet.isUnlocked
+                              ? const ColorFilter.mode(
+                                  Colors.transparent, BlendMode.multiply)
+                              : ColorFilter.mode(
+                                  Colors.black.withValues(alpha: 0.3),
+                                  BlendMode.srcATop),
                           child: Lottie.asset(
                             previewPet.lottieAsset,
                             height: 180,
@@ -75,7 +78,8 @@ class PetSelectionPage extends ConsumerWidget {
                         Positioned(
                           bottom: 20,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                               color: Colors.black.withValues(alpha: 0.4),
                               borderRadius: BorderRadius.circular(20),
@@ -104,7 +108,8 @@ class PetSelectionPage extends ConsumerWidget {
                 top: MediaQuery.of(context).padding.top + 10,
                 left: 10,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  icon:
+                      const Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -234,15 +239,17 @@ class PetSelectionPage extends ConsumerWidget {
                         final pet = availablePets[index];
                         final isCurrentlySelected =
                             selectedPet.lottieAsset == pet.lottieAsset;
-                        final isPreviewed = previewPet.lottieAsset == pet.lottieAsset;
+                        final isPreviewed =
+                            previewPet.lottieAsset == pet.lottieAsset;
 
                         return GestureDetector(
                           onTap: () {
                             // Always update preview
                             ref.read(previewPetProvider.notifier).state = pet;
-                            
+
                             if (pet.isUnlocked) {
-                              ref.read(selectedPetProvider.notifier).state = pet;
+                              ref.read(selectedPetProvider.notifier).state =
+                                  pet;
                             } else {
                               _showLockedDialog(context);
                             }
@@ -259,7 +266,10 @@ class PetSelectionPage extends ConsumerWidget {
                               border: Border.all(
                                 color: isCurrentlySelected
                                     ? selectedTheme.colors.first
-                                    : (isPreviewed ? selectedTheme.colors.first.withValues(alpha: 0.5) : Colors.grey.shade200),
+                                    : (isPreviewed
+                                        ? selectedTheme.colors.first
+                                            .withValues(alpha: 0.5)
+                                        : Colors.grey.shade200),
                                 width: 2.5,
                               ),
                               boxShadow: [
@@ -300,7 +310,10 @@ class PetSelectionPage extends ConsumerWidget {
                                       decoration: BoxDecoration(
                                         color: isCurrentlySelected
                                             ? selectedTheme.colors.first
-                                            : (isPreviewed ? selectedTheme.colors.first.withValues(alpha: 0.2) : Colors.white),
+                                            : (isPreviewed
+                                                ? selectedTheme.colors.first
+                                                    .withValues(alpha: 0.2)
+                                                : Colors.white),
                                         borderRadius: const BorderRadius.only(
                                           bottomLeft: Radius.circular(21),
                                           bottomRight: Radius.circular(21),

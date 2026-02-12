@@ -19,7 +19,7 @@ class _LandingPageState extends State<LandingPage>
   @override
   void initState() {
     super.initState();
-    
+
     // Select a random lottie between the actual one and rocket_man
     final lotties = [
       'assets/lottie/completing_tasks.json',
