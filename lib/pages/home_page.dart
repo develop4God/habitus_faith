@@ -111,6 +111,10 @@ class _HomePageState extends ConsumerState<HomePage> {
         ? habits.map((h) => h.longestStreak).reduce((a, b) => a > b ? a : b)
         : 0;
 
+    // Get selected pet and theme
+    final selectedPet = ref.watch(new_pets.selectedPetProvider);
+    final selectedTheme = ref.watch(new_pets.selectedPetThemeProvider);
+
     final List<Widget> pages = [
       Scaffold(
         backgroundColor: Colors.grey.shade50,
@@ -120,24 +124,22 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const SizedBox(height: 32),
 
-              // Hero section with gradient
-              Container(
+              // Hero section with dynamic gradient theme
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
                 width: double.infinity,
                 margin: const EdgeInsets.all(16),
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.deepOrange.shade400,
-                      Colors.orange.shade300,
-                    ],
+                    colors: selectedTheme.colors,
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.deepOrange.shade200.withAlpha(128),
+                      color: selectedTheme.colors.first.withValues(alpha: 0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -178,7 +180,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
-                        // Pet Animation - Autofit logic
+                        // Pet Animation - Optimized scale
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
@@ -188,15 +190,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                             );
                           },
                           child: SizedBox(
-                            height: 110, // Increased size
-                            width: 110,  // Increased size
+                            height: 110,
+                            width: 110,
                             child: Transform.scale(
-                              scale: 1.3, // Scale up to reduce internal Lottie whitespace
+                              scale: 1.3,
                               child: Lottie.asset(
-                                ref.watch(new_pets.selectedPetProvider).lottieAsset,
+                                selectedPet.lottieAsset,
                                 fit: BoxFit.contain,
                                 errorBuilder: (context, error, stackTrace) {
-                                  final selectedPet = ref.read(new_pets.selectedPetProvider);
                                   return Center(
                                     child: Text(
                                       selectedPet.emoji,

@@ -11,6 +11,8 @@ class PetSelectionPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final availablePets = ref.watch(availablePetsProvider);
     final selectedPet = ref.watch(selectedPetProvider);
+    final themes = ref.watch(petThemesProvider);
+    final selectedTheme = ref.watch(selectedPetThemeProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -22,7 +24,7 @@ class PetSelectionPage extends ConsumerWidget {
             floating: false,
             pinned: true,
             stretch: true,
-            backgroundColor: Colors.orange.shade400,
+            backgroundColor: selectedTheme.colors.first,
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
@@ -32,15 +34,13 @@ class PetSelectionPage extends ConsumerWidget {
               stretchModes: const [
                 StretchMode.zoomBackground,
               ],
-              background: Container(
+              background: AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Colors.orange.shade400,
-                      Colors.deepOrange.shade600,
-                    ],
+                    colors: selectedTheme.colors,
                   ),
                 ),
                 child: Stack(
@@ -70,9 +70,7 @@ class PetSelectionPage extends ConsumerWidget {
                         height: 200,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
-                          debugPrint(
-                              'DEBUG: Error loading selected pet Lottie: ${selectedPet.lottieAsset}. Error: $error');
-                          return const Icon(Icons.pets,
+                          return Icon(Icons.pets,
                               size: 100, color: Colors.white);
                         },
                       ),
@@ -82,13 +80,13 @@ class PetSelectionPage extends ConsumerWidget {
               ),
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(24, 24, 24, 8),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Selecciona tu mascota',
                     style: TextStyle(
                       color: Colors.black87,
@@ -96,15 +94,68 @@ class PetSelectionPage extends ConsumerWidget {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     '¡Colecciona todos tus amigos!',
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
+                  
+                  // Color Themes Section
+                  const Text(
+                    'Tema de Fondo',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 60,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: themes.length,
+                      itemBuilder: (context, index) {
+                        final theme = themes[index];
+                        final isSelected = selectedTheme.id == theme.id;
+                        return GestureDetector(
+                          onTap: () => ref.read(selectedPetThemeProvider.notifier).state = theme,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.only(right: 12),
+                            width: 60,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: theme.colors,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              border: Border.all(
+                                color: isSelected ? Colors.black : Colors.transparent,
+                                width: 3,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: isSelected 
+                              ? const Icon(Icons.check, color: Colors.white)
+                              : null,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
@@ -136,19 +187,19 @@ class PetSelectionPage extends ConsumerWidget {
                       curve: Curves.easeInOut,
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Colors.orange.shade50
+                            ? selectedTheme.colors.first.withValues(alpha: 0.1)
                             : Colors.grey.shade50,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
                           color: isSelected
-                              ? Colors.orange.shade400
+                              ? selectedTheme.colors.first
                               : Colors.grey.shade200,
                           width: 2.5,
                         ),
                         boxShadow: [
                           BoxShadow(
                             color: isSelected
-                                ? Colors.orange.withValues(alpha: 0.15)
+                                ? selectedTheme.colors.first.withValues(alpha: 0.15)
                                 : Colors.black.withValues(alpha: 0.03),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
@@ -167,8 +218,6 @@ class PetSelectionPage extends ConsumerWidget {
                                     pet.lottieAsset,
                                     fit: BoxFit.contain,
                                     errorBuilder: (context, error, stackTrace) {
-                                      debugPrint(
-                                          'DEBUG: Error loading grid pet Lottie: ${pet.lottieAsset}. Error: $error');
                                       return Icon(Icons.pets,
                                           size: 50,
                                           color: Colors.grey.shade300);
@@ -181,9 +230,7 @@ class PetSelectionPage extends ConsumerWidget {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12),
                                 decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Colors.orange.shade400
-                                      : Colors.white,
+                                  color: isSelected ? selectedTheme.colors.first : Colors.white,
                                   borderRadius: const BorderRadius.only(
                                     bottomLeft: Radius.circular(21),
                                     bottomRight: Radius.circular(21),
