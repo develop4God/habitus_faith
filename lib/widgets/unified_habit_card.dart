@@ -194,9 +194,9 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Subtasks',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    l10n.subtasks,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -358,34 +358,27 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                 ),
                                 if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 8),
-                                  Tooltip(
-                                    message: l10n.subtasks,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(
-                                          () => _isExpanded = !_isExpanded,
-                                        );
-                                      },
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: habitColor.withValues(
-                                            alpha: 0.15,
-                                          ),
-                                          shape: BoxShape.circle,
+                                  InkWell(
+                                    onTap: () {
+                                      setState(
+                                        () => _isExpanded = !_isExpanded,
+                                      );
+                                    },
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: habitColor.withValues(
+                                          alpha: 0.15,
                                         ),
-                                        padding: const EdgeInsets.all(4),
-                                        child: Semantics(
-                                          label: l10n.subtasks,
-                                          button: true,
-                                          child: Icon(
-                                            _isExpanded
-                                                ? Icons.expand_less
-                                                : Icons.expand_more,
-                                            size: 20,
-                                            color: habitColor,
-                                          ),
-                                        ),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      padding: const EdgeInsets.all(4),
+                                      child: Icon(
+                                        _isExpanded
+                                            ? Icons.expand_less
+                                            : Icons.expand_more,
+                                        size: 20,
+                                        color: habitColor,
                                       ),
                                     ),
                                   ),
@@ -712,27 +705,25 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
             Positioned(
               top: 0,
               left: 0,
-              child: Tooltip(
-                message: l10n.subtasks,
-                child: InkWell(
-                  onTap: () {
-                    _showSubtasksEditor(this.context, habit, habitColor, l10n);
-                  },
-                  borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: habitColor.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: habitColor.withValues(alpha: 0.3),
-                        width: 2,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      _showSubtasksEditor(this.context, habit, habitColor, l10n);
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: habitColor.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: habitColor.withValues(alpha: 0.3),
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    child: Semantics(
-                      label: l10n.subtasks,
-                      button: true,
                       child: Icon(
                         Icons.add_task_rounded,
                         color: habitColor,
@@ -740,72 +731,89 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.subtasks,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: habitColor,
+                    ),
+                  ),
+                ],
               ),
             ),
             Positioned(
               top: 0,
               right: 0,
-              child: Tooltip(
-                message: l10n.startTimer,
-                child: InkWell(
-                  onTap: () async {
-                    Navigator.of(context).pop();
-                    _showTimer(this.context, habitColor, l10n);
-                  },
-                  borderRadius: BorderRadius.circular(30),
-                  child: AnimatedBuilder(
-                    animation: _timerPulseController,
-                    builder: (context, child) {
-                      final pulse = 0.95 +
-                          0.07 *
-                              Curves.easeInOut
-                                  .transform(_timerPulseController.value);
-                      final shadowOpacity =
-                          0.15 + 0.25 * _timerPulseController.value;
-                      return Transform.scale(
-                        scale: pulse,
-                        child: Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                habitColor.withValues(alpha: 0.4),
-                                habitColor.withValues(alpha: 0.15),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: habitColor.withValues(alpha: 0.5),
-                              width: 2,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: habitColor.withValues(alpha: shadowOpacity),
-                                blurRadius: 14,
-                                spreadRadius: 2,
-                                offset: const Offset(0, 4),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      _showTimer(this.context, habitColor, l10n);
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: AnimatedBuilder(
+                      animation: _timerPulseController,
+                      builder: (context, child) {
+                        final pulse = 0.95 +
+                            0.07 *
+                                Curves.easeInOut
+                                    .transform(_timerPulseController.value);
+                        final shadowOpacity =
+                            0.15 + 0.25 * _timerPulseController.value;
+                        return Transform.scale(
+                          scale: pulse,
+                          child: Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  habitColor.withValues(alpha: 0.4),
+                                  habitColor.withValues(alpha: 0.15),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                            ],
-                          ),
-                          child: Semantics(
-                            label: l10n.startTimer,
-                            button: true,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: habitColor.withValues(alpha: 0.5),
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      habitColor.withValues(alpha: shadowOpacity),
+                                  blurRadius: 14,
+                                  spreadRadius: 2,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
                             child: child,
                           ),
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.timer_outlined,
-                      color: habitColor,
-                      size: 32,
+                        );
+                      },
+                      child: Icon(
+                        Icons.timer_outlined,
+                        color: habitColor,
+                        size: 32,
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.timer,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: habitColor,
+                    ),
+                  ),
+                ],
               ),
             ),
             Column(
@@ -1020,20 +1028,17 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Tooltip(
-            message: label,
-            child: InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.08),
-                  shape: BoxShape.circle,
-                ),
-                child: Semantics(label: label, button: true, child: Icon(icon, color: color, size: 24)),
+          InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
               ),
+              child: Icon(icon, color: color, size: 24),
             ),
           ),
           const SizedBox(height: 8),
