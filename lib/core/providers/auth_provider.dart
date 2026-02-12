@@ -1,13 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_init_provider.dart';
-
-// Provider for FirebaseAuth instance (waits for Firebase to be ready)
-final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
-  // Watch Firebase initialization to ensure it's ready
-  ref.watch(firebaseInitProvider);
-  return FirebaseAuth.instance;
-});
+import 'firebase_services_provider.dart';
 
 // Provider that initializes anonymous auth if needed
 // This will automatically wait for Firebase to initialize

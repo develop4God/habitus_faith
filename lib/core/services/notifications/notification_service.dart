@@ -27,18 +27,24 @@ void flutterLocalNotificationsBackgroundHandler(
 }
 
 class NotificationService {
-  // Private constructor to prevent direct instantiation
-  NotificationService._();
+  // Dependency Injection - All dependencies injected via constructor
+  // This is the ONLY way to create NotificationService - use Riverpod providers
+  NotificationService({
+    required FirebaseMessaging firebaseMessaging,
+    required FirebaseFirestore firestore,
+    required FirebaseAuth auth,
+    FlutterLocalNotificationsPlugin? localNotificationsPlugin,
+  })  : _firebaseMessaging = firebaseMessaging,
+        _firestore = firestore,
+        _auth = auth,
+        _flutterLocalNotificationsPlugin =
+            localNotificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
-  // Single factory pattern for Riverpod
-  factory NotificationService.create() => NotificationService._();
 
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+  final FirebaseMessaging _firebaseMessaging;
+  final FirebaseFirestore _firestore;
+  final FirebaseAuth _auth;
 
   static const String _notificationsEnabledKey = 'notifications_enabled';
   static const String _notificationTimeKey = 'notification_time';

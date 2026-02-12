@@ -2,20 +2,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:habitus_faith/core/services/notifications/notification_service.dart';
 import 'package:habitus_faith/core/providers/firebase_init_provider.dart';
+import 'package:habitus_faith/core/providers/firebase_services_provider.dart';
 import 'package:habitus_faith/core/providers/language_provider.dart';
 import '../../features/habits/presentation/habits_providers.dart';
 
-// Provider for NotificationService instance - Pure Riverpod DI
-// Note: This provider should only be accessed after Firebase is initialized
-// The notificationInitProvider ensures proper initialization order
+// Provider for NotificationService instance - Pure Riverpod DI with Constructor Injection
+// Follows SOLID principles: Dependencies are injected, not created internally
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  // Check if Firebase is ready (for debugging)
+  // Ensure Firebase is initialized before creating the service
   final firebaseReady = ref.read(firebaseReadyProvider);
   if (!firebaseReady) {
     debugPrint('⚠️ NotificationService: Created before Firebase ready!');
   }
 
-  return NotificationService.create();
+  // Inject all dependencies via constructor (Dependency Injection)
+  // Using ref.watch() to ensure provider rebuilds if Firebase reinitializes
+  return NotificationService(
+    firebaseMessaging: ref.watch(firebaseMessagingProvider),
+    firestore: ref.watch(firebaseFirestoreProvider),
+    auth: ref.watch(firebaseAuthProvider),
+  );
 });
 
 // Provider for NotificationService initialization
