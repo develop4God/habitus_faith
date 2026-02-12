@@ -236,6 +236,15 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     final isSkipped = habit.dailyStatus == HabitDailyStatus.skipped;
     final isFailed = habit.dailyStatus == HabitDailyStatus.failed;
 
+    // Derived light color for modern card background
+    final cardColor = isCompleted
+        ? Colors.green.shade50
+        : isSkipped
+            ? Colors.orange.shade50
+            : isFailed
+                ? Colors.red.shade50
+                : habitColor.withValues(alpha: 0.08);
+
     return AnimatedScale(
       scale: (isCompleted || isSkipped || isFailed) ? 0.98 : 1.0,
       duration: const Duration(milliseconds: 150),
@@ -244,13 +253,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Container(
           decoration: BoxDecoration(
-            color: isCompleted
-                ? Colors.green.shade50
-                : isSkipped
-                    ? Colors.orange.shade50
-                    : isFailed
-                        ? Colors.red.shade50
-                        : Colors.white,
+            color: cardColor,
             borderRadius: BorderRadius.circular(16),
             border: Border(left: BorderSide(color: habitColor, width: 4)),
             boxShadow: [
@@ -286,7 +289,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: habitColor.withValues(alpha: 0.1),
+                          color: habitColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
