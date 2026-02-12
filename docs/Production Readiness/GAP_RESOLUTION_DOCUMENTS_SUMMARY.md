@@ -258,7 +258,7 @@ The living action plan addresses all critical gaps identified in the Feb 12, 202
 ### Reference Documents (Existing)
 6. [CRITICAL_PRE_PRODUCTION_AUDIT_2026_02_12.md](CRITICAL_PRE_PRODUCTION_AUDIT_2026_02_12.md) - Audit findings
 7. [EXECUTIVE_SUMMARY_2026_02_12.md](EXECUTIVE_SUMMARY_2026_02_12.md) - Executive overview
-8. [CRITICAL_ISSUES_RESOLVED_2026_02_12.md](CRITICAL_ISSUES_RESOLVED_2026_02_12.md) - Issue tracking
+8. [CRITICAL_ISSUES_RESOLVED_2026_02_12.md](../CRITICAL_ISSUES_RESOLVED_2026_02_12.md) - Issue tracking
 
 ---
 

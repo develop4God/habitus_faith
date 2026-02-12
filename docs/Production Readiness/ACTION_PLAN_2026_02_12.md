@@ -919,8 +919,8 @@ jobs:
 
 ## 📚 References
 
-- [Senior Architect Evaluation 2026-02-12](SENIOR_ARCHITECT_EVALUATION_2026_02_12.md)
-- [Critical Issues Resolved](CRITICAL_ISSUES_RESOLVED_2026_02_12.md)
+- [Senior Architect Evaluation 2026-02-12](../SENIOR_ARCHITECT_EVALUATION_2026_02_12.md)
+- [Critical Issues Resolved](../CRITICAL_ISSUES_RESOLVED_2026_02_12.md)
 - [Architecture Review](ARCHITECTURE_REVIEW.md)
 - [ML Model Review](ML_MODEL_REVIEW.md)
 - [Security Fixes 2026-02-11](SECURITY_FIXES_2026_02_11.md)
