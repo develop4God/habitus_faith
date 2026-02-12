@@ -40,9 +40,9 @@ String createMalformedResponse(String type) {
     case 'not_array':
       return '{"habits": "not an array"}';
     case 'missing_fields':
-      return '[{"action": "Only action field"}]';
+      return '{"habits": [{"action": "Only action field"}]}';
     case 'wrong_count':
-      return '[{"action": "Only one habit", "verse": "John 3:16", "verseText": "...", "purpose": "...", "estimatedMinutes": 5}]';
+      return '{"habits": [{"action": "Only one habit", "verse": "John 3:16", "verseText": "...", "purpose": "...", "estimatedMinutes": 5}]}';
     default:
       return '{}';
   }

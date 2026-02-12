@@ -262,8 +262,10 @@ void main() {
         // Assert
         expect(result, equals(cachedHabits));
         verify(() => mockCache.get<List<MicroHabit>>(any())).called(1);
-        // Note: Current implementation checks rate limit before cache
-        // This is a known issue that could be optimized in the future
+        // OPTIMIZATION TODO: Current implementation checks rate limit before cache
+        // This means cached responses still consume rate limit quota unnecessarily.
+        // Recommended fix: Move cache check before rate limit check in GeminiService
+        // to improve performance and reduce rate limit consumption.
         verify(() => mockRateLimit.waitIfNeeded()).called(1);
         verify(() => mockRateLimit.canMakeRequest()).called(1);
       });
