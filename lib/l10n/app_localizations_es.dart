@@ -343,7 +343,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationsDisabled => 'Notificaciones desactivadas';
 
   @override
-  String get notificationTimeUpdated => 'Hora de notificación actualizada a';
+  String notificationTimeUpdated(String time) {
+    return 'Hora de notificación actualizada a $time';
+  }
 
   @override
   String get enableNotifications => 'Activar Notificaciones';
@@ -370,6 +372,17 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get notificationInfo =>
       'Recibirás un recordatorio diario a la hora seleccionada para completar tus hábitos.';
+
+  @override
+  String confirmNotificationQuestion(String time) {
+    return '¿Desea ajustar la hora de notificación a $time?';
+  }
+
+  @override
+  String get buttonConfirmHour => 'Confirmar hora';
+
+  @override
+  String get buttonEdit => 'Editar';
 
   @override
   String get highRiskWarning => '¡Alto riesgo de abandonar este hábito hoy!';

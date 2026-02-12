@@ -24,5 +24,16 @@ linter:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
+# Promote specific info-level lints to errors (fatal) so `flutter analyze` fails
+# when these are present. Add or remove keys here as needed.
+analyzer:
+  errors:
+    use_build_context_synchronously: error
+    use_super_parameters: error
+    unnecessary_import: error
+    deprecated_member_use: error
+    deprecated_member_use_from_same_package: error
+    # You can add more analyzer/lint rules here to escalate their severity.
+
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

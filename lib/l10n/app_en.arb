@@ -414,9 +414,10 @@
   "@notificationsDisabled": {
     "description": "Notifications disabled message"
   },
-  "notificationTimeUpdated": "Notification time updated to",
+  "notificationTimeUpdated": "Notification time updated to {time}",
   "@notificationTimeUpdated": {
-    "description": "Notification time updated message"
+    "description": "Notification time updated message with time",
+    "placeholders": { "time": { "type": "String", "example": "13:00" } }
   },
   "enableNotifications": "Enable Notifications",
   "@enableNotifications": {
@@ -449,6 +450,21 @@
   "notificationInfo": "You will receive a daily reminder at your selected time to complete your habits.",
   "@notificationInfo": {
     "description": "Notification information text"
+  },
+  "confirmNotificationQuestion": "Would you like to set the notification time to {time}?",
+  "@confirmNotificationQuestion": {
+    "description": "Confirmation question for notification time",
+    "placeholders": {
+      "time": { "type": "String", "example": "10:00" }
+    }
+  },
+  "buttonConfirmHour": "Confirm hour",
+  "@buttonConfirmHour": {
+    "description": "Confirm hour button label"
+  },
+  "buttonEdit": "Edit",
+  "@buttonEdit": {
+    "description": "Edit button label"
   },
   "highRiskWarning": "High risk of abandoning this habit today!",
   "@highRiskWarning": {

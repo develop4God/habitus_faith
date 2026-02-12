@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,10 +14,19 @@ class _LandingPageState extends State<LandingPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _fadeAnimation;
+  late final String _selectedLottie;
 
   @override
   void initState() {
     super.initState();
+
+    // Select a random lottie between the actual one and rocket_man
+    final lotties = [
+      'assets/lottie/completing_tasks.json',
+      'assets/lottie/rocket_man.json',
+    ];
+    _selectedLottie = lotties[Random().nextInt(lotties.length)];
+
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -62,7 +72,7 @@ class _LandingPageState extends State<LandingPage>
                 const SizedBox(height: 16),
                 SizedBox(
                   height: 220,
-                  child: Lottie.asset('assets/lottie/completing_tasks.json'),
+                  child: Lottie.asset(_selectedLottie),
                 ),
                 const SizedBox(height: 24),
               ],

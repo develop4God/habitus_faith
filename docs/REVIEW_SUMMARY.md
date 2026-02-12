@@ -186,7 +186,7 @@ cd ml_pipeline
 
 ## 📞 Quick Links
 
-- **Main README:** [../README.md](../README.md)
+- **Main README:** [../README.md](README.md)
 - **ML Pipeline:** [../ml_pipeline/README.md](../ml_pipeline/README.md)
 - **AI Features:** [AI_FEATURES.md](AI_FEATURES.md)
 - **Testing Guide:** [TESTING.md](TESTING.md)

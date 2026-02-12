@@ -343,7 +343,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsDisabled => 'Notifications disabled';
 
   @override
-  String get notificationTimeUpdated => 'Notification time updated to';
+  String notificationTimeUpdated(String time) {
+    return 'Notification time updated to $time';
+  }
 
   @override
   String get enableNotifications => 'Enable Notifications';
@@ -370,6 +372,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationInfo =>
       'You will receive a daily reminder at your selected time to complete your habits.';
+
+  @override
+  String confirmNotificationQuestion(String time) {
+    return 'Would you like to set the notification time to $time?';
+  }
+
+  @override
+  String get buttonConfirmHour => 'Confirm hour';
+
+  @override
+  String get buttonEdit => 'Edit';
 
   @override
   String get highRiskWarning => 'High risk of abandoning this habit today!';

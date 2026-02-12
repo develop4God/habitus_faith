@@ -317,7 +317,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notificationsDisabled => '通知已禁用';
 
   @override
-  String get notificationTimeUpdated => '通知时间已更新为';
+  String notificationTimeUpdated(String time) {
+    return '通知时间已更新为 $time';
+  }
 
   @override
   String get enableNotifications => '启用通知';
@@ -342,6 +344,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get notificationInfo => '您将在所选时间收到每日提醒以完成您的习惯。';
+
+  @override
+  String confirmNotificationQuestion(String time) {
+    return '您想将通知时间设置为 $time 吗？';
+  }
+
+  @override
+  String get buttonConfirmHour => '确认时间';
+
+  @override
+  String get buttonEdit => '编辑';
 
   @override
   String get highRiskWarning => '今天有高风险放弃这个习惯！';

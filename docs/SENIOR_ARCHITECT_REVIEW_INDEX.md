@@ -283,7 +283,7 @@ Habitus Faith is a **production-ready, enterprise-grade application** that demon
 - [Testing Guide](TESTING.md)
 
 ### Development Resources
-- [Main README](../README.md)
+- [Main README](README.md)
 - [Quick Reference](QUICK_REFERENCE.md)
 - [Status Document](../STATUS.txt)
 

@@ -159,13 +159,13 @@
 
 This review produced 4 comprehensive documents:
 
-1. **[SENIOR_ARCHITECT_EVALUATION_2026_02_12.md](SENIOR_ARCHITECT_EVALUATION_2026_02_12.md)** (20KB)
+1. **[SENIOR_ARCHITECT_EVALUATION_2026_02_12.md](../SENIOR_ARCHITECT_EVALUATION_2026_02_12.md)** (20KB)
    - Complete architecture review
    - Critical issues status
    - Production readiness assessment
    - Detailed recommendations
 
-2. **[CRITICAL_ISSUES_RESOLVED_2026_02_12.md](CRITICAL_ISSUES_RESOLVED_2026_02_12.md)** (17KB)
+2. **[CRITICAL_ISSUES_RESOLVED_2026_02_12.md](../CRITICAL_ISSUES_RESOLVED_2026_02_12.md)** (17KB)
    - Issue-by-issue resolution tracking
    - 78% resolution rate
    - Before/after comparisons
@@ -214,16 +214,16 @@ This review produced 4 comprehensive documents:
 ## 📞 Contact & Questions
 
 ### For Technical Questions
-- Architecture: See [SENIOR_ARCHITECT_EVALUATION_2026_02_12.md](SENIOR_ARCHITECT_EVALUATION_2026_02_12.md)
+- Architecture: See [SENIOR_ARCHITECT_EVALUATION_2026_02_12.md](../SENIOR_ARCHITECT_EVALUATION_2026_02_12.md)
 - Security: See [SECURITY_FIXES_2026_02_11.md](SECURITY_FIXES_2026_02_11.md)
 - ML/AI: See [ML_MODEL_REVIEW.md](ML_MODEL_REVIEW.md)
 
 ### For Planning Questions
 - Timeline: See [ACTION_PLAN_2026_02_12.md](ACTION_PLAN_2026_02_12.md)
-- Issues: See [CRITICAL_ISSUES_RESOLVED_2026_02_12.md](CRITICAL_ISSUES_RESOLVED_2026_02_12.md)
+- Issues: See [CRITICAL_ISSUES_RESOLVED_2026_02_12.md](../CRITICAL_ISSUES_RESOLVED_2026_02_12.md)
 
 ### For Quick Reference
-- All reviews: See [SENIOR_ARCHITECT_REVIEW_INDEX.md](SENIOR_ARCHITECT_REVIEW_INDEX.md)
+- All reviews: See [SENIOR_ARCHITECT_REVIEW_INDEX.md](../SENIOR_ARCHITECT_REVIEW_INDEX.md)
 
 ---
 

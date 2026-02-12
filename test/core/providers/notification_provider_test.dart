@@ -30,9 +30,10 @@ void main() {
       expect(habitNotificationsSchedulerProvider, isA<FutureProvider<void>>());
     });
 
-    test('NotificationService.create() factory method exists', () {
-      // Validate that the factory method exists and is callable
-      expect(() => NotificationService.create, returnsNormally);
+    test('NotificationService uses dependency injection', () {
+      // Validate that the service is created through DI, not factory
+      // Service should be instantiated through provider with injected dependencies
+      expect(notificationServiceProvider, isA<Provider<NotificationService>>());
     });
   });
 
@@ -69,10 +70,10 @@ void main() {
   });
 
   group('Architecture Validation', () {
-    test('NotificationService uses factory pattern for Riverpod', () {
-      // Validate that NotificationService.create() is the factory method
-      // and not a singleton pattern
-      expect(NotificationService.create, isA<Function>());
+    test('NotificationService uses dependency injection for Riverpod', () {
+      // Validate that NotificationService is created through DI
+      // Dependencies are injected via constructor, not singletons
+      expect(notificationServiceProvider, isA<Provider<NotificationService>>());
     });
 
     test('provider can be overridden for testing (validates testability)', () {

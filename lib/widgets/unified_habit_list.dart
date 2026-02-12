@@ -88,9 +88,11 @@ class UnifiedHabitList extends ConsumerWidget {
               }).toList()
             : habits;
 
+        // Base habits sorted by user-defined order (what persists to next day)
         final baseHabits = [...displayHabits];
         baseHabits.sort((a, b) => a.order.compareTo(b.order));
 
+        // Visual habits: auto-sort by completion status for TODAY only
         final sortedHabits = [...baseHabits];
         if (isViewingToday) {
           sortedHabits.sort((a, b) {
@@ -99,7 +101,7 @@ class UnifiedHabitList extends ConsumerWidget {
             final bDone =
                 b.dailyStatus != HabitDailyStatus.pending || b.completedToday;
             if (aDone != bDone) {
-              return aDone ? 1 : -1;
+              return aDone ? 1 : -1; // Completed to bottom (visual only)
             }
             return a.order.compareTo(b.order);
           });
@@ -169,6 +171,7 @@ class UnifiedHabitList extends ConsumerWidget {
                 newIndex -= 1;
               }
 
+              // Prevent cross-section dragging when viewing today
               if (isViewingToday) {
                 final movedHabit = sortedHabits[oldIndex];
                 final movedIsDone =
@@ -189,14 +192,36 @@ class UnifiedHabitList extends ConsumerWidget {
                 }
               }
 
-              final reorderedHabits = [...sortedHabits];
-              final item = reorderedHabits.removeAt(oldIndex);
-              reorderedHabits.insert(newIndex, item);
+              // Create reordered list from visual order
+              final reorderedVisual = [...sortedHabits];
+              final item = reorderedVisual.removeAt(oldIndex);
+              reorderedVisual.insert(newIndex, item);
+
+              // Map back to base order (without completion sorting)
+              // This ensures the user's intended order persists to next day
+              final List<Habit> reorderedBase;
+              if (isViewingToday) {
+                // Separate pending and completed from the new visual order
+                final pending = reorderedVisual
+                    .where((h) =>
+                        h.dailyStatus == HabitDailyStatus.pending &&
+                        !h.completedToday)
+                    .toList();
+                final completed = reorderedVisual
+                    .where((h) =>
+                        h.dailyStatus != HabitDailyStatus.pending ||
+                        h.completedToday)
+                    .toList();
+                // Combine: pending first, then completed (this is the base order)
+                reorderedBase = [...pending, ...completed];
+              } else {
+                reorderedBase = reorderedVisual;
+              }
 
               HapticFeedback.lightImpact();
               await ref
                   .read(habitsNotifierProvider.notifier)
-                  .reorderHabits(reorderedHabits.map((h) => h.id).toList());
+                  .reorderHabits(reorderedBase.map((h) => h.id).toList());
             },
             itemBuilder: (context, index) {
               final habit = sortedHabits[index];

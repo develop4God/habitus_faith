@@ -398,9 +398,15 @@
   "@notificationsDisabled": {
     "description": "Notifications disabled message"
   },
-  "notificationTimeUpdated": "Horário de notificação atualizado para",
+  "notificationTimeUpdated": "Horário de notificação atualizado para {time}",
   "@notificationTimeUpdated": {
-    "description": "Notification time updated message"
+    "description": "Notification time updated message with time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "13:00"
+      }
+    }
   },
   "enableNotifications": "Ativar Notificações",
   "@enableNotifications": {
@@ -433,6 +439,24 @@
   "notificationInfo": "Você receberá um lembrete diário no horário selecionado para completar seus hábitos.",
   "@notificationInfo": {
     "description": "Notification information text"
+  },
+  "confirmNotificationQuestion": "Deseja definir o horário de notificação para {time}?",
+  "@confirmNotificationQuestion": {
+    "description": "Confirmation question for notification time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "10:00"
+      }
+    }
+  },
+  "buttonConfirmHour": "Confirmar hora",
+  "@buttonConfirmHour": {
+    "description": "Confirm hour button label"
+  },
+  "buttonEdit": "Editar",
+  "@buttonEdit": {
+    "description": "Edit button label"
   },
   "highRiskWarning": "Alto risco de abandonar este hábito hoje!",
   "@highRiskWarning": {
@@ -1130,7 +1154,7 @@
   },
   "repeat": "Repetir lembrete",
   "@repeat": {
-    "description": "Rótulo do botão de repetição de lembrete."
+    "description": "Rótulo do botão de repetição de lembrete"
   },
   "setCycleForPlan": "Defina o ciclo para seu plano",
   "@setCycleForPlan": {

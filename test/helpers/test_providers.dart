@@ -1,7 +1,7 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitus_faith/core/providers/auth_provider.dart';
+import 'package:habitus_faith/core/providers/firebase_services_provider.dart';
 import 'package:habitus_faith/core/providers/firestore_provider.dart';
 import 'package:habitus_faith/features/habits/data/firestore_habits_repository.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
