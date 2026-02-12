@@ -10,39 +10,39 @@ final availablePetsProvider = Provider<List<Pet>>((ref) {
       isUnlocked: true,
     ),
     const Pet(
-      name: 'Tigre',
-      lottieAsset: 'assets/lottie/pets/tiger_cute.json',
-      emoji: '🐯',
-      isUnlocked: true,
-    ),
-    const Pet(
       name: 'Gatito',
       lottieAsset: 'assets/lottie/pets/cat_play_ball.json',
       emoji: '🐱',
       isUnlocked: true,
     ),
     const Pet(
+      name: 'Tigre',
+      lottieAsset: 'assets/lottie/pets/tiger_cute.json',
+      emoji: '🐯',
+      isUnlocked: false,
+    ),
+    const Pet(
       name: 'Pez León',
       lottieAsset: 'assets/lottie/pets/lion_fish.json',
       emoji: '🐠',
-      isUnlocked: true,
+      isUnlocked: false,
     ),
     // Locked pets for FOMO
     const Pet(
       name: 'Leoncito',
-      lottieAsset: 'assets/lottie/pets/lion_cute.json', // Placeholder asset
+      lottieAsset: 'assets/lottie/pets/lion_cute.json',
       emoji: '🦁',
       isUnlocked: false,
     ),
     const Pet(
       name: 'Panda',
-      lottieAsset: 'assets/lottie/pets/panda_cute.json', // Placeholder asset
+      lottieAsset: 'assets/lottie/pets/panda_cute.json',
       emoji: '🐼',
       isUnlocked: false,
     ),
     const Pet(
       name: 'Unicornio',
-      lottieAsset: 'assets/lottie/pets/unicorn_cute.json', // Placeholder asset
+      lottieAsset: 'assets/lottie/pets/unicorn_cute.json',
       emoji: '🦄',
       isUnlocked: false,
     ),
@@ -51,5 +51,6 @@ final availablePetsProvider = Provider<List<Pet>>((ref) {
 
 final selectedPetProvider = StateProvider<Pet>((ref) {
   final pets = ref.watch(availablePetsProvider);
-  return pets.first;
+  // Always default to an unlocked pet (Perrito)
+  return pets.firstWhere((p) => p.isUnlocked, orElse: () => pets.first);
 });
