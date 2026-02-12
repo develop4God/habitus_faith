@@ -238,7 +238,6 @@ class HabitPredictorService {
       final title = localizations.abandonmentNudgeTitle(habitName);
       final body = localizations.abandonmentNudgeBody(suggestedMinutes);
 
-
       await notificationService.showImmediateNotification(
         title,
         body,

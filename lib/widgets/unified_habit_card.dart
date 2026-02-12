@@ -146,11 +146,14 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     if (!mounted) return;
     Navigator.of(context).pop();
     await Future.delayed(const Duration(milliseconds: 300));
-    await ref.read(habitsNotifierProvider.notifier).duplicateHabitFromData(habit);
+    await ref
+        .read(habitsNotifierProvider.notifier)
+        .duplicateHabitFromData(habit);
     GlobalSnackbar.showSuccess(l10n.copy);
   }
 
-  void _showTimer(BuildContext context, Color habitColor, AppLocalizations l10n) async {
+  void _showTimer(
+      BuildContext context, Color habitColor, AppLocalizations l10n) async {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -173,7 +176,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     );
   }
 
-  void _showSubtasksEditor(BuildContext context, Habit habit, Color habitColor, AppLocalizations l10n) {
+  void _showSubtasksEditor(BuildContext context, Habit habit, Color habitColor,
+      AppLocalizations l10n) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -196,7 +200,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                 children: [
                   Text(
                     l10n.subtasks,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -211,10 +216,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                   child: SubtasksSection(
                     initialSubtasks: habit.subtasks,
                     onSubtasksChanged: (newSubtasks) async {
-                      await ref.read(habitsNotifierProvider.notifier).updateHabit(
-                        habitId: habit.id,
-                        subtasks: newSubtasks,
-                      );
+                      await ref
+                          .read(habitsNotifierProvider.notifier)
+                          .updateHabit(
+                            habitId: habit.id,
+                            subtasks: newSubtasks,
+                          );
                     },
                     showAddButton: true,
                   ),
@@ -713,7 +720,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                 children: [
                   InkWell(
                     onTap: () {
-                      _showSubtasksEditor(this.context, habit, habitColor, l10n);
+                      _showSubtasksEditor(
+                          this.context, habit, habitColor, l10n);
                     },
                     borderRadius: BorderRadius.circular(30),
                     child: Container(
@@ -788,8 +796,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      habitColor.withValues(alpha: shadowOpacity),
+                                  color: habitColor.withValues(
+                                      alpha: shadowOpacity),
                                   blurRadius: 14,
                                   spreadRadius: 2,
                                   offset: const Offset(0, 4),

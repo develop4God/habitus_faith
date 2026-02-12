@@ -124,7 +124,9 @@ class _SubtasksSectionState extends State<SubtasksSection> {
                 color: subtask.completed ? Colors.green.shade50 : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: subtask.completed ? Colors.green.shade100 : Colors.grey.shade200,
+                  color: subtask.completed
+                      ? Colors.green.shade100
+                      : Colors.grey.shade200,
                 ),
               ),
               child: ListTile(
@@ -140,7 +142,8 @@ class _SubtasksSectionState extends State<SubtasksSection> {
                 title: Text(
                   subtask.title,
                   style: TextStyle(
-                    decoration: subtask.completed ? TextDecoration.lineThrough : null,
+                    decoration:
+                        subtask.completed ? TextDecoration.lineThrough : null,
                     color: subtask.completed ? Colors.grey : Colors.black87,
                   ),
                 ),

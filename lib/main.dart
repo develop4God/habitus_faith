@@ -47,7 +47,6 @@ void main() async {
 
   final prefs = results[1] as SharedPreferences;
 
-
   // PHASE 2: Initialize core services synchronously (required before runApp)
   final storageService = JsonStorageService(prefs);
   const userId = 'local_user';

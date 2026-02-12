@@ -33,7 +33,6 @@ class NotificationService {
   // Single factory pattern for Riverpod
   factory NotificationService.create() => NotificationService._();
 
-
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -549,7 +548,8 @@ class NotificationService {
     return prefs.getBool(_notificationsEnabledKey) ?? true;
   }
 
-  Future<void> setNotificationsEnabled(bool enabled, {String? languageCode}) async {
+  Future<void> setNotificationsEnabled(bool enabled,
+      {String? languageCode}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, enabled);
     developer.log(
@@ -570,7 +570,8 @@ class NotificationService {
             settingsDoc.data()?['notificationTime'] ?? defaultNotificationTime;
         String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
-        String currentLanguage = settingsDoc.data()?['preferredLanguage'] ?? languageCode ?? 'en';
+        String currentLanguage =
+            settingsDoc.data()?['preferredLanguage'] ?? languageCode ?? 'en';
 
         await _saveNotificationSettingsToFirestore(
           user.uid,
@@ -619,7 +620,8 @@ class NotificationService {
             settingsDoc.data()?['notificationsEnabled'] ?? true;
         String currentUserTimezone = settingsDoc.data()?['userTimezone'] ??
             await FlutterTimezone.getLocalTimezone();
-        String currentLanguage = settingsDoc.data()?['preferredLanguage'] ?? languageCode ?? 'en';
+        String currentLanguage =
+            settingsDoc.data()?['preferredLanguage'] ?? languageCode ?? 'en';
 
         await _saveNotificationSettingsToFirestore(
           user.uid,
@@ -831,7 +833,6 @@ class NotificationService {
       name: 'NotificationService',
     );
   }
-
 
   /// Schedule a notification for a specific habit
   Future<void> scheduleHabitNotification({

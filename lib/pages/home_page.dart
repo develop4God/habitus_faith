@@ -483,10 +483,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.amber.shade600, Colors.orange.shade700],
+                          colors: [
+                            Colors.amber.shade600,
+                            Colors.orange.shade700
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
@@ -566,7 +570,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 decoration: BoxDecoration(
                                   color: Colors.white.withValues(alpha: 0.15),
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                                  border: Border.all(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.2)),
                                 ),
                                 child: const Icon(
                                   Icons.bolt_rounded,
@@ -584,7 +590,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   height: 1.1,
                                   shadows: [
                                     Shadow(
-                                      color: Colors.black.withValues(alpha: 0.3),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.3),
                                       offset: const Offset(0, 2),
                                       blurRadius: 4,
                                     )
@@ -593,22 +600,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                               const SizedBox(height: 12),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                  border: Border.all(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.1)),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(Icons.stars_rounded, color: Colors.amber, size: 16),
+                                    const Icon(Icons.stars_rounded,
+                                        color: Colors.amber, size: 16),
                                     const SizedBox(width: 8),
                                     Text(
                                       'Misiones exclusivas y premios pronto...',
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: Colors.white.withValues(alpha: 0.9),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.9),
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),

@@ -94,7 +94,8 @@ void main() {
       // 3. Updated notification_provider.dart to pure Riverpod
       // 4. Updated NotificationService to use single factory pattern
 
-      expect(true, isTrue, reason: 'Service locator antipattern has been removed');
+      expect(true, isTrue,
+          reason: 'Service locator antipattern has been removed');
     });
   });
 }

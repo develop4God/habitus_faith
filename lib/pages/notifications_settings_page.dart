@@ -61,7 +61,8 @@ class _NotificationsSettingsPageState
     final languageCode = currentLocale.languageCode;
 
     final notificationService = ref.read(notificationServiceProvider);
-    await notificationService.setNotificationsEnabled(value, languageCode: languageCode);
+    await notificationService.setNotificationsEnabled(value,
+        languageCode: languageCode);
 
     if (!mounted) return;
 
@@ -94,7 +95,8 @@ class _NotificationsSettingsPageState
       final languageCode = currentLocale.languageCode;
 
       final notificationService = ref.read(notificationServiceProvider);
-      await notificationService.setNotificationTime(timeStr, languageCode: languageCode);
+      await notificationService.setNotificationTime(timeStr,
+          languageCode: languageCode);
 
       if (!mounted) return;
 

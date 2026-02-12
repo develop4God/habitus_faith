@@ -64,7 +64,8 @@ class FaithJourneyPage extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
                                 color: Colors.amber.shade600,
                                 borderRadius: BorderRadius.circular(20),
@@ -108,7 +109,8 @@ class FaithJourneyPage extends ConsumerWidget {
               ),
             ),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                  color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
           ),
@@ -132,7 +134,8 @@ class FaithJourneyPage extends ConsumerWidget {
                   const SizedBox(height: 16),
                   journeyLevelAsync.when(
                     data: (level) => JourneyProgressCard(level: level),
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (error, _) => Text('Error: $error'),
                   ),
 
@@ -158,7 +161,8 @@ class FaithJourneyPage extends ConsumerWidget {
                   ),
                   badgesAsync.when(
                     data: (badges) => BadgeCollectionGrid(badges: badges),
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (error, _) => Text('Error: $error'),
                   ),
 
@@ -166,7 +170,7 @@ class FaithJourneyPage extends ConsumerWidget {
 
                   // FOMO / COMING SOON SECTION
                   _buildFomoSection(),
-                  
+
                   const SizedBox(height: 40),
                 ],
               ),
@@ -192,7 +196,8 @@ class FaithJourneyPage extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.lock_outline_rounded, size: 18, color: Colors.grey),
+            const Icon(Icons.lock_outline_rounded,
+                size: 18, color: Colors.grey),
           ],
         ),
         const SizedBox(height: 16),
@@ -221,7 +226,8 @@ class FaithJourneyPage extends ConsumerWidget {
                       color: Colors.amber.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.auto_fix_high_rounded, color: Colors.amber, size: 24),
+                    child: const Icon(Icons.auto_fix_high_rounded,
+                        color: Colors.amber, size: 24),
                   ),
                   const SizedBox(width: 16),
                   const Expanded(
@@ -264,7 +270,8 @@ class FaithJourneyPage extends ConsumerWidget {
                   onPressed: null,
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                   child: const Text('COMING SOON'),
                 ),
