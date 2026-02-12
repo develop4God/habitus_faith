@@ -219,49 +219,44 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                               ),
                               // Pet Animation - Optimized scale
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 110,
-                                    width: 110,
-                                    child: Transform.scale(
-                                      scale: 1.3,
-                                      child: Lottie.asset(
-                                        selectedPet.lottieAsset,
-                                        fit: BoxFit.contain,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          return Center(
-                                            child: Text(
-                                              selectedPet.emoji,
-                                              style: const TextStyle(fontSize: 40),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  if (_showPetHint)
-                                    Positioned(
-                                      bottom: 5,
-                                      right: 5,
-                                      child: IgnorePointer(
-                                        child: SizedBox(
-                                          height: 70,
-                                          width: 70,
-                                          child: Lottie.asset(
-                                            'assets/lottie/tap_screen.json',
-                                            fit: BoxFit.contain,
-                                          ),
+                              SizedBox(
+                                height: 110,
+                                width: 110,
+                                child: Transform.scale(
+                                  scale: 1.3,
+                                  child: Lottie.asset(
+                                    selectedPet.lottieAsset,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(
+                                        child: Text(
+                                          selectedPet.emoji,
+                                          style: const TextStyle(fontSize: 40),
                                         ),
-                                      ),
-                                    ),
-                                ],
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
                             ],
                           ),
                         ],
                       ),
+                      if (_showPetHint)
+                        Positioned(
+                          right: -30,
+                          bottom: -20,
+                          child: IgnorePointer(
+                            child: SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: Lottie.asset(
+                                'assets/lottie/tap_screen.json',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
