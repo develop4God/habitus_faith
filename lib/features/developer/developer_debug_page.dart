@@ -449,7 +449,8 @@ class DeveloperDebugPage extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.touch_app, color: Colors.blue),
             title: const Text('Reset Pet Tap Hint'),
-            subtitle: const Text('Delete has_seen_pet_hint flag to show Lottie again'),
+            subtitle: const Text(
+                'Delete has_seen_pet_hint flag to show Lottie again'),
             onTap: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {

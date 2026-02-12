@@ -174,7 +174,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: selectedTheme.colors.first.withValues(alpha: 0.3),
+                        color:
+                            selectedTheme.colors.first.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 5),
                       ),
