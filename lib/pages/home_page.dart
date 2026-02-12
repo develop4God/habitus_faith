@@ -452,34 +452,68 @@ class _HomePageState extends ConsumerState<HomePage> {
               // Pets Section
               _buildPetsSection(),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 32),
 
-              // Gamification Section Header
+              // Gamification Section Header - REIMAGINED WITH FOMO
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.emoji_events,
-                      color: Colors.purple.shade600,
-                      size: 24,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.faithJourney,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.grey.shade900,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        Text(
+                          'En construcción 🚧',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Your Faith Journey',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade800,
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.amber.shade600, Colors.orange.shade700],
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.orange.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: const Text(
+                        'PRÓXIMAMENTE',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
-              // Gamification Cards - Faith Journey only
+              // Gamification Card - REIMAGINED WITH FOMO
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
@@ -491,74 +525,106 @@ class _HomePageState extends ConsumerState<HomePage> {
                     );
                   },
                   child: Container(
-                    height: 160,
+                    constraints: const BoxConstraints(minHeight: 180),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Colors.purple.shade400,
-                          Colors.purple.shade600,
+                          Colors.purple.shade700,
+                          Colors.indigo.shade800,
                         ],
                       ),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.purple.shade200.withAlpha(128),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
+                          color: Colors.purple.withValues(alpha: 0.4),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(51),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.auto_awesome,
-                              color: Colors.white,
-                              size: 28,
-                            ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          right: -20,
+                          top: -20,
+                          child: Icon(
+                            Icons.auto_awesome,
+                            size: 150,
+                            color: Colors.white.withValues(alpha: 0.05),
                           ),
-                          Column(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Faith\nJourney',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  height: 1.2,
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.15),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                                ),
+                                child: const Icon(
+                                  Icons.bolt_rounded,
+                                  color: Colors.amber,
+                                  size: 32,
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              const SizedBox(height: 20),
                               Text(
-                                'Track progress →',
+                                'Prepárate para el\nSiguiente Nivel',
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white.withAlpha(204),
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  height: 1.1,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withValues(alpha: 0.3),
+                                      offset: const Offset(0, 2),
+                                      blurRadius: 4,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.stars_rounded, color: Colors.amber, size: 16),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Misiones exclusivas y premios pronto...',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.white.withValues(alpha: 0.9),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
             ],
           ),
         ),
