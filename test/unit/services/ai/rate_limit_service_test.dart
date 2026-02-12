@@ -16,7 +16,7 @@ void main() {
     group('Test 1: checkLimit - allows requests within limit', () {
       test('should allow requests when under limit', () {
         // Arrange - Fresh service with 0 requests
-        
+
         // Act
         final canRequest = service.canMakeRequest();
 
@@ -191,7 +191,7 @@ void main() {
 
       test('should return null when requests are available', () {
         // Arrange - Fresh service
-        
+
         // Act
         final nextTime = service.getNextAvailableTime();
 
@@ -221,10 +221,10 @@ void main() {
       test('should clean timestamps older than 30 days', () async {
         // Note: This test validates the concept
         // In real implementation, we'd need to manipulate time or use a clock service
-        
+
         // The service automatically cleans old timestamps in _cleanOldTimestamps()
         // which is called by canMakeRequest() and other methods
-        
+
         expect(service.getRemainingRequests(), equals(10));
       });
 
@@ -232,7 +232,7 @@ void main() {
         // Arrange
         service.recordRequest();
         service.recordRequest();
-        
+
         // Act - Force cleanup through canMakeRequest
         service.canMakeRequest();
 
@@ -257,7 +257,7 @@ void main() {
       test('should wait when next available time is in future', () async {
         // Arrange
         service.recordRequest();
-        
+
         // This test documents the behavior
         // In real scenario, waitIfNeeded would delay until next available time
         expect(service.canMakeRequest(), isFalse);
@@ -270,7 +270,7 @@ void main() {
         service.recordRequest();
         service.recordRequest();
         service.recordRequest();
-        
+
         expect(service.getRemainingRequests(), equals(7));
 
         // Act - Create new service instance with same SharedPreferences
@@ -316,7 +316,7 @@ void main() {
           'gemini_timestamps': ['invalid'],
         });
         final prefs = await SharedPreferences.getInstance();
-        
+
         // Act - Create service
         final newService = RateLimitService(prefs);
 

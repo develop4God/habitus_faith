@@ -29,11 +29,13 @@ void main() {
       when(() => mockRateLimit.getRemainingRequests()).thenReturn(10);
       when(() => mockCache.get<List<MicroHabit>>(any()))
           .thenAnswer((_) async => null);
-      when(() => mockCache.set<List<MicroHabit>>(any(), any(), ttl: any(named: 'ttl')))
-          .thenAnswer((_) async {});
+      when(() => mockCache.set<List<MicroHabit>>(any(), any(),
+          ttl: any(named: 'ttl'))).thenAnswer((_) async {});
     });
 
-    group('Test 1: generateMicroHabits - Service initialization and configuration', () {
+    group(
+        'Test 1: generateMicroHabits - Service initialization and configuration',
+        () {
       test('should successfully create service with all dependencies', () {
         // Act
         final testService = GeminiService(
@@ -73,7 +75,8 @@ void main() {
     });
 
     group('Test 2: generateMicroHabits - handles rate limiting', () {
-      test('should throw RateLimitExceededException when limit exceeded', () async {
+      test('should throw RateLimitExceededException when limit exceeded',
+          () async {
         // Arrange
         when(() => mockRateLimit.canMakeRequest()).thenReturn(false);
 
