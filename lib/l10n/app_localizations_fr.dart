@@ -373,6 +373,17 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vous recevrez un rappel quotidien à l\'heure sélectionnée pour compléter vos habitudes.';
 
   @override
+  String confirmNotificationQuestion(String time) {
+    return 'Voulez-vous définir l\'heure de notification sur $time ?';
+  }
+
+  @override
+  String get buttonConfirmHour => 'Confirmer l\'heure';
+
+  @override
+  String get buttonEdit => 'Modifier';
+
+  @override
   String get highRiskWarning =>
       'Risque élevé d\'abandonner cette habitude aujourd\'hui !';
 

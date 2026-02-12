@@ -344,6 +344,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notificationInfo => '您将在所选时间收到每日提醒以完成您的习惯。';
 
   @override
+  String confirmNotificationQuestion(String time) {
+    return '您想将通知时间设置为 $time 吗？';
+  }
+
+  @override
+  String get buttonConfirmHour => '确认时间';
+
+  @override
+  String get buttonEdit => '编辑';
+
+  @override
   String get highRiskWarning => '今天有高风险放弃这个习惯！';
 
   @override

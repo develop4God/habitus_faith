@@ -450,6 +450,21 @@
   "@notificationInfo": {
     "description": "Notification information text"
   },
+  "confirmNotificationQuestion": "Would you like to set the notification time to {time}?",
+  "@confirmNotificationQuestion": {
+    "description": "Confirmation question for notification time",
+    "placeholders": {
+      "time": { "type": "String", "example": "10:00" }
+    }
+  },
+  "buttonConfirmHour": "Confirm hour",
+  "@buttonConfirmHour": {
+    "description": "Confirm hour button label"
+  },
+  "buttonEdit": "Edit",
+  "@buttonEdit": {
+    "description": "Edit button label"
+  },
   "highRiskWarning": "High risk of abandoning this habit today!",
   "@highRiskWarning": {
     "description": "Warning message for high abandonment risk"

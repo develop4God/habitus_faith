@@ -770,6 +770,24 @@ abstract class AppLocalizations {
   /// **'You will receive a daily reminder at your selected time to complete your habits.'**
   String get notificationInfo;
 
+  /// Confirmation question for notification time
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to set the notification time to {time}?'**
+  String confirmNotificationQuestion(String time);
+
+  /// Confirm hour button label
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm hour'**
+  String get buttonConfirmHour;
+
+  /// Edit button label
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get buttonEdit;
+
   /// Warning message for high abandonment risk
   ///
   /// In en, this message translates to:

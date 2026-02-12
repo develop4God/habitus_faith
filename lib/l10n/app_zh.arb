@@ -211,6 +211,24 @@
   "selectNotificationTime": "选择通知时间",
   "currentTime": "当前时间",
   "notificationInfo": "您将在所选时间收到每日提醒以完成您的习惯。",
+  "confirmNotificationQuestion": "您想将通知时间设置为 {time} 吗？",
+  "@confirmNotificationQuestion": {
+    "description": "Confirmation question for notification time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "10:00"
+      }
+    }
+  },
+  "buttonConfirmHour": "确认时间",
+  "@buttonConfirmHour": {
+    "description": "Confirm hour button label"
+  },
+  "buttonEdit": "编辑",
+  "@buttonEdit": {
+    "description": "Edit button label"
+  },
   "highRiskWarning": "今天有高风险放弃这个习惯！",
   "riskPercentage": "{percent}% 放弃的概率",
   "completeNow": "立即完成",
@@ -1468,5 +1486,68 @@
   "habitAlreadyCompletedStartAgain": "该习惯已完成。是否要重新开始计时？",
   "@habitAlreadyCompletedStartAgain": {
     "description": "No description provided for @habitAlreadyCompletedStartAgain."
+  },
+  "@predefinedHabit_washDishes_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_washDishes_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_cleanRoom_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_cleanRoom_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_doLaundry_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_doLaundry_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_organizeSpace_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_organizeSpace_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_cleanBathroom_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_cleanBathroom_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_cookMeal_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_cookMeal_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_vacuumFloors_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_vacuumFloors_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_makeBreakfast_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_makeBreakfast_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_bedMaking_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_bedMaking_description": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_helpKidsHomework_name": {
+    "description": "PENDING"
+  },
+  "@predefinedHabit_helpKidsHomework_description": {
+    "description": "PENDING"
+  },
+  "@habitCreated": {
+    "description": "PENDING"
   }
 }

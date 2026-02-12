@@ -434,6 +434,24 @@
   "@notificationInfo": {
     "description": "Notification information text"
   },
+  "confirmNotificationQuestion": "Deseja definir o horário de notificação para {time}?",
+  "@confirmNotificationQuestion": {
+    "description": "Confirmation question for notification time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "10:00"
+      }
+    }
+  },
+  "buttonConfirmHour": "Confirmar hora",
+  "@buttonConfirmHour": {
+    "description": "Confirm hour button label"
+  },
+  "buttonEdit": "Editar",
+  "@buttonEdit": {
+    "description": "Edit button label"
+  },
   "highRiskWarning": "Alto risco de abandonar este hábito hoje!",
   "@highRiskWarning": {
     "description": "Warning message for high abandonment risk"
@@ -1130,7 +1148,7 @@
   },
   "repeat": "Repetir lembrete",
   "@repeat": {
-    "description": "Rótulo do botão de repetição de lembrete."
+    "description": "Rótulo do botão de repetição de lembrete"
   },
   "setCycleForPlan": "Defina o ciclo para seu plano",
   "@setCycleForPlan": {

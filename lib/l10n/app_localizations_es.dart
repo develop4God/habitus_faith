@@ -372,6 +372,17 @@ class AppLocalizationsEs extends AppLocalizations {
       'Recibirás un recordatorio diario a la hora seleccionada para completar tus hábitos.';
 
   @override
+  String confirmNotificationQuestion(String time) {
+    return '¿Desea ajustar la hora de notificación a $time?';
+  }
+
+  @override
+  String get buttonConfirmHour => 'Confirmar hora';
+
+  @override
+  String get buttonEdit => 'Editar';
+
+  @override
   String get highRiskWarning => '¡Alto riesgo de abandonar este hábito hoy!';
 
   @override

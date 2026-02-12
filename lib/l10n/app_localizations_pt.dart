@@ -373,6 +373,17 @@ class AppLocalizationsPt extends AppLocalizations {
       'Você receberá um lembrete diário no horário selecionado para completar seus hábitos.';
 
   @override
+  String confirmNotificationQuestion(String time) {
+    return 'Deseja definir o horário de notificação para $time?';
+  }
+
+  @override
+  String get buttonConfirmHour => 'Confirmar hora';
+
+  @override
+  String get buttonEdit => 'Editar';
+
+  @override
   String get highRiskWarning => 'Alto risco de abandonar este hábito hoje!';
 
   @override
