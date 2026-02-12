@@ -24,4 +24,3 @@ final firebaseMessagingProvider = Provider<FirebaseMessaging>((ref) {
   ref.watch(firebaseInitProvider);
   return FirebaseMessaging.instance;
 });
-

@@ -24,7 +24,10 @@ class TestDataGenerators {
     );
 
     // Apply additional properties via copyWith if they differ from defaults
-    if (streakDays > 0 || isCompleted || lastCompletedAt != null || (completionHistory != null && completionHistory.isNotEmpty)) {
+    if (streakDays > 0 ||
+        isCompleted ||
+        lastCompletedAt != null ||
+        (completionHistory != null && completionHistory.isNotEmpty)) {
       return habit.copyWith(
         currentStreak: streakDays,
         longestStreak: streakDays,
@@ -124,11 +127,12 @@ class TestDataGenerators {
       'fcmToken': fcmToken,
       'lastLogin': (lastLogin ?? DateTime.now()).toIso8601String(),
       'createdAt': DateTime.now().toIso8601String(),
-      'notificationSettings': notificationSettings ?? {
-        'dailyReminder': true,
-        'habitReminders': true,
-        'nudgeNotifications': true,
-      },
+      'notificationSettings': notificationSettings ??
+          {
+            'dailyReminder': true,
+            'habitReminders': true,
+            'nudgeNotifications': true,
+          },
     };
   }
 

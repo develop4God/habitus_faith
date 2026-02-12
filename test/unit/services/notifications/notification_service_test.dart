@@ -108,8 +108,7 @@ void main() {
 
       test('service uses injected Firestore instance', () async {
         // Arrange: Create document in our FakeFirebaseFirestore
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         // Act: Create document through our injected fake Firestore
         await userDoc.set({'test': 'data'});
@@ -131,8 +130,7 @@ void main() {
     group('User Document Management', () {
       test('updateLastLogin - creates user document if not exists', () async {
         // Arrange: No existing user document
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         // Verify document doesn't exist yet
         final initialSnapshot = await userDoc.get();
@@ -153,8 +151,7 @@ void main() {
 
       test('updateLastLogin - updates existing user document', () async {
         // Arrange: Create existing user document
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
         final oldLoginTime = DateTime.now().subtract(const Duration(days: 1));
 
         await userDoc.set({
@@ -212,8 +209,7 @@ void main() {
       test('getToken is called from messaging service', () async {
         // Arrange
         const testToken = 'test_fcm_token_abc123xyz789';
-        when(() => mockMessaging.getToken())
-            .thenAnswer((_) async => testToken);
+        when(() => mockMessaging.getToken()).thenAnswer((_) async => testToken);
 
         // Act: Call getToken through our mock
         final token = await mockMessaging.getToken();
@@ -251,8 +247,7 @@ void main() {
         const initialToken = 'initial_token_123';
         const newToken = 'refreshed_token_456';
 
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
         await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
 
         // Save initial token
@@ -431,8 +426,7 @@ void main() {
     group('Production Failure Scenarios', () {
       test('handles Firestore offline mode', () async {
         // FakeFirebaseFirestore works offline by default
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         // Act: Perform operations while "offline"
         await userDoc.set({
@@ -467,4 +461,3 @@ void main() {
     });
   });
 }
-

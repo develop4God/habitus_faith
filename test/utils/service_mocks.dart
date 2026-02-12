@@ -68,8 +68,7 @@ class MockAbandonmentPredictor extends Mock {
 class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 /// Helper to create mock SharedPreferences with preset values
-MockSharedPreferences mockSharedPreferencesWithData(
-    Map<String, dynamic> data) {
+MockSharedPreferences mockSharedPreferencesWithData(Map<String, dynamic> data) {
   final prefs = MockSharedPreferences();
 
   // Setup getters for common types

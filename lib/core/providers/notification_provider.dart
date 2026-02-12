@@ -26,7 +26,8 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
   // 🔴 CRITICAL: Dispose service when provider is disposed
   // Prevents memory leaks by cancelling all stream subscriptions
   ref.onDispose(() {
-    debugPrint('[NotificationServiceProvider] Disposing service and cleaning up resources');
+    debugPrint(
+        '[NotificationServiceProvider] Disposing service and cleaning up resources');
     service.dispose();
   });
 

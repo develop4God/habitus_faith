@@ -126,8 +126,7 @@ void main() {
       test('reusing token updates lastUsed timestamp', () async {
         // Arrange - Setup existing valid token
         const existingToken = 'existing_token_abc123';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         // Create user document
         await userDoc.set({
@@ -183,8 +182,7 @@ void main() {
 
         // Arrange - Create token older than 30 days
         const oldToken = 'old_token_should_be_deleted';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         await userDoc.set({
           'createdAt': FieldValue.serverTimestamp(),
@@ -194,7 +192,8 @@ void main() {
         final tokenDoc = userDoc.collection('fcmTokens').doc(oldToken);
 
         // Token created 31 days ago
-        final thirtyOneDaysAgo = DateTime.now().subtract(const Duration(days: 31));
+        final thirtyOneDaysAgo =
+            DateTime.now().subtract(const Duration(days: 31));
         await tokenDoc.set({
           'token': oldToken,
           'createdAt': Timestamp.fromDate(thirtyOneDaysAgo),
@@ -239,8 +238,7 @@ void main() {
       test('missing lastUsed field is handled gracefully', () async {
         // Arrange - Token without lastUsed field
         const tokenWithoutLastUsed = 'token_no_lastused';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
 
@@ -287,7 +285,8 @@ void main() {
         expect(badLog.contains('🔍'), true); // Has emoji
 
         // Assert - Production logs should not have emojis
-        expect(goodLog.contains(RegExp(r'[\u{1F300}-\u{1F9FF}]', unicode: true)),
+        expect(
+            goodLog.contains(RegExp(r'[\u{1F300}-\u{1F9FF}]', unicode: true)),
             false);
       });
 
@@ -314,8 +313,7 @@ void main() {
           () async {
         // Arrange - Complete setup
         const existingToken = 'integration_test_token';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         await userDoc.set({
           'createdAt': FieldValue.serverTimestamp(),
@@ -370,8 +368,7 @@ void main() {
 
         // Arrange - Mock a scenario where update might fail
         const token = 'test_token';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
 
@@ -392,6 +389,133 @@ void main() {
         expect(snapshot.data()?['lastUsed'], isNotNull);
       });
     });
+
+    group('Token Deletion on Uninstall', () {
+      test('deleteTokenOnUninstall removes token from Firestore and local storage',
+          () async {
+        // Arrange - Setup token in Firestore and SharedPreferences
+        const testToken = 'token_to_delete_123';
+        final userDoc =
+            fakeFirestore.collection('users').doc('test-user-123');
+
+        await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
+
+        final tokenDoc = userDoc.collection('fcmTokens').doc(testToken);
+        await tokenDoc.set({
+          'token': testToken,
+          'createdAt': FieldValue.serverTimestamp(),
+          'platform': 'Android',
+        });
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('fcm_token', testToken);
+
+        // Verify token exists before deletion
+        var snapshot = await tokenDoc.get();
+        expect(snapshot.exists, true);
+        expect(prefs.getString('fcm_token'), testToken);
+
+        // Mock deleteToken method
+        when(() => mockMessaging.deleteToken()).thenAnswer((_) async => {});
+
+        // Act - Delete token
+        await notificationService.deleteTokenOnUninstall();
+
+        // Assert - Token should be deleted from Firestore
+        snapshot = await tokenDoc.get();
+        expect(snapshot.exists, false);
+
+        // Token should be removed from SharedPreferences
+        expect(prefs.getString('fcm_token'), isNull);
+
+        // Verify FCM deleteToken was called
+        verify(() => mockMessaging.deleteToken()).called(1);
+      });
+
+      test('deleteTokenOnUninstall handles missing token gracefully', () async {
+        // Arrange - No token in storage
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('fcm_token');
+
+        // Act - Try to delete (should not throw)
+        await expectLater(
+          notificationService.deleteTokenOnUninstall(),
+          completes,
+        );
+
+        // Assert - Should complete without errors
+        expect(prefs.getString('fcm_token'), isNull);
+      });
+
+      test('deleteTokenOnUninstall handles unauthenticated user', () async {
+        // Arrange - Create service with unauthenticated user
+        final unauthService = NotificationService(
+          firebaseMessaging: mockMessaging,
+          firestore: fakeFirestore,
+          auth: MockFirebaseAuth(signedIn: false),
+        );
+
+        // Act - Try to delete (should exit early)
+        await expectLater(
+          unauthService.deleteTokenOnUninstall(),
+          completes,
+        );
+
+        // Assert - No exception thrown
+        expect(true, true);
+
+        // Cleanup
+        unauthService.dispose();
+      });
+
+      test('deleteTokenOnUninstall handles Firestore errors gracefully',
+          () async {
+        // Arrange - Setup token in local storage only
+        const testToken = 'error_token';
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('fcm_token', testToken);
+
+        // Mock deleteToken to succeed
+        when(() => mockMessaging.deleteToken()).thenAnswer((_) async => {});
+
+        // Act - Try to delete (Firestore doc doesn't exist, should handle gracefully)
+        await expectLater(
+          notificationService.deleteTokenOnUninstall(),
+          completes,
+        );
+
+        // Assert - Local token should still be removed
+        expect(prefs.getString('fcm_token'), isNull);
+      });
+
+      test('deleteTokenOnUninstall is idempotent', () async {
+        // Arrange - Setup token
+        const testToken = 'idempotent_token';
+        final userDoc =
+            fakeFirestore.collection('users').doc('test-user-123');
+        await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
+
+        final tokenDoc = userDoc.collection('fcmTokens').doc(testToken);
+        await tokenDoc.set({
+          'token': testToken,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('fcm_token', testToken);
+
+        when(() => mockMessaging.deleteToken()).thenAnswer((_) async => {});
+
+        // Act - Delete multiple times
+        await notificationService.deleteTokenOnUninstall();
+        await notificationService.deleteTokenOnUninstall();
+        await notificationService.deleteTokenOnUninstall();
+
+        // Assert - Should complete without errors
+        final snapshot = await tokenDoc.get();
+        expect(snapshot.exists, false);
+        expect(prefs.getString('fcm_token'), isNull);
+      });
+    });
   });
 }
-

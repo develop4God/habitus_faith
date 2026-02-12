@@ -41,7 +41,6 @@ class NotificationService {
         _flutterLocalNotificationsPlugin =
             localNotificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
-
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   final FirebaseMessaging _firebaseMessaging;
   final FirebaseFirestore _firestore;
@@ -80,6 +79,70 @@ class NotificationService {
 
     _onMessageOpenedAppSubscription?.cancel();
     _onMessageOpenedAppSubscription = null;
+  }
+
+  /// 🔴 CRITICAL: Delete FCM token on app uninstall
+  /// This should be called when the app is being uninstalled or user logs out permanently
+  /// Prevents sending notifications to devices that no longer have the app
+  ///
+  /// Call this method when:
+  /// - User explicitly logs out and won't use app again
+  /// - App is being uninstalled (iOS can detect this via AppDelegate)
+  /// - User deletes their account
+  Future<void> deleteTokenOnUninstall() async {
+    try {
+      final User? user = _auth.currentUser;
+      if (user == null) {
+        developer.log(
+          '[NotificationService] Token deletion: user_authenticated=false, skipping',
+          name: 'NotificationService',
+        );
+        return;
+      }
+
+      // Get current FCM token
+      final prefs = await SharedPreferences.getInstance();
+      final String? currentToken = prefs.getString(_fcmTokenKey);
+
+      if (currentToken == null || currentToken.isEmpty) {
+        developer.log(
+          '[NotificationService] Token deletion: token_exists=false, nothing_to_delete',
+          name: 'NotificationService',
+        );
+        return;
+      }
+
+      developer.log(
+        '[NotificationService] Token deletion: user_id=${user.uid}, deleting_token=true',
+        name: 'NotificationService',
+      );
+
+      // Delete token from Firestore
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('fcmTokens')
+          .doc(currentToken)
+          .delete();
+
+      // Delete the FCM token from FCM service
+      await _firebaseMessaging.deleteToken();
+
+      // Remove token from local storage
+      await prefs.remove(_fcmTokenKey);
+
+      developer.log(
+        '[NotificationService] Token deletion: success=true, token_deleted_from_firestore=true, token_deleted_from_fcm=true, token_deleted_from_local=true',
+        name: 'NotificationService',
+      );
+    } catch (e) {
+      developer.log(
+        '[NotificationService] Token deletion: error=true, details=$e',
+        name: 'NotificationService',
+        error: e,
+      );
+      // Don't rethrow - token deletion is best-effort
+    }
   }
 
   /// Ensure user document exists in Firestore

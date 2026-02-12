@@ -14,8 +14,8 @@ class MockUserCredential extends Mock implements UserCredential {}
 // Firestore Mocks
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
-class MockCollectionReference extends Mock
-    implements CollectionReference<Map<String, dynamic>> {}
+// class MockCollectionReference extends Mock
+//     implements CollectionReference<Map<String, dynamic>> {}
 
 class MockWriteBatch extends Mock implements WriteBatch {}
 
