@@ -317,7 +317,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notificationsDisabled => '通知已禁用';
 
   @override
-  String get notificationTimeUpdated => '通知时间已更新为';
+  String notificationTimeUpdated(String time) {
+    return '通知时间已更新为 $time';
+  }
 
   @override
   String get enableNotifications => '启用通知';

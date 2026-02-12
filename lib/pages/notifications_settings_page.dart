@@ -93,6 +93,9 @@ class _NotificationsSettingsPageState
       final existingMinute = int.parse(parts[1]);
       final existingTimes = [TimeOfDay(hour: existingHour, minute: existingMinute)];
 
+      // Ensure widget is still mounted before showing dialog (we had awaits above)
+      if (!mounted) return;
+
       // Use the compact dialog which returns the confirmed TimeOfDay or null
       final confirmed = await showConfirmNotificationDialog(
         context,
@@ -100,6 +103,9 @@ class _NotificationsSettingsPageState
         existingTimes: existingTimes,
         userTimezone: null,
       );
+
+      // Ensure widget is still mounted before using context after async gap
+      if (!mounted) return;
 
       if (confirmed != null) {
         // Update visible selected time only after user confirmed and validation passed
@@ -110,6 +116,11 @@ class _NotificationsSettingsPageState
         final timeStr =
             '${confirmed.hour.toString().padLeft(2, '0')}:${confirmed.minute.toString().padLeft(2, '0')}';
 
+        // Capture localization-dependent strings before the async call so we
+        // don't use BuildContext across an async gap (fixes use_build_context_synchronously).
+        final l10n = AppLocalizations.of(context)!;
+        final formatted = confirmed.format(context);
+
         final currentLocale = ref.read(appLanguageProvider);
         final languageCode = currentLocale.languageCode;
 
@@ -118,10 +129,9 @@ class _NotificationsSettingsPageState
 
         if (!mounted) return;
 
-        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${l10n.notificationTimeUpdated} $timeStr'),
+            content: Text(l10n.notificationTimeUpdated(formatted)),
           ),
         );
       }

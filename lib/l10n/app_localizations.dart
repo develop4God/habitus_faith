@@ -716,11 +716,11 @@ abstract class AppLocalizations {
   /// **'Notifications disabled'**
   String get notificationsDisabled;
 
-  /// Notification time updated message
+  /// Notification time updated message with time
   ///
   /// In en, this message translates to:
-  /// **'Notification time updated to'**
-  String get notificationTimeUpdated;
+  /// **'Notification time updated to {time}'**
+  String notificationTimeUpdated(String time);
 
   /// Enable notifications option
   ///

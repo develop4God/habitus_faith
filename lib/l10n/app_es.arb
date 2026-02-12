@@ -414,9 +414,15 @@
   "@notificationsDisabled": {
     "description": "Notifications disabled message"
   },
-  "notificationTimeUpdated": "Hora de notificación actualizada a",
+  "notificationTimeUpdated": "Hora de notificación actualizada a {time}",
   "@notificationTimeUpdated": {
-    "description": "Notification time updated message"
+    "description": "Notification time updated message with time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "13:00"
+      }
+    }
   },
   "enableNotifications": "Activar Notificaciones",
   "@enableNotifications": {
@@ -1370,10 +1376,26 @@
     "description": "PENDING"
   },
   "@mlInsufficientData": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "days": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@backgroundSyncFailed": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "reason": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@backgroundSyncNetwork": {
     "description": "PENDING"
@@ -1397,7 +1419,15 @@
     "description": "PENDING"
   },
   "@optimalTimeFound": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "time": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@networkTimeout": {
     "description": "PENDING"
@@ -1412,16 +1442,53 @@
     "description": "PENDING"
   },
   "@devBannerLastSync": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "time": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@devBannerMlStatus": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "status": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@devBannerWorkmanager": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "status": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@devBannerFastTime": {
-    "description": "PENDING"
+    "description": "PENDING",
+    "placeholders": {
+      "description": "PENDING",
+      "multiplier": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      },
+      "date": {
+        "description": "PENDING",
+        "type": "PENDING",
+        "example": "PENDING"
+      }
+    }
   },
   "@riskLevelLow": {
     "description": "PENDING"

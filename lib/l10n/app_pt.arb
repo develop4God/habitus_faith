@@ -398,9 +398,15 @@
   "@notificationsDisabled": {
     "description": "Notifications disabled message"
   },
-  "notificationTimeUpdated": "Horário de notificação atualizado para",
+  "notificationTimeUpdated": "Horário de notificação atualizado para {time}",
   "@notificationTimeUpdated": {
-    "description": "Notification time updated message"
+    "description": "Notification time updated message with time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "13:00"
+      }
+    }
   },
   "enableNotifications": "Ativar Notificações",
   "@enableNotifications": {

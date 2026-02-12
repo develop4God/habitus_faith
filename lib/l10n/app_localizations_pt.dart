@@ -343,8 +343,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get notificationsDisabled => 'Notificações desativadas';
 
   @override
-  String get notificationTimeUpdated =>
-      'Horário de notificação atualizado para';
+  String notificationTimeUpdated(String time) {
+    return 'Horário de notificação atualizado para $time';
+  }
 
   @override
   String get enableNotifications => 'Ativar Notificações';

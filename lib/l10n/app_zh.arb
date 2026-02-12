@@ -202,7 +202,16 @@
   "languageInfo": "应用程序将使用所选语言显示所有文本和界面元素。",
   "notificationsEnabled": "通知已启用",
   "notificationsDisabled": "通知已禁用",
-  "notificationTimeUpdated": "通知时间已更新为",
+  "notificationTimeUpdated": "通知时间已更新为 {time}",
+  "@notificationTimeUpdated": {
+    "description": "Notification time updated message with time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "13:00"
+      }
+    }
+  },
   "enableNotifications": "启用通知",
   "notificationsOn": "通知已开启",
   "notificationsOff": "通知已关闭",
@@ -703,9 +712,6 @@
   },
   "@notificationsDisabled": {
     "description": "Notifications disabled message"
-  },
-  "@notificationTimeUpdated": {
-    "description": "Notification time updated message"
   },
   "@enableNotifications": {
     "description": "Enable notifications option"
