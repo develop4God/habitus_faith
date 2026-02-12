@@ -1,4 +1,5 @@
 // lib/core/services/notifications/notification_service.dart
+import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,6 +47,12 @@ class NotificationService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
+  // 🔴 CRITICAL: Stream subscriptions for proper lifecycle management
+  // Must be cancelled to prevent memory leaks on hot reload or provider recreation
+  StreamSubscription<String>? _tokenRefreshSubscription;
+  StreamSubscription<RemoteMessage>? _onMessageSubscription;
+  StreamSubscription<RemoteMessage>? _onMessageOpenedAppSubscription;
+
   static const String _notificationsEnabledKey = 'notifications_enabled';
   static const String _notificationTimeKey = 'notification_time';
   static const String defaultNotificationTime = '09:00';
@@ -55,6 +62,25 @@ class NotificationService {
   static const String nudgeSentPrefix = 'nudge_sent_';
 
   Function(String? payload)? onNotificationTapped;
+
+  /// 🔴 CRITICAL: Dispose method to clean up resources
+  /// Must be called when service is no longer needed (e.g., app termination, provider disposal)
+  /// Prevents memory leaks by cancelling all active stream subscriptions
+  void dispose() {
+    developer.log(
+      '[NotificationService] Disposing service and cancelling subscriptions',
+      name: 'NotificationService',
+    );
+
+    _tokenRefreshSubscription?.cancel();
+    _tokenRefreshSubscription = null;
+
+    _onMessageSubscription?.cancel();
+    _onMessageSubscription = null;
+
+    _onMessageOpenedAppSubscription?.cancel();
+    _onMessageOpenedAppSubscription = null;
+  }
 
   /// Ensure user document exists in Firestore
   /// Creates a minimal user document if it doesn't exist
@@ -275,8 +301,22 @@ class NotificationService {
   }
 
   // Initialize FCM, get/save token and configure listeners
+  // 🎯 INTELLIGENT TOKEN MANAGEMENT:
+  // 1. Check if token exists locally
+  // 2. Validate token is still valid in Firestore
+  // 3. Only request new token if needed
+  // 4. Update lastLogin and notification config
   Future<void> _initializeFCM() async {
     try {
+      final User? user = _auth.currentUser;
+      if (user == null) {
+        developer.log(
+          '⚠️ NotificationService: No authenticated user, skipping FCM initialization',
+          name: 'NotificationService',
+        );
+        return;
+      }
+
       // Request permission for notifications (iOS and Android 13+)
       NotificationSettings settings =
           await _firebaseMessaging.requestPermission(
@@ -294,78 +334,95 @@ class NotificationService {
         name: 'NotificationService',
       );
 
-      // Get FCM token with retry logic (max 3 attempts)
-      String? token;
-      const int maxAttempts = 3;
-      for (int attempt = 1; attempt <= maxAttempts; attempt++) {
-        try {
-          token = await _firebaseMessaging.getToken();
-          if (token != null) {
-            developer.log(
-              'NotificationService: FCM token obtained on attempt $attempt: $token',
-              name: 'NotificationService',
-            );
-            break;
-          } else {
-            developer.log(
-              'NotificationService: FCM token null on attempt $attempt',
-              name: 'NotificationService',
-            );
-          }
-        } catch (e) {
-          final msg = e.toString();
+      // STEP 1: Check if we already have a valid token locally
+      final prefs = await SharedPreferences.getInstance();
+      final String? existingToken = prefs.getString(_fcmTokenKey);
+
+      if (existingToken != null && existingToken.isNotEmpty) {
+        developer.log(
+          '[NotificationService] Token validation: found_locally=true, token_length=${existingToken.length}',
+          name: 'NotificationService',
+        );
+
+        // STEP 2: Validate token exists in Firestore
+        final isTokenValid = await _validateTokenInFirestore(
+          user.uid,
+          existingToken,
+        );
+
+        if (isTokenValid) {
           developer.log(
-            'NotificationService: Error getting token (attempt $attempt): $msg',
+            '[NotificationService] Token validation: valid_in_firestore=true, reusing_token=true',
             name: 'NotificationService',
-            error: e,
           );
-          if (msg.contains('SERVICE_NOT_AVAILABLE') && attempt < maxAttempts) {
-            await Future.delayed(Duration(milliseconds: 600 * attempt));
-            continue;
-          } else {
-            rethrow;
+
+          // 🔴 CRITICAL: Update lastUsed timestamp to prevent Cloud Function deletion
+          // Cloud Function deletes tokens older than 30 days without lastUsed update
+          try {
+            await _firestore
+                .collection('users')
+                .doc(user.uid)
+                .collection('fcmTokens')
+                .doc(existingToken)
+                .update({
+              'lastUsed': FieldValue.serverTimestamp(),
+            });
+
+            developer.log(
+              '[NotificationService] Token lifecycle: lastUsed_updated=true, prevents_cleanup=true',
+              name: 'NotificationService',
+            );
+          } catch (e) {
+            developer.log(
+              '[NotificationService] Token lifecycle: lastUsed_update_failed=true, error=$e',
+              name: 'NotificationService',
+              error: e,
+            );
+            // Continue anyway - this is non-critical
           }
+
+          // STEP 3: Update lastLogin (user opened app with valid token)
+          await updateLastLogin();
+
+          // STEP 4: Sync notification configuration (in case user changed settings)
+          await _syncNotificationConfiguration(user.uid);
+
+          // Setup listeners and we're done
+          _setupTokenRefreshListener();
+          _setupMessageListeners();
+          return;
+        } else {
+          developer.log(
+            '[NotificationService] Token validation: valid_in_firestore=false, requesting_new=true',
+            name: 'NotificationService',
+          );
         }
-        if (token == null && attempt < maxAttempts) {
-          await Future.delayed(Duration(milliseconds: 400 * attempt));
-        }
+      } else {
+        developer.log(
+          '📝 NotificationService: No existing token found locally - requesting new token',
+          name: 'NotificationService',
+        );
       }
 
+      // 🎯 STEP 5: Request new token (only if we don't have a valid one)
+      String? token = await _requestFcmToken();
+
       if (token != null) {
+        developer.log(
+          '✅ NotificationService: New token obtained: ${token.substring(0, 20)}...',
+          name: 'NotificationService',
+        );
         await _saveFcmToken(token);
       } else {
         developer.log(
-          'NotificationService: Could not obtain FCM token after $maxAttempts attempts (token still null).',
+          '⚠️ NotificationService: Could not obtain FCM token',
           name: 'NotificationService',
         );
       }
 
-      // Listen for token changes
-      _firebaseMessaging.onTokenRefresh.listen((newToken) {
-        developer.log(
-          'NotificationService: FCM token refreshed: $newToken',
-          name: 'NotificationService',
-        );
-        _saveFcmToken(newToken);
-      });
-
-      // Listener for FCM messages when app is in foreground
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        developer.log(
-          'NotificationService: FCM message in foreground: ${message.messageId}',
-          name: 'NotificationService',
-        );
-        _handleMessage(message);
-      });
-
-      // Listener for when user taps a FCM notification
-      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        developer.log(
-          'NotificationService: App opened from notification: ${message.messageId}',
-          name: 'NotificationService',
-        );
-        _handleMessage(message);
-      });
+      // Setup listeners
+      _setupTokenRefreshListener();
+      _setupMessageListeners();
     } catch (e) {
       developer.log(
         'ERROR in _initializeFCM: $e',
@@ -373,6 +430,191 @@ class NotificationService {
         error: e,
       );
     }
+  }
+
+  /// 🎯 Validate if token exists in Firestore for this user
+  Future<bool> _validateTokenInFirestore(String userId, String token) async {
+    try {
+      final tokenDoc = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('fcmTokens')
+          .doc(token);
+
+      final snapshot = await tokenDoc.get();
+      return snapshot.exists;
+    } catch (e) {
+      developer.log(
+        '⚠️ NotificationService: Error validating token in Firestore: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+      return false;
+    }
+  }
+
+  /// 🎯 Request FCM token with retry logic
+  Future<String?> _requestFcmToken() async {
+    String? token;
+    const int maxAttempts = 3;
+
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        token = await _firebaseMessaging.getToken();
+        if (token != null) {
+          developer.log(
+            'NotificationService: FCM token obtained on attempt $attempt',
+            name: 'NotificationService',
+          );
+          return token;
+        } else {
+          developer.log(
+            'NotificationService: FCM token null on attempt $attempt',
+            name: 'NotificationService',
+          );
+        }
+      } catch (e) {
+        final msg = e.toString();
+        developer.log(
+          'NotificationService: Error getting token (attempt $attempt): $msg',
+          name: 'NotificationService',
+          error: e,
+        );
+        if (msg.contains('SERVICE_NOT_AVAILABLE') && attempt < maxAttempts) {
+          await Future.delayed(Duration(milliseconds: 600 * attempt));
+          continue;
+        } else {
+          // Don't rethrow - just return null and log error
+          developer.log(
+            'NotificationService: Failed to get token after $attempt attempts',
+            name: 'NotificationService',
+          );
+          return null;
+        }
+      }
+
+      if (token == null && attempt < maxAttempts) {
+        await Future.delayed(Duration(milliseconds: 400 * attempt));
+      }
+    }
+
+    return token;
+  }
+
+  /// 🎯 Sync notification configuration from Firestore
+  /// Called when user has valid token but may have changed settings
+  Future<void> _syncNotificationConfiguration(String userId) async {
+    try {
+      final currentDeviceTimezone = await FlutterTimezone.getLocalTimezone();
+
+      final settingsDoc = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('settings')
+          .doc('notifications')
+          .get();
+
+      if (settingsDoc.exists) {
+        final data = settingsDoc.data();
+        final enabled = data?['notificationsEnabled'] ?? true;
+        final time = data?['notificationTime'] ?? defaultNotificationTime;
+        final timezone = data?['userTimezone'] ?? currentDeviceTimezone;
+
+        developer.log(
+          '🔄 NotificationService: Syncing config - Enabled: $enabled, Time: $time, Timezone: $timezone',
+          name: 'NotificationService',
+        );
+
+        // Cache locally for offline access
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_notificationsEnabledKey, enabled);
+        await prefs.setString(_notificationTimeKey, time);
+      } else {
+        developer.log(
+          '📝 NotificationService: No settings found - using defaults',
+          name: 'NotificationService',
+        );
+      }
+    } catch (e) {
+      developer.log(
+        '⚠️ NotificationService: Error syncing configuration: $e',
+        name: 'NotificationService',
+        error: e,
+      );
+    }
+  }
+
+  /// Setup token refresh listener (separate method for clarity)
+  /// 🔴 CRITICAL: Cancels old subscription first to prevent memory leaks
+  void _setupTokenRefreshListener() {
+    // Cancel existing subscription if any
+    _tokenRefreshSubscription?.cancel();
+
+    // Listen for token changes
+    _tokenRefreshSubscription =
+        _firebaseMessaging.onTokenRefresh.listen((newToken) {
+      developer.log(
+        '[NotificationService] Token refresh: new_token_received=true',
+        name: 'NotificationService',
+      );
+      _saveFcmToken(newToken);
+    }, onError: (error) {
+      developer.log(
+        '[NotificationService] Token refresh: error=true, details=$error',
+        name: 'NotificationService',
+        error: error,
+      );
+    });
+
+    developer.log(
+      '[NotificationService] Listener: token_refresh_listener=active',
+      name: 'NotificationService',
+    );
+  }
+
+  /// Setup message listeners (separate method for clarity)
+  /// 🔴 CRITICAL: Cancels old subscriptions first to prevent memory leaks
+  void _setupMessageListeners() {
+    // Cancel existing subscriptions if any
+    _onMessageSubscription?.cancel();
+    _onMessageOpenedAppSubscription?.cancel();
+
+    // Listener for FCM messages when app is in foreground
+    _onMessageSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      developer.log(
+        '[NotificationService] Message received: foreground=true, message_id=${message.messageId}',
+        name: 'NotificationService',
+      );
+      _handleMessage(message);
+    }, onError: (error) {
+      developer.log(
+        '[NotificationService] Message error: error=true, details=$error',
+        name: 'NotificationService',
+        error: error,
+      );
+    });
+
+    // Listener for when user taps a FCM notification
+    _onMessageOpenedAppSubscription =
+        FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      developer.log(
+        '[NotificationService] Message opened: app_opened_from_notification=true, message_id=${message.messageId}',
+        name: 'NotificationService',
+      );
+      _handleMessage(message);
+    }, onError: (error) {
+      developer.log(
+        '[NotificationService] Message opened error: error=true, details=$error',
+        name: 'NotificationService',
+        error: error,
+      );
+    });
+
+    developer.log(
+      '[NotificationService] Listeners: message_listeners=active, count=2',
+      name: 'NotificationService',
+    );
   }
 
   // Handle FCM messages and show them locally

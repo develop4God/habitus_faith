@@ -290,7 +290,6 @@ void main() {
 
       test('onTokenRefresh stream emits new tokens', () async {
         // Arrange: Create a stream controller for token refresh events
-        const initialToken = 'initial_token_abc';
         const refreshedToken = 'refreshed_token_xyz';
 
         // Mock the stream to emit a token refresh event

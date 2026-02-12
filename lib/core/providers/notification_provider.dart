@@ -17,11 +17,20 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
 
   // Inject all dependencies via constructor (Dependency Injection)
   // Using ref.watch() to ensure provider rebuilds if Firebase reinitializes
-  return NotificationService(
+  final service = NotificationService(
     firebaseMessaging: ref.watch(firebaseMessagingProvider),
     firestore: ref.watch(firebaseFirestoreProvider),
     auth: ref.watch(firebaseAuthProvider),
   );
+
+  // 🔴 CRITICAL: Dispose service when provider is disposed
+  // Prevents memory leaks by cancelling all stream subscriptions
+  ref.onDispose(() {
+    debugPrint('[NotificationServiceProvider] Disposing service and cleaning up resources');
+    service.dispose();
+  });
+
+  return service;
 });
 
 // Provider for NotificationService initialization
