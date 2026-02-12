@@ -79,6 +79,7 @@ flutter:
   assets:
     - assets/lottie/animation.json
     - assets/lottie/
+    - assets/lottie/pets/
     - assets/biblia/
     - assets/ml_models/predictor.tflite
     - assets/ml_models/scaler_params.json
