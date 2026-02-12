@@ -728,7 +728,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                         ),
                       ),
                       child: Icon(
-                        Icons.add_task_rounded,
+                        Icons.checklist_rtl_outlined,
                         color: habitColor,
                         size: 32,
                       ),

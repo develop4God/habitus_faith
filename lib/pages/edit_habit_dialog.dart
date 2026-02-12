@@ -67,7 +67,10 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     if (emojiCtrl.text != (habit.emoji ?? '')) return true;
     if (selectedCategory != habit.category) return true;
     if (selectedDifficulty != habit.difficulty) return true;
-    if (selectedColor?.toARGB32() != habit.colorValue) return true;
+    
+    final currentColorValue = selectedColor?.toARGB32();
+    if (currentColorValue != habit.colorValue) return true;
+    
     if (notificationSettings != habit.notificationSettings) return true;
     if (recurrence != habit.recurrence) return true;
     return false;
@@ -236,7 +239,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: HabitColors.availableColors.map((color) {
-                                final isSelected = selectedColor?.value == color.value;
+                                final isSelected = selectedColor?.toARGB32() == color.toARGB32();
                                 return GestureDetector(
                                   onTap: () => setState(() => selectedColor = color),
                                   child: AnimatedContainer(
