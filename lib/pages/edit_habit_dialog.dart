@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:collection/collection.dart';
 
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
@@ -125,10 +124,12 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   @override
   Widget build(BuildContext context) {
     final canSave = _hasChanges();
+    final l10n = widget.l10n;
+    const themeColor = Colors.blueAccent;
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -141,19 +142,19 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               children: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(widget.l10n.cancel, style: TextStyle(color: Colors.grey.shade600, fontSize: 16)),
+                  child: Text(l10n.cancel, style: TextStyle(color: Colors.grey.shade600, fontSize: 16)),
                 ),
-                Text(widget.l10n.editHabit, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                Text(l10n.editHabit, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                 ElevatedButton(
                   onPressed: canSave ? _save : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: themeColor,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   ),
-                  child: Text(widget.l10n.save, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(l10n.save, style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -175,7 +176,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                               width: 60,
                               height: 60,
                               decoration: BoxDecoration(
-                                color: (selectedColor ?? Colors.blueAccent).withValues(alpha: 0.1),
+                                color: themeColor.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: TextField(
@@ -196,7 +197,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                                 controller: nameCtrl,
                                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 decoration: InputDecoration(
-                                  hintText: widget.l10n.name,
+                                  hintText: l10n.name,
                                   border: InputBorder.none,
                                   hintStyle: TextStyle(color: Colors.grey.shade400),
                                 ),
@@ -239,20 +240,20 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                   ),
                   
                   const SizedBox(height: 20),
-                  const Text("Challenge", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                  Text(l10n.difficulty, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey)),
                   const SizedBox(height: 10),
                   _buildSectionCard(
                     child: Column(
                       children: [
-                        _buildDifficultySelector(),
+                        _buildDifficultySelector(themeColor),
                         const SizedBox(height: 16),
-                        _buildCategoryChips(),
+                        _buildCategoryChips(themeColor),
                       ],
                     ),
                   ),
 
                   const SizedBox(height: 20),
-                  const Text("Schedule", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                  Text(l10n.routine, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey)),
                   const SizedBox(height: 10),
                   _buildSectionCard(
                     padding: EdgeInsets.zero,
@@ -261,8 +262,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         _buildTile(
                           icon: Icons.access_time_rounded,
                           color: Colors.orange,
-                          title: "Target Time",
-                          value: eventTime?.format(context) ?? "Set time",
+                          title: "Hora",
+                          value: eventTime?.format(context) ?? "Seleccionar hora",
                           onTap: () async {
                             final picked = await showTimePicker(context: context, initialTime: eventTime ?? TimeOfDay.now());
                             if (picked != null) {
@@ -279,8 +280,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         _buildTile(
                           icon: Icons.notifications_active_outlined,
                           color: Colors.purple,
-                          title: widget.l10n.reminder,
-                          value: notificationSettings?.timing.displayName ?? "None",
+                          title: l10n.reminder,
+                          value: notificationSettings?.timing.displayName ?? l10n.noRepetition,
                           onTap: () async {
                             final result = await showDialog<HabitNotificationSettings>(
                               context: context,
@@ -296,8 +297,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                         _buildTile(
                           icon: Icons.repeat_rounded,
                           color: Colors.green,
-                          title: widget.l10n.repetition,
-                          value: recurrence?.enabled == true ? recurrence!.frequency.displayName : widget.l10n.noRepetition,
+                          title: l10n.repetition,
+                          value: recurrence?.enabled == true ? recurrence!.frequency.displayName : l10n.noRepetition,
                           onTap: () async {
                             final result = await showDialog<HabitRecurrence>(
                               context: context,
@@ -339,17 +340,12 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
         child: Icon(icon, color: color, size: 20),
       ),
       title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(value, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
-          const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
-        ],
-      ),
+      subtitle: Text(value, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+      trailing: const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
     );
   }
 
-  Widget _buildDifficultySelector() {
+  Widget _buildDifficultySelector(Color themeColor) {
     return Row(
       children: HabitDifficulty.values.map((diff) {
         final isSelected = selectedDifficulty == diff;
@@ -361,7 +357,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
               margin: const EdgeInsets.symmetric(horizontal: 4),
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: isSelected ? Colors.blueAccent : Colors.grey.shade100,
+                color: isSelected ? themeColor : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -380,7 +376,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     );
   }
 
-  Widget _buildCategoryChips() {
+  Widget _buildCategoryChips(Color themeColor) {
     return Wrap(
       spacing: 8,
       runSpacing: 0,
@@ -390,7 +386,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
           label: Text(HabitColors.getCategoryDisplayName(cat, widget.l10n), style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : Colors.black87)),
           selected: isSelected,
           onSelected: (val) => setState(() => selectedCategory = cat),
-          selectedColor: Colors.blueAccent,
+          selectedColor: themeColor,
           backgroundColor: Colors.grey.shade100,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           showCheckmark: false,
