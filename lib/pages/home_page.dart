@@ -178,7 +178,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
-                        // Pet Animation - Updated to use selectedPetProvider
+                        // Pet Animation - with Fallback Emoji
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
@@ -191,10 +191,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                             height: 100,
                             width: 100,
                             child: Lottie.asset(
-                              ref.watch(new_pets.selectedPetProvider).lottieAsset,
+                              ref
+                                  .watch(new_pets.selectedPetProvider)
+                                  .lottieAsset,
                               fit: BoxFit.contain,
                               errorBuilder: (context, error, stackTrace) {
-                                return const Text('🐶', style: TextStyle(fontSize: 40));
+                                final selectedPet =
+                                    ref.read(new_pets.selectedPetProvider);
+                                debugPrint(
+                                    'DEBUG: Error loading Lottie asset: ${selectedPet.lottieAsset}. Error: $error');
+                                return Center(
+                                  child: Text(
+                                    selectedPet.emoji,
+                                    style: const TextStyle(fontSize: 40),
+                                  ),
+                                );
                               },
                             ),
                           ),

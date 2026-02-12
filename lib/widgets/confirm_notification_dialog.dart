@@ -31,17 +31,18 @@ class _ConfirmNotificationDialogContent extends StatefulWidget {
   final String? userTimezone;
 
   const _ConfirmNotificationDialogContent({
-    Key? key,
     required this.proposedTime,
     required this.existingTimes,
     this.userTimezone,
-  }) : super(key: key);
+  });
 
   @override
-  State<_ConfirmNotificationDialogContent> createState() => _ConfirmNotificationDialogContentState();
+  State<_ConfirmNotificationDialogContent> createState() =>
+      _ConfirmNotificationDialogContentState();
 }
 
-class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationDialogContent> {
+class _ConfirmNotificationDialogContentState
+    extends State<_ConfirmNotificationDialogContent> {
   late TimeOfDay _current;
   ValidationResult? _result;
   bool _loading = true;
@@ -87,7 +88,8 @@ class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationD
             Center(
               child: Text(
                 timeStr,
-                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 12),
@@ -104,7 +106,8 @@ class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationD
             const SizedBox(height: 12),
             if (_loading)
               const LinearProgressIndicator()
-            else if (_result != null && _result!.status != ValidationStatus.valid)
+            else if (_result != null &&
+                _result!.status != ValidationStatus.valid)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
@@ -115,7 +118,9 @@ class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationD
                   ],
                 ),
               ),
-            if (!_loading && _result != null && _result!.suggestedTimes.isNotEmpty)
+            if (!_loading &&
+                _result != null &&
+                _result!.suggestedTimes.isNotEmpty)
               Wrap(
                 spacing: 8,
                 children: _result!.suggestedTimes
@@ -132,19 +137,23 @@ class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationD
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(alignment: Alignment.center),
+                      style:
+                          OutlinedButton.styleFrom(alignment: Alignment.center),
                       onPressed: () => Navigator.of(context).pop(null),
-                      child: Text(loc.buttonEdit, textAlign: TextAlign.center),
+                      child: Center(child: Text(loc.buttonEdit)),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(alignment: Alignment.center),
-                      onPressed: (!_loading && _result != null && _result!.status == ValidationStatus.valid)
+                      style:
+                          ElevatedButton.styleFrom(alignment: Alignment.center),
+                      onPressed: (!_loading &&
+                              _result != null &&
+                              _result!.status == ValidationStatus.valid)
                           ? () => Navigator.of(context).pop(_current)
                           : null,
-                      child: Text(loc.buttonConfirmHour, textAlign: TextAlign.center),
+                      child: Center(child: Text(loc.buttonConfirmHour)),
                     ),
                   ),
                 ],

@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 /// Simple validation result for notification time confirmation.
-enum ValidationStatus { valid, info, warning, conflict, invalid, ambiguousAmPm, timezoneError }
+enum ValidationStatus {
+  valid,
+  info,
+  warning,
+  conflict,
+  invalid,
+  ambiguousAmPm,
+  timezoneError
+}
 
 class ValidationResult {
   final ValidationStatus status;
@@ -74,10 +82,13 @@ class NotificationValidator {
       final int minutesA = requestedTime.hour * 60 + requestedTime.minute;
       final int minutesB = t.hour * 60 + t.minute;
       final int diff = (minutesA - minutesB).abs();
-      if (diff == 0 || (allowNearConflictsWindow > 0 && diff <= allowNearConflictsWindow)) {
+      if (diff == 0 ||
+          (allowNearConflictsWindow > 0 && diff <= allowNearConflictsWindow)) {
         // suggest +/- 1 hour as basic suggestions
-        final beforeHour = TimeOfDay(hour: (requestedTime.hour - 1) % 24, minute: 0);
-        final afterHour = TimeOfDay(hour: (requestedTime.hour + 1) % 24, minute: 0);
+        final beforeHour =
+            TimeOfDay(hour: (requestedTime.hour - 1) % 24, minute: 0);
+        final afterHour =
+            TimeOfDay(hour: (requestedTime.hour + 1) % 24, minute: 0);
         return ValidationResult(
           status: ValidationStatus.conflict,
           errorCode: 'TIME_CONFLICT',
@@ -91,13 +102,15 @@ class NotificationValidator {
     // 4) Past time check (if now provided)
     if (now != null) {
       try {
-        final tz.TZDateTime scheduled = tz.TZDateTime(
-            tz.local, now.year, now.month, now.day, requestedTime.hour, requestedTime.minute);
+        final tz.TZDateTime scheduled = tz.TZDateTime(tz.local, now.year,
+            now.month, now.day, requestedTime.hour, requestedTime.minute);
         if (scheduled.isBefore(now)) {
-          final suggested = TimeOfDay(hour: requestedTime.hour, minute: requestedTime.minute);
+          final suggested =
+              TimeOfDay(hour: requestedTime.hour, minute: requestedTime.minute);
           return ValidationResult(
             status: ValidationStatus.info,
-            message: 'The selected time is earlier than now — it will be scheduled for tomorrow.',
+            message:
+                'The selected time is earlier than now — it will be scheduled for tomorrow.',
             suggestedTimes: [suggested],
             raw: {'scheduledToday': scheduled.toString()},
           );
@@ -107,7 +120,8 @@ class NotificationValidator {
         return ValidationResult(
           status: ValidationStatus.timezoneError,
           errorCode: 'DST_AMBIGUOUS',
-          message: 'The chosen local time is ambiguous due to timezone rules (DST).',
+          message:
+              'The chosen local time is ambiguous due to timezone rules (DST).',
         );
       }
     }
@@ -119,4 +133,3 @@ class NotificationValidator {
     );
   }
 }
-

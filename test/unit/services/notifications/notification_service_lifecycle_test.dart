@@ -391,12 +391,12 @@ void main() {
     });
 
     group('Token Deletion on Uninstall', () {
-      test('deleteTokenOnUninstall removes token from Firestore and local storage',
+      test(
+          'deleteTokenOnUninstall removes token from Firestore and local storage',
           () async {
         // Arrange - Setup token in Firestore and SharedPreferences
         const testToken = 'token_to_delete_123';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
 
         await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
 
@@ -491,8 +491,7 @@ void main() {
       test('deleteTokenOnUninstall is idempotent', () async {
         // Arrange - Setup token
         const testToken = 'idempotent_token';
-        final userDoc =
-            fakeFirestore.collection('users').doc('test-user-123');
+        final userDoc = fakeFirestore.collection('users').doc('test-user-123');
         await userDoc.set({'createdAt': FieldValue.serverTimestamp()});
 
         final tokenDoc = userDoc.collection('fcmTokens').doc(testToken);

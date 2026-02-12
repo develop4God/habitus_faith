@@ -91,7 +91,9 @@ class _NotificationsSettingsPageState
       final parts = existingTimeStr.split(':');
       final existingHour = int.parse(parts[0]);
       final existingMinute = int.parse(parts[1]);
-      final existingTimes = [TimeOfDay(hour: existingHour, minute: existingMinute)];
+      final existingTimes = [
+        TimeOfDay(hour: existingHour, minute: existingMinute)
+      ];
 
       // Ensure widget is still mounted before showing dialog (we had awaits above)
       if (!mounted) return;
