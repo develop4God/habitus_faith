@@ -178,7 +178,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
-                        // Pet Animation - with Fallback Emoji
+                        // Pet Animation - Autofit logic
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
@@ -188,25 +188,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                             );
                           },
                           child: SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Lottie.asset(
-                              ref
-                                  .watch(new_pets.selectedPetProvider)
-                                  .lottieAsset,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                final selectedPet =
-                                    ref.read(new_pets.selectedPetProvider);
-                                debugPrint(
-                                    'DEBUG: Error loading Lottie asset: ${selectedPet.lottieAsset}. Error: $error');
-                                return Center(
-                                  child: Text(
-                                    selectedPet.emoji,
-                                    style: const TextStyle(fontSize: 40),
-                                  ),
-                                );
-                              },
+                            height: 110, // Increased size
+                            width: 110,  // Increased size
+                            child: Transform.scale(
+                              scale: 1.3, // Scale up to reduce internal Lottie whitespace
+                              child: Lottie.asset(
+                                ref.watch(new_pets.selectedPetProvider).lottieAsset,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  final selectedPet = ref.read(new_pets.selectedPetProvider);
+                                  return Center(
+                                    child: Text(
+                                      selectedPet.emoji,
+                                      style: const TextStyle(fontSize: 40),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),

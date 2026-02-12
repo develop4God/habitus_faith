@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+
 import '../pets_provider.dart';
 
 class PetSelectionPage extends ConsumerWidget {
@@ -66,7 +67,7 @@ class PetSelectionPage extends ConsumerWidget {
                       tag: 'selected_pet',
                       child: Lottie.asset(
                         selectedPet.lottieAsset,
-                        height: 180,
+                        height: 200, // Increased slightly
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
                           debugPrint(
@@ -161,7 +162,7 @@ class PetSelectionPage extends ConsumerWidget {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
+                                  padding: const EdgeInsets.all(8.0), // Reduced padding to help "tiny" pets fill space
                                   child: Lottie.asset(
                                     pet.lottieAsset,
                                     fit: BoxFit.contain,
