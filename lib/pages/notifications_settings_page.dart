@@ -4,6 +4,7 @@ import 'package:habitus_faith/core/providers/notification_provider.dart';
 import 'package:habitus_faith/core/providers/background_task_service_provider.dart';
 import 'package:habitus_faith/core/providers/language_provider.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
+import 'package:habitus_faith/widgets/confirm_notification_dialog.dart';
 
 class NotificationsSettingsPage extends ConsumerStatefulWidget {
   const NotificationsSettingsPage({super.key});
@@ -84,29 +85,46 @@ class _NotificationsSettingsPageState
     );
 
     if (picked != null && picked != _selectedTime) {
-      setState(() {
-        _selectedTime = picked;
-      });
-
-      final timeStr =
-          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-
-      final currentLocale = ref.read(appLanguageProvider);
-      final languageCode = currentLocale.languageCode;
-
+      // Instead of saving immediately, show a compact confirmation dialog
       final notificationService = ref.read(notificationServiceProvider);
-      await notificationService.setNotificationTime(timeStr,
-          languageCode: languageCode);
+      final existingTimeStr = await notificationService.getNotificationTime();
+      final parts = existingTimeStr.split(':');
+      final existingHour = int.parse(parts[0]);
+      final existingMinute = int.parse(parts[1]);
+      final existingTimes = [TimeOfDay(hour: existingHour, minute: existingMinute)];
 
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${AppLocalizations.of(context)!.notificationTimeUpdated} ${picked.format(context)}',
-          ),
-        ),
+      // Use the compact dialog which returns the confirmed TimeOfDay or null
+      final confirmed = await showConfirmNotificationDialog(
+        context,
+        proposedTime: picked,
+        existingTimes: existingTimes,
+        userTimezone: null,
       );
+
+      if (confirmed != null) {
+        // Update visible selected time only after user confirmed and validation passed
+        setState(() {
+          _selectedTime = confirmed;
+        });
+
+        final timeStr =
+            '${confirmed.hour.toString().padLeft(2, '0')}:${confirmed.minute.toString().padLeft(2, '0')}';
+
+        final currentLocale = ref.read(appLanguageProvider);
+        final languageCode = currentLocale.languageCode;
+
+        await notificationService.setNotificationTime(timeStr,
+            languageCode: languageCode);
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            // Generic confirmation message (does not include the hour string)
+            content: Text(AppLocalizations.of(context)!.notificationTimeUpdated),
+          ),
+        );
+      }
     }
   }
 

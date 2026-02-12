@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
@@ -152,25 +153,42 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text(
-                            l10n.introMessage,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.introMessage,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formattedDate,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Pet Animation - Updated to box_dog.json
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: Lottie.asset(
+                            'assets/lottie/box_dog.json',
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Text('🐶', style: TextStyle(fontSize: 40));
+                            },
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
                     ),
                   ],
                 ),
