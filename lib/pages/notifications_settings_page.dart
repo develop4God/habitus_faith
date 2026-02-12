@@ -118,10 +118,10 @@ class _NotificationsSettingsPageState
 
         if (!mounted) return;
 
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            // Generic confirmation message (does not include the hour string)
-            content: Text(AppLocalizations.of(context)!.notificationTimeUpdated),
+            content: Text('${l10n.notificationTimeUpdated} $timeStr'),
           ),
         );
       }
