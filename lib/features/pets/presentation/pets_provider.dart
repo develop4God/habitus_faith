@@ -21,6 +21,12 @@ final availablePetsProvider = Provider<List<Pet>>((ref) {
       emoji: '🐱',
       isUnlocked: true,
     ),
+    const Pet(
+      name: 'Pez León',
+      lottieAsset: 'assets/lottie/pets/lion_fish.json',
+      emoji: '🐠',
+      isUnlocked: true,
+    ),
     // Locked pets for FOMO
     const Pet(
       name: 'Leoncito',
