@@ -11,6 +11,7 @@ class PetSelectionPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final availablePets = ref.watch(availablePetsProvider);
     final selectedPet = ref.watch(selectedPetProvider);
+    final previewPet = ref.watch(previewPetProvider);
     final themes = ref.watch(petThemesProvider);
     final selectedTheme = ref.watch(selectedPetThemeProvider);
 
@@ -55,16 +56,46 @@ class PetSelectionPage extends ConsumerWidget {
                       ),
                       Hero(
                         tag: 'selected_pet',
-                        child: Lottie.asset(
-                          selectedPet.lottieAsset,
-                          height: 180,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.pets,
-                                size: 100, color: Colors.white);
-                          },
+                        child: ColorFiltered(
+                          colorFilter: previewPet.isUnlocked 
+                            ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
+                            : ColorFilter.mode(Colors.black.withValues(alpha: 0.3), BlendMode.srcATop),
+                          child: Lottie.asset(
+                            previewPet.lottieAsset,
+                            height: 180,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.pets,
+                                  size: 100, color: Colors.white);
+                            },
+                          ),
                         ),
                       ),
+                      if (!previewPet.isUnlocked)
+                        Positioned(
+                          bottom: 20,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.4),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(Icons.lock, color: Colors.white, size: 16),
+                                SizedBox(width: 8),
+                                Text(
+                                  'VISTA PREVIA (BLOQUEADO)',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -161,13 +192,13 @@ class PetSelectionPage extends ConsumerWidget {
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                SliverToBoxAdapter(
+                const SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                    padding: EdgeInsets.fromLTRB(24, 24, 24, 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Selecciona tu mascota',
                           style: TextStyle(
                             color: Colors.black87,
@@ -175,15 +206,15 @@ class PetSelectionPage extends ConsumerWidget {
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
+                        SizedBox(height: 4),
+                        Text(
                           '¡Colecciona todos tus amigos!',
                           style: TextStyle(
                             color: Colors.black54,
                             fontSize: 16,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                       ],
                     ),
                   ),
@@ -201,14 +232,17 @@ class PetSelectionPage extends ConsumerWidget {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         final pet = availablePets[index];
-                        final isSelected =
+                        final isCurrentlySelected =
                             selectedPet.lottieAsset == pet.lottieAsset;
+                        final isPreviewed = previewPet.lottieAsset == pet.lottieAsset;
 
                         return GestureDetector(
                           onTap: () {
+                            // Always update preview
+                            ref.read(previewPetProvider.notifier).state = pet;
+                            
                             if (pet.isUnlocked) {
-                              ref.read(selectedPetProvider.notifier).state =
-                                  pet;
+                              ref.read(selectedPetProvider.notifier).state = pet;
                             } else {
                               _showLockedDialog(context);
                             }
@@ -217,20 +251,20 @@ class PetSelectionPage extends ConsumerWidget {
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                             decoration: BoxDecoration(
-                              color: isSelected
+                              color: isPreviewed
                                   ? selectedTheme.colors.first
                                       .withValues(alpha: 0.1)
                                   : Colors.grey.shade50,
                               borderRadius: BorderRadius.circular(24),
                               border: Border.all(
-                                color: isSelected
+                                color: isCurrentlySelected
                                     ? selectedTheme.colors.first
-                                    : Colors.grey.shade200,
+                                    : (isPreviewed ? selectedTheme.colors.first.withValues(alpha: 0.5) : Colors.grey.shade200),
                                 width: 2.5,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: isSelected
+                                  color: isPreviewed
                                       ? selectedTheme.colors.first
                                           .withValues(alpha: 0.15)
                                       : Colors.black.withValues(alpha: 0.03),
@@ -264,9 +298,9 @@ class PetSelectionPage extends ConsumerWidget {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 12),
                                       decoration: BoxDecoration(
-                                        color: isSelected
+                                        color: isCurrentlySelected
                                             ? selectedTheme.colors.first
-                                            : Colors.white,
+                                            : (isPreviewed ? selectedTheme.colors.first.withValues(alpha: 0.2) : Colors.white),
                                         borderRadius: const BorderRadius.only(
                                           bottomLeft: Radius.circular(21),
                                           bottomRight: Radius.circular(21),
@@ -276,7 +310,7 @@ class PetSelectionPage extends ConsumerWidget {
                                         pet.name,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: isSelected
+                                          color: isCurrentlySelected
                                               ? Colors.white
                                               : Colors.black87,
                                           fontWeight: FontWeight.bold,
@@ -301,6 +335,23 @@ class PetSelectionPage extends ConsumerWidget {
                                         Icons.lock_rounded,
                                         color: Colors.white,
                                         size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                if (isCurrentlySelected)
+                                  Positioned(
+                                    top: 12,
+                                    left: 12,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.green,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 12,
                                       ),
                                     ),
                                   ),

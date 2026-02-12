@@ -94,3 +94,7 @@ final selectedPetProvider = StateProvider<Pet>((ref) {
   final pets = ref.watch(availablePetsProvider);
   return pets.firstWhere((p) => p.isUnlocked, orElse: () => pets.first);
 });
+
+final previewPetProvider = StateProvider<Pet>((ref) {
+  return ref.watch(selectedPetProvider);
+});
