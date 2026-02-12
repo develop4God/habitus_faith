@@ -5,6 +5,8 @@ import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
 import '../features/habits/presentation/pets_providers.dart';
+import '../features/pets/presentation/pets_provider.dart' as new_pets;
+import '../features/pets/presentation/pages/pet_selection_page.dart';
 
 import 'settings_page.dart';
 import 'bible_reader_page.dart';
@@ -176,16 +178,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ],
                           ),
                         ),
-                        // Pet Animation - Updated to box_dog.json
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Lottie.asset(
-                            'assets/lottie/box_dog.json',
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Text('🐶', style: TextStyle(fontSize: 40));
-                            },
+                        // Pet Animation - Updated to use selectedPetProvider
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const PetSelectionPage(),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Lottie.asset(
+                              ref.watch(new_pets.selectedPetProvider).lottieAsset,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Text('🐶', style: TextStyle(fontSize: 40));
+                              },
+                            ),
                           ),
                         ),
                       ],

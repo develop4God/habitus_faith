@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitus_faith/core/services/notifications/notification_validator.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 
 /// Shows a simple, modern confirmation dialog for a proposed notification time.
 /// Returns the confirmed [TimeOfDay] if the user confirms, or null if canceled/edited.
@@ -91,11 +92,14 @@ class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationD
             ),
             const SizedBox(height: 12),
             Center(
-              child: Text(
-                '¿Desea ajustar la hora de notificación a $timeStr?',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
-              ),
+              child: Builder(builder: (ctx) {
+                final loc = AppLocalizations.of(ctx)!;
+                return Text(
+                  loc.confirmNotificationQuestion(timeStr),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16),
+                );
+              }),
             ),
             const SizedBox(height: 12),
             if (_loading)
@@ -122,29 +126,33 @@ class _ConfirmNotificationDialogContentState extends State<_ConfirmNotificationD
                     .toList(),
               ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(null),
-                    child: const Text('Editar'),
+            Builder(builder: (ctx) {
+              final loc = AppLocalizations.of(ctx)!;
+              return Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(alignment: Alignment.center),
+                      onPressed: () => Navigator.of(context).pop(null),
+                      child: Text(loc.buttonEdit, textAlign: TextAlign.center),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (!_loading && _result != null && _result!.status == ValidationStatus.valid)
-                        ? () => Navigator.of(context).pop(_current)
-                        : null,
-                    child: const Text('Confirmar hora'),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(alignment: Alignment.center),
+                      onPressed: (!_loading && _result != null && _result!.status == ValidationStatus.valid)
+                          ? () => Navigator.of(context).pop(_current)
+                          : null,
+                      child: Text(loc.buttonConfirmHour, textAlign: TextAlign.center),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ],
         ),
       ),
     );
   }
 }
-
