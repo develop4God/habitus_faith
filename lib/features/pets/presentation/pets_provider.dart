@@ -17,9 +17,28 @@ final availablePetsProvider = Provider<List<Pet>>((ref) {
     ),
     const Pet(
       name: 'Gatito',
-      lottieAsset: 'assets/lottie/animation.json',
+      lottieAsset: 'assets/lottie/pets/cat_play_ball.json',
       emoji: '🐱',
       isUnlocked: true,
+    ),
+    // Locked pets for FOMO
+    const Pet(
+      name: 'Leoncito',
+      lottieAsset: 'assets/lottie/pets/lion_cute.json', // Placeholder asset
+      emoji: '🦁',
+      isUnlocked: false,
+    ),
+    const Pet(
+      name: 'Panda',
+      lottieAsset: 'assets/lottie/pets/panda_cute.json', // Placeholder asset
+      emoji: '🐼',
+      isUnlocked: false,
+    ),
+    const Pet(
+      name: 'Unicornio',
+      lottieAsset: 'assets/lottie/pets/unicorn_cute.json', // Placeholder asset
+      emoji: '🦄',
+      isUnlocked: false,
     ),
   ];
 });

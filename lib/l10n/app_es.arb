@@ -1424,16 +1424,16 @@
     "description": "Mensaje de patrón de tarde detectado"
   },
   "@networkTimeout": {
-    "description": "PENDING"
+    "description": "Error de tiempo de espera de red"
   },
   "@firebasePermissionDenied": {
-    "description": "PENDING"
+    "description": "Permiso de Firebase denegado"
   },
   "@errorUnknown": {
-    "description": "PENDING"
+    "description": "Error desconocido genérico"
   },
   "@devBannerTitle": {
-    "description": "PENDING"
+    "description": "Título del banner de herramientas de desarrollo"
   },
   "@devBannerLastSync": {
     "description": "Muestra la última hora de sincronización en el banner de desarrollo.",
