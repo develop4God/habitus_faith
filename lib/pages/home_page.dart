@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
@@ -32,6 +33,31 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
+  bool _showPetHint = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPetHint();
+  }
+
+  Future<void> _checkPetHint() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasSeenHint = prefs.getBool('has_seen_pet_hint') ?? false;
+    if (!hasSeenHint) {
+      setState(() {
+        _showPetHint = true;
+      });
+    }
+  }
+
+  Future<void> _dismissPetHint() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('has_seen_pet_hint', true);
+    setState(() {
+      _showPetHint = false;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -125,93 +151,119 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 32),
 
               // Hero section with dynamic gradient theme
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                width: double.infinity,
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: selectedTheme.colors,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: selectedTheme.colors.first.withValues(alpha: 0.3),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
+              GestureDetector(
+                onTap: () {
+                  if (_showPetHint) _dismissPetHint();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PetSelectionPage(),
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.wb_sunny_outlined,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  );
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: selectedTheme.colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: selectedTheme.colors.first.withValues(alpha: 0.3),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              Text(
-                                l10n.introMessage,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                              const Icon(
+                                Icons.wb_sunny_outlined,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      l10n.introMessage,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      formattedDate,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                formattedDate,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                              // Pet Animation - Optimized scale
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 110,
+                                    width: 110,
+                                    child: Transform.scale(
+                                      scale: 1.3,
+                                      child: Lottie.asset(
+                                        selectedPet.lottieAsset,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Center(
+                                            child: Text(
+                                              selectedPet.emoji,
+                                              style: const TextStyle(fontSize: 40),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  if (_showPetHint)
+                                    Positioned(
+                                      bottom: 5,
+                                      right: 5,
+                                      child: IgnorePointer(
+                                        child: SizedBox(
+                                          height: 70,
+                                          width: 70,
+                                          child: Lottie.asset(
+                                            'assets/lottie/tap_screen.json',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ],
                           ),
-                        ),
-                        // Pet Animation - Optimized scale
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const PetSelectionPage(),
-                              ),
-                            );
-                          },
-                          child: SizedBox(
-                            height: 110,
-                            width: 110,
-                            child: Transform.scale(
-                              scale: 1.3,
-                              child: Lottie.asset(
-                                selectedPet.lottieAsset,
-                                fit: BoxFit.contain,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Center(
-                                    child: Text(
-                                      selectedPet.emoji,
-                                      style: const TextStyle(fontSize: 40),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
 

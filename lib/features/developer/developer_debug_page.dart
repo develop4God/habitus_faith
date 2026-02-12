@@ -446,6 +446,31 @@ class DeveloperDebugPage extends ConsumerWidget {
               }
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.touch_app, color: Colors.blue),
+            title: const Text('Reset Pet Tap Hint'),
+            subtitle: const Text('Delete has_seen_pet_hint flag to show Lottie again'),
+            onTap: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.remove('has_seen_pet_hint');
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Pet tap hint flag deleted.'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } catch (e) {
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text('Error: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
           const Divider(),
           // Bell button for notification test/demo
           ListTile(
