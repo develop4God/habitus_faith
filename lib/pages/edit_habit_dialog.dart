@@ -211,7 +211,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           height: 45,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children: HabitColors.categoryColors.values.map((color) {
+                            children: HabitColors.availableColors.map((color) {
                               final isSelected = selectedColor?.value == color.value;
                               return GestureDetector(
                                 onTap: () => setState(() => selectedColor = color),
@@ -281,7 +281,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           icon: Icons.notifications_active_outlined,
                           color: Colors.purple,
                           title: l10n.reminder,
-                          value: notificationSettings?.timing.displayName ?? l10n.noRepetition,
+                          value: notificationSettings?.timing.displayName ?? "Sin aviso",
                           onTap: () async {
                             final result = await showDialog<HabitNotificationSettings>(
                               context: context,
@@ -349,25 +349,44 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     return Row(
       children: HabitDifficulty.values.map((diff) {
         final isSelected = selectedDifficulty == diff;
+        final stars = HabitDifficultyHelper.getDifficultyStars(diff);
+        
         return Expanded(
           child: GestureDetector(
             onTap: () => setState(() => selectedDifficulty = diff),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               margin: const EdgeInsets.symmetric(horizontal: 4),
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected ? themeColor : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(
-                diff.displayName,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.grey.shade600,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  fontSize: 13,
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    diff.displayName,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.grey.shade600,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      stars,
+                      (index) => Icon(
+                        Icons.star,
+                        size: 12,
+                        color: isSelected ? Colors.white : Colors.amber,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -383,7 +402,15 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
       children: HabitCategory.values.map((cat) {
         final isSelected = selectedCategory == cat;
         return ChoiceChip(
-          label: Text(HabitColors.getCategoryDisplayName(cat, widget.l10n), style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : Colors.black87)),
+          avatar: Icon(
+            HabitColors.getCategoryIcon(cat),
+            size: 16,
+            color: isSelected ? Colors.white : themeColor,
+          ),
+          label: Text(
+            HabitColors.getCategoryDisplayName(cat, widget.l10n),
+            style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : Colors.black87),
+          ),
           selected: isSelected,
           onSelected: (val) => setState(() => selectedCategory = cat),
           selectedColor: themeColor,
