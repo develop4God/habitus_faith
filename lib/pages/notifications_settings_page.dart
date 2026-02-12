@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitus_faith/core/providers/notification_provider.dart';
 import 'package:habitus_faith/core/providers/background_task_service_provider.dart';
+import 'package:habitus_faith/core/providers/language_provider.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 
 class NotificationsSettingsPage extends ConsumerStatefulWidget {
@@ -56,8 +57,12 @@ class _NotificationsSettingsPageState
       _notificationsEnabled = value;
     });
 
+    final currentLocale = ref.read(appLanguageProvider);
+    final languageCode = currentLocale.languageCode;
+
     final notificationService = ref.read(notificationServiceProvider);
-    await notificationService.setNotificationsEnabled(value);
+    await notificationService.setNotificationsEnabled(value,
+        languageCode: languageCode);
 
     if (!mounted) return;
 
@@ -85,8 +90,13 @@ class _NotificationsSettingsPageState
 
       final timeStr =
           '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+
+      final currentLocale = ref.read(appLanguageProvider);
+      final languageCode = currentLocale.languageCode;
+
       final notificationService = ref.read(notificationServiceProvider);
-      await notificationService.setNotificationTime(timeStr);
+      await notificationService.setNotificationTime(timeStr,
+          languageCode: languageCode);
 
       if (!mounted) return;
 

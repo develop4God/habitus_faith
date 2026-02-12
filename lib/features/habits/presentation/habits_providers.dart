@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/habit.dart';
 import '../domain/models/habit_notification.dart';
 import '../data/storage/storage_providers.dart';
-import '../../../core/services/notifications/notification_service.dart';
+import '../../../core/providers/notification_provider.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../gamification/presentation/gamification_providers.dart';
 
@@ -174,13 +174,15 @@ class HabitsNotifier extends AsyncNotifier<void> {
         if (notificationSettings != null &&
             notificationSettings.timing == NotificationTiming.atEventTime &&
             notificationSettings.eventTime != null) {
-          await NotificationService().scheduleHabitNotification(
+          final notificationService = ref.read(notificationServiceProvider);
+          await notificationService.scheduleHabitNotification(
             habitId: habit.id,
             habitName: habit.name,
             eventTime: notificationSettings.eventTime!,
           );
         } else if (notificationSettings == null) {
-          await NotificationService().cancelHabitNotification(habit.id);
+          final notificationService = ref.read(notificationServiceProvider);
+          await notificationService.cancelHabitNotification(habit.id);
         }
       },
     );

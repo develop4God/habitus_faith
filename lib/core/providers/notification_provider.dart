@@ -1,27 +1,54 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 import 'package:habitus_faith/core/services/notifications/notification_service.dart';
+import 'package:habitus_faith/core/providers/firebase_init_provider.dart';
+import 'package:habitus_faith/core/providers/language_provider.dart';
 import '../../features/habits/presentation/habits_providers.dart';
 
-// Provider for NotificationService instance
+// Provider for NotificationService instance - Pure Riverpod DI
+// Note: This provider should only be accessed after Firebase is initialized
+// The notificationInitProvider ensures proper initialization order
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  return NotificationService();
+  // Check if Firebase is ready (for debugging)
+  final firebaseReady = ref.read(firebaseReadyProvider);
+  if (!firebaseReady) {
+    debugPrint('⚠️ NotificationService: Created before Firebase ready!');
+  }
+
+  return NotificationService.create();
 });
 
 // Provider for NotificationService initialization
+// This MUST be called before using NotificationService to ensure Firebase is ready
 final notificationInitProvider = FutureProvider<void>((ref) async {
-  final notificationService = ref.watch(notificationServiceProvider);
-  await notificationService.initialize();
+  // Wait for Firebase to initialize first
+  await ref.watch(firebaseInitProvider.future);
+  debugPrint('🔥 NotificationService: Firebase ready, creating service...');
+
+  // Get current language from the app language provider
+  final currentLocale = ref.read(appLanguageProvider);
+  final languageCode = currentLocale.languageCode;
+
+  // Now it's safe to create and initialize the notification service
+  final notificationService = ref.read(notificationServiceProvider);
+  await notificationService.initialize(languageCode: languageCode);
 });
 
 // Provider for checking if notifications are enabled
 final notificationsEnabledProvider = FutureProvider<bool>((ref) async {
-  final notificationService = ref.watch(notificationServiceProvider);
+  // Ensure notification service is initialized
+  await ref.watch(notificationInitProvider.future);
+
+  final notificationService = ref.read(notificationServiceProvider);
   return await notificationService.areNotificationsEnabled();
 });
 
 // Provider for getting notification time
 final notificationTimeProvider = FutureProvider<String>((ref) async {
-  final notificationService = ref.watch(notificationServiceProvider);
+  // Ensure notification service is initialized
+  await ref.watch(notificationInitProvider.future);
+
+  final notificationService = ref.read(notificationServiceProvider);
   return await notificationService.getNotificationTime();
 });
 

@@ -1,403 +1,344 @@
-// index.js
+// index.js - Cloud Functions optimizadas para notificaciones y limpieza
+
 const {onSchedule} = require("firebase-functions/v2/scheduler");
 const admin = require("firebase-admin");
 const {logger} = require("firebase-functions");
 const {setGlobalOptions} = require("firebase-functions/v2");
 const {DateTime} = require("luxon");
 
+// --- Traducciones para notificaciones multiidioma ---
+const NOTIFICATION_TRANSLATIONS = {
+
+  es: {
+    title: "⚡ ¡Tu momento de crecimiento te espera!",
+    body: "✨ Pequeños pasos hoy = grandes logros mañana",
+  },
+  en: {
+    title: "⚡ Your growth moment awaits!",
+    body: "✨ Small steps today = big wins tomorrow",
+  },
+  pt: {
+    title: "⚡ Seu momento de crescimento te espera!",
+    body: "✨ Pequenos passos hoje = grandes conquistas amanhã",
+  },
+  fr: {
+    title: "⚡ Votre moment de croissance vous attend!",
+    body: "✨ Petits pas aujourd'hui = grandes victoires demain",
+  },
+  ja: {
+    title: "⚡ 成長の瞬間があなたを待っています！",
+    body: "✨ 今日の小さな一歩 = 明日の大きな成功",
+  },
+  zh: {
+    title: "⚡ 你的成长时刻在等待！",
+    body: "✨ 今天的小步 = 明天的大胜利",
+  },
+  hi: {
+    title: "⚡ आपकी विकास की घड़ी इंतज़ार कर रही है!",
+    body: "✨ आज के छोटे कदम = कल की बड़ी जीत",
+  },
+};
+
+const NOTIFICATION_IMAGE_URL = "https://cdn.jsdelivr.net/gh/develop4God/Devocionales-assets@main/images/habitus/rocket_cartoon.avif";
+
+// Configuración global
 setGlobalOptions({region: "us-central1"});
 
-logger.info(
-    "Cloud Function: Iniciando el proceso de inicialización.",
-    {structuredData: true},
-);
+// Inicialización de Firebase Admin
+logger.info("Cloud Function: Iniciando inicialización.", {structuredData: true});
 
 try {
   if (!admin.apps.length) {
     admin.initializeApp();
-    logger.info(
-        "Cloud Function: Firebase Admin SDK inicializado.",
-        {structuredData: true},
-    );
-  } else {
-    logger.info(
-        "Cloud Function: Firebase Admin SDK ya inicializado.",
-        {structuredData: true},
-    );
+    logger.info("Cloud Function: Firebase Admin SDK inicializado.", {structuredData: true});
   }
 } catch (e) {
-  logger.error(
-      "Cloud Function: Error durante la inicialización:",
-      e,
-      {structuredData: true},
-  );
+  logger.error("Cloud Function: Error en inicialización:", e, {structuredData: true});
   throw e;
 }
 
 const db = admin.firestore();
-logger.info(
-    "Cloud Function: Referencia a Firestore obtenida.",
-    {structuredData: true},
-);
 
-/**
- * Envía notificaciones diarias a usuarios según su zona horaria
- */
+// Helper: Seleccionar idioma
+function selectLanguageForUser(preferredLanguage) {
+  return (preferredLanguage && NOTIFICATION_TRANSLATIONS[preferredLanguage]) ?
+        preferredLanguage :
+        "es";
+}
+
+// ==========================================
+// FUNCIÓN 1: ENVIAR NOTIFICACIONES DIARIAS
+// ==========================================
 exports.sendDailyDevotionalNotification = onSchedule({
   schedule: "0 * * * *",
   timeZone: "UTC",
 }, async (context) => {
-  logger.info(
-      "Cloud Function: sendDailyDevotionalNotification iniciada.",
-      {structuredData: true},
-  );
+  logger.info("Notificaciones: Ejecución iniciada.", {structuredData: true});
 
-  const devotionalTitle = "Pruebas Cerradas Google Play Store";
-  const devotionalBody = "¡Recuerda conectarte hoy con la palabra de Dios!";
-
-  logger.info(
-      "Cloud Function: Consultando usuarios en Firestore.",
-      {structuredData: true},
-  );
   const usersRef = db.collection("users");
   const usersSnapshot = await usersRef.get();
 
   if (usersSnapshot.empty) {
-    logger.info(
-        "Cloud Function: No se encontraron usuarios.",
-        {structuredData: true},
-    );
+    logger.info("Notificaciones: Sin usuarios.", {structuredData: true});
     return null;
   }
-  logger.info(
-      `Cloud Function: ${usersSnapshot.size} usuarios encontrados.`,
-      {structuredData: true},
-  );
 
   const nowUtc = DateTime.now().setZone("UTC");
-  logger.info(
-      `Cloud Function: Hora UTC: ${nowUtc.toFormat("HH:mm")}.`,
-      {structuredData: true},
-  );
+  logger.info(`Notificaciones: ${usersSnapshot.size} usuarios. Hora UTC: ${nowUtc.toFormat("HH:mm")}.`, {structuredData: true});
 
   for (const userDoc of usersSnapshot.docs) {
     const userId = userDoc.id;
-    logger.info(
-        `Cloud Function: Procesando usuario: ${userId}.`,
-        {structuredData: true},
-    );
 
-    const settingsRef = db.collection("users")
-        .doc(userId).collection("settings").doc("notifications");
+    const settingsRef = db.collection("users").doc(userId).collection("settings").doc("notifications");
     let settingsDoc;
+
     try {
       settingsDoc = await settingsRef.get();
     } catch (e) {
-      logger.error(
-          `Cloud Function: Error obteniendo config de ${userId}:`,
-          e,
-          {structuredData: true},
-      );
+      logger.error(`Notificaciones: Error al obtener settings de ${userId}.`, {structuredData: true});
       continue;
     }
 
-    if (settingsDoc.exists) {
-      const settingsData = settingsDoc.data();
-      const notificationsEnabled = settingsData.notificationsEnabled;
-      const notificationTimeStr = settingsData.notificationTime;
-      const userTimezoneStr = settingsData.userTimezone;
-      const lastNotificationSentTimestamp =
-        settingsData.lastNotificationSentDate;
+    if (!settingsDoc.exists) {
+      continue;
+    }
 
-      logger.info(
-          `Cloud Function: ${userId} - Habilitado: ` +
-        `${notificationsEnabled}, Hora: ${notificationTimeStr}, ` +
-        `TZ: ${userTimezoneStr}.`,
-          {structuredData: true},
-      );
+    const settingsData = settingsDoc.data();
+    const {notificationsEnabled, notificationTime, userTimezone, preferredLanguage, lastNotificationSentDate} = settingsData;
 
-      if (!notificationsEnabled || !userTimezoneStr) {
-        logger.info(
-            `Cloud Function: ${userId} no elegible ` +
-          `(deshabilitado o sin TZ).`,
-            {structuredData: true},
-        );
+    if (!notificationsEnabled || !userTimezone || !notificationTime) {
+      continue;
+    }
+
+    let userLocalTime;
+    try {
+      if (!DateTime.local().setZone(userTimezone).isValid) {
+        logger.warn(`Notificaciones: Timezone inválido ${userId}: ${userTimezone}.`, {structuredData: true});
         continue;
       }
+      userLocalTime = nowUtc.setZone(userTimezone);
+    } catch (e) {
+      logger.error(`Notificaciones: Error timezone ${userId}.`, {structuredData: true});
+      continue;
+    }
 
-      let userLocalTime;
-      try {
-        if (!DateTime.local().setZone(userTimezoneStr).isValid) {
-          logger.warn(
-              `Cloud Function: TZ inválida ${userId}: ` +
-            `${userTimezoneStr}.`,
-              {structuredData: true},
-          );
-          continue;
-        }
-        userLocalTime = nowUtc.setZone(userTimezoneStr);
-      } catch (e) {
-        logger.error(
-            `Cloud Function: Error TZ ${userId} ` +
-          `(${userTimezoneStr}): ${e.message}.`,
-            {structuredData: true},
-        );
-        continue;
-      }
+    const [preferredHour, preferredMinute] = notificationTime.split(":").map(Number);
+    if (isNaN(preferredHour) || isNaN(preferredMinute)) {
+      logger.warn(`Notificaciones: Hora inválida ${userId}: ${notificationTime}.`, {structuredData: true});
+      continue;
+    }
 
-      const [preferredHour, preferredMinute] =
-        notificationTimeStr.split(":").map(Number);
-      if (isNaN(preferredHour) || isNaN(preferredMinute)) {
-        logger.warn(
-            `Cloud Function: Hora inválida ${userId}: ` +
-          `${notificationTimeStr}.`,
-            {structuredData: true},
-        );
-        continue;
-      }
+    const todayInUserTimezone = userLocalTime.toISODate();
+    let lastSentDate = null;
 
-      const todayInUserTimezone = userLocalTime.toISODate();
+    if (lastNotificationSentDate instanceof admin.firestore.Timestamp) {
+      lastSentDate = DateTime.fromJSDate(lastNotificationSentDate.toDate(), {zone: userTimezone}).toISODate();
+    } else if (typeof lastNotificationSentDate === "string") {
+      lastSentDate = lastNotificationSentDate;
+    }
 
-      let lastSentDate = null;
-      if (lastNotificationSentTimestamp instanceof
-          admin.firestore.Timestamp) {
-        lastSentDate = DateTime.fromJSDate(
-            lastNotificationSentTimestamp.toDate(),
-            {zone: userTimezoneStr},
-        ).toISODate();
-      } else if (typeof lastNotificationSentTimestamp === "string") {
-        lastSentDate = lastNotificationSentTimestamp;
-      }
+    const isTimeToSend = (userLocalTime.hour === preferredHour);
+    const alreadySentToday = (lastSentDate === todayInUserTimezone);
 
-      const isTimeToSend = (userLocalTime.hour === preferredHour);
-      const alreadySentToday = (lastSentDate === todayInUserTimezone);
+    if (!isTimeToSend || alreadySentToday) {
+      continue;
+    }
 
-      logger.info(
-          `Cloud Function: ${userId} - ` +
-        `Hora local: ${userLocalTime.toFormat("HH:mm")}, ` +
-        `Preferida: ${notificationTimeStr}, ` +
-        `Último: ${lastSentDate || "Nunca"}, ` +
-        `Hoy: ${todayInUserTimezone}, ` +
-        `Enviado hoy: ${alreadySentToday}, ` +
-        `Es hora: ${isTimeToSend}.`,
-          {structuredData: true},
-      );
+    logger.info(`Notificaciones: Usuario ${userId} elegible. Obteniendo tokens.`, {structuredData: true});
+    const fcmTokensSnapshot = await db.collection("users").doc(userId).collection("fcmTokens").get();
 
-      if (isTimeToSend && !alreadySentToday) {
-        logger.info(
-            `Cloud Function: ${userId} elegible. Recopilando tokens.`,
-            {structuredData: true},
-        );
-        const fcmTokensRef = db.collection("users")
-            .doc(userId).collection("fcmTokens");
-        const fcmTokensSnapshot = await fcmTokensRef.get();
+    if (fcmTokensSnapshot.empty) {
+      logger.warn(`Notificaciones: Sin tokens FCM para ${userId}.`, {structuredData: true});
+      continue;
+    }
 
-        if (!fcmTokensSnapshot.empty) {
-          const tokens = fcmTokensSnapshot.docs.map((doc) => doc.id);
+    const tokens = fcmTokensSnapshot.docs.map((doc) => doc.data().token).filter((t) => t);
 
-          if (tokens.length === 0) {
-            logger.warn(
-                `Cloud Function: Sin tokens FCM para ${userId}.`,
-                {structuredData: true},
-            );
-            continue;
-          }
+    if (tokens.length === 0) {
+      continue;
+    }
 
-          const message = {
-            notification: {
-              title: devotionalTitle,
-              body: devotionalBody,
-            },
-            data: {
-              userId: userId,
-              notificationType: "daily_devotional",
-            },
-            tokens: tokens,
-          };
+    const userLanguage = selectLanguageForUser(preferredLanguage);
+    const userTranslations = NOTIFICATION_TRANSLATIONS[userLanguage];
 
-          const response =
-            await admin.messaging().sendEachForMulticast(message);
-          logger.info(
-              `Cloud Function: Enviadas a ${response.successCount} ` +
-            `dispositivos. Fallaron ${response.failureCount}.`,
-              {structuredData: true},
-          );
+    const message = {
+      notification: {
+        title: userTranslations.title,
+        body: userTranslations.body,
+      },
+      data: {
+        userId: userId,
+        notificationType: "daily_devotional",
+        language: userLanguage,
+      },
+      android: {
+        notification: {
+          imageUrl: NOTIFICATION_IMAGE_URL,
+        },
+      },
+      apns: {
+        payload: {
+          aps: {
+            "mutable-content": 1,
+          },
+        },
+        fcm_options: {
+          image: NOTIFICATION_IMAGE_URL,
+        },
+      },
+      tokens: tokens,
+    };
 
-          await settingsRef.update({
-            lastNotificationSentDate:
-              admin.firestore.Timestamp.fromDate(userLocalTime.toJSDate()),
+    const response = await admin.messaging().sendEachForMulticast(message);
+    logger.info(`Notificaciones: Enviadas a ${response.successCount}/${tokens.length} dispositivos (${userId}, ${userLanguage}).`, {structuredData: true});
+
+    await settingsRef.update({
+      lastNotificationSentDate: admin.firestore.Timestamp.fromDate(userLocalTime.toJSDate()),
+    });
+
+    if (response.failureCount > 0) {
+      response.responses.forEach(async (resp, idx) => {
+        if (!resp.success && (resp.error?.code === "messaging/invalid-argument" || resp.error?.code === "messaging/registration-token-not-registered")) {
+          const invalidToken = tokens[idx];
+          logger.warn(`Notificaciones: Eliminando token inválido de ${userId}.`, {structuredData: true});
+
+          const tokenQuery = await db.collection("users").doc(userId).collection("fcmTokens")
+              .where("token", "==", invalidToken)
+              .get();
+
+          tokenQuery.docs.forEach(async (doc) => {
+            await doc.ref.delete();
           });
-          logger.info(
-              `Cloud Function: lastNotificationSentDate ` +
-            `actualizado para ${userId}.`,
-              {structuredData: true},
-          );
-
-          if (response.failureCount > 0) {
-            response.responses.forEach(async (resp, idx) => {
-              if (!resp.success &&
-                  (resp.error?.code === "messaging/invalid-argument" ||
-                   resp.error?.code ===
-                     "messaging/registration-token-not-registered")) {
-                const invalidToken = tokens[idx];
-                logger.warn(
-                    `Cloud Function: Token inválido ${userId}: ` +
-                  `${invalidToken}.`,
-                    {structuredData: true},
-                );
-                await db.collection("users").doc(userId)
-                    .collection("fcmTokens").doc(invalidToken).delete();
-              }
-            });
-          }
-        } else {
-          logger.warn(
-              `Cloud Function: ${userId} sin tokens FCM.`,
-              {structuredData: true},
-          );
         }
-      } else {
-        logger.info(
-            `Cloud Function: ${userId} no elegible en esta ejecución.`,
-            {structuredData: true},
-        );
-      }
-    } else {
-      logger.info(
-          `Cloud Function: ${userId} sin config de notificaciones.`,
-          {structuredData: true},
-      );
+      });
     }
   }
 
-  logger.info(
-      "Cloud Function: sendDailyDevotionalNotification finalizada.",
-      {structuredData: true},
-  );
+  logger.info("Notificaciones: Ejecución finalizada.", {structuredData: true});
   return null;
 });
 
-/**
- * Limpia tokens FCM inválidos cada 24 horas
- */
+// ==========================================
+// FUNCIÓN 2: LIMPIEZA AGRESIVA DE BASE DE DATOS
+// Elimina usuario completo si cumple cualquier condición
+// Modificado: 27-nov-2025 - Parámetros de retención ajustados
+// ==========================================
 exports.cleanupInvalidFCMTokens = onSchedule({
   schedule: "every 24 hours",
   timeZone: "UTC",
+  timeoutSeconds: 540,
+  memory: "512MiB",
 }, async (context) => {
-  logger.info(
-      "Cloud Function: Iniciando limpieza de tokens FCM.",
-      {structuredData: true},
-  );
+  logger.info("Limpieza: Iniciando proceso.", {structuredData: true});
 
-  const tokensToDelete = [];
+  const now = admin.firestore.Timestamp.now();
+
+  // Parámetros de retención configurables
+  const RETENTION_DAYS_LAST_LOGIN = 15;
+  const RETENTION_DAYS_TOKENS = 30;
+
+  const cutoffLastLogin = admin.firestore.Timestamp.fromMillis(now.toMillis() - (RETENTION_DAYS_LAST_LOGIN * 24 * 60 * 60 * 1000));
+  const cutoffTokens = admin.firestore.Timestamp.fromMillis(now.toMillis() - (RETENTION_DAYS_TOKENS * 24 * 60 * 60 * 1000));
+
+  let deletedUsers = 0;
 
   try {
-    const usersSnapshot = await db.collection("users").get();
+    logger.info("Limpieza: Evaluando usuarios.", {structuredData: true});
 
-    const allTokens = [];
+    const usersSnapshot = await db.collection("users").get();
+    let batch = db.batch();
+    let batchCount = 0;
+
     for (const userDoc of usersSnapshot.docs) {
       const userId = userDoc.id;
-      const fcmTokensSnapshot = await db.collection("users")
-          .doc(userId).collection("fcmTokens").get();
-      fcmTokensSnapshot.docs.forEach((tokenDoc) => {
-        const tokenData = tokenDoc.data();
-        if (tokenData.token) {
-          allTokens.push({
-            token: tokenData.token,
-            ref: tokenDoc.ref,
-          });
-        }
-      });
-    }
+      let shouldDelete = false;
+      let deleteReason = "";
 
-    if (allTokens.length === 0) {
-      logger.info(
-          "Cloud Function: No hay tokens FCM para limpiar.",
-          {structuredData: true},
-      );
-      return null;
-    }
-
-    logger.info(
-        `Cloud Function: ${allTokens.length} tokens a verificar.`,
-        {structuredData: true},
-    );
-
-    const tokensChunks = [];
-    for (let i = 0; i < allTokens.length; i += 500) {
-      tokensChunks.push(allTokens.slice(i, i + 500).map((t) => t.token));
-    }
-
-    for (const chunk of tokensChunks) {
-      const message = {
-        data: {
-          type: "cleanup_check",
-          timestamp: new Date().toISOString(),
-        },
-        tokens: chunk,
-      };
+      const settingsRef = db.collection("users").doc(userId).collection("settings").doc("notifications");
+      let settingsDoc;
 
       try {
-        const response =
-          await admin.messaging().sendEachForMulticast(message);
-        logger.info(
-            `Cloud Function: Respuesta FCM: ` +
-          `${response.successCount} OK, ` +
-          `${response.failureCount} fallidos.`,
-            {structuredData: true},
-        );
+        settingsDoc = await settingsRef.get();
+      } catch (e) {
+        logger.error(`Limpieza: Error al obtener settings de ${userId}.`, {structuredData: true});
+        continue;
+      }
 
-        response.responses.forEach((resp, index) => {
-          if (!resp.success) {
-            const failedToken = chunk[index];
-            const tokenRef =
-              allTokens.find((t) => t.token === failedToken)?.ref;
-            if (tokenRef) {
-              tokensToDelete.push(tokenRef);
-            }
-            logger.warn(
-                `Cloud Function: Token inválido: ${failedToken} - ` +
-              `Error: ${resp.error?.message}.`,
-                {structuredData: true},
-            );
+      // Condición 1: Sin settings
+      if (!settingsDoc.exists) {
+        shouldDelete = true;
+        deleteReason = "sin settings";
+      }
+
+      // Condición 2: lastLogin > 15 días (modificado)
+      if (!shouldDelete) {
+        const userData = userDoc.data();
+        const lastLogin = userData?.lastLogin;
+
+        if (!lastLogin || (lastLogin instanceof admin.firestore.Timestamp && lastLogin.toMillis() < cutoffLastLogin.toMillis())) {
+          shouldDelete = true;
+          deleteReason = `inactivo +${RETENTION_DAYS_LAST_LOGIN} días (lastLogin)`;
+        }
+      }
+
+      // Condición 3: Todos los tokens son > 30 días o sin tokens
+      if (!shouldDelete) {
+        const tokensSnapshot = await db.collection("users").doc(userId).collection("fcmTokens").get();
+
+        if (tokensSnapshot.empty) {
+          shouldDelete = true;
+          deleteReason = "sin tokens";
+        } else {
+          const allTokensOld = tokensSnapshot.docs.every((tokenDoc) => {
+            const tokenData = tokenDoc.data();
+            const createdAt = tokenData.createdAt;
+            return createdAt instanceof admin.firestore.Timestamp && createdAt.toMillis() < cutoffTokens.toMillis();
+          });
+
+          if (allTokensOld) {
+            shouldDelete = true;
+            deleteReason = `todos tokens +${RETENTION_DAYS_TOKENS} días`;
           }
+        }
+      }
+
+      // ELIMINAR USUARIO COMPLETO
+      if (shouldDelete) {
+        logger.info(`Limpieza: Eliminando usuario ${userId} (${deleteReason}).`, {structuredData: true});
+
+        // Eliminar subcolecciones
+        const tokensSnapshot = await db.collection("users").doc(userId).collection("fcmTokens").get();
+        tokensSnapshot.docs.forEach((tokenDoc) => {
+          batch.delete(tokenDoc.ref);
+          batchCount++;
         });
-      } catch (error) {
-        logger.error(
-            "Cloud Function: Error enviando a chunk:",
-            error,
-            {structuredData: true},
-        );
+
+        if (settingsDoc && settingsDoc.exists) {
+          batch.delete(settingsRef);
+          batchCount++;
+        }
+
+        // Eliminar documento principal
+        batch.delete(userDoc.ref);
+        batchCount++;
+        deletedUsers++;
+
+        if (batchCount >= 450) {
+          await batch.commit();
+          logger.info(`Limpieza: Batch commit (${deletedUsers} usuarios hasta ahora).`, {structuredData: true});
+          batch = db.batch();
+          batchCount = 0;
+        }
       }
     }
 
-    if (tokensToDelete.length > 0) {
-      const batch = db.batch();
-      tokensToDelete.forEach((tokenRef) => {
-        batch.delete(tokenRef);
-      });
+    if (batchCount > 0) {
       await batch.commit();
-      logger.info(
-          `Cloud Function: ${tokensToDelete.length} tokens eliminados.`,
-          {structuredData: true},
-      );
-    } else {
-      logger.info(
-          "Cloud Function: No hay tokens inválidos que eliminar.",
-          {structuredData: true},
-      );
     }
 
-    logger.info(
-        "Cloud Function: Limpieza de tokens completada.",
-        {structuredData: true},
-    );
+    logger.info(`Limpieza: Completado. ${deletedUsers} usuarios eliminados completamente.`, {structuredData: true});
   } catch (error) {
-    logger.error(
-        "Cloud Function: Error en limpieza de tokens:",
-        error,
-        {structuredData: true},
-    );
+    logger.error("Limpieza: Error general:", error, {structuredData: true});
   }
 
   return null;

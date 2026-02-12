@@ -386,7 +386,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(ctx),
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
@@ -396,7 +396,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                         nameController.text.trim(),
                         selectedEmoji,
                       );
-                  if (mounted) Navigator.pop(ctx);
+                  if (mounted) Navigator.of(context).pop();
                 }
               },
               child: const Text('Agregar'),

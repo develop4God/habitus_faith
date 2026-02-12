@@ -11,6 +11,7 @@ import '../features/common/presentation/widgets/task_timer.dart';
 import '../l10n/app_localizations.dart';
 import '../core/utils/global_snackbar.dart';
 import 'notification_options_dialog.dart';
+import 'subtasks_section.dart';
 
 class UnifiedHabitCard extends ConsumerStatefulWidget {
   final Habit habit;
@@ -68,7 +69,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     if (_isCompleting) return;
     setState(() => _isCompleting = true);
     try {
-      // Use the habit prop directly which has the correct completedToday for selected date
       if (widget.habit.completedToday) {
         await widget.onUncheck(widget.habit.id);
       } else {
@@ -82,7 +82,6 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
   Future<void> _handleDelete() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = widget.habit;
-    debugPrint('UnifiedHabitCard: delete button pressed for habit ${habit.id}');
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -103,56 +102,29 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
       ),
     );
 
-    debugPrint('UnifiedHabitCard: delete dialog result = $confirmed');
-
     if (confirmed == true) {
       if (!mounted) return;
-
-      // Close the modal with proper animation
-      debugPrint('UnifiedHabitCard: popping modal sheet for habit ${habit.id}');
       Navigator.of(context).pop();
-      debugPrint('UnifiedHabitCard: modal sheet popped for habit ${habit.id}');
-
-      // Wait for modal close animation to complete (typically 250-300ms)
       await Future.delayed(const Duration(milliseconds: 300));
-
-      // Perform the deletion
-      debugPrint('UnifiedHabitCard: deleting habit ${habit.id}');
       await widget.onDelete(habit.id);
-      debugPrint('UnifiedHabitCard: delete completed for habit ${habit.id}');
-
-      // Show snackbar using the global utility
-      debugPrint('UnifiedHabitCard: showing snackbar for habit ${habit.id}');
       GlobalSnackbar.showError(l10n.habitDeleted);
-      debugPrint('UnifiedHabitCard: snackbar shown for habit ${habit.id}');
     }
   }
 
   Future<void> _handleSkip() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = widget.habit;
-
     if (!mounted) return;
-
-    // Close the modal first
     Navigator.of(context).pop();
-
-    // Wait for modal close animation to complete
     await Future.delayed(const Duration(milliseconds: 300));
-
-    // Perform the skip operation
     await ref.read(habitsNotifierProvider.notifier).skipHabit(habit.id);
-
-    // Show snackbar using the global utility
     GlobalSnackbar.showWarning(l10n.habitSkipped);
   }
 
   Future<void> _handleDuplicate() async {
     final l10n = AppLocalizations.of(context)!;
     final habit = widget.habit;
-
     if (!mounted) return;
-
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -170,16 +142,10 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
         ],
       ),
     );
-
-    if (confirmed != true) {
-      return;
-    }
-
+    if (confirmed != true) return;
     if (!mounted) return;
     Navigator.of(context).pop();
     await Future.delayed(const Duration(milliseconds: 300));
-    debugPrint(
-        'UnifiedHabitCard._handleDuplicate: invoking duplicateHabitFromData for ${habit.id}');
     await ref
         .read(habitsNotifierProvider.notifier)
         .duplicateHabitFromData(habit);
@@ -210,15 +176,81 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     );
   }
 
+  void _showSubtasksEditor(BuildContext context, Habit habit, Color habitColor,
+      AppLocalizations l10n) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.subtasks,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: SubtasksSection(
+                    initialSubtasks: habit.subtasks,
+                    onSubtasksChanged: (newSubtasks) async {
+                      await ref
+                          .read(habitsNotifierProvider.notifier)
+                          .updateHabit(
+                            habitId: habit.id,
+                            subtasks: newSubtasks,
+                          );
+                    },
+                    showAddButton: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // Use widget.habit directly to respect the selected date's completion status
     final habit = widget.habit;
     final habitColor = HabitColors.getHabitColor(habit);
     final isCompleted = habit.completedToday;
     final isSkipped = habit.dailyStatus == HabitDailyStatus.skipped;
     final isFailed = habit.dailyStatus == HabitDailyStatus.failed;
+
+    // Derived light color for modern card background
+    final cardColor = isCompleted
+        ? Colors.green.shade50
+        : isSkipped
+            ? Colors.orange.shade50
+            : isFailed
+                ? Colors.red.shade50
+                : habitColor.withValues(alpha: 0.08);
 
     return AnimatedScale(
       scale: (isCompleted || isSkipped || isFailed) ? 0.98 : 1.0,
@@ -228,13 +260,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Container(
           decoration: BoxDecoration(
-            color: isCompleted
-                ? Colors.green.shade50
-                : isSkipped
-                    ? Colors.orange.shade50
-                    : isFailed
-                        ? Colors.red.shade50
-                        : Colors.white,
+            color: cardColor,
             borderRadius: BorderRadius.circular(16),
             border: Border(left: BorderSide(color: habitColor, width: 4)),
             boxShadow: [
@@ -270,7 +296,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: habitColor.withValues(alpha: 0.1),
+                          color: habitColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
@@ -290,7 +316,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                 Expanded(
                                   child: Text(
                                     widget.habit.name,
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -688,61 +714,117 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
           children: [
             Positioned(
               top: 0,
-              right: 0,
-              child: InkWell(
-                onTap: () async {
-                  Navigator.of(context).pop();
-                  _showTimer(this.context, habitColor, l10n);
-                },
-                borderRadius: BorderRadius.circular(30),
-                child: AnimatedBuilder(
-                  animation: _timerPulseController,
-                  builder: (context, child) {
-                    final pulse = 0.95 +
-                        0.07 *
-                            Curves.easeInOut
-                                .transform(_timerPulseController.value);
-                    final shadowOpacity =
-                        0.15 + 0.25 * _timerPulseController.value;
-                    return Transform.scale(
-                      scale: pulse,
-                      child: Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              habitColor.withValues(alpha: 0.4),
-                              habitColor.withValues(alpha: 0.15),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: habitColor.withValues(alpha: 0.5),
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  habitColor.withValues(alpha: shadowOpacity),
-                              blurRadius: 14,
-                              spreadRadius: 2,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+              left: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      _showSubtasksEditor(
+                          this.context, habit, habitColor, l10n);
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: habitColor.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: habitColor.withValues(alpha: 0.3),
+                          width: 2,
                         ),
-                        child: child,
                       ),
-                    );
-                  },
-                  child: Icon(
-                    Icons.timer_outlined,
-                    color: habitColor,
-                    size: 32,
+                      child: Icon(
+                        Icons.checklist_rtl_outlined,
+                        color: habitColor,
+                        size: 32,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.subtasks,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: habitColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      _showTimer(this.context, habitColor, l10n);
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: AnimatedBuilder(
+                      animation: _timerPulseController,
+                      builder: (context, child) {
+                        final pulse = 0.95 +
+                            0.07 *
+                                Curves.easeInOut
+                                    .transform(_timerPulseController.value);
+                        final shadowOpacity =
+                            0.15 + 0.25 * _timerPulseController.value;
+                        return Transform.scale(
+                          scale: pulse,
+                          child: Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  habitColor.withValues(alpha: 0.4),
+                                  habitColor.withValues(alpha: 0.15),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: habitColor.withValues(alpha: 0.5),
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: habitColor.withValues(
+                                      alpha: shadowOpacity),
+                                  blurRadius: 14,
+                                  spreadRadius: 2,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.timer_outlined,
+                        color: habitColor,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.timer,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: habitColor,
+                    ),
+                  ),
+                ],
               ),
             ),
             Column(
@@ -768,8 +850,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                     AutoSizeText(
                       habit.name,
                       textAlign: TextAlign.center,
-                      maxLines: 2,
-                      minFontSize: 16,
+                      maxLines: 4,
+                      minFontSize: 12,
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,

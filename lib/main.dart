@@ -130,6 +130,18 @@ class MyApp extends ConsumerWidget {
       }
     });
 
+    // Initialize NotificationService with error handling
+    ref.listen(notificationInitProvider, (previous, next) {
+      next.when(
+        data: (_) =>
+            debugPrint('✅ NotificationService: Initialized successfully'),
+        error: (err, stack) {
+          debugPrint('❌ NotificationService: Initialization failed: $err');
+          debugPrint('Stack trace: $stack');
+        },
+        loading: () => debugPrint('🔄 NotificationService: Initializing...'),
+      );
+    });
     ref.watch(notificationInitProvider);
 
     // Initialize background tasks and schedule daily predictions with error handling
@@ -145,6 +157,17 @@ class MyApp extends ConsumerWidget {
     ref.watch(backgroundTaskInitProvider);
 
     // Reschedule habit notifications when app starts
+    ref.listen(habitNotificationsSchedulerProvider, (previous, next) {
+      next.when(
+        data: (_) =>
+            debugPrint('✅ HabitNotifications: Rescheduled successfully'),
+        error: (err, stack) {
+          debugPrint('❌ HabitNotifications: Rescheduling failed: $err');
+          debugPrint('Stack trace: $stack');
+        },
+        loading: () => debugPrint('🔄 HabitNotifications: Rescheduling...'),
+      );
+    });
     ref.watch(habitNotificationsSchedulerProvider);
 
     return MaterialApp(

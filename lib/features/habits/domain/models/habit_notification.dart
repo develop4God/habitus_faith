@@ -2,7 +2,7 @@
 
 enum NotificationTiming {
   none, // Sin aviso
-  atEventTime, // En el momento del evento
+  atEventTime, // En el momento
   tenMinutesBefore, // 10 minutos antes
   thirtyMinutesBefore, // 30 minutos antes
   oneHourBefore, // 1 hora antes
@@ -13,7 +13,7 @@ enum NotificationTiming {
       case NotificationTiming.none:
         return 'Sin aviso';
       case NotificationTiming.atEventTime:
-        return 'En el momento del evento';
+        return 'En el momento';
       case NotificationTiming.tenMinutesBefore:
         return '10 minutos antes';
       case NotificationTiming.thirtyMinutesBefore:
