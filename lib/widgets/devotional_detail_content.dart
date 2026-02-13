@@ -26,11 +26,12 @@ class DevotionalDetailContent extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final mediaQuery = MediaQuery.of(context);
+    final textScaler = mediaQuery.textScaler;
     
     // Accessibility: Use relative sizes for better scaling
-    final double headlineSize = 22 * mediaQuery.textScaleFactor;
-    final double bodySize = 18 * mediaQuery.textScaleFactor;
-    final double sectionTitleSize = 14 * mediaQuery.textScaleFactor;
+    final double headlineSize = textScaler.scale(22);
+    final double bodySize = textScaler.scale(18);
+    final double sectionTitleSize = textScaler.scale(14);
 
     return Padding(
       padding: EdgeInsets.fromLTRB(

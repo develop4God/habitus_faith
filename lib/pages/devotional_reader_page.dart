@@ -29,7 +29,6 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
   }
 
   void _handleVerticalDragUpdate(DragUpdateDetails details) {
-    // Allow dragging down from anywhere, but prioritize scroll if not at top
     if (_scrollController.hasClients && _scrollController.offset <= 0) {
       setState(() {
         _dragOffset += details.primaryDelta!;
@@ -51,12 +50,11 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
     final mediaQuery = MediaQuery.of(context);
+    final textScaler = mediaQuery.textScaler;
 
     // Modern layout: Fixed Header (Hero) + Scrolling Content
-    // Hero height is smaller (approx 32% of screen)
     final double heroHeight = size.height * 0.32;
 
     return Scaffold(
@@ -64,8 +62,9 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
       body: GestureDetector(
         onVerticalDragUpdate: _handleVerticalDragUpdate,
         onVerticalDragEnd: _handleVerticalDragEnd,
+        behavior: HitTestBehavior.translucent,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: _dragOffset == 0 ? const Duration(milliseconds: 300) : Duration.zero,
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(0, _dragOffset, 0),
           child: ClipRRect(
@@ -77,7 +76,7 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                   // 1. FROZEN HERO SECTION (Top)
                   Stack(
                     children: [
-                      Container(
+                      SizedBox(
                         height: heroHeight,
                         width: double.infinity,
                         child: Stack(
@@ -107,8 +106,8 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: [
-                                    Colors.black.withOpacity(0.1),
-                                    Colors.black.withOpacity(0.7),
+                                    Colors.black.withValues(alpha: 0.1),
+                                    Colors.black.withValues(alpha: 0.7),
                                   ],
                                 ),
                               ),
@@ -127,7 +126,7 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 22 * mediaQuery.textScaleFactor,
+                                        fontSize: textScaler.scale(22),
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic,
                                         height: 1.3,
@@ -147,19 +146,13 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                         ),
                       ),
                       
-                      // Floating Back Button (Integrated into Hero Stack)
+                      // Close button
                       Positioned(
-                        top: mediaQuery.padding.top + 8,
-                        left: 16,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.3),
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 18),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
+                        top: mediaQuery.padding.top + 4,
+                        left: 12,
+                        child: IconButton(
+                          icon: const Icon(Icons.close_rounded, color: Colors.white, size: 24),
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
                     ],
@@ -167,31 +160,26 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
 
                   // 2. SCROLLING REFLECTION SECTION (Bottom)
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: theme.scaffoldBackgroundColor,
-                        // Visual cue that this is a separate sheet
-                        boxShadow: [
-                          if (_dragOffset == 0)
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, -5),
-                            ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        // Slightly overlap rounded corners at the top of the scroll area
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          physics: _dragOffset > 0 
-                              ? const NeverScrollableScrollPhysics() 
-                              : const BouncingScrollPhysics(),
-                          child: DevotionalDetailContent(
-                            devocional: widget.devocional,
-                            showVerseReference: false,
-                          ),
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (notification) {
+                        if (notification is ScrollUpdateNotification && notification.metrics.pixels <= 0) {
+                          if (notification.scrollDelta! < 0) {
+                            setState(() {
+                              _dragOffset -= notification.scrollDelta!;
+                            });
+                            return true;
+                          }
+                        }
+                        return false;
+                      },
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        physics: _dragOffset > 0 
+                            ? const NeverScrollableScrollPhysics() 
+                            : const BouncingScrollPhysics(),
+                        child: DevotionalDetailContent(
+                          devocional: widget.devocional,
+                          showVerseReference: false,
                         ),
                       ),
                     ),
