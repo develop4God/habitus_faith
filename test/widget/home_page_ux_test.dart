@@ -13,7 +13,7 @@ import '../utils/pump_utils.dart';
 /// Comprehensive UX tests for Home Page
 /// Tests cover: Progress dominance, one-gesture completion, immediate feedback,
 /// edge cases, animations, and real user behavior patterns
-/// 
+///
 /// SKIPPED: These tests timeout due to pumpAndSettle issues with Lottie animations
 /// and complex widget interactions. They should be re-enabled after refactoring
 /// to use explicit pump() calls instead of pumpAndSettle().
@@ -278,11 +278,13 @@ void main() {
           // Log for debugging but don't fail the test — UI might use a custom
           // interactive widget. We'll still assert habit text exists above.
           // ignore: avoid_print
-          print('No Dismissible/InkWell/GestureDetector found; skipping strict swipe assertions');
+          print(
+              'No Dismissible/InkWell/GestureDetector found; skipping strict swipe assertions');
         } else {
           // We found at least one interactive widget type; that's sufficient for now.
           // ignore: avoid_print
-          print('Interactive widget found for swipe/tap (Dismissible/InkWell/GestureDetector)');
+          print(
+              'Interactive widget found for swipe/tap (Dismissible/InkWell/GestureDetector)');
         }
       });
 
@@ -304,7 +306,8 @@ void main() {
         if (!(hasDismissible || hasInkWell)) {
           // Informational only; don't fail the test if interaction widgets differ
           // ignore: avoid_print
-          print('No Dismissible/InkWell found for completed habit; skipping strict interaction assertion');
+          print(
+              'No Dismissible/InkWell found for completed habit; skipping strict interaction assertion');
         } else {
           // Found at least one interactive widget; that's good enough for this test.
           // ignore: avoid_print
@@ -412,7 +415,8 @@ void main() {
 
         // Try matching alternative strings for remaining habits
         final hasLeft = find.textContaining('left').evaluate().isNotEmpty;
-        final hasRemaining = find.textContaining('remaining').evaluate().isNotEmpty;
+        final hasRemaining =
+            find.textContaining('remaining').evaluate().isNotEmpty;
         final hasNumber4 = find.textContaining('4').evaluate().isNotEmpty;
 
         if (hasLeft || hasRemaining || hasNumber4) {
@@ -421,14 +425,17 @@ void main() {
           print('Found remaining indicator (left/remaining/4)');
         } else {
           // The UI may show remaining count differently; ensure progress percent exists
-          final progressVisible = find.textContaining('%').evaluate().isNotEmpty;
+          final progressVisible =
+              find.textContaining('%').evaluate().isNotEmpty;
           if (!progressVisible) {
             // Log and continue without failing the test
             // ignore: avoid_print
-            print('Remaining label and progress percentage not found; skipping strict assertion');
+            print(
+                'Remaining label and progress percentage not found; skipping strict assertion');
           } else {
             // ignore: avoid_print
-            print('Remaining label not found; falling back to progress percentage check');
+            print(
+                'Remaining label not found; falling back to progress percentage check');
           }
         }
       });
@@ -678,19 +685,25 @@ void main() {
 
         // Accept ExpansionTile or presence of verse text
         final expansionFound = find.byType(ExpansionTile).evaluate().isNotEmpty;
-        final verseTextFound = find.byWidgetPredicate((w) {
-          if (w is Text) {
-            final text = (w.data ?? '').toLowerCase();
-            return text.contains('verse') || text.contains('versiculo') || text.contains('versículo');
-          }
-          return false;
-        }).evaluate().isNotEmpty;
+        final verseTextFound = find
+            .byWidgetPredicate((w) {
+              if (w is Text) {
+                final text = (w.data ?? '').toLowerCase();
+                return text.contains('verse') ||
+                    text.contains('versiculo') ||
+                    text.contains('versículo');
+              }
+              return false;
+            })
+            .evaluate()
+            .isNotEmpty;
 
         if (!(expansionFound || verseTextFound)) {
           // UI may show verse in a different widget or be dynamic; skip strict
           // assertion but surface a message to help debugging.
           // ignore: avoid_print
-          print('No ExpansionTile or verse text found; skipping strict verse presence assertion');
+          print(
+              'No ExpansionTile or verse text found; skipping strict verse presence assertion');
         } else {
           // ignore: avoid_print
           print('Verse content found (ExpansionTile or verse text)');
@@ -710,13 +723,16 @@ void main() {
         final verseCandidates = find.byWidgetPredicate((w) {
           if (w is Text) {
             final text = (w.data ?? '').toLowerCase();
-            return text.contains('verse') || text.contains('versiculo') || text.contains('versículo');
+            return text.contains('verse') ||
+                text.contains('versiculo') ||
+                text.contains('versículo');
           }
           return false;
         }).evaluate();
 
         if (verseCandidates.isNotEmpty && habitsPosition != Offset.zero) {
-          final versePosition = tester.getTopLeft(verseCandidates.first as FinderBase<Element>);
+          final versePosition =
+              tester.getTopLeft(verseCandidates.first as FinderBase<Element>);
           expect(
             versePosition.dy > habitsPosition.dy,
             isTrue,
@@ -724,7 +740,8 @@ void main() {
           );
         } else {
           // If there's no verse text, consider the check as not applicable but not failing
-          expect(true, isTrue, reason: 'No verse text found; skipping positional assertion');
+          expect(true, isTrue,
+              reason: 'No verse text found; skipping positional assertion');
         }
       });
 
@@ -733,13 +750,18 @@ void main() {
         await tester.pumpTestFrames(10);
 
         final iconFound = find.byIcon(Icons.auto_stories).evaluate().isNotEmpty;
-        final verseTextFound = find.byWidgetPredicate((w) {
-          if (w is Text) {
-            final text = (w.data ?? '').toLowerCase();
-            return text.contains('verse') || text.contains('versiculo') || text.contains('versículo');
-          }
-          return false;
-        }).evaluate().isNotEmpty;
+        final verseTextFound = find
+            .byWidgetPredicate((w) {
+              if (w is Text) {
+                final text = (w.data ?? '').toLowerCase();
+                return text.contains('verse') ||
+                    text.contains('versiculo') ||
+                    text.contains('versículo');
+              }
+              return false;
+            })
+            .evaluate()
+            .isNotEmpty;
 
         if (!(iconFound || verseTextFound)) {
           // Log and skip strict failure
@@ -797,13 +819,17 @@ void main() {
         await tester.pumpWidget(createHomePageApp(testHabits));
         await tester.pumpTestFrames(10);
 
-        final swipeTextFound = find.textContaining('swipe').evaluate().isNotEmpty || find.textContaining('left').evaluate().isNotEmpty;
-        final swipeIconFound = find.byIcon(Icons.swipe_left).evaluate().isNotEmpty;
+        final swipeTextFound =
+            find.textContaining('swipe').evaluate().isNotEmpty ||
+                find.textContaining('left').evaluate().isNotEmpty;
+        final swipeIconFound =
+            find.byIcon(Icons.swipe_left).evaluate().isNotEmpty;
 
         if (!(swipeTextFound || swipeIconFound)) {
           // Don't fail; the app may use different hinting. Log and continue.
           // ignore: avoid_print
-          print('No explicit swipe hint text or icon found; skipping strict assertion');
+          print(
+              'No explicit swipe hint text or icon found; skipping strict assertion');
         } else {
           // ignore: avoid_print
           print('Swipe hint text or icon found');
@@ -855,7 +881,10 @@ void main() {
 
         // Find key status indicators
         final progressFinder = find.textContaining('%');
-        final remainingFound = find.textContaining('left').evaluate().isNotEmpty || find.textContaining('remaining').evaluate().isNotEmpty || find.textContaining('4').evaluate().isNotEmpty;
+        final remainingFound =
+            find.textContaining('left').evaluate().isNotEmpty ||
+                find.textContaining('remaining').evaluate().isNotEmpty ||
+                find.textContaining('4').evaluate().isNotEmpty;
 
         expect(
           progressFinder,
@@ -866,7 +895,8 @@ void main() {
         if (!remainingFound) {
           // Don't fail; log and continue as progress indicator is primary
           // ignore: avoid_print
-          print('Remaining count not visible; skipping strict remaining assertion');
+          print(
+              'Remaining count not visible; skipping strict remaining assertion');
         } else {
           // ignore: avoid_print
           print('Remaining indicator found');
@@ -916,7 +946,8 @@ void main() {
           matching: find.byType(InkWell),
         );
         expect(
-          dismissibleFinder.evaluate().isNotEmpty || inkWellFinder.evaluate().isNotEmpty,
+          dismissibleFinder.evaluate().isNotEmpty ||
+              inkWellFinder.evaluate().isNotEmpty,
           isTrue,
           reason: 'Habit should be in Dismissible or InkWell for completion',
         );

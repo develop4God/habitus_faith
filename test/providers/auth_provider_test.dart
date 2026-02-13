@@ -25,11 +25,13 @@ void main() {
       mockUser = mockFirebaseUser(uid: 'test-uid-123', isAnonymous: true);
       mockCredential = MockUserCredential();
       mockApp = MockFirebaseApp();
-      
+
       when(() => mockAuth.currentUser).thenReturn(null);
-      when(() => mockAuth.authStateChanges()).thenAnswer((_) => Stream.value(null));
+      when(() => mockAuth.authStateChanges())
+          .thenAnswer((_) => Stream.value(null));
       when(() => mockCredential.user).thenReturn(mockUser);
-      when(() => mockAuth.signInAnonymously()).thenAnswer((_) async => mockCredential);
+      when(() => mockAuth.signInAnonymously())
+          .thenAnswer((_) async => mockCredential);
     });
 
     tearDown(() {

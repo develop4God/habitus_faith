@@ -56,7 +56,7 @@ void main() {
 
         // Predictor exists but may not be initialized yet
         expect(predictor, isA<AbandonmentPredictor>());
-        
+
         // This is the behavior: returns immediately, init happens async
         // For guaranteed initialization, use abandonmentPredictorInitializedProvider
       });
@@ -79,16 +79,16 @@ void main() {
         addTearDown(container.dispose);
 
         final stopwatch = Stopwatch()..start();
-        
+
         final predictor = await container.read(
           abandonmentPredictorInitializedProvider.future,
         );
-        
+
         stopwatch.stop();
 
         // Initialization should have taken some time (loading assets)
         expect(predictor, isA<AbandonmentPredictor>());
-        
+
         // Predictor should be ready for predictions
         // In test environment without TFLite, it will fail to load model
         // but initialization should complete without hanging
@@ -118,7 +118,7 @@ void main() {
         );
 
         expect(predictor, isA<AbandonmentPredictor>());
-        
+
         // Predictor should have attempted initialization
         // (even if it failed due to missing TFLite in test environment)
       });
@@ -157,9 +157,9 @@ void main() {
         addTearDown(container.dispose);
 
         final stopwatch = Stopwatch()..start();
-        
+
         final predictor = container.read(abandonmentPredictorProvider);
-        
+
         stopwatch.stop();
 
         expect(predictor, isA<AbandonmentPredictor>());

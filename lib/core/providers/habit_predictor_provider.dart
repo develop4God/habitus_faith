@@ -35,9 +35,11 @@ final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
 
 /// Provider that ensures predictor is fully initialized before use
 /// Use this in background tasks where initialization must be guaranteed
-final habitPredictorInitializedProvider = FutureProvider<HabitPredictorService>((ref) async {
+final habitPredictorInitializedProvider =
+    FutureProvider<HabitPredictorService>((ref) async {
   final habitsRepository = ref.watch(jsonHabitsRepositoryProvider);
-  final predictor = await ref.watch(abandonmentPredictorInitializedProvider.future);
+  final predictor =
+      await ref.watch(abandonmentPredictorInitializedProvider.future);
   final clock = ref.watch(clockProvider);
   final remoteConfig = ref.watch(remoteConfigServiceProvider);
   final notificationService = ref.watch(notificationServiceProvider);

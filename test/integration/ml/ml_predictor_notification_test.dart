@@ -15,7 +15,7 @@ import '../../utils/habit_predictor_mocks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  
+
   group('ML Predictor → Notification Integration Tests', () {
     late MockHabitsRepository mockRepo;
     late MockNotificationService mockNotificationService;
@@ -48,12 +48,14 @@ void main() {
     test('ML predictor initializes before making predictions', () async {
       container = ProviderContainer();
 
-      final predictor = await container.read(abandonmentPredictorInitializedProvider.future);
+      final predictor =
+          await container.read(abandonmentPredictorInitializedProvider.future);
 
       expect(predictor, isA<AbandonmentPredictor>());
     });
 
-    test('habitPredictorInitializedProvider ensures ML model is ready', () async {
+    test('habitPredictorInitializedProvider ensures ML model is ready',
+        () async {
       // Skip: TensorFlow Lite not available in CI, causes initialization errors
       // TODO: Mock TFLite or test in environment with proper setup
       return;
@@ -64,14 +66,14 @@ void main() {
       expect(RiskThresholds.requiresIntervention(0.65), isTrue);
       expect(RiskThresholds.requiresIntervention(0.75), isTrue);
       expect(RiskThresholds.requiresIntervention(1.0), isTrue);
-      
+
       expect(RiskThresholds.highRiskThreshold, equals(0.65));
       expect(RiskThresholds.mediumRiskThreshold, equals(0.3));
     });
 
     test('High-risk prediction triggers intervention', () async {
       final prefs = await SharedPreferences.getInstance();
-      
+
       final highRiskHabit = Habit(
         id: 'high-risk-1',
         userId: 'user1',
@@ -91,12 +93,11 @@ void main() {
       );
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [highRiskHabit]);
-      when(() => mockRepo.updateHabitInstance(any())).thenAnswer((_) async => null);
-      when(() => mockNotificationService.showImmediateNotification(
-        any(), any(), 
-        payload: any(named: 'payload'), 
-        id: any(named: 'id')
-      )).thenAnswer((_) async {});
+      when(() => mockRepo.updateHabitInstance(any()))
+          .thenAnswer((_) async => null);
+      when(() => mockNotificationService.showImmediateNotification(any(), any(),
+          payload: any(named: 'payload'),
+          id: any(named: 'id'))).thenAnswer((_) async {});
 
       container = ProviderContainer(
         overrides: [
@@ -107,7 +108,7 @@ void main() {
       final clock = container.read(clockProvider);
       final realPredictor = container.read(abandonmentPredictorProvider);
       await realPredictor.initialize();
-      
+
       final service = HabitPredictorService(
         habitsRepository: mockRepo,
         predictor: realPredictor,
@@ -119,7 +120,8 @@ void main() {
       await service.runDailyPredictions();
 
       verify(() => mockRepo.getHabits()).called(1);
-      verify(() => mockRepo.updateHabitInstance(any())).called(greaterThanOrEqualTo(1));
+      verify(() => mockRepo.updateHabitInstance(any()))
+          .called(greaterThanOrEqualTo(1));
     });
   });
 }

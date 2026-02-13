@@ -404,7 +404,7 @@ void main() {
     test('Detects weekendGap when weekdays succeed but weekends fail', () {
       // Arrange
       final now = DateTime.now();
-      
+
       final habit = Habit.create(
         id: 'test-16',
         userId: 'user-1',
@@ -414,7 +414,7 @@ void main() {
         completionHistory: [
           // Only weekdays from last 7 days (Mon-Fri), no weekends
           now.subtract(const Duration(days: 1)), // Yesterday (if weekday)
-          now.subtract(const Duration(days: 2)), 
+          now.subtract(const Duration(days: 2)),
           now.subtract(const Duration(days: 3)),
           now.subtract(const Duration(days: 4)),
           now.subtract(const Duration(days: 5)),

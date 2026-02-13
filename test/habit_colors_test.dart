@@ -33,7 +33,8 @@ void main() {
     });
 
     test('Should provide category-specific default colors', () {
-      expect(HabitColors.categoryColors.length, equals(6)); // Updated to 6 categories
+      expect(HabitColors.categoryColors.length,
+          equals(6)); // Updated to 6 categories
       expect(
         HabitColors.categoryColors[HabitCategory.spiritual],
         equals(const Color(0xFF9333EA)),

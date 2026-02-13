@@ -246,7 +246,8 @@ class UnifiedHabitList extends ConsumerWidget {
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (err, stack) => Center(child: Text(l10n?.errorUnknown ?? 'Unknown error')),
+      error: (err, stack) =>
+          Center(child: Text(l10n?.errorUnknown ?? 'Unknown error')),
     );
   }
 

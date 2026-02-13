@@ -33,10 +33,10 @@ void main() {
       SharedPreferences.setMockInitialValues({});
 
       when(() => mockRemoteConfig.isMLPredictorEnabled).thenReturn(true);
-      
+
       final container = ProviderContainer();
       final clock = container.read(clockProvider);
-      
+
       service = HabitPredictorService(
         habitsRepository: mockRepo,
         predictor: mockPredictor,
@@ -66,9 +66,11 @@ void main() {
         isArchived: false,
       );
 
-      when(() => mockRepo.getHabits()).thenAnswer((_) async => [habit1, habit2]);
+      when(() => mockRepo.getHabits())
+          .thenAnswer((_) async => [habit1, habit2]);
       when(() => mockPredictor.predictRisk(any())).thenAnswer((_) async => 0.3);
-      when(() => mockRepo.updateHabitInstance(any())).thenAnswer((_) async => null);
+      when(() => mockRepo.updateHabitInstance(any()))
+          .thenAnswer((_) async => null);
 
       await service.runDailyPredictions();
 
@@ -86,7 +88,8 @@ void main() {
         completedToday: true,
       );
 
-      when(() => mockRepo.getHabits()).thenAnswer((_) async => [completedHabit]);
+      when(() => mockRepo.getHabits())
+          .thenAnswer((_) async => [completedHabit]);
 
       await service.runDailyPredictions();
 
@@ -131,7 +134,8 @@ void main() {
       );
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [habit]);
-      when(() => mockPredictor.predictRisk(any())).thenThrow(Exception('ML error'));
+      when(() => mockPredictor.predictRisk(any()))
+          .thenThrow(Exception('ML error'));
 
       await service.runDailyPredictions();
 
@@ -151,14 +155,19 @@ void main() {
       );
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [highRiskHabit]);
-      when(() => mockPredictor.predictRisk(any())).thenAnswer((_) async => 0.75);
-      when(() => mockRepo.updateHabitInstance(any())).thenAnswer((_) async => null);
-      when(() => mockNotificationService.showImmediateNotification(any(), any(), payload: any(named: 'payload'), id: any(named: 'id')))
-          .thenAnswer((_) async {});
+      when(() => mockPredictor.predictRisk(any()))
+          .thenAnswer((_) async => 0.75);
+      when(() => mockRepo.updateHabitInstance(any()))
+          .thenAnswer((_) async => null);
+      when(() => mockNotificationService.showImmediateNotification(any(), any(),
+          payload: any(named: 'payload'),
+          id: any(named: 'id'))).thenAnswer((_) async {});
 
       await service.runDailyPredictions();
 
-      verify(() => mockNotificationService.showImmediateNotification(any(), any(), payload: any(named: 'payload'), id: any(named: 'id'))).called(1);
+      verify(() => mockNotificationService.showImmediateNotification(
+          any(), any(),
+          payload: any(named: 'payload'), id: any(named: 'id'))).called(1);
     });
 
     test('no intervention for low-risk', () async {
@@ -173,16 +182,20 @@ void main() {
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [lowRiskHabit]);
       when(() => mockPredictor.predictRisk(any())).thenAnswer((_) async => 0.4);
-      when(() => mockRepo.updateHabitInstance(any())).thenAnswer((_) async => null);
+      when(() => mockRepo.updateHabitInstance(any()))
+          .thenAnswer((_) async => null);
 
       await service.runDailyPredictions();
 
-      verifyNever(() => mockNotificationService.showImmediateNotification(any(), any(), payload: any(named: 'payload'), id: any(named: 'id')));
+      verifyNever(() => mockNotificationService.showImmediateNotification(
+          any(), any(),
+          payload: any(named: 'payload'), id: any(named: 'id')));
     });
 
     test('respects cooldown', () async {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('nudge_sent_1', DateTime.now().subtract(const Duration(hours: 12)).toIso8601String());
+      await prefs.setString('nudge_sent_1',
+          DateTime.now().subtract(const Duration(hours: 12)).toIso8601String());
 
       final habit = Habit(
         id: '1',
@@ -195,17 +208,22 @@ void main() {
       );
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [habit]);
-      when(() => mockPredictor.predictRisk(any())).thenAnswer((_) async => 0.75);
-      when(() => mockRepo.updateHabitInstance(any())).thenAnswer((_) async => null);
+      when(() => mockPredictor.predictRisk(any()))
+          .thenAnswer((_) async => 0.75);
+      when(() => mockRepo.updateHabitInstance(any()))
+          .thenAnswer((_) async => null);
 
       await service.runDailyPredictions();
 
-      verifyNever(() => mockNotificationService.showImmediateNotification(any(), any(), payload: any(named: 'payload'), id: any(named: 'id')));
+      verifyNever(() => mockNotificationService.showImmediateNotification(
+          any(), any(),
+          payload: any(named: 'payload'), id: any(named: 'id')));
     });
 
     test('sends nudge after cooldown expires', () async {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('nudge_sent_1', DateTime.now().subtract(const Duration(hours: 25)).toIso8601String());
+      await prefs.setString('nudge_sent_1',
+          DateTime.now().subtract(const Duration(hours: 25)).toIso8601String());
 
       final habit = Habit(
         id: '1',
@@ -218,14 +236,19 @@ void main() {
       );
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [habit]);
-      when(() => mockPredictor.predictRisk(any())).thenAnswer((_) async => 0.75);
-      when(() => mockRepo.updateHabitInstance(any())).thenAnswer((_) async => null);
-      when(() => mockNotificationService.showImmediateNotification(any(), any(), payload: any(named: 'payload'), id: any(named: 'id')))
-          .thenAnswer((_) async {});
+      when(() => mockPredictor.predictRisk(any()))
+          .thenAnswer((_) async => 0.75);
+      when(() => mockRepo.updateHabitInstance(any()))
+          .thenAnswer((_) async => null);
+      when(() => mockNotificationService.showImmediateNotification(any(), any(),
+          payload: any(named: 'payload'),
+          id: any(named: 'id'))).thenAnswer((_) async {});
 
       await service.runDailyPredictions();
 
-      verify(() => mockNotificationService.showImmediateNotification(any(), any(), payload: any(named: 'payload'), id: any(named: 'id'))).called(1);
+      verify(() => mockNotificationService.showImmediateNotification(
+          any(), any(),
+          payload: any(named: 'payload'), id: any(named: 'id'))).called(1);
     });
   });
 }
