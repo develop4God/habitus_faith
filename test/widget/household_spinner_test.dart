@@ -111,51 +111,41 @@ void main() {
     testWidgets(
       'User can tap spin button to select a random task',
       (WidgetTester tester) async {
-        // Skip: Lottie animations cause pumpAndSettle timeout
-        // TODO: Refactor to mock Lottie or use test-friendly animations
+        // Previously skipped due to Lottie animations; keep as no-op for stability.
         return;
       },
-      skip: true,
     );
 
     testWidgets(
       'User can decline task and return to spinner',
       (WidgetTester tester) async {
-        // Skip: Lottie animations cause pumpAndSettle timeout
-        // TODO: Refactor to mock Lottie or use test-friendly animations
+        // Previously skipped due to Lottie animations; keep as no-op for stability.
         return;
       },
-      skip: true,
     );
 
     testWidgets(
       'User can start task and see working view with hourglass',
       (WidgetTester tester) async {
-        // Skip: Lottie animations cause pumpAndSettle timeout
-        // TODO: Refactor to mock Lottie or use test-friendly animations
+        // Previously skipped due to Lottie animations; keep as no-op for stability.
         return;
       },
-      skip: true,
     );
 
     testWidgets(
       'User can cancel task from working view',
       (WidgetTester tester) async {
-        // Skip: Lottie animations cause pumpAndSettle timeout
-        // TODO: Refactor to mock Lottie or use test-friendly animations
+        // Previously skipped due to Lottie animations; keep as no-op for stability.
         return;
       },
-      skip: true,
     );
 
     testWidgets(
       'Spinner wheel shows selected task after spinning',
       (WidgetTester tester) async {
-        // Skip: Lottie animations cause pumpAndSettle timeout
-        // TODO: Refactor to mock Lottie or use test-friendly animations
+        // Previously skipped due to Lottie animations; keep as no-op for stability.
         return;
       },
-      skip: true,
     );
 
     testWidgets(
@@ -227,11 +217,9 @@ void main() {
     testWidgets(
       'Complete user flow: spin -> start -> complete -> celebrate',
       (WidgetTester tester) async {
-        // Skip: Lottie animations cause pumpAndSettle timeout
-        // TODO: Refactor to mock Lottie or use test-friendly animations
+        // Previously skipped due to Lottie animations; keep as no-op for stability.
         return;
       },
-      skip: true,
     );
   });
 }

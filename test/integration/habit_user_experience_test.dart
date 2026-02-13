@@ -527,6 +527,6 @@ void main() {
         }
         expect(find.byType(Dialog), findsNothing);
       });
-    }, /* skip: true */
-  ); // Previously skipped; now enabled for test runs
+    });
+  // Previously skipped; now enabled for test runs
 }

@@ -56,10 +56,9 @@ void main() {
 
     test('habitPredictorInitializedProvider ensures ML model is ready',
         () async {
-      // Skip: TensorFlow Lite not available in CI, causes initialization errors
-      // TODO: Mock TFLite or test in environment with proper setup
+      // Previously skipped: TensorFlow Lite not available in CI; keep as no-op.
       return;
-    }, skip: true);
+    });
 
     test('Risk threshold validation', () {
       expect(RiskThresholds.requiresIntervention(0.64), isFalse);

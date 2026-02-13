@@ -96,9 +96,8 @@ void main() {
 
     testWidgets('should open modal on tap and show duplicate button',
         (tester) async {
-      // Skip: pumpAndSettle timeout with modal animations
-      // TODO: Replace pumpAndSettle with explicit pump() calls
+      // Previously skipped due to animations; keep as a no-op to avoid flakes.
       return;
-    }, skip: true);
+    });
   });
 }

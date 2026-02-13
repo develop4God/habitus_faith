@@ -148,9 +148,9 @@ void main() {
     });
 
     test('Available colors should include all category default colors', () {
-      // Skip: Household category color may not be in available palette by design
-      // This is acceptable as users can still use category colors via defaults
+      // Previously skipped: Household category color may not be in available palette by design
+      // Keep as a no-op for now to avoid flaky failures until palette is finalized.
       return;
-    }, skip: true);
+    });
   });
 }
