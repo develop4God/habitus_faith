@@ -10,10 +10,12 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final storage = JsonStorageService(prefs);
+    int _counter = 0;
     final repo = JsonHabitsRepository(
       storage: storage,
       userId: 'test_user',
-      idGenerator: () => 'id_${DateTime.now().millisecondsSinceEpoch}',
+      // Use a simple counter-based id generator to avoid millisecond collisions in tests
+      idGenerator: () => 'id_test_${_counter++}_${DateTime.now().microsecondsSinceEpoch}',
     );
 
     final createResult = await repo.createHabit(name: 'Original');
@@ -38,10 +40,12 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final storage = JsonStorageService(prefs);
+    int _counter = 0;
     final repo = JsonHabitsRepository(
       storage: storage,
       userId: 'test_user',
-      idGenerator: () => 'id_${DateTime.now().millisecondsSinceEpoch}',
+      // Use a simple counter-based id generator to avoid millisecond collisions in tests
+      idGenerator: () => 'id_test_${_counter++}_${DateTime.now().microsecondsSinceEpoch}',
     );
 
     final container = ProviderContainer(overrides: [
@@ -51,6 +55,7 @@ void main() {
     addTearDown(container.dispose);
 
     final createResult = await repo.createHabit(name: 'Original2');
+    expect(createResult.isSuccess(), isTrue);
     final original = createResult.value;
 
     final notifier = container.read(habitsNotifierProvider.notifier);
