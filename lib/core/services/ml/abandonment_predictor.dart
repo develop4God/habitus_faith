@@ -24,14 +24,15 @@ import 'telemetry_service.dart';
 class AbandonmentPredictor {
   final Clock clock;
   final MLTelemetryService? _telemetryService;
-  Interpreter? _interpreter;
+  // Interpreter instance (dynamic to allow test doubles without extending sealed class)
+  dynamic _interpreter;
   Map<String, dynamic>? _scalerParams;
   Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
 
   // Test-time hook: allow tests to override how the Interpreter is loaded
-  // Example in tests: AbandonmentPredictor.assetLoaderOverride = (asset) async => FakeInterpreter();
-  static Future<Interpreter> Function(String asset)? assetLoaderOverride;
+  // Return type is dynamic so tests can provide simple objects with run/close methods
+  static Future<dynamic> Function(String asset)? assetLoaderOverride;
 
   // Model constants
   static const int featureCount = 5;
@@ -48,15 +49,13 @@ class AbandonmentPredictor {
   static const String _telemetryPredictionCountKey = 'ml_prediction_count';
   static const String _telemetryErrorCountKey = 'ml_error_count';
   // Keep these constants for compatibility with code/tests that reference them
-  static const String _telemetryLastPredictionKey = 'ml_last_prediction';
-  static const String _telemetryLastResetKey = 'ml_last_reset';
   // Note: last prediction/reset keys are also referenced as string literals in _load/_save
 
   /// Constructor with optional clock and telemetry service injection
   AbandonmentPredictor({
     Clock? clock,
     MLTelemetryService? telemetryService,
-    Interpreter? interpreter, // Add this for test injection
+    dynamic interpreter, // Add this for test injection (can be test double)
   })  : clock = clock ?? const Clock.system(),
         _telemetryService = telemetryService {
     if (interpreter != null) {
@@ -117,7 +116,7 @@ class AbandonmentPredictor {
           debugPrint(
             'AbandonmentPredictor.initialize: TFLite model loaded successfully',
           );
-        } catch (e, st) {
+        } catch (e) {
           // If native library isn't available (common in CI/test), fall back to a lightweight in-process interpreter
           debugPrint('AbandonmentPredictor.initialize: Failed to load native TFLite interpreter: $e');
           debugPrint('AbandonmentPredictor.initialize: Falling back to in-process fake interpreter for tests');
@@ -329,7 +328,8 @@ class AbandonmentPredictor {
       final output = List.filled(1, List.filled(1, 0.0));
 
       // Run inference
-      _interpreter!.run(input, output);
+      // Use dynamic invocation so both real Interpreter and test doubles work
+      (_interpreter as dynamic).run(input, output);
 
       // Extract probability (value between 0 and 1)
       final probability = output[0][0];
@@ -433,7 +433,9 @@ class AbandonmentPredictor {
       debugPrint('AbandonmentPredictor: Flushed telemetry buffer');
     }
 
-    _interpreter?.close();
+    try {
+      (_interpreter as dynamic)?.close();
+    } catch (_) {}
     _interpreter = null;
     _scalerParams = null;
     _initialized = false;
@@ -532,20 +534,17 @@ class AbandonmentPredictor {
 }
 
 // Minimal fallback interpreter used when tflite native library is unavailable (tests/CI)
-class _FallbackInterpreter implements Interpreter {
-  @override
-  void close() {}
+class _FallbackInterpreter {
+   void close() {}
 
-  @override
-  void run(Object input, Object output) {
-    try {
-      if (output is List && output.isNotEmpty && output[0] is List) {
-        (output[0] as List)[0] = 0.3; // deterministic default
-      }
-    } catch (_) {}
-  }
+   void run(Object input, Object output) {
+     try {
+       if (output is List && output.isNotEmpty && output[0] is List) {
+         (output[0] as List)[0] = 0.3; // deterministic default
+       }
+     } catch (_) {}
+   }
 
-  @override
+   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
-
