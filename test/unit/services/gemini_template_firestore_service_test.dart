@@ -5,6 +5,12 @@ import 'package:habitus_faith/core/services/ai/gemini_template_firestore_service
 
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
+class MockCollectionReference extends Mock
+    implements CollectionReference<Map<String, dynamic>> {}
+
+class MockDocumentReference extends Mock
+    implements DocumentReference<Map<String, dynamic>> {}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(<String, dynamic>{});
@@ -14,13 +20,13 @@ void main() {
   group('GeminiTemplateFirestoreService', () {
     late MockFirebaseFirestore mockFirestore;
     late GeminiTemplateFirestoreService service;
-    late dynamic mockCollectionRef;
-    late dynamic mockDocRef;
+    late MockCollectionReference mockCollectionRef;
+    late MockDocumentReference mockDocRef;
 
     setUp(() {
       mockFirestore = MockFirebaseFirestore();
-      mockCollectionRef = Mock();
-      mockDocRef = Mock();
+      mockCollectionRef = MockCollectionReference();
+      mockDocRef = MockDocumentReference();
       service = GeminiTemplateFirestoreService(mockFirestore);
       // Stub collection and doc
       when(

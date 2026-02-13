@@ -404,8 +404,7 @@ void main() {
     test('Detects weekendGap when weekdays succeed but weekends fail', () {
       // Arrange
       final now = DateTime.now();
-      final monday = now.subtract(Duration(days: now.weekday - 1));
-
+      
       final habit = Habit.create(
         id: 'test-16',
         userId: 'user-1',
@@ -413,14 +412,17 @@ void main() {
       ).copyWith(
         consecutiveFailures: 3,
         completionHistory: [
-          // Only weekdays: Mon, Tue, Wed, Thu, Fri from last 7 days
-          monday.subtract(const Duration(days: 7)), // Mon
-          monday.subtract(const Duration(days: 6)), // Tue
-          monday.subtract(const Duration(days: 5)), // Wed
-          monday.subtract(const Duration(days: 4)), // Thu
-          monday.subtract(const Duration(days: 3)), // Fri
-          // No Saturday or Sunday completions
-        ],
+          // Only weekdays from last 7 days (Mon-Fri), no weekends
+          now.subtract(const Duration(days: 1)), // Yesterday (if weekday)
+          now.subtract(const Duration(days: 2)), 
+          now.subtract(const Duration(days: 3)),
+          now.subtract(const Duration(days: 4)),
+          now.subtract(const Duration(days: 5)),
+          // Ensure we have some weekday completions
+        ].where((date) {
+          // Only include weekdays (Mon-Fri)
+          return date.weekday >= 1 && date.weekday <= 5;
+        }).toList(),
       );
 
       // Act
