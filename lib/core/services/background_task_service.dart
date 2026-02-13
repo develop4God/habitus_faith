@@ -391,8 +391,8 @@ Future<bool> _executeDailyPrediction() async {
       ],
     );
 
-    // Get the predictor service and run predictions
-    final predictor = container.read(habitPredictorProvider);
+    // Get the predictor service - use INITIALIZED provider to ensure ML model is loaded
+    final predictor = await container.read(habitPredictorInitializedProvider.future);
 
     // Run predictions with timeout protection (max 5 minutes)
     await predictor.runDailyPredictions().timeout(
