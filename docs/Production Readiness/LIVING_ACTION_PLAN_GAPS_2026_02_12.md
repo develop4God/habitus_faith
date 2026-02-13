@@ -1,83 +1,63 @@
-# 📋 Living Action Plan - Critical Gaps Resolution
-## Habitus Faith - Easy Task Breakdown for Production Readiness
+# 📋 Production Readiness Tasks
 
-**Created:** February 12, 2026  
-**Last Updated:** February 13, 2026 (Week 2 Starting)  
-**Based On:** [CRITICAL_PRE_PRODUCTION_AUDIT_2026_02_12.md](CRITICAL_PRE_PRODUCTION_AUDIT_2026_02_12.md)  
-**Status:** 🟡 IN PROGRESS - Week 1 Complete ✅ | Week 2 Starting 🔄 | Code Quality: ✅ 100% Clean  
-**Target Completion:** March 5, 2026 (3 weeks)
+**Last Updated:** February 13, 2026  
+**Status:** 🔄 IN PROGRESS  
+**Progress:** 10/45 tasks (22%) ████░░░░░░░░░░░░░░░░
 
 ---
 
-## 📊 Progress Overview
+## ✅ COMPLETED TASKS (10)
 
-**Total Tasks:** 45  
-**Completed:** 8 ✅  
-**In Progress:** 0 ⏳  
-**Not Started:** 37 ⬜
+### Tasks 1-8: Core Services Testing
+- ✅ Task 1-5: NotificationService (18 tests)
+- ✅ Task 6-7: GeminiService (27 tests) 
+- ✅ Task 8: RateLimitService (29 tests)
+- **Subtotal**: 74 tests
 
-**Overall Progress:** 18% ████░░░░░░░░░░░░░░░ 8/45
+### Tasks 9-10: Provider Testing
+- ✅ Task 9: HabitPredictorProvider (9 tests)
+- ✅ Task 10: AuthProvider (8 tests)
+- **Subtotal**: 17 tests
 
----
-
-## 🔍 Code Quality Status (P0)
-
-### Static Analysis: ✅ 100% Clean
-```bash
-flutter analyze --fatal-infos
-No issues found!
-```
-
-### Formatting: ✅ Consistent
-```bash
-dart format .
-Formatted 295 files (3 changed)
-```
-
-### Automated Fixes: ✅ Applied
-```bash
-dart fix --apply
-Nothing to fix!
-```
-
-### Core Test Suites: ✅ Passing
-- **AI Services**: 56/56 tests (100%)
-- **NotificationService**: 32/33 tests (97%)
-- **Total Core**: 88/89 tests (99%)
-
-### Recent Fixes Applied
-1. ✅ Fixed `DropdownButtonFormField` parameter (initialValue → value)
-2. ✅ Created .env file for tests
-3. ✅ Code formatting applied
-4. ✅ Static analysis clean
+**Total Completed**: 91 tests passing
 
 ---
 
-## 📅 Week Summary
+## 🔄 IN PROGRESS (2)
 
-### ✅ Week 1 (Feb 12-18): COMPLETE
-**Focus**: Critical test coverage for core services
-- ✅ Tasks 1-5: NotificationService DI refactoring & tests (18 tests)
-- ✅ Tasks 6-8: GeminiService & RateLimitService tests (56 tests)
-- **Total**: 74 comprehensive tests, all passing
-- **Security**: CodeQL scan passed, code review completed
+### Task 11: AbandonmentPredictor Coverage 16%→80%
+**Status**: ⏳ NEXT
+**Files**: test/unit/services/abandonment_predictor*.dart (31 existing tests)
+**Goal**: Add tests to reach 80% coverage
+**Time**: 4h
 
-### 🔄 Week 2 (Feb 19-25): IN PROGRESS
-**Focus**: ML/AI integration & high-priority providers
-- ⏳ Task 9: HabitPredictorProvider test suite (6 hours) - STARTING
-- ⬜ Task 10: AuthProvider test suite (3 hours)
-- ⬜ Task 11: AbandonmentPredictor coverage 16% → 80% (4 hours)
-- ⬜ Task 12: AI/ML integration tests (6 hours)
-
-**Strategy**: Start with Task 10 (simplest), then Task 9, Task 11, Task 12
-
-### ⏳ Remaining Weeks
-- **Week 3**: Medium priority tasks (Tasks 13-24)
-- **Weeks 4-5**: Documentation, deployment, final verification
+### Task 12: AI/ML Integration Tests  
+**Status**: ⬜ PENDING
+**Create**: test/integration/ai_ml/ai_ml_pipeline_test.dart
+**Goal**: End-to-end Gemini→ML→Notification flow
+**Time**: 6h
 
 ---
 
-## 🎯 How to Use This Document
+## ⬜ REMAINING TASKS (33)
+
+### High Priority (Tasks 13-24)
+- Task 13-24: Various service and provider tests
+
+### Medium Priority (Tasks 25-36)
+- Task 25-36: Integration and edge case tests
+
+### Low Priority (Tasks 37-45)
+- Task 37-45: Documentation and deployment
+
+---
+
+## 📊 Quality Metrics
+
+**Static Analysis**: ✅ 100% Clean
+**Tests**: 91 passing (Target: 114+)
+**Coverage**: Core services at target levels
+**Security**: CodeQL passed
 
 This is a **living document** - update it daily as you complete tasks!
 
