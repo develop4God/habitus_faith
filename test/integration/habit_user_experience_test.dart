@@ -222,11 +222,17 @@ void main() {
 
         await tester.pumpTestFrames(10);
 
-        // Tap on the habit card to expand
-        await tester.tap(find.byType(UnifiedHabitCard));
-        await tester.pumpTestFrames(20);
+        // Tap on the habit name to open the expanded modal
+        await tester.tap(find.text('Test Habit with Subtasks'));
+        await tester.pumpAndSettle();
 
-        // Verify subtasks are shown in the modal
+        // Inside the modal, tap the subtasks checklist icon to open the subtasks editor
+        final checklistIcon = find.byIcon(Icons.checklist_rtl_outlined);
+        expect(checklistIcon, findsWidgets);
+        await tester.tap(checklistIcon.first);
+        await tester.pumpAndSettle();
+
+        // Verify subtasks are shown in the subtasks editor
         expect(find.text('Subtask 1'), findsOneWidget);
         expect(find.text('Subtask 2'), findsOneWidget);
       });
@@ -244,7 +250,8 @@ void main() {
                   builder: (context) {
                     // Use a concrete localization instance to avoid async delegate timing
                     final l10n = AppLocalizationsEn();
-                    return AddHabitDialog(l10n: l10n, initialTab: 2);
+                    // Start on the discovery flow so 'Continue' steps are available
+                    return AddHabitDialog(l10n: l10n, initialTab: 0);
                   },
                 ),
               ),
@@ -254,20 +261,17 @@ void main() {
 
         await tester.pumpTestFrames(20);
 
-        // Enter habit name - the dialog's first TextField is the name input
-        await tester.pumpTestFrames(10);
-        await tester.enterText(
-          find.byType(TextField).first,
-          'Daily Exercise',
-        );
-        await tester.pumpTestFrames(20);
+        // Enter habit name on the discovery flow
+        // Use discovery name field key to be robust
+        await tester.enterText(find.byKey(const Key('add_habit_name_field_discovery')), 'Daily Exercise');
+        await tester.pumpAndSettle();
 
-        // Navigate through steps to reach recurrence
-        for (int i = 0; i < 5; i++) {
-          final nextFinder = find.text('Next');
-          if (nextFinder.evaluate().isNotEmpty) {
-            await tester.tap(nextFinder.last);
-            await tester.pumpTestFrames(10);
+        // Navigate through steps to reach recurrence by tapping 'Continue'
+        for (int i = 0; i < 6; i++) {
+          final continueFinder = find.text('Continue');
+          if (continueFinder.evaluate().isNotEmpty) {
+            await tester.tap(continueFinder.last);
+            await tester.pumpAndSettle();
           }
         }
 
@@ -396,7 +400,20 @@ void main() {
 
         await tester.pumpTestFrames(20);
 
-        // Verify drag handles exist for the two habits by key (virtualized lists may not expose types)
+        await tester.pumpTestFrames(30);
+
+        // The ReorderableListView is virtualized; scroll to each habit to force build
+        await tester.scrollUntilVisible(find.text('First Habit'), 200,
+            scrollable: find.byType(Scrollable).first);
+        await tester.pumpTestFrames(10);
+        expect(find.text('First Habit'), findsOneWidget);
+
+        await tester.scrollUntilVisible(find.text('Second Habit'), 200,
+            scrollable: find.byType(Scrollable).first);
+        await tester.pumpTestFrames(10);
+        expect(find.text('Second Habit'), findsOneWidget);
+
+        // Verify drag handles exist by key after scrolling
         expect(find.byKey(const Key('habit_drag_habit_1')), findsOneWidget);
         expect(find.byKey(const Key('habit_drag_habit_2')), findsOneWidget);
         final dragListener1 =
