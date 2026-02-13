@@ -83,7 +83,7 @@ class DevotionalDetailContent extends ConsumerWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              icon: const Icon(Icons.menu_book_rounded, size: 20),
+              icon: const Icon(Icons.auto_stories_rounded, size: 20),
               label: AutoSizeText(
                 l10n.readVerseFirst,
                 maxLines: 1,
@@ -126,9 +126,9 @@ class DevotionalDetailContent extends ConsumerWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              color: Colors.pink.withOpacity(isDark ? 0.1 : 0.05),
+              color: Colors.pink.withValues(alpha: isDark ? 0.1 : 0.05),
               borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: Colors.pink.withOpacity(0.1)),
+              border: Border.all(color: Colors.pink.withValues(alpha: 0.1)),
             ),
             child: Text(
               devocional.oracion,
