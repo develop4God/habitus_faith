@@ -20,27 +20,31 @@ class DevotionalReaderPage extends ConsumerStatefulWidget {
 
 class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
   final ScrollController _scrollController = ScrollController();
-  bool _canDismiss = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
+  double _dragOffset = 0;
 
   @override
   void dispose() {
-    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _scrollListener() {
-    // Only allow dismissal if we are at the top of the scroll
-    if (_scrollController.offset <= 0) {
-      if (!_canDismiss) setState(() => _canDismiss = true);
+  void _handleVerticalDragUpdate(DragUpdateDetails details) {
+    // Allow dragging down from anywhere, but prioritize scroll if not at top
+    if (_scrollController.hasClients && _scrollController.offset <= 0) {
+      setState(() {
+        _dragOffset += details.primaryDelta!;
+        if (_dragOffset < 0) _dragOffset = 0;
+      });
+    }
+  }
+
+  void _handleVerticalDragEnd(DragEndDetails details) {
+    if (_dragOffset > 150 || details.primaryVelocity! > 500) {
+      Navigator.of(context).pop();
     } else {
-      if (_canDismiss) setState(() => _canDismiss = false);
+      setState(() {
+        _dragOffset = 0;
+      });
     }
   }
 
@@ -49,156 +53,152 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
+    final mediaQuery = MediaQuery.of(context);
+
+    // Modern layout: Fixed Header (Hero) + Scrolling Content
+    // Hero height is smaller (approx 32% of screen)
+    final double heroHeight = size.height * 0.32;
 
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background for the "pop" transition
-      body: Dismissible(
-        key: const Key('devotional_reader_dismissible'),
-        direction: _canDismiss ? DismissDirection.down : DismissDirection.none,
-        onDismissed: (_) => Navigator.of(context).pop(),
-        child: Container(
-          color: theme.scaffoldBackgroundColor, // Re-apply theme background
-          child: Stack(
-            children: [
-              // 1. Fixed Background Hero Section
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                height: size.height * 0.45,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (widget.imageUrl != null)
-                      Hero(
-                        tag: 'devotional_image_${widget.devocional.id}',
-                        child: Image.network(
-                          widget.imageUrl!,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    else
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.blue.shade900, Colors.indigo.shade900],
-                          ),
-                        ),
-                      ),
-                    
-                    // Dark Overlay
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withValues(alpha: 0.1),
-                            Colors.black.withValues(alpha: 0.6),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // Verse Overlay
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(32, 60, 32, 60),
-                      child: Center(
-                        child: Hero(
-                          tag: 'devotional_verse_${widget.devocional.id}',
-                          child: Material(
-                            color: Colors.transparent,
-                            child: AutoSizeText(
-                              widget.devocional.versiculo,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w300,
-                                fontStyle: FontStyle.italic,
-                                height: 1.3,
-                                fontFamily: 'Georgia',
-                                shadows: [
-                                  Shadow(color: Colors.black45, blurRadius: 15, offset: Offset(0, 2))
-                                ],
-                              ),
-                              maxLines: 6,
-                              minFontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // 2. Scrolling Content Sheet
-              Positioned.fill(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onVerticalDragUpdate: _handleVerticalDragUpdate,
+        onVerticalDragEnd: _handleVerticalDragEnd,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          transform: Matrix4.translationValues(0, _dragOffset, 0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(_dragOffset > 0 ? 32 : 0),
+            child: Container(
+              color: theme.scaffoldBackgroundColor,
+              child: Column(
+                children: [
+                  // 1. FROZEN HERO SECTION (Top)
+                  Stack(
                     children: [
-                      // Transparent spacer to allow seeing the background
-                      SizedBox(height: size.height * 0.38),
-                      
-                      // The actual content card
                       Container(
+                        height: heroHeight,
                         width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: theme.scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, -5),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (widget.imageUrl != null)
+                              Hero(
+                                tag: 'devotional_image_${widget.devocional.id}',
+                                child: Image.network(
+                                  widget.imageUrl!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            else
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [Colors.blue.shade900, Colors.indigo.shade900],
+                                  ),
+                                ),
+                              ),
+                            
+                            // Dark Overlay for legibility
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.black.withOpacity(0.1),
+                                    Colors.black.withOpacity(0.7),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            // Verse Text Overlay (Centered and Auto-fitted)
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(32, 60, 32, 40),
+                              child: Center(
+                                child: Hero(
+                                  tag: 'devotional_verse_${widget.devocional.id}',
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: AutoSizeText(
+                                      widget.devocional.versiculo,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22 * mediaQuery.textScaleFactor,
+                                        fontWeight: FontWeight.w300,
+                                        fontStyle: FontStyle.italic,
+                                        height: 1.3,
+                                        fontFamily: 'Georgia',
+                                        shadows: const [
+                                          Shadow(color: Colors.black45, blurRadius: 15, offset: Offset(0, 2))
+                                        ],
+                                      ),
+                                      maxLines: 5,
+                                      minFontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: Column(
-                          children: [
-                            // Handle bar for visual cue
-                            const SizedBox(height: 12),
-                            Container(
-                              width: 40,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                            
-                            // Devotional Content (Optimized Reusable Widget)
-                            DevotionalDetailContent(
-                              devocional: widget.devocional,
-                              showVerseReference: false,
-                            ),
-                          ],
+                      ),
+                      
+                      // Floating Back Button (Integrated into Hero Stack)
+                      Positioned(
+                        top: mediaQuery.padding.top + 8,
+                        left: 16,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.3),
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 18),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
 
-              // 3. Floating Back Button
-              Positioned(
-                top: MediaQuery.of(context).padding.top + 8,
-                left: 16,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    shape: BoxShape.circle,
+                  // 2. SCROLLING REFLECTION SECTION (Bottom)
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: theme.scaffoldBackgroundColor,
+                        // Visual cue that this is a separate sheet
+                        boxShadow: [
+                          if (_dragOffset == 0)
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, -5),
+                            ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        // Slightly overlap rounded corners at the top of the scroll area
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          physics: _dragOffset > 0 
+                              ? const NeverScrollableScrollPhysics() 
+                              : const BouncingScrollPhysics(),
+                          child: DevotionalDetailContent(
+                            devocional: widget.devocional,
+                            showVerseReference: false,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
