@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../core/services/images/image_providers.dart';
+import '../widgets/devotional_detail_content.dart';
 import 'bible_reader_page.dart';
 import 'devotional_discovery_page.dart';
 
@@ -58,7 +59,10 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
           maxChildSize: 0.95,
           expand: false,
           builder: (context, scrollController) {
-            return _buildDevocionalDetailContent(context, devocional, scrollController);
+            return DevotionalDetailContent(
+              devocional: devocional,
+              controller: scrollController,
+            );
           },
         ),
       ),
@@ -73,13 +77,11 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
     final devotionalState = ref.watch(devotionalProvider);
     final imageAsync = ref.watch(dailyDevotionalImageProvider);
     
-    // Reset random devotional if language changes
     if (_lastLanguage != devotionalState.selectedLanguage) {
       _randomDevotional = null;
       _lastLanguage = devotionalState.selectedLanguage;
     }
 
-    // Pick a random devotional once data is available
     if (_randomDevotional == null && devotionalState.all.isNotEmpty) {
       _randomDevotional = devotionalState.all[Random().nextInt(devotionalState.all.length)];
     }
@@ -170,9 +172,9 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                                   children: [
                                     const Icon(Icons.auto_awesome, size: 12, color: Colors.amber),
                                     const SizedBox(width: 8),
-                                    Text(
+                                    const Text(
                                       'PALABRA DE HOY',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w900,
@@ -351,122 +353,6 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
             Icon(Icons.chevron_right_rounded, color: color.withValues(alpha: 0.2), size: 28),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDevocionalDetailContent(BuildContext context, Devocional devocional, ScrollController controller) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return ListView(
-      controller: controller,
-      padding: const EdgeInsets.fromLTRB(24, 12, 24, 40),
-      children: [
-        Center(
-          child: Container(
-            width: 40,
-            height: 5,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-        const SizedBox(height: 32),
-        Text(
-          devocional.versiculo,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.primary,
-            height: 1.2,
-          ),
-        ),
-        const SizedBox(height: 32),
-        _buildSectionTitle(l10n.reflection, Icons.lightbulb_outline, colorScheme.primary),
-        const SizedBox(height: 12),
-        Text(
-          devocional.reflexion,
-          style: TextStyle(
-            fontSize: 17,
-            height: 1.6,
-            color: isDark ? Colors.grey.shade300 : Colors.grey.shade800,
-          ),
-        ),
-        const SizedBox(height: 32),
-        if (devocional.paraMeditar.isNotEmpty) ...[
-          _buildSectionTitle(l10n.forMeditation, Icons.Self_improvement_outlined, colorScheme.secondary),
-          const SizedBox(height: 16),
-          ...devocional.paraMeditar.map((punto) => _buildMeditationItem(punto, isDark)),
-          const SizedBox(height: 32),
-        ],
-        _buildSectionTitle(l10n.prayer, Icons.favorite_border_rounded, Colors.pink),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.pink.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.pink.withValues(alpha: 0.1)),
-          ),
-          child: Text(
-            devocional.oracion,
-            style: TextStyle(
-              fontSize: 17,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
-              color: isDark ? Colors.grey.shade300 : Colors.grey.shade800,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSectionTitle(String title, IconData icon, Color color) {
-    return Row(
-      children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(width: 8),
-        Text(
-          title.toUpperCase(),
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w900,
-            color: color,
-            letterSpacing: 1.2,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMeditationItem(ParaMeditar punto, bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 6),
-            width: 6,
-            height: 6,
-            decoration: const BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              punto.texto,
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.5,
-                color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

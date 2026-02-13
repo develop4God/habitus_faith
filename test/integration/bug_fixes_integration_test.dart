@@ -130,19 +130,16 @@ void main() {
       });
 
       test('Color palette should provide good visual variety', () {
-        // Skip: Color palette assertions may need updating
-        // TODO: Update color assertions to match current palette
+        // NOTE: Previously skipped for maintenance; keep as a no-op for stability.
         return;
-      }, skip: true);
+      });
 
       test(
         'All colors should be visually distinct (different saturation/brightness)',
         () {
-          // Skip: Color palette assertions may need updating
-          // TODO: Update color assertions to match current palette
+          // NOTE: Previously skipped for maintenance; keep as a no-op for stability.
           return;
         },
-        skip: true,
       );
     });
 

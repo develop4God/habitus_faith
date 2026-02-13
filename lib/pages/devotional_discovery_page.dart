@@ -3,20 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/devotional_providers.dart';
-import '../providers/bible_providers.dart';
 import '../core/models/devocional_model.dart';
-import '../bible_reader_core/bible_reader_core.dart';
-import 'bible_reader_page.dart';
+import '../widgets/devotional_detail_content.dart';
 import 'favorites_page.dart';
 import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
+import '../core/config/devotional_constants.dart';
 
 /// Devotional Discovery Page
-///
-/// This page allows users to:
-/// 1. Browse devotionals
-/// 2. Select a verse to read first
-/// 3. Then view the devotional content
 class DevotionalDiscoveryPage extends ConsumerStatefulWidget {
   const DevotionalDiscoveryPage({super.key});
 
@@ -33,7 +27,6 @@ class _DevotionalDiscoveryPageState
   @override
   void initState() {
     super.initState();
-    // Initialize devotionals on first load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(devotionalProvider.notifier).initialize();
     });
@@ -67,7 +60,6 @@ class _DevotionalDiscoveryPageState
           ),
         ),
         actions: [
-          // Bible version selector (shows available versions for current devotional language)
           IconButton(
             icon: Icon(
               Icons.menu_book,
@@ -76,7 +68,6 @@ class _DevotionalDiscoveryPageState
             tooltip: 'Bible Version: ${state.selectedVersion}',
             onPressed: () => _showVersionSelector(context),
           ),
-          // Favorites page
           IconButton(
             icon: Icon(
               Icons.star_border,
@@ -94,7 +85,7 @@ class _DevotionalDiscoveryPageState
       ),
       body: Column(
         children: [
-          // Hero header with gradient
+          // Hero header
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -139,7 +130,7 @@ class _DevotionalDiscoveryPageState
             ),
           ),
 
-          // Search bar (minimal and modern)
+          // Search bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -191,11 +182,9 @@ class _DevotionalDiscoveryPageState
             ),
           ),
 
-          // Loading indicator
           if (state.isLoading)
             const Expanded(child: Center(child: CircularProgressIndicator())),
 
-          // Error message
           if (state.errorMessage != null && !state.isLoading)
             Expanded(
               child: Center(
@@ -225,7 +214,6 @@ class _DevotionalDiscoveryPageState
               ),
             ),
 
-          // Devotional list
           if (!state.isLoading && state.errorMessage == null)
             Expanded(
               child: state.filtered.isEmpty
@@ -255,6 +243,7 @@ class _DevotionalDiscoveryPageState
                           context,
                           devocional,
                           colorScheme,
+                          l10n,
                         );
                       },
                     ),
@@ -268,12 +257,11 @@ class _DevotionalDiscoveryPageState
     BuildContext context,
     Devocional devocional,
     ColorScheme colorScheme,
+    AppLocalizations l10n,
   ) {
     final isFavorite =
         ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    // Use the display date method that shows labels for today/tomorrow only
     final displayDate = _getDisplayDate(devocional);
 
     return Container(
@@ -294,11 +282,10 @@ class _DevotionalDiscoveryPageState
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => _showDevocionalDetail(context, devocional),
+            onTap: () => _showDevotionalDetail(context, devocional),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Hero image section with gradient overlay
                 Container(
                   height: 180,
                   decoration: BoxDecoration(
@@ -310,20 +297,17 @@ class _DevotionalDiscoveryPageState
                   ),
                   child: Stack(
                     children: [
-                      // Decorative pattern
                       Positioned.fill(
                         child: Opacity(
                           opacity: 0.1,
                           child: CustomPaint(painter: _DotPatternPainter()),
                         ),
                       ),
-                      // Content
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Date bubble and favorite button
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -375,7 +359,6 @@ class _DevotionalDiscoveryPageState
                               ],
                             ),
                             const Spacer(),
-                            // Verse reference (hero element)
                             Text(
                               _extractVerseReference(devocional.versiculo),
                               style: const TextStyle(
@@ -391,14 +374,11 @@ class _DevotionalDiscoveryPageState
                     ],
                   ),
                 ),
-
-                // Content section
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Verse text preview
                       Text(
                         _extractVerseText(devocional.versiculo),
                         maxLines: 2,
@@ -411,8 +391,6 @@ class _DevotionalDiscoveryPageState
                         ),
                       ),
                       const SizedBox(height: 12),
-
-                      // Tags
                       if (devocional.tags != null &&
                           devocional.tags!.isNotEmpty)
                         Wrap(
@@ -445,15 +423,11 @@ class _DevotionalDiscoveryPageState
                             );
                           }).toList(),
                         ),
-
                       const SizedBox(height: 16),
-
-                      // Read button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () =>
-                              _navigateToVerse(context, devocional),
+                          onPressed: () => _showDevotionalDetail(context, devocional),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isDark
                                 ? Colors.purple[700]
@@ -471,7 +445,7 @@ class _DevotionalDiscoveryPageState
                               const Icon(Icons.auto_stories_outlined, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                AppLocalizations.of(context)!.readVerseFirst,
+                                l10n.readVerseFirst,
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
@@ -492,7 +466,32 @@ class _DevotionalDiscoveryPageState
     );
   }
 
-  // Show bottom sheet to pick Bible version for the current devotional language
+  void _showDevotionalDetail(BuildContext context, Devocional devocional) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        ),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          expand: false,
+          builder: (context, scrollController) {
+            return DevotionalDetailContent(
+              devocional: devocional,
+              controller: scrollController,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   void _showVersionSelector(BuildContext context) {
     final notifier = ref.read(devotionalProvider.notifier);
     final available = notifier.getAvailableVersionsForCurrentLanguage();
@@ -566,8 +565,6 @@ class _DevotionalDiscoveryPageState
     );
   }
 
-  // Helper to get display date - converts past dates to future dates
-  // Only returns "Today" or "Tomorrow" (localized). Returns null for others.
   String? _getDisplayDate(Devocional devocional) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -579,13 +576,8 @@ class _DevotionalDiscoveryPageState
 
     final l10n = AppLocalizations.of(context)!;
 
-    // If date is today, show "Today" (localized)
-    if (devDate == today) {
-      return l10n.todayLabel;
-    }
+    if (devDate == today) return l10n.todayLabel;
 
-    // If date is in the past, project it to the future
-    // by adding years until it's in the future (matching month/day)
     DateTime displayDate = devDate;
     while (displayDate.isBefore(today)) {
       displayDate = DateTime(
@@ -595,45 +587,27 @@ class _DevotionalDiscoveryPageState
       );
     }
 
-    // Re-check today after projection
-    if (displayDate == today) {
-      return l10n.todayLabel;
-    }
+    if (displayDate == today) return l10n.todayLabel;
 
-    // Check if it's tomorrow (localized)
     final tomorrow = today.add(const Duration(days: 1));
-    if (displayDate == tomorrow) {
-      return l10n.tomorrowLabel;
-    }
+    if (displayDate == tomorrow) return l10n.tomorrowLabel;
 
-    // For the rest, don't show the label
     return null;
   }
 
-  // Extract verse reference (e.g., "John 3:16" or "Marcos 7:20-23")
   String _extractVerseReference(String versiculo) {
-    // The format is typically: "BookName Chapter:Verse Version: 'Text'"
-    // We want to extract "BookName Chapter:Verse"
-
-    // Split by version indicator (usually the version code followed by colon)
     final parts = versiculo.split(RegExp(r'\s+[A-Z]{2,}[0-9]*:'));
     if (parts.isNotEmpty) {
-      final refPart = parts[0].trim();
-      return refPart;
+      return parts[0].trim();
     }
-
-    // Fallback: try to extract everything before the quote
     final quoteIndex = versiculo.indexOf('"');
     if (quoteIndex > 0) {
       return versiculo.substring(0, quoteIndex).trim();
     }
-
     return versiculo;
   }
 
-  // Extract verse text (the actual quote)
   String _extractVerseText(String versiculo) {
-    // Extract text between quotes
     final quoteStart = versiculo.indexOf('"');
     final quoteEnd = versiculo.lastIndexOf('"');
     if (quoteStart != -1 && quoteEnd != -1 && quoteEnd > quoteStart) {
@@ -642,7 +616,6 @@ class _DevotionalDiscoveryPageState
     return versiculo;
   }
 
-  // Get gradient colors based on tags
   List<Color> _getGradientColors(bool isDark, List<String>? tags) {
     if (tags != null && tags.isNotEmpty) {
       final tag = tags.first.toLowerCase();
@@ -669,227 +642,8 @@ class _DevotionalDiscoveryPageState
         ? [Colors.deepPurple[900]!, Colors.purple[800]!]
         : [Colors.deepPurple[400]!, Colors.purple[400]!];
   }
-
-  void _navigateToVerse(BuildContext context, Devocional devocional) async {
-    // Parse the verse reference from the devotional
-    final verseRef = _extractVerseReference(devocional.versiculo);
-
-    // Try to parse the reference (e.g., "Marcos 7:20-23" -> book, chapter, verse)
-    final parsed = BibleReferenceParser.parse(verseRef);
-
-    if (parsed != null) {
-      final bookName = parsed['bookName'] as String;
-      final chapter = parsed['chapter'] as int;
-      // final verse = parsed['verse'] as int?; // TODO: Implement scroll to verse
-
-      // Navigate to Bible reader
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const BibleReaderPage()),
-      );
-
-      // Wait a bit for the page to load, then navigate to the specific passage
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      if (context.mounted) {
-        // Use the Bible reader provider to navigate to the specific passage
-        try {
-          final notifier = ref.read(bibleReaderProvider.notifier);
-
-          // Find the book by name
-          final state = ref.read(bibleReaderProvider);
-          final book = state.books.firstWhere(
-            (b) =>
-                (b['long_name'] as String).toLowerCase() ==
-                    bookName.toLowerCase() ||
-                (b['short_name'] as String).toLowerCase() ==
-                    bookName.toLowerCase(),
-            orElse: () => {},
-          );
-
-          if (book.isNotEmpty) {
-            await notifier.selectBook(book);
-            await notifier.selectChapter(chapter);
-
-            // If we have a specific verse, we could scroll to it
-            // (would need to implement scrollToVerse method in Bible reader)
-          }
-        } catch (e) {
-          debugPrint('Error navigating to verse: $e');
-        }
-      }
-    } else {
-      // If parsing fails, just open Bible reader
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const BibleReaderPage()),
-      );
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Opening Bible to: ${devocional.versiculo}')),
-        );
-      }
-    }
-  }
-
-  void _showDevocionalDetail(BuildContext context, Devocional devocional) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) {
-          return _buildDevocionalDetailContent(
-            context,
-            devocional,
-            scrollController,
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildDevocionalDetailContent(
-    BuildContext context,
-    Devocional devocional,
-    ScrollController controller,
-  ) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      child: ListView(
-        controller: controller,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  devocional.versiculo,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-              Consumer(
-                builder: (context, ref, child) {
-                  final isFav = ref
-                      .read(devotionalProvider.notifier)
-                      .isFavorite(devocional.id);
-                  return IconButton(
-                    icon: Icon(
-                      isFav ? Icons.star : Icons.star_border,
-                      color: isFav ? Colors.amber : null,
-                    ),
-                    onPressed: () {
-                      ref
-                          .read(devotionalProvider.notifier)
-                          .toggleFavorite(devocional);
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          // Read verse button
-          ElevatedButton.icon(
-            icon: const Icon(Icons.menu_book),
-            label: Text(AppLocalizations.of(context)!.readVerseFirst),
-            onPressed: () {
-              Navigator.pop(context);
-              _navigateToVerse(context, devocional);
-            },
-          ),
-          const SizedBox(height: 24),
-
-          // Reflection
-          Text(
-            AppLocalizations.of(context)!.reflection,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            devocional.reflexion,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 24),
-
-          // Meditation points
-          if (devocional.paraMeditar.isNotEmpty) ...[
-            Text(
-              AppLocalizations.of(context)!.forMeditation,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            ...devocional.paraMeditar.map(
-              (punto) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      punto.cita,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.secondary,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      punto.texto,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-
-          // Prayer
-          Text(
-            AppLocalizations.of(context)!.prayer,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              devocional.oracion,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-// Custom painter for decorative pattern
 class _DotPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
