@@ -11,6 +11,7 @@ import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:habitus_faith/features/habits/domain/habits_repository.dart' show Success;
 import '../../utils/habit_predictor_mocks.dart';
 
 void main() {
@@ -93,7 +94,7 @@ void main() {
 
       when(() => mockRepo.getHabits()).thenAnswer((_) async => [highRiskHabit]);
       when(() => mockRepo.updateHabitInstance(any()))
-          .thenAnswer((_) async => null);
+          .thenAnswer((_) async => Success(highRiskHabit));
       when(() => mockNotificationService.showImmediateNotification(any(), any(),
           payload: any(named: 'payload'),
           id: any(named: 'id'))).thenAnswer((_) async {});
