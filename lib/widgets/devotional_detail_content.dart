@@ -9,12 +9,12 @@ import '../providers/bible_providers.dart';
 
 class DevotionalDetailContent extends ConsumerWidget {
   final Devocional devocional;
-  final ScrollController? controller;
+  final bool shrinkWrap;
 
   const DevotionalDetailContent({
     super.key,
     required this.devocional,
-    this.controller,
+    this.shrinkWrap = false,
   });
 
   @override
@@ -23,22 +23,24 @@ class DevotionalDetailContent extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      padding: const EdgeInsets.all(24),
-      child: ListView(
-        controller: controller,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // Header with Verse Reference and Favorite
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Text(
-                  devocional.versiculo,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  _extractVerseReference(devocional.versiculo),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: colorScheme.primary,
+                    letterSpacing: -0.5,
+                  ),
                 ),
               ),
               IconButton(
@@ -56,57 +58,63 @@ class DevotionalDetailContent extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-
-          // Read verse button
-          ElevatedButton.icon(
-            icon: const Icon(Icons.menu_book),
-            label: Text(l10n.readVerseFirst),
-            onPressed: () {
-              Navigator.pop(context);
-              _navigateToVerse(context, ref, devocional);
-            },
-          ),
           const SizedBox(height: 24),
 
-          // Reflection
+          // Read verse button (Bible Reader deep link)
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.menu_book_rounded, size: 20),
+              label: Text(l10n.readVerseFirst),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              onPressed: () => _navigateToVerse(context, ref, devocional),
+            ),
+          ),
+          const SizedBox(height: 40),
+
+          // Reflection Section
           _buildSectionTitle(l10n.reflection, Icons.lightbulb_outline, colorScheme.primary),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Text(
             devocional.reflexion,
             style: TextStyle(
-              fontSize: 17,
-              height: 1.6,
+              fontSize: 18,
+              height: 1.7,
               color: isDark ? Colors.grey.shade300 : Colors.grey.shade800,
+              letterSpacing: 0.2,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 40),
 
-          // Meditation points
+          // Meditation Section
           if (devocional.paraMeditar.isNotEmpty) ...[
             _buildSectionTitle(l10n.forMeditation, Icons.auto_awesome_rounded, colorScheme.secondary),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             ...devocional.paraMeditar.map((punto) => _buildMeditationItem(punto, isDark)),
-            const SizedBox(height: 32),
+            const SizedBox(height: 40),
           ],
 
-          // Prayer
+          // Prayer Section
           _buildSectionTitle(l10n.prayer, Icons.favorite_border_rounded, Colors.pink),
           const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              color: Colors.pink.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.pink.withValues(alpha: 0.1)),
+              color: Colors.pink.withOpacity(isDark ? 0.1 : 0.05),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: Colors.pink.withOpacity(0.1)),
             ),
             child: Text(
               devocional.oracion,
               style: TextStyle(
-                fontSize: 17,
-                height: 1.6,
+                fontSize: 18,
+                height: 1.7,
                 fontStyle: FontStyle.italic,
                 color: isDark ? Colors.grey.shade300 : Colors.grey.shade800,
+                fontFamily: 'Georgia',
               ),
             ),
           ),
@@ -118,15 +126,15 @@ class DevotionalDetailContent extends ConsumerWidget {
   Widget _buildSectionTitle(String title, IconData icon, Color color) {
     return Row(
       children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(width: 8),
+        Icon(icon, color: color, size: 22),
+        const SizedBox(width: 10),
         Text(
           title.toUpperCase(),
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 14,
             fontWeight: FontWeight.w900,
             color: color,
-            letterSpacing: 1.2,
+            letterSpacing: 1.5,
           ),
         ),
       ],
@@ -135,23 +143,23 @@ class DevotionalDetailContent extends ConsumerWidget {
 
   Widget _buildMeditationItem(ParaMeditar punto, bool isDark) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 6),
-            width: 6,
-            height: 6,
+            margin: const EdgeInsets.only(top: 8),
+            width: 8,
+            height: 8,
             decoration: const BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 20),
           Expanded(
             child: Text(
               punto.texto,
               style: TextStyle(
-                fontSize: 16,
-                height: 1.5,
+                fontSize: 17,
+                height: 1.6,
                 color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
               ),
             ),

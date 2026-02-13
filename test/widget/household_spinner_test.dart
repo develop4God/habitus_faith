@@ -9,6 +9,8 @@ import 'package:habitus_faith/core/providers/auth_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import '../utils/pump_utils.dart';
 
+// Using pumpTestFrames from pump_utils to avoid pumpAndSettle timeouts with animations
+
 void main() {
   group('HouseholdSpinnerPage - User Behavior Tests', () {
     late List<Habit> mockHouseholdHabits;

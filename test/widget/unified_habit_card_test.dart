@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../utils/pump_utils.dart';
 import 'package:habitus_faith/widgets/unified_habit_card.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
@@ -45,7 +46,7 @@ void main() {
         ),
       );
 
-      await tester.pump();
+      await tester.pumpTestFrames();
 
       expect(find.text('Morning Prayer'), findsOneWidget);
       expect(find.text('🙏'), findsOneWidget);
@@ -88,7 +89,7 @@ void main() {
         ),
       );
 
-      await tester.pump();
+      await tester.pumpTestFrames();
 
       final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
       expect(checkbox.value, false);

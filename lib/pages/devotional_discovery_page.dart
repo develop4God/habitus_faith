@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/devotional_providers.dart';
 import '../core/models/devocional_model.dart';
-import '../widgets/devotional_detail_content.dart';
+import '../core/services/images/image_providers.dart';
+import 'devotional_reader_page.dart';
 import 'favorites_page.dart';
 import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
-import '../core/config/devotional_constants.dart';
 
 /// Devotional Discovery Page
 class DevotionalDiscoveryPage extends ConsumerStatefulWidget {
@@ -36,6 +36,26 @@ class _DevotionalDiscoveryPageState
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _openDevotionalReader(Devocional devocional) {
+    final imageAsync = ref.read(dailyDevotionalImageProvider);
+    final imageUrl = imageAsync.asData?.value;
+    
+    final now = DateTime.now();
+    final isToday = devocional.date.year == now.year && 
+                    devocional.date.month == now.month && 
+                    devocional.date.day == now.day;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DevotionalReaderPage(
+          devocional: devocional,
+          imageUrl: isToday ? imageUrl : null,
+        ),
+      ),
+    );
   }
 
   @override
@@ -282,7 +302,7 @@ class _DevotionalDiscoveryPageState
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => _showDevotionalDetail(context, devocional),
+            onTap: () => _openDevotionalReader(devocional),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -427,7 +447,7 @@ class _DevotionalDiscoveryPageState
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => _showDevotionalDetail(context, devocional),
+                          onPressed: () => _openDevotionalReader(devocional),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isDark
                                 ? Colors.purple[700]
@@ -461,32 +481,6 @@ class _DevotionalDiscoveryPageState
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  void _showDevotionalDetail(BuildContext context, Devocional devocional) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        child: DraggableScrollableSheet(
-          initialChildSize: 0.9,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          expand: false,
-          builder: (context, scrollController) {
-            return DevotionalDetailContent(
-              devocional: devocional,
-              controller: scrollController,
-            );
-          },
         ),
       ),
     );

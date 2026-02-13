@@ -6,9 +6,9 @@ import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../core/services/images/image_providers.dart';
-import '../widgets/devotional_detail_content.dart';
 import 'bible_reader_page.dart';
 import 'devotional_discovery_page.dart';
+import 'devotional_reader_page.dart';
 
 class SpiritualHubPage extends ConsumerStatefulWidget {
   const SpiritualHubPage({super.key});
@@ -43,30 +43,11 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
     }
   }
 
-  void _showDevotionalDetail(BuildContext context, Devocional devocional) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        child: DraggableScrollableSheet(
-          initialChildSize: 0.9,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          expand: false,
-          builder: (context, scrollController) {
-            return DevotionalDetailContent(
-              devocional: devocional,
-              controller: scrollController,
-            );
-          },
-        ),
-      ),
-    );
+  void _openDevotionalReader(Devocional devocional, String? imageUrl) {
+    _safeNavigate(DevotionalReaderPage(
+      devocional: devocional,
+      imageUrl: imageUrl,
+    ));
   }
 
   @override
@@ -95,6 +76,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
       date: DateTime.now(),
     );
 
+    final imageUrl = imageAsync.asData?.value;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -113,7 +96,7 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverAppBar(
-                expandedHeight: 300,
+                expandedHeight: 320,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 pinned: true,
@@ -122,26 +105,23 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                   stretchModes: const [StretchMode.zoomBackground, StretchMode.blurBackground],
                   background: GestureDetector(
                     onTap: displayDevotional.id != 'fallback' 
-                        ? () => _showDevotionalDetail(context, displayDevotional)
+                        ? () => _openDevotionalReader(displayDevotional, imageUrl)
                         : null,
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        imageAsync.when(
-                          data: (imageUrl) => Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Colors.blue.shade900, Colors.indigo.shade900],
-                                ),
-                              ),
+                        if (imageUrl != null)
+                          Hero(
+                            tag: 'devotional_image_${displayDevotional.id}',
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(color: Colors.blue.shade900),
                             ),
-                          ),
-                          loading: () => Container(color: Colors.blue.shade900),
-                          error: (_, __) => Container(color: Colors.blue.shade900),
-                        ),
+                          )
+                        else
+                          Container(color: Colors.blue.shade900),
+                        
                         Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -167,12 +147,12 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(Icons.auto_awesome, size: 12, color: Colors.amber),
-                                    const SizedBox(width: 8),
-                                    const Text(
+                                    Icon(Icons.auto_awesome, size: 12, color: Colors.amber),
+                                    SizedBox(width: 8),
+                                    Text(
                                       'PALABRA DE HOY',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -191,30 +171,34 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                                   child: Center(child: CircularProgressIndicator(color: Colors.white)),
                                 )
                               else
-                                Expanded(
-                                  child: AutoSizeText(
-                                    displayDevotional.versiculo,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w300,
-                                      fontStyle: FontStyle.italic,
-                                      height: 1.3,
-                                      fontFamily: 'Georgia',
+                                Hero(
+                                  tag: 'devotional_verse_${displayDevotional.id}',
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: AutoSizeText(
+                                      displayDevotional.versiculo,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w300,
+                                        fontStyle: FontStyle.italic,
+                                        height: 1.3,
+                                        fontFamily: 'Georgia',
+                                      ),
+                                      maxLines: 5,
+                                      minFontSize: 16,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 5,
-                                    minFontSize: 16,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               const SizedBox(height: 12),
-                              Row(
+                              const Row(
                                 children: [
-                                  const Icon(Icons.menu_book_rounded, size: 14, color: Colors.white70),
-                                  const SizedBox(width: 8),
+                                  Icon(Icons.menu_book_rounded, size: 14, color: Colors.white70),
+                                  SizedBox(width: 8),
                                   Text(
-                                    displayDevotional.id == 'fallback' ? 'Sincronizando...' : 'Ver devocional completo',
-                                    style: const TextStyle(
+                                    'Ver devocional completo',
+                                    style: TextStyle(
                                       color: Colors.white70,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
@@ -268,15 +252,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
           if (_isNavigating)
             Container(
               color: Colors.black54,
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const CircularProgressIndicator(strokeWidth: 5),
-                ),
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
               ),
             ),
         ],
