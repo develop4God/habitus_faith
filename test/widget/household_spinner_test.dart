@@ -122,7 +122,8 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); // Initial frame
+        await tester.pump(const Duration(milliseconds: 500)); // Allow initial render
 
         // Find and tap the spin button
         final spinButton = find.text('¡GIRAR!');
@@ -136,7 +137,7 @@ void main() {
 
         // Wait for spin animation (3 seconds)
         await tester.pump(const Duration(seconds: 3));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
 
         // Verify dialog appears with a task
         expect(find.text('¡Es hora de esta tarea!'), findsOneWidget);
@@ -162,16 +163,18 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); // Initial frame
+        await tester.pump(const Duration(milliseconds: 500)); // Allow initial render
 
         // Spin to get a task
         await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
 
         // Decline the task
         await tester.tap(find.text('Otro momento'));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process tap
+        await tester.pump(const Duration(milliseconds: 500)); // Allow transition
 
         // Verify back to spinner view
         expect(find.text('¡GIRAR!'), findsOneWidget);
@@ -195,16 +198,18 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); // Initial frame
+        await tester.pump(const Duration(milliseconds: 500)); // Allow initial render
 
         // Spin to get a task
         await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
 
         // Start the task
         await tester.tap(find.text('¡Vamos!'));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process tap
+        await tester.pump(const Duration(milliseconds: 500)); // Allow transition
 
         // Verify working view
         expect(find.text('Trabajando en la tarea...'), findsOneWidget);
@@ -230,18 +235,21 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); // Initial frame
+        await tester.pump(const Duration(milliseconds: 500)); // Allow initial render
 
         // Spin and start task
         await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
         await tester.tap(find.text('¡Vamos!'));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process tap
+        await tester.pump(const Duration(milliseconds: 500)); // Allow transition
 
         // Cancel the task
         await tester.tap(find.text('Cancelar'));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process tap
+        await tester.pump(const Duration(milliseconds: 500)); // Allow transition
 
         // Verify back to spinner
         expect(find.text('¡GIRAR!'), findsOneWidget);
@@ -297,7 +305,8 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); // Initial frame
+        await tester.pump(const Duration(milliseconds: 500)); // Allow initial render
 
         // Initial state - home icon
         expect(find.byIcon(Icons.home_rounded), findsWidgets);
@@ -305,11 +314,12 @@ void main() {
         // Spin
         await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
 
         // Close dialog to see spinner wheel result
         await tester.tap(find.text('Otro momento'));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process tap
+        await tester.pump(const Duration(milliseconds: 500)); // Allow transition
 
         // Verify a task name appears on the wheel
         // At least one of the tasks should be visible
@@ -418,23 +428,29 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump(); // Initial frame
+        await tester.pump(const Duration(milliseconds: 500)); // Allow initial render
 
         // Step 1: Spin
         await tester.tap(find.text('¡GIRAR!'));
         await tester.pump(const Duration(seconds: 3));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
+        await tester.pump(const Duration(milliseconds: 300)); // Allow dialog to show
 
         // Step 2: Start task
         await tester.tap(find.text('¡Vamos!'));
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process tap
+        await tester.pump(const Duration(milliseconds: 500)); // Allow transition
+        await tester.pump(const Duration(milliseconds: 300)); // Extra time for state update
 
         expect(find.text('Trabajando en la tarea...'), findsOneWidget);
 
         // Step 3: Complete task
         await tester.tap(find.text('Completar'));
+        await tester.pump(); // Process tap
         await tester.pump(const Duration(seconds: 2)); // Celebration animation
-        await tester.pumpAndSettle();
+        await tester.pump(); // Process result
+        await tester.pump(const Duration(milliseconds: 300)); // Extra time
 
         // Step 4: Verify celebration
         expect(find.text('¡Excelente trabajo!'), findsOneWidget);

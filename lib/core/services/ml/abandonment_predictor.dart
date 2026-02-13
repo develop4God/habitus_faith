@@ -59,6 +59,9 @@ class AbandonmentPredictor {
     }
   }
 
+  /// Check if predictor is initialized
+  bool get isInitialized => _initialized;
+
   /// Get model version
   String? get modelVersion => _modelMetadata?['version'];
 
