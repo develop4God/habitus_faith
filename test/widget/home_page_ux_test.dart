@@ -1091,5 +1091,5 @@ void main() {
         expect(find.text('🏳️‍🌈'), findsOneWidget);
       });
     });
-  }, skip: false); // Fixed: Using pumpTestFrames instead of pumpAndSettle
+  }); // Fixed: Using pumpTestFrames instead of pumpAndSettle
 }
