@@ -34,7 +34,7 @@ class UnifiedHabitList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -54,7 +54,7 @@ class UnifiedHabitList extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(32.0),
               child: Text(
-                l10n.startJourney,
+                l10n?.startJourney ?? 'Start your journey',
                 style: TextStyle(fontSize: 18, color: Colors.grey.shade500),
                 textAlign: TextAlign.center,
               ),
@@ -120,7 +120,7 @@ class UnifiedHabitList extends ConsumerWidget {
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                     child: Text(
-                      '📝 ${l10n.planYourDay}',
+                      '📝 ${l10n?.planYourDay ?? 'Plan your day'}',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w900,
@@ -246,7 +246,7 @@ class UnifiedHabitList extends ConsumerWidget {
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (err, stack) => Center(child: Text(l10n.errorUnknown)),
+      error: (err, stack) => Center(child: Text(l10n?.errorUnknown ?? 'Unknown error')),
     );
   }
 

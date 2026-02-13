@@ -5,6 +5,9 @@ import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/presentation/household_spinner/household_spinner_page.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import 'package:habitus_faith/core/providers/auth_provider.dart';
+// ignore: unused_import
+import 'package:flutter_localizations/flutter_localizations.dart';
+import '../utils/pump_utils.dart';
 
 void main() {
   group('HouseholdSpinnerPage - User Behavior Tests', () {
@@ -68,7 +71,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pumpTestFrames(10);
 
         // Verify page elements
         expect(find.text('🏠 Girar Tareas del Hogar'), findsOneWidget);
@@ -97,7 +100,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pumpTestFrames(10);
 
         // Verify empty state
         expect(find.text('No hay tareas del hogar'), findsOneWidget);
@@ -172,7 +175,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pumpTestFrames(10);
 
         // Verify modern UI elements
         expect(find.byType(Container), findsWidgets);
@@ -205,14 +208,14 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle();
+        await tester.pumpTestFrames(10);
 
         // Tap add tasks button
         final addButton = find.text('Agregar tareas');
         expect(addButton, findsOneWidget);
 
         await tester.tap(addButton);
-        await tester.pumpAndSettle();
+        await tester.pumpTestFrames(10);
 
         // Should pop the page (navigation tested separately)
         expect(find.text('No hay tareas del hogar'), findsNothing);

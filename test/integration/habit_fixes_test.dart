@@ -9,6 +9,7 @@ import 'package:habitus_faith/features/habits/data/storage/storage_providers.dar
 import 'package:habitus_faith/core/services/time/clock.dart';
 import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import '../utils/pump_utils.dart';
 
 /// Integration tests for habit completion persistence, modal keyboard behavior,
 /// and time acceleration features
@@ -195,7 +196,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pumpTestFrames(10);
 
       // Verify the app structure is set up correctly
       expect(find.text('Test Page'), findsOneWidget);
