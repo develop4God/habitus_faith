@@ -1,15 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/providers/ml_providers.dart';
 import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
-import 'package:habitus_faith/core/providers/notification_provider.dart';
-import 'package:habitus_faith/core/providers/remote_config_provider.dart';
-import 'package:habitus_faith/features/habits/data/storage/storage_providers.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mocktail/mocktail.dart';
-import '../utils/habit_predictor_mocks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

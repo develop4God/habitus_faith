@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -76,15 +77,15 @@ void main() {
         userId: 'user1',
         name: 'Morning Prayer',
         category: HabitCategory.spiritual,
-        createdAt: DateTime.now().subtract(Duration(days: 30)),
+        createdAt: DateTime.now().subtract(const Duration(days: 30)),
         targetMinutes: 30,
         difficultyLevel: 4,
         currentStreak: 2,
         completionHistory: [
-          DateTime.now().subtract(Duration(days: 10)),
-          DateTime.now().subtract(Duration(days: 8)),
+          DateTime.now().subtract(const Duration(days: 10)),
+          DateTime.now().subtract(const Duration(days: 8)),
         ],
-        lastCompletedAt: DateTime.now().subtract(Duration(days: 8)),
+        lastCompletedAt: DateTime.now().subtract(const Duration(days: 8)),
         completedToday: false,
         isArchived: false,
       );

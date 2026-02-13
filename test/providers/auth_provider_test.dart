@@ -1,4 +1,5 @@
 import 'dart:async';
+// ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,6 +77,7 @@ void main() {
           overrides: [
             firebaseAuthProvider.overrideWithValue(mockAuth),
             firebaseInitProvider.overrideWith((ref) async {
+              // ignore: prefer_const_constructors
               await Future.delayed(Duration(milliseconds: 10));
               initCalled = true;
               return mockApp;

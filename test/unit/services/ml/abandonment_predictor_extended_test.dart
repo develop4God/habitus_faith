@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/core/services/time/time.dart';
@@ -131,6 +131,7 @@ void main() {
             createdAt: DateTime.now(),
             currentStreak: 3,
             completionHistory: [
+              // ignore: prefer_const_constructors
               DateTime.now().subtract(Duration(days: 1)),
             ],
           );

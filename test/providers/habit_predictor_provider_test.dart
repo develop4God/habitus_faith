@@ -182,7 +182,7 @@ void main() {
 
     test('respects cooldown', () async {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('nudge_sent_1', DateTime.now().subtract(Duration(hours: 12)).toIso8601String());
+      await prefs.setString('nudge_sent_1', DateTime.now().subtract(const Duration(hours: 12)).toIso8601String());
 
       final habit = Habit(
         id: '1',
@@ -205,7 +205,7 @@ void main() {
 
     test('sends nudge after cooldown expires', () async {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('nudge_sent_1', DateTime.now().subtract(Duration(hours: 25)).toIso8601String());
+      await prefs.setString('nudge_sent_1', DateTime.now().subtract(const Duration(hours: 25)).toIso8601String());
 
       final habit = Habit(
         id: '1',
