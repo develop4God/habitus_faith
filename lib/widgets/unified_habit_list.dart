@@ -55,7 +55,7 @@ class UnifiedHabitList extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(32.0),
               child: Text(
-                l10n?.startJourney ?? 'Start your journey',
+                l10n.startJourney,
                 style: TextStyle(fontSize: 18, color: Colors.grey.shade500),
                 textAlign: TextAlign.center,
               ),
@@ -121,7 +121,7 @@ class UnifiedHabitList extends ConsumerWidget {
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                     child: Text(
-                      '📝 ${l10n?.planYourDay ?? 'Plan your day'}',
+                      '📝 ${l10n.planYourDay}',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w900,
