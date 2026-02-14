@@ -106,8 +106,10 @@ class AbandonmentPredictor {
 
       if (assetLoaderOverride != null) {
         // Use test-provided interpreter loader (avoids loading native lib in tests)
-        _interpreter = await assetLoaderOverride!('assets/ml_models/predictor.tflite');
-        debugPrint('AbandonmentPredictor.initialize: Interpreter provided by test override');
+        _interpreter =
+            await assetLoaderOverride!('assets/ml_models/predictor.tflite');
+        debugPrint(
+            'AbandonmentPredictor.initialize: Interpreter provided by test override');
       } else {
         try {
           _interpreter = await Interpreter.fromAsset(
@@ -118,8 +120,10 @@ class AbandonmentPredictor {
           );
         } catch (e) {
           // If native library isn't available (common in CI/test), fall back to a lightweight in-process interpreter
-          debugPrint('AbandonmentPredictor.initialize: Failed to load native TFLite interpreter: $e');
-          debugPrint('AbandonmentPredictor.initialize: Falling back to in-process fake interpreter for tests');
+          debugPrint(
+              'AbandonmentPredictor.initialize: Failed to load native TFLite interpreter: $e');
+          debugPrint(
+              'AbandonmentPredictor.initialize: Falling back to in-process fake interpreter for tests');
           _interpreter = _FallbackInterpreter();
         }
       }
@@ -535,16 +539,16 @@ class AbandonmentPredictor {
 
 // Minimal fallback interpreter used when tflite native library is unavailable (tests/CI)
 class _FallbackInterpreter {
-   void close() {}
+  void close() {}
 
-   void run(Object input, Object output) {
-     try {
-       if (output is List && output.isNotEmpty && output[0] is List) {
-         (output[0] as List)[0] = 0.3; // deterministic default
-       }
-     } catch (_) {}
-   }
+  void run(Object input, Object output) {
+    try {
+      if (output is List && output.isNotEmpty && output[0] is List) {
+        (output[0] as List)[0] = 0.3; // deterministic default
+      }
+    } catch (_) {}
+  }
 
-   @override
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

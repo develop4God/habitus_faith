@@ -33,11 +33,11 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
   Future<void> _safeNavigate(Widget page) async {
     if (_isNavigating) return;
     setState(() => _isNavigating = true);
-    
+
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => page),
     );
-    
+
     if (mounted) {
       setState(() => _isNavigating = false);
     }
@@ -57,24 +57,27 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
     final isDark = theme.brightness == Brightness.dark;
     final devotionalState = ref.watch(devotionalProvider);
     final imageAsync = ref.watch(dailyDevotionalImageProvider);
-    
+
     if (_lastLanguage != devotionalState.selectedLanguage) {
       _randomDevotional = null;
       _lastLanguage = devotionalState.selectedLanguage;
     }
 
     if (_randomDevotional == null && devotionalState.all.isNotEmpty) {
-      _randomDevotional = devotionalState.all[Random().nextInt(devotionalState.all.length)];
+      _randomDevotional =
+          devotionalState.all[Random().nextInt(devotionalState.all.length)];
     }
 
-    final displayDevotional = _randomDevotional ?? Devocional(
-      id: 'fallback',
-      versiculo: 'Salmos 119:105 "Lámpara es a mis pies tu palabra, y lumbrera a mi camino."',
-      reflexion: '',
-      paraMeditar: [],
-      oracion: '',
-      date: DateTime.now(),
-    );
+    final displayDevotional = _randomDevotional ??
+        Devocional(
+          id: 'fallback',
+          versiculo:
+              'Salmos 119:105 "Lámpara es a mis pies tu palabra, y lumbrera a mi camino."',
+          reflexion: '',
+          paraMeditar: [],
+          oracion: '',
+          date: DateTime.now(),
+        );
 
     final imageUrl = imageAsync.asData?.value;
 
@@ -102,10 +105,14 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                 pinned: true,
                 stretch: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: const [StretchMode.zoomBackground, StretchMode.blurBackground],
+                  stretchModes: const [
+                    StretchMode.zoomBackground,
+                    StretchMode.blurBackground
+                  ],
                   background: GestureDetector(
-                    onTap: displayDevotional.id != 'fallback' 
-                        ? () => _openDevotionalReader(displayDevotional, imageUrl)
+                    onTap: displayDevotional.id != 'fallback'
+                        ? () =>
+                            _openDevotionalReader(displayDevotional, imageUrl)
                         : null,
                     child: Stack(
                       fit: StackFit.expand,
@@ -116,12 +123,12 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                             child: Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(color: Colors.blue.shade900),
+                              errorBuilder: (_, __, ___) =>
+                                  Container(color: Colors.blue.shade900),
                             ),
                           )
                         else
                           Container(color: Colors.blue.shade900),
-                        
                         Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -141,16 +148,20 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                                  border: Border.all(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.1)),
                                 ),
                                 child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.auto_awesome, size: 12, color: Colors.amber),
+                                    Icon(Icons.auto_awesome,
+                                        size: 12, color: Colors.amber),
                                     SizedBox(width: 8),
                                     Text(
                                       'PALABRA DE HOY',
@@ -165,14 +176,18 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              if (devotionalState.isLoading && devotionalState.all.isEmpty)
+                              if (devotionalState.isLoading &&
+                                  devotionalState.all.isEmpty)
                                 const SizedBox(
                                   height: 60,
-                                  child: Center(child: CircularProgressIndicator(color: Colors.white)),
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white)),
                                 )
                               else
                                 Hero(
-                                  tag: 'devotional_verse_${displayDevotional.id}',
+                                  tag:
+                                      'devotional_verse_${displayDevotional.id}',
                                   child: Material(
                                     color: Colors.transparent,
                                     child: AutoSizeText(
@@ -194,7 +209,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                               const SizedBox(height: 12),
                               const Row(
                                 children: [
-                                  Icon(Icons.menu_book_rounded, size: 14, color: Colors.white70),
+                                  Icon(Icons.menu_book_rounded,
+                                      size: 14, color: Colors.white70),
                                   SizedBox(width: 8),
                                   Text(
                                     'Ver devocional completo',
@@ -230,7 +246,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                     _buildFeatureCard(
                       context: context,
                       title: l10n.readBible,
-                      description: 'Explora la Palabra de Dios con nuestro lector avanzado.',
+                      description:
+                          'Explora la Palabra de Dios con nuestro lector avanzado.',
                       icon: Icons.auto_stories_rounded,
                       color: const Color(0xFF007AFF),
                       onTap: () => _safeNavigate(const BibleReaderPage()),
@@ -239,10 +256,12 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                     _buildFeatureCard(
                       context: context,
                       title: 'Devocionales',
-                      description: 'Fortalece tu fe con reflexiones diarias personalizadas.',
+                      description:
+                          'Fortalece tu fe con reflexiones diarias personalizadas.',
                       icon: Icons.local_library_rounded,
                       color: const Color(0xFF5856D6),
-                      onTap: () => _safeNavigate(const DevotionalDiscoveryPage()),
+                      onTap: () =>
+                          _safeNavigate(const DevotionalDiscoveryPage()),
                     ),
                   ]),
                 ),
@@ -318,7 +337,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                     description,
                     style: TextStyle(
                       fontSize: 13,
-                      color: isDark ? Colors.grey.shade500 : Colors.grey.shade600,
+                      color:
+                          isDark ? Colors.grey.shade500 : Colors.grey.shade600,
                       height: 1.4,
                     ),
                     maxLines: 2,
@@ -327,7 +347,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right_rounded, color: color.withValues(alpha: 0.2), size: 28),
+            Icon(Icons.chevron_right_rounded,
+                color: color.withValues(alpha: 0.2), size: 28),
           ],
         ),
       ),

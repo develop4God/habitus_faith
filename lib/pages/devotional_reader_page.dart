@@ -15,7 +15,8 @@ class DevotionalReaderPage extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<DevotionalReaderPage> createState() => _DevotionalReaderPageState();
+  ConsumerState<DevotionalReaderPage> createState() =>
+      _DevotionalReaderPageState();
 }
 
 class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
@@ -64,7 +65,9 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
         onVerticalDragEnd: _handleVerticalDragEnd,
         behavior: HitTestBehavior.translucent,
         child: AnimatedContainer(
-          duration: _dragOffset == 0 ? const Duration(milliseconds: 300) : Duration.zero,
+          duration: _dragOffset == 0
+              ? const Duration(milliseconds: 300)
+              : Duration.zero,
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(0, _dragOffset, 0),
           child: ClipRRect(
@@ -94,11 +97,14 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                               Container(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [Colors.blue.shade900, Colors.indigo.shade900],
+                                    colors: [
+                                      Colors.blue.shade900,
+                                      Colors.indigo.shade900
+                                    ],
                                   ),
                                 ),
                               ),
-                            
+
                             // Dark Overlay for legibility
                             Container(
                               decoration: BoxDecoration(
@@ -115,10 +121,12 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
 
                             // Verse Text Overlay (Centered and Auto-fitted)
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(32, 60, 32, 40),
+                              padding:
+                                  const EdgeInsets.fromLTRB(32, 60, 32, 40),
                               child: Center(
                                 child: Hero(
-                                  tag: 'devotional_verse_${widget.devocional.id}',
+                                  tag:
+                                      'devotional_verse_${widget.devocional.id}',
                                   child: Material(
                                     color: Colors.transparent,
                                     child: AutoSizeText(
@@ -132,7 +140,10 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                                         height: 1.3,
                                         fontFamily: 'Georgia',
                                         shadows: const [
-                                          Shadow(color: Colors.black45, blurRadius: 15, offset: Offset(0, 2))
+                                          Shadow(
+                                              color: Colors.black45,
+                                              blurRadius: 15,
+                                              offset: Offset(0, 2))
                                         ],
                                       ),
                                       maxLines: 5,
@@ -145,13 +156,14 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                           ],
                         ),
                       ),
-                      
+
                       // Close button
                       Positioned(
                         top: mediaQuery.padding.top + 4,
                         left: 12,
                         child: IconButton(
-                          icon: const Icon(Icons.close_rounded, color: Colors.white, size: 24),
+                          icon: const Icon(Icons.close_rounded,
+                              color: Colors.white, size: 24),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
@@ -162,7 +174,8 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                   Expanded(
                     child: NotificationListener<ScrollNotification>(
                       onNotification: (notification) {
-                        if (notification is ScrollUpdateNotification && notification.metrics.pixels <= 0) {
+                        if (notification is ScrollUpdateNotification &&
+                            notification.metrics.pixels <= 0) {
                           if (notification.scrollDelta! < 0) {
                             setState(() {
                               _dragOffset -= notification.scrollDelta!;
@@ -174,8 +187,8 @@ class _DevotionalReaderPageState extends ConsumerState<DevotionalReaderPage> {
                       },
                       child: SingleChildScrollView(
                         controller: _scrollController,
-                        physics: _dragOffset > 0 
-                            ? const NeverScrollableScrollPhysics() 
+                        physics: _dragOffset > 0
+                            ? const NeverScrollableScrollPhysics()
                             : const BouncingScrollPhysics(),
                         child: DevotionalDetailContent(
                           devocional: widget.devocional,

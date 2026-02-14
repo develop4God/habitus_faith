@@ -27,7 +27,7 @@ class DevotionalDetailContent extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final mediaQuery = MediaQuery.of(context);
     final textScaler = mediaQuery.textScaler;
-    
+
     // Accessibility: Use relative sizes for better scaling
     final double headlineSize = textScaler.scale(22);
     final double bodySize = textScaler.scale(18);
@@ -35,12 +35,11 @@ class DevotionalDetailContent extends ConsumerWidget {
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        24, 
-        32, 
-        24, 
-        // Large safe space at the bottom for better reachability and avoiding system bars
-        mediaQuery.padding.bottom + 60 
-      ),
+          24,
+          32,
+          24,
+          // Large safe space at the bottom for better reachability and avoiding system bars
+          mediaQuery.padding.bottom + 60),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -65,15 +64,21 @@ class DevotionalDetailContent extends ConsumerWidget {
                 const Spacer(),
               IconButton(
                 icon: Icon(
-                  ref.watch(devotionalProvider.notifier).isFavorite(devocional.id)
+                  ref
+                          .watch(devotionalProvider.notifier)
+                          .isFavorite(devocional.id)
                       ? Icons.star
                       : Icons.star_border,
-                  color: ref.watch(devotionalProvider.notifier).isFavorite(devocional.id)
+                  color: ref
+                          .watch(devotionalProvider.notifier)
+                          .isFavorite(devocional.id)
                       ? Colors.amber
                       : null,
                 ),
                 onPressed: () {
-                  ref.read(devotionalProvider.notifier).toggleFavorite(devocional);
+                  ref
+                      .read(devotionalProvider.notifier)
+                      .toggleFavorite(devocional);
                 },
               ),
             ],
@@ -90,8 +95,10 @@ class DevotionalDetailContent extends ConsumerWidget {
                 maxLines: 1,
               ),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
               ),
               onPressed: () => _navigateToVerse(context, ref, devocional),
             ),
@@ -99,7 +106,8 @@ class DevotionalDetailContent extends ConsumerWidget {
           const SizedBox(height: 40),
 
           // Reflection Section
-          _buildSectionTitle(l10n.reflection, Icons.lightbulb_outline, colorScheme.primary, sectionTitleSize),
+          _buildSectionTitle(l10n.reflection, Icons.lightbulb_outline,
+              colorScheme.primary, sectionTitleSize),
           const SizedBox(height: 16),
           Text(
             devocional.reflexion,
@@ -114,14 +122,17 @@ class DevotionalDetailContent extends ConsumerWidget {
 
           // Meditation Section
           if (devocional.paraMeditar.isNotEmpty) ...[
-            _buildSectionTitle(l10n.forMeditation, Icons.auto_awesome_rounded, colorScheme.secondary, sectionTitleSize),
+            _buildSectionTitle(l10n.forMeditation, Icons.auto_awesome_rounded,
+                colorScheme.secondary, sectionTitleSize),
             const SizedBox(height: 20),
-            ...devocional.paraMeditar.map((punto) => _buildMeditationItem(punto, isDark, bodySize)),
+            ...devocional.paraMeditar
+                .map((punto) => _buildMeditationItem(punto, isDark, bodySize)),
             const SizedBox(height: 40),
           ],
 
           // Prayer Section
-          _buildSectionTitle(l10n.prayer, Icons.favorite_border_rounded, Colors.pink, sectionTitleSize),
+          _buildSectionTitle(l10n.prayer, Icons.favorite_border_rounded,
+              Colors.pink, sectionTitleSize),
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -147,7 +158,8 @@ class DevotionalDetailContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title, IconData icon, Color color, double fontSize) {
+  Widget _buildSectionTitle(
+      String title, IconData icon, Color color, double fontSize) {
     return Row(
       children: [
         Icon(icon, color: color, size: 22),
@@ -178,7 +190,8 @@ class DevotionalDetailContent extends ConsumerWidget {
             margin: const EdgeInsets.only(top: 8),
             width: 8,
             height: 8,
-            decoration: const BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: Colors.amber, shape: BoxShape.circle),
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -196,7 +209,8 @@ class DevotionalDetailContent extends ConsumerWidget {
     );
   }
 
-  void _navigateToVerse(BuildContext context, WidgetRef ref, Devocional devocional) async {
+  void _navigateToVerse(
+      BuildContext context, WidgetRef ref, Devocional devocional) async {
     final verseRef = _extractVerseReference(devocional.versiculo);
     final parsed = BibleReferenceParser.parse(verseRef);
 
@@ -217,8 +231,10 @@ class DevotionalDetailContent extends ConsumerWidget {
           final state = ref.read(bibleReaderProvider);
           final book = state.books.firstWhere(
             (b) =>
-                (b['long_name'] as String).toLowerCase() == bookName.toLowerCase() ||
-                (b['short_name'] as String).toLowerCase() == bookName.toLowerCase(),
+                (b['long_name'] as String).toLowerCase() ==
+                    bookName.toLowerCase() ||
+                (b['short_name'] as String).toLowerCase() ==
+                    bookName.toLowerCase(),
             orElse: () => {},
           );
 

@@ -15,7 +15,8 @@ void main() {
       storage: storage,
       userId: 'test_user',
       // Use a simple counter-based id generator to avoid millisecond collisions in tests
-      idGenerator: () => 'id_test_${counter++}_${DateTime.now().microsecondsSinceEpoch}',
+      idGenerator: () =>
+          'id_test_${counter++}_${DateTime.now().microsecondsSinceEpoch}',
     );
 
     final createResult = await repo.createHabit(name: 'Original');
@@ -45,7 +46,8 @@ void main() {
       storage: storage,
       userId: 'test_user',
       // Use a simple counter-based id generator to avoid millisecond collisions in tests
-      idGenerator: () => 'id_test_${counter++}_${DateTime.now().microsecondsSinceEpoch}',
+      idGenerator: () =>
+          'id_test_${counter++}_${DateTime.now().microsecondsSinceEpoch}',
     );
 
     final container = ProviderContainer(overrides: [

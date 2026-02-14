@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
-import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 
@@ -99,7 +98,8 @@ class MLPredictorTestUtils {
     debugPrint('ML_TEST_UTILS 🧪 Validating predictor initialization...');
 
     if (!predictor.isInitialized) {
-      debugPrint('ML_TEST_UTILS 🧪 ⚠️ Predictor not initialized, initializing...');
+      debugPrint(
+          'ML_TEST_UTILS 🧪 ⚠️ Predictor not initialized, initializing...');
       await predictor.initialize();
     }
 
@@ -120,7 +120,8 @@ class MLPredictorTestUtils {
     debugPrint(
         'ML_TEST_UTILS 🧪 Predicting risk for: "${habit.name}" (id: ${habit.id})');
     debugPrint('ML_TEST_UTILS 🧪 Habit details:');
-    debugPrint('ML_TEST_UTILS 🧪   - Age: ${DateTime.now().difference(habit.createdAt).inDays} days');
+    debugPrint(
+        'ML_TEST_UTILS 🧪   - Age: ${DateTime.now().difference(habit.createdAt).inDays} days');
     debugPrint(
         'ML_TEST_UTILS 🧪   - Days since completion: ${habit.lastCompletedAt != null ? DateTime.now().difference(habit.lastCompletedAt!).inDays : 'never'}');
     debugPrint('ML_TEST_UTILS 🧪   - Current streak: ${habit.currentStreak}');

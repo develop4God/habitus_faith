@@ -31,7 +31,8 @@ class FakeInterpreter implements Interpreter {
 /// Install the fake interpreter into AbandonmentPredictor for tests.
 /// Optional `result` allows customizing the returned probability.
 Future<void> installFakeTflite({double result = 0.3}) async {
-  AbandonmentPredictor.assetLoaderOverride = (asset) async => FakeInterpreter(result: result);
+  AbandonmentPredictor.assetLoaderOverride =
+      (asset) async => FakeInterpreter(result: result);
 }
 
 /// Remove any installed override and reset to normal behavior.

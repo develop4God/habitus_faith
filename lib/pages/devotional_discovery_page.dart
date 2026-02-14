@@ -41,11 +41,11 @@ class _DevotionalDiscoveryPageState
   void _openDevotionalReader(Devocional devocional) {
     final imageAsync = ref.read(dailyDevotionalImageProvider);
     final imageUrl = imageAsync.asData?.value;
-    
+
     final now = DateTime.now();
-    final isToday = devocional.date.year == now.year && 
-                    devocional.date.month == now.month && 
-                    devocional.date.day == now.day;
+    final isToday = devocional.date.year == now.year &&
+        devocional.date.month == now.month &&
+        devocional.date.day == now.day;
 
     Navigator.push(
       context,

@@ -327,10 +327,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                         color: isCompleted
                                             ? Colors.green.shade900
                                             : Colors.grey.shade900,
-                                        decoration:
-                                            (isCompleted || isSkipped || isFailed)
-                                                ? TextDecoration.lineThrough
-                                                : null,
+                                        decoration: (isCompleted ||
+                                                isSkipped ||
+                                                isFailed)
+                                            ? TextDecoration.lineThrough
+                                            : null,
                                       ),
                                     ),
                                   ),

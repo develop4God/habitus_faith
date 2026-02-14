@@ -10,7 +10,8 @@ import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:habitus_faith/features/habits/domain/habits_repository.dart' show Success;
+import 'package:habitus_faith/features/habits/domain/habits_repository.dart'
+    show Success;
 import '../../utils/habit_predictor_mocks.dart';
 import '../../utils/ml_predictor_test_utils.dart';
 
@@ -41,7 +42,7 @@ void main() {
       SharedPreferences.setMockInitialValues({});
 
       when(() => mockRemoteConfig.isMLPredictorEnabled).thenReturn(true);
-      
+
       // Reset threshold to default before each test
       MLPredictorTestUtils.resetThreshold();
     });
@@ -76,7 +77,8 @@ void main() {
       expect(RiskThresholds.mediumRiskThreshold, equals(0.3));
     });
 
-    test('High-risk prediction triggers intervention with test utils', () async {
+    test('High-risk prediction triggers intervention with test utils',
+        () async {
       final prefs = await SharedPreferences.getInstance();
 
       // Use test utility to create high-risk habit
@@ -107,7 +109,7 @@ void main() {
 
       final clock = container.read(clockProvider);
       final realPredictor = container.read(abandonmentPredictorProvider);
-      
+
       // Validate predictor initialization with test utils
       await MLPredictorTestUtils.validatePredictorInitialized(realPredictor);
 
@@ -117,7 +119,8 @@ void main() {
         highRiskHabit,
       );
 
-      debugPrint('ML_TEST 🧪 Predicted risk: ${(predictedRisk * 100).toStringAsFixed(1)}%');
+      debugPrint(
+          'ML_TEST 🧪 Predicted risk: ${(predictedRisk * 100).toStringAsFixed(1)}%');
 
       final service = HabitPredictorService(
         habitsRepository: mockRepo,
@@ -134,15 +137,16 @@ void main() {
           .called(greaterThanOrEqualTo(1));
     });
 
-    test('Configurable threshold allows easier testing in FAST_TIME mode', () async {
+    test('Configurable threshold allows easier testing in FAST_TIME mode',
+        () async {
       // Lower threshold to 0.3 (medium risk) for easier testing
       MLPredictorTestUtils.setThreshold(0.3);
-      
+
       expect(MLPredictorTestUtils.interventionThreshold, equals(0.3));
       expect(MLPredictorTestUtils.requiresIntervention(0.25), isFalse);
       expect(MLPredictorTestUtils.requiresIntervention(0.3), isTrue);
       expect(MLPredictorTestUtils.requiresIntervention(0.5), isTrue);
-      
+
       // Reset to default
       MLPredictorTestUtils.resetThreshold();
       expect(MLPredictorTestUtils.interventionThreshold, equals(0.65));
@@ -179,8 +183,9 @@ void main() {
       // Low-risk habit should have risk below intervention threshold
       expect(predictedRisk < RiskThresholds.highRiskThreshold, isTrue,
           reason: 'Low-risk habit should have risk < 0.65');
-      
-      debugPrint('ML_TEST 🧪 ✅ Low-risk habit correctly identified (risk: ${(predictedRisk * 100).toStringAsFixed(1)}%)');
+
+      debugPrint(
+          'ML_TEST 🧪 ✅ Low-risk habit correctly identified (risk: ${(predictedRisk * 100).toStringAsFixed(1)}%)');
     });
   });
 }
