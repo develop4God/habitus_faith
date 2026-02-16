@@ -14,6 +14,7 @@ import '../../config/ai_config.dart';
 import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
 import 'gemini_template_firestore_service.dart';
+import 'gemini_prompts.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
@@ -138,65 +139,12 @@ class GeminiService implements IGeminiService {
     String faithContext,
     String languageCode,
   ) {
-    // Language name mapping for clearer instructions
-    final languageNames = {
-      'en': 'English',
-      'es': 'Spanish',
-      'pt': 'Portuguese',
-      'fr': 'French',
-      'zh': 'Chinese',
-    };
-    final languageName = languageNames[languageCode] ?? 'English';
-
-    return '''
-User goal: "$userGoal"
-${failurePattern != null ? 'Failure pattern: $failurePattern' : ''}
-Faith context: $faithContext
-Output language: $languageCode ($languageName)
-
-Generate EXACTLY ${AiConfig.habitsPerGeneration} micro-habits in $languageName.
-
-REQUIRED FIELDS (output in $languageName):
-1. action: specific action with number/time (e.g., "Pray 10 minutes", "Read 3 chapters")
-2. verse: Bible reference (e.g., "Psalm 5:3", "John 3:16")
-3. verseText: full verse text in $languageName
-4. purpose: why this helps achieve the goal (in $languageName)
-5. estimatedMinutes: 1-${AiConfig.maxHabitMinutes}
-6. scheduledTime: "HH:mm" format (24-hour, e.g., "07:00") - optimal time for this habit
-7. trigger: when/where context (e.g., "Right after waking up", "Before breakfast")
-8. notifications: array of notification objects with time, title, body
-
-EXAMPLE (for Spanish output):
-{
-  "action": "Oración matutina de 10 minutos",
-  "verse": "Salmos 5:3",
-  "verseText": "Oh Jehová, de mañana oirás mi voz; De mañana me presentaré delante de ti, y esperaré.",
-  "purpose": "Conectar espiritualmente antes de empezar el día laboral",
-  "estimatedMinutes": 10,
-  "scheduledTime": "07:00",
-  "trigger": "Inmediatamente después de despertar, antes de revisar el teléfono",
-  "notifications": [
-    {
-      "time": "06:55",
-      "title": "🙏 En 5 min: Tiempo con Dios",
-      "body": "Prepara tu espacio de oración"
-    }
-  ]
-}
-
-STRICT RULES:
-- Output ALL text content in $languageName (action, verseText, purpose, trigger, notification title/body)
-- Actions must be CONCRETE: include numbers, times, or specific triggers
-- Purpose must explain the LOGICAL CONNECTION between action and goal
-- scheduledTime should be optimal time of day for this habit
-- trigger should provide clear context of when/where to do the habit
-- Include at least 1 notification per habit with appropriate timing
-- Notification times should be 5-10 minutes before scheduledTime
-- Tone: practical, motivational, focused on user's goal
-
-Respond ONLY with valid JSON array (no markdown, no ```json):
-[{...}, {...}, {...}]
-''';
+    return GeminiPrompts.microHabitGeneration(
+      userGoal: userGoal,
+      failurePattern: failurePattern,
+      faithContext: faithContext,
+      languageCode: languageCode,
+    );
   }
 
   List<MicroHabit> _parseResponse(String? responseText, String langCode) {
@@ -296,7 +244,7 @@ Respond ONLY with valid JSON array (no markdown, no ```json):
             }
           }
 
-          return MicroHabit(
+          final habit = MicroHabit(
             id: const Uuid().v4(),
             action: data['action'],
             verse: data['verse'],
@@ -309,6 +257,11 @@ Respond ONLY with valid JSON array (no markdown, no ```json):
             trigger: data['trigger'] as String?,
             notifications: notifications,
           );
+
+          // Validate the parsed habit
+          _validateHabit(habit, entry.key);
+
+          return habit;
         } catch (e) {
           if (e is GeminiParseException) rethrow;
           throw GeminiParseException(
@@ -327,6 +280,64 @@ Respond ONLY with valid JSON array (no markdown, no ```json):
   bool _isValidTimeFormat(String time) {
     final regex = RegExp(r'^([0-1][0-9]|2[0-3]):([0-5][0-9])$');
     return regex.hasMatch(time);
+  }
+
+  /// Validate habit data quality and completeness
+  void _validateHabit(MicroHabit habit, int index) {
+    final errors = <String>[];
+
+    // Validate action is specific and contains numbers/times
+    if (!RegExp(r'\d+').hasMatch(habit.action)) {
+      errors.add('Action should include specific numbers or times');
+    }
+
+    // Validate action length
+    if (habit.action.length < 10) {
+      errors.add('Action is too vague (less than 10 characters)');
+    }
+
+    // Validate verse format
+    if (!RegExp(r'\w+\s+\d+:\d+').hasMatch(habit.verse)) {
+      errors.add('Verse reference format invalid (expected "Book ch:v")');
+    }
+
+    // Validate purpose is meaningful
+    if (habit.purpose.length < 20) {
+      errors.add('Purpose explanation is too brief');
+    }
+
+    // Validate estimated minutes
+    if (habit.estimatedMinutes < 1 || habit.estimatedMinutes > 30) {
+      errors.add(
+          'Estimated minutes out of range (${habit.estimatedMinutes} not in 1-30)');
+    }
+
+    // Validate scheduledTime if present
+    if (habit.scheduledTime != null &&
+        !_isValidTimeFormat(habit.scheduledTime!)) {
+      errors.add('Scheduled time format invalid (expected HH:mm)');
+    }
+
+    // Validate notifications if present
+    if (habit.notifications != null) {
+      for (var i = 0; i < habit.notifications!.length; i++) {
+        final notif = habit.notifications![i];
+        if (!_isValidTimeFormat(notif.time)) {
+          errors.add('Notification #${i + 1} time format invalid');
+        }
+        if (notif.title.isEmpty || notif.body.isEmpty) {
+          errors.add('Notification #${i + 1} missing title or body');
+        }
+      }
+    }
+
+    // Log warnings but don't throw - allow some flexibility
+    if (errors.isNotEmpty) {
+      // In production, this would log to telemetry
+      // For now, we accept the habit with warnings
+      // ignore: avoid_print
+      print('⚠️ Habit #${index + 1} validation warnings: ${errors.join(', ')}');
+    }
   }
 
   /// Enrich habits with full verse text from Bible database

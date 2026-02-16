@@ -64,22 +64,26 @@ class HabitNotificationSettings {
   final NotificationTiming timing;
   final int? customMinutesBefore;
   final String? eventTime; // HH:mm format
+  final String? customMessage;
 
   const HabitNotificationSettings({
     this.timing = NotificationTiming.none,
     this.customMinutesBefore,
     this.eventTime,
+    this.customMessage,
   });
 
   HabitNotificationSettings copyWith({
     NotificationTiming? timing,
     int? customMinutesBefore,
     String? eventTime,
+    String? customMessage,
   }) {
     return HabitNotificationSettings(
       timing: timing ?? this.timing,
       customMinutesBefore: customMinutesBefore ?? this.customMinutesBefore,
       eventTime: eventTime ?? this.eventTime,
+      customMessage: customMessage ?? this.customMessage,
     );
   }
 
@@ -88,6 +92,7 @@ class HabitNotificationSettings {
       'timing': timing.name,
       'customMinutesBefore': customMinutesBefore,
       'eventTime': eventTime,
+      'customMessage': customMessage,
     };
   }
 
@@ -99,6 +104,7 @@ class HabitNotificationSettings {
       ),
       customMinutesBefore: json['customMinutesBefore'] as int?,
       eventTime: json['eventTime'] as String?,
+      customMessage: json['customMessage'] as String?,
     );
   }
 }

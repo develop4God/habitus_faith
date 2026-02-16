@@ -106,11 +106,12 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
             category: category,
             emoji: emoji,
             targetMinutes: microHabit.estimatedMinutes,
-            // Map scheduledTime to notification settings
+            // Map scheduledTime to notification settings with custom message
             notificationSettings: microHabit.scheduledTime != null
                 ? HabitNotificationSettings(
                     timing: NotificationTiming.atEventTime,
                     eventTime: microHabit.scheduledTime,
+                    customMessage: microHabit.notifications?.first.body,
                   )
                 : null,
           );
