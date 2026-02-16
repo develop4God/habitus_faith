@@ -37,6 +37,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
   @override
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
+    String? description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
@@ -67,6 +68,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
         id: idGenerator(),
         userId: userId!,
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
@@ -155,6 +157,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
       final habit = HabitModel.fromFirestore(doc);
       final updatedHabit = habit.copyWith(
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,

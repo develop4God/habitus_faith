@@ -101,8 +101,17 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
           _habitCategories[microHabit.id] ?? HabitCategory.spiritual;
       final emoji = _getCategoryEmoji(category);
 
+      // Build comprehensive description from MicroHabit data
+      final description = [
+        microHabit.purpose,
+        if (microHabit.trigger != null) '⏰ ${microHabit.trigger}',
+        if (microHabit.verseText != null)
+          '📖 ${microHabit.verse}\n"${microHabit.verseText}"',
+      ].join('\n\n');
+
       await ref.read(habitsRepositoryProvider).createHabit(
             name: microHabit.action,
+            description: description,
             category: category,
             emoji: emoji,
             targetMinutes: microHabit.estimatedMinutes,

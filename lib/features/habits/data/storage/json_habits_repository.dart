@@ -286,6 +286,7 @@ class JsonHabitsRepository implements HabitsRepository {
   @override
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
+    String? description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
@@ -306,6 +307,7 @@ class JsonHabitsRepository implements HabitsRepository {
         id: _idGenerator(),
         userId: _userId,
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
@@ -511,6 +513,7 @@ class JsonHabitsRepository implements HabitsRepository {
   Future<Result<Habit, HabitFailure>> updateHabit({
     required String habitId,
     String? name,
+    String? description,
     HabitCategory? category,
     String? emoji,
     int? colorValue,
@@ -531,6 +534,7 @@ class JsonHabitsRepository implements HabitsRepository {
       final habit = habits[index];
       final updatedHabit = habit.copyWith(
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
