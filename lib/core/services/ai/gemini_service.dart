@@ -138,43 +138,64 @@ class GeminiService implements IGeminiService {
     String faithContext,
     String languageCode,
   ) {
+    // Language name mapping for clearer instructions
+    final languageNames = {
+      'en': 'English',
+      'es': 'Spanish',
+      'pt': 'Portuguese',
+      'fr': 'French',
+      'zh': 'Chinese',
+    };
+    final languageName = languageNames[languageCode] ?? 'English';
+
     return '''
-El usuario quiere lograr: "$userGoal"
-${failurePattern != null ? 'Patrón de falla: $failurePattern' : ''}
-Contexto de fe: $faithContext
-Idioma: $languageCode
+User goal: "$userGoal"
+${failurePattern != null ? 'Failure pattern: $failurePattern' : ''}
+Faith context: $faithContext
+Output language: $languageCode ($languageName)
 
-IMPORTANTE: Genera EXACTAMENTE ${AiConfig.habitsPerGeneration} micro-hábitos LÓGICOS y DIRECTAMENTE relacionados con el objetivo del usuario.
+Generate EXACTLY ${AiConfig.habitsPerGeneration} micro-habits in $languageName.
 
-Cada hábito debe:
-1. Ser una acción ESPECÍFICA, MEDIBLE y REALISTA que ayude a lograr el objetivo
-2. Completarse en máximo ${AiConfig.maxHabitMinutes} minutos
-3. Estar DIRECTAMENTE relacionado con "$userGoal" (no sugerencias genéricas)
-4. Incluir UN versículo bíblico como referencia inspiracional (no necesariamente literal)
-5. Explicar claramente POR QUÉ este hábito ayuda a lograr el objetivo
+REQUIRED FIELDS (output in $languageName):
+1. action: specific action with number/time (e.g., "Pray 10 minutes", "Read 3 chapters")
+2. verse: Bible reference (e.g., "Psalm 5:3", "John 3:16")
+3. verseText: full verse text in $languageName
+4. purpose: why this helps achieve the goal (in $languageName)
+5. estimatedMinutes: 1-${AiConfig.maxHabitMinutes}
+6. scheduledTime: "HH:mm" format (24-hour, e.g., "07:00") - optimal time for this habit
+7. trigger: when/where context (e.g., "Right after waking up", "Before breakfast")
+8. notifications: array of notification objects with time, title, body
 
-Ejemplos de hábitos LÓGICOS:
-- Objetivo: "Leer toda la Biblia" → "Leer 3 capítulos cada mañana antes del desayuno"
-- Objetivo: "Comer mejor sin saltar comidas" → "Preparar 3 comidas balanceadas el domingo para la semana"
-- Objetivo: "Hacer más ejercicio" → "Caminar 15 minutos después del almuerzo"
+EXAMPLE (for Spanish output):
+{
+  "action": "Oración matutina de 10 minutos",
+  "verse": "Salmos 5:3",
+  "verseText": "Oh Jehová, de mañana oirás mi voz; De mañana me presentaré delante de ti, y esperaré.",
+  "purpose": "Conectar espiritualmente antes de empezar el día laboral",
+  "estimatedMinutes": 10,
+  "scheduledTime": "07:00",
+  "trigger": "Inmediatamente después de despertar, antes de revisar el teléfono",
+  "notifications": [
+    {
+      "time": "06:55",
+      "title": "🙏 En 5 min: Tiempo con Dios",
+      "body": "Prepara tu espacio de oración"
+    }
+  ]
+}
 
-Responde SOLO con JSON válido (sin markdown, sin ```json):
-[
-  {
-    "action": "Acción específica y medible relacionada directamente con el objetivo",
-    "verse": "Libro capítulo:versículo",
-    "verseText": "Texto completo del versículo bíblico",
-    "purpose": "Explicación clara de cómo esta acción específica ayuda a lograr el objetivo del usuario",
-    "estimatedMinutes": número entero entre 1 y ${AiConfig.maxHabitMinutes}
-  }
-]
+STRICT RULES:
+- Output ALL text content in $languageName (action, verseText, purpose, trigger, notification title/body)
+- Actions must be CONCRETE: include numbers, times, or specific triggers
+- Purpose must explain the LOGICAL CONNECTION between action and goal
+- scheduledTime should be optimal time of day for this habit
+- trigger should provide clear context of when/where to do the habit
+- Include at least 1 notification per habit with appropriate timing
+- Notification times should be 5-10 minutes before scheduledTime
+- Tone: practical, motivational, focused on user's goal
 
-REGLAS ESTRICTAS:
-- NO sugieras hábitos genéricos no relacionados con el objetivo
-- Las acciones deben ser CONCRETAS: incluir números, horarios, o triggers específicos
-- El propósito debe explicar la CONEXIÓN LÓGICA entre la acción y el objetivo
-- El versículo es referencia inspiracional, no debe ser el foco principal
-- Tono: práctico, motivacional, centrado en el objetivo del usuario
+Respond ONLY with valid JSON array (no markdown, no \`\`\`json):
+[{...}, {...}, {...}]
 ''';
   }
 
@@ -231,6 +252,50 @@ REGLAS ESTRICTAS:
             }
           }
 
+          // Validate scheduledTime format if present
+          String? scheduledTime = data['scheduledTime'] as String?;
+          if (scheduledTime != null && !_isValidTimeFormat(scheduledTime)) {
+            // Log warning but don't fail - just set to null
+            scheduledTime = null;
+          }
+
+          // Parse notifications array
+          List<NotificationConfig>? notifications;
+          if (data['notifications'] != null && data['notifications'] is List) {
+            try {
+              notifications = (data['notifications'] as List)
+                  .map((n) {
+                    if (n is! Map<String, dynamic>) return null;
+                    // Validate required notification fields
+                    if (!n.containsKey('time') ||
+                        !n.containsKey('title') ||
+                        !n.containsKey('body')) {
+                      return null;
+                    }
+                    // Validate time format
+                    if (!_isValidTimeFormat(n['time'] as String)) {
+                      return null;
+                    }
+                    return NotificationConfig(
+                      time: n['time'] as String,
+                      title: n['title'] as String,
+                      body: n['body'] as String,
+                    );
+                  })
+                  .where((n) => n != null)
+                  .cast<NotificationConfig>()
+                  .toList();
+              
+              // If no valid notifications, set to null
+              if (notifications.isEmpty) {
+                notifications = null;
+              }
+            } catch (e) {
+              // If parsing fails, leave notifications as null
+              notifications = null;
+            }
+          }
+
           return MicroHabit(
             id: const Uuid().v4(),
             action: data['action'],
@@ -240,6 +305,9 @@ REGLAS ESTRICTAS:
             estimatedMinutes:
                 data['estimatedMinutes'] ?? AiConfig.maxHabitMinutes,
             generatedAt: DateTime.now(),
+            scheduledTime: scheduledTime,
+            trigger: data['trigger'] as String?,
+            notifications: notifications,
           );
         } catch (e) {
           if (e is GeminiParseException) rethrow;
@@ -253,6 +321,12 @@ REGLAS ESTRICTAS:
       if (e is GeminiParseException) rethrow;
       throw GeminiParseException('Failed to parse response: $e', responseText);
     }
+  }
+
+  /// Validate time format (HH:mm in 24-hour format)
+  bool _isValidTimeFormat(String time) {
+    final regex = RegExp(r'^([0-1][0-9]|2[0-3]):([0-5][0-9])$');
+    return regex.hasMatch(time);
   }
 
   /// Enrich habits with full verse text from Bible database

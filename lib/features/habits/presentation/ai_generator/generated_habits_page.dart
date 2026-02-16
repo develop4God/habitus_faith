@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers/ai_providers.dart';
 import '../../domain/models/micro_habit.dart';
 import '../../domain/habit.dart';
+import '../../domain/models/habit_notification.dart';
 import '../habits_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -94,7 +95,7 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
       ),
     );
 
-    // Add habits to repository with inferred categories
+    // Add habits to repository with inferred categories and all available data
     for (final microHabit in selectedHabits) {
       final category =
           _habitCategories[microHabit.id] ?? HabitCategory.spiritual;
@@ -104,6 +105,17 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
             name: microHabit.action,
             category: category,
             emoji: emoji,
+            targetMinutes: microHabit.estimatedMinutes,
+            // Map scheduledTime to reminderTime for notifications
+            notificationSettings: microHabit.scheduledTime != null
+                ? HabitNotificationSettings(
+                    enabled: true,
+                    time: microHabit.scheduledTime!,
+                    customMessage: microHabit.notifications?.isNotEmpty == true
+                        ? microHabit.notifications!.first.body
+                        : null,
+                  )
+                : null,
           );
     }
 
