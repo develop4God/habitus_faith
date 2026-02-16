@@ -194,7 +194,7 @@ STRICT RULES:
 - Notification times should be 5-10 minutes before scheduledTime
 - Tone: practical, motivational, focused on user's goal
 
-Respond ONLY with valid JSON array (no markdown, no \`\`\`json):
+Respond ONLY with valid JSON array (no markdown, no ```json):
 [{...}, {...}, {...}]
 ''';
   }
@@ -285,7 +285,7 @@ Respond ONLY with valid JSON array (no markdown, no \`\`\`json):
                   .where((n) => n != null)
                   .cast<NotificationConfig>()
                   .toList();
-              
+
               // If no valid notifications, set to null
               if (notifications.isEmpty) {
                 notifications = null;
