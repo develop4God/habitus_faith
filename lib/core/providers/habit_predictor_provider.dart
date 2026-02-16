@@ -16,10 +16,30 @@ import '../services/time/time.dart';
 import 'clock_provider.dart';
 
 /// Provider for managing daily habit predictions and interventions
-/// Runs predictions daily at 6am via background task
+/// Runs predictions daily at configured hour via background task
 final habitPredictorProvider = Provider<HabitPredictorService>((ref) {
   final habitsRepository = ref.watch(jsonHabitsRepositoryProvider);
   final predictor = ref.watch(abandonmentPredictorProvider);
+  final clock = ref.watch(clockProvider);
+  final remoteConfig = ref.watch(remoteConfigServiceProvider);
+  final notificationService = ref.watch(notificationServiceProvider);
+
+  return HabitPredictorService(
+    habitsRepository: habitsRepository,
+    predictor: predictor,
+    clock: clock,
+    remoteConfigFuture: remoteConfig,
+    notificationService: notificationService,
+  );
+});
+
+/// Provider that ensures predictor is fully initialized before use
+/// Use this in background tasks where initialization must be guaranteed
+final habitPredictorInitializedProvider =
+    FutureProvider<HabitPredictorService>((ref) async {
+  final habitsRepository = ref.watch(jsonHabitsRepositoryProvider);
+  final predictor =
+      await ref.watch(abandonmentPredictorInitializedProvider.future);
   final clock = ref.watch(clockProvider);
   final remoteConfig = ref.watch(remoteConfigServiceProvider);
   final notificationService = ref.watch(notificationServiceProvider);

@@ -295,16 +295,20 @@ void main() {
         const logMessage =
             '[NotificationService] Token validation: found_locally=true, token_length=256';
 
-        // Parse log
-        final parts = logMessage.split(': ');
-        expect(parts.length, 2);
+        // Parse log - split on first ': ' occurrence
+        final colonIndex = logMessage.indexOf(': ');
+        expect(colonIndex, greaterThan(-1));
 
-        final service = parts[0].replaceAll('[', '').replaceAll(']', '');
-        expect(service, 'NotificationService');
+        final servicePart = logMessage.substring(0, colonIndex);
+        final detailsPart = logMessage.substring(colonIndex + 2);
 
-        final details = parts[1];
-        expect(details.contains('found_locally=true'), true);
-        expect(details.contains('token_length=256'), true);
+        // Extract service name from brackets
+        final service = servicePart.replaceAll('[', '').replaceAll(']', '');
+        expect(service, contains('NotificationService'));
+
+        // Verify details are present
+        expect(detailsPart.contains('found_locally=true'), true);
+        expect(detailsPart.contains('token_length=256'), true);
       });
     });
 

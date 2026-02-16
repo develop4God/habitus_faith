@@ -338,8 +338,9 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         children: [
           _buildPreviewCard(habitColor),
           const SizedBox(height: 24),
-          // Name Input
+          // Name Input (test key added)
           TextField(
+            key: const Key('add_habit_name_field'),
             controller: nameCtrl,
             autofocus: true,
             maxLength: 40,
@@ -588,6 +589,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     switch (stepKey) {
       case 'name':
         return TextField(
+          key: const Key('add_habit_name_field_discovery'),
           controller: nameCtrl,
           autofocus: true,
           maxLength: 40,
@@ -609,7 +611,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         );
       case 'category':
         return DropdownButtonFormField<HabitCategory>(
-          initialValue: selectedCategory,
+          value: selectedCategory,
           decoration: InputDecoration(
             labelText: '$stepLabel (${widget.l10n.optional})',
             border: const OutlineInputBorder(),

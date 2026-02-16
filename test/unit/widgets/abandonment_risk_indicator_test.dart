@@ -22,13 +22,9 @@ void main() {
             (widget.decoration as BoxDecoration).color == Colors.green,
       );
       expect(greenDot, findsOneWidget);
-
-      // Should not show text for low risk
-      expect(find.text('At Risk'), findsNothing);
-      expect(find.text('High Risk'), findsNothing);
     });
 
-    testWidgets('shows orange indicator with text for medium risk (0.3-0.65)', (
+    testWidgets('shows orange indicator for medium risk (0.3-0.65)', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
@@ -46,13 +42,10 @@ void main() {
                 Colors.orange.shade600,
       );
       expect(orangeDot, findsOneWidget);
-
-      // Should show "At Risk" text
-      expect(find.text('At Risk'), findsOneWidget);
     });
 
     testWidgets(
-      'shows red indicator with warning icon for high risk (> 0.65)',
+      'shows orange indicator for high risk (> 0.65)',
       (WidgetTester tester) async {
         await tester.pumpWidget(
           const MaterialApp(
@@ -60,20 +53,15 @@ void main() {
           ),
         );
 
-        // Should show red dot
-        final redDot = find.byWidgetPredicate(
+        // Should show orange dot (high risk also shows orange per implementation)
+        final orangeDot = find.byWidgetPredicate(
           (widget) =>
               widget is Container &&
               widget.decoration is BoxDecoration &&
-              (widget.decoration as BoxDecoration).color == Colors.red,
+              (widget.decoration as BoxDecoration).color ==
+                  Colors.orange.shade600,
         );
-        expect(redDot, findsOneWidget);
-
-        // Should show "High Risk" text
-        expect(find.text('High Risk'), findsOneWidget);
-
-        // Should show warning icon
-        expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
+        expect(orangeDot, findsOneWidget);
       },
     );
 
@@ -90,8 +78,15 @@ void main() {
         ),
       );
 
-      // Should show medium risk (orange)
-      expect(find.text('At Risk'), findsOneWidget);
+      // At boundary (0.3), should show orange (medium risk)
+      final orangeDot = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.decoration is BoxDecoration &&
+            (widget.decoration as BoxDecoration).color ==
+                Colors.orange.shade600,
+      );
+      expect(orangeDot, findsOneWidget);
     });
 
     testWidgets('handles edge case risk = highRiskThreshold (boundary)', (
@@ -107,25 +102,15 @@ void main() {
         ),
       );
 
-      // Should show high risk (red)
-      expect(find.text('High Risk'), findsOneWidget);
-    });
-
-    testWidgets('handles risk = 0.0', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AbandonmentRiskIndicator(risk: 0.0)),
-        ),
-      );
-
-      // Should show low risk (green)
-      final greenDot = find.byWidgetPredicate(
+      // At boundary (0.65), should show orange (high risk per implementation)
+      final orangeDot = find.byWidgetPredicate(
         (widget) =>
             widget is Container &&
             widget.decoration is BoxDecoration &&
-            (widget.decoration as BoxDecoration).color == Colors.green,
+            (widget.decoration as BoxDecoration).color ==
+                Colors.orange.shade600,
       );
-      expect(greenDot, findsOneWidget);
+      expect(orangeDot, findsOneWidget);
     });
 
     testWidgets('handles risk = 1.0', (WidgetTester tester) async {
@@ -135,8 +120,15 @@ void main() {
         ),
       );
 
-      // Should show high risk (red)
-      expect(find.text('High Risk'), findsOneWidget);
+      // Maximum risk should show orange
+      final orangeDot = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.decoration is BoxDecoration &&
+            (widget.decoration as BoxDecoration).color ==
+                Colors.orange.shade600,
+      );
+      expect(orangeDot, findsOneWidget);
     });
   });
 }

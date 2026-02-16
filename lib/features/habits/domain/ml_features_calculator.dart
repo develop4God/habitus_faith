@@ -51,6 +51,7 @@ class MLFeaturesCalculator {
   ///
   /// Example: if 7 days passed but only 4 completions exist, return 3 failures
   /// If habit was created less than N days ago, only count actual days elapsed
+  /// A brand new habit created today has 0 failures (hasn't had chance to fail yet)
   static int countRecentFailures(Habit habit, int days, {DateTime? now}) {
     final currentTime = now ?? DateTime.now();
     final today = DateTime(
@@ -59,21 +60,22 @@ class MLFeaturesCalculator {
       currentTime.day,
     );
 
-    // Calculate habit age in days (inclusive of today)
+    // Calculate habit age in days
     final habitCreated = DateTime(
       habit.createdAt.year,
       habit.createdAt.month,
       habit.createdAt.day,
     );
-    final habitAgeDays = today.difference(habitCreated).inDays + 1;
+    final habitAgeDays = today.difference(habitCreated).inDays;
+
+    // If habit was created today, it hasn't had a chance to fail yet
+    if (habitAgeDays <= 0) return 0;
 
     // Use actual days elapsed if habit is newer than requested window
+    // For a habit created 5 days ago, we check the last 5 days (not including creation day)
     final daysToCheck = habitAgeDays < days ? habitAgeDays : days;
 
-    // If habit was just created today or is brand new, expected completions is 1
-    if (daysToCheck <= 0) return 0;
-
-    // The window includes today and goes back (daysToCheck - 1) days
+    // The window goes back daysToCheck days from today (inclusive)
     final windowStart = today.subtract(Duration(days: daysToCheck - 1));
 
     // Count completions in the window [windowStart, today] inclusive
@@ -83,9 +85,9 @@ class MLFeaturesCalculator {
         completion.month,
         completion.day,
       );
-      return completionDate.isAtSameMomentAs(windowStart) ||
-          completionDate.isAtSameMomentAs(today) ||
-          (completionDate.isAfter(windowStart) &&
+      return (completionDate.isAtSameMomentAs(windowStart) ||
+              completionDate.isAfter(windowStart)) &&
+          (completionDate.isAtSameMomentAs(today) ||
               completionDate.isBefore(today));
     }).length;
 

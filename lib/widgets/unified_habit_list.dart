@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/presentation/habits_providers.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/app_localizations_en.dart';
 import 'unified_habit_card.dart';
 
 /// Unified habit list widget that combines:
@@ -34,7 +35,7 @@ class UnifiedHabitList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context) ?? AppLocalizationsEn();
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);

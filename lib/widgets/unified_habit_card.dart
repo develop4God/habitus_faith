@@ -9,6 +9,7 @@ import '../features/habits/presentation/habits_providers.dart';
 import '../features/habits/presentation/widgets/abandonment_risk_indicator.dart';
 import '../features/common/presentation/widgets/task_timer.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/app_localizations_en.dart';
 import '../core/utils/global_snackbar.dart';
 import 'notification_options_dialog.dart';
 import 'subtasks_section.dart';
@@ -236,7 +237,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context) ?? AppLocalizationsEn();
     final habit = widget.habit;
     final habitColor = HabitColors.getHabitColor(habit);
     final isCompleted = habit.completedToday;
@@ -271,154 +272,158 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
               ),
             ],
           ),
-          child: InkWell(
-            onTap: () async {
-              await HabitModalSheet.show(
-                context: context,
-                child: Builder(
-                  builder: (modalContext) =>
-                      _buildExpandedContent(modalContext, l10n, habitColor),
-                ),
-                maxHeight: 520,
-              );
-              if (!mounted) return;
-              setState(() {});
-            },
-            borderRadius: BorderRadius.circular(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: habitColor.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.habit.emoji ?? '✓',
-                            style: const TextStyle(fontSize: 24),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () async {
+                await HabitModalSheet.show(
+                  context: context,
+                  child: Builder(
+                    builder: (modalContext) =>
+                        _buildExpandedContent(modalContext, l10n, habitColor),
+                  ),
+                  maxHeight: 520,
+                );
+                if (!mounted) return;
+                setState(() {});
+              },
+              borderRadius: BorderRadius.circular(16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: habitColor.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.habit.emoji ?? '✓',
+                              style: const TextStyle(fontSize: 24),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    widget.habit.name,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: isCompleted
-                                          ? Colors.green.shade900
-                                          : Colors.grey.shade900,
-                                      decoration:
-                                          (isCompleted || isSkipped || isFailed)
-                                              ? TextDecoration.lineThrough
-                                              : null,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      widget.habit.name,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: isCompleted
+                                            ? Colors.green.shade900
+                                            : Colors.grey.shade900,
+                                        decoration: (isCompleted ||
+                                                isSkipped ||
+                                                isFailed)
+                                            ? TextDecoration.lineThrough
+                                            : null,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                if (isSkipped || isFailed) ...[
+                                  if (isSkipped || isFailed) ...[
+                                    const SizedBox(width: 4),
+                                    Flexible(
+                                      child: _buildStatusBadge(
+                                        isSkipped
+                                            ? l10n.skippedHabit
+                                            : l10n.failedHabit,
+                                        isSkipped ? Colors.orange : Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.local_fire_department,
+                                    size: 14,
+                                    color: widget.habit.currentStreak > 0
+                                        ? Colors.orange.shade600
+                                        : Colors.grey.shade400,
+                                  ),
                                   const SizedBox(width: 4),
-                                  Flexible(
-                                    child: _buildStatusBadge(
-                                      isSkipped
-                                          ? l10n.skippedHabit
-                                          : l10n.failedHabit,
-                                      isSkipped ? Colors.orange : Colors.red,
+                                  Text(
+                                    l10n.dayStreak(widget.habit.currentStreak),
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey.shade600,
                                     ),
                                   ),
-                                ],
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.local_fire_department,
-                                  size: 14,
-                                  color: widget.habit.currentStreak > 0
-                                      ? Colors.orange.shade600
-                                      : Colors.grey.shade400,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  l10n.dayStreak(widget.habit.currentStreak),
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                AbandonmentRiskIndicator(
-                                  risk: habit.abandonmentRisk,
-                                ),
-                                if (habit.subtasks.isNotEmpty) ...[
                                   const SizedBox(width: 8),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(
-                                        () => _isExpanded = !_isExpanded,
-                                      );
-                                    },
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: habitColor.withValues(
-                                          alpha: 0.15,
+                                  AbandonmentRiskIndicator(
+                                    risk: habit.abandonmentRisk,
+                                  ),
+                                  if (habit.subtasks.isNotEmpty) ...[
+                                    const SizedBox(width: 8),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(
+                                          () => _isExpanded = !_isExpanded,
+                                        );
+                                      },
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: habitColor.withValues(
+                                            alpha: 0.15,
+                                          ),
+                                          shape: BoxShape.circle,
                                         ),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      padding: const EdgeInsets.all(4),
-                                      child: Icon(
-                                        _isExpanded
-                                            ? Icons.expand_less
-                                            : Icons.expand_more,
-                                        size: 20,
-                                        color: habitColor,
+                                        padding: const EdgeInsets.all(4),
+                                        child: Icon(
+                                          _isExpanded
+                                              ? Icons.expand_less
+                                              : Icons.expand_more,
+                                          size: 20,
+                                          color: habitColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ],
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      _buildActions(
-                        context,
-                        ref,
-                        l10n,
-                        habit,
-                        isCompleted,
-                        habitColor,
-                      ),
-                    ],
-                  ),
-                  if (habit.subtasks.isNotEmpty) ...[
-                    const SizedBox(height: 12),
-                    _buildSubtasksProgress(habit, habitColor),
-                    if (_isExpanded) ...[
+                        _buildActions(
+                          context,
+                          ref,
+                          l10n,
+                          habit,
+                          isCompleted,
+                          habitColor,
+                        ),
+                      ],
+                    ),
+                    if (habit.subtasks.isNotEmpty) ...[
                       const SizedBox(height: 12),
-                      const Divider(height: 1),
-                      const SizedBox(height: 8),
-                      _buildInlineSubtasks(habit, habitColor),
+                      _buildSubtasksProgress(habit, habitColor),
+                      if (_isExpanded) ...[
+                        const SizedBox(height: 12),
+                        const Divider(height: 1),
+                        const SizedBox(height: 8),
+                        _buildInlineSubtasks(habit, habitColor),
+                      ],
                     ],
                   ],
-                ],
+                ),
               ),
             ),
           ),

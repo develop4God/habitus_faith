@@ -10,8 +10,7 @@ import '../features/pets/presentation/pets_provider.dart' as new_pets;
 import '../features/pets/presentation/pages/pet_selection_page.dart';
 
 import 'settings_page.dart';
-import 'bible_reader_page.dart';
-import 'devotional_discovery_page.dart';
+import 'spiritual_hub_page.dart';
 import '../features/statistics/statistics_page.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/devotional_providers.dart';
@@ -731,8 +730,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       const HabitsPage(),
       const GoalsPage(),
       const NotesPage(),
-      const BibleReaderPage(),
-      const DevotionalDiscoveryPage(),
+      const SpiritualHubPage(),
       const StatisticsPage(),
       const SettingsPage(),
     ];
@@ -761,10 +759,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.auto_stories_outlined),
             label: l10n.readBible,
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.local_library_outlined),
-            label: 'Devotionals',
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.bar_chart),

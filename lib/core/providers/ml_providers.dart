@@ -5,17 +5,32 @@ import 'clock_provider.dart';
 
 /// Provider for AbandonmentPredictor singleton
 /// Automatically initializes on first access and disposes when ref is invalidated
+///
+/// NOTE: This provider returns the predictor immediately, but initialization happens async.
+/// Use abandonmentPredictorInitializedProvider if you need to ensure initialization is complete.
 final abandonmentPredictorProvider = Provider<AbandonmentPredictor>((ref) {
   final clock = ref.watch(clockProvider);
   final predictor = AbandonmentPredictor(clock: clock);
 
-  // Initialize asynchronously
+  // Initialize asynchronously (non-blocking for app startup)
   predictor.initialize();
 
   // Dispose when provider is disposed
   ref.onDispose(() {
     predictor.dispose();
   });
+
+  return predictor;
+});
+
+/// Provider that ensures AbandonmentPredictor is fully initialized before returning
+/// Use this in background tasks or when you need guaranteed initialization
+final abandonmentPredictorInitializedProvider =
+    FutureProvider<AbandonmentPredictor>((ref) async {
+  final predictor = ref.watch(abandonmentPredictorProvider);
+
+  // Wait for initialization to complete
+  await predictor.initialize();
 
   return predictor;
 });
