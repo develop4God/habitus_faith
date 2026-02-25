@@ -668,6 +668,33 @@ class JsonHabitsRepository implements HabitsRepository {
   }
 
   @override
+  Future<Result<Habit, HabitFailure>> resetHabit(String habitId) async {
+    debugPrint('resetHabit: inicio para habitId=$habitId');
+    try {
+      final habits = _loadHabits();
+      final index = habits.indexWhere((h) => h.id == habitId);
+      if (index == -1) {
+        debugPrint('resetHabit: hábito no encontrado "$habitId"');
+        return Failure(HabitFailure.notFound('Habit not found: $habitId'));
+      }
+
+      final habit = habits[index];
+      final updatedHabit = habit.resetToday(clock: _clock);
+
+      habits[index] = updatedHabit;
+      await _saveHabits(habits);
+      await _updateStatistics();
+      debugPrint(
+          'resetHabit: hábito "$habitId" restablecido a pendiente para hoy');
+      return Success(updatedHabit);
+    } catch (e) {
+      debugPrint('resetHabit: error: $e');
+      return Failure(
+          HabitFailure.persistence('Failed to reset habit: $e'));
+    }
+  }
+
+  @override
   Future<Result<Habit, HabitFailure>> failHabit(String habitId) async {
     debugPrint('failHabit: inicio para habitId=$habitId');
     try {

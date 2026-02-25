@@ -279,6 +279,35 @@ class FirestoreHabitsRepository implements HabitsRepository {
   }
 
   @override
+  Future<Result<Habit, HabitFailure>> resetHabit(String habitId) async {
+    try {
+      if (userId == null) {
+        return const Failure(UserNotAuthenticatedFailure());
+      }
+
+      final doc = await firestore.collection('habits').doc(habitId).get();
+
+      if (!doc.exists) {
+        return Failure(HabitNotFoundFailure(habitId));
+      }
+
+      final habit = HabitModel.fromFirestore(doc);
+      final updatedHabit = habit.resetToday();
+
+      await firestore
+          .collection('habits')
+          .doc(habitId)
+          .update(HabitModel.toFirestore(updatedHabit));
+
+      return Success(updatedHabit);
+    } on FirebaseException catch (e) {
+      return Failure(NetworkFailure(e.message ?? 'Unknown Firebase error'));
+    } catch (e) {
+      return Failure(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Result<Habit, HabitFailure>> failHabit(String habitId) async {
     try {
       if (userId == null) {

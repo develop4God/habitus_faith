@@ -166,6 +166,8 @@ class UnifiedHabitList extends ConsumerWidget {
                 },
               );
             },
+            // Performance: cache items far off-screen so drag-to-top is smooth
+            cacheExtent: 2000,
             onReorderStart: (_) => HapticFeedback.mediumImpact(),
             onReorder: (oldIndex, newIndex) async {
               if (newIndex > oldIndex) {

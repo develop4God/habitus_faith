@@ -226,6 +226,25 @@ class HabitsNotifier extends AsyncNotifier<void> {
     );
   }
 
+  Future<void> resetHabit(String habitId) async {
+    debugPrint('HabitsNotifier.resetHabit: llamado para habitId=$habitId');
+    state = const AsyncLoading();
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.resetHabit(habitId);
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.resetHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (habit) {
+        debugPrint(
+          'HabitsNotifier.resetHabit: éxito, habit.dailyStatus=${habit.dailyStatus}',
+        );
+        state = const AsyncData(null);
+      },
+    );
+  }
+
   Future<void> failHabit(String habitId) async {
     debugPrint('HabitsNotifier.failHabit: llamado para habitId=$habitId');
     state = const AsyncLoading();
@@ -249,12 +268,15 @@ class HabitsNotifier extends AsyncNotifier<void> {
     debugPrint(
       'HabitsNotifier.reorderHabits: reordering ${habitIds.length} habits',
     );
-    state = const AsyncLoading();
+    // Do NOT set AsyncLoading here — it would rebuild the list widget and
+    // corrupt the visual order the user just set.  The stream will emit
+    // updated habits after save, which is enough to keep state in sync.
     final repository = ref.read(habitsRepositoryProvider);
     final result = await repository.reorderHabits(habitIds);
     result.fold(
       (failure) {
         debugPrint('HabitsNotifier.reorderHabits: error: $failure');
+        // Only update state on failure so the UI can react
         state = AsyncError(failure, StackTrace.current);
       },
       (_) {
