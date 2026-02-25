@@ -27,7 +27,7 @@ void main() {
     /// Test 1.1: Description with all fields
     test('saves description with purpose, trigger, and verse', () async {
       // Arrange
-      final microHabit = MicroHabit(
+      const microHabit = MicroHabit(
         id: 'test-1',
         action: 'Morning prayer 10 min',
         purpose: 'Connect with God before work',
@@ -64,7 +64,7 @@ void main() {
     /// Test 1.2: Description with missing optional fields
     test('builds description when trigger and verse are null', () async {
       // Arrange
-      final microHabit = MicroHabit(
+      const microHabit = MicroHabit(
         id: 'test-2',
         action: 'Prayer',
         purpose: 'Daily connection',

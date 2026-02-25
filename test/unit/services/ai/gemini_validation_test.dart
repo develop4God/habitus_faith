@@ -26,7 +26,7 @@ void main() {
     /// Test 3.1: Detects vague actions
     test('validates action contains numbers', () {
       // Arrange
-      final habit = MicroHabit(
+      const habit = MicroHabit(
         id: 'test-1',
         action: 'Pray more', // No number - vague
         verse: 'Psalm 5:3',
@@ -49,7 +49,7 @@ void main() {
     /// Test 3.2: Validates time format
     test('flags invalid scheduled time format', () {
       // Arrange
-      final habit = MicroHabit(
+      const habit = MicroHabit(
         id: 'test-2',
         action: 'Prayer 10 min',
         verse: 'Psalm 5:3',
@@ -73,7 +73,7 @@ void main() {
     /// Test 3.3: Passes valid habits
     test('accepts well-formed habits without warnings', () {
       // Arrange
-      final habit = MicroHabit(
+      const habit = MicroHabit(
         id: 'test-3',
         action: 'Morning prayer 10 minutes',
         verse: 'Psalm 5:3',
@@ -120,8 +120,7 @@ void _validateHabitForTest(MicroHabit habit, int index) {
   }
 
   // Validate estimated minutes
-  if (habit.estimatedMinutes != null &&
-      (habit.estimatedMinutes! < 1 || habit.estimatedMinutes! > 30)) {
+  if ((habit.estimatedMinutes < 1 || habit.estimatedMinutes > 30)) {
     errors.add(
         'Estimated minutes out of range (${habit.estimatedMinutes} not in 1-30)');
   }

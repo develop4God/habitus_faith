@@ -1,11 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:habitus_faith/core/services/ai/gemini_service.dart';
 import 'package:habitus_faith/core/services/ai/rate_limit_service.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
-import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
 import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart';
-import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../scripts/diagnose_gemini.dart';
 import '../../utils/ml_predictor_test_utils.dart';
 
 void main() {
@@ -24,7 +22,7 @@ void main() {
       final rateLimitService = RateLimitService(prefs);
       expect(rateLimitService, isNotNull);
       
-      final remainingRequests = await rateLimitService.getRemainingRequests();
+      final remainingRequests = rateLimitService.getRemainingRequests();
       expect(remainingRequests, equals(10), 
         reason: 'Should start with 10 requests per month');
     });
@@ -175,7 +173,7 @@ void main() {
       final rateLimitService = RateLimitService(prefs);
       
       // Check initial state
-      final canMakeRequest1 = await rateLimitService.canMakeRequest();
+      final canMakeRequest1 = rateLimitService.canMakeRequest();
       expect(canMakeRequest1, isTrue, 
         reason: 'Should allow first request');
       
@@ -183,7 +181,7 @@ void main() {
       expect(() => rateLimitService.recordRequest(), returnsNormally);
       
       // Check remaining
-      final remaining = await rateLimitService.getRemainingRequests();
+      final remaining = rateLimitService.getRemainingRequests();
       expect(remaining, lessThan(10), 
         reason: 'Should have fewer than 10 requests after recording one');
     });
@@ -204,7 +202,7 @@ void main() {
       final needsIntervention = MLPredictorTestUtils.requiresIntervention(risk);
       
       // Document the threshold behavior
-      print('ML Integration Test: Risk=$risk, Intervention=$needsIntervention');
+      debugPrint('ML Integration Test: Risk=$risk, Intervention=$needsIntervention');
       
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));

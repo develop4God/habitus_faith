@@ -28,13 +28,13 @@ void main() {
     /// Test 5.1: Saves notification body as custom message
     test('persists custom message from notification', () async {
       // Arrange
-      final microHabit = MicroHabit(
+      const microHabit = MicroHabit(
         id: 'test-1',
         action: 'Prayer 10 min',
         purpose: 'Connect with God',
         verse: 'Psalm 5:3',
         scheduledTime: '07:00',
-        notifications: const [
+        notifications: [
           NotificationConfig(
             time: '06:55',
             title: 'Prayer time',
@@ -65,7 +65,7 @@ void main() {
     /// Test 5.2: Handles missing notifications gracefully
     test('creates habit when notifications array is null', () async {
       // Arrange
-      final microHabit = MicroHabit(
+      const microHabit = MicroHabit(
         id: 'test-2',
         action: 'Prayer',
         purpose: 'Daily prayer',
@@ -96,13 +96,13 @@ void main() {
     /// Test 5.3: Handles empty notifications array
     test('creates habit when notifications array is empty', () async {
       // Arrange
-      final microHabit = MicroHabit(
+      const microHabit = MicroHabit(
         id: 'test-3',
         action: 'Prayer',
         purpose: 'Daily prayer',
         verse: 'Psalm 5:3',
         scheduledTime: '07:00',
-        notifications: const [], // Empty list
+        notifications: [], // Empty list
       );
 
       // Act
