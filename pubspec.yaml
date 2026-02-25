@@ -59,7 +59,7 @@ dev_dependencies:
 
     sdk: flutter
   flutter_lints: ^4.0.0
-  riverpod_generator: ^2.4.3
+  riverpod_generator: ^2.4.0
   build_runner: ^2.4.13
   mocktail: ^1.0.4
   fake_cloud_firestore: ^3.0.3
@@ -67,7 +67,7 @@ dev_dependencies:
   coverage: ^1.9.2
   freezed: ^2.4.7
   json_serializable: ^6.7.1
-  envied_generator: ^0.5.0
+  envied_generator: ^1.1.1
   flutter_launcher_icons: ^0.13.1
 
 
