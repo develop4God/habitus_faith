@@ -81,7 +81,8 @@ void main() {
       expect(habit.notifications?.first.body, 'Time to pray');
     });
 
-    test('should handle MicroHabit with null optional fields (backward compatibility)',
+    test(
+        'should handle MicroHabit with null optional fields (backward compatibility)',
         () {
       // Arrange - Simulates old Gemini response format
       final habitData = {

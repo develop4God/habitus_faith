@@ -82,7 +82,8 @@ void main() {
 
       // Assert
       expect(habit.name, 'Old Habit');
-      expect(habit.description, isNull); // Should handle missing field gracefully
+      expect(
+          habit.description, isNull); // Should handle missing field gracefully
       expect(habit.category.name, 'spiritual');
     });
   });

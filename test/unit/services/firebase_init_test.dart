@@ -20,7 +20,7 @@ void main() {
       // Firebase should handle being initialized multiple times
       // without throwing errors (idempotent operation)
       final appCount = Firebase.apps.length;
-      
+
       // Multiple init calls should not crash
       // In production, Firebase.initializeApp() would be called
       // This test verifies the pattern is safe
@@ -56,7 +56,7 @@ void main() {
     test('Firebase handles network unavailable at startup', () async {
       // Firebase should work offline initially
       // This is critical for offline-first architecture
-      
+
       // Firestore has offline persistence enabled by default
       // This test validates the pattern
       expect(true, isTrue); // Network independence verified
@@ -73,7 +73,7 @@ void main() {
     test('Firestore offline persistence enabled by default', () {
       // Firestore in Flutter has offline persistence by default
       // This test documents the expected behavior
-      
+
       // App should work without network
       expect(true, isTrue); // Offline-first architecture confirmed
     });
@@ -81,7 +81,7 @@ void main() {
     test('Firestore offline queries work correctly', () async {
       // Queries should work even when offline
       // returning cached data
-      
+
       // This is a key requirement for habit tracking app
       expect(true, isTrue); // Offline queries supported
     });
@@ -91,7 +91,7 @@ void main() {
     test('Firebase Messaging initializes correctly', () async {
       // FCM should initialize without errors
       // This is required for notifications
-      
+
       // In production, FirebaseMessaging.instance is used
       expect(true, isTrue); // FCM initialization pattern valid
     });
@@ -99,7 +99,7 @@ void main() {
     test('Firebase Messaging handles permission denied', () async {
       // If user denies notification permission,
       // app should continue working
-      
+
       // This is critical for user experience
       expect(true, isTrue); // Graceful degradation confirmed
     });
