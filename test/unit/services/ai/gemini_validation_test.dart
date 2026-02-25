@@ -90,7 +90,8 @@ void main() {
       });
 
       // Assert
-      expect(warnings, isEmpty, reason: 'Well-formed habit should have no warnings');
+      expect(warnings, isEmpty,
+          reason: 'Well-formed habit should have no warnings');
     });
   });
 }
@@ -126,7 +127,8 @@ void _validateHabitForTest(MicroHabit habit, int index) {
   }
 
   // Validate scheduledTime if present
-  if (habit.scheduledTime != null && !_isValidTimeFormat(habit.scheduledTime!)) {
+  if (habit.scheduledTime != null &&
+      !_isValidTimeFormat(habit.scheduledTime!)) {
     errors.add('Scheduled time format invalid (expected HH:mm)');
   }
 
