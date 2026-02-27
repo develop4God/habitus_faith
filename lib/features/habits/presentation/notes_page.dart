@@ -324,7 +324,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final notesAsync = ref.watch(generalNotesStreamProvider);
-    final today = DateFormat('EEEE, d MMMM', Localizations.localeOf(context).languageCode).format(DateTime.now());
+    final today =
+        DateFormat('EEEE, d MMMM', Localizations.localeOf(context).languageCode)
+            .format(DateTime.now());
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -646,7 +648,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   // ── Note cards ────────────────────────────────────────────────────────────
 
   Widget _buildNoteCard(GeneralNote note) {
-    final dateStr = DateFormat('d MMM, HH:mm', Localizations.localeOf(context).languageCode).format(note.createdAt);
+    final dateStr =
+        DateFormat('d MMM, HH:mm', Localizations.localeOf(context).languageCode)
+            .format(note.createdAt);
     final lines = _parseNote(note.content);
 
     return _NoteCard(
@@ -673,8 +677,8 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               size: 64, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           Text(l10n.noSavedNotes,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey)),
           Text(l10n.thoughtsAppearHere,
               style: const TextStyle(color: Colors.grey, fontSize: 13)),
         ],

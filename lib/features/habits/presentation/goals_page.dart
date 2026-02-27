@@ -438,7 +438,8 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             child: Text(
               l10n.defineYourGoals,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.grey, fontSize: 15, height: 1.5),
+              style: const TextStyle(
+                  color: Colors.grey, fontSize: 15, height: 1.5),
             ),
           ),
           const SizedBox(height: 32),
@@ -473,176 +474,182 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
         builder: (context, setDialogState) {
           final l10n = AppLocalizations.of(context)!;
           return Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: 32,
-            left: 24,
-            right: 24,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.newGoal,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: titleCtrl,
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: l10n.whatToAchieve,
-                  hintText: l10n.exampleGoal,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              top: 32,
+              left: 24,
+              right: 24,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.newGoal,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                l10n.deadline,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: [
-                  GoalType.week,
-                  GoalType.month,
-                  GoalType.year,
-                  GoalType.custom,
-                ].map((type) {
-                  final isSelected = selectedType == type;
-                  return ChoiceChip(
-                    label: Text(_goalTypeLabel(l10n, type)),
-                    selected: isSelected,
-                    onSelected: (val) {
-                      setDialogState(() => selectedType = type);
-                      if (type == GoalType.custom) {
-                        _selectCustomDeadline(context, customDeadline, (date) {
-                          setDialogState(() => customDeadline = date);
-                        });
-                      }
-                    },
-                    selectedColor: Colors.blue.shade700,
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (selectedType == GoalType.custom &&
-                  customDeadline != null) ...[
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        color: Colors.blue.shade700,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.deadlineDate('${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
-                        style: TextStyle(
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 18),
-                        onPressed: () {
-                          _selectCustomDeadline(context, customDeadline, (
-                            date,
-                          ) {
-                            setDialogState(() => customDeadline = date);
-                          });
-                        },
-                        color: Colors.blue.shade700,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (titleCtrl.text.isNotEmpty) {
-                      // Validate custom deadline
-                      if (selectedType == GoalType.custom &&
-                          customDeadline == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              l10n.selectDeadline,
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-
-                      DateTime deadline;
-                      if (selectedType == GoalType.custom) {
-                        deadline = customDeadline!;
-                      } else if (selectedType == GoalType.week) {
-                        deadline = DateTime.now().add(const Duration(days: 7));
-                      } else if (selectedType == GoalType.month) {
-                        deadline = DateTime.now().add(const Duration(days: 30));
-                      } else if (selectedType == GoalType.year) {
-                        deadline =
-                            DateTime.now().add(const Duration(days: 365));
-                      } else {
-                        deadline = DateTime.now().add(
-                          const Duration(days: 365),
-                        );
-                      }
-
-                      final newGoal = Goal(
-                        id: const Uuid().v4(),
-                        userId: 'local_user',
-                        title: titleCtrl.text,
-                        description: '',
-                        type: selectedType,
-                        deadline: deadline,
-                        createdAt: DateTime.now(),
-                      );
-                      ref.read(jsonGoalsRepositoryProvider).addGoal(newGoal);
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade700,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                const SizedBox(height: 24),
+                TextField(
+                  controller: titleCtrl,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.whatToAchieve,
+                    hintText: l10n.exampleGoal,
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: Text(
-                    l10n.saveGoal,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.deadline,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    GoalType.week,
+                    GoalType.month,
+                    GoalType.year,
+                    GoalType.custom,
+                  ].map((type) {
+                    final isSelected = selectedType == type;
+                    return ChoiceChip(
+                      label: Text(_goalTypeLabel(l10n, type)),
+                      selected: isSelected,
+                      onSelected: (val) {
+                        setDialogState(() => selectedType = type);
+                        if (type == GoalType.custom) {
+                          _selectCustomDeadline(context, customDeadline,
+                              (date) {
+                            setDialogState(() => customDeadline = date);
+                          });
+                        }
+                      },
+                      selectedColor: Colors.blue.shade700,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (selectedType == GoalType.custom &&
+                    customDeadline != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: Colors.blue.shade700,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.deadlineDate(
+                              '${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
+                          style: TextStyle(
+                            color: Colors.blue.shade700,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.edit, size: 18),
+                          onPressed: () {
+                            _selectCustomDeadline(context, customDeadline, (
+                              date,
+                            ) {
+                              setDialogState(() => customDeadline = date);
+                            });
+                          },
+                          color: Colors.blue.shade700,
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (titleCtrl.text.isNotEmpty) {
+                        // Validate custom deadline
+                        if (selectedType == GoalType.custom &&
+                            customDeadline == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                l10n.selectDeadline,
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        DateTime deadline;
+                        if (selectedType == GoalType.custom) {
+                          deadline = customDeadline!;
+                        } else if (selectedType == GoalType.week) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 7));
+                        } else if (selectedType == GoalType.month) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 30));
+                        } else if (selectedType == GoalType.year) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 365));
+                        } else {
+                          deadline = DateTime.now().add(
+                            const Duration(days: 365),
+                          );
+                        }
+
+                        final newGoal = Goal(
+                          id: const Uuid().v4(),
+                          userId: 'local_user',
+                          title: titleCtrl.text,
+                          description: '',
+                          type: selectedType,
+                          deadline: deadline,
+                          createdAt: DateTime.now(),
+                        );
+                        ref.read(jsonGoalsRepositoryProvider).addGoal(newGoal);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.saveGoal,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-            ],
-          ),
+                const SizedBox(height: 32),
+              ],
+            ),
           );
         },
       ),
@@ -663,174 +670,180 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
         builder: (context, setDialogState) {
           final l10n = AppLocalizations.of(context)!;
           return Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: 32,
-            left: 24,
-            right: 24,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.editGoal,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: titleCtrl,
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: l10n.whatToAchieve,
-                  hintText: l10n.exampleGoal,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              top: 32,
+              left: 24,
+              right: 24,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.editGoal,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                l10n.deadline,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: [
-                  GoalType.week,
-                  GoalType.month,
-                  GoalType.year,
-                  GoalType.custom,
-                ].map((type) {
-                  final isSelected = selectedType == type;
-                  return ChoiceChip(
-                    label: Text(_goalTypeLabel(l10n, type)),
-                    selected: isSelected,
-                    onSelected: (val) {
-                      setDialogState(() => selectedType = type);
-                      if (type == GoalType.custom) {
-                        _selectCustomDeadline(context, customDeadline, (date) {
-                          setDialogState(() => customDeadline = date);
-                        });
-                      }
-                    },
-                    selectedColor: Colors.blue.shade700,
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (selectedType == GoalType.custom &&
-                  customDeadline != null) ...[
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        color: Colors.blue.shade700,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.deadlineDate('${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
-                        style: TextStyle(
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 18),
-                        onPressed: () {
-                          _selectCustomDeadline(context, customDeadline, (
-                            date,
-                          ) {
-                            setDialogState(() => customDeadline = date);
-                          });
-                        },
-                        color: Colors.blue.shade700,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (titleCtrl.text.isNotEmpty) {
-                      // Validate custom deadline
-                      if (selectedType == GoalType.custom &&
-                          customDeadline == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              l10n.selectDeadline,
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-
-                      DateTime deadline;
-                      if (selectedType == GoalType.custom) {
-                        deadline = customDeadline!;
-                      } else if (selectedType == GoalType.week) {
-                        deadline = DateTime.now().add(const Duration(days: 7));
-                      } else if (selectedType == GoalType.month) {
-                        deadline = DateTime.now().add(const Duration(days: 30));
-                      } else if (selectedType == GoalType.year) {
-                        deadline =
-                            DateTime.now().add(const Duration(days: 365));
-                      } else {
-                        deadline = DateTime.now().add(
-                          const Duration(days: 365),
-                        );
-                      }
-
-                      final updatedGoal = goal.copyWith(
-                        title: titleCtrl.text,
-                        type: selectedType,
-                        deadline: deadline,
-                      );
-                      ref
-                          .read(jsonGoalsRepositoryProvider)
-                          .updateGoal(updatedGoal);
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade700,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                const SizedBox(height: 24),
+                TextField(
+                  controller: titleCtrl,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.whatToAchieve,
+                    hintText: l10n.exampleGoal,
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: Text(
-                    l10n.updateGoal,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.deadline,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    GoalType.week,
+                    GoalType.month,
+                    GoalType.year,
+                    GoalType.custom,
+                  ].map((type) {
+                    final isSelected = selectedType == type;
+                    return ChoiceChip(
+                      label: Text(_goalTypeLabel(l10n, type)),
+                      selected: isSelected,
+                      onSelected: (val) {
+                        setDialogState(() => selectedType = type);
+                        if (type == GoalType.custom) {
+                          _selectCustomDeadline(context, customDeadline,
+                              (date) {
+                            setDialogState(() => customDeadline = date);
+                          });
+                        }
+                      },
+                      selectedColor: Colors.blue.shade700,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (selectedType == GoalType.custom &&
+                    customDeadline != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: Colors.blue.shade700,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.deadlineDate(
+                              '${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
+                          style: TextStyle(
+                            color: Colors.blue.shade700,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.edit, size: 18),
+                          onPressed: () {
+                            _selectCustomDeadline(context, customDeadline, (
+                              date,
+                            ) {
+                              setDialogState(() => customDeadline = date);
+                            });
+                          },
+                          color: Colors.blue.shade700,
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (titleCtrl.text.isNotEmpty) {
+                        // Validate custom deadline
+                        if (selectedType == GoalType.custom &&
+                            customDeadline == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                l10n.selectDeadline,
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        DateTime deadline;
+                        if (selectedType == GoalType.custom) {
+                          deadline = customDeadline!;
+                        } else if (selectedType == GoalType.week) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 7));
+                        } else if (selectedType == GoalType.month) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 30));
+                        } else if (selectedType == GoalType.year) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 365));
+                        } else {
+                          deadline = DateTime.now().add(
+                            const Duration(days: 365),
+                          );
+                        }
+
+                        final updatedGoal = goal.copyWith(
+                          title: titleCtrl.text,
+                          type: selectedType,
+                          deadline: deadline,
+                        );
+                        ref
+                            .read(jsonGoalsRepositoryProvider)
+                            .updateGoal(updatedGoal);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.updateGoal,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-            ],
-          ),
+                const SizedBox(height: 32),
+              ],
+            ),
           );
         },
       ),
