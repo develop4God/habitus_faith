@@ -40,6 +40,7 @@ abstract class HabitsRepository {
   /// Create a new habit
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
+    String? description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
@@ -67,6 +68,7 @@ abstract class HabitsRepository {
   Future<Result<Habit, HabitFailure>> updateHabit({
     required String habitId,
     String? name,
+    String? description,
     HabitCategory? category,
     String? emoji,
     int? colorValue,
@@ -78,6 +80,9 @@ abstract class HabitsRepository {
 
   /// Uncheck a habit (reset today's completion)
   Future<Result<Habit, HabitFailure>> uncheckHabit(String habitId);
+
+  /// Reset a habit back to pending (removes skip / fail status for today)
+  Future<Result<Habit, HabitFailure>> resetHabit(String habitId);
 
   /// Skip/postpone a habit for today (doesn't affect statistics)
   Future<Result<Habit, HabitFailure>> skipHabit(String habitId);

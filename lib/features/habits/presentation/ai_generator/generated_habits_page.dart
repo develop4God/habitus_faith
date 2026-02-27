@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers/ai_providers.dart';
 import '../../domain/models/micro_habit.dart';
 import '../../domain/habit.dart';
+import '../../domain/models/habit_notification.dart';
 import '../habits_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -94,16 +95,34 @@ class _GeneratedHabitsPageState extends ConsumerState<GeneratedHabitsPage> {
       ),
     );
 
-    // Add habits to repository with inferred categories
+    // Add habits to repository with inferred categories and all available data
     for (final microHabit in selectedHabits) {
       final category =
           _habitCategories[microHabit.id] ?? HabitCategory.spiritual;
       final emoji = _getCategoryEmoji(category);
 
+      // Build comprehensive description from MicroHabit data
+      final description = [
+        microHabit.purpose,
+        if (microHabit.trigger != null) '⏰ ${microHabit.trigger}',
+        if (microHabit.verseText != null)
+          '📖 ${microHabit.verse}\n"${microHabit.verseText}"',
+      ].join('\n\n');
+
       await ref.read(habitsRepositoryProvider).createHabit(
             name: microHabit.action,
+            description: description,
             category: category,
             emoji: emoji,
+            targetMinutes: microHabit.estimatedMinutes,
+            // Map scheduledTime to notification settings with custom message
+            notificationSettings: microHabit.scheduledTime != null
+                ? HabitNotificationSettings(
+                    timing: NotificationTiming.atEventTime,
+                    eventTime: microHabit.scheduledTime,
+                    customMessage: microHabit.notifications?.first.body,
+                  )
+                : null,
           );
     }
 
@@ -524,7 +543,7 @@ class _MicroHabitCardState extends State<_MicroHabitCard> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: DropdownButtonFormField<HabitCategory>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         decoration: InputDecoration(
                           labelText: l10n.category,
                           border: OutlineInputBorder(

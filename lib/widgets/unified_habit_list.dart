@@ -1,4 +1,6 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/habits/domain/habit.dart';
@@ -7,12 +9,23 @@ import '../l10n/app_localizations.dart';
 import '../l10n/app_localizations_en.dart';
 import 'unified_habit_card.dart';
 
-/// Unified habit list widget that combines:
-/// - Visual design from habits_page (colored border)
-/// - Reorderable items with drag-and-drop
-/// - Dedicated subtask expansion button
-/// - Historical view support
-class UnifiedHabitList extends ConsumerWidget {
+// ─────────────────────────────────────────────────────────────────────────────
+// Auto-scroll engine constants
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// How many logical pixels from the edge the auto-scroll zone starts.
+/// Larger zone makes it easier to trigger auto-scroll when dragging.
+const double _kEdgeThreshold = 180.0;
+
+/// Maximum scroll speed in pixels per second (reached at the very edge).
+const double _kMaxScrollSpeed = 900.0;
+
+/// Minimum scroll speed once inside the edge zone (prevents sluggishness).
+const double _kMinScrollSpeed = 120.0;
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+class UnifiedHabitList extends ConsumerStatefulWidget {
   final Future<void> Function(String habitId) onComplete;
   final Future<void> Function(String habitId) onUncheck;
   final Future<void> Function(String habitId) onDelete;
@@ -33,228 +46,446 @@ class UnifiedHabitList extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UnifiedHabitList> createState() => _UnifiedHabitListState();
+}
+
+/// Uses [SingleTickerProviderStateMixin] so the scroll ticker is driven by
+/// Flutter's vsync — frame-synchronized instead of a raw [Timer].
+class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
+    with SingleTickerProviderStateMixin {
+  // ── scroll infrastructure ────────────────────────────────────────────────
+  final ScrollController _scrollCtrl = ScrollController();
+
+  // ── vsync ticker for auto-scroll ─────────────────────────────────────────
+  Ticker? _ticker;
+  Duration _lastTickTime = Duration.zero;
+
+  // ── drag tracking ────────────────────────────────────────────────────────
+  bool _isDragging = false;
+  double _pointerGlobalY = 0;
+
+  // ── edge indicator (+ = top, - = bottom, 0 = none) ───────────────────────
+  double _edgeFraction = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker(_onTick);
+  }
+
+  @override
+  void dispose() {
+    _ticker?.dispose();
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  // ── ticker callback (called every frame while ticker is active) ──────────
+
+  void _onTick(Duration elapsed) {
+    if (!_isDragging) {
+      _stopTicker();
+      return;
+    }
+
+    if (!_scrollCtrl.hasClients) return;
+
+    // Measure the list widget's screen position
+    final RenderBox? box = context.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+
+    final Offset origin = box.localToGlobal(Offset.zero);
+    final double listTop = origin.dy;
+    final double listBottom = listTop + box.size.height;
+    final double py = _pointerGlobalY;
+
+    double fraction = 0.0;
+    double direction = 0.0; // -1 = up, +1 = down
+
+    if (py < listTop + _kEdgeThreshold) {
+      // Top edge zone
+      fraction = 1.0 - math.max(0, py - listTop) / _kEdgeThreshold;
+      direction = -1.0;
+    } else if (py > listBottom - _kEdgeThreshold) {
+      // Bottom edge zone
+      fraction = 1.0 - math.max(0, listBottom - py) / _kEdgeThreshold;
+      direction = 1.0;
+    }
+
+    fraction = fraction.clamp(0.0, 1.0);
+
+    // Update the visual indicator (only setState when value changes significantly)
+    final double newEdgeFraction = direction < 0 ? fraction : -fraction;
+    if ((newEdgeFraction - _edgeFraction).abs() > 0.02) {
+      if (mounted) setState(() => _edgeFraction = newEdgeFraction);
+    }
+
+    if (fraction <= 0) return; // not in edge zone, no scroll needed
+
+    // Compute pixels to scroll this frame (speed × Δt in seconds)
+    final double dt = _lastTickTime == Duration.zero
+        ? (1 / 60)
+        : (elapsed - _lastTickTime).inMicroseconds / 1e6;
+    _lastTickTime = elapsed;
+
+    // Apply graduated speed with a minimum floor for instant response
+    final double speed =
+        _kMinScrollSpeed + (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
+    final double pixels = direction * speed * dt;
+    final double current = _scrollCtrl.offset;
+    final double maxOffset = _scrollCtrl.position.maxScrollExtent;
+    final double target = (current + pixels).clamp(0.0, maxOffset);
+
+    if ((target - current).abs() > 0.1) {
+      _scrollCtrl.jumpTo(target);
+    }
+  }
+
+  // ── drag lifecycle ────────────────────────────────────────────────────────
+
+  void _onDragStarted(int index) {
+    HapticFeedback.mediumImpact();
+    _lastTickTime = Duration.zero;
+    _isDragging = true;
+    if (!(_ticker?.isTicking ?? false)) {
+      _ticker?.start();
+    }
+  }
+
+  void _onDragEnded(int index) {
+    _stopTicker();
+  }
+
+  void _stopTicker() {
+    if (_ticker?.isTicking ?? false) {
+      _ticker?.stop();
+    }
+    _isDragging = false;
+    _lastTickTime = Duration.zero;
+    if (_edgeFraction != 0.0 && mounted) {
+      setState(() => _edgeFraction = 0.0);
+    }
+  }
+
+  // ── pointer tracking ─────────────────────────────────────────────────────
+
+  void _onPointerMove(PointerMoveEvent e) {
+    _pointerGlobalY = e.position.dy;
+  }
+
+  void _onPointerUp(PointerUpEvent e) {
+    _stopTicker();
+  }
+
+  void _onPointerCancel(PointerCancelEvent e) {
+    _stopTicker();
+  }
+
+  // ── build ────────────────────────────────────────────────────────────────
+
+  @override
+  Widget build(BuildContext context) {
     final habitsAsync = ref.watch(habitsStreamProvider);
     final l10n = AppLocalizations.of(context) ?? AppLocalizationsEn();
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final viewingDate = selectedDate != null
-        ? DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day)
+    final viewingDate = widget.selectedDate != null
+        ? DateTime(
+            widget.selectedDate!.year,
+            widget.selectedDate!.month,
+            widget.selectedDate!.day,
+          )
         : today;
     final isViewingToday = viewingDate == today;
     final isFuture = viewingDate.isAfter(today);
 
-    debugPrint(
-        '🗓️ UnifiedHabitList: today=$today, viewingDate=$viewingDate, isViewingToday=$isViewingToday, isFuture=$isFuture');
-
     return habitsAsync.when(
-      data: (habits) {
-        if (habits.isEmpty) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Text(
-                l10n.startJourney,
-                style: TextStyle(fontSize: 18, color: Colors.grey.shade500),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-        }
-
-        // For any non-today date, check completion history
-        // For future dates, always show as uncompleted
-        final displayHabits = selectedDate != null
-            ? habits.map((habit) {
-                final viewingDate = DateTime(
-                    selectedDate!.year, selectedDate!.month, selectedDate!.day);
-                final isFuture = viewingDate.isAfter(today);
-
-                if (isFuture) {
-                  // Future dates: always show as uncompleted
-                  debugPrint(
-                      '🗓️ Habit "${habit.name}" on future date: completedToday=false (forced)');
-                  return habit.copyWith(completedToday: false);
-                } else {
-                  // Past or today: check completion history
-                  final wasCompletedOnDate = habit.completionHistory.any((dt) {
-                    final historyDay = DateTime(dt.year, dt.month, dt.day);
-                    return historyDay == viewingDate;
-                  });
-                  debugPrint(
-                      '🗓️ Habit "${habit.name}" on $viewingDate: completedToday=$wasCompletedOnDate');
-                  return habit.copyWith(completedToday: wasCompletedOnDate);
-                }
-              }).toList()
-            : habits;
-
-        // Base habits sorted by user-defined order (what persists to next day)
-        final baseHabits = [...displayHabits];
-        baseHabits.sort((a, b) => a.order.compareTo(b.order));
-
-        // Visual habits: auto-sort by completion status for TODAY only
-        final sortedHabits = [...baseHabits];
-        if (isViewingToday) {
-          sortedHabits.sort((a, b) {
-            final aDone =
-                a.dailyStatus != HabitDailyStatus.pending || a.completedToday;
-            final bDone =
-                b.dailyStatus != HabitDailyStatus.pending || b.completedToday;
-            if (aDone != bDone) {
-              return aDone ? 1 : -1; // Completed to bottom (visual only)
-            }
-            return a.order.compareTo(b.order);
-          });
-        }
-
-        final hasPendingHabits = selectedDate != null && !isViewingToday
-            ? sortedHabits.any((h) => !h.completedToday)
-            : sortedHabits.any(
-                (h) => h.dailyStatus == HabitDailyStatus.pending,
-              );
-
-        return Theme(
-          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-          child: ReorderableListView.builder(
-            header: hasPendingHabits
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                    child: Text(
-                      '📝 ${l10n.planYourDay}',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.blueAccent,
-                        shadows: [
-                          Shadow(
-                            offset: const Offset(0, 2),
-                            blurRadius: 8,
-                            color: Colors.blueAccent.withAlpha(77),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : null,
-            footer: const SizedBox(height: 32),
-            shrinkWrap: shrinkWrap,
-            physics: physics ??
-                (shrinkWrap
-                    ? const NeverScrollableScrollPhysics()
-                    : const AlwaysScrollableScrollPhysics()),
-            buildDefaultDragHandles: false,
-            itemCount: sortedHabits.length,
-            proxyDecorator: (child, index, animation) {
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (context, _) {
-                  final double animValue = Curves.easeInOut.transform(
-                    animation.value,
-                  );
-                  final double elevation = lerpDouble(0, 6, animValue)!;
-                  final double scale = lerpDouble(1, 1.02, animValue)!;
-                  return Transform.scale(
-                    scale: scale,
-                    child: Material(
-                      elevation: elevation,
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(16),
-                      child: child,
-                    ),
-                  );
-                },
-              );
-            },
-            onReorderStart: (_) => HapticFeedback.mediumImpact(),
-            onReorder: (oldIndex, newIndex) async {
-              if (newIndex > oldIndex) {
-                newIndex -= 1;
-              }
-
-              // Prevent cross-section dragging when viewing today
-              if (isViewingToday) {
-                final movedHabit = sortedHabits[oldIndex];
-                final movedIsDone =
-                    movedHabit.dailyStatus != HabitDailyStatus.pending ||
-                        movedHabit.completedToday;
-                final doneStartIndex = sortedHabits.indexWhere(
-                  (h) =>
-                      h.dailyStatus != HabitDailyStatus.pending ||
-                      h.completedToday,
-                );
-                if (doneStartIndex != -1) {
-                  if (movedIsDone && newIndex < doneStartIndex) {
-                    return;
-                  }
-                  if (!movedIsDone && newIndex >= doneStartIndex) {
-                    return;
-                  }
-                }
-              }
-
-              // Create reordered list from visual order
-              final reorderedVisual = [...sortedHabits];
-              final item = reorderedVisual.removeAt(oldIndex);
-              reorderedVisual.insert(newIndex, item);
-
-              // Map back to base order (without completion sorting)
-              // This ensures the user's intended order persists to next day
-              final List<Habit> reorderedBase;
-              if (isViewingToday) {
-                // Separate pending and completed from the new visual order
-                final pending = reorderedVisual
-                    .where((h) =>
-                        h.dailyStatus == HabitDailyStatus.pending &&
-                        !h.completedToday)
-                    .toList();
-                final completed = reorderedVisual
-                    .where((h) =>
-                        h.dailyStatus != HabitDailyStatus.pending ||
-                        h.completedToday)
-                    .toList();
-                // Combine: pending first, then completed (this is the base order)
-                reorderedBase = [...pending, ...completed];
-              } else {
-                reorderedBase = reorderedVisual;
-              }
-
-              HapticFeedback.lightImpact();
-              await ref
-                  .read(habitsNotifierProvider.notifier)
-                  .reorderHabits(reorderedBase.map((h) => h.id).toList());
-            },
-            itemBuilder: (context, index) {
-              final habit = sortedHabits[index];
-              return ReorderableDelayedDragStartListener(
-                key: Key('habit_drag_${habit.id}'),
-                index: index,
-                child: UnifiedHabitCard(
-                  habit: habit,
-                  onComplete: onComplete,
-                  onUncheck: onUncheck,
-                  onDelete: onDelete,
-                  onEdit: onEdit,
-                ),
-              );
-            },
-          ),
-        );
-      },
+      data: (habits) => _buildList(
+        context,
+        habits,
+        l10n,
+        today,
+        viewingDate,
+        isViewingToday,
+        isFuture,
+      ),
       loading: () => const Center(
         child: Padding(
-          padding: EdgeInsets.all(32.0),
+          padding: EdgeInsets.all(32),
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (err, stack) => Center(child: Text(l10n.errorUnknown)),
+      error: (err, _) => Center(child: Text(l10n.errorUnknown)),
     );
   }
 
-  double? lerpDouble(num? a, num? b, double t) {
-    if (a == null && b == null) return null;
-    a ??= 0.0;
-    b ??= 0.0;
-    return a + (b - a) * t;
+  Widget _buildList(
+    BuildContext context,
+    List<Habit> habits,
+    AppLocalizations l10n,
+    DateTime today,
+    DateTime viewingDate,
+    bool isViewingToday,
+    bool isFuture,
+  ) {
+    if (habits.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Text(
+            l10n.startJourney,
+            style: TextStyle(fontSize: 18, color: Colors.grey.shade500),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    // ── date-aware habit status ───────────────────────────────────────────
+    final displayHabits = widget.selectedDate != null
+        ? habits.map((habit) {
+            final vd = DateTime(
+              widget.selectedDate!.year,
+              widget.selectedDate!.month,
+              widget.selectedDate!.day,
+            );
+            if (vd.isAfter(today)) {
+              return habit.copyWith(completedToday: false);
+            }
+            final wasCompleted = habit.completionHistory
+                .any((dt) => DateTime(dt.year, dt.month, dt.day) == vd);
+            return habit.copyWith(completedToday: wasCompleted);
+          }).toList()
+        : habits;
+
+    // ── sort ──────────────────────────────────────────────────────────────
+    // Use createdAt as a stable tiebreaker so equal-order habits keep a
+    // consistent position across day boundaries (e.g. after midnight reset).
+    int habitCompare(Habit a, Habit b) {
+      final orderCmp = a.order.compareTo(b.order);
+      if (orderCmp != 0) return orderCmp;
+      return a.createdAt.compareTo(b.createdAt);
+    }
+
+    final sortedHabits = [...displayHabits]..sort(habitCompare);
+
+    if (isViewingToday) {
+      sortedHabits.sort((a, b) {
+        final aDone =
+            a.dailyStatus != HabitDailyStatus.pending || a.completedToday;
+        final bDone =
+            b.dailyStatus != HabitDailyStatus.pending || b.completedToday;
+        if (aDone != bDone) return aDone ? 1 : -1;
+        return habitCompare(a, b);
+      });
+    }
+
+    final hasPendingHabits = widget.selectedDate != null && !isViewingToday
+        ? sortedHabits.any((h) => !h.completedToday)
+        : sortedHabits.any((h) => h.dailyStatus == HabitDailyStatus.pending);
+
+    return Theme(
+      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+      child: Stack(
+        children: [
+          // ── core reorderable list ─────────────────────────────────────
+          Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerMove: _onPointerMove,
+            onPointerUp: _onPointerUp,
+            onPointerCancel: _onPointerCancel,
+            child: ReorderableListView.builder(
+              scrollController: _scrollCtrl,
+              // Moderate built-in auto-scroll; our custom ticker handles the
+              // wider activation zone (180 px) and graduated speed floor.
+              autoScrollerVelocityScalar: 30,
+              header: hasPendingHabits
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                      child: Text(
+                        '📝 ${l10n.planYourDay}',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.blueAccent,
+                          shadows: [
+                            Shadow(
+                              offset: const Offset(0, 2),
+                              blurRadius: 8,
+                              color: Colors.blueAccent.withAlpha(77),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : null,
+              footer: const SizedBox(height: 32),
+              shrinkWrap: widget.shrinkWrap,
+              physics: widget.physics ??
+                  (widget.shrinkWrap
+                      ? const NeverScrollableScrollPhysics()
+                      : const AlwaysScrollableScrollPhysics()),
+              buildDefaultDragHandles: false,
+              itemCount: sortedHabits.length,
+              cacheExtent: 3000,
+              proxyDecorator: _proxyDecorator,
+              onReorderStart: _onDragStarted,
+              onReorderEnd: _onDragEnded,
+              onReorder: (oldIndex, newIndex) =>
+                  _onReorder(oldIndex, newIndex, sortedHabits, isViewingToday),
+              itemBuilder: (context, index) {
+                final habit = sortedHabits[index];
+                return ReorderableDelayedDragStartListener(
+                  key: Key('drag_${habit.id}'),
+                  index: index,
+                  child: UnifiedHabitCard(
+                    habit: habit,
+                    onComplete: widget.onComplete,
+                    onUncheck: widget.onUncheck,
+                    onDelete: widget.onDelete,
+                    onEdit: widget.onEdit,
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // ── top edge-scroll indicator ─────────────────────────────────
+          if (_isDragging && _edgeFraction > 0.05)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: IgnorePointer(
+                child: Container(
+                  height: 64,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.blue.withAlpha(
+                            (_edgeFraction.clamp(0.0, 1.0) * 160).round()),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.keyboard_double_arrow_up_rounded,
+                      color:
+                          Colors.white.withAlpha((_edgeFraction * 220).round()),
+                      size: 32,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          // ── bottom edge-scroll indicator ──────────────────────────────
+          if (_isDragging && _edgeFraction < -0.05)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: IgnorePointer(
+                child: Container(
+                  height: 64,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.blue.withAlpha(
+                            ((-_edgeFraction).clamp(0.0, 1.0) * 160).round()),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.keyboard_double_arrow_down_rounded,
+                      color: Colors.white
+                          .withAlpha(((-_edgeFraction) * 220).round()),
+                      size: 32,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // ── reorder callback ──────────────────────────────────────────────────────
+
+  Future<void> _onReorder(
+    int oldIndex,
+    int newIndex,
+    List<Habit> sortedHabits,
+    bool isViewingToday,
+  ) async {
+    _stopTicker();
+
+    if (newIndex > oldIndex) newIndex -= 1;
+
+    if (isViewingToday) {
+      final moved = sortedHabits[oldIndex];
+      final movedDone =
+          moved.dailyStatus != HabitDailyStatus.pending || moved.completedToday;
+      final doneStart = sortedHabits.indexWhere(
+        (h) => h.dailyStatus != HabitDailyStatus.pending || h.completedToday,
+      );
+      if (doneStart != -1) {
+        if (movedDone && newIndex < doneStart) return;
+        if (!movedDone && newIndex >= doneStart) return;
+      }
+    }
+
+    final reordered = [...sortedHabits];
+    final item = reordered.removeAt(oldIndex);
+    reordered.insert(newIndex, item);
+
+    final List<Habit> base;
+    if (isViewingToday) {
+      final pending = reordered
+          .where((h) =>
+              h.dailyStatus == HabitDailyStatus.pending && !h.completedToday)
+          .toList();
+      final done = reordered
+          .where((h) =>
+              h.dailyStatus != HabitDailyStatus.pending || h.completedToday)
+          .toList();
+      base = [...pending, ...done];
+    } else {
+      base = reordered;
+    }
+
+    HapticFeedback.lightImpact();
+    await ref
+        .read(habitsNotifierProvider.notifier)
+        .reorderHabits(base.map((h) => h.id).toList());
+  }
+
+  // ── proxy decorator ───────────────────────────────────────────────────────
+
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, _) {
+        final t = Curves.easeInOut.transform(animation.value);
+        return Transform.scale(
+          scale: 1.0 + t * 0.03,
+          child: Material(
+            elevation: t * 8,
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(16),
+            child: child,
+          ),
+        );
+      },
+    );
   }
 }

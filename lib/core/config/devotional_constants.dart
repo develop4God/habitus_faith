@@ -34,18 +34,19 @@ class DevotionalConstants {
     'en': 'English',
     'pt': 'Português',
     'fr': 'Français',
-    'ja': '日本語', // Japanese
     'zh': '中文', // Chinese
+    'hi': 'हिन्दी', // Hindi
   };
 
   // Available Bible versions by language
+  // Files are stored as gzip-compressed SQLite databases in assets/biblia/
   static const Map<String, List<String>> bibleVersionsByLanguage = {
     'es': ['RVR1960', 'NVI'],
     'en': ['KJV', 'NIV'],
     'pt': ['ARC', 'NVI'],
-    'fr': ['LSG1910', 'TOB'],
-    'ja': ['新改訳2003', 'リビングバイブル'], // Japanese versions
-    'zh': ['和合本1919', '新译本'], // Chinese versions
+    'fr': ['LSG1910', 'BDS'],
+    'zh': ['CUV1919', 'CNVS'], // Chinese Union Version 1919, Chinese New Version Simplified
+    'hi': ['ERV', 'HIOV'],    // Easy-to-Read Version Hindi, Hindi Old Version
   };
 
   // Default Bible version by language
@@ -54,8 +55,8 @@ class DevotionalConstants {
     'en': 'KJV',
     'pt': 'ARC',
     'fr': 'LSG1910',
-    'ja': '新改訳2003',
-    'zh': '和合本1919',
+    'zh': 'CUV1919',
+    'hi': 'ERV',
   };
 
   /// PREFERENCES (SharedPreferences KEYS)

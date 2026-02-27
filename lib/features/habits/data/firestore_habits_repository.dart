@@ -37,6 +37,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
   @override
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
+    String? description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
@@ -67,6 +68,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
         id: idGenerator(),
         userId: userId!,
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
@@ -155,6 +157,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
       final habit = HabitModel.fromFirestore(doc);
       final updatedHabit = habit.copyWith(
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
@@ -261,6 +264,35 @@ class FirestoreHabitsRepository implements HabitsRepository {
 
       final habit = HabitModel.fromFirestore(doc);
       final updatedHabit = habit.skipToday();
+
+      await firestore
+          .collection('habits')
+          .doc(habitId)
+          .update(HabitModel.toFirestore(updatedHabit));
+
+      return Success(updatedHabit);
+    } on FirebaseException catch (e) {
+      return Failure(NetworkFailure(e.message ?? 'Unknown Firebase error'));
+    } catch (e) {
+      return Failure(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> resetHabit(String habitId) async {
+    try {
+      if (userId == null) {
+        return const Failure(UserNotAuthenticatedFailure());
+      }
+
+      final doc = await firestore.collection('habits').doc(habitId).get();
+
+      if (!doc.exists) {
+        return Failure(HabitNotFoundFailure(habitId));
+      }
+
+      final habit = HabitModel.fromFirestore(doc);
+      final updatedHabit = habit.resetToday();
 
       await firestore
           .collection('habits')

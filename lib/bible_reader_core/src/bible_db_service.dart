@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart';
@@ -8,14 +9,34 @@ import 'package:sqflite/sqflite.dart';
 class BibleDbService {
   late Database _db;
 
+  /// Initialise the database from an asset file.
+  ///
+  /// [dbAssetPath] may point to either a plain `.SQLite3` file or a
+  /// gzip-compressed `.SQLite3.gz` file.  When the asset is compressed the
+  /// service decompresses it transparently before writing it to the
+  /// application-documents directory so that SQLite can open it normally.
+  ///
+  /// The local cache file is always named after the uncompressed DB so that
+  /// a second launch skips the copy/decompress step.
   Future<void> initDb(String dbAssetPath, String dbName) async {
+    // Resolve the local (uncompressed) cache name.
+    // e.g. "RVR1960_es.SQLite3.gz" → cache as "RVR1960_es.SQLite3"
+    final String localName =
+        dbName.endsWith('.gz') ? dbName.substring(0, dbName.length - 3) : dbName;
+
     final documentsDirectory = await getApplicationDocumentsDirectory();
-    final dbPath = join(documentsDirectory.path, dbName);
+    final dbPath = join(documentsDirectory.path, localName);
 
     if (!File(dbPath).existsSync()) {
-      // Read the asset correctly using rootBundle
+      // Read the asset bytes
       final data = await rootBundle.load(dbAssetPath);
-      final bytes = data.buffer.asUint8List();
+      Uint8List bytes = data.buffer.asUint8List();
+
+      // Decompress if the asset is gzip-compressed
+      if (dbAssetPath.endsWith('.gz')) {
+        bytes = Uint8List.fromList(GZipCodec().decode(bytes));
+      }
+
       await File(dbPath).writeAsBytes(bytes, flush: true);
     }
 

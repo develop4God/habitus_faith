@@ -37,6 +37,7 @@ class HabitModel {
       id: doc.id,
       userId: data['userId'] as String,
       name: data['name'] as String,
+      description: data['description'] as String?,
       category: _migrateCategory(data['category']),
       emoji: data['emoji'] as String?,
       verse: data['verse'] != null
@@ -122,6 +123,7 @@ class HabitModel {
     return {
       'userId': habit.userId,
       'name': habit.name,
+      'description': habit.description,
       'category': habit.category.name,
       'emoji': habit.emoji,
       'verse': habit.verse?.toJson(),
@@ -175,6 +177,7 @@ class HabitModel {
       id: data['id'] as String,
       userId: data['userId'] as String,
       name: data['name'] as String,
+      description: data['description'] as String?,
       category: _migrateCategory(data['category']),
       emoji: data['emoji'] as String?,
       verse: data['verse'] != null
@@ -260,6 +263,7 @@ class HabitModel {
       'id': habit.id,
       'userId': habit.userId,
       'name': habit.name,
+      'description': habit.description,
       'category': habit.category.name,
       'emoji': habit.emoji,
       'verse': habit.verse?.toJson(),

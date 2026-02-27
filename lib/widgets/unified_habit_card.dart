@@ -70,10 +70,18 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
     if (_isCompleting) return;
     setState(() => _isCompleting = true);
     try {
-      if (widget.habit.completedToday) {
-        await widget.onUncheck(widget.habit.id);
+      final habit = widget.habit;
+      if (habit.completedToday) {
+        // Completed → uncheck back to pending
+        await widget.onUncheck(habit.id);
+      } else if (habit.dailyStatus == HabitDailyStatus.skipped ||
+          habit.dailyStatus == HabitDailyStatus.failed) {
+        // Skipped / failed → reset back to pending first, then complete
+        await ref.read(habitsNotifierProvider.notifier).resetHabit(habit.id);
+        await widget.onComplete(habit.id);
       } else {
-        await widget.onComplete(widget.habit.id);
+        // Pending → complete
+        await widget.onComplete(habit.id);
       }
     } finally {
       if (mounted) setState(() => _isCompleting = false);
@@ -711,6 +719,8 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
   ) {
     final habit = widget.habit;
     final isCompleted = habit.dailyStatus == HabitDailyStatus.completed;
+    final isSkipped = habit.dailyStatus == HabitDailyStatus.skipped;
+    final isFailed = habit.dailyStatus == HabitDailyStatus.failed;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
@@ -895,7 +905,67 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                   ],
                 ),
                 const SizedBox(height: 32),
-                if (!isCompleted)
+                if (isSkipped || isFailed) ...[
+                  // Unskip / un-fail: reset back to pending
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        await Future.delayed(const Duration(milliseconds: 150));
+                        await ref
+                            .read(habitsNotifierProvider.notifier)
+                            .resetHabit(habit.id);
+                      },
+                      icon: const Icon(Icons.replay_rounded),
+                      label: Text(
+                        isSkipped ? l10n.uncheck : l10n.uncheck,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: isSkipped
+                            ? Colors.orange.shade700
+                            : Colors.red.shade700,
+                        side: BorderSide(
+                          color: isSkipped
+                              ? Colors.orange.shade300
+                              : Colors.red.shade300,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _handleComplete();
+                      },
+                      icon: const Icon(Icons.check_rounded, size: 28),
+                      label: Text(
+                        l10n.completeNow,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: habitColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                ] else if (!isCompleted)
                   SizedBox(
                     width: double.infinity,
                     height: 56,

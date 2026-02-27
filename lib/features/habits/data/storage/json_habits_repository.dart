@@ -286,6 +286,7 @@ class JsonHabitsRepository implements HabitsRepository {
   @override
   Future<Result<Habit, HabitFailure>> createHabit({
     required String name,
+    String? description,
     HabitCategory category = HabitCategory.mental,
     String? emoji,
     int? colorValue,
@@ -306,6 +307,7 @@ class JsonHabitsRepository implements HabitsRepository {
         id: _idGenerator(),
         userId: _userId,
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
@@ -511,6 +513,7 @@ class JsonHabitsRepository implements HabitsRepository {
   Future<Result<Habit, HabitFailure>> updateHabit({
     required String habitId,
     String? name,
+    String? description,
     HabitCategory? category,
     String? emoji,
     int? colorValue,
@@ -531,6 +534,7 @@ class JsonHabitsRepository implements HabitsRepository {
       final habit = habits[index];
       final updatedHabit = habit.copyWith(
         name: name,
+        description: description,
         category: category,
         emoji: emoji,
         colorValue: colorValue,
@@ -660,6 +664,32 @@ class JsonHabitsRepository implements HabitsRepository {
     } catch (e) {
       debugPrint('skipHabit: error: $e');
       return Failure(HabitFailure.persistence('Failed to skip habit: $e'));
+    }
+  }
+
+  @override
+  Future<Result<Habit, HabitFailure>> resetHabit(String habitId) async {
+    debugPrint('resetHabit: inicio para habitId=$habitId');
+    try {
+      final habits = _loadHabits();
+      final index = habits.indexWhere((h) => h.id == habitId);
+      if (index == -1) {
+        debugPrint('resetHabit: hábito no encontrado "$habitId"');
+        return Failure(HabitFailure.notFound('Habit not found: $habitId'));
+      }
+
+      final habit = habits[index];
+      final updatedHabit = habit.resetToday(clock: _clock);
+
+      habits[index] = updatedHabit;
+      await _saveHabits(habits);
+      await _updateStatistics();
+      debugPrint(
+          'resetHabit: hábito "$habitId" restablecido a pendiente para hoy');
+      return Success(updatedHabit);
+    } catch (e) {
+      debugPrint('resetHabit: error: $e');
+      return Failure(HabitFailure.persistence('Failed to reset habit: $e'));
     }
   }
 

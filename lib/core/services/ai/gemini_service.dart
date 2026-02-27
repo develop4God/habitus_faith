@@ -14,6 +14,7 @@ import '../../config/ai_config.dart';
 import 'rate_limit_service.dart';
 import 'gemini_exceptions.dart';
 import 'gemini_template_firestore_service.dart';
+import 'gemini_prompts.dart';
 
 /// Interface for Gemini AI service (state-agnostic)
 abstract class IGeminiService {
@@ -138,44 +139,12 @@ class GeminiService implements IGeminiService {
     String faithContext,
     String languageCode,
   ) {
-    return '''
-El usuario quiere lograr: "$userGoal"
-${failurePattern != null ? 'Patrón de falla: $failurePattern' : ''}
-Contexto de fe: $faithContext
-Idioma: $languageCode
-
-IMPORTANTE: Genera EXACTAMENTE ${AiConfig.habitsPerGeneration} micro-hábitos LÓGICOS y DIRECTAMENTE relacionados con el objetivo del usuario.
-
-Cada hábito debe:
-1. Ser una acción ESPECÍFICA, MEDIBLE y REALISTA que ayude a lograr el objetivo
-2. Completarse en máximo ${AiConfig.maxHabitMinutes} minutos
-3. Estar DIRECTAMENTE relacionado con "$userGoal" (no sugerencias genéricas)
-4. Incluir UN versículo bíblico como referencia inspiracional (no necesariamente literal)
-5. Explicar claramente POR QUÉ este hábito ayuda a lograr el objetivo
-
-Ejemplos de hábitos LÓGICOS:
-- Objetivo: "Leer toda la Biblia" → "Leer 3 capítulos cada mañana antes del desayuno"
-- Objetivo: "Comer mejor sin saltar comidas" → "Preparar 3 comidas balanceadas el domingo para la semana"
-- Objetivo: "Hacer más ejercicio" → "Caminar 15 minutos después del almuerzo"
-
-Responde SOLO con JSON válido (sin markdown, sin ```json):
-[
-  {
-    "action": "Acción específica y medible relacionada directamente con el objetivo",
-    "verse": "Libro capítulo:versículo",
-    "verseText": "Texto completo del versículo bíblico",
-    "purpose": "Explicación clara de cómo esta acción específica ayuda a lograr el objetivo del usuario",
-    "estimatedMinutes": número entero entre 1 y ${AiConfig.maxHabitMinutes}
-  }
-]
-
-REGLAS ESTRICTAS:
-- NO sugieras hábitos genéricos no relacionados con el objetivo
-- Las acciones deben ser CONCRETAS: incluir números, horarios, o triggers específicos
-- El propósito debe explicar la CONEXIÓN LÓGICA entre la acción y el objetivo
-- El versículo es referencia inspiracional, no debe ser el foco principal
-- Tono: práctico, motivacional, centrado en el objetivo del usuario
-''';
+    return GeminiPrompts.microHabitGeneration(
+      userGoal: userGoal,
+      failurePattern: failurePattern,
+      faithContext: faithContext,
+      languageCode: languageCode,
+    );
   }
 
   List<MicroHabit> _parseResponse(String? responseText, String langCode) {
@@ -231,7 +200,51 @@ REGLAS ESTRICTAS:
             }
           }
 
-          return MicroHabit(
+          // Validate scheduledTime format if present
+          String? scheduledTime = data['scheduledTime'] as String?;
+          if (scheduledTime != null && !_isValidTimeFormat(scheduledTime)) {
+            // Log warning but don't fail - just set to null
+            scheduledTime = null;
+          }
+
+          // Parse notifications array
+          List<NotificationConfig>? notifications;
+          if (data['notifications'] != null && data['notifications'] is List) {
+            try {
+              notifications = (data['notifications'] as List)
+                  .map((n) {
+                    if (n is! Map<String, dynamic>) return null;
+                    // Validate required notification fields
+                    if (!n.containsKey('time') ||
+                        !n.containsKey('title') ||
+                        !n.containsKey('body')) {
+                      return null;
+                    }
+                    // Validate time format
+                    if (!_isValidTimeFormat(n['time'] as String)) {
+                      return null;
+                    }
+                    return NotificationConfig(
+                      time: n['time'] as String,
+                      title: n['title'] as String,
+                      body: n['body'] as String,
+                    );
+                  })
+                  .where((n) => n != null)
+                  .cast<NotificationConfig>()
+                  .toList();
+
+              // If no valid notifications, set to null
+              if (notifications.isEmpty) {
+                notifications = null;
+              }
+            } catch (e) {
+              // If parsing fails, leave notifications as null
+              notifications = null;
+            }
+          }
+
+          final habit = MicroHabit(
             id: const Uuid().v4(),
             action: data['action'],
             verse: data['verse'],
@@ -240,7 +253,15 @@ REGLAS ESTRICTAS:
             estimatedMinutes:
                 data['estimatedMinutes'] ?? AiConfig.maxHabitMinutes,
             generatedAt: DateTime.now(),
+            scheduledTime: scheduledTime,
+            trigger: data['trigger'] as String?,
+            notifications: notifications,
           );
+
+          // Validate the parsed habit
+          _validateHabit(habit, entry.key);
+
+          return habit;
         } catch (e) {
           if (e is GeminiParseException) rethrow;
           throw GeminiParseException(
@@ -252,6 +273,70 @@ REGLAS ESTRICTAS:
     } catch (e) {
       if (e is GeminiParseException) rethrow;
       throw GeminiParseException('Failed to parse response: $e', responseText);
+    }
+  }
+
+  /// Validate time format (HH:mm in 24-hour format)
+  bool _isValidTimeFormat(String time) {
+    final regex = RegExp(r'^([0-1][0-9]|2[0-3]):([0-5][0-9])$');
+    return regex.hasMatch(time);
+  }
+
+  /// Validate habit data quality and completeness
+  void _validateHabit(MicroHabit habit, int index) {
+    final errors = <String>[];
+
+    // Validate action is specific and contains numbers/times
+    if (!RegExp(r'\d+').hasMatch(habit.action)) {
+      errors.add('Action should include specific numbers or times');
+    }
+
+    // Validate action length
+    if (habit.action.length < 10) {
+      errors.add('Action is too vague (less than 10 characters)');
+    }
+
+    // Validate verse format
+    if (!RegExp(r'\w+\s+\d+:\d+').hasMatch(habit.verse)) {
+      errors.add('Verse reference format invalid (expected "Book ch:v")');
+    }
+
+    // Validate purpose is meaningful
+    if (habit.purpose.length < 20) {
+      errors.add('Purpose explanation is too brief');
+    }
+
+    // Validate estimated minutes
+    if (habit.estimatedMinutes < 1 || habit.estimatedMinutes > 30) {
+      errors.add(
+          'Estimated minutes out of range (${habit.estimatedMinutes} not in 1-30)');
+    }
+
+    // Validate scheduledTime if present
+    if (habit.scheduledTime != null &&
+        !_isValidTimeFormat(habit.scheduledTime!)) {
+      errors.add('Scheduled time format invalid (expected HH:mm)');
+    }
+
+    // Validate notifications if present
+    if (habit.notifications != null) {
+      for (var i = 0; i < habit.notifications!.length; i++) {
+        final notif = habit.notifications![i];
+        if (!_isValidTimeFormat(notif.time)) {
+          errors.add('Notification #${i + 1} time format invalid');
+        }
+        if (notif.title.isEmpty || notif.body.isEmpty) {
+          errors.add('Notification #${i + 1} missing title or body');
+        }
+      }
+    }
+
+    // Log warnings but don't throw - allow some flexibility
+    if (errors.isNotEmpty) {
+      // In production, this would log to telemetry
+      // For now, we accept the habit with warnings
+      // ignore: avoid_print
+      print('⚠️ Habit #${index + 1} validation warnings: ${errors.join(', ')}');
     }
   }
 
