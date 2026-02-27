@@ -334,39 +334,34 @@ class _ModernWeeklyCalendarState extends State<ModernWeeklyCalendar> {
           ),
         ),
         Expanded(
-          child: Scrollbar(
-            thumbVisibility: true,
-            thickness: 4,
-            radius: const Radius.circular(8),
-            child: UnifiedHabitList(
-              selectedDate: _selectedDate,
-              onComplete: (habitId) async {
-                debugPrint('HabitsPageUI: marcado hábito $habitId');
-                if (widget.onComplete != null) {
-                  await widget.onComplete!(habitId);
-                }
-              },
-              onUncheck: (habitId) async {
-                debugPrint('HabitsPageUI: desmarcado hábito $habitId');
-                if (widget.onUncheck != null) {
-                  await widget.onUncheck!(habitId);
-                }
-              },
-              onDelete: (habitId) async {
-                debugPrint('HabitsPageUI: eliminando hábito $habitId');
-                if (widget.onDelete != null) {
-                  await widget.onDelete!(habitId);
-                }
-              },
-              onEdit: (habit) async {
-                debugPrint('HabitsPageUI: editar hábito ${habit.name}');
-                final l10n = AppLocalizations.of(context)!;
-                await showDialog(
-                  context: context,
-                  builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
-                );
-              },
-            ),
+          child: UnifiedHabitList(
+            selectedDate: _selectedDate,
+            onComplete: (habitId) async {
+              debugPrint('HabitsPageUI: marcado hábito $habitId');
+              if (widget.onComplete != null) {
+                await widget.onComplete!(habitId);
+              }
+            },
+            onUncheck: (habitId) async {
+              debugPrint('HabitsPageUI: desmarcado hábito $habitId');
+              if (widget.onUncheck != null) {
+                await widget.onUncheck!(habitId);
+              }
+            },
+            onDelete: (habitId) async {
+              debugPrint('HabitsPageUI: eliminando hábito $habitId');
+              if (widget.onDelete != null) {
+                await widget.onDelete!(habitId);
+              }
+            },
+            onEdit: (habit) async {
+              debugPrint('HabitsPageUI: editar hábito ${habit.name}');
+              final l10n = AppLocalizations.of(context)!;
+              await showDialog(
+                context: context,
+                builder: (ctx) => EditHabitDialog(l10n: l10n, habit: habit),
+              );
+            },
           ),
         ),
       ],

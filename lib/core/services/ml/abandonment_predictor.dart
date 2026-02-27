@@ -34,6 +34,10 @@ class AbandonmentPredictor {
   // Return type is dynamic so tests can provide simple objects with run/close methods
   static Future<dynamic> Function(String asset)? assetLoaderOverride;
 
+  // Test-time hook: allow tests to override how asset strings (JSON) are loaded
+  // When set, this replaces rootBundle.loadString calls during initialization
+  static Future<String> Function(String asset)? assetStringLoaderOverride;
+
   // Model constants
   static const int featureCount = 5;
   static const double defaultRiskForNewHabits = 0.5;
@@ -93,9 +97,9 @@ class AbandonmentPredictor {
     try {
       // Load model metadata
       debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
-      final metadataJson = await rootBundle.loadString(
-        'assets/ml_models/model_metadata.json',
-      );
+      final metadataJson = assetStringLoaderOverride != null
+          ? await assetStringLoaderOverride!('assets/ml_models/model_metadata.json')
+          : await rootBundle.loadString('assets/ml_models/model_metadata.json');
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
       debugPrint(
         'AbandonmentPredictor.initialize: Model version ${_modelMetadata!['version']} loaded',
@@ -130,9 +134,9 @@ class AbandonmentPredictor {
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
-      final scalerJson = await rootBundle.loadString(
-        'assets/ml_models/scaler_params.json',
-      );
+      final scalerJson = assetStringLoaderOverride != null
+          ? await assetStringLoaderOverride!('assets/ml_models/scaler_params.json')
+          : await rootBundle.loadString('assets/ml_models/scaler_params.json');
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
