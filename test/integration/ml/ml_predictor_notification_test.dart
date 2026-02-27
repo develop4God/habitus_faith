@@ -6,6 +6,7 @@ import 'package:habitus_faith/core/providers/ml_providers.dart';
 import 'package:habitus_faith/core/providers/clock_provider.dart';
 import 'package:habitus_faith/core/providers/shared_preferences_provider.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
+import 'package:habitus_faith/core/services/ml/preferences_service.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 import 'package:mocktail/mocktail.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habitus_faith/features/habits/domain/habits_repository.dart'
     show Success;
 import '../../utils/habit_predictor_mocks.dart';
+import '../../utils/tflite_test_stub.dart';
 import '../../utils/ml_predictor_test_utils.dart';
 
 void main() {
@@ -53,7 +55,12 @@ void main() {
     });
 
     test('ML predictor initializes before making predictions', () async {
-      container = ProviderContainer();
+      final prefs = await SharedPreferences.getInstance();
+      container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
+      );
 
       final predictor =
           await container.read(abandonmentPredictorInitializedProvider.future);
@@ -104,6 +111,17 @@ void main() {
       container = ProviderContainer(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
+          abandonmentPredictorProvider.overrideWith((ref) {
+            final clock = ref.watch(clockProvider);
+            final predictor = AbandonmentPredictor(
+              clock: clock,
+              assetLoader: TestAssetLoader(),
+              preferencesService: SharedPreferencesService(prefs),
+            );
+            predictor.initialize();
+            ref.onDispose(() => predictor.dispose());
+            return predictor;
+          }),
         ],
       );
 
@@ -169,6 +187,17 @@ void main() {
       container = ProviderContainer(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
+          abandonmentPredictorProvider.overrideWith((ref) {
+            final clock = ref.watch(clockProvider);
+            final predictor = AbandonmentPredictor(
+              clock: clock,
+              assetLoader: TestAssetLoader(),
+              preferencesService: SharedPreferencesService(prefs),
+            );
+            predictor.initialize();
+            ref.onDispose(() => predictor.dispose());
+            return predictor;
+          }),
         ],
       );
 

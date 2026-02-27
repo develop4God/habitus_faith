@@ -8,17 +8,16 @@ void main() {
 
   group('AbandonmentPredictor validation', () {
     test('initialize works with fake interpreter', () async {
-      // Install fake tflite interpreter so initialization doesn't try to load native libs
-      await installFakeTflite(result: 0.3);
-
-      final predictor = AbandonmentPredictor();
+      // Inject fake asset loader via constructor (no static overrides)
+      final predictor = AbandonmentPredictor(
+        assetLoader: TestAssetLoader(interpreterResult: 0.3),
+      );
       await predictor.initialize();
 
       // With fake interpreter, predictor should report initialized
       expect(predictor.isInitialized, isTrue);
 
       await predictor.dispose();
-      uninstallFakeTflite();
     });
   });
 }

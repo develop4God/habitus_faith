@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
+import 'package:habitus_faith/core/services/ml/preferences_service.dart';
 import 'package:habitus_faith/core/services/time/time.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../test/utils/tflite_test_stub.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -11,10 +13,15 @@ void main() {
     late AbandonmentPredictor predictor;
     late Clock clock;
 
-    setUp(() {
+    setUp(() async {
       SharedPreferences.setMockInitialValues({});
       clock = const Clock.system();
-      predictor = AbandonmentPredictor(clock: clock);
+      final prefs = await SharedPreferences.getInstance();
+      predictor = AbandonmentPredictor(
+        clock: clock,
+        assetLoader: TestAssetLoader(),
+        preferencesService: SharedPreferencesService(prefs),
+      );
     });
 
     tearDown(() {

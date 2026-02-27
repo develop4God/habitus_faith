@@ -5,6 +5,7 @@ import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../scripts/diagnose_gemini.dart';
 import '../../utils/ml_predictor_test_utils.dart';
+import '../../utils/tflite_test_stub.dart';
 
 void main() {
   group('AI/ML Pipeline Integration Tests', () {
@@ -28,7 +29,7 @@ void main() {
     });
 
     testWidgets('ML predictor initialization is idempotent', (tester) async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
 
       // Initialize multiple times
       await predictor.initialize();
@@ -50,7 +51,7 @@ void main() {
 
     testWidgets('ML features calculator integrates with habit predictor',
         (tester) async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
       // Use test utility to create a habit with good streak
@@ -79,7 +80,7 @@ void main() {
     });
 
     test('Concurrent ML predictions maintain independence', () async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
       // Create different habits
@@ -122,7 +123,7 @@ void main() {
     });
 
     testWidgets('ML predictor telemetry is available', (tester) async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
       // Make predictions
@@ -144,7 +145,7 @@ void main() {
     });
 
     test('ML predictor handles rapid successive predictions', () async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
       final habit = MLPredictorTestUtils.createLowRiskHabit();
@@ -190,7 +191,7 @@ void main() {
     });
 
     test('Integration: ML predictor with configurable threshold', () async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
       // Test with default threshold (0.65)
@@ -215,7 +216,7 @@ void main() {
     });
 
     testWidgets('Integration: Predictor lifecycle management', (tester) async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
 
       // Should start not initialized
       expect(predictor.isInitialized, isFalse);
