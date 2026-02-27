@@ -12,23 +12,34 @@ class BibleVersionRegistry {
     'en': 'English',
     'pt': 'Português',
     'fr': 'Français',
+    'zh': '中文',
+    'hi': 'हिन्दी',
   };
 
   static const Map<String, List<Map<String, String>>> _versionsByLanguage = {
     'es': [
-      {'name': 'RVR1960', 'dbFile': 'RVR1960_es.SQLite3'},
-      {'name': 'NVI', 'dbFile': 'NVI_es.SQLite3'},
+      {'name': 'RVR1960', 'dbFile': 'RVR1960_es.SQLite3.gz'},
+      {'name': 'NVI', 'dbFile': 'NVI_es.SQLite3.gz'},
     ],
     'en': [
-      {'name': 'KJV', 'dbFile': 'KJV_en.SQLite3'},
-      {'name': 'NIV', 'dbFile': 'NIV_en.SQLite3'},
+      {'name': 'KJV', 'dbFile': 'KJV_en.SQLite3.gz'},
+      {'name': 'NIV', 'dbFile': 'NIV_en.SQLite3.gz'},
     ],
     'pt': [
-      {'name': 'ARC', 'dbFile': 'ARC_pt.SQLite3'},
-      {'name': 'NVI', 'dbFile': 'NVI_pt.SQLite3'},
+      {'name': 'ARC', 'dbFile': 'ARC_pt.SQLite3.gz'},
+      {'name': 'NVI', 'dbFile': 'NVI_pt.SQLite3.gz'},
     ],
     'fr': [
-      {'name': 'LSG1910', 'dbFile': 'LSG1910_fr.SQLite3'},
+      {'name': 'LSG1910', 'dbFile': 'LSG1910_fr.SQLite3.gz'},
+      {'name': 'BDS', 'dbFile': 'BDS_fr.SQLite3.gz'},
+    ],
+    'zh': [
+      {'name': 'CUV1919', 'dbFile': 'CUV1919_zh.SQLite3.gz'},
+      {'name': 'CNVS', 'dbFile': 'CNVS_zh.SQLite3.gz'},
+    ],
+    'hi': [
+      {'name': 'ERV', 'dbFile': 'ERV_hi.SQLite3.gz'},
+      {'name': 'HIOV', 'dbFile': 'HIOV_hi.SQLite3.gz'},
     ],
   };
 
@@ -70,11 +81,16 @@ class BibleVersionRegistry {
     return allVersions;
   }
 
-  /// Check if a Bible version database is downloaded locally
+  /// Check if a Bible version database is downloaded locally.
+  /// The local cache file is always the uncompressed SQLite file
+  /// (i.e. without the trailing ".gz").
   static Future<bool> _isVersionDownloaded(String dbFileName) async {
     try {
+      final localName = dbFileName.endsWith('.gz')
+          ? dbFileName.substring(0, dbFileName.length - 3)
+          : dbFileName;
       final documentsDirectory = await getApplicationDocumentsDirectory();
-      final dbPath = join(documentsDirectory.path, dbFileName);
+      final dbPath = join(documentsDirectory.path, localName);
       return File(dbPath).existsSync();
     } catch (e) {
       // If we can't check, assume it needs to be downloaded from assets

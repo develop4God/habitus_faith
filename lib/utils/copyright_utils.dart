@@ -5,35 +5,48 @@ class CopyrightUtils {
     const Map<String, Map<String, String>> copyrightMap = {
       'es': {
         'RVR1960':
-            'El texto bíblico Reina-Valera 1960® Sociedades Bíblicas en América Latina, 1960. Derechos renovados 1988, Sociedades Bíblicas Unidas.',
+            'El texto bíblico Reina-Valera 1960® © Sociedades Bíblicas en América Latina, 1960. Derechos renovados 1988, Sociedades Bíblicas Unidas. Usado con permiso.',
         'NVI':
-            'El texto bíblico Nueva Versión Internacional® © 1999 Biblica, Inc. Todos los derechos reservados.',
+            'El texto bíblico Nueva Versión Internacional® (NVI®) © 1999 Biblica, Inc.® Todos los derechos reservados en todo el mundo.',
         'default':
-            'El texto bíblico Reina-Valera 1960® Sociedades Bíblicas en América Latina, 1960. Derechos renovados 1988, Sociedades Bíblicas Unidas.',
+            'El texto bíblico Reina-Valera 1960® © Sociedades Bíblicas en América Latina, 1960. Derechos renovados 1988, Sociedades Bíblicas Unidas.',
       },
       'en': {
-        'KJV': 'The biblical text King James Version® Public Domain.',
+        'KJV':
+            'The Holy Bible, King James Version (KJV). Public Domain.',
         'NIV':
-            'The biblical text New International Version® © 2011 Biblica, Inc. All rights reserved.',
-        'default': 'The biblical text King James Version® Public Domain.',
+            'Holy Bible, New International Version®, NIV® Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.® Used by permission. All rights reserved worldwide.',
+        'default': 'The Holy Bible, King James Version (KJV). Public Domain.',
       },
       'pt': {
-        'ARC': 'O texto bíblico Almeida Revista e Corrigida® Domínio Público.',
+        'ARC':
+            'O texto bíblico Almeida Revista e Corrigida (ARC). Domínio Público.',
         'NVI':
-            'O texto bíblico Nova Versão Internacional® © 2000 Biblica, Inc. Todos os direitos reservados.',
+            'O texto bíblico Nova Versão Internacional® (NVI®) © 1993, 2000 Biblica, Inc.® Todos os direitos reservados.',
         'default':
-            'O texto bíblico Almeida Revista e Corrigida® Domínio Público.',
+            'O texto bíblico Almeida Revista e Corrigida (ARC). Domínio Público.',
       },
       'fr': {
-        'LSG1910': 'Le texte biblique Louis Segond 1910® Domaine Public.',
-        'TOB':
-            'Le texte biblique Traduction Oecuménique de la Bible® © Société Biblique Française et Éditions du Cerf.',
-        'default': 'Le texte biblique Louis Segond 1910® Domaine Public.',
+        'LSG1910':
+            'La Bible Louis Segond 1910 (LSG). Domaine Public.',
+        'BDS':
+            'La Bible du Semeur® (BDS) © 1992, 1999, 2015 Société Biblique Internationale. Tous droits réservés.',
+        'default': 'La Bible Louis Segond 1910 (LSG). Domaine Public.',
       },
-      'ja': {
-        'KJV': '聖書本文 キング・ジェームズ版® パブリックドメイン。',
-        'NIV': '聖書本文 新国際版® © 2011 Biblica, Inc. すべての権利が保護されています。',
-        'default': '聖書本文 新改訳聖書® パブリックドメイン。',
+      'zh': {
+        'CUV1919':
+            '中文聖經和合本 (CUV) 1919 版。公共領域。',
+        'CNVS':
+            '聖經當代譯本修訂版 (CNVS) © 1979, 2010 國際聖經協會。版權所有。',
+        'default': '中文聖經和合本 (CUV) 1919 版。公共領域。',
+      },
+      'hi': {
+        'ERV':
+            'Hindi Bible: Easy-to-Read Version (ERV-HI) © 2010 Bible League International. All rights reserved.',
+        'HIOV':
+            'Hindi Old Version Bible (HIOV). Public Domain.',
+        'default':
+            'Hindi Old Version Bible (HIOV). Public Domain.',
       },
     };
 
@@ -43,21 +56,31 @@ class CopyrightUtils {
 
   /// Get Bible version display name for TTS
   static String getBibleVersionDisplayName(String language, String version) {
-    final Map<String, Map<String, String>> versionNames = {
+    const Map<String, Map<String, String>> versionNames = {
       'es': {
-        'RVR1960': 'Reina Valera 1960',
+        'RVR1960': 'Reina-Valera 1960',
         'NVI': 'Nueva Versión Internacional',
       },
-      'en': {'KJV': 'King James Version', 'NIV': 'New International Version'},
+      'en': {
+        'KJV': 'King James Version',
+        'NIV': 'New International Version',
+      },
       'pt': {
         'ARC': 'Almeida Revista e Corrigida',
         'NVI': 'Nova Versão Internacional',
       },
       'fr': {
         'LSG1910': 'Louis Segond 1910',
-        'TOB': 'Traduction Oecuménique de la Bible',
+        'BDS': 'Bible du Semeur',
       },
-      'ja': {'KJV': 'キング・ジェームズ版', 'NIV': '新国際版'},
+      'zh': {
+        'CUV1919': '和合本 1919',
+        'CNVS': '當代譯本修訂版',
+      },
+      'hi': {
+        'ERV': 'Easy-to-Read Version Hindi',
+        'HIOV': 'Hindi Old Version',
+      },
     };
 
     return versionNames[language]?[version] ?? version;

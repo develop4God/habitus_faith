@@ -10,42 +10,99 @@ final sharedPreferencesProvider = FutureProvider<SharedPreferences>((
 });
 
 /// Provider for Bible versions list
+/// All assets are gzip-compressed SQLite databases (*.SQLite3.gz).
+/// BibleDbService handles decompression transparently on first load.
 final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
   return [
+    // Spanish
     BibleVersion(
       name: 'RVR1960',
-      language: 'Spanish',
+      language: 'Español',
       languageCode: 'es',
-      assetPath: 'assets/biblia/RVR1960.SQLite3',
-      dbFileName: 'RVR1960.SQLite3',
+      assetPath: 'assets/biblia/RVR1960_es.SQLite3.gz',
+      dbFileName: 'RVR1960_es.SQLite3.gz',
     ),
     BibleVersion(
-      name: 'NTV',
-      language: 'Spanish',
+      name: 'NVI',
+      language: 'Español',
       languageCode: 'es',
-      assetPath: 'assets/biblia/NTV.SQLite3',
-      dbFileName: 'NTV.SQLite3',
+      assetPath: 'assets/biblia/NVI_es.SQLite3.gz',
+      dbFileName: 'NVI_es.SQLite3.gz',
+    ),
+    // English
+    BibleVersion(
+      name: 'KJV',
+      language: 'English',
+      languageCode: 'en',
+      assetPath: 'assets/biblia/KJV_en.SQLite3.gz',
+      dbFileName: 'KJV_en.SQLite3.gz',
     ),
     BibleVersion(
-      name: 'Peshitta',
-      language: 'Spanish',
-      languageCode: 'es',
-      assetPath: 'assets/biblia/Pesh-es.SQLite3',
-      dbFileName: 'Pesh-es.SQLite3',
+      name: 'NIV',
+      language: 'English',
+      languageCode: 'en',
+      assetPath: 'assets/biblia/NIV_en.SQLite3.gz',
+      dbFileName: 'NIV_en.SQLite3.gz',
+    ),
+    // Portuguese
+    BibleVersion(
+      name: 'ARC',
+      language: 'Português',
+      languageCode: 'pt',
+      assetPath: 'assets/biblia/ARC_pt.SQLite3.gz',
+      dbFileName: 'ARC_pt.SQLite3.gz',
     ),
     BibleVersion(
-      name: 'TLA',
-      language: 'Spanish',
-      languageCode: 'es',
-      assetPath: 'assets/biblia/TLA.SQLite3',
-      dbFileName: 'TLA.SQLite3',
+      name: 'NVI',
+      language: 'Português',
+      languageCode: 'pt',
+      assetPath: 'assets/biblia/NVI_pt.SQLite3.gz',
+      dbFileName: 'NVI_pt.SQLite3.gz',
+    ),
+    // French
+    BibleVersion(
+      name: 'LSG1910',
+      language: 'Français',
+      languageCode: 'fr',
+      assetPath: 'assets/biblia/LSG1910_fr.SQLite3.gz',
+      dbFileName: 'LSG1910_fr.SQLite3.gz',
     ),
     BibleVersion(
-      name: 'RV1865',
-      language: 'Spanish',
-      languageCode: 'es',
-      assetPath: 'assets/biblia/RV1865.SQLite3',
-      dbFileName: 'RV1865.SQLite3',
+      name: 'BDS',
+      language: 'Français',
+      languageCode: 'fr',
+      assetPath: 'assets/biblia/BDS_fr.SQLite3.gz',
+      dbFileName: 'BDS_fr.SQLite3.gz',
+    ),
+    // Chinese
+    BibleVersion(
+      name: 'CUV1919',
+      language: '中文',
+      languageCode: 'zh',
+      assetPath: 'assets/biblia/CUV1919_zh.SQLite3.gz',
+      dbFileName: 'CUV1919_zh.SQLite3.gz',
+    ),
+    BibleVersion(
+      name: 'CNVS',
+      language: '中文',
+      languageCode: 'zh',
+      assetPath: 'assets/biblia/CNVS_zh.SQLite3.gz',
+      dbFileName: 'CNVS_zh.SQLite3.gz',
+    ),
+    // Hindi
+    BibleVersion(
+      name: 'ERV',
+      language: 'हिन्दी',
+      languageCode: 'hi',
+      assetPath: 'assets/biblia/ERV_hi.SQLite3.gz',
+      dbFileName: 'ERV_hi.SQLite3.gz',
+    ),
+    BibleVersion(
+      name: 'HIOV',
+      language: 'हिन्दी',
+      languageCode: 'hi',
+      assetPath: 'assets/biblia/HIOV_hi.SQLite3.gz',
+      dbFileName: 'HIOV_hi.SQLite3.gz',
     ),
   ];
 });
