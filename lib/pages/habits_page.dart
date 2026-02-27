@@ -295,7 +295,9 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
             },
             error: (e, st) {
               debugPrint('HabitsPage.build: error cargando hábitos: $e');
-              return Center(child: Text(AppLocalizations.of(context)!.errorLoadingHabits));
+              return Center(
+                  child:
+                      Text(AppLocalizations.of(context)!.errorLoadingHabits));
             },
           ),
           floatingActionButton: Builder(

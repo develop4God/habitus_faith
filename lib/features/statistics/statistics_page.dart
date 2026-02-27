@@ -143,7 +143,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    l10n.lastCompletionDate('${stats.lastCompletion.day}/${stats.lastCompletion.month}/${stats.lastCompletion.year}'),
+                    l10n.lastCompletionDate(
+                        '${stats.lastCompletion.day}/${stats.lastCompletion.month}/${stats.lastCompletion.year}'),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 24),
