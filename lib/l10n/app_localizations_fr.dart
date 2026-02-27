@@ -47,11 +47,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'Oui';
 
   @override
   String get habitAlreadyCompletedStartAgain =>
-      'This habit is already completed. Do you want to start the timer again?';
+      'Cette habitude est déjà terminée. Voulez-vous relancer le minuteur ?';
 
   @override
   String get delete => 'Supprimer';
@@ -1277,27 +1277,236 @@ class AppLocalizationsFr extends AppLocalizations {
       'Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu';
 
   @override
-  String get faithJourney => 'Faith Journey';
+  String get faithJourney => 'Parcours de Foi';
 
   @override
   String get faithJourneyDescription =>
-      'Track your progress, earn faith points, and unlock badges!';
+      'Suivez vos progrès, gagnez des points de foi et débloquez des badges !';
 
   @override
-  String get startTimer => 'Start Timer';
+  String get startTimer => 'Démarrer le Minuteur';
 
   @override
-  String get timerRunning => 'Timer Running';
+  String get timerRunning => 'Minuteur en Cours';
 
   @override
-  String get timeToFocus => 'Time to Focus';
+  String get timeToFocus => 'Temps de Concentration';
 
   @override
-  String get focusComplete => 'Focus session complete!';
+  String get focusComplete => 'Session de concentration terminée !';
 
   @override
-  String get goalReached => 'Goal Reached!';
+  String get goalReached => 'Objectif Atteint !';
 
   @override
-  String get timer => 'Timer';
+  String get timer => 'Minuteur';
+
+  @override
+  String get statisticsTitle => 'Statistiques';
+
+  @override
+  String get noStatisticsData => 'Aucune donnée statistique disponible.';
+
+  @override
+  String get activeHabits => 'Habitudes actives';
+
+  @override
+  String get successPercentage => 'Pourcentage de réussite';
+
+  @override
+  String lastCompletionDate(String date) {
+    return 'Dernière réalisation : $date';
+  }
+
+  @override
+  String get habitDistribution => 'Répartition des habitudes';
+
+  @override
+  String get pending => 'En attente';
+
+  @override
+  String get excellentConsistency => 'Excellente régularité ! Continuez ainsi.';
+
+  @override
+  String get goodProgress => 'Bonne progression ! Gardez le rythme.';
+
+  @override
+  String get everyDayMatters =>
+      'Chaque jour compte ! Vous pouvez vous améliorer.';
+
+  @override
+  String get myNotes => 'Mes Notes';
+
+  @override
+  String get editNote => 'Modifier la Note';
+
+  @override
+  String get newNote => 'Nouvelle Note';
+
+  @override
+  String get cancelEdit => 'Annuler la modification';
+
+  @override
+  String get discardNote => 'Supprimer le brouillon';
+
+  @override
+  String get checkboxItem => 'Case à cocher';
+
+  @override
+  String get numberedItem => 'Numérotée';
+
+  @override
+  String get plainText => 'Texte';
+
+  @override
+  String get listItemHint => 'Élément de liste...';
+
+  @override
+  String get stepHint => 'Étape...';
+
+  @override
+  String get writeNoteHint => 'Écrire une note...';
+
+  @override
+  String get noSavedNotes => 'Aucune note sauvegardée';
+
+  @override
+  String get thoughtsAppearHere => 'Vos pensées apparaîtront ici.';
+
+  @override
+  String get myGoals => 'Mes Objectifs';
+
+  @override
+  String get yearly => 'Annuel';
+
+  @override
+  String get personal => 'Personnel';
+
+  @override
+  String get activeGoals => 'Objectifs Actifs';
+
+  @override
+  String get generalProgress => 'Progrès Général';
+
+  @override
+  String get completedLower => 'terminé';
+
+  @override
+  String get noGoalsYet => 'Pas encore d\'objectifs';
+
+  @override
+  String get defineYourGoals =>
+      'Définissez vos objectifs spirituels ou personnels pour cette année, ce mois ou cette semaine.';
+
+  @override
+  String get createFirstGoal => 'Créer mon premier objectif';
+
+  @override
+  String get editGoal => 'Modifier l\'Objectif';
+
+  @override
+  String get whatToAchieve => 'Que voulez-vous accomplir ?';
+
+  @override
+  String get exampleGoal => 'Ex : Lire toute la Bible';
+
+  @override
+  String get deadline => 'Échéance';
+
+  @override
+  String deadlineDate(String date) {
+    return 'Date limite : $date';
+  }
+
+  @override
+  String get selectDeadline => 'Veuillez sélectionner une date limite';
+
+  @override
+  String get updateGoal => 'Mettre à Jour l\'Objectif';
+
+  @override
+  String get saveGoal => 'Enregistrer l\'Objectif';
+
+  @override
+  String get goalTypeYear => 'Annuel';
+
+  @override
+  String get goalTypeMonth => 'Mensuel';
+
+  @override
+  String get goalTypeWeek => 'Hebdomadaire';
+
+  @override
+  String get goalTypeCustom => 'Personnalisé';
+
+  @override
+  String get noScheduledNotifications => 'Aucune notification programmée';
+
+  @override
+  String get notificationOn => 'Activée';
+
+  @override
+  String get noTime => 'Pas d\'heure';
+
+  @override
+  String get configureReminder => 'Configurer le rappel';
+
+  @override
+  String get householdSpinnerTitle => '🏠 Tourner les Tâches Ménagères';
+
+  @override
+  String get anotherMoment => 'Un autre moment';
+
+  @override
+  String taskCompleteError(String error) {
+    return 'Erreur lors de l\'achèvement de la tâche : $error';
+  }
+
+  @override
+  String get addTasks => 'Ajouter des tâches';
+
+  @override
+  String get completing => 'En cours...';
+
+  @override
+  String get complete => 'Terminer';
+
+  @override
+  String get comingSoon => 'BIENTÔT DISPONIBLE';
+
+  @override
+  String get viewAll => 'Voir Tout';
+
+  @override
+  String get selectVersion => 'Sélectionner la Version';
+
+  @override
+  String get fontSize => 'Taille de Police';
+
+  @override
+  String get share => 'Partager';
+
+  @override
+  String get cancelAction => 'Annuler';
+
+  @override
+  String get favorites => 'Favoris';
+
+  @override
+  String get noBibleVersions =>
+      'Aucune version de la Bible disponible pour cette langue.';
+
+  @override
+  String bibleVersionSet(String version) {
+    return 'Version de la Bible définie : $version';
+  }
+
+  @override
+  String get errorLoadingHabits => 'Erreur de chargement des habitudes';
+
+  @override
+  String get spinHouseholdTasks => 'Tourner les tâches ménagères';
+
+  @override
+  String get newGoal => 'Nouvel Objectif';
 }
