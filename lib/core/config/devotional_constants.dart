@@ -45,8 +45,11 @@ class DevotionalConstants {
     'en': ['KJV', 'NIV'],
     'pt': ['ARC', 'NVI'],
     'fr': ['LSG1910', 'BDS'],
-    'zh': ['CUV1919', 'CNVS'], // Chinese Union Version 1919, Chinese New Version Simplified
-    'hi': ['ERV', 'HIOV'],    // Easy-to-Read Version Hindi, Hindi Old Version
+    'zh': [
+      'CUV1919',
+      'CNVS'
+    ], // Chinese Union Version 1919, Chinese New Version Simplified
+    'hi': ['HERV', 'HIOV'], // Hindi Easy-to-Read Version 95, Hindi Old Version
   };
 
   // Default Bible version by language
@@ -56,7 +59,7 @@ class DevotionalConstants {
     'pt': 'ARC',
     'fr': 'LSG1910',
     'zh': 'CUV1919',
-    'hi': 'ERV',
+    'hi': 'HERV',
   };
 
   /// PREFERENCES (SharedPreferences KEYS)

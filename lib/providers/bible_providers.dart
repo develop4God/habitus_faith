@@ -91,11 +91,11 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
     ),
     // Hindi
     BibleVersion(
-      name: 'ERV',
+      name: 'HERV',
       language: 'हिन्दी',
       languageCode: 'hi',
-      assetPath: 'assets/biblia/ERV_hi.SQLite3.gz',
-      dbFileName: 'ERV_hi.SQLite3.gz',
+      assetPath: 'assets/biblia/HERV_hi.SQLite3.gz',
+      dbFileName: 'HERV_hi.SQLite3.gz',
     ),
     BibleVersion(
       name: 'HIOV',

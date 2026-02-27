@@ -21,8 +21,9 @@ class BibleDbService {
   Future<void> initDb(String dbAssetPath, String dbName) async {
     // Resolve the local (uncompressed) cache name.
     // e.g. "RVR1960_es.SQLite3.gz" → cache as "RVR1960_es.SQLite3"
-    final String localName =
-        dbName.endsWith('.gz') ? dbName.substring(0, dbName.length - 3) : dbName;
+    final String localName = dbName.endsWith('.gz')
+        ? dbName.substring(0, dbName.length - 3)
+        : dbName;
 
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final dbPath = join(documentsDirectory.path, localName);

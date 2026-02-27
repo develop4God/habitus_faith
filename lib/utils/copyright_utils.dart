@@ -12,8 +12,7 @@ class CopyrightUtils {
             'El texto bíblico Reina-Valera 1960® © Sociedades Bíblicas en América Latina, 1960. Derechos renovados 1988, Sociedades Bíblicas Unidas.',
       },
       'en': {
-        'KJV':
-            'The Holy Bible, King James Version (KJV). Public Domain.',
+        'KJV': 'The Holy Bible, King James Version (KJV). Public Domain.',
         'NIV':
             'Holy Bible, New International Version®, NIV® Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.® Used by permission. All rights reserved worldwide.',
         'default': 'The Holy Bible, King James Version (KJV). Public Domain.',
@@ -27,26 +26,21 @@ class CopyrightUtils {
             'O texto bíblico Almeida Revista e Corrigida (ARC). Domínio Público.',
       },
       'fr': {
-        'LSG1910':
-            'La Bible Louis Segond 1910 (LSG). Domaine Public.',
+        'LSG1910': 'La Bible Louis Segond 1910 (LSG). Domaine Public.',
         'BDS':
             'La Bible du Semeur® (BDS) © 1992, 1999, 2015 Société Biblique Internationale. Tous droits réservés.',
         'default': 'La Bible Louis Segond 1910 (LSG). Domaine Public.',
       },
       'zh': {
-        'CUV1919':
-            '中文聖經和合本 (CUV) 1919 版。公共領域。',
-        'CNVS':
-            '聖經當代譯本修訂版 (CNVS) © 1979, 2010 國際聖經協會。版權所有。',
+        'CUV1919': '中文聖經和合本 (CUV) 1919 版。公共領域。',
+        'CNVS': '聖經當代譯本修訂版 (CNVS) © 1979, 2010 國際聖經協會。版權所有。',
         'default': '中文聖經和合本 (CUV) 1919 版。公共領域。',
       },
       'hi': {
-        'ERV':
-            'Hindi Bible: Easy-to-Read Version (ERV-HI) © 2010 Bible League International. All rights reserved.',
-        'HIOV':
-            'Hindi Old Version Bible (HIOV). Public Domain.',
-        'default':
-            'Hindi Old Version Bible (HIOV). Public Domain.',
+        'HERV':
+            'Hindi Easy-to-Read Version (HERV) © 1995 Bible League International. All rights reserved.',
+        'HIOV': 'Hindi Old Version Bible (HIOV). Public Domain.',
+        'default': 'Hindi Old Version Bible (HIOV). Public Domain.',
       },
     };
 
@@ -78,7 +72,7 @@ class CopyrightUtils {
         'CNVS': '當代譯本修訂版',
       },
       'hi': {
-        'ERV': 'Easy-to-Read Version Hindi',
+        'HERV': 'Hindi Easy-to-Read Version 95',
         'HIOV': 'Hindi Old Version',
       },
     };

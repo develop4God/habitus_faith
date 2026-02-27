@@ -182,7 +182,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           // Version selector
           if (state.availableVersions.isNotEmpty)
             PopupMenuButton<BibleVersion>(
-              icon: const Icon(Icons.library_books),
+              icon: const Icon(Icons.auto_stories),
               tooltip: 'Select Version',
               onSelected: (version) {
                 notifier.changeVersion(version);

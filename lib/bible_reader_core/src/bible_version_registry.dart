@@ -38,7 +38,7 @@ class BibleVersionRegistry {
       {'name': 'CNVS', 'dbFile': 'CNVS_zh.SQLite3.gz'},
     ],
     'hi': [
-      {'name': 'ERV', 'dbFile': 'ERV_hi.SQLite3.gz'},
+      {'name': 'HERV', 'dbFile': 'HERV_hi.SQLite3.gz'},
       {'name': 'HIOV', 'dbFile': 'HIOV_hi.SQLite3.gz'},
     ],
   };
