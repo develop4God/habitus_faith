@@ -15,6 +15,19 @@ class GoalsPage extends ConsumerStatefulWidget {
 class _GoalsPageState extends ConsumerState<GoalsPage> {
   GoalType _selectedTab = GoalType.week;
 
+  String _goalTypeLabel(AppLocalizations l10n, GoalType type) {
+    switch (type) {
+      case GoalType.year:
+        return l10n.goalTypeYear;
+      case GoalType.month:
+        return l10n.goalTypeMonth;
+      case GoalType.week:
+        return l10n.goalTypeWeek;
+      case GoalType.custom:
+        return l10n.goalTypeCustom;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -314,7 +327,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        goal.type.displayName,
+                        _goalTypeLabel(l10n, goal.type),
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.blue.shade700,
@@ -506,7 +519,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 ].map((type) {
                   final isSelected = selectedType == type;
                   return ChoiceChip(
-                    label: Text(type.displayName),
+                    label: Text(_goalTypeLabel(l10n, type)),
                     selected: isSelected,
                     onSelected: (val) {
                       setDialogState(() => selectedType = type);
@@ -629,6 +642,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
               ),
               const SizedBox(height: 32),
             ],
+          ),
           );
         },
       ),
@@ -695,7 +709,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 ].map((type) {
                   final isSelected = selectedType == type;
                   return ChoiceChip(
-                    label: Text(type.displayName),
+                    label: Text(_goalTypeLabel(l10n, type)),
                     selected: isSelected,
                     onSelected: (val) {
                       setDialogState(() => selectedType = type);

@@ -343,7 +343,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 children: [
                   Text(
                     l10n.myNotes,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF1A1C1E),
                       fontWeight: FontWeight.w900,
                     ),
