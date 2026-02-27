@@ -654,7 +654,7 @@ class JsonHabitsRepository implements HabitsRepository {
       }
 
       final habit = habits[index];
-      final updatedHabit = habit.skipToday();
+      final updatedHabit = habit.skipToday(clock: _clock);
 
       habits[index] = updatedHabit;
       await _saveHabits(habits);
@@ -705,7 +705,7 @@ class JsonHabitsRepository implements HabitsRepository {
       }
 
       final habit = habits[index];
-      final updatedHabit = habit.failToday();
+      final updatedHabit = habit.failToday(clock: _clock);
 
       habits[index] = updatedHabit;
       await _saveHabits(habits);
