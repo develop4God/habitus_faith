@@ -1621,5 +1621,143 @@
   "bibleVersionSet": "Version de la Bible définie : {version}",
   "errorLoadingHabits": "Erreur de chargement des habitudes",
   "spinHouseholdTasks": "Tourner les tâches ménagères",
-  "newGoal": "Nouvel Objectif"
+  "newGoal": "Nouvel Objectif",
+  "notificationTimingNone": "Pas de rappel",
+  "@notificationTimingNone": {
+    "description": "Notification timing: no reminder"
+  },
+  "notificationTimingAtEvent": "Au moment de l'événement",
+  "@notificationTimingAtEvent": {
+    "description": "Notification timing: at event time"
+  },
+  "notificationTimingTenMin": "10 minutes avant",
+  "@notificationTimingTenMin": {
+    "description": "Notification timing: 10 minutes before"
+  },
+  "notificationTimingThirtyMin": "30 minutes avant",
+  "@notificationTimingThirtyMin": {
+    "description": "Notification timing: 30 minutes before"
+  },
+  "notificationTimingOneHour": "1 heure avant",
+  "@notificationTimingOneHour": {
+    "description": "Notification timing: 1 hour before"
+  },
+  "difficultyEasy": "Facile",
+  "@difficultyEasy": {
+    "description": "Easy difficulty label"
+  },
+  "difficultyMedium": "Moyen",
+  "@difficultyMedium": {
+    "description": "Medium difficulty label"
+  },
+  "difficultyHard": "Difficile",
+  "@difficultyHard": {
+    "description": "Hard difficulty label"
+  },
+  "selectTime": "Sélectionner l'heure",
+  "@selectTime": {
+    "description": "Button/label to select a time"
+  },
+  "hour": "Heure",
+  "@hour": {
+    "description": "Hour label in time picker tile"
+  },
+  "noHouseholdTasks": "Aucune tâche ménagère",
+  "@noHouseholdTasks": {
+    "description": "Empty state for household tasks"
+  },
+  "myFavorites": "Mes Favoris",
+  "@myFavorites": {
+    "description": "Title for favorites page"
+  },
+  "noFavoritesYet": "Pas encore de favoris",
+  "@noFavoritesYet": {
+    "description": "Empty state title on favorites page"
+  },
+  "noFavoritesMessage": "Appuyez sur l'icône étoile d'un dévotionnel pour le sauvegarder ici",
+  "@noFavoritesMessage": {
+    "description": "Empty state hint on favorites page"
+  },
+  "exploreDevotionals": "Explorer les Dévotionnels",
+  "@exploreDevotionals": {
+    "description": "Button to explore devotionals from favorites page"
+  },
+  "everyInterval": "Chaque {interval} {unit}",
+  "@everyInterval": {
+    "description": "Recurrence interval display, e.g. Every 2 days",
+    "placeholders": {
+      "interval": {
+        "type": "int"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyUnitDay": "jour(s)",
+  "@frequencyUnitDay": {
+    "description": "Day unit for recurrence interval"
+  },
+  "frequencyUnitWeek": "semaine(s)",
+  "@frequencyUnitWeek": {
+    "description": "Week unit for recurrence interval"
+  },
+  "frequencyUnitMonth": "mois",
+  "@frequencyUnitMonth": {
+    "description": "Month unit for recurrence interval"
+  },
+  "addTasksToUseSpinner": "Ajoutez des tâches ménagères pour utiliser le spinner",
+  "@addTasksToUseSpinner": {
+    "description": "Hint text on household spinner empty state"
+  },
+  "goals": "Objectifs",
+  "@goals": {
+    "description": "Goals navigation tab label"
+  },
+  "notes": "Notes",
+  "@notes": {
+    "description": "Notes navigation tab label"
+  },
+  "newSubtaskHint": "Nouvelle sous-tâche...",
+  "@newSubtaskHint": {
+    "description": "Hint text for new subtask input field"
+  },
+  "image": "Image",
+  "@image": {
+    "description": "Image label (e.g. in bible reader action modal)"
+  },
+  "removeFromFavorites": "Retirer des favoris",
+  "@removeFromFavorites": {
+    "description": "Tooltip to remove a devotional from favorites"
+  },
+  "searchDevotionals": "Rechercher des dévotionnels...",
+  "@searchDevotionals": {
+    "description": "Hint text for devotional search field"
+  },
+  "languageChangedTo": "Langue changée en {language}",
+  "@languageChangedTo": {
+    "description": "Snackbar when language is changed",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "currentLabel": "Actuel",
+  "@currentLabel": {
+    "description": "Current label (e.g. in nudge suggestion dialog)"
+  },
+  "suggestedLabel": "Suggéré",
+  "@suggestedLabel": {
+    "description": "Suggested label (e.g. in nudge suggestion dialog)"
+  },
+  "bibleVersionTooltip": "Version de la Bible: {version}",
+  "@bibleVersionTooltip": {
+    "description": "Tooltip showing current Bible version",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

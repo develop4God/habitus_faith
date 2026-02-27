@@ -1492,4 +1492,102 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get newGoal => 'Nova Meta';
+
+  @override
+  String get notificationTimingNone => 'Sem lembrete';
+
+  @override
+  String get notificationTimingAtEvent => 'No momento do evento';
+
+  @override
+  String get notificationTimingTenMin => '10 minutos antes';
+
+  @override
+  String get notificationTimingThirtyMin => '30 minutos antes';
+
+  @override
+  String get notificationTimingOneHour => '1 hora antes';
+
+  @override
+  String get difficultyEasy => 'Fácil';
+
+  @override
+  String get difficultyMedium => 'Médio';
+
+  @override
+  String get difficultyHard => 'Difícil';
+
+  @override
+  String get selectTime => 'Selecionar hora';
+
+  @override
+  String get hour => 'Hora';
+
+  @override
+  String get noHouseholdTasks => 'Nenhuma tarefa doméstica';
+
+  @override
+  String get myFavorites => 'Meus Favoritos';
+
+  @override
+  String get noFavoritesYet => 'Nenhum favorito ainda';
+
+  @override
+  String get noFavoritesMessage =>
+      'Toque no ícone de estrela em qualquer devocional para salvá-lo aqui';
+
+  @override
+  String get exploreDevotionals => 'Explorar Devocionais';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return 'A cada $interval $unit';
+  }
+
+  @override
+  String get frequencyUnitDay => 'dia(s)';
+
+  @override
+  String get frequencyUnitWeek => 'semana(s)';
+
+  @override
+  String get frequencyUnitMonth => 'mês(es)';
+
+  @override
+  String get addTasksToUseSpinner =>
+      'Adicione tarefas domésticas para usar o spinner';
+
+  @override
+  String get goals => 'Metas';
+
+  @override
+  String get notes => 'Notas';
+
+  @override
+  String get newSubtaskHint => 'Nova subtarefa...';
+
+  @override
+  String get image => 'Imagem';
+
+  @override
+  String get removeFromFavorites => 'Remover dos favoritos';
+
+  @override
+  String get searchDevotionals => 'Pesquisar devocionais...';
+
+  @override
+  String languageChangedTo(String language) {
+    return 'Idioma alterado para $language';
+  }
+
+  @override
+  String get currentLabel => 'Atual';
+
+  @override
+  String get suggestedLabel => 'Sugerido';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return 'Versão da Bíblia: $version';
+  }
 }

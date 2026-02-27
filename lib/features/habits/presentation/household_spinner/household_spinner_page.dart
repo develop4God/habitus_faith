@@ -397,7 +397,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
             ),
             const SizedBox(height: 24),
             Text(
-              'No hay tareas del hogar',
+              l10n.noHouseholdTasks,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -406,7 +406,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
             ),
             const SizedBox(height: 12),
             Text(
-              'Agrega tareas del hogar para usar el girador',
+              l10n.addTasksToUseSpinner,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey.shade500,

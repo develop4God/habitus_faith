@@ -1621,5 +1621,143 @@
   "bibleVersionSet": "圣经版本设置为：{version}",
   "errorLoadingHabits": "加载习惯时出错",
   "spinHouseholdTasks": "旋转家务任务",
-  "newGoal": "新目标"
+  "newGoal": "新目标",
+  "notificationTimingNone": "无提醒",
+  "@notificationTimingNone": {
+    "description": "Notification timing: no reminder"
+  },
+  "notificationTimingAtEvent": "活动时间",
+  "@notificationTimingAtEvent": {
+    "description": "Notification timing: at event time"
+  },
+  "notificationTimingTenMin": "提前10分钟",
+  "@notificationTimingTenMin": {
+    "description": "Notification timing: 10 minutes before"
+  },
+  "notificationTimingThirtyMin": "提前30分钟",
+  "@notificationTimingThirtyMin": {
+    "description": "Notification timing: 30 minutes before"
+  },
+  "notificationTimingOneHour": "提前1小时",
+  "@notificationTimingOneHour": {
+    "description": "Notification timing: 1 hour before"
+  },
+  "difficultyEasy": "简单",
+  "@difficultyEasy": {
+    "description": "Easy difficulty label"
+  },
+  "difficultyMedium": "中等",
+  "@difficultyMedium": {
+    "description": "Medium difficulty label"
+  },
+  "difficultyHard": "困难",
+  "@difficultyHard": {
+    "description": "Hard difficulty label"
+  },
+  "selectTime": "选择时间",
+  "@selectTime": {
+    "description": "Button/label to select a time"
+  },
+  "hour": "时间",
+  "@hour": {
+    "description": "Hour label in time picker tile"
+  },
+  "noHouseholdTasks": "没有家务任务",
+  "@noHouseholdTasks": {
+    "description": "Empty state for household tasks"
+  },
+  "myFavorites": "我的收藏",
+  "@myFavorites": {
+    "description": "Title for favorites page"
+  },
+  "noFavoritesYet": "暂无收藏",
+  "@noFavoritesYet": {
+    "description": "Empty state title on favorites page"
+  },
+  "noFavoritesMessage": "点击任何灵修内容上的星形图标将其保存在这里",
+  "@noFavoritesMessage": {
+    "description": "Empty state hint on favorites page"
+  },
+  "exploreDevotionals": "探索灵修内容",
+  "@exploreDevotionals": {
+    "description": "Button to explore devotionals from favorites page"
+  },
+  "everyInterval": "每{interval}{unit}",
+  "@everyInterval": {
+    "description": "Recurrence interval display, e.g. Every 2 days",
+    "placeholders": {
+      "interval": {
+        "type": "int"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyUnitDay": "天",
+  "@frequencyUnitDay": {
+    "description": "Day unit for recurrence interval"
+  },
+  "frequencyUnitWeek": "周",
+  "@frequencyUnitWeek": {
+    "description": "Week unit for recurrence interval"
+  },
+  "frequencyUnitMonth": "月",
+  "@frequencyUnitMonth": {
+    "description": "Month unit for recurrence interval"
+  },
+  "addTasksToUseSpinner": "添加家务任务以使用旋转器",
+  "@addTasksToUseSpinner": {
+    "description": "Hint text on household spinner empty state"
+  },
+  "goals": "目标",
+  "@goals": {
+    "description": "Goals navigation tab label"
+  },
+  "notes": "笔记",
+  "@notes": {
+    "description": "Notes navigation tab label"
+  },
+  "newSubtaskHint": "新子任务...",
+  "@newSubtaskHint": {
+    "description": "Hint text for new subtask input field"
+  },
+  "image": "图片",
+  "@image": {
+    "description": "Image label (e.g. in bible reader action modal)"
+  },
+  "removeFromFavorites": "从收藏中移除",
+  "@removeFromFavorites": {
+    "description": "Tooltip to remove a devotional from favorites"
+  },
+  "searchDevotionals": "搜索灵修内容...",
+  "@searchDevotionals": {
+    "description": "Hint text for devotional search field"
+  },
+  "languageChangedTo": "语言已更改为{language}",
+  "@languageChangedTo": {
+    "description": "Snackbar when language is changed",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "currentLabel": "当前",
+  "@currentLabel": {
+    "description": "Current label (e.g. in nudge suggestion dialog)"
+  },
+  "suggestedLabel": "建议",
+  "@suggestedLabel": {
+    "description": "Suggested label (e.g. in nudge suggestion dialog)"
+  },
+  "bibleVersionTooltip": "圣经版本: {version}",
+  "@bibleVersionTooltip": {
+    "description": "Tooltip showing current Bible version",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

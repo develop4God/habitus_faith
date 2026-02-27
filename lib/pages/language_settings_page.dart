@@ -29,7 +29,7 @@ class _LanguageSettingsPageState extends ConsumerState<LanguageSettingsPage> {
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Language changed to ${language.name}'),
+          content: Text(AppLocalizations.of(context)!.languageChangedTo(language.name)),
           duration: const Duration(seconds: 2),
         ),
       );

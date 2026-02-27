@@ -461,7 +461,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                   child: widget.habit.recurrence != null &&
                           widget.habit.recurrence!.enabled
                       ? Text(
-                          '${widget.habit.recurrence!.frequency.displayName} · Cada ${widget.habit.recurrence!.interval} ${_getFrequencyUnit(widget.habit.recurrence!.frequency)}',
+                          '${_recurrenceFrequencyLabel(l10n, widget.habit.recurrence!.frequency)} · ${l10n.everyInterval(widget.habit.recurrence!.interval, _getFrequencyUnit(l10n, widget.habit.recurrence!.frequency))}',
                           style: const TextStyle(fontSize: 15),
                         )
                       : Text(
@@ -502,7 +502,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                                   controller: _subtaskController,
                                   autofocus: true,
                                   decoration: InputDecoration(
-                                    hintText: 'Nueva subtarea...',
+                                    hintText: l10n.newSubtaskHint,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -584,7 +584,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  'Agregar subtarea',
+                                  l10n.addSubtask,
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.purple.shade700,
@@ -758,14 +758,25 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 
-  String _getFrequencyUnit(RecurrenceFrequency frequency) {
+  String _recurrenceFrequencyLabel(AppLocalizations l10n, RecurrenceFrequency frequency) {
     switch (frequency) {
       case RecurrenceFrequency.daily:
-        return 'día';
+        return l10n.daily;
       case RecurrenceFrequency.weekly:
-        return 'semana';
+        return l10n.weekly;
       case RecurrenceFrequency.monthly:
-        return 'mes';
+        return l10n.monthly;
+    }
+  }
+
+  String _getFrequencyUnit(AppLocalizations l10n, RecurrenceFrequency frequency) {
+    switch (frequency) {
+      case RecurrenceFrequency.daily:
+        return l10n.frequencyUnitDay;
+      case RecurrenceFrequency.weekly:
+        return l10n.frequencyUnitWeek;
+      case RecurrenceFrequency.monthly:
+        return l10n.frequencyUnitMonth;
     }
   }
 }

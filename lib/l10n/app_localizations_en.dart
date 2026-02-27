@@ -1486,4 +1486,101 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newGoal => 'New Goal';
+
+  @override
+  String get notificationTimingNone => 'No reminder';
+
+  @override
+  String get notificationTimingAtEvent => 'At event time';
+
+  @override
+  String get notificationTimingTenMin => '10 minutes before';
+
+  @override
+  String get notificationTimingThirtyMin => '30 minutes before';
+
+  @override
+  String get notificationTimingOneHour => '1 hour before';
+
+  @override
+  String get difficultyEasy => 'Easy';
+
+  @override
+  String get difficultyMedium => 'Medium';
+
+  @override
+  String get difficultyHard => 'Hard';
+
+  @override
+  String get selectTime => 'Select time';
+
+  @override
+  String get hour => 'Hour';
+
+  @override
+  String get noHouseholdTasks => 'No household tasks';
+
+  @override
+  String get myFavorites => 'My Favorites';
+
+  @override
+  String get noFavoritesYet => 'No favorites yet';
+
+  @override
+  String get noFavoritesMessage =>
+      'Tap the star icon on any devotional to save it here';
+
+  @override
+  String get exploreDevotionals => 'Explore Devotionals';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return 'Every $interval $unit';
+  }
+
+  @override
+  String get frequencyUnitDay => 'day(s)';
+
+  @override
+  String get frequencyUnitWeek => 'week(s)';
+
+  @override
+  String get frequencyUnitMonth => 'month(s)';
+
+  @override
+  String get addTasksToUseSpinner => 'Add household tasks to use the spinner';
+
+  @override
+  String get goals => 'Goals';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get newSubtaskHint => 'New subtask...';
+
+  @override
+  String get image => 'Image';
+
+  @override
+  String get removeFromFavorites => 'Remove from favorites';
+
+  @override
+  String get searchDevotionals => 'Search devotionals...';
+
+  @override
+  String languageChangedTo(String language) {
+    return 'Language changed to $language';
+  }
+
+  @override
+  String get currentLabel => 'Current';
+
+  @override
+  String get suggestedLabel => 'Suggested';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return 'Bible Version: $version';
+  }
 }

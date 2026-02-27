@@ -48,11 +48,11 @@ enum HabitDifficulty {
   String get displayName {
     switch (this) {
       case HabitDifficulty.easy:
-        return 'Fácil';
+        return 'Easy';
       case HabitDifficulty.medium:
-        return 'Medio';
+        return 'Medium';
       case HabitDifficulty.hard:
-        return 'Difícil';
+        return 'Hard';
     }
   }
 }

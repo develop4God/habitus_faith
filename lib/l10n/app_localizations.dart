@@ -66,7 +66,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -89,11 +89,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -101,7 +101,7 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('pt'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -2803,6 +2803,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New Goal'**
   String get newGoal;
+
+  /// Notification timing: no reminder
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder'**
+  String get notificationTimingNone;
+
+  /// Notification timing: at event time
+  ///
+  /// In en, this message translates to:
+  /// **'At event time'**
+  String get notificationTimingAtEvent;
+
+  /// Notification timing: 10 minutes before
+  ///
+  /// In en, this message translates to:
+  /// **'10 minutes before'**
+  String get notificationTimingTenMin;
+
+  /// Notification timing: 30 minutes before
+  ///
+  /// In en, this message translates to:
+  /// **'30 minutes before'**
+  String get notificationTimingThirtyMin;
+
+  /// Notification timing: 1 hour before
+  ///
+  /// In en, this message translates to:
+  /// **'1 hour before'**
+  String get notificationTimingOneHour;
+
+  /// Easy difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get difficultyEasy;
+
+  /// Medium difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get difficultyMedium;
+
+  /// Hard difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get difficultyHard;
+
+  /// Button/label to select a time
+  ///
+  /// In en, this message translates to:
+  /// **'Select time'**
+  String get selectTime;
+
+  /// Hour label in time picker tile
+  ///
+  /// In en, this message translates to:
+  /// **'Hour'**
+  String get hour;
+
+  /// Empty state for household tasks
+  ///
+  /// In en, this message translates to:
+  /// **'No household tasks'**
+  String get noHouseholdTasks;
+
+  /// Title for favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'My Favorites'**
+  String get myFavorites;
+
+  /// Empty state title on favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get noFavoritesYet;
+
+  /// Empty state hint on favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the star icon on any devotional to save it here'**
+  String get noFavoritesMessage;
+
+  /// Button to explore devotionals from favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Devotionals'**
+  String get exploreDevotionals;
+
+  /// Recurrence interval display, e.g. Every 2 days
+  ///
+  /// In en, this message translates to:
+  /// **'Every {interval} {unit}'**
+  String everyInterval(int interval, String unit);
+
+  /// Day unit for recurrence interval
+  ///
+  /// In en, this message translates to:
+  /// **'day(s)'**
+  String get frequencyUnitDay;
+
+  /// Week unit for recurrence interval
+  ///
+  /// In en, this message translates to:
+  /// **'week(s)'**
+  String get frequencyUnitWeek;
+
+  /// Month unit for recurrence interval
+  ///
+  /// In en, this message translates to:
+  /// **'month(s)'**
+  String get frequencyUnitMonth;
+
+  /// Hint text on household spinner empty state
+  ///
+  /// In en, this message translates to:
+  /// **'Add household tasks to use the spinner'**
+  String get addTasksToUseSpinner;
+
+  /// Goals navigation tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get goals;
+
+  /// Notes navigation tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// Hint text for new subtask input field
+  ///
+  /// In en, this message translates to:
+  /// **'New subtask...'**
+  String get newSubtaskHint;
+
+  /// Image label (e.g. in bible reader action modal)
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get image;
+
+  /// Tooltip to remove a devotional from favorites
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get removeFromFavorites;
+
+  /// Hint text for devotional search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search devotionals...'**
+  String get searchDevotionals;
+
+  /// Snackbar when language is changed
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to {language}'**
+  String languageChangedTo(String language);
+
+  /// Current label (e.g. in nudge suggestion dialog)
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get currentLabel;
+
+  /// Suggested label (e.g. in nudge suggestion dialog)
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested'**
+  String get suggestedLabel;
+
+  /// Tooltip showing current Bible version
+  ///
+  /// In en, this message translates to:
+  /// **'Bible Version: {version}'**
+  String bibleVersionTooltip(String version);
 }
 
 class _AppLocalizationsDelegate
@@ -2838,9 +3018,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

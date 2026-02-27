@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitus_faith/features/habits/domain/models/habit_notification.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 
 class SubtasksSection extends StatefulWidget {
   final List<Subtask> initialSubtasks;
@@ -106,7 +107,7 @@ class _SubtasksSectionState extends State<SubtasksSection> {
                 child: TextField(
                   controller: _newSubtaskController,
                   decoration: InputDecoration(
-                    labelText: 'Agregar subtarea',
+                    labelText: AppLocalizations.of(context)!.addSubtask,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
