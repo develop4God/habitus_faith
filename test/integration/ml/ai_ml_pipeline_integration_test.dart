@@ -136,8 +136,8 @@ void main() {
 
       // Should have metadata
       expect(
-          telemetry.containsKey('predictionCount') ||
-              telemetry.containsKey('version'),
+          telemetry.containsKey('prediction_count') ||
+              telemetry.containsKey('error_count'),
           isTrue,
           reason: 'Telemetry should contain tracking data');
 
