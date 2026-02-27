@@ -1,3 +1,4 @@
+// ignore: dangling_library_doc_comments
 /// Robust behavioral tests for all five bug fixes.
 ///
 /// Each test group directly exercises the domain / repository layer (no

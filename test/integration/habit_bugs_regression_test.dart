@@ -69,9 +69,9 @@ void main() {
     test('scroll pixel delta at full fraction (1/60 frame) is reasonable', () {
       const dt = 1 / 60;
       const fraction = 1.0; // deepest inside the edge zone
-      final speed = _kMinScrollSpeed +
+      const speed = _kMinScrollSpeed +
           (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
-      final delta = speed * dt;
+      const delta = speed * dt;
       expect(delta, greaterThan(0), reason: 'Must scroll at least some pixels');
       expect(delta, lessThan(100),
           reason: 'Must not jump more than ~100px per frame (too jumpy)');
@@ -81,9 +81,9 @@ void main() {
         () {
       const dt = 1 / 60;
       const fraction = 0.2;
-      final speed = _kMinScrollSpeed +
+      const speed = _kMinScrollSpeed +
           (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
-      final delta = speed * dt;
+      const delta = speed * dt;
       expect(delta, greaterThan(0));
       expect(speed, greaterThan(_kMinScrollSpeed));
       expect(speed, lessThan(_kMaxScrollSpeed));
