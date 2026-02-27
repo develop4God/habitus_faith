@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../domain/models/goal_model.dart';
 import 'goals_providers.dart';
 
@@ -16,6 +17,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final goalsAsync = ref.watch(goalsStreamProvider);
 
     return Scaffold(
@@ -30,7 +32,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Mis Metas',
+                l10n.myGoals,
                 style: TextStyle(
                   color: Colors.blue.shade900,
                   fontWeight: FontWeight.bold,
@@ -78,13 +80,13 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       children: [
-                        _buildTabButton(GoalType.week, 'Semanal'),
+                        _buildTabButton(GoalType.week, l10n.goalTypeWeek),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.month, 'Mensual'),
+                        _buildTabButton(GoalType.month, l10n.goalTypeMonth),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.year, 'Anual'),
+                        _buildTabButton(GoalType.year, l10n.yearly),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.custom, 'Personal'),
+                        _buildTabButton(GoalType.custom, l10n.personal),
                       ],
                     ),
                   ),
@@ -92,9 +94,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Objetivos Activos',
-                        style: TextStyle(
+                      Text(
+                        l10n.activeGoals,
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           letterSpacing: -0.5,
@@ -174,6 +176,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   }
 
   Widget _buildSummaryCard(List<Goal> goals) {
+    final l10n = AppLocalizations.of(context)!;
     final double avgProgress = goals.isEmpty
         ? 0.0
         : goals.map((g) => g.progress).reduce((a, b) => a + b) / goals.length;
@@ -214,9 +217,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Progreso General',
-                style: TextStyle(
+              Text(
+                l10n.generalProgress,
+                style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
@@ -237,11 +240,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   letterSpacing: -1,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 8, left: 4),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8, left: 4),
                 child: Text(
-                  'completado',
-                  style: TextStyle(color: Colors.white60, fontSize: 16),
+                  l10n.completedLower,
+                  style: const TextStyle(color: Colors.white60, fontSize: 16),
                 ),
               ),
             ],
@@ -262,6 +265,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   }
 
   Widget _buildGoalCard(Goal goal) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -323,10 +327,10 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, color: Colors.grey),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
-                    const PopupMenuItem(
+                    PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
+                    PopupMenuItem(
                       value: 'delete',
-                      child: Text('Eliminar'),
+                      child: Text(l10n.delete),
                     ),
                   ],
                   onSelected: (val) {
@@ -389,6 +393,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -406,28 +411,28 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
-            'Aún no tienes metas',
-            style: TextStyle(
+          Text(
+            l10n.noGoalsYet,
+            style: const TextStyle(
               fontSize: 20,
               color: Color(0xFF1A1C1E),
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 12),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              'Define tus objetivos espirituales o personales para este año, mes o semana.',
+              l10n.defineYourGoals,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey, fontSize: 15, height: 1.5),
+              style: const TextStyle(color: Colors.grey, fontSize: 15, height: 1.5),
             ),
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () => _showAddGoalDialog(context),
             icon: const Icon(Icons.add),
-            label: const Text('Crear mi primera meta'),
+            label: Text(l10n.createFirstGoal),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue.shade700,
               foregroundColor: Colors.white,
@@ -452,7 +457,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => Container(
+        builder: (context, setDialogState) {
+          final l10n = AppLocalizations.of(context)!;
+          return Container(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
             top: 32,
@@ -467,26 +474,26 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Nueva Meta',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                l10n.newGoal,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
               TextField(
                 controller: titleCtrl,
                 autofocus: true,
                 decoration: InputDecoration(
-                  labelText: '¿Qué quieres lograr?',
-                  hintText: 'Ej: Leer toda la Biblia',
+                  labelText: l10n.whatToAchieve,
+                  hintText: l10n.exampleGoal,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Plazo',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Text(
+                l10n.deadline,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -534,7 +541,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
+                        l10n.deadlineDate('${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
                         style: TextStyle(
                           color: Colors.blue.shade700,
                           fontWeight: FontWeight.w600,
@@ -568,9 +575,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       if (selectedType == GoalType.custom &&
                           customDeadline == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
-                              'Por favor selecciona una fecha límite',
+                              l10n.selectDeadline,
                             ),
                             backgroundColor: Colors.red,
                           ),
@@ -614,16 +621,16 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'Guardar Meta',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Text(
+                    l10n.saveGoal,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               const SizedBox(height: 32),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -639,7 +646,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => Container(
+        builder: (context, setDialogState) {
+          final l10n = AppLocalizations.of(context)!;
+          return Container(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
             top: 32,
@@ -654,26 +663,26 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Editar Meta',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                l10n.editGoal,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
               TextField(
                 controller: titleCtrl,
                 autofocus: true,
                 decoration: InputDecoration(
-                  labelText: '¿Qué quieres lograr?',
-                  hintText: 'Ej: Leer toda la Biblia',
+                  labelText: l10n.whatToAchieve,
+                  hintText: l10n.exampleGoal,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Plazo',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Text(
+                l10n.deadline,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -721,7 +730,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
+                        l10n.deadlineDate('${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
                         style: TextStyle(
                           color: Colors.blue.shade700,
                           fontWeight: FontWeight.w600,
@@ -755,9 +764,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       if (selectedType == GoalType.custom &&
                           customDeadline == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
-                              'Por favor selecciona una fecha límite',
+                              l10n.selectDeadline,
                             ),
                             backgroundColor: Colors.red,
                           ),
@@ -799,16 +808,17 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'Actualizar Meta',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Text(
+                    l10n.updateGoal,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               const SizedBox(height: 32),
             ],
           ),
-        ),
+          );
+        },
       ),
     );
   }
