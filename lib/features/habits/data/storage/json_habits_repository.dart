@@ -689,8 +689,7 @@ class JsonHabitsRepository implements HabitsRepository {
       return Success(updatedHabit);
     } catch (e) {
       debugPrint('resetHabit: error: $e');
-      return Failure(
-          HabitFailure.persistence('Failed to reset habit: $e'));
+      return Failure(HabitFailure.persistence('Failed to reset habit: $e'));
     }
   }
 

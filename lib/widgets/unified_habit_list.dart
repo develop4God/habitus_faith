@@ -253,8 +253,8 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
             if (vd.isAfter(today)) {
               return habit.copyWith(completedToday: false);
             }
-            final wasCompleted = habit.completionHistory.any((dt) =>
-                DateTime(dt.year, dt.month, dt.day) == vd);
+            final wasCompleted = habit.completionHistory
+                .any((dt) => DateTime(dt.year, dt.month, dt.day) == vd);
             return habit.copyWith(completedToday: wasCompleted);
           }).toList()
         : habits;
@@ -280,7 +280,6 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
         return habitCompare(a, b);
       });
     }
-
 
     final hasPendingHabits = widget.selectedDate != null && !isViewingToday
         ? sortedHabits.any((h) => !h.completedToday)
@@ -355,7 +354,9 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
           // ── top edge-scroll indicator ─────────────────────────────────
           if (_isDragging && _edgeFraction > 0.05)
             Positioned(
-              top: 0, left: 0, right: 0,
+              top: 0,
+              left: 0,
+              right: 0,
               child: IgnorePointer(
                 child: Container(
                   height: 64,
@@ -385,7 +386,9 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
           // ── bottom edge-scroll indicator ──────────────────────────────
           if (_isDragging && _edgeFraction < -0.05)
             Positioned(
-              bottom: 0, left: 0, right: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
               child: IgnorePointer(
                 child: Container(
                   height: 64,

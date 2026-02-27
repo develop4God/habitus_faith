@@ -150,8 +150,26 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   int _lastAddedIndex = -1;
 
   final List<String> _quickEmojis = [
-    '🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥',
-    '😊', '😌', '🌟', '🌈', '💡', '🎉', '🏆', '🎯', '💧', '⛪',
+    '🙏',
+    '✨',
+    '📖',
+    '❤️',
+    '🙌',
+    '💪',
+    '🌱',
+    '☀️',
+    '🕊️',
+    '🔥',
+    '😊',
+    '😌',
+    '🌟',
+    '🌈',
+    '💡',
+    '🎉',
+    '🏆',
+    '🎯',
+    '💧',
+    '⛪',
   ];
 
   static const int _maxChars = 500;
@@ -237,18 +255,19 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       final controller = _getController(_focusedIndex);
       final currentText = controller.text;
       final selection = controller.selection;
-      
+
       String newText;
       int newOffset;
-      
+
       if (selection.isValid) {
-        newText = currentText.replaceRange(selection.start, selection.end, emoji);
+        newText =
+            currentText.replaceRange(selection.start, selection.end, emoji);
         newOffset = selection.start + emoji.length;
       } else {
         newText = currentText + emoji;
         newOffset = newText.length;
       }
-      
+
       setState(() {
         controller.text = newText;
         controller.selection = TextSelection.collapsed(offset: newOffset);
@@ -398,7 +417,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: isEditing ? Border.all(color: Colors.orange.shade200, width: 2) : null,
+        border: isEditing
+            ? Border.all(color: Colors.orange.shade200, width: 2)
+            : null,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -413,20 +434,20 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           // Header row
           Row(
             children: [
-              Icon(isEditing ? Icons.edit : Icons.edit_note, color: Colors.orange),
+              Icon(isEditing ? Icons.edit : Icons.edit_note,
+                  color: Colors.orange),
               const SizedBox(width: 8),
               Text(
                 isEditing ? 'Editar Nota' : 'Nueva Nota',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const Spacer(),
               if (isEditing || hasContent)
                 IconButton(
                   onPressed: _clearEditor,
-                  icon: Icon(
-                    isEditing ? Icons.close : Icons.delete_outline, 
-                    color: Colors.grey.shade400
-                  ),
+                  icon: Icon(isEditing ? Icons.close : Icons.delete_outline,
+                      color: Colors.grey.shade400),
                   tooltip: isEditing ? 'Cancelar edición' : 'Descartar nota',
                 ),
               IconButton(
@@ -476,8 +497,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  for (int i = 0; i < _lines.length; i++)
-                    _buildLineEditor(i),
+                  for (int i = 0; i < _lines.length; i++) _buildLineEditor(i),
                 ],
               ),
             ),
@@ -572,7 +592,8 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           Expanded(
             child: TextField(
               key: ValueKey(line.id),
-              autofocus: index == _lastAddedIndex || (index == 0 && _lines.length == 1 && line.text.isEmpty),
+              autofocus: index == _lastAddedIndex ||
+                  (index == 0 && _lines.length == 1 && line.text.isEmpty),
               controller: controller,
               onTap: () => setState(() => _focusedIndex = index),
               onChanged: (v) {
@@ -581,10 +602,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               },
               style: TextStyle(
                 fontSize: 15,
-                decoration: (line.type == _NoteLineType.checkbox &&
-                        line.checked)
-                    ? TextDecoration.lineThrough
-                    : null,
+                decoration:
+                    (line.type == _NoteLineType.checkbox && line.checked)
+                        ? TextDecoration.lineThrough
+                        : null,
                 color: (line.type == _NoteLineType.checkbox && line.checked)
                     ? Colors.grey.shade400
                     : Colors.grey.shade900,
@@ -597,8 +618,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                     : line.type == _NoteLineType.numbered
                         ? 'Paso...'
                         : 'Escribe una nota...',
-                hintStyle:
-                    TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
                 border: InputBorder.none,
               ),
               textInputAction: TextInputAction.done,
@@ -690,31 +710,31 @@ class _ToolbarButton extends StatelessWidget {
             color: isSelected ? color : Colors.grey.shade300,
             width: 1.5,
           ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: color.withValues(alpha: 0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            )
-          ] : null,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  )
+                ]
+              : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              icon, 
-              size: 16, 
+              icon,
+              size: 16,
               color: isSelected ? Colors.white : Colors.grey.shade600,
             ),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12, 
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600, 
-                color: isSelected ? Colors.white : Colors.grey.shade600,
-              )
-            ),
+            Text(label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                  color: isSelected ? Colors.white : Colors.grey.shade600,
+                )),
           ],
         ),
       ),

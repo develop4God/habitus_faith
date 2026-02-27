@@ -61,7 +61,8 @@ void main() {
   // 1 & 2 – Drag & drop and midnight order persistence
   // --------------------------------------------------------------------------
   group('1+2 – Habit order persistence (drag & midnight)', () {
-    test('reorderHabits persists the given order and it survives a stream reload',
+    test(
+        'reorderHabits persists the given order and it survives a stream reload',
         () async {
       final repo = await _makeRepo();
       addTearDown(repo.dispose);
@@ -75,8 +76,7 @@ void main() {
       // User drags to a new order: c, a, d, b
       final desiredOrder = [c, a, d, b];
       final result = await repo.reorderHabits(desiredOrder);
-      expect(result.isSuccess(), isTrue,
-          reason: 'reorderHabits must succeed');
+      expect(result.isSuccess(), isTrue, reason: 'reorderHabits must succeed');
 
       // Read back from storage via stream (simulates next frame).
       final habits = await repo.watchHabits().first;
@@ -89,8 +89,7 @@ void main() {
         'base order is preserved when some habits are completed (simulates midnight reset)',
         () async {
       // Simulates Day 1 noon: complete habit B so it visually moves to bottom.
-      final day1 =
-          DateTime(2026, 2, 25, 12, 0); // Tuesday
+      final day1 = DateTime(2026, 2, 25, 12, 0); // Tuesday
       final repo = await _makeRepo(fixedNow: day1);
       addTearDown(repo.dispose);
 
@@ -241,7 +240,7 @@ void main() {
     // Re-implement the serialisation helpers inline so these tests only depend
     // on pure Dart, with zero widget overhead.
 
-    String _serializeLines(List<Map<String, dynamic>> lines) {
+    String serializeLines(List<Map<String, dynamic>> lines) {
       int numberedIndex = 1;
       final sb = StringBuffer();
       for (int i = 0; i < lines.length; i++) {
@@ -264,7 +263,7 @@ void main() {
       return sb.toString();
     }
 
-    List<Map<String, dynamic>> _parseNote(String raw) {
+    List<Map<String, dynamic>> parseNote(String raw) {
       if (raw.isEmpty) return [];
       final result = <Map<String, dynamic>>[];
       for (final line in raw.split('\n')) {
@@ -298,28 +297,28 @@ void main() {
 
     test('plain text round-trips without modification', () {
       const raw = 'Had a great prayer session today.';
-      final lines = _parseNote(raw);
+      final lines = parseNote(raw);
       expect(lines.length, 1);
       expect(lines.first['type'], 'plain');
-      expect(_serializeLines(lines), raw);
+      expect(serializeLines(lines), raw);
     });
 
     test('checked checkbox serialises to [x] prefix', () {
       final lines = [
         {'type': 'checkbox', 'text': 'Read Matthew 5', 'checked': true}
       ];
-      expect(_serializeLines(lines), '[x] Read Matthew 5');
+      expect(serializeLines(lines), '[x] Read Matthew 5');
     });
 
     test('unchecked checkbox serialises to [ ] prefix', () {
       final lines = [
         {'type': 'checkbox', 'text': 'Exercise', 'checked': false}
       ];
-      expect(_serializeLines(lines), '[ ] Exercise');
+      expect(serializeLines(lines), '[ ] Exercise');
     });
 
     test('checked checkbox parses back with checked=true', () {
-      final lines = _parseNote('[x] Pray for family');
+      final lines = parseNote('[x] Pray for family');
       expect(lines.length, 1);
       expect(lines.first['type'], 'checkbox');
       expect(lines.first['checked'], isTrue);
@@ -332,13 +331,13 @@ void main() {
         {'type': 'numbered', 'text': 'Read Bible', 'checked': false},
         {'type': 'numbered', 'text': 'Pray', 'checked': false},
       ];
-      final result = _serializeLines(lines);
+      final result = serializeLines(lines);
       expect(result, '1. Wake up\n2. Read Bible\n3. Pray');
     });
 
     test('numbered list parses back correctly', () {
       const raw = '1. Wake up\n2. Read Bible\n3. Pray';
-      final lines = _parseNote(raw);
+      final lines = parseNote(raw);
       expect(lines.length, 3);
       for (final line in lines) {
         expect(line['type'], 'numbered');
@@ -356,8 +355,8 @@ void main() {
         {'type': 'numbered', 'text': 'Step one', 'checked': false},
         {'type': 'numbered', 'text': 'Step two', 'checked': false},
       ];
-      final serialised = _serializeLines(lines);
-      final parsed = _parseNote(serialised);
+      final serialised = serializeLines(lines);
+      final parsed = parseNote(serialised);
 
       expect(parsed.length, lines.length);
       expect(parsed[0]['type'], 'plain');
@@ -370,14 +369,14 @@ void main() {
     });
 
     test('empty note produces empty string', () {
-      expect(_serializeLines([]), '');
+      expect(serializeLines([]), '');
     });
 
     test('emoji in note text is preserved', () {
       final lines = [
         {'type': 'plain', 'text': 'Thank you Lord 🙏✨', 'checked': false}
       ];
-      expect(_serializeLines(lines), 'Thank you Lord 🙏✨');
+      expect(serializeLines(lines), 'Thank you Lord 🙏✨');
     });
 
     test('toggling a checkbox changes its serialised form', () {
@@ -385,14 +384,13 @@ void main() {
       var lines = [
         {'type': 'checkbox', 'text': 'Forgiveness prayer', 'checked': false}
       ];
-      expect(_serializeLines(lines), '[ ] Forgiveness prayer');
+      expect(serializeLines(lines), '[ ] Forgiveness prayer');
 
       // Simulate tap (toggle)
       lines = [
         {'type': 'checkbox', 'text': 'Forgiveness prayer', 'checked': true}
       ];
-      expect(_serializeLines(lines), '[x] Forgiveness prayer');
+      expect(serializeLines(lines), '[x] Forgiveness prayer');
     });
   });
 }
-

@@ -13,6 +13,7 @@
 ///   D. Unskip → complete full workflow (skip, reset, complete).
 ///   E. Duplicate order=0 habits are sorted stably by createdAt.
 ///   F. failHabit → resetHabit removes from failedDates.
+library;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +57,8 @@ const double _kMinScrollSpeed = 120.0; // must match unified_habit_list.dart
 
 void main() {
   group('A – Auto-scroll constants (drag-upward UX)', () {
-    test('edge threshold is positive and large enough for comfortable drag', () {
+    test('edge threshold is positive and large enough for comfortable drag',
+        () {
       expect(_kEdgeThreshold, greaterThan(100),
           reason: 'Threshold must be wide enough for users to trigger scroll');
     });
@@ -69,8 +71,8 @@ void main() {
     test('scroll pixel delta at full fraction (1/60 frame) is reasonable', () {
       const dt = 1 / 60;
       const fraction = 1.0; // deepest inside the edge zone
-      const speed = _kMinScrollSpeed +
-          (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
+      const speed =
+          _kMinScrollSpeed + (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
       const delta = speed * dt;
       expect(delta, greaterThan(0), reason: 'Must scroll at least some pixels');
       expect(delta, lessThan(100),
@@ -81,8 +83,8 @@ void main() {
         () {
       const dt = 1 / 60;
       const fraction = 0.2;
-      const speed = _kMinScrollSpeed +
-          (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
+      const speed =
+          _kMinScrollSpeed + (_kMaxScrollSpeed - _kMinScrollSpeed) * fraction;
       const delta = speed * dt;
       expect(delta, greaterThan(0));
       expect(speed, greaterThan(_kMinScrollSpeed));
@@ -93,8 +95,8 @@ void main() {
   // ─── B: stable sort across midnight ────────────────────────────────────────
 
   group('B – Habit order stable across midnight (createdAt tiebreaker)', () {
-    test(
-        'three habits all with order=0 keep a stable position by createdAt', () {
+    test('three habits all with order=0 keep a stable position by createdAt',
+        () {
       // Simulate three habits with identical order (e.g. fresh install, no reorder done yet).
       final t0 = DateTime(2026, 2, 26, 8, 0, 0);
       final t1 = DateTime(2026, 2, 26, 8, 0, 1);
@@ -125,15 +127,15 @@ void main() {
       ];
 
       // Apply the same tiebreaker sort that unified_habit_list.dart uses:
-      final sorted = [...habits]
-        ..sort((a, b) {
+      final sorted = [...habits]..sort((a, b) {
           final cmp = a.order.compareTo(b.order);
           if (cmp != 0) return cmp;
           return a.createdAt.compareTo(b.createdAt);
         });
 
       expect(sorted.map((h) => h.id).toList(), ['a', 'b', 'c'],
-          reason: 'Equal-order habits must be sorted by createdAt for stability');
+          reason:
+              'Equal-order habits must be sorted by createdAt for stability');
     });
 
     test('mixed order values sort correctly with createdAt tiebreaker', () {
@@ -164,8 +166,7 @@ void main() {
         ).copyWith(order: 0, createdAt: t0),
       ];
 
-      final sorted = [...habits]
-        ..sort((a, b) {
+      final sorted = [...habits]..sort((a, b) {
           final cmp = a.order.compareTo(b.order);
           if (cmp != 0) return cmp;
           return a.createdAt.compareTo(b.createdAt);
@@ -195,8 +196,7 @@ void main() {
       // In test we just call watchHabits().first which reads from storage.
       final habits = await repo.watchHabits().first;
       // Sort by order + createdAt (same as widget logic)
-      final sorted = [...habits]
-        ..sort((x, y) {
+      final sorted = [...habits]..sort((x, y) {
           final cmp = x.order.compareTo(y.order);
           if (cmp != 0) return cmp;
           return x.createdAt.compareTo(y.createdAt);
@@ -237,10 +237,12 @@ void main() {
       addTearDown(repo.dispose);
 
       // Must complete in finite time without throwing.
-      final result =
-          await repo.resetHabit('nonexistent').timeout(const Duration(seconds: 5));
+      final result = await repo
+          .resetHabit('nonexistent')
+          .timeout(const Duration(seconds: 5));
       expect(result.isFailure(), isTrue,
-          reason: 'Missing habit should give a typed Failure, not an exception');
+          reason:
+              'Missing habit should give a typed Failure, not an exception');
     });
 
     test('rapidfire: skip→reset called twice in a row does not corrupt state',
@@ -302,11 +304,13 @@ void main() {
       final afterReset = resetR.fold((f) => throw Exception(f), (h) => h);
       expect(afterReset.dailyStatus, HabitDailyStatus.pending,
           reason: 'resetHabit must clear failed status');
-      expect(afterReset.failedDates.where((d) {
-        final now = DateTime.now();
-        final today = DateTime(now.year, now.month, now.day);
-        return DateTime(d.year, d.month, d.day) == today;
-      }).isEmpty, isTrue,
+      expect(
+          afterReset.failedDates.where((d) {
+            final now = DateTime.now();
+            final today = DateTime(now.year, now.month, now.day);
+            return DateTime(d.year, d.month, d.day) == today;
+          }).isEmpty,
+          isTrue,
           reason: "Today's entry must be removed from failedDates");
 
       final completeR = await repo.completeHabit(id);
@@ -377,7 +381,8 @@ void main() {
       var habits = await repo.watchHabits().first;
       final failed = habits.firstWhere((h) => h.id == id);
       expect(
-        failed.failedDates.any((d) => DateTime(d.year, d.month, d.day) == today),
+        failed.failedDates
+            .any((d) => DateTime(d.year, d.month, d.day) == today),
         isTrue,
         reason: 'failedDates must contain today after failHabit',
       );
@@ -394,7 +399,8 @@ void main() {
       expect(reset.dailyStatus, HabitDailyStatus.pending);
     });
 
-    test('currentStreak is NOT broken by resetHabit when habit was merely failed',
+    test(
+        'currentStreak is NOT broken by resetHabit when habit was merely failed',
         () async {
       // The streak should only be recalculated from completionHistory, which is
       // untouched by fail/reset.  So resetting a never-completed habit keeps streak=0.
@@ -410,4 +416,3 @@ void main() {
     });
   });
 }
-

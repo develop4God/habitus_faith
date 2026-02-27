@@ -913,8 +913,7 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                     child: OutlinedButton.icon(
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        await Future.delayed(
-                            const Duration(milliseconds: 150));
+                        await Future.delayed(const Duration(milliseconds: 150));
                         await ref
                             .read(habitsNotifierProvider.notifier)
                             .resetHabit(habit.id);
