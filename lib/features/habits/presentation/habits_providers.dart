@@ -229,20 +229,25 @@ class HabitsNotifier extends AsyncNotifier<void> {
   Future<void> resetHabit(String habitId) async {
     debugPrint('HabitsNotifier.resetHabit: llamado para habitId=$habitId');
     state = const AsyncLoading();
-    final repository = ref.read(habitsRepositoryProvider);
-    final result = await repository.resetHabit(habitId);
-    result.fold(
-      (failure) {
-        debugPrint('HabitsNotifier.resetHabit: error: $failure');
-        state = AsyncError(failure, StackTrace.current);
-      },
-      (habit) {
-        debugPrint(
-          'HabitsNotifier.resetHabit: éxito, habit.dailyStatus=${habit.dailyStatus}',
-        );
-        state = const AsyncData(null);
-      },
-    );
+    try {
+      final repository = ref.read(habitsRepositoryProvider);
+      final result = await repository.resetHabit(habitId);
+      result.fold(
+        (failure) {
+          debugPrint('HabitsNotifier.resetHabit: error: $failure');
+          state = AsyncError(failure, StackTrace.current);
+        },
+        (habit) {
+          debugPrint(
+            'HabitsNotifier.resetHabit: éxito, habit.dailyStatus=${habit.dailyStatus}',
+          );
+          state = const AsyncData(null);
+        },
+      );
+    } catch (e, st) {
+      debugPrint('HabitsNotifier.resetHabit: excepción inesperada: $e');
+      state = AsyncError(e, st);
+    }
   }
 
   Future<void> failHabit(String habitId) async {

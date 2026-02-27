@@ -85,6 +85,15 @@ class JsonGeneralNotesRepository {
     await _save(list);
   }
 
+  Future<void> updateNote(String id, String content) async {
+    final list = _load();
+    final index = list.indexWhere((n) => n.id == id);
+    if (index != -1) {
+      list[index] = list[index].copyWith(content: content);
+      await _save(list);
+    }
+  }
+
   Future<void> deleteNote(String id) async {
     final list = _load();
     list.removeWhere((n) => n.id == id);

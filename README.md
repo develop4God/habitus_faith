@@ -54,9 +54,10 @@ AI Generates 3 Habits:
 - Automatic streak monitoring, calendar heatmap, longest record
 - Same-day protection (no duplicate completions)
 - Offline-first (SharedPreferences + optional Firestore sync)
-- **User-defined drag & drop reorder** – long-press any card and reorder
-- **Persistent order across midnight** – base order survives daily reset
-- **Unskip / un-fail** – tap a skipped or failed habit to instantly reset it to pending
+- **Long-press drag & drop reorder** – hold any habit card to drag; short taps always scroll
+- **Auto-scroll when dragging** – 180 px edge zone with graduated speed (120–900 px/s); upward drag scrolls continuously without releasing
+- **Persistent order across midnight** – `createdAt` tiebreaker ensures deterministic sort after daily reset
+- **Unskip / un-fail** – tap a skipped or failed habit to instantly reset it to pending, then complete
 
 #### 📝 Rich Note Editor
 - Checkbox list with tap-to-toggle (✅ done / ⬜ pending)
@@ -93,14 +94,15 @@ AI Generates 3 Habits:
 
 ---
 
-### 🐛 Recent Bug Fixes (v1.1.0)
+### 🐛 Recent Bug Fixes (v1.2.0)
 
 | # | Bug | Fix |
 |---|-----|-----|
-| 1 | Drag & drop sluggish on long lists | Added `cacheExtent: 2000`, switched to immediate `ReorderableDragStartListener` |
-| 2 | Habit order resets after midnight | `reorderHabits` no longer sets `AsyncLoading` mid-stream, preserving visual order |
-| 3 | Unskip triggers infinite spinner | Added `resetHabit` method; checkbox now calls `resetHabit → completeHabit` for skipped/failed habits |
-| 4 | Notes editor — plain text only | New rich editor with checkbox list, numbered list, and formatting toolbar |
+| 1 | Drag upward gets stuck / doesn't scroll | Edge zone enlarged to 180 px, minimum scroll speed floor (120 px/s), `autoScrollerVelocityScalar` re-enabled cooperatively |
+| 2 | Normal scroll hijacked by drag | `ReorderableDelayedDragStartListener` requires **long-press** before drag starts; short taps scroll normally |
+| 3 | Habit order resets after midnight | `createdAt` used as stable tiebreaker so equal-`order` habits keep a deterministic position across day resets |
+| 4 | Unskip triggers infinite loading | All `HabitsNotifier` mutation methods now wrapped in `try-catch`; `AsyncLoading` can never be left unresolved by an unexpected exception |
+| 5 | Notes editor — plain text only | Rich editor with checkbox list (tap to toggle ✅), numbered list (1. 2. 3…), quick-emoji toolbar, and per-note share button |
 
 ---
 
@@ -127,6 +129,8 @@ GEMINI_MODEL=gemini-1.5-flash
 ```bash
 flutter test
 # All suites: ✅ passing
+# Regression tests: habit_bugs_regression_test.dart (16 tests)
+# Behavior tests: bug_fixes_behavior_test.dart (19 tests)
 # Coverage: 85%+ on core business logic
 ```
 

@@ -4,20 +4,24 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'notes_providers.dart';
-import 'pets_providers.dart';
 import '../domain/models/general_note_model.dart';
-import '../domain/models/pet_model.dart';
 
 // ─── Rich note line model ─────────────────────────────────────────────────────
 
 enum _NoteLineType { plain, checkbox, numbered }
 
 class _NoteLine {
+  final String id;
   final _NoteLineType type;
   String text;
   bool checked;
 
-  _NoteLine({required this.type, this.text = '', this.checked = false});
+  _NoteLine({
+    required this.type,
+    this.text = '',
+    this.checked = false,
+    String? id,
+  }) : id = id ?? UniqueKey().toString();
 
   String toStorageString(int numberIndex) {
     switch (type) {
@@ -28,6 +32,15 @@ class _NoteLine {
       case _NoteLineType.plain:
         return text;
     }
+  }
+
+  _NoteLine copyWith({_NoteLineType? type, String? text, bool? checked}) {
+    return _NoteLine(
+      id: id,
+      type: type ?? this.type,
+      text: text ?? this.text,
+      checked: checked ?? this.checked,
+    );
   }
 }
 
@@ -60,6 +73,65 @@ List<_NoteLine> _parseNote(String raw) {
   return result;
 }
 
+String _serialiseLines(List<_NoteLine> lines) {
+  int num = 1;
+  final sb = StringBuffer();
+  for (int i = 0; i < lines.length; i++) {
+    if (i > 0) sb.write('\n');
+    final line = lines[i];
+    if (line.type == _NoteLineType.numbered) {
+      sb.write(line.toStorageString(num));
+      num++;
+    } else {
+      num = 1;
+      sb.write(line.toStorageString(0));
+    }
+  }
+  return sb.toString();
+}
+
+// ─── Shared Modern Widgets ──────────────────────────────────────────────────
+
+class _ModernCheckbox extends StatelessWidget {
+  final bool checked;
+  final VoidCallback onTap;
+  final double size;
+
+  const _ModernCheckbox({
+    required this.checked,
+    required this.onTap,
+    this.size = 22,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: checked ? Colors.green.shade500 : Colors.transparent,
+            borderRadius: BorderRadius.circular(size * 0.35),
+            border: Border.all(
+              color: checked ? Colors.green.shade500 : Colors.grey.shade300,
+              width: 2,
+            ),
+          ),
+          child: checked
+              ? const Icon(Icons.check, color: Colors.white, size: 14)
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 class NotesPage extends ConsumerStatefulWidget {
@@ -70,10 +142,12 @@ class NotesPage extends ConsumerStatefulWidget {
 }
 
 class _NotesPageState extends ConsumerState<NotesPage> {
-  String? _selectedPetId;
-
   // Rich editor state
   late List<_NoteLine> _lines;
+  String? _editingNoteId;
+  final Map<String, TextEditingController> _controllers = {};
+  int _focusedIndex = 0;
+  int _lastAddedIndex = -1;
 
   final List<String> _quickEmojis = [
     '🙏', '✨', '📖', '❤️', '🙌', '💪', '🌱', '☀️', '🕊️', '🔥',
@@ -88,61 +162,140 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     _lines = [_NoteLine(type: _NoteLineType.plain)];
   }
 
+  @override
+  void dispose() {
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  TextEditingController _getController(int index) {
+    final line = _lines[index];
+    if (!_controllers.containsKey(line.id)) {
+      _controllers[line.id] = TextEditingController(text: line.text);
+    }
+    return _controllers[line.id]!;
+  }
+
   // ── Serialise lines to flat text for storage ──────────────────────────────
 
-  String get _serialised {
-    int num = 1;
-    final sb = StringBuffer();
-    for (int i = 0; i < _lines.length; i++) {
-      if (i > 0) sb.write('\n');
-      final line = _lines[i];
-      if (line.type == _NoteLineType.numbered) {
-        sb.write(line.toStorageString(num));
-        num++;
-      } else {
-        num = 1;
-        sb.write(line.toStorageString(0));
-      }
-    }
-    return sb.toString();
-  }
+  String get _serialised => _serialiseLines(_lines);
 
   bool get _canSave {
     final text = _serialised.trim();
     return text.isNotEmpty && text.length <= _maxChars;
   }
 
-  void _addLine(_NoteLineType type) => setState(() {
-        _lines.add(_NoteLine(type: type));
+  void _changeCurrentLineType(_NoteLineType type) {
+    setState(() {
+      _lines[_focusedIndex] = _lines[_focusedIndex].copyWith(type: type);
+    });
+  }
+
+  void _handleSubmitted(int index) {
+    final line = _lines[index];
+    final text = _getController(index).text;
+
+    if (text.isEmpty && line.type != _NoteLineType.plain) {
+      setState(() {
+        _lines[index] = line.copyWith(type: _NoteLineType.plain);
+        _lastAddedIndex = index;
+        _focusedIndex = index;
       });
-
-  void _toggleCheckbox(int index) =>
-      setState(() => _lines[index].checked = !_lines[index].checked);
-
-  void _removeLine(int index) {
-    if (_lines.length == 1) {
-      setState(() => _lines[0].text = '');
     } else {
-      setState(() => _lines.removeAt(index));
+      setState(() {
+        final newLine = _NoteLine(type: line.type);
+        _lines.insert(index + 1, newLine);
+        _lastAddedIndex = index + 1;
+        _focusedIndex = index + 1;
+      });
     }
   }
 
-  void _insertEmoji(String emoji) => setState(() {
-        if (_lines.isNotEmpty) _lines.last.text += emoji;
+  void _removeLine(int index) {
+    if (_lines.length == 1) {
+      setState(() {
+        _getController(0).text = '';
+        _lines[0].text = '';
+        _lines[0].checked = false;
+        _focusedIndex = 0;
       });
+    } else {
+      setState(() {
+        final line = _lines.removeAt(index);
+        _controllers[line.id]?.dispose();
+        _controllers.remove(line.id);
+        _focusedIndex = index > 0 ? index - 1 : 0;
+        _lastAddedIndex = _focusedIndex;
+      });
+    }
+  }
+
+  void _insertEmoji(String emoji) {
+    if (_lines.isNotEmpty) {
+      final controller = _getController(_focusedIndex);
+      final currentText = controller.text;
+      final selection = controller.selection;
+      
+      String newText;
+      int newOffset;
+      
+      if (selection.isValid) {
+        newText = currentText.replaceRange(selection.start, selection.end, emoji);
+        newOffset = selection.start + emoji.length;
+      } else {
+        newText = currentText + emoji;
+        newOffset = newText.length;
+      }
+      
+      setState(() {
+        controller.text = newText;
+        controller.selection = TextSelection.collapsed(offset: newOffset);
+        _lines[_focusedIndex].text = newText;
+      });
+    }
+  }
 
   void _saveNote() {
     final text = _serialised.trim();
     if (_canSave) {
-      ref
-          .read(jsonGeneralNotesRepositoryProvider)
-          .addNote(text, petId: _selectedPetId);
-      setState(() {
-        _lines = [_NoteLine(type: _NoteLineType.plain)];
-        _selectedPetId = null;
-      });
-      FocusScope.of(context).unfocus();
+      final repo = ref.read(jsonGeneralNotesRepositoryProvider);
+      if (_editingNoteId != null) {
+        repo.updateNote(_editingNoteId!, text);
+      } else {
+        repo.addNote(text);
+      }
+      _clearEditor();
     }
+  }
+
+  void _clearEditor() {
+    setState(() {
+      for (var c in _controllers.values) {
+        c.dispose();
+      }
+      _controllers.clear();
+      _lines = [_NoteLine(type: _NoteLineType.plain)];
+      _editingNoteId = null;
+      _lastAddedIndex = -1;
+      _focusedIndex = 0;
+    });
+    FocusScope.of(context).unfocus();
+  }
+
+  void _editNote(GeneralNote note) {
+    setState(() {
+      for (var c in _controllers.values) {
+        c.dispose();
+      }
+      _controllers.clear();
+      _editingNoteId = note.id;
+      _lines = _parseNote(note.content);
+      if (_lines.isEmpty) _lines = [_NoteLine(type: _NoteLineType.plain)];
+      _lastAddedIndex = 0;
+      _focusedIndex = 0;
+    });
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -236,14 +389,18 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   // ── Rich input card ────────────────────────────────────────────────────────
 
   Widget _buildRichNoteInput() {
+    final isEditing = _editingNoteId != null;
+    final currentType = _lines[_focusedIndex].type;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
+        border: isEditing ? Border.all(color: Colors.orange.shade200, width: 2) : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(5),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -255,17 +412,22 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           // Header row
           Row(
             children: [
-              const Icon(Icons.edit_note, color: Colors.orange),
+              Icon(isEditing ? Icons.edit : Icons.edit_note, color: Colors.orange),
               const SizedBox(width: 8),
-              const Text(
-                'Nueva Nota',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Text(
+                isEditing ? 'Editar Nota' : 'Nueva Nota',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const Spacer(),
+              if (isEditing)
+                IconButton(
+                  onPressed: _clearEditor,
+                  icon: const Icon(Icons.close, color: Colors.grey),
+                ),
               IconButton(
                 onPressed: _canSave ? _saveNote : null,
                 icon: Icon(
-                  Icons.send_rounded,
+                  isEditing ? Icons.check_circle : Icons.send_rounded,
                   color: _canSave ? Colors.orange : Colors.grey.shade300,
                 ),
               ),
@@ -280,19 +442,22 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 icon: Icons.format_list_bulleted_rounded,
                 label: 'Casilla',
                 color: Colors.green.shade700,
-                onTap: () => _addLine(_NoteLineType.checkbox),
+                isSelected: currentType == _NoteLineType.checkbox,
+                onTap: () => _changeCurrentLineType(_NoteLineType.checkbox),
               ),
               _ToolbarButton(
                 icon: Icons.format_list_numbered_rounded,
                 label: 'Numerada',
                 color: Colors.blue.shade700,
-                onTap: () => _addLine(_NoteLineType.numbered),
+                isSelected: currentType == _NoteLineType.numbered,
+                onTap: () => _changeCurrentLineType(_NoteLineType.numbered),
               ),
               _ToolbarButton(
                 icon: Icons.text_fields_rounded,
                 label: 'Texto',
-                color: Colors.grey.shade700,
-                onTap: () => _addLine(_NoteLineType.plain),
+                color: Colors.purple.shade700,
+                isSelected: currentType == _NoteLineType.plain,
+                onTap: () => _changeCurrentLineType(_NoteLineType.plain),
               ),
             ],
           ),
@@ -301,7 +466,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
           // Lines editor
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 240),
+            constraints: const BoxConstraints(maxHeight: 300),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -328,11 +493,6 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               ),
             ),
           ),
-
-          const SizedBox(height: 4),
-
-          // Pet selector
-          _buildPetSelector(),
 
           const SizedBox(height: 8),
 
@@ -361,24 +521,14 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   Widget _buildLineEditor(int index) {
     final line = _lines[index];
+    final controller = _getController(index);
     Widget leading;
 
     switch (line.type) {
       case _NoteLineType.checkbox:
-        leading = GestureDetector(
-          onTap: () => _toggleCheckbox(index),
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 180),
-            child: Icon(
-              line.checked
-                  ? Icons.check_box_rounded
-                  : Icons.check_box_outline_blank_rounded,
-              key: ValueKey(line.checked),
-              color:
-                  line.checked ? Colors.green.shade600 : Colors.grey.shade400,
-              size: 22,
-            ),
-          ),
+        leading = _ModernCheckbox(
+          checked: line.checked,
+          onTap: () => setState(() => line.checked = !line.checked),
         );
         break;
       case _NoteLineType.numbered:
@@ -386,8 +536,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         for (int i = 0; i < index; i++) {
           if (_lines[i].type == _NoteLineType.numbered) num++;
         }
-        leading = SizedBox(
+        leading = Container(
           width: 26,
+          padding: const EdgeInsets.only(top: 2),
           child: Text(
             '$num.',
             style: TextStyle(
@@ -406,17 +557,23 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          leading,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: leading,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(
-              autofocus: index == _lines.length - 1,
-              controller: TextEditingController(text: line.text)
-                ..selection =
-                    TextSelection.collapsed(offset: line.text.length),
-              onChanged: (v) => _lines[index].text = v,
+              key: ValueKey(line.id),
+              autofocus: index == _lastAddedIndex || (index == 0 && _lines.length == 1 && line.text.isEmpty),
+              controller: controller,
+              onTap: () => setState(() => _focusedIndex = index),
+              onChanged: (v) {
+                line.text = v;
+                setState(() {}); // For character counter
+              },
               style: TextStyle(
                 fontSize: 15,
                 decoration: (line.type == _NoteLineType.checkbox &&
@@ -429,189 +586,30 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               ),
               decoration: InputDecoration(
                 isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 hintText: line.type == _NoteLineType.checkbox
                     ? 'Elemento de lista...'
                     : line.type == _NoteLineType.numbered
                         ? 'Paso...'
-                        : 'Escribe un testimonio, oración o pensamiento...',
+                        : 'Escribe una nota...',
                 hintStyle:
                     TextStyle(color: Colors.grey.shade400, fontSize: 14),
                 border: InputBorder.none,
               ),
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => _addLine(line.type),
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _handleSubmitted(index),
             ),
           ),
           if (_lines.length > 1)
-            GestureDetector(
-              onTap: () => _removeLine(index),
-              child: Icon(Icons.remove_circle_outline,
-                  size: 16, color: Colors.grey.shade400),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: GestureDetector(
+                onTap: () => _removeLine(index),
+                child: Icon(Icons.remove_circle_outline,
+                    size: 16, color: Colors.grey.shade400),
+              ),
             ),
         ],
-      ),
-    );
-  }
-
-  // ── Pet selector ──────────────────────────────────────────────────────────
-
-  Widget _buildPetSelector() {
-    final petsAsync = ref.watch(petsNotifierProvider);
-
-    return petsAsync.when(
-      data: (pets) {
-        if (pets.isEmpty) {
-          return Row(
-            children: [
-              Icon(Icons.pets, size: 16, color: Colors.grey.shade400),
-              const SizedBox(width: 8),
-              TextButton.icon(
-                onPressed: _showAddPetDialog,
-                icon: const Icon(Icons.add, size: 16),
-                label: const Text('Agregar mascota',
-                    style: TextStyle(fontSize: 12)),
-                style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                ),
-              ),
-            ],
-          );
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.pets, size: 16, color: Colors.grey.shade600),
-                const SizedBox(width: 8),
-                const Text('Mascota:',
-                    style:
-                        TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                const Spacer(),
-                TextButton.icon(
-                  onPressed: _showAddPetDialog,
-                  icon: const Icon(Icons.add, size: 14),
-                  label: const Text('Agregar', style: TextStyle(fontSize: 11)),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 4, vertical: 2),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            SizedBox(
-              height: 44,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _buildPetChip(null, '❌', 'Ninguna'),
-                  ...pets.map(
-                      (pet) => _buildPetChip(pet.id, pet.emoji, pet.name)),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-    );
-  }
-
-  Widget _buildPetChip(String? petId, String emoji, String label) {
-    final isSelected = _selectedPetId == petId;
-
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: FilterChip(
-        selected: isSelected,
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(emoji, style: const TextStyle(fontSize: 16)),
-            const SizedBox(width: 4),
-            Text(label, style: const TextStyle(fontSize: 12)),
-          ],
-        ),
-        onSelected: (_) => setState(() => _selectedPetId = petId),
-        backgroundColor: Colors.grey.shade100,
-        selectedColor: Colors.orange.shade100,
-        checkmarkColor: Colors.orange.shade700,
-      ),
-    );
-  }
-
-  Future<void> _showAddPetDialog() async {
-    final nameController = TextEditingController();
-    String selectedEmoji = '🐕';
-    final petEmojis = ['🐕', '🐈', '🐦', '🐠', '🐰', '🐹', '🐢', '🦎', '🐍'];
-
-    await showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('Agregar Mascota'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nombre',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text('Selecciona un emoji:',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: petEmojis
-                    .map((emoji) => InkWell(
-                          onTap: () =>
-                              setDialogState(() => selectedEmoji = emoji),
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: selectedEmoji == emoji
-                                    ? Colors.orange
-                                    : Colors.grey.shade300,
-                                width: selectedEmoji == emoji ? 2 : 1,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(emoji,
-                                style: const TextStyle(fontSize: 24)),
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (nameController.text.trim().isNotEmpty) {
-                  await ref.read(petsNotifierProvider.notifier).addPet(
-                        nameController.text.trim(),
-                        selectedEmoji,
-                      );
-                  if (mounted) Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Agregar'),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -620,58 +618,19 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   Widget _buildNoteCard(GeneralNote note) {
     final dateStr = DateFormat('d MMM, HH:mm', 'es').format(note.createdAt);
-    // Parse the stored content so we can render checkboxes interactively
     final lines = _parseNote(note.content);
 
     return _NoteCard(
       note: note,
       lines: lines,
       dateStr: dateStr,
+      onEdit: () => _editNote(note),
       onDelete: () =>
           ref.read(jsonGeneralNotesRepositoryProvider).deleteNote(note.id),
       onShare: () => Share.share(note.content),
-      petBadge: note.petId != null ? _buildNotePetBadge(note.petId!) : null,
-    );
-  }
-
-  Widget _buildNotePetBadge(String petId) {
-    final petsAsync = ref.watch(petsNotifierProvider);
-
-    return petsAsync.when(
-      data: (pets) {
-        Pet? pet;
-        try {
-          pet = pets.firstWhere((p) => p.id == petId);
-        } catch (e) {
-          return const SizedBox.shrink();
-        }
-
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          decoration: BoxDecoration(
-            color: Colors.orange.shade50,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.orange.shade200),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(pet.emoji, style: const TextStyle(fontSize: 12)),
-              const SizedBox(width: 4),
-              Text(
-                pet.name,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.orange.shade900,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      onUpdate: (updatedContent) => ref
+          .read(jsonGeneralNotesRepositoryProvider)
+          .updateNote(note.id, updatedContent),
     );
   }
 
@@ -700,12 +659,14 @@ class _ToolbarButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
+  final bool isSelected;
   final VoidCallback onTap;
 
   const _ToolbarButton({
     required this.icon,
     required this.label,
     required this.color,
+    required this.isSelected,
     required this.onTap,
   });
 
@@ -714,21 +675,41 @@ class _ToolbarButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.08),
+          color: isSelected ? color : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
+          border: Border.all(
+            color: isSelected ? color : Colors.grey.shade300,
+            width: 1.5,
+          ),
+          boxShadow: isSelected ? [
+            BoxShadow(
+              color: color.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            )
+          ] : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 16, color: color),
-            const SizedBox(width: 4),
-            Text(label,
-                style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w600, color: color)),
+            Icon(
+              icon, 
+              size: 16, 
+              color: isSelected ? Colors.white : Colors.grey.shade600,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12, 
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600, 
+                color: isSelected ? Colors.white : Colors.grey.shade600,
+              )
+            ),
           ],
         ),
       ),
@@ -742,17 +723,19 @@ class _NoteCard extends StatefulWidget {
   final GeneralNote note;
   final List<_NoteLine> lines;
   final String dateStr;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onShare;
-  final Widget? petBadge;
+  final Function(String updatedContent) onUpdate;
 
   const _NoteCard({
     required this.note,
     required this.lines,
     required this.dateStr,
+    required this.onEdit,
     required this.onDelete,
     required this.onShare,
-    this.petBadge,
+    required this.onUpdate,
   });
 
   @override
@@ -769,6 +752,21 @@ class _NoteCardState extends State<_NoteCard> {
   }
 
   @override
+  void didUpdateWidget(_NoteCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.note.content != oldWidget.note.content) {
+      _lines = widget.lines;
+    }
+  }
+
+  void _toggleLine(int index) {
+    setState(() {
+      _lines[index].checked = !_lines[index].checked;
+    });
+    widget.onUpdate(_serialiseLines(_lines));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -777,6 +775,13 @@ class _NoteCardState extends State<_NoteCard> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.grey.shade100),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -785,11 +790,16 @@ class _NoteCardState extends State<_NoteCard> {
             children: [
               Text(widget.dateStr,
                   style: const TextStyle(color: Colors.grey, fontSize: 12)),
-              if (widget.petBadge != null) ...[
-                const SizedBox(width: 8),
-                widget.petBadge!,
-              ],
               const Spacer(),
+              IconButton(
+                onPressed: widget.onEdit,
+                icon: const Icon(Icons.edit_outlined,
+                    size: 18, color: Colors.orange),
+                visualDensity: VisualDensity.compact,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+              const SizedBox(width: 16),
               IconButton(
                 onPressed: widget.onShare,
                 icon: const Icon(Icons.share_outlined,
@@ -810,7 +820,6 @@ class _NoteCardState extends State<_NoteCard> {
             ],
           ),
           const SizedBox(height: 12),
-          // Render lines: plain lines as text, checkbox lines interactively
           for (int i = 0; i < _lines.length; i++) _buildReadLine(i),
         ],
       ),
@@ -823,28 +832,21 @@ class _NoteCardState extends State<_NoteCard> {
       case _NoteLineType.checkbox:
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 3),
-          child: GestureDetector(
-            onTap: () => setState(() => _lines[index].checked = !line.checked),
+          child: InkWell(
+            onTap: () => _toggleLine(index),
+            borderRadius: BorderRadius.circular(8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 180),
-                  child: Icon(
-                    line.checked
-                        ? Icons.check_box_rounded
-                        : Icons.check_box_outline_blank_rounded,
-                    key: ValueKey(line.checked),
-                    color: line.checked
-                        ? Colors.green.shade600
-                        : Colors.grey.shade400,
-                    size: 20,
-                  ),
+                _ModernCheckbox(
+                  checked: line.checked,
+                  onTap: () => _toggleLine(index),
+                  size: 20,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    line.text,
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 200),
                     style: TextStyle(
                       fontSize: 15,
                       height: 1.5,
@@ -853,8 +855,9 @@ class _NoteCardState extends State<_NoteCard> {
                           : const Color(0xFF1A1C1E),
                       decoration: line.checked
                           ? TextDecoration.lineThrough
-                          : null,
+                          : TextDecoration.none,
                     ),
+                    child: Text(line.text),
                   ),
                 ),
               ],

@@ -15,6 +15,24 @@ class GeneralNote {
     this.petId,
   });
 
+  GeneralNote copyWith({
+    String? id,
+    String? userId,
+    String? content,
+    DateTime? date,
+    DateTime? createdAt,
+    String? petId,
+  }) {
+    return GeneralNote(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      content: content ?? this.content,
+      date: date ?? this.date,
+      createdAt: createdAt ?? this.createdAt,
+      petId: petId ?? this.petId,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
