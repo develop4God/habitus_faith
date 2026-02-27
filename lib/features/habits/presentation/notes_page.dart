@@ -391,6 +391,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   Widget _buildRichNoteInput() {
     final isEditing = _editingNoteId != null;
     final currentType = _lines[_focusedIndex].type;
+    final hasContent = _serialised.trim().isNotEmpty;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -419,10 +420,14 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const Spacer(),
-              if (isEditing)
+              if (isEditing || hasContent)
                 IconButton(
                   onPressed: _clearEditor,
-                  icon: const Icon(Icons.close, color: Colors.grey),
+                  icon: Icon(
+                    isEditing ? Icons.close : Icons.delete_outline, 
+                    color: Colors.grey.shade400
+                  ),
+                  tooltip: isEditing ? 'Cancelar edición' : 'Descartar nota',
                 ),
               IconButton(
                 onPressed: _canSave ? _saveNote : null,
