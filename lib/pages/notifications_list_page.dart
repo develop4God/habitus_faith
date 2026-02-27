@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/habits_providers.dart';
@@ -10,6 +11,7 @@ class NotificationsListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(habitsStreamProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -18,7 +20,7 @@ class NotificationsListPage extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Notificaciones'),
+        title: Text(l10n.notifications),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black,
@@ -43,7 +45,7 @@ class NotificationsListPage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'No hay notificaciones programadas',
+                    l10n.noScheduledNotifications,
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                 ],
@@ -67,6 +69,7 @@ class NotificationsListPage extends ConsumerWidget {
   }
 
   Widget _buildNotificationCard(BuildContext context, Habit habit) {
+    final l10n = AppLocalizations.of(context)!;
     final settings = habit.notificationSettings!;
     final isEnabled = settings.timing != NotificationTiming.none;
 
@@ -121,7 +124,7 @@ class NotificationsListPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  notificationTime.isNotEmpty ? notificationTime : 'Sin hora',
+                  notificationTime.isNotEmpty ? notificationTime : l10n.noTime,
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
               ],
@@ -135,9 +138,9 @@ class NotificationsListPage extends ConsumerWidget {
                 color: Colors.green.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text(
-                'Encendido',
-                style: TextStyle(
+              child: Text(
+                l10n.notificationOn,
+                style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.green,

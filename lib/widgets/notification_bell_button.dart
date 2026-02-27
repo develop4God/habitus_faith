@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 
 /// Notification bell button that only asks for the hour and sets daily notification at that hour.
@@ -19,6 +20,7 @@ class NotificationBellButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isActive = initialSettings != null &&
         initialSettings!.timing != NotificationTiming.none;
     return IconButton(
@@ -26,7 +28,7 @@ class NotificationBellButton extends StatelessWidget {
         isActive ? Icons.notifications_active : Icons.notifications_none,
         color: isActive ? Colors.orange : Colors.grey,
       ),
-      tooltip: 'Configurar recordatorio',
+      tooltip: l10n.configureReminder,
       onPressed: () async {
         // Parse eventTime or use now
         TimeOfDay initial = TimeOfDay.now();

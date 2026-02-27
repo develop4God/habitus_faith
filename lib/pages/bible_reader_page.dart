@@ -183,7 +183,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           if (state.availableVersions.isNotEmpty)
             PopupMenuButton<BibleVersion>(
               icon: const Icon(Icons.auto_stories),
-              tooltip: 'Select Version',
+              tooltip: l10n.selectVersion,
               onSelected: (version) {
                 notifier.changeVersion(version);
               },
@@ -199,7 +199,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           // Font size controls
           IconButton(
             icon: const Icon(Icons.format_size),
-            tooltip: 'Font Size',
+            tooltip: l10n.fontSize,
             onPressed: () {
               notifier.toggleFontControls();
             },
@@ -468,7 +468,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Copy
                         IconButton(
                           icon: const Icon(Icons.copy),
-                          tooltip: 'Copy',
+                          tooltip: l10n.copy,
                           onPressed: () {
                             final text = _getSelectedVersesText(state);
                             final reference = _formatVerseReference(state);
@@ -484,7 +484,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Share
                         IconButton(
                           icon: const Icon(Icons.share),
-                          tooltip: 'Share',
+                          tooltip: l10n.share,
                           onPressed: () {
                             final text = _getSelectedVersesText(state);
                             final reference = _formatVerseReference(state);
@@ -495,7 +495,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Save
                         IconButton(
                           icon: const Icon(Icons.bookmark_add),
-                          tooltip: 'Save',
+                          tooltip: l10n.save,
                           onPressed: () async {
                             await notifier.saveSelectedVerses();
                             if (context.mounted) {
@@ -509,7 +509,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Cancel
                         IconButton(
                           icon: const Icon(Icons.close),
-                          tooltip: 'Cancel',
+                          tooltip: l10n.cancelAction,
                           onPressed: () {
                             notifier.clearSelection();
                           },

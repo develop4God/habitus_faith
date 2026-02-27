@@ -47,11 +47,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'Sim';
 
   @override
   String get habitAlreadyCompletedStartAgain =>
-      'This habit is already completed. Do you want to start the timer again?';
+      'Este hábito já foi concluído. Deseja iniciar o cronômetro novamente?';
 
   @override
   String get delete => 'Excluir';
@@ -1261,27 +1261,235 @@ class AppLocalizationsPt extends AppLocalizations {
       'Feito com ❤️ por Develop4God\n \nPara a Glória de Deus';
 
   @override
-  String get faithJourney => 'Faith Journey';
+  String get faithJourney => 'Jornada de Fé';
 
   @override
   String get faithJourneyDescription =>
-      'Track your progress, earn faith points, and unlock badges!';
+      'Acompanhe seu progresso, ganhe pontos de fé e desbloqueie medalhas!';
 
   @override
-  String get startTimer => 'Start Timer';
+  String get startTimer => 'Iniciar Cronômetro';
 
   @override
-  String get timerRunning => 'Timer Running';
+  String get timerRunning => 'Cronômetro em Execução';
 
   @override
-  String get timeToFocus => 'Time to Focus';
+  String get timeToFocus => 'Hora de Focar';
 
   @override
-  String get focusComplete => 'Focus session complete!';
+  String get focusComplete => 'Sessão de foco concluída!';
 
   @override
-  String get goalReached => 'Goal Reached!';
+  String get goalReached => 'Meta Alcançada!';
 
   @override
-  String get timer => 'Timer';
+  String get timer => 'Cronômetro';
+
+  @override
+  String get statisticsTitle => 'Estatísticas';
+
+  @override
+  String get noStatisticsData => 'Nenhum dado estatístico disponível.';
+
+  @override
+  String get activeHabits => 'Hábitos ativos';
+
+  @override
+  String get successPercentage => 'Porcentagem de sucesso';
+
+  @override
+  String lastCompletionDate(String date) {
+    return 'Última conclusão: $date';
+  }
+
+  @override
+  String get habitDistribution => 'Distribuição de hábitos';
+
+  @override
+  String get pending => 'Pendentes';
+
+  @override
+  String get excellentConsistency => 'Excelente consistência! Continue assim.';
+
+  @override
+  String get goodProgress => 'Bom progresso! Mantenha o ritmo.';
+
+  @override
+  String get everyDayMatters => 'Cada dia conta! Você pode melhorar.';
+
+  @override
+  String get myNotes => 'Minhas Notas';
+
+  @override
+  String get editNote => 'Editar Nota';
+
+  @override
+  String get newNote => 'Nova Nota';
+
+  @override
+  String get cancelEdit => 'Cancelar edição';
+
+  @override
+  String get discardNote => 'Descartar nota';
+
+  @override
+  String get checkboxItem => 'Caixa de seleção';
+
+  @override
+  String get numberedItem => 'Numerada';
+
+  @override
+  String get plainText => 'Texto';
+
+  @override
+  String get listItemHint => 'Item da lista...';
+
+  @override
+  String get stepHint => 'Passo...';
+
+  @override
+  String get writeNoteHint => 'Escreva uma nota...';
+
+  @override
+  String get noSavedNotes => 'Nenhuma nota salva';
+
+  @override
+  String get thoughtsAppearHere => 'Seus pensamentos aparecerão aqui.';
+
+  @override
+  String get myGoals => 'Minhas Metas';
+
+  @override
+  String get yearly => 'Anual';
+
+  @override
+  String get personal => 'Pessoal';
+
+  @override
+  String get activeGoals => 'Objetivos Ativos';
+
+  @override
+  String get generalProgress => 'Progresso Geral';
+
+  @override
+  String get completedLower => 'concluído';
+
+  @override
+  String get noGoalsYet => 'Ainda sem metas';
+
+  @override
+  String get defineYourGoals =>
+      'Defina seus objetivos espirituais ou pessoais para este ano, mês ou semana.';
+
+  @override
+  String get createFirstGoal => 'Criar minha primeira meta';
+
+  @override
+  String get editGoal => 'Editar Meta';
+
+  @override
+  String get whatToAchieve => 'O que você deseja alcançar?';
+
+  @override
+  String get exampleGoal => 'Ex: Ler toda a Bíblia';
+
+  @override
+  String get deadline => 'Prazo';
+
+  @override
+  String deadlineDate(String date) {
+    return 'Data limite: $date';
+  }
+
+  @override
+  String get selectDeadline => 'Por favor selecione um prazo';
+
+  @override
+  String get updateGoal => 'Atualizar Meta';
+
+  @override
+  String get saveGoal => 'Salvar Meta';
+
+  @override
+  String get goalTypeYear => 'Anual';
+
+  @override
+  String get goalTypeMonth => 'Mensal';
+
+  @override
+  String get goalTypeWeek => 'Semanal';
+
+  @override
+  String get goalTypeCustom => 'Personalizado';
+
+  @override
+  String get noScheduledNotifications => 'Nenhuma notificação agendada';
+
+  @override
+  String get notificationOn => 'Ativada';
+
+  @override
+  String get noTime => 'Sem horário';
+
+  @override
+  String get configureReminder => 'Configurar lembrete';
+
+  @override
+  String get householdSpinnerTitle => '🏠 Girar Tarefas Domésticas';
+
+  @override
+  String get anotherMoment => 'Outro momento';
+
+  @override
+  String taskCompleteError(String error) {
+    return 'Erro ao concluir a tarefa: $error';
+  }
+
+  @override
+  String get addTasks => 'Adicionar tarefas';
+
+  @override
+  String get completing => 'Concluindo...';
+
+  @override
+  String get complete => 'Concluir';
+
+  @override
+  String get comingSoon => 'EM BREVE';
+
+  @override
+  String get viewAll => 'Ver Tudo';
+
+  @override
+  String get selectVersion => 'Selecionar Versão';
+
+  @override
+  String get fontSize => 'Tamanho da Fonte';
+
+  @override
+  String get share => 'Compartilhar';
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String get favorites => 'Favoritos';
+
+  @override
+  String get noBibleVersions =>
+      'Nenhuma versão da Bíblia disponível para este idioma.';
+
+  @override
+  String bibleVersionSet(String version) {
+    return 'Versão da Bíblia definida: $version';
+  }
+
+  @override
+  String get errorLoadingHabits => 'Erro ao carregar hábitos';
+
+  @override
+  String get spinHouseholdTasks => 'Girar tarefas domésticas';
+
+  @override
+  String get newGoal => 'Nova Meta';
 }

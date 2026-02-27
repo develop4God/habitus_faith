@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'dart:math' as math;
 import '../../domain/habit.dart';
 import '../habits_providers.dart';
@@ -98,6 +99,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   }
 
   void _showTaskDialog(Habit task) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -163,7 +165,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text('Otro momento'),
+                      child: Text(l10n.anotherMoment),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -236,9 +238,10 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
       if (!mounted) return;
 
       // Show error message
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error al completar la tarea: $e'),
+          content: Text(l10n.taskCompleteError(e.toString())),
           backgroundColor: Colors.red.shade600,
         ),
       );
@@ -346,11 +349,12 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   @override
   Widget build(BuildContext context) {
     final habitsAsync = ref.watch(habitsStreamProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: const Color(0xfff8fafc),
       appBar: AppBar(
-        title: const Text('🏠 Girar Tareas del Hogar'),
+        title: Text(l10n.householdSpinnerTitle),
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF1a202c),
@@ -379,6 +383,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -412,7 +417,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.add),
-              label: const Text('Agregar tareas'),
+              label: Text(l10n.addTasks),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange.shade400,
                 foregroundColor: Colors.white,
@@ -658,6 +663,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
   }
 
   Widget _buildWorkingView(Habit task) {
+    final l10n = AppLocalizations.of(context)!;
     // Use a scrollable container to avoid overflow on small screens or tests
     return SingleChildScrollView(
       child: Padding(
@@ -714,7 +720,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text('Cancelar'),
+                  child: Text(l10n.cancel),
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton.icon(
@@ -730,7 +736,7 @@ class _HouseholdSpinnerPageState extends ConsumerState<HouseholdSpinnerPage>
                           ),
                         )
                       : const Icon(Icons.check_circle),
-                  label: Text(_isCompleting ? 'Completando...' : 'Completar'),
+                  label: Text(_isCompleting ? l10n.completing : l10n.complete),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isCompleting
                         ? Colors.grey.shade400
