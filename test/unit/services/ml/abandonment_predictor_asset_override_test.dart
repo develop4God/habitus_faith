@@ -85,7 +85,8 @@ void main() {
       await predictor.dispose();
     });
 
-    test('invalid scaler params cause schema validation to detect mismatch', () async {
+    test('invalid scaler params cause schema validation to detect mismatch',
+        () async {
       AbandonmentPredictor.assetLoaderOverride =
           (asset) async => FakeInterpreter(result: 0.3);
 
@@ -170,4 +171,3 @@ Habit _createHabitWithHistory() {
     createdAt: DateTime.now().subtract(const Duration(days: 30)),
   );
 }
-

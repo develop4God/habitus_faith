@@ -98,7 +98,8 @@ class AbandonmentPredictor {
       // Load model metadata
       debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
       final metadataJson = assetStringLoaderOverride != null
-          ? await assetStringLoaderOverride!('assets/ml_models/model_metadata.json')
+          ? await assetStringLoaderOverride!(
+              'assets/ml_models/model_metadata.json')
           : await rootBundle.loadString('assets/ml_models/model_metadata.json');
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
       debugPrint(
@@ -135,7 +136,8 @@ class AbandonmentPredictor {
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
       final scalerJson = assetStringLoaderOverride != null
-          ? await assetStringLoaderOverride!('assets/ml_models/scaler_params.json')
+          ? await assetStringLoaderOverride!(
+              'assets/ml_models/scaler_params.json')
           : await rootBundle.loadString('assets/ml_models/scaler_params.json');
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');

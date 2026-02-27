@@ -97,11 +97,13 @@ void main() {
     tearDown(() async => predictor.dispose());
 
     test('low-risk habit has few recent failures', () {
-      final habit = MLPredictorTestUtils.createLowRiskHabit(name: 'Morning Prayer');
+      final habit =
+          MLPredictorTestUtils.createLowRiskHabit(name: 'Morning Prayer');
 
       final recentFailures = MLFeaturesCalculator.countRecentFailures(habit, 7);
       expect(recentFailures, lessThanOrEqualTo(3),
-          reason: 'Low-risk habit should have at most 3 failures in last 7 days');
+          reason:
+              'Low-risk habit should have at most 3 failures in last 7 days');
     });
 
     test('high-risk habit has more recent failures than low-risk', () {
@@ -136,7 +138,8 @@ void main() {
       }
     });
 
-    test('same habit always produces the same prediction (deterministic)', () async {
+    test('same habit always produces the same prediction (deterministic)',
+        () async {
       final habit = MLPredictorTestUtils.createLowRiskHabit();
 
       final predictions = <double>[];
@@ -146,13 +149,15 @@ void main() {
 
       final unique = predictions.toSet();
       expect(unique.length, equals(1),
-          reason: 'Deterministic fake interpreter must return same value every time');
+          reason:
+              'Deterministic fake interpreter must return same value every time');
     });
 
     test('concurrent predictions complete without errors', () async {
       final habit1 = MLPredictorTestUtils.createHighRiskHabit(name: 'H1');
       final habit2 = MLPredictorTestUtils.createLowRiskHabit(name: 'H2');
-      final habit3 = MLPredictorTestUtils.createHighRiskHabit(name: 'H3', daysOld: 60);
+      final habit3 =
+          MLPredictorTestUtils.createHighRiskHabit(name: 'H3', daysOld: 60);
 
       final results = await Future.wait([
         predictor.predictRisk(habit1),
@@ -201,11 +206,13 @@ void main() {
     });
 
     test('medium risk is correctly classified', () {
-      final level = RiskThresholds.fromValue(RiskThresholds.mediumRiskThreshold);
+      final level =
+          RiskThresholds.fromValue(RiskThresholds.mediumRiskThreshold);
       expect(level, isNotNull);
     });
 
-    test('full pipeline: prediction → threshold gate works end-to-end', () async {
+    test('full pipeline: prediction → threshold gate works end-to-end',
+        () async {
       // Fake interpreter returns 0.30, which is below the 0.65 intervention threshold.
       final predictor = AbandonmentPredictor();
       await predictor.initialize();
@@ -331,7 +338,8 @@ void main() {
       expect(service.getRemainingRequests(), greaterThanOrEqualTo(0));
     });
 
-    test('persists state across service instances (same SharedPreferences)', () async {
+    test('persists state across service instances (same SharedPreferences)',
+        () async {
       service.recordRequest();
       service.recordRequest();
       expect(service.getRemainingRequests(), equals(8));
@@ -350,7 +358,8 @@ void main() {
   // (CI/CD, older devices, first cold-start).
   // ─────────────────────────────────────────────────────────────────────────
   group('Graceful degradation', () {
-    test('uninitialised predictor returns safe neutral risk, not 0 or 1', () async {
+    test('uninitialised predictor returns safe neutral risk, not 0 or 1',
+        () async {
       final predictor = AbandonmentPredictor(); // intentionally never init'd
 
       final habit = MLPredictorTestUtils.createLowRiskHabit();
