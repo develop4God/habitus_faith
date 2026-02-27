@@ -11,7 +11,7 @@
 
 **The First Faith-Based Habit Tracker with AI-Powered Personalization**
 
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-0/ passing-yellow)]()
 [![Flutter](https://img.shields.io/badge/flutter-3.0%2B-blue)]()
 [![Riverpod](https://img.shields.io/badge/riverpod-2.5-blue)]()
 [![Firebase](https://img.shields.io/badge/firebase-enabled-orange)]()
@@ -241,7 +241,7 @@ flutter clean && flutter pub get
 
 **El primer rastreador de hábitos basado en la fe con personalización por IA**
 
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-0/ passing-yellow)]()
 [![Flutter](https://img.shields.io/badge/flutter-3.0%2B-blue)]()
 [![Riverpod](https://img.shields.io/badge/riverpod-2.5-blue)]()
 [![Firebase](https://img.shields.io/badge/firebase-enabled-orange)]()
