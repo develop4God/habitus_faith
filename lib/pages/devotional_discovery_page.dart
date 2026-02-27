@@ -99,7 +99,7 @@ class _DevotionalDiscoveryPageState
                 MaterialPageRoute(builder: (context) => const FavoritesPage()),
               );
             },
-            tooltip: 'Favorites',
+            tooltip: l10n.favorites,
           ),
         ],
       ),
@@ -227,7 +227,7 @@ class _DevotionalDiscoveryPageState
                       onPressed: () {
                         ref.read(devotionalProvider.notifier).initialize();
                       },
-                      child: const Text('Retry'),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -487,14 +487,15 @@ class _DevotionalDiscoveryPageState
   }
 
   void _showVersionSelector(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final notifier = ref.read(devotionalProvider.notifier);
     final available = notifier.getAvailableVersionsForCurrentLanguage();
 
     if (available.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No Bible versions available for this language.'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(l10n.noBibleVersions),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -549,8 +550,9 @@ class _DevotionalDiscoveryPageState
       title: Text(versionCode),
       trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
       onTap: () async {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Bible version set to: $versionCode')),
+          SnackBar(content: Text(l10n.bibleVersionSet(versionCode))),
         );
         Navigator.pop(context);
         final notifier = ref.read(devotionalProvider.notifier);

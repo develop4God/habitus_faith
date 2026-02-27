@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../../../../core/providers/auth_provider.dart';
 import '../gamification_providers.dart';
 import '../widgets/journey_progress_card.dart';
@@ -11,6 +12,7 @@ class FaithJourneyPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userIdProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     if (userId == null) {
       return const Scaffold(
@@ -155,7 +157,7 @@ class FaithJourneyPage extends ConsumerWidget {
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text('View All'),
+                        child: Text(l10n.viewAll),
                       ),
                     ],
                   ),
@@ -169,7 +171,7 @@ class FaithJourneyPage extends ConsumerWidget {
                   const SizedBox(height: 32),
 
                   // FOMO / COMING SOON SECTION
-                  _buildFomoSection(),
+                  _buildFomoSection(l10n),
 
                   const SizedBox(height: 40),
                 ],
@@ -181,7 +183,7 @@ class FaithJourneyPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildFomoSection() {
+  Widget _buildFomoSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -273,7 +275,7 @@ class FaithJourneyPage extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
                   ),
-                  child: const Text('COMING SOON'),
+                  child: Text(l10n.comingSoon),
                 ),
               ),
             ],
