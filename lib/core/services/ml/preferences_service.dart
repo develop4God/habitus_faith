@@ -4,6 +4,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///
 /// Abstracts away [SharedPreferences.getInstance] so the predictor
 /// can be tested without a platform channel.
+///
+/// ## Design note
+/// A generic key-value interface was chosen over a focused `ITelemetryStorage`
+/// facade for two reasons:
+/// 1. **Simplicity** — the four operations (getInt/setInt/getString/setString)
+///    map 1-to-1 to the SharedPreferences API, keeping the contract thin.
+/// 2. **Flexibility** — the same interface can be reused by other services
+///    without coupling them to a ML-specific abstraction.
+///
+/// If the set of keys grows significantly or multiple services need to share
+/// preferences, consider introducing a dedicated `ITelemetryStorage` facade.
 abstract class IPreferencesService {
   int? getInt(String key);
   Future<bool> setInt(String key, int value);

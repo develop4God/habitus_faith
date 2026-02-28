@@ -90,9 +90,10 @@ class AbandonmentPredictor {
     }
 
     if (_assetLoader == null) {
-      debugPrint(
-          'AbandonmentPredictor.initialize: No asset loader provided, skipping');
-      return;
+      throw StateError(
+        'AbandonmentPredictor: assetLoader is required for initialization. '
+        'Pass an IAssetLoader via the constructor.',
+      );
     }
 
     debugPrint('AbandonmentPredictor.initialize: Starting initialization...');
@@ -436,7 +437,11 @@ class AbandonmentPredictor {
 
   /// Load persisted telemetry from preferences
   Future<void> _loadTelemetry() async {
-    if (_preferencesService == null) return;
+    if (_preferencesService == null) {
+      debugPrint(
+          'AbandonmentPredictor: Telemetry disabled (no preferences service)');
+      return;
+    }
     try {
       _predictionCount =
           _preferencesService!.getInt(_telemetryPredictionCountKey) ?? 0;
@@ -477,7 +482,11 @@ class AbandonmentPredictor {
 
   /// Save telemetry to preferences
   Future<void> _saveTelemetry() async {
-    if (_preferencesService == null) return;
+    if (_preferencesService == null) {
+      debugPrint(
+          'AbandonmentPredictor: Telemetry save skipped (no preferences service)');
+      return;
+    }
     try {
       await _preferencesService!
           .setInt(_telemetryPredictionCountKey, _predictionCount);
@@ -498,7 +507,11 @@ class AbandonmentPredictor {
 
   /// Reset telemetry counters (called weekly)
   Future<void> _resetTelemetry() async {
-    if (_preferencesService == null) return;
+    if (_preferencesService == null) {
+      debugPrint(
+          'AbandonmentPredictor: Telemetry reset skipped (no preferences service)');
+      return;
+    }
     try {
       // Log final stats before reset
       debugPrint(

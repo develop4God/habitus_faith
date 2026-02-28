@@ -16,11 +16,15 @@ void main() {
         predictor.dispose();
       });
 
-      test('initialize skips when no IAssetLoader is provided', () async {
+      test('initialize throws StateError when no IAssetLoader is provided',
+          () async {
         final predictor = AbandonmentPredictor();
-        await predictor.initialize();
-        expect(predictor.isInitialized, isFalse,
-            reason: 'Without asset loader, initialization should not proceed');
+        await expectLater(
+          () => predictor.initialize(),
+          throwsA(isA<StateError>()),
+          reason: 'Missing assetLoader should throw StateError, not fail silently',
+        );
+        expect(predictor.isInitialized, isFalse);
         predictor.dispose();
       });
 

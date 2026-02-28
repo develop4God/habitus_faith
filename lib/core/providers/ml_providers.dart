@@ -11,6 +11,25 @@ import 'shared_preferences_provider.dart';
 ///
 /// NOTE: This provider returns the predictor immediately, but initialization happens async.
 /// Use abandonmentPredictorInitializedProvider if you need to ensure initialization is complete.
+///
+/// ## Test Override Pattern
+/// ```dart
+/// final prefs = await SharedPreferences.getInstance();
+/// ProviderContainer(overrides: [
+///   sharedPreferencesProvider.overrideWithValue(prefs),
+///   abandonmentPredictorProvider.overrideWith((ref) {
+///     final clock = ref.watch(clockProvider);
+///     final predictor = AbandonmentPredictor(
+///       clock: clock,
+///       assetLoader: TestAssetLoader(),
+///       preferencesService: SharedPreferencesService(prefs),
+///     );
+///     predictor.initialize();
+///     ref.onDispose(() => predictor.dispose());
+///     return predictor;
+///   }),
+/// ])
+/// ```
 final abandonmentPredictorProvider = Provider<AbandonmentPredictor>((ref) {
   final clock = ref.watch(clockProvider);
   final prefs = ref.watch(sharedPreferencesProvider);
