@@ -22,7 +22,8 @@ void main() {
         await expectLater(
           () => predictor.initialize(),
           throwsA(isA<StateError>()),
-          reason: 'Missing assetLoader should throw StateError, not fail silently',
+          reason:
+              'Missing assetLoader should throw StateError, not fail silently',
         );
         expect(predictor.isInitialized, isFalse);
         predictor.dispose();

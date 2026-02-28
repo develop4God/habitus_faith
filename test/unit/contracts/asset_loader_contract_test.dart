@@ -28,10 +28,10 @@ void main() {
       expect(result, contains('"scale"'));
     });
 
-    test('loadString throws for unknown path', () async {
+    test('loadString throws Exception for unknown path', () async {
       await expectLater(
         () => loader.loadString('assets/unknown/file.json'),
-        throwsA(anything),
+        throwsA(isA<Exception>()),
       );
     });
 
@@ -44,7 +44,10 @@ void main() {
       final output = [
         [0.0]
       ];
-      expect(() => (interpreter as dynamic).run([[1.0, 1.0, 1.0, 1.0, 1.0]], output),
+      expect(
+          () => (interpreter as dynamic).run([
+                [1.0, 1.0, 1.0, 1.0, 1.0]
+              ], output),
           returnsNormally);
     });
 
@@ -61,7 +64,9 @@ void main() {
       final output = [
         [0.0]
       ];
-      (interpreter as dynamic).run([[0.0, 0.0, 0.0, 0.0, 0.0]], output);
+      (interpreter as dynamic).run([
+        [0.0, 0.0, 0.0, 0.0, 0.0]
+      ], output);
       expect(output[0][0], closeTo(0.9, 0.001));
     });
   });

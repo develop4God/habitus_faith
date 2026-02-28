@@ -68,7 +68,8 @@ void main() {
       expect(identical(p1, p2), isFalse);
     });
 
-    test('abandonmentPredictorInitializedProvider returns initialized predictor',
+    test(
+        'abandonmentPredictorInitializedProvider returns initialized predictor',
         () async {
       final container = testContainer();
       addTearDown(container.dispose);

@@ -112,10 +112,9 @@ class AbandonmentPredictor {
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
 
-      _interpreter =
-          await _assetLoader!.loadInterpreter('assets/ml_models/predictor.tflite');
-      debugPrint(
-          'AbandonmentPredictor.initialize: Interpreter loaded');
+      _interpreter = await _assetLoader!
+          .loadInterpreter('assets/ml_models/predictor.tflite');
+      debugPrint('AbandonmentPredictor.initialize: Interpreter loaded');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
@@ -490,8 +489,7 @@ class AbandonmentPredictor {
     try {
       await _preferencesService!
           .setInt(_telemetryPredictionCountKey, _predictionCount);
-      await _preferencesService!
-          .setInt(_telemetryErrorCountKey, _errorCount);
+      await _preferencesService!.setInt(_telemetryErrorCountKey, _errorCount);
 
       if (_lastPredictionTime != null) {
         await _preferencesService!.setString(
@@ -525,8 +523,7 @@ class AbandonmentPredictor {
       _errorCount = 0;
       _lastTelemetryReset = clock.now();
 
-      await _preferencesService!
-          .setInt(_telemetryPredictionCountKey, 0);
+      await _preferencesService!.setInt(_telemetryPredictionCountKey, 0);
       await _preferencesService!.setInt(_telemetryErrorCountKey, 0);
       await _preferencesService!.setString(
         'ml_last_reset',
