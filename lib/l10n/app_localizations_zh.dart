@@ -1290,12 +1290,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myGoals => '我的目标';
 
   @override
-  String get yearly => '年度';
-
-  @override
-  String get personal => '个人';
-
-  @override
   String get activeGoals => '活跃目标';
 
   @override

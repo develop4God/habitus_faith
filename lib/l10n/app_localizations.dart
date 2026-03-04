@@ -2552,18 +2552,6 @@ abstract class AppLocalizations {
   /// **'My Goals'**
   String get myGoals;
 
-  /// Yearly goal type tab
-  ///
-  /// In en, this message translates to:
-  /// **'Yearly'**
-  String get yearly;
-
-  /// Personal/custom goal type tab
-  ///
-  /// In en, this message translates to:
-  /// **'Personal'**
-  String get personal;
-
   /// Active goals section title
   ///
   /// In en, this message translates to:
