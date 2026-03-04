@@ -90,6 +90,7 @@ class Habit {
   final bool isArchived;
   final int? colorValue; // Store color as int (Color.value)
   final HabitDifficulty difficulty;
+  final bool isPinned;
 
   // TCC/Nudge adaptive intelligence fields
   final int difficultyLevel; // 1-5 scale for TCC adjustment
@@ -133,6 +134,7 @@ class Habit {
     this.isArchived = false,
     this.colorValue,
     this.difficulty = HabitDifficulty.medium,
+    this.isPinned = false,
     this.difficultyLevel = 3,
     this.targetMinutes = 20, // Default matches difficultyLevel 3
     this.successRate7d = 0.0,
@@ -354,6 +356,7 @@ class Habit {
     bool? isArchived,
     int? colorValue,
     HabitDifficulty? difficulty,
+    bool? isPinned,
     int? difficultyLevel,
     int? targetMinutes,
     double? successRate7d,
@@ -390,6 +393,7 @@ class Habit {
       isArchived: isArchived ?? this.isArchived,
       colorValue: colorValue ?? this.colorValue,
       difficulty: difficulty ?? this.difficulty,
+      isPinned: isPinned ?? this.isPinned,
       difficultyLevel: difficultyLevel ?? this.difficultyLevel,
       targetMinutes: targetMinutes ?? this.targetMinutes,
       successRate7d: successRate7d ?? this.successRate7d,

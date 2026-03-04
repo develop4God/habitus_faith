@@ -1377,12 +1377,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get myGoals => 'Mes Objectifs';
 
   @override
-  String get yearly => 'Annuel';
-
-  @override
-  String get personal => 'Personnel';
-
-  @override
   String get activeGoals => 'Objectifs Actifs';
 
   @override

@@ -1360,12 +1360,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get myGoals => 'Minhas Metas';
 
   @override
-  String get yearly => 'Anual';
-
-  @override
-  String get personal => 'Pessoal';
-
-  @override
   String get activeGoals => 'Objetivos Ativos';
 
   @override

@@ -1363,12 +1363,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myGoals => 'Mis Metas';
 
   @override
-  String get yearly => 'Anual';
-
-  @override
-  String get personal => 'Personal';
-
-  @override
   String get activeGoals => 'Objetivos Activos';
 
   @override

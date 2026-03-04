@@ -89,7 +89,17 @@ class AbandonmentPredictor {
       return;
     }
 
-    if (_assetLoader == null) {
+    // Resolve effective asset loader: prefer constructor-injected loader,
+    // fall back to static overrides for backward compatibility with test stubs.
+    final IAssetLoader? effectiveLoader = _assetLoader ??
+        (assetLoaderOverride != null || assetStringLoaderOverride != null
+            ? _StaticOverrideAssetLoader(
+                loaderOverride: assetLoaderOverride,
+                stringLoaderOverride: assetStringLoaderOverride,
+              )
+            : null);
+
+    if (effectiveLoader == null) {
       throw StateError(
         'AbandonmentPredictor: assetLoader is required for initialization. '
         'Pass an IAssetLoader via the constructor.',
@@ -101,7 +111,7 @@ class AbandonmentPredictor {
     try {
       // Load model metadata
       debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
-      final metadataJson = await _assetLoader!.loadString(
+      final metadataJson = await effectiveLoader.loadString(
         'assets/ml_models/model_metadata.json',
       );
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
@@ -112,13 +122,13 @@ class AbandonmentPredictor {
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
 
-      _interpreter = await _assetLoader!
+      _interpreter = await effectiveLoader
           .loadInterpreter('assets/ml_models/predictor.tflite');
       debugPrint('AbandonmentPredictor.initialize: Interpreter loaded');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
-      final scalerJson = await _assetLoader!.loadString(
+      final scalerJson = await effectiveLoader.loadString(
         'assets/ml_models/scaler_params.json',
       );
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
@@ -542,3 +552,40 @@ class AbandonmentPredictor {
   /// Static override for asset string loader (for tests)
   static Future<String> Function(String asset)? assetStringLoaderOverride;
 }
+
+/// Private [IAssetLoader] adapter that delegates to the static override
+/// functions for backward compatibility with test stubs that set
+/// [AbandonmentPredictor.assetLoaderOverride] /
+/// [AbandonmentPredictor.assetStringLoaderOverride] directly.
+class _StaticOverrideAssetLoader implements IAssetLoader {
+  final Future<dynamic> Function(String asset)? loaderOverride;
+  final Future<String> Function(String asset)? stringLoaderOverride;
+
+  const _StaticOverrideAssetLoader({
+    this.loaderOverride,
+    this.stringLoaderOverride,
+  });
+
+  @override
+  Future<String> loadString(String assetPath) async {
+    if (stringLoaderOverride != null) {
+      return stringLoaderOverride!(assetPath);
+    }
+    throw StateError(
+      'AbandonmentPredictor: assetStringLoaderOverride is not set. '
+      'Call installFakeTflite() before initialize().',
+    );
+  }
+
+  @override
+  Future<dynamic> loadInterpreter(String assetPath) async {
+    if (loaderOverride != null) {
+      return loaderOverride!(assetPath);
+    }
+    throw StateError(
+      'AbandonmentPredictor: assetLoaderOverride is not set. '
+      'Call installFakeTflite() before initialize().',
+    );
+  }
+}
+
