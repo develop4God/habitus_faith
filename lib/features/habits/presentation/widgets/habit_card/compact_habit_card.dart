@@ -758,7 +758,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     );
   }
 
-  String _recurrenceFrequencyLabel(AppLocalizations l10n, RecurrenceFrequency frequency) {
+  String _recurrenceFrequencyLabel(
+      AppLocalizations l10n, RecurrenceFrequency frequency) {
     switch (frequency) {
       case RecurrenceFrequency.daily:
         return l10n.daily;
@@ -769,7 +770,8 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
     }
   }
 
-  String _getFrequencyUnit(AppLocalizations l10n, RecurrenceFrequency frequency) {
+  String _getFrequencyUnit(
+      AppLocalizations l10n, RecurrenceFrequency frequency) {
     switch (frequency) {
       case RecurrenceFrequency.daily:
         return l10n.frequencyUnitDay;

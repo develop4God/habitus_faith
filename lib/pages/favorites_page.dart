@@ -169,7 +169,8 @@ class _FavoriteCard extends ConsumerWidget {
                               .read(devotionalProvider.notifier)
                               .toggleFavorite(devocional);
                         },
-                        tooltip: AppLocalizations.of(context)!.removeFromFavorites,
+                        tooltip:
+                            AppLocalizations.of(context)!.removeFromFavorites,
                       ),
                     ],
                   ),

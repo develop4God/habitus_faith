@@ -535,4 +535,9 @@ class AbandonmentPredictor {
       debugPrint('AbandonmentPredictor: Failed to reset telemetry: $e');
     }
   }
+
+  /// Static override for asset loader (for tests)
+  static Future<dynamic> Function(String asset)? assetLoaderOverride;
+  /// Static override for asset string loader (for tests)
+  static Future<String> Function(String asset)? assetStringLoaderOverride;
 }

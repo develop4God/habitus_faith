@@ -141,7 +141,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     }
   }
 
-  String _notificationTimingLabel(AppLocalizations l10n, NotificationTiming timing) {
+  String _notificationTimingLabel(
+      AppLocalizations l10n, NotificationTiming timing) {
     switch (timing) {
       case NotificationTiming.none:
         return l10n.notificationTimingNone;
@@ -169,7 +170,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     }
   }
 
-  String _recurrenceFrequencyLabel(AppLocalizations l10n, RecurrenceFrequency freq) {
+  String _recurrenceFrequencyLabel(
+      AppLocalizations l10n, RecurrenceFrequency freq) {
     switch (freq) {
       case RecurrenceFrequency.daily:
         return l10n.daily;
@@ -361,8 +363,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             icon: Icons.access_time_rounded,
                             color: Colors.orange,
                             title: l10n.hour,
-                            value: eventTime?.format(context) ??
-                                l10n.selectTime,
+                            value:
+                                eventTime?.format(context) ?? l10n.selectTime,
                             onTap: () async {
                               final picked = await showTimePicker(
                                   context: context,
@@ -388,7 +390,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             color: Colors.purple,
                             title: l10n.reminder,
                             value: notificationSettings != null
-                                ? _notificationTimingLabel(l10n, notificationSettings!.timing)
+                                ? _notificationTimingLabel(
+                                    l10n, notificationSettings!.timing)
                                 : l10n.notificationTimingNone,
                             onTap: () async {
                               final result =
@@ -412,7 +415,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             color: Colors.green,
                             title: l10n.repetition,
                             value: recurrence?.enabled == true
-                                ? _recurrenceFrequencyLabel(l10n, recurrence!.frequency)
+                                ? _recurrenceFrequencyLabel(
+                                    l10n, recurrence!.frequency)
                                 : l10n.noRepetition,
                             onTap: () async {
                               final result = await showDialog<HabitRecurrence>(

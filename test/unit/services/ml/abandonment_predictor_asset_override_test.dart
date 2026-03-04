@@ -12,6 +12,7 @@
 /// FIX: Added assetStringLoaderOverride static field that, when set, replaces
 /// rootBundle.loadString calls during initialization.
 library;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';

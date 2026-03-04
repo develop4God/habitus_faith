@@ -215,7 +215,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
                               controller: _subtaskController,
                               autofocus: true,
                               decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)!.newSubtaskHint,
+                                hintText: AppLocalizations.of(context)!
+                                    .newSubtaskHint,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),

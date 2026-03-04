@@ -54,7 +54,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
     return '(${adjustedHour.toString().padLeft(2, '0')}:${adjustedMinute.toString().padLeft(2, '0')})';
   }
 
-  String _notificationTimingLabel(AppLocalizations l10n, NotificationTiming timing) {
+  String _notificationTimingLabel(
+      AppLocalizations l10n, NotificationTiming timing) {
     switch (timing) {
       case NotificationTiming.none:
         return l10n.notificationTimingNone;
@@ -108,13 +109,15 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.atEventTime,
-                title: _notificationTimingLabel(l10n, NotificationTiming.atEventTime),
+                title: _notificationTimingLabel(
+                    l10n, NotificationTiming.atEventTime),
                 effectiveTime: widget.eventTime ?? '',
                 isSelected: selectedTiming == NotificationTiming.atEventTime,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.tenMinutesBefore,
-                title: _notificationTimingLabel(l10n, NotificationTiming.tenMinutesBefore),
+                title: _notificationTimingLabel(
+                    l10n, NotificationTiming.tenMinutesBefore),
                 effectiveTime: _getEffectiveTime(
                   NotificationTiming.tenMinutesBefore,
                 ),
@@ -123,7 +126,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.thirtyMinutesBefore,
-                title: _notificationTimingLabel(l10n, NotificationTiming.thirtyMinutesBefore),
+                title: _notificationTimingLabel(
+                    l10n, NotificationTiming.thirtyMinutesBefore),
                 effectiveTime: _getEffectiveTime(
                   NotificationTiming.thirtyMinutesBefore,
                 ),
@@ -132,7 +136,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.oneHourBefore,
-                title: _notificationTimingLabel(l10n, NotificationTiming.oneHourBefore),
+                title: _notificationTimingLabel(
+                    l10n, NotificationTiming.oneHourBefore),
                 effectiveTime: _getEffectiveTime(
                   NotificationTiming.oneHourBefore,
                 ),
@@ -140,7 +145,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.custom,
-                title: _notificationTimingLabel(l10n, NotificationTiming.custom),
+                title:
+                    _notificationTimingLabel(l10n, NotificationTiming.custom),
                 isSelected: selectedTiming == NotificationTiming.custom,
                 showCustomInput: true,
               ),
@@ -246,7 +252,8 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                                   onPressed: () async {
                                     final picked = await showTimePicker(
                                       context: context,
-                                      initialTime: customTime ?? TimeOfDay.now(),
+                                      initialTime:
+                                          customTime ?? TimeOfDay.now(),
                                     );
                                     if (picked != null) {
                                       setState(() {
