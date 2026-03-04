@@ -2,13 +2,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/core/services/time/time.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
+import '../../utils/tflite_test_stub.dart';
 
 void main() {
   group('AbandonmentPredictor with Clock injection', () {
     test('uses injected clock for telemetry timestamps', () async {
       final fixedTime = DateTime(2025, 11, 15, 14, 30); // Friday 2:30pm
       final clock = Clock.fixed(fixedTime);
-      final predictor = AbandonmentPredictor(clock: clock);
+      final predictor = AbandonmentPredictor(
+        clock: clock,
+        assetLoader: TestAssetLoader(),
+      );
 
       // Initialize (may fail in test environment, but that's ok)
       await predictor.initialize();
@@ -42,7 +46,10 @@ void main() {
       // Start at a fixed time
       final startTime = DateTime(2025, 11, 1, 0, 0);
       final clock = Clock.fixed(startTime);
-      final predictor = AbandonmentPredictor(clock: clock);
+      final predictor = AbandonmentPredictor(
+        clock: clock,
+        assetLoader: TestAssetLoader(),
+      );
 
       await predictor.initialize();
 
@@ -57,8 +64,14 @@ void main() {
       final clock1 = Clock.fixed(fixedTime);
       final clock2 = Clock.fixed(fixedTime);
 
-      final predictor1 = AbandonmentPredictor(clock: clock1);
-      final predictor2 = AbandonmentPredictor(clock: clock2);
+      final predictor1 = AbandonmentPredictor(
+        clock: clock1,
+        assetLoader: TestAssetLoader(),
+      );
+      final predictor2 = AbandonmentPredictor(
+        clock: clock2,
+        assetLoader: TestAssetLoader(),
+      );
 
       await predictor1.initialize();
       await predictor2.initialize();
@@ -88,7 +101,9 @@ void main() {
     });
 
     test('system clock is used by default when no clock provided', () async {
-      final predictor = AbandonmentPredictor(); // No clock parameter
+      final predictor = AbandonmentPredictor(
+        assetLoader: TestAssetLoader(),
+      ); // No clock parameter
 
       await predictor.initialize();
 

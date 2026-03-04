@@ -3,6 +3,7 @@ import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/core/services/ai/behavioral_engine.dart';
 import 'package:habitus_faith/core/services/time/time.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
+import '../utils/tflite_test_stub.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,10 @@ void main() {
 
     setUpAll(() async {
       fixedClock = FixedClock(DateTime(2024, 1, 15, 14, 30));
-      predictor = AbandonmentPredictor(clock: fixedClock);
+      predictor = AbandonmentPredictor(
+        clock: fixedClock,
+        assetLoader: TestAssetLoader(),
+      );
       behavioralEngine = BehavioralEngine(clock: fixedClock);
       await predictor.initialize();
     });

@@ -1,16 +1,43 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ml/abandonment_predictor.dart';
+import '../services/ml/asset_loader.dart';
+import '../services/ml/preferences_service.dart';
 import '../../features/habits/presentation/habits_providers.dart';
 import 'clock_provider.dart';
+import 'shared_preferences_provider.dart';
 
 /// Provider for AbandonmentPredictor singleton
 /// Automatically initializes on first access and disposes when ref is invalidated
 ///
 /// NOTE: This provider returns the predictor immediately, but initialization happens async.
 /// Use abandonmentPredictorInitializedProvider if you need to ensure initialization is complete.
+///
+/// ## Test Override Pattern
+/// ```dart
+/// final prefs = await SharedPreferences.getInstance();
+/// ProviderContainer(overrides: [
+///   sharedPreferencesProvider.overrideWithValue(prefs),
+///   abandonmentPredictorProvider.overrideWith((ref) {
+///     final clock = ref.watch(clockProvider);
+///     final predictor = AbandonmentPredictor(
+///       clock: clock,
+///       assetLoader: TestAssetLoader(),
+///       preferencesService: SharedPreferencesService(prefs),
+///     );
+///     predictor.initialize();
+///     ref.onDispose(() => predictor.dispose());
+///     return predictor;
+///   }),
+/// ])
+/// ```
 final abandonmentPredictorProvider = Provider<AbandonmentPredictor>((ref) {
   final clock = ref.watch(clockProvider);
-  final predictor = AbandonmentPredictor(clock: clock);
+  final prefs = ref.watch(sharedPreferencesProvider);
+  final predictor = AbandonmentPredictor(
+    clock: clock,
+    assetLoader: const RootBundleAssetLoader(),
+    preferencesService: SharedPreferencesService(prefs),
+  );
 
   // Initialize asynchronously (non-blocking for app startup)
   predictor.initialize();
