@@ -2407,6 +2407,582 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Timer'**
   String get timer;
+
+  /// Statistics page title
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statisticsTitle;
+
+  /// Empty state for statistics page
+  ///
+  /// In en, this message translates to:
+  /// **'No statistics data available.'**
+  String get noStatisticsData;
+
+  /// Active habits label in statistics
+  ///
+  /// In en, this message translates to:
+  /// **'Active habits'**
+  String get activeHabits;
+
+  /// Success percentage label
+  ///
+  /// In en, this message translates to:
+  /// **'Success percentage'**
+  String get successPercentage;
+
+  /// Last completion date label
+  ///
+  /// In en, this message translates to:
+  /// **'Last completion: {date}'**
+  String lastCompletionDate(String date);
+
+  /// Habit distribution chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Habit distribution'**
+  String get habitDistribution;
+
+  /// Pending habits label
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// Motivational message for high success rate
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent consistency! Keep it up.'**
+  String get excellentConsistency;
+
+  /// Motivational message for medium success rate
+  ///
+  /// In en, this message translates to:
+  /// **'Good progress! Keep the rhythm.'**
+  String get goodProgress;
+
+  /// Motivational message for low success rate
+  ///
+  /// In en, this message translates to:
+  /// **'Every day matters! You can improve.'**
+  String get everyDayMatters;
+
+  /// Notes page title
+  ///
+  /// In en, this message translates to:
+  /// **'My Notes'**
+  String get myNotes;
+
+  /// Edit note header
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Note'**
+  String get editNote;
+
+  /// New note header
+  ///
+  /// In en, this message translates to:
+  /// **'New Note'**
+  String get newNote;
+
+  /// Cancel edit tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel edit'**
+  String get cancelEdit;
+
+  /// Discard note tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Discard note'**
+  String get discardNote;
+
+  /// Checkbox line type label
+  ///
+  /// In en, this message translates to:
+  /// **'Checkbox'**
+  String get checkboxItem;
+
+  /// Numbered line type label
+  ///
+  /// In en, this message translates to:
+  /// **'Numbered'**
+  String get numberedItem;
+
+  /// Plain text line type label
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get plainText;
+
+  /// Hint for checkbox list item
+  ///
+  /// In en, this message translates to:
+  /// **'List item...'**
+  String get listItemHint;
+
+  /// Hint for numbered step
+  ///
+  /// In en, this message translates to:
+  /// **'Step...'**
+  String get stepHint;
+
+  /// Hint for plain text note
+  ///
+  /// In en, this message translates to:
+  /// **'Write a note...'**
+  String get writeNoteHint;
+
+  /// Empty state for notes
+  ///
+  /// In en, this message translates to:
+  /// **'No saved notes'**
+  String get noSavedNotes;
+
+  /// Empty state subtitle for notes
+  ///
+  /// In en, this message translates to:
+  /// **'Your thoughts will appear here.'**
+  String get thoughtsAppearHere;
+
+  /// Goals page title
+  ///
+  /// In en, this message translates to:
+  /// **'My Goals'**
+  String get myGoals;
+
+  /// Yearly goal type tab
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get yearly;
+
+  /// Personal/custom goal type tab
+  ///
+  /// In en, this message translates to:
+  /// **'Personal'**
+  String get personal;
+
+  /// Active goals section title
+  ///
+  /// In en, this message translates to:
+  /// **'Active Goals'**
+  String get activeGoals;
+
+  /// General progress card title
+  ///
+  /// In en, this message translates to:
+  /// **'General Progress'**
+  String get generalProgress;
+
+  /// completed label (lowercase)
+  ///
+  /// In en, this message translates to:
+  /// **'completed'**
+  String get completedLower;
+
+  /// Empty state for goals
+  ///
+  /// In en, this message translates to:
+  /// **'No goals yet'**
+  String get noGoalsYet;
+
+  /// Empty state description for goals
+  ///
+  /// In en, this message translates to:
+  /// **'Define your spiritual or personal goals for this year, month, or week.'**
+  String get defineYourGoals;
+
+  /// Button to create first goal
+  ///
+  /// In en, this message translates to:
+  /// **'Create my first goal'**
+  String get createFirstGoal;
+
+  /// Edit goal dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Goal'**
+  String get editGoal;
+
+  /// Goal title input label
+  ///
+  /// In en, this message translates to:
+  /// **'What do you want to achieve?'**
+  String get whatToAchieve;
+
+  /// Goal title input hint
+  ///
+  /// In en, this message translates to:
+  /// **'E.g.: Read the entire Bible'**
+  String get exampleGoal;
+
+  /// Deadline label
+  ///
+  /// In en, this message translates to:
+  /// **'Deadline'**
+  String get deadline;
+
+  /// Deadline date display
+  ///
+  /// In en, this message translates to:
+  /// **'Deadline: {date}'**
+  String deadlineDate(String date);
+
+  /// Validation message for missing deadline
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a deadline'**
+  String get selectDeadline;
+
+  /// Update goal button
+  ///
+  /// In en, this message translates to:
+  /// **'Update Goal'**
+  String get updateGoal;
+
+  /// Save goal button
+  ///
+  /// In en, this message translates to:
+  /// **'Save Goal'**
+  String get saveGoal;
+
+  /// Goal type: yearly
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get goalTypeYear;
+
+  /// Goal type: monthly
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get goalTypeMonth;
+
+  /// Goal type: weekly
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get goalTypeWeek;
+
+  /// Goal type: custom
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get goalTypeCustom;
+
+  /// Empty state for notifications list
+  ///
+  /// In en, this message translates to:
+  /// **'No scheduled notifications'**
+  String get noScheduledNotifications;
+
+  /// Notification enabled status
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get notificationOn;
+
+  /// Fallback when no notification time set
+  ///
+  /// In en, this message translates to:
+  /// **'No time'**
+  String get noTime;
+
+  /// Tooltip for notification bell
+  ///
+  /// In en, this message translates to:
+  /// **'Configure reminder'**
+  String get configureReminder;
+
+  /// Household spinner page title
+  ///
+  /// In en, this message translates to:
+  /// **'🏠 Spin Household Tasks'**
+  String get householdSpinnerTitle;
+
+  /// Dismiss button in household spinner
+  ///
+  /// In en, this message translates to:
+  /// **'Another moment'**
+  String get anotherMoment;
+
+  /// Error message when task completion fails
+  ///
+  /// In en, this message translates to:
+  /// **'Error completing task: {error}'**
+  String taskCompleteError(String error);
+
+  /// Add tasks button label
+  ///
+  /// In en, this message translates to:
+  /// **'Add tasks'**
+  String get addTasks;
+
+  /// Completing task state
+  ///
+  /// In en, this message translates to:
+  /// **'Completing...'**
+  String get completing;
+
+  /// Complete button text
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get complete;
+
+  /// Coming soon label
+  ///
+  /// In en, this message translates to:
+  /// **'COMING SOON'**
+  String get comingSoon;
+
+  /// View all button
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// Select Bible version tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Select Version'**
+  String get selectVersion;
+
+  /// Font size tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Font Size'**
+  String get fontSize;
+
+  /// Share button tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// Cancel action tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelAction;
+
+  /// Favorites tooltip/label
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// No Bible versions available message
+  ///
+  /// In en, this message translates to:
+  /// **'No Bible versions available for this language.'**
+  String get noBibleVersions;
+
+  /// Bible version changed confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Bible version set to: {version}'**
+  String bibleVersionSet(String version);
+
+  /// Error loading habits message
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading habits'**
+  String get errorLoadingHabits;
+
+  /// Tooltip for household spinner FAB
+  ///
+  /// In en, this message translates to:
+  /// **'Spin household tasks'**
+  String get spinHouseholdTasks;
+
+  /// New goal dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'New Goal'**
+  String get newGoal;
+
+  /// Notification timing: no reminder
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder'**
+  String get notificationTimingNone;
+
+  /// Notification timing: at event time
+  ///
+  /// In en, this message translates to:
+  /// **'At event time'**
+  String get notificationTimingAtEvent;
+
+  /// Notification timing: 10 minutes before
+  ///
+  /// In en, this message translates to:
+  /// **'10 minutes before'**
+  String get notificationTimingTenMin;
+
+  /// Notification timing: 30 minutes before
+  ///
+  /// In en, this message translates to:
+  /// **'30 minutes before'**
+  String get notificationTimingThirtyMin;
+
+  /// Notification timing: 1 hour before
+  ///
+  /// In en, this message translates to:
+  /// **'1 hour before'**
+  String get notificationTimingOneHour;
+
+  /// Easy difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get difficultyEasy;
+
+  /// Medium difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get difficultyMedium;
+
+  /// Hard difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get difficultyHard;
+
+  /// Button/label to select a time
+  ///
+  /// In en, this message translates to:
+  /// **'Select time'**
+  String get selectTime;
+
+  /// Hour label in time picker tile
+  ///
+  /// In en, this message translates to:
+  /// **'Hour'**
+  String get hour;
+
+  /// Empty state for household tasks
+  ///
+  /// In en, this message translates to:
+  /// **'No household tasks'**
+  String get noHouseholdTasks;
+
+  /// Title for favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'My Favorites'**
+  String get myFavorites;
+
+  /// Empty state title on favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get noFavoritesYet;
+
+  /// Empty state hint on favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the star icon on any devotional to save it here'**
+  String get noFavoritesMessage;
+
+  /// Button to explore devotionals from favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Devotionals'**
+  String get exploreDevotionals;
+
+  /// Recurrence interval display, e.g. Every 2 days
+  ///
+  /// In en, this message translates to:
+  /// **'Every {interval} {unit}'**
+  String everyInterval(int interval, String unit);
+
+  /// Day unit for recurrence interval
+  ///
+  /// In en, this message translates to:
+  /// **'day(s)'**
+  String get frequencyUnitDay;
+
+  /// Week unit for recurrence interval
+  ///
+  /// In en, this message translates to:
+  /// **'week(s)'**
+  String get frequencyUnitWeek;
+
+  /// Month unit for recurrence interval
+  ///
+  /// In en, this message translates to:
+  /// **'month(s)'**
+  String get frequencyUnitMonth;
+
+  /// Hint text on household spinner empty state
+  ///
+  /// In en, this message translates to:
+  /// **'Add household tasks to use the spinner'**
+  String get addTasksToUseSpinner;
+
+  /// Goals navigation tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get goals;
+
+  /// Notes navigation tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// Hint text for new subtask input field
+  ///
+  /// In en, this message translates to:
+  /// **'New subtask...'**
+  String get newSubtaskHint;
+
+  /// Image label (e.g. in bible reader action modal)
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get image;
+
+  /// Tooltip to remove a devotional from favorites
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get removeFromFavorites;
+
+  /// Hint text for devotional search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search devotionals...'**
+  String get searchDevotionals;
+
+  /// Snackbar when language is changed
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to {language}'**
+  String languageChangedTo(String language);
+
+  /// Current label (e.g. in nudge suggestion dialog)
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get currentLabel;
+
+  /// Suggested label (e.g. in nudge suggestion dialog)
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested'**
+  String get suggestedLabel;
+
+  /// Tooltip showing current Bible version
+  ///
+  /// In en, this message translates to:
+  /// **'Bible Version: {version}'**
+  String bibleVersionTooltip(String version);
 }
 
 class _AppLocalizationsDelegate

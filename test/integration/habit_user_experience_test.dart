@@ -453,12 +453,12 @@ void main() {
       expect(find.text('Second Habit'), findsOneWidget);
 
       // Verify drag handles exist by key after scrolling
-      expect(find.byKey(const Key('habit_drag_habit_1')), findsOneWidget);
-      expect(find.byKey(const Key('habit_drag_habit_2')), findsOneWidget);
+      expect(find.byKey(const Key('drag_habit_1')), findsOneWidget);
+      expect(find.byKey(const Key('drag_habit_2')), findsOneWidget);
       final dragListener1 =
-          find.byKey(const Key('habit_drag_habit_1')).evaluate().first;
+          find.byKey(const Key('drag_habit_1')).evaluate().first;
       final dragListener2 =
-          find.byKey(const Key('habit_drag_habit_2')).evaluate().first;
+          find.byKey(const Key('drag_habit_2')).evaluate().first;
       expect(dragListener1, isNotNull);
       expect(dragListener2, isNotNull);
     });

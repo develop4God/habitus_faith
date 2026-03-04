@@ -87,8 +87,8 @@ void main() {
       await notifier.setVersion(testVersion);
 
       final prefs = await SharedPreferences.getInstance();
-      final savedName = prefs.getString('current_bible_version');
-      expect(savedName, equals(testVersion.name));
+      final savedId = prefs.getString('current_bible_version');
+      expect(savedId, equals(testVersion.id));
     });
 
     test('loads saved version from SharedPreferences', () async {
@@ -97,7 +97,7 @@ void main() {
 
       // Save version to preferences first
       SharedPreferences.setMockInitialValues({
-        'current_bible_version': savedVersion.name,
+        'current_bible_version': savedVersion.id,
       });
 
       // Create new container to trigger reload

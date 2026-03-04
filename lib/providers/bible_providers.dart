@@ -16,6 +16,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
   return [
     // Spanish
     BibleVersion(
+      id: 'RVR1960_es',
       name: 'RVR1960',
       language: 'Español',
       languageCode: 'es',
@@ -23,6 +24,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
       dbFileName: 'RVR1960_es.SQLite3.gz',
     ),
     BibleVersion(
+      id: 'NVI_es',
       name: 'NVI',
       language: 'Español',
       languageCode: 'es',
@@ -31,6 +33,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
     ),
     // English
     BibleVersion(
+      id: 'KJV_en',
       name: 'KJV',
       language: 'English',
       languageCode: 'en',
@@ -38,6 +41,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
       dbFileName: 'KJV_en.SQLite3.gz',
     ),
     BibleVersion(
+      id: 'NIV_en',
       name: 'NIV',
       language: 'English',
       languageCode: 'en',
@@ -46,6 +50,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
     ),
     // Portuguese
     BibleVersion(
+      id: 'ARC_pt',
       name: 'ARC',
       language: 'Português',
       languageCode: 'pt',
@@ -53,6 +58,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
       dbFileName: 'ARC_pt.SQLite3.gz',
     ),
     BibleVersion(
+      id: 'NVI_pt',
       name: 'NVI',
       language: 'Português',
       languageCode: 'pt',
@@ -61,6 +67,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
     ),
     // French
     BibleVersion(
+      id: 'LSG1910_fr',
       name: 'LSG1910',
       language: 'Français',
       languageCode: 'fr',
@@ -68,6 +75,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
       dbFileName: 'LSG1910_fr.SQLite3.gz',
     ),
     BibleVersion(
+      id: 'BDS_fr',
       name: 'BDS',
       language: 'Français',
       languageCode: 'fr',
@@ -76,6 +84,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
     ),
     // Chinese
     BibleVersion(
+      id: 'CUV1919_zh',
       name: 'CUV1919',
       language: '中文',
       languageCode: 'zh',
@@ -83,6 +92,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
       dbFileName: 'CUV1919_zh.SQLite3.gz',
     ),
     BibleVersion(
+      id: 'CNVS_zh',
       name: 'CNVS',
       language: '中文',
       languageCode: 'zh',
@@ -91,6 +101,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
     ),
     // Hindi
     BibleVersion(
+      id: 'HERV_hi',
       name: 'HERV',
       language: 'हिन्दी',
       languageCode: 'hi',
@@ -98,6 +109,7 @@ final bibleVersionsProvider = Provider<List<BibleVersion>>((ref) {
       dbFileName: 'HERV_hi.SQLite3.gz',
     ),
     BibleVersion(
+      id: 'HIOV_hi',
       name: 'HIOV',
       language: 'हिन्दी',
       languageCode: 'hi',
@@ -134,12 +146,12 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
 
   Future<void> _loadInitialVersion() async {
     final prefs = await ref.read(sharedPreferencesProvider.future);
-    final versionName = prefs.getString('current_bible_version');
+    final versionId = prefs.getString('current_bible_version');
 
     final available = ref.read(bibleVersionsProvider);
-    if (versionName != null) {
+    if (versionId != null) {
       try {
-        final saved = available.firstWhere((v) => v.name == versionName);
+        final saved = available.firstWhere((v) => v.id == versionId);
         state = saved;
         return;
       } catch (_) {
@@ -153,9 +165,9 @@ class CurrentBibleVersionNotifier extends StateNotifier<BibleVersion?> {
 
   Future<void> setVersion(BibleVersion version) async {
     state = version;
-    // Save to preferences
+    // Save to preferences using unique id to avoid ambiguity
     final prefs = await ref.read(sharedPreferencesProvider.future);
-    await prefs.setString('current_bible_version', version.name);
+    await prefs.setString('current_bible_version', version.id);
   }
 }
 

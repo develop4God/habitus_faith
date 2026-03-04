@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'statistics_model.dart';
 import 'statistics_service.dart';
@@ -23,9 +24,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Estadísticas'),
+        title: Text(l10n.statisticsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -44,17 +46,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData) {
-            return const Center(child: Text('No hay datos de estadísticas.'));
+            return Center(child: Text(l10n.noStatisticsData));
           }
           final stats = snapshot.data!;
           final double successPercent = stats.totalHabits > 0
               ? (stats.completedHabits / stats.totalHabits) * 100
               : 0;
           final String motivacion = successPercent >= 80
-              ? '¡Excelente constancia! Sigue así.'
+              ? l10n.excellentConsistency
               : successPercent >= 50
-                  ? '¡Vas bien! Mantén el ritmo.'
-                  : '¡Cada día cuenta! Puedes mejorar.';
+                  ? l10n.goodProgress
+                  : l10n.everyDayMatters;
 
           return SingleChildScrollView(
             child: Padding(
@@ -87,19 +89,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           _StatTile(
-                            label: 'Hábitos activos',
+                            label: l10n.activeHabits,
                             value: stats.totalHabits.toString(),
                             icon: Icons.list_alt,
                             color: Colors.blue,
                           ),
                           _StatTile(
-                            label: 'Completados',
+                            label: l10n.completed,
                             value: stats.completedHabits.toString(),
                             icon: Icons.check_circle,
                             color: Colors.green,
                           ),
                           _StatTile(
-                            label: 'Racha máxima',
+                            label: l10n.longestStreak,
                             value: stats.longestStreak.toString(),
                             icon: Icons.emoji_events,
                             color: Colors.amber,
@@ -110,7 +112,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Porcentaje de éxito',
+                    l10n.successPercentage,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -141,12 +143,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Última finalización: ${stats.lastCompletion.day}/${stats.lastCompletion.month}/${stats.lastCompletion.year}',
+                    l10n.lastCompletionDate(
+                        '${stats.lastCompletion.day}/${stats.lastCompletion.month}/${stats.lastCompletion.year}'),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Distribución de hábitos',
+                    l10n.habitDistribution,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -162,7 +165,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 ? stats.completedHabits.toDouble()
                                 : 1,
                             color: Colors.green,
-                            title: 'Completados',
+                            title: l10n.completed,
                             radius: 50,
                             titleStyle: const TextStyle(
                               fontSize: 14,
@@ -177,7 +180,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                     .toDouble()
                                 : 1,
                             color: Colors.redAccent,
-                            title: 'Pendientes',
+                            title: l10n.pending,
                             radius: 50,
                             titleStyle: const TextStyle(
                               fontSize: 14,

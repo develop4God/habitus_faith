@@ -417,7 +417,12 @@
   "notificationTimeUpdated": "Notification time updated to {time}",
   "@notificationTimeUpdated": {
     "description": "Notification time updated message with time",
-    "placeholders": { "time": { "type": "String", "example": "13:00" } }
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "13:00"
+      }
+    }
   },
   "enableNotifications": "Enable Notifications",
   "@enableNotifications": {
@@ -455,7 +460,10 @@
   "@confirmNotificationQuestion": {
     "description": "Confirmation question for notification time",
     "placeholders": {
-      "time": { "type": "String", "example": "10:00" }
+      "time": {
+        "type": "String",
+        "example": "10:00"
+      }
     }
   },
   "buttonConfirmHour": "Confirm hour",
@@ -1523,5 +1531,427 @@
   "timeToFocus": "Time to Focus",
   "focusComplete": "Focus session complete!",
   "goalReached": "Goal Reached!",
-  "timer": "Timer"
+  "timer": "Timer",
+  "statisticsTitle": "Statistics",
+  "@statisticsTitle": {
+    "description": "Statistics page title"
+  },
+  "noStatisticsData": "No statistics data available.",
+  "@noStatisticsData": {
+    "description": "Empty state for statistics page"
+  },
+  "activeHabits": "Active habits",
+  "@activeHabits": {
+    "description": "Active habits label in statistics"
+  },
+  "successPercentage": "Success percentage",
+  "@successPercentage": {
+    "description": "Success percentage label"
+  },
+  "lastCompletionDate": "Last completion: {date}",
+  "@lastCompletionDate": {
+    "description": "Last completion date label",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "habitDistribution": "Habit distribution",
+  "@habitDistribution": {
+    "description": "Habit distribution chart title"
+  },
+  "pending": "Pending",
+  "@pending": {
+    "description": "Pending habits label"
+  },
+  "excellentConsistency": "Excellent consistency! Keep it up.",
+  "@excellentConsistency": {
+    "description": "Motivational message for high success rate"
+  },
+  "goodProgress": "Good progress! Keep the rhythm.",
+  "@goodProgress": {
+    "description": "Motivational message for medium success rate"
+  },
+  "everyDayMatters": "Every day matters! You can improve.",
+  "@everyDayMatters": {
+    "description": "Motivational message for low success rate"
+  },
+  "myNotes": "My Notes",
+  "@myNotes": {
+    "description": "Notes page title"
+  },
+  "editNote": "Edit Note",
+  "@editNote": {
+    "description": "Edit note header"
+  },
+  "newNote": "New Note",
+  "@newNote": {
+    "description": "New note header"
+  },
+  "cancelEdit": "Cancel edit",
+  "@cancelEdit": {
+    "description": "Cancel edit tooltip"
+  },
+  "discardNote": "Discard note",
+  "@discardNote": {
+    "description": "Discard note tooltip"
+  },
+  "checkboxItem": "Checkbox",
+  "@checkboxItem": {
+    "description": "Checkbox line type label"
+  },
+  "numberedItem": "Numbered",
+  "@numberedItem": {
+    "description": "Numbered line type label"
+  },
+  "plainText": "Text",
+  "@plainText": {
+    "description": "Plain text line type label"
+  },
+  "listItemHint": "List item...",
+  "@listItemHint": {
+    "description": "Hint for checkbox list item"
+  },
+  "stepHint": "Step...",
+  "@stepHint": {
+    "description": "Hint for numbered step"
+  },
+  "writeNoteHint": "Write a note...",
+  "@writeNoteHint": {
+    "description": "Hint for plain text note"
+  },
+  "noSavedNotes": "No saved notes",
+  "@noSavedNotes": {
+    "description": "Empty state for notes"
+  },
+  "thoughtsAppearHere": "Your thoughts will appear here.",
+  "@thoughtsAppearHere": {
+    "description": "Empty state subtitle for notes"
+  },
+  "myGoals": "My Goals",
+  "@myGoals": {
+    "description": "Goals page title"
+  },
+  "yearly": "Yearly",
+  "@yearly": {
+    "description": "Yearly goal type tab"
+  },
+  "personal": "Personal",
+  "@personal": {
+    "description": "Personal/custom goal type tab"
+  },
+  "activeGoals": "Active Goals",
+  "@activeGoals": {
+    "description": "Active goals section title"
+  },
+  "generalProgress": "General Progress",
+  "@generalProgress": {
+    "description": "General progress card title"
+  },
+  "completedLower": "completed",
+  "@completedLower": {
+    "description": "completed label (lowercase)"
+  },
+  "noGoalsYet": "No goals yet",
+  "@noGoalsYet": {
+    "description": "Empty state for goals"
+  },
+  "defineYourGoals": "Define your spiritual or personal goals for this year, month, or week.",
+  "@defineYourGoals": {
+    "description": "Empty state description for goals"
+  },
+  "createFirstGoal": "Create my first goal",
+  "@createFirstGoal": {
+    "description": "Button to create first goal"
+  },
+  "editGoal": "Edit Goal",
+  "@editGoal": {
+    "description": "Edit goal dialog title"
+  },
+  "whatToAchieve": "What do you want to achieve?",
+  "@whatToAchieve": {
+    "description": "Goal title input label"
+  },
+  "exampleGoal": "E.g.: Read the entire Bible",
+  "@exampleGoal": {
+    "description": "Goal title input hint"
+  },
+  "deadline": "Deadline",
+  "@deadline": {
+    "description": "Deadline label"
+  },
+  "deadlineDate": "Deadline: {date}",
+  "@deadlineDate": {
+    "description": "Deadline date display",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "selectDeadline": "Please select a deadline",
+  "@selectDeadline": {
+    "description": "Validation message for missing deadline"
+  },
+  "updateGoal": "Update Goal",
+  "@updateGoal": {
+    "description": "Update goal button"
+  },
+  "saveGoal": "Save Goal",
+  "@saveGoal": {
+    "description": "Save goal button"
+  },
+  "goalTypeYear": "Yearly",
+  "@goalTypeYear": {
+    "description": "Goal type: yearly"
+  },
+  "goalTypeMonth": "Monthly",
+  "@goalTypeMonth": {
+    "description": "Goal type: monthly"
+  },
+  "goalTypeWeek": "Weekly",
+  "@goalTypeWeek": {
+    "description": "Goal type: weekly"
+  },
+  "goalTypeCustom": "Custom",
+  "@goalTypeCustom": {
+    "description": "Goal type: custom"
+  },
+  "noScheduledNotifications": "No scheduled notifications",
+  "@noScheduledNotifications": {
+    "description": "Empty state for notifications list"
+  },
+  "notificationOn": "On",
+  "@notificationOn": {
+    "description": "Notification enabled status"
+  },
+  "noTime": "No time",
+  "@noTime": {
+    "description": "Fallback when no notification time set"
+  },
+  "configureReminder": "Configure reminder",
+  "@configureReminder": {
+    "description": "Tooltip for notification bell"
+  },
+  "householdSpinnerTitle": "🏠 Spin Household Tasks",
+  "@householdSpinnerTitle": {
+    "description": "Household spinner page title"
+  },
+  "anotherMoment": "Another moment",
+  "@anotherMoment": {
+    "description": "Dismiss button in household spinner"
+  },
+  "taskCompleteError": "Error completing task: {error}",
+  "@taskCompleteError": {
+    "description": "Error message when task completion fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addTasks": "Add tasks",
+  "@addTasks": {
+    "description": "Add tasks button label"
+  },
+  "completing": "Completing...",
+  "@completing": {
+    "description": "Completing task state"
+  },
+  "complete": "Complete",
+  "@complete": {
+    "description": "Complete button text"
+  },
+  "comingSoon": "COMING SOON",
+  "@comingSoon": {
+    "description": "Coming soon label"
+  },
+  "viewAll": "View All",
+  "@viewAll": {
+    "description": "View all button"
+  },
+  "selectVersion": "Select Version",
+  "@selectVersion": {
+    "description": "Select Bible version tooltip"
+  },
+  "fontSize": "Font Size",
+  "@fontSize": {
+    "description": "Font size tooltip"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share button tooltip"
+  },
+  "cancelAction": "Cancel",
+  "@cancelAction": {
+    "description": "Cancel action tooltip"
+  },
+  "favorites": "Favorites",
+  "@favorites": {
+    "description": "Favorites tooltip/label"
+  },
+  "noBibleVersions": "No Bible versions available for this language.",
+  "@noBibleVersions": {
+    "description": "No Bible versions available message"
+  },
+  "bibleVersionSet": "Bible version set to: {version}",
+  "@bibleVersionSet": {
+    "description": "Bible version changed confirmation",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingHabits": "Error loading habits",
+  "@errorLoadingHabits": {
+    "description": "Error loading habits message"
+  },
+  "spinHouseholdTasks": "Spin household tasks",
+  "@spinHouseholdTasks": {
+    "description": "Tooltip for household spinner FAB"
+  },
+  "newGoal": "New Goal",
+  "@newGoal": {
+    "description": "New goal dialog title"
+  },
+  "notificationTimingNone": "No reminder",
+  "@notificationTimingNone": {
+    "description": "Notification timing: no reminder"
+  },
+  "notificationTimingAtEvent": "At event time",
+  "@notificationTimingAtEvent": {
+    "description": "Notification timing: at event time"
+  },
+  "notificationTimingTenMin": "10 minutes before",
+  "@notificationTimingTenMin": {
+    "description": "Notification timing: 10 minutes before"
+  },
+  "notificationTimingThirtyMin": "30 minutes before",
+  "@notificationTimingThirtyMin": {
+    "description": "Notification timing: 30 minutes before"
+  },
+  "notificationTimingOneHour": "1 hour before",
+  "@notificationTimingOneHour": {
+    "description": "Notification timing: 1 hour before"
+  },
+  "difficultyEasy": "Easy",
+  "@difficultyEasy": {
+    "description": "Easy difficulty label"
+  },
+  "difficultyMedium": "Medium",
+  "@difficultyMedium": {
+    "description": "Medium difficulty label"
+  },
+  "difficultyHard": "Hard",
+  "@difficultyHard": {
+    "description": "Hard difficulty label"
+  },
+  "selectTime": "Select time",
+  "@selectTime": {
+    "description": "Button/label to select a time"
+  },
+  "hour": "Hour",
+  "@hour": {
+    "description": "Hour label in time picker tile"
+  },
+  "noHouseholdTasks": "No household tasks",
+  "@noHouseholdTasks": {
+    "description": "Empty state for household tasks"
+  },
+  "myFavorites": "My Favorites",
+  "@myFavorites": {
+    "description": "Title for favorites page"
+  },
+  "noFavoritesYet": "No favorites yet",
+  "@noFavoritesYet": {
+    "description": "Empty state title on favorites page"
+  },
+  "noFavoritesMessage": "Tap the star icon on any devotional to save it here",
+  "@noFavoritesMessage": {
+    "description": "Empty state hint on favorites page"
+  },
+  "exploreDevotionals": "Explore Devotionals",
+  "@exploreDevotionals": {
+    "description": "Button to explore devotionals from favorites page"
+  },
+  "everyInterval": "Every {interval} {unit}",
+  "@everyInterval": {
+    "description": "Recurrence interval display, e.g. Every 2 days",
+    "placeholders": {
+      "interval": {
+        "type": "int"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyUnitDay": "day(s)",
+  "@frequencyUnitDay": {
+    "description": "Day unit for recurrence interval"
+  },
+  "frequencyUnitWeek": "week(s)",
+  "@frequencyUnitWeek": {
+    "description": "Week unit for recurrence interval"
+  },
+  "frequencyUnitMonth": "month(s)",
+  "@frequencyUnitMonth": {
+    "description": "Month unit for recurrence interval"
+  },
+  "addTasksToUseSpinner": "Add household tasks to use the spinner",
+  "@addTasksToUseSpinner": {
+    "description": "Hint text on household spinner empty state"
+  },
+  "goals": "Goals",
+  "@goals": {
+    "description": "Goals navigation tab label"
+  },
+  "notes": "Notes",
+  "@notes": {
+    "description": "Notes navigation tab label"
+  },
+  "newSubtaskHint": "New subtask...",
+  "@newSubtaskHint": {
+    "description": "Hint text for new subtask input field"
+  },
+  "image": "Image",
+  "@image": {
+    "description": "Image label (e.g. in bible reader action modal)"
+  },
+  "removeFromFavorites": "Remove from favorites",
+  "@removeFromFavorites": {
+    "description": "Tooltip to remove a devotional from favorites"
+  },
+  "searchDevotionals": "Search devotionals...",
+  "@searchDevotionals": {
+    "description": "Hint text for devotional search field"
+  },
+  "languageChangedTo": "Language changed to {language}",
+  "@languageChangedTo": {
+    "description": "Snackbar when language is changed",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "currentLabel": "Current",
+  "@currentLabel": {
+    "description": "Current label (e.g. in nudge suggestion dialog)"
+  },
+  "suggestedLabel": "Suggested",
+  "@suggestedLabel": {
+    "description": "Suggested label (e.g. in nudge suggestion dialog)"
+  },
+  "bibleVersionTooltip": "Bible Version: {version}",
+  "@bibleVersionTooltip": {
+    "description": "Tooltip showing current Bible version",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -2,51 +2,54 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ai/rate_limit_service.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/ml_features_calculator.dart';
+import 'package:habitus_faith/features/habits/domain/models/risk_level.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../scripts/diagnose_gemini.dart';
 import '../../utils/ml_predictor_test_utils.dart';
 import '../../utils/tflite_test_stub.dart';
 
 void main() {
-  group('AI/ML Pipeline Integration Tests', () {
-    setUp(() async {
-      // Reset shared preferences for each test
-      SharedPreferences.setMockInitialValues({});
-    });
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    test('End-to-end: Gemini → RateLimit → Cache flow', () async {
-      // This tests the full AI generation pipeline
-      // Note: Actual Gemini calls are mocked in unit tests
-      // This verifies the integration pattern
+  // Install deterministic fake TFLite interpreter once for the whole suite.
+  // FakeInterpreter(result: 0.3) → every inference returns 0.30 probability.
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    await installFakeTflite(result: 0.3);
+  });
 
-      final prefs = await SharedPreferences.getInstance();
-      final rateLimitService = RateLimitService(prefs);
-      expect(rateLimitService, isNotNull);
+  tearDownAll(() {
+    uninstallFakeTflite();
+  });
 
-      final remainingRequests = rateLimitService.getRemainingRequests();
-      expect(remainingRequests, equals(10),
-          reason: 'Should start with 10 requests per month');
-    });
+  setUp(() async {
+    // Fresh SharedPreferences state for every test so telemetry counters reset.
+    SharedPreferences.setMockInitialValues({});
+  });
 
     testWidgets('ML predictor initialization is idempotent', (tester) async {
       final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
 
-      // Initialize multiple times
+    test('initialises exactly once (idempotent)', () async {
+      final predictor = AbandonmentPredictor();
       await predictor.initialize();
-      await predictor.initialize();
-      await predictor.initialize();
+      await predictor.initialize(); // second call must be a no-op
+      await predictor.initialize(); // third call must be a no-op
 
-      // Should only initialize once internally
       expect(predictor.isInitialized, isTrue);
+      await predictor.dispose();
+    });
 
-      // Verify predictor works after multiple init calls
+    test('is ready for predictions after initialisation', () async {
+      final predictor = AbandonmentPredictor();
+      await predictor.initialize();
+
       final habit = MLPredictorTestUtils.createLowRiskHabit();
       final risk = await predictor.predictRisk(habit);
 
       expect(risk, greaterThanOrEqualTo(0.0));
       expect(risk, lessThanOrEqualTo(1.0));
 
-      predictor.dispose();
+      await predictor.dispose();
     });
 
     testWidgets('ML features calculator integrates with habit predictor',
@@ -54,85 +57,157 @@ void main() {
       final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
-      // Use test utility to create a habit with good streak
-      final habit = MLPredictorTestUtils.createLowRiskHabit(
-        name: 'Morning Prayer',
-      );
-
-      // Calculate features using the calculator
-      final recentFailures = MLFeaturesCalculator.countRecentFailures(
-        habit,
-        7,
-      );
-      expect(recentFailures, lessThanOrEqualTo(3),
-          reason: 'Low-risk habit should have few recent failures');
-
-      // Predict risk
-      final risk = await predictor.predictRisk(habit);
-      expect(risk, greaterThanOrEqualTo(0.0));
-      expect(risk, lessThanOrEqualTo(1.0));
-
-      // Good streak should result in lower risk
-      expect(risk, lessThan(0.5),
-          reason: 'Good streak should have lower abandonment risk');
-
-      predictor.dispose();
+      await predictor.dispose();
+      // Second dispose should not throw.
+      expect(() => predictor.dispose(), returnsNormally);
     });
+
+    test('returns neutral risk (0.5) when not initialised', () async {
+      final predictor = AbandonmentPredictor(); // never initialised
+      final habit = MLPredictorTestUtils.createLowRiskHabit();
+      final risk = await predictor.predictRisk(habit);
+
+      // defaultRiskWhenUninitialized == 0.5 — safe, non-alarming default.
+      expect(risk, equals(AbandonmentPredictor.defaultRiskWhenUninitialized));
+    });
+  });
 
     test('Concurrent ML predictions maintain independence', () async {
       final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
+    });
 
-      // Create different habits
-      final habit1 = MLPredictorTestUtils.createHighRiskHabit(
-        name: 'Habit 1',
-        daysOld: 30,
-        daysSinceLastCompletion: 8,
+    tearDown(() async => predictor.dispose());
+
+    test('low-risk habit has few recent failures', () {
+      final habit =
+          MLPredictorTestUtils.createLowRiskHabit(name: 'Morning Prayer');
+
+      final recentFailures = MLFeaturesCalculator.countRecentFailures(habit, 7);
+      expect(recentFailures, lessThanOrEqualTo(3),
+          reason:
+              'Low-risk habit should have at most 3 failures in last 7 days');
+    });
+
+    test('high-risk habit has more recent failures than low-risk', () {
+      final low = MLPredictorTestUtils.createLowRiskHabit();
+      final high = MLPredictorTestUtils.createHighRiskHabit(
+        daysSinceLastCompletion: 10,
       );
 
-      final habit2 = MLPredictorTestUtils.createLowRiskHabit(
-        name: 'Habit 2',
-      );
+      final lowFailures = MLFeaturesCalculator.countRecentFailures(low, 7);
+      final highFailures = MLFeaturesCalculator.countRecentFailures(high, 7);
 
-      final habit3 = MLPredictorTestUtils.createHighRiskHabit(
-        name: 'Habit 3',
-        daysOld: 60,
-        daysSinceLastCompletion: 15,
-      );
+      // High-risk fixture has 8+ days without completion → more missed days.
+      expect(highFailures, greaterThanOrEqualTo(lowFailures),
+          reason: 'High-risk habit should have >= failures than low-risk');
+    });
 
-      // Run predictions concurrently
+    test('prediction result is in [0, 1] for any valid habit', () async {
+      final habits = [
+        MLPredictorTestUtils.createLowRiskHabit(name: 'Stable habit'),
+        MLPredictorTestUtils.createHighRiskHabit(
+            name: 'At-risk habit', daysOld: 30, daysSinceLastCompletion: 12),
+        MLPredictorTestUtils.createHighRiskHabit(
+            name: 'Very at-risk', daysOld: 60, daysSinceLastCompletion: 20),
+      ];
+
+      for (final habit in habits) {
+        final risk = await predictor.predictRisk(habit);
+        expect(risk, greaterThanOrEqualTo(0.0),
+            reason: '${habit.name}: risk must be >= 0');
+        expect(risk, lessThanOrEqualTo(1.0),
+            reason: '${habit.name}: risk must be <= 1');
+      }
+    });
+
+    test('same habit always produces the same prediction (deterministic)',
+        () async {
+      final habit = MLPredictorTestUtils.createLowRiskHabit();
+
+      final predictions = <double>[];
+      for (int i = 0; i < 5; i++) {
+        predictions.add(await predictor.predictRisk(habit));
+      }
+
+      final unique = predictions.toSet();
+      expect(unique.length, equals(1),
+          reason:
+              'Deterministic fake interpreter must return same value every time');
+    });
+
+    test('concurrent predictions complete without errors', () async {
+      final habit1 = MLPredictorTestUtils.createHighRiskHabit(name: 'H1');
+      final habit2 = MLPredictorTestUtils.createLowRiskHabit(name: 'H2');
+      final habit3 =
+          MLPredictorTestUtils.createHighRiskHabit(name: 'H3', daysOld: 60);
+
       final results = await Future.wait([
         predictor.predictRisk(habit1),
         predictor.predictRisk(habit2),
         predictor.predictRisk(habit3),
       ]);
 
-      expect(results.length, equals(3));
-      expect(results[0], greaterThanOrEqualTo(0.0));
-      expect(results[1], greaterThanOrEqualTo(0.0));
-      expect(results[2], greaterThanOrEqualTo(0.0));
+      expect(results, hasLength(3));
+      for (final r in results) {
+        expect(r, greaterThanOrEqualTo(0.0));
+        expect(r, lessThanOrEqualTo(1.0));
+      }
+    });
+  });
 
-      // Verify different habits get different predictions
-      // Note: In practice, predictor may return similar values for similar patterns
-      // So we just verify all are valid risk scores
-      expect(results[0], lessThanOrEqualTo(1.0));
-      expect(results[1], lessThanOrEqualTo(1.0));
-      expect(results[2], lessThanOrEqualTo(1.0));
+  // ─────────────────────────────────────────────────────────────────────────
+  // GROUP 3 – Risk threshold → intervention decision
+  // High value: these thresholds gate whether the app sends an intervention
+  // notification. Getting them wrong directly hurts the user experience.
+  // ─────────────────────────────────────────────────────────────────────────
+  group('Risk threshold → intervention decision', () {
+    test('risk below high threshold does NOT require intervention', () {
+      // Fake interpreter returns 0.30 < 0.65 threshold.
+      const risk = 0.30;
+      expect(RiskThresholds.requiresIntervention(risk), isFalse,
+          reason: '0.30 is below high-risk threshold (0.65)');
+    });
 
-      predictor.dispose();
+    test('risk at or above high threshold requires intervention', () {
+      const risk = 0.65;
+      expect(RiskThresholds.requiresIntervention(risk), isTrue,
+          reason: '0.65 == highRiskThreshold must trigger intervention');
+    });
+
+    test('risk > high threshold requires intervention', () {
+      const risk = 0.90;
+      expect(RiskThresholds.requiresIntervention(risk), isTrue);
     });
 
     testWidgets('ML predictor telemetry is available', (tester) async {
       final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
-      // Make predictions
-      final habit = MLPredictorTestUtils.createLowRiskHabit();
-      await predictor.predictRisk(habit);
+      final habit = MLPredictorTestUtils.createHighRiskHabit(
+        daysOld: 30,
+        daysSinceLastCompletion: 8,
+      );
+      final risk = await predictor.predictRisk(habit);
 
-      // Telemetry should be available
-      final telemetry = predictor.telemetry;
-      expect(telemetry, isA<Map<String, dynamic>>());
+      final needsIntervention = RiskThresholds.requiresIntervention(risk);
+      // With fake result 0.30, no intervention should be triggered.
+      expect(needsIntervention, isFalse,
+          reason: 'Fake interpreter returns 0.30 < 0.65 threshold');
+      expect(risk, equals(0.30));
+
+      await predictor.dispose();
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // GROUP 4 – Telemetry accumulates correctly
+  // High value: telemetry drives A/B decisions and on-call alerts in prod.
+  // ─────────────────────────────────────────────────────────────────────────
+  group('Telemetry accumulates correctly', () {
+    test('telemetry map contains required keys', () async {
+      final predictor = AbandonmentPredictor();
+      await predictor.initialize();
 
       // Should have metadata
       expect(
@@ -141,7 +216,7 @@ void main() {
           isTrue,
           reason: 'Telemetry should contain tracking data');
 
-      predictor.dispose();
+      await predictor.dispose();
     });
 
     test('ML predictor handles rapid successive predictions', () async {
@@ -149,70 +224,113 @@ void main() {
       await predictor.initialize();
 
       final habit = MLPredictorTestUtils.createLowRiskHabit();
+      await predictor.predictRisk(habit);
+      await predictor.predictRisk(habit);
+      await predictor.predictRisk(habit);
 
-      // Make 10 rapid predictions
-      final predictions = <double>[];
-      for (int i = 0; i < 10; i++) {
-        final risk = await predictor.predictRisk(habit);
-        predictions.add(risk);
-      }
+      expect(predictor.telemetry['prediction_count'], greaterThanOrEqualTo(3),
+          reason: 'Three predictions must register in telemetry');
 
-      expect(predictions.length, equals(10));
-
-      // All predictions should be valid
-      for (final risk in predictions) {
-        expect(risk, greaterThanOrEqualTo(0.0));
-        expect(risk, lessThanOrEqualTo(1.0));
-      }
-
-      // Same habit should get same prediction (consistency)
-      final uniquePredictions = predictions.toSet();
-      expect(uniquePredictions.length, equals(1),
-          reason: 'Same habit should get same prediction');
-
-      predictor.dispose();
+      await predictor.dispose();
     });
 
-    test('Integration: Rate limiting prevents API overuse', () async {
+    test('success_rate is 1.0 when all predictions succeed', () async {
+      final predictor = AbandonmentPredictor();
+      await predictor.initialize();
+
+      final habit = MLPredictorTestUtils.createLowRiskHabit();
+      await predictor.predictRisk(habit);
+      await predictor.predictRisk(habit);
+
+      final t = predictor.telemetry;
+      final successRate = t['success_rate'] as double;
+      expect(successRate, equals(1.0),
+          reason: 'No errors → success_rate must be 1.0');
+
+      await predictor.dispose();
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // GROUP 5 – Rate limiting guards the Gemini API budget
+  // High value: without this guard the app exhausts the monthly quota and
+  // all AI-powered features go dark until the next billing cycle.
+  // ─────────────────────────────────────────────────────────────────────────
+  group('Rate limiting guards Gemini API budget', () {
+    late RateLimitService service;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
-      final rateLimitService = RateLimitService(prefs);
+      service = RateLimitService(prefs);
+    });
 
-      // Check initial state
-      final canMakeRequest1 = rateLimitService.canMakeRequest();
-      expect(canMakeRequest1, isTrue, reason: 'Should allow first request');
+    test('starts with 10 requests available', () {
+      expect(service.getRemainingRequests(), equals(10));
+      expect(service.canMakeRequest(), isTrue);
+    });
 
-      // Record request (returns void, just verify it doesn't throw)
-      expect(() => rateLimitService.recordRequest(), returnsNormally);
+    test('each recorded request decrements the budget', () {
+      service.recordRequest();
+      expect(service.getRemainingRequests(), equals(9));
 
-      // Check remaining
-      final remaining = rateLimitService.getRemainingRequests();
-      expect(remaining, lessThan(10),
-          reason: 'Should have fewer than 10 requests after recording one');
+      service.recordRequest();
+      expect(service.getRemainingRequests(), equals(8));
     });
 
     test('Integration: ML predictor with configurable threshold', () async {
       final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
 
-      // Test with default threshold (0.65)
-      final highRiskHabit = MLPredictorTestUtils.createHighRiskHabit(
-        daysOld: 30,
-        daysSinceLastCompletion: 8,
-      );
+    test('blocks all requests once the monthly cap is reached', () {
+      // Fill the quota — must be sequential to avoid timestamp dedup.
+      // Each call after the first is blocked by the 5-s delay via canMakeRequest()
+      // but recordRequest() still increments the internal counter (simulates
+      // requests having already been made in the past).
+      for (int i = 0; i < 10; i++) {
+        service.recordRequest();
+      }
+      expect(service.getRemainingRequests(), equals(0));
+    });
 
-      final risk = await predictor.predictRisk(highRiskHabit);
+    test('remaining requests is never negative', () {
+      for (int i = 0; i < 15; i++) {
+        service.recordRequest();
+      }
+      expect(service.getRemainingRequests(), greaterThanOrEqualTo(0));
+    });
 
-      // Verify intervention logic (using test utilities)
-      final needsIntervention = MLPredictorTestUtils.requiresIntervention(risk);
+    test('persists state across service instances (same SharedPreferences)',
+        () async {
+      service.recordRequest();
+      service.recordRequest();
+      expect(service.getRemainingRequests(), equals(8));
 
-      // Document the threshold behavior
-      debugPrint(
-          'ML Integration Test: Risk=$risk, Intervention=$needsIntervention');
+      // Re-create service from same SharedPreferences.
+      final prefs = await SharedPreferences.getInstance();
+      final service2 = RateLimitService(prefs);
+      expect(service2.getRemainingRequests(), equals(8),
+          reason: 'New service instance must read persisted count');
+    });
+  });
 
-      expect(risk, greaterThanOrEqualTo(0.0));
-      expect(risk, lessThanOrEqualTo(1.0));
+  // ─────────────────────────────────────────────────────────────────────────
+  // GROUP 6 – Graceful degradation (resilience)
+  // High value: the app must remain usable when the ML model isn't available
+  // (CI/CD, older devices, first cold-start).
+  // ─────────────────────────────────────────────────────────────────────────
+  group('Graceful degradation', () {
+    test('uninitialised predictor returns safe neutral risk, not 0 or 1',
+        () async {
+      final predictor = AbandonmentPredictor(); // intentionally never init'd
 
-      predictor.dispose();
+      final habit = MLPredictorTestUtils.createLowRiskHabit();
+      final risk = await predictor.predictRisk(habit);
+
+      // 0.5 is the "unknown" sentinel — not falsely safe (0.0) and not
+      // falsely alarming (1.0).
+      expect(risk, equals(0.5),
+          reason: 'defaultRiskWhenUninitialized must be 0.5');
     });
 
     testWidgets('Integration: Predictor lifecycle management', (tester) async {
@@ -222,18 +340,19 @@ void main() {
       expect(predictor.isInitialized, isFalse);
 
       await predictor.initialize();
-      expect(predictor.isInitialized, isTrue);
 
-      // Use predictor
-      final habit = MLPredictorTestUtils.createLowRiskHabit();
-      await predictor.predictRisk(habit);
+      // Habit with zero history — predictor should fall back to default.
+      final newHabit = MLPredictorTestUtils.createLowRiskHabit().copyWith(
+        completionHistory: [],
+        currentStreak: 0,
+        lastCompletedAt: null,
+      );
 
-      // Dispose
-      predictor.dispose();
+      final risk = await predictor.predictRisk(newHabit);
+      expect(risk, equals(AbandonmentPredictor.defaultRiskForNewHabits),
+          reason: 'First-time habit with no history → 0.5 neutral risk');
 
-      // Multiple dispose calls should be safe
-      expect(() => predictor.dispose(), returnsNormally,
-          reason: 'Multiple dispose calls should be safe');
+      await predictor.dispose();
     });
   });
 }

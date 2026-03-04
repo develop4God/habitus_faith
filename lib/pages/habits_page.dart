@@ -295,7 +295,9 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
             },
             error: (e, st) {
               debugPrint('HabitsPage.build: error cargando hábitos: $e');
-              return const Center(child: Text('Error cargando hábitos'));
+              return Center(
+                  child:
+                      Text(AppLocalizations.of(context)!.errorLoadingHabits));
             },
           ),
           floatingActionButton: Builder(
@@ -325,7 +327,7 @@ class _HabitsPageState extends ConsumerState<HabitsPage> {
                         );
                       },
                       backgroundColor: Colors.orange.shade400,
-                      tooltip: 'Girar tareas del hogar',
+                      tooltip: l10n.spinHouseholdTasks,
                       child: const Icon(
                         Icons.auto_mode_rounded,
                         color: Colors.white,

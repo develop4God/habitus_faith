@@ -282,7 +282,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
               Icon(Icons.delete, color: Colors.red.shade700),
               const SizedBox(width: 8),
               Text(
-                l10n?.deleteHabit ?? 'Eliminar',
+                l10n?.deleteHabit ?? 'Delete',
                 style: TextStyle(
                   color: Colors.red.shade700,
                   fontWeight: FontWeight.bold,
@@ -333,7 +333,7 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
                 IconButton(
                   icon: const Icon(Icons.close, color: Color(0xff64748b)),
                   onPressed: () => _removeHabit(habitId),
-                  tooltip: l10n?.deleteHabit ?? 'Eliminar',
+                  tooltip: l10n?.deleteHabit ?? 'Delete',
                 ),
               ],
             ),
@@ -358,20 +358,25 @@ class _HabitPreviewPageState extends ConsumerState<HabitPreviewPage> {
             style: BorderStyle.solid,
           ),
         ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add, color: Color(0xff6366f1)),
-            SizedBox(width: 8),
-            Text(
-              'Agregar hábito',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff6366f1),
-              ),
-            ),
-          ],
+        child: Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context);
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.add, color: Color(0xff6366f1)),
+                const SizedBox(width: 8),
+                Text(
+                  l10n?.addHabit ?? 'Add Habit',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff6366f1),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

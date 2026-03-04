@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import 'notes_providers.dart';
 import '../domain/models/general_note_model.dart';
 
@@ -321,8 +322,11 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final notesAsync = ref.watch(generalNotesStreamProvider);
-    final today = DateFormat('EEEE, d MMMM', 'es').format(DateTime.now());
+    final today =
+        DateFormat('EEEE, d MMMM', Localizations.localeOf(context).languageCode)
+            .format(DateTime.now());
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -339,9 +343,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Mis Notas',
-                    style: TextStyle(
+                  Text(
+                    l10n.myNotes,
+                    style: const TextStyle(
                       color: Color(0xFF1A1C1E),
                       fontWeight: FontWeight.w900,
                     ),
@@ -408,6 +412,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   // ── Rich input card ────────────────────────────────────────────────────────
 
   Widget _buildRichNoteInput() {
+    final l10n = AppLocalizations.of(context)!;
     final isEditing = _editingNoteId != null;
     final currentType = _lines[_focusedIndex].type;
     final hasContent = _serialised.trim().isNotEmpty;
@@ -438,7 +443,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                   color: Colors.orange),
               const SizedBox(width: 8),
               Text(
-                isEditing ? 'Editar Nota' : 'Nueva Nota',
+                isEditing ? l10n.editNote : l10n.newNote,
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
@@ -448,7 +453,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                   onPressed: _clearEditor,
                   icon: Icon(isEditing ? Icons.close : Icons.delete_outline,
                       color: Colors.grey.shade400),
-                  tooltip: isEditing ? 'Cancelar edición' : 'Descartar nota',
+                  tooltip: isEditing ? l10n.cancelEdit : l10n.discardNote,
                 ),
               IconButton(
                 onPressed: _canSave ? _saveNote : null,
@@ -466,21 +471,21 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             children: [
               _ToolbarButton(
                 icon: Icons.format_list_bulleted_rounded,
-                label: 'Casilla',
+                label: l10n.checkboxItem,
                 color: Colors.green.shade700,
                 isSelected: currentType == _NoteLineType.checkbox,
                 onTap: () => _changeCurrentLineType(_NoteLineType.checkbox),
               ),
               _ToolbarButton(
                 icon: Icons.format_list_numbered_rounded,
-                label: 'Numerada',
+                label: l10n.numberedItem,
                 color: Colors.blue.shade700,
                 isSelected: currentType == _NoteLineType.numbered,
                 onTap: () => _changeCurrentLineType(_NoteLineType.numbered),
               ),
               _ToolbarButton(
                 icon: Icons.text_fields_rounded,
-                label: 'Texto',
+                label: l10n.plainText,
                 color: Colors.purple.shade700,
                 isSelected: currentType == _NoteLineType.plain,
                 onTap: () => _changeCurrentLineType(_NoteLineType.plain),
@@ -545,6 +550,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   }
 
   Widget _buildLineEditor(int index) {
+    final l10n = AppLocalizations.of(context)!;
     final line = _lines[index];
     final controller = _getController(index);
     Widget leading;
@@ -614,10 +620,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 hintText: line.type == _NoteLineType.checkbox
-                    ? 'Elemento de lista...'
+                    ? l10n.listItemHint
                     : line.type == _NoteLineType.numbered
-                        ? 'Paso...'
-                        : 'Escribe una nota...',
+                        ? l10n.stepHint
+                        : l10n.writeNoteHint,
                 hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
                 border: InputBorder.none,
               ),
@@ -642,7 +648,9 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   // ── Note cards ────────────────────────────────────────────────────────────
 
   Widget _buildNoteCard(GeneralNote note) {
-    final dateStr = DateFormat('d MMM, HH:mm', 'es').format(note.createdAt);
+    final dateStr =
+        DateFormat('d MMM, HH:mm', Localizations.localeOf(context).languageCode)
+            .format(note.createdAt);
     final lines = _parseNote(note.content);
 
     return _NoteCard(
@@ -660,6 +668,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -667,11 +676,11 @@ class _NotesPageState extends ConsumerState<NotesPage> {
           Icon(Icons.sticky_note_2_outlined,
               size: 64, color: Colors.grey.shade300),
           const SizedBox(height: 16),
-          const Text('No hay notas guardadas',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text('Tus pensamientos aparecerán aquí.',
-              style: TextStyle(color: Colors.grey, fontSize: 13)),
+          Text(l10n.noSavedNotes,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey)),
+          Text(l10n.thoughtsAppearHere,
+              style: const TextStyle(color: Colors.grey, fontSize: 13)),
         ],
       ),
     );

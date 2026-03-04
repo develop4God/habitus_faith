@@ -64,7 +64,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
             // Current vs Suggested
             _buildComparisonRow(
               context,
-              label: 'Current',
+              label: l10n.currentLabel,
               value: '${habit.targetMinutes} min daily',
               icon: Icons.schedule,
               color: Colors.grey,
@@ -74,7 +74,7 @@ class NudgeSuggestionDialog extends StatelessWidget {
             const SizedBox(height: 8),
             _buildComparisonRow(
               context,
-              label: 'Suggested',
+              label: l10n.suggestedLabel,
               value: '$suggestedMinutes min daily',
               icon: Icons.schedule,
               color: Colors.green,
