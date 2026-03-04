@@ -193,7 +193,8 @@ class HabitsNotifier extends AsyncNotifier<void> {
   }
 
   Future<void> togglePinHabit(String habitId, bool isPinned) async {
-    debugPrint('HabitsNotifier.togglePinHabit: habitId=$habitId, isPinned=$isPinned');
+    debugPrint(
+        'HabitsNotifier.togglePinHabit: habitId=$habitId, isPinned=$isPinned');
     // Minimal state update to avoid full list reload if possible
     final repository = ref.read(habitsRepositoryProvider);
     final result = await repository.updateHabit(

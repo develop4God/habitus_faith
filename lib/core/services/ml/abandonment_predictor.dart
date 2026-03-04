@@ -588,4 +588,3 @@ class _StaticOverrideAssetLoader implements IAssetLoader {
     );
   }
 }
-
