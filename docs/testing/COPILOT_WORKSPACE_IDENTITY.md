@@ -9,8 +9,8 @@
 
 | Field                | Value                                                            |
 |----------------------|------------------------------------------------------------------|
-| **Project name**     | `devocional_nuevo`                                               |
-| **Absolute path**    | `/home/develop4god/projects/devocional_nuevo`                    |
+| **Project name**     | `habitus_faith`                                                  |
+| **Absolute path**    | `/home/develop4god/projects/habitus_faith`                       |
 | **Platform**         | Pop!_OS 24.04 LTS (Linux, x86_64)                                |
 | **Shell**            | bash                                                             |
 | **Flutter SDK**      | `/home/develop4god/development/flutter` (channel stable, 3.38.5) |
@@ -123,7 +123,7 @@ flutter test test/unit/blocs/devocionales_bloc_test.dart --reporter compact
 | `devocional_provider.dart` (full) | `test/unit/providers/devocional_provider_working_test.dart` |
 | `localization_provider.dart`      | `test/unit/providers/localization_provider_test.dart`       |
 | `application_language_page.dart`  | `test/unit/providers/devocional_provider_working_test.dart` |
-| Any BLoC                          | `test/unit/blocs/<bloc_name>_test.dart`                     |
+| Any riverpod                      | `test/unit/blocs/<bloc_name>_test.dart`                     |
 | TTS service                       | `test/unit/services/tts_service_test.dart`                  |
 
 ---
