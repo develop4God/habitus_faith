@@ -1584,4 +1584,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String bibleVersionTooltip(String version) {
     return 'Versão da Bíblia: $version';
   }
+
+  @override
+  String get underConstruction => 'Em construção 🚧';
+
+  @override
+  String get getReadyNextLevel => 'Prepare-se para o\nPróximo Nível';
+
+  @override
+  String get exclusiveMissionsComingSoon =>
+      'Missões exclusivas e recompensas em breve...';
+
+  @override
+  String get myPets => 'Meus Animais';
 }

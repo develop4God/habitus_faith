@@ -1510,4 +1510,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String bibleVersionTooltip(String version) {
     return '圣经版本: $version';
   }
+
+  @override
+  String get underConstruction => '建设中 🚧';
+
+  @override
+  String get getReadyNextLevel => '准备好迎接\n下一个级别';
+
+  @override
+  String get exclusiveMissionsComingSoon => '独家任务和奖励即将到来...';
+
+  @override
+  String get myPets => '我的宠物';
 }

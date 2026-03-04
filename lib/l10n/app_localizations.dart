@@ -2971,6 +2971,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bible Version: {version}'**
   String bibleVersionTooltip(String version);
+
+  /// Under construction badge label
+  ///
+  /// In en, this message translates to:
+  /// **'Under Construction 🚧'**
+  String get underConstruction;
+
+  /// Gamification card headline
+  ///
+  /// In en, this message translates to:
+  /// **'Get Ready for the\nNext Level'**
+  String get getReadyNextLevel;
+
+  /// Gamification card teaser subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusive missions and rewards coming soon...'**
+  String get exclusiveMissionsComingSoon;
+
+  /// Section title for pets on home page
+  ///
+  /// In en, this message translates to:
+  /// **'My Pets'**
+  String get myPets;
 }
 
 class _AppLocalizationsDelegate

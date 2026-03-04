@@ -1757,5 +1757,21 @@
         "type": "String"
       }
     }
+  },
+  "underConstruction": "建设中 🚧",
+  "@underConstruction": {
+    "description": "Under construction badge label"
+  },
+  "getReadyNextLevel": "准备好迎接\n下一个级别",
+  "@getReadyNextLevel": {
+    "description": "Gamification card headline"
+  },
+  "exclusiveMissionsComingSoon": "独家任务和奖励即将到来...",
+  "@exclusiveMissionsComingSoon": {
+    "description": "Gamification card teaser subtitle"
+  },
+  "myPets": "我的宠物",
+  "@myPets": {
+    "description": "Section title for pets on home page"
   }
 }

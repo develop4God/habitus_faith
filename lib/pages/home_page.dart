@@ -558,7 +558,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                         ),
                         Text(
-                          'En construcción 🚧',
+                          l10n.underConstruction,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey.shade600,
@@ -587,9 +587,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                           )
                         ],
                       ),
-                      child: const Text(
-                        'PRÓXIMAMENTE',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.comingSoon,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 9,
                           fontWeight: FontWeight.w900,
@@ -668,7 +668,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                'Prepárate para el\nSiguiente Nivel',
+                                l10n.getReadyNextLevel,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w900,
@@ -702,7 +702,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         color: Colors.amber, size: 16),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Misiones exclusivas y premios pronto...',
+                                      l10n.exclusiveMissionsComingSoon,
                                       style: TextStyle(
                                         fontSize: 13,
                                         color:
@@ -789,6 +789,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildPetsSection() {
     final petsAsync = ref.watch(petsNotifierProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return petsAsync.when(
       data: (pets) {
@@ -808,7 +809,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Mis Mascotas',
+                    l10n.myPets,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
