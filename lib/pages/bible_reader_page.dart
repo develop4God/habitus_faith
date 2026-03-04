@@ -6,6 +6,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/bible_providers.dart';
 import '../bible_reader_core/bible_reader_core.dart';
+import '../core/providers/language_provider.dart';
 import '../utils/copyright_utils.dart';
 import '../widgets/floating_font_control_buttons.dart';
 import '../widgets/bible_book_selector_dialog.dart';
@@ -28,9 +29,11 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize Bible reader with device language
+    // Initialize Bible reader with current app language
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(bibleReaderProvider.notifier).initialize('es');
+      final languageCode =
+          ref.read(appLanguageProvider).languageCode;
+      ref.read(bibleReaderProvider.notifier).initialize(languageCode);
     });
   }
 

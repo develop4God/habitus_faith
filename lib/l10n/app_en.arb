@@ -1945,5 +1945,21 @@
         "type": "String"
       }
     }
+  },
+  "underConstruction": "Under Construction 🚧",
+  "@underConstruction": {
+    "description": "Under construction badge label"
+  },
+  "getReadyNextLevel": "Get Ready for the\nNext Level",
+  "@getReadyNextLevel": {
+    "description": "Gamification card headline"
+  },
+  "exclusiveMissionsComingSoon": "Exclusive missions and rewards coming soon...",
+  "@exclusiveMissionsComingSoon": {
+    "description": "Gamification card teaser subtitle"
+  },
+  "myPets": "My Pets",
+  "@myPets": {
+    "description": "Section title for pets on home page"
   }
 }

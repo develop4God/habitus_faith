@@ -1757,5 +1757,21 @@
         "type": "String"
       }
     }
+  },
+  "underConstruction": "En construction 🚧",
+  "@underConstruction": {
+    "description": "Under construction badge label"
+  },
+  "getReadyNextLevel": "Préparez-vous pour le\nNiveau Suivant",
+  "@getReadyNextLevel": {
+    "description": "Gamification card headline"
+  },
+  "exclusiveMissionsComingSoon": "Missions exclusives et récompenses bientôt...",
+  "@exclusiveMissionsComingSoon": {
+    "description": "Gamification card teaser subtitle"
+  },
+  "myPets": "Mes Animaux",
+  "@myPets": {
+    "description": "Section title for pets on home page"
   }
 }
