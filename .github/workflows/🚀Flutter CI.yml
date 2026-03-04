@@ -44,7 +44,7 @@ jobs:
           cache: true
 
       - name: 📦 Get dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile 
 
       - name: "🔑 Create .env file from secret"
         run: |
@@ -135,7 +135,7 @@ jobs:
           cache: true
 
       - name: 📦 Get dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: 📦 Cache dependencies
         uses: actions/cache@v4
