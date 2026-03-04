@@ -143,6 +143,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
     HabitNotificationSettings? notificationSettings,
     HabitRecurrence? recurrence,
     List<Subtask>? subtasks,
+    bool? isPinned, // Added to match interface
   }) async {
     try {
       if (userId == null) {
@@ -165,6 +166,7 @@ class FirestoreHabitsRepository implements HabitsRepository {
         notificationSettings: notificationSettings,
         recurrence: recurrence,
         subtasks: subtasks,
+        isPinned: isPinned, // Pass to copyWith
       );
 
       await firestore

@@ -367,29 +367,28 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                 children: [
                                   Icon(
                                     Icons.local_fire_department,
-                                    size: 14,
+                                    size: 16,
                                     color: widget.habit.currentStreak > 0
                                         ? Colors.orange.shade600
                                         : Colors.grey.shade400,
                                   ),
                                   const SizedBox(width: 4),
-                                  Flexible(
-                                    child: Text(
-                                      l10n.dayStreak(widget.habit.currentStreak),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey.shade600,
-                                      ),
+                                  Text(
+                                    '${widget.habit.currentStreak}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: widget.habit.currentStreak > 0
+                                          ? Colors.orange.shade700
+                                          : Colors.grey.shade600,
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: 12),
                                   AbandonmentRiskIndicator(
                                     risk: habit.abandonmentRisk,
                                   ),
                                   if (habit.subtasks.isNotEmpty) ...[
-                                    const SizedBox(width: 8),
+                                    const SizedBox(width: 12),
                                     InkWell(
                                       onTap: () {
                                         setState(
