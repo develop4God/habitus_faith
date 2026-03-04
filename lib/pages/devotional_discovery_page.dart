@@ -85,7 +85,7 @@ class _DevotionalDiscoveryPageState
               Icons.menu_book,
               color: isDark ? Colors.white : Colors.black87,
             ),
-            tooltip: 'Bible Version: ${state.selectedVersion}',
+            tooltip: l10n.bibleVersionTooltip(state.selectedVersion),
             onPressed: () => _showVersionSelector(context),
           ),
           IconButton(
@@ -168,7 +168,7 @@ class _DevotionalDiscoveryPageState
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: 'Search devotionals...',
+                  hintText: l10n.searchDevotionals,
                   hintStyle: TextStyle(
                     color: isDark ? Colors.grey[600] : Colors.grey[400],
                   ),

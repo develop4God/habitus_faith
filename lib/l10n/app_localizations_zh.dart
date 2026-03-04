@@ -1420,4 +1420,100 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get newGoal => '新目标';
+
+  @override
+  String get notificationTimingNone => '无提醒';
+
+  @override
+  String get notificationTimingAtEvent => '活动时间';
+
+  @override
+  String get notificationTimingTenMin => '提前10分钟';
+
+  @override
+  String get notificationTimingThirtyMin => '提前30分钟';
+
+  @override
+  String get notificationTimingOneHour => '提前1小时';
+
+  @override
+  String get difficultyEasy => '简单';
+
+  @override
+  String get difficultyMedium => '中等';
+
+  @override
+  String get difficultyHard => '困难';
+
+  @override
+  String get selectTime => '选择时间';
+
+  @override
+  String get hour => '时间';
+
+  @override
+  String get noHouseholdTasks => '没有家务任务';
+
+  @override
+  String get myFavorites => '我的收藏';
+
+  @override
+  String get noFavoritesYet => '暂无收藏';
+
+  @override
+  String get noFavoritesMessage => '点击任何灵修内容上的星形图标将其保存在这里';
+
+  @override
+  String get exploreDevotionals => '探索灵修内容';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return '每$interval$unit';
+  }
+
+  @override
+  String get frequencyUnitDay => '天';
+
+  @override
+  String get frequencyUnitWeek => '周';
+
+  @override
+  String get frequencyUnitMonth => '月';
+
+  @override
+  String get addTasksToUseSpinner => '添加家务任务以使用旋转器';
+
+  @override
+  String get goals => '目标';
+
+  @override
+  String get notes => '笔记';
+
+  @override
+  String get newSubtaskHint => '新子任务...';
+
+  @override
+  String get image => '图片';
+
+  @override
+  String get removeFromFavorites => '从收藏中移除';
+
+  @override
+  String get searchDevotionals => '搜索灵修内容...';
+
+  @override
+  String languageChangedTo(String language) {
+    return '语言已更改为$language';
+  }
+
+  @override
+  String get currentLabel => '当前';
+
+  @override
+  String get suggestedLabel => '建议';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return '圣经版本: $version';
+  }
 }

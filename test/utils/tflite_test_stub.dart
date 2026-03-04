@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
+import 'package:habitus_faith/core/services/ml/asset_loader.dart';
 
 /// Minimal fake Interpreter for tests that cannot load the native TFLite library.
 /// Provides `run` and `close` with deterministic behavior.
@@ -28,46 +29,35 @@ class FakeInterpreter implements Interpreter {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-/// Default fake model metadata JSON for tests
-const _fakeModelMetadataJson = '''
-{
-  "version": "1.0.0-test",
-  "training_samples": 1000,
-  "accuracy": 0.85,
-  "features": ["hourOfDay", "dayOfWeek", "currentStreak", "failuresLast7Days", "hoursFromReminder"],
-  "feature_count": 5
-}
-''';
+/// Test [IAssetLoader] that returns fake metadata, scaler params, and a
+/// [FakeInterpreter] without touching rootBundle or native libraries.
+class TestAssetLoader implements IAssetLoader {
+  final double interpreterResult;
 
-/// Default fake scaler params JSON for tests
-const _fakeScalerParamsJson = '''
-{
-  "mean": [12.0, 4.0, 5.0, 2.0, 3.0],
-  "scale": [6.0, 2.0, 5.0, 2.0, 4.0]
-}
-''';
+  TestAssetLoader({this.interpreterResult = 0.3});
 
-/// Install the fake interpreter into AbandonmentPredictor for tests.
-/// Also installs fake JSON asset loader to prevent rootBundle.loadString from hanging.
-/// Optional `result` allows customizing the returned probability.
-Future<void> installFakeTflite({double result = 0.3}) async {
-  AbandonmentPredictor.assetLoaderOverride =
-      (asset) async => FakeInterpreter(result: result);
-
-  // Also override asset string loading to prevent rootBundle.loadString from
-  // hanging indefinitely in test environments without real asset bundles.
-  AbandonmentPredictor.assetStringLoaderOverride = (asset) async {
-    if (asset.contains('model_metadata')) {
-      return _fakeModelMetadataJson;
-    } else if (asset.contains('scaler_params')) {
-      return _fakeScalerParamsJson;
+  @override
+  Future<String> loadString(String assetPath) async {
+    if (assetPath.contains('model_metadata')) {
+      return json.encode({
+        'version': '1.0.0-test',
+        'input_shape': [1, 5],
+        'output_shape': [1, 1],
+        'training_samples': 1000,
+        'accuracy': 0.85,
+      });
     }
-    return '{}';
-  };
-}
+    if (assetPath.contains('scaler_params')) {
+      return json.encode({
+        'mean': [12.0, 4.0, 5.0, 2.0, 3.0],
+        'scale': [6.0, 2.0, 5.0, 2.0, 4.0],
+      });
+    }
+    throw Exception('Unknown asset: $assetPath');
+  }
 
-/// Remove any installed override and reset to normal behavior.
-void uninstallFakeTflite() {
-  AbandonmentPredictor.assetLoaderOverride = null;
-  AbandonmentPredictor.assetStringLoaderOverride = null;
+  @override
+  Future<dynamic> loadInterpreter(String assetPath) async {
+    return FakeInterpreter(result: interpreterResult);
+  }
 }

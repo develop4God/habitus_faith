@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/providers/ml_providers.dart';
 import 'package:habitus_faith/core/providers/habit_predictor_provider.dart';
+import 'package:habitus_faith/core/providers/shared_preferences_provider.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,13 +10,24 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('ML Providers Tests - New Initialized Providers', () {
-    setUp(() {
+    late SharedPreferences prefs;
+
+    setUp(() async {
       SharedPreferences.setMockInitialValues({});
+      prefs = await SharedPreferences.getInstance();
     });
+
+    ProviderContainer createContainer() {
+      return ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
+      );
+    }
 
     group('abandonmentPredictorProvider (original)', () {
       test('returns AbandonmentPredictor instance immediately', () {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor = container.read(abandonmentPredictorProvider);
@@ -24,7 +36,7 @@ void main() {
       });
 
       test('creates only one instance (singleton)', () {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor1 = container.read(abandonmentPredictorProvider);
@@ -34,7 +46,7 @@ void main() {
       });
 
       test('disposes predictor when container is disposed', () {
-        final container = ProviderContainer();
+        final container = createContainer();
         final predictor = container.read(abandonmentPredictorProvider);
 
         // Verify predictor exists
@@ -48,7 +60,7 @@ void main() {
       });
 
       test('starts initialization asynchronously', () {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         // Get predictor - should return immediately
@@ -64,7 +76,7 @@ void main() {
 
     group('abandonmentPredictorInitializedProvider (new)', () {
       test('returns fully initialized AbandonmentPredictor', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor = await container.read(
@@ -75,7 +87,7 @@ void main() {
       });
 
       test('ensures initialization completes before returning', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final stopwatch = Stopwatch()..start();
@@ -95,7 +107,7 @@ void main() {
       });
 
       test('multiple reads return same initialized instance', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor1 = await container.read(
@@ -109,7 +121,7 @@ void main() {
       });
 
       test('waits for async initialization to complete', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         // This should await the initialize() call
@@ -124,7 +136,7 @@ void main() {
       });
 
       test('handles initialization errors gracefully', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         // Should not throw even if TFLite model can't load in test env
@@ -153,7 +165,7 @@ void main() {
 
     group('Provider Integration Tests', () {
       test('original provider enables non-blocking app startup', () {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final stopwatch = Stopwatch()..start();
@@ -167,7 +179,7 @@ void main() {
       });
 
       test('initialized provider blocks until ready', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor = await container.read(
@@ -178,7 +190,7 @@ void main() {
       });
 
       test('both providers return same underlying instance', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor1 = container.read(abandonmentPredictorProvider);
@@ -192,7 +204,7 @@ void main() {
 
     group('Use Case Validation', () {
       test('UI code should use original provider (non-blocking)', () {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor = container.read(abandonmentPredictorProvider);
@@ -201,7 +213,7 @@ void main() {
       });
 
       test('risk calculations should work after initialization', () async {
-        final container = ProviderContainer();
+        final container = createContainer();
         addTearDown(container.dispose);
 
         final predictor = await container.read(

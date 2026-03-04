@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 import '../../../features/habits/domain/habit.dart';
 import '../../../features/habits/domain/ml_features_calculator.dart';
 import '../../services/time/time.dart';
+import 'asset_loader.dart';
+import 'preferences_service.dart';
 import 'telemetry_service.dart';
 
 /// Service for ML-based habit abandonment risk prediction
@@ -24,19 +23,13 @@ import 'telemetry_service.dart';
 class AbandonmentPredictor {
   final Clock clock;
   final MLTelemetryService? _telemetryService;
+  final IAssetLoader? _assetLoader;
+  final IPreferencesService? _preferencesService;
   // Interpreter instance (dynamic to allow test doubles without extending sealed class)
   dynamic _interpreter;
   Map<String, dynamic>? _scalerParams;
   Map<String, dynamic>? _modelMetadata;
   bool _initialized = false;
-
-  // Test-time hook: allow tests to override how the Interpreter is loaded
-  // Return type is dynamic so tests can provide simple objects with run/close methods
-  static Future<dynamic> Function(String asset)? assetLoaderOverride;
-
-  // Test-time hook: allow tests to override how asset strings (JSON) are loaded
-  // When set, this replaces rootBundle.loadString calls during initialization
-  static Future<String> Function(String asset)? assetStringLoaderOverride;
 
   // Model constants
   static const int featureCount = 5;
@@ -60,8 +53,12 @@ class AbandonmentPredictor {
     Clock? clock,
     MLTelemetryService? telemetryService,
     dynamic interpreter, // Add this for test injection (can be test double)
+    IAssetLoader? assetLoader,
+    IPreferencesService? preferencesService,
   })  : clock = clock ?? const Clock.system(),
-        _telemetryService = telemetryService {
+        _telemetryService = telemetryService,
+        _assetLoader = assetLoader,
+        _preferencesService = preferencesService {
     if (interpreter != null) {
       _interpreter = interpreter;
       _initialized = true;
@@ -92,14 +89,21 @@ class AbandonmentPredictor {
       return;
     }
 
+    if (_assetLoader == null) {
+      throw StateError(
+        'AbandonmentPredictor: assetLoader is required for initialization. '
+        'Pass an IAssetLoader via the constructor.',
+      );
+    }
+
     debugPrint('AbandonmentPredictor.initialize: Starting initialization...');
 
     try {
       // Load model metadata
       debugPrint('AbandonmentPredictor.initialize: Loading model metadata...');
-      final metadataJson = assetStringLoaderOverride != null
-          ? await assetStringLoaderOverride!('assets/ml_models/model_metadata.json')
-          : await rootBundle.loadString('assets/ml_models/model_metadata.json');
+      final metadataJson = await _assetLoader!.loadString(
+        'assets/ml_models/model_metadata.json',
+      );
       _modelMetadata = json.decode(metadataJson) as Map<String, dynamic>;
       debugPrint(
         'AbandonmentPredictor.initialize: Model version ${_modelMetadata!['version']} loaded',
@@ -108,35 +112,15 @@ class AbandonmentPredictor {
       // Load TFLite model from assets
       debugPrint('AbandonmentPredictor.initialize: Loading TFLite model...');
 
-      if (assetLoaderOverride != null) {
-        // Use test-provided interpreter loader (avoids loading native lib in tests)
-        _interpreter =
-            await assetLoaderOverride!('assets/ml_models/predictor.tflite');
-        debugPrint(
-            'AbandonmentPredictor.initialize: Interpreter provided by test override');
-      } else {
-        try {
-          _interpreter = await Interpreter.fromAsset(
-            'assets/ml_models/predictor.tflite',
-          );
-          debugPrint(
-            'AbandonmentPredictor.initialize: TFLite model loaded successfully',
-          );
-        } catch (e) {
-          // If native library isn't available (common in CI/test), fall back to a lightweight in-process interpreter
-          debugPrint(
-              'AbandonmentPredictor.initialize: Failed to load native TFLite interpreter: $e');
-          debugPrint(
-              'AbandonmentPredictor.initialize: Falling back to in-process fake interpreter for tests');
-          _interpreter = _FallbackInterpreter();
-        }
-      }
+      _interpreter = await _assetLoader!
+          .loadInterpreter('assets/ml_models/predictor.tflite');
+      debugPrint('AbandonmentPredictor.initialize: Interpreter loaded');
 
       // Load scaler parameters
       debugPrint('AbandonmentPredictor: Loading scaler params...');
-      final scalerJson = assetStringLoaderOverride != null
-          ? await assetStringLoaderOverride!('assets/ml_models/scaler_params.json')
-          : await rootBundle.loadString('assets/ml_models/scaler_params.json');
+      final scalerJson = await _assetLoader!.loadString(
+        'assets/ml_models/scaler_params.json',
+      );
       _scalerParams = json.decode(scalerJson) as Map<String, dynamic>;
       debugPrint('AbandonmentPredictor: Scaler params loaded successfully');
 
@@ -450,20 +434,25 @@ class AbandonmentPredictor {
     debugPrint('AbandonmentPredictor: Disposed');
   }
 
-  /// Load persisted telemetry from SharedPreferences
+  /// Load persisted telemetry from preferences
   Future<void> _loadTelemetry() async {
+    if (_preferencesService == null) {
+      debugPrint(
+          'AbandonmentPredictor: Telemetry disabled (no preferences service)');
+      return;
+    }
     try {
-      final prefs = await SharedPreferences.getInstance();
+      _predictionCount =
+          _preferencesService!.getInt(_telemetryPredictionCountKey) ?? 0;
+      _errorCount = _preferencesService!.getInt(_telemetryErrorCountKey) ?? 0;
 
-      _predictionCount = prefs.getInt(_telemetryPredictionCountKey) ?? 0;
-      _errorCount = prefs.getInt(_telemetryErrorCountKey) ?? 0;
-
-      final lastPredictionStr = prefs.getString('ml_last_prediction');
+      final lastPredictionStr =
+          _preferencesService!.getString('ml_last_prediction');
       if (lastPredictionStr != null) {
         _lastPredictionTime = DateTime.parse(lastPredictionStr);
       }
 
-      final lastResetStr = prefs.getString('ml_last_reset');
+      final lastResetStr = _preferencesService!.getString('ml_last_reset');
       if (lastResetStr != null) {
         _lastTelemetryReset = DateTime.parse(lastResetStr);
 
@@ -475,7 +464,7 @@ class AbandonmentPredictor {
       } else {
         // First time - initialize reset timestamp
         _lastTelemetryReset = clock.now();
-        await prefs.setString(
+        await _preferencesService!.setString(
           'ml_last_reset',
           _lastTelemetryReset!.toIso8601String(),
         );
@@ -490,16 +479,20 @@ class AbandonmentPredictor {
     }
   }
 
-  /// Save telemetry to SharedPreferences
+  /// Save telemetry to preferences
   Future<void> _saveTelemetry() async {
+    if (_preferencesService == null) {
+      debugPrint(
+          'AbandonmentPredictor: Telemetry save skipped (no preferences service)');
+      return;
+    }
     try {
-      final prefs = await SharedPreferences.getInstance();
-
-      await prefs.setInt(_telemetryPredictionCountKey, _predictionCount);
-      await prefs.setInt(_telemetryErrorCountKey, _errorCount);
+      await _preferencesService!
+          .setInt(_telemetryPredictionCountKey, _predictionCount);
+      await _preferencesService!.setInt(_telemetryErrorCountKey, _errorCount);
 
       if (_lastPredictionTime != null) {
-        await prefs.setString(
+        await _preferencesService!.setString(
           'ml_last_prediction',
           _lastPredictionTime!.toIso8601String(),
         );
@@ -512,9 +505,12 @@ class AbandonmentPredictor {
 
   /// Reset telemetry counters (called weekly)
   Future<void> _resetTelemetry() async {
+    if (_preferencesService == null) {
+      debugPrint(
+          'AbandonmentPredictor: Telemetry reset skipped (no preferences service)');
+      return;
+    }
     try {
-      final prefs = await SharedPreferences.getInstance();
-
       // Log final stats before reset
       debugPrint(
         'AbandonmentPredictor: Resetting telemetry - '
@@ -527,9 +523,9 @@ class AbandonmentPredictor {
       _errorCount = 0;
       _lastTelemetryReset = clock.now();
 
-      await prefs.setInt(_telemetryPredictionCountKey, 0);
-      await prefs.setInt(_telemetryErrorCountKey, 0);
-      await prefs.setString(
+      await _preferencesService!.setInt(_telemetryPredictionCountKey, 0);
+      await _preferencesService!.setInt(_telemetryErrorCountKey, 0);
+      await _preferencesService!.setString(
         'ml_last_reset',
         _lastTelemetryReset!.toIso8601String(),
       );
@@ -539,20 +535,4 @@ class AbandonmentPredictor {
       debugPrint('AbandonmentPredictor: Failed to reset telemetry: $e');
     }
   }
-}
-
-// Minimal fallback interpreter used when tflite native library is unavailable (tests/CI)
-class _FallbackInterpreter {
-  void close() {}
-
-  void run(Object input, Object output) {
-    try {
-      if (output is List && output.isNotEmpty && output[0] is List) {
-        (output[0] as List)[0] = 0.3; // deterministic default
-      }
-    } catch (_) {}
-  }
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

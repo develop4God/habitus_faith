@@ -11,17 +11,17 @@ enum NotificationTiming {
   String get displayName {
     switch (this) {
       case NotificationTiming.none:
-        return 'Sin aviso';
+        return 'No reminder';
       case NotificationTiming.atEventTime:
-        return 'En el momento';
+        return 'At event time';
       case NotificationTiming.tenMinutesBefore:
-        return '10 minutos antes';
+        return '10 minutes before';
       case NotificationTiming.thirtyMinutesBefore:
-        return '30 minutos antes';
+        return '30 minutes before';
       case NotificationTiming.oneHourBefore:
-        return '1 hora antes';
+        return '1 hour before';
       case NotificationTiming.custom:
-        return 'Personalizado';
+        return 'Custom';
     }
   }
 
@@ -51,11 +51,11 @@ enum RecurrenceFrequency {
   String get displayName {
     switch (this) {
       case RecurrenceFrequency.daily:
-        return 'Diario';
+        return 'Daily';
       case RecurrenceFrequency.weekly:
-        return 'Semanal';
+        return 'Weekly';
       case RecurrenceFrequency.monthly:
-        return 'Mensual';
+        return 'Monthly';
     }
   }
 }

@@ -748,13 +748,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             icon: const Icon(Icons.playlist_add_check_circle_outlined),
             label: l10n.routine,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.flag_outlined),
-            label: 'Metas',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.flag_outlined),
+            label: l10n.goals,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.sticky_note_2_outlined),
-            label: 'Notas',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.sticky_note_2_outlined),
+            label: l10n.notes,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.auto_stories_outlined),

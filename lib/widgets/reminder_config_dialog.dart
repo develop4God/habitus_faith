@@ -54,6 +54,23 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
     return '(${adjustedHour.toString().padLeft(2, '0')}:${adjustedMinute.toString().padLeft(2, '0')})';
   }
 
+  String _notificationTimingLabel(AppLocalizations l10n, NotificationTiming timing) {
+    switch (timing) {
+      case NotificationTiming.none:
+        return l10n.notificationTimingNone;
+      case NotificationTiming.atEventTime:
+        return l10n.notificationTimingAtEvent;
+      case NotificationTiming.tenMinutesBefore:
+        return l10n.notificationTimingTenMin;
+      case NotificationTiming.thirtyMinutesBefore:
+        return l10n.notificationTimingThirtyMin;
+      case NotificationTiming.oneHourBefore:
+        return l10n.notificationTimingOneHour;
+      case NotificationTiming.custom:
+        return l10n.custom;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -86,18 +103,18 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               const SizedBox(height: 12),
               _buildTimingOption(
                 timing: NotificationTiming.none,
-                title: NotificationTiming.none.displayName,
+                title: _notificationTimingLabel(l10n, NotificationTiming.none),
                 isSelected: selectedTiming == NotificationTiming.none,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.atEventTime,
-                title: NotificationTiming.atEventTime.displayName,
+                title: _notificationTimingLabel(l10n, NotificationTiming.atEventTime),
                 effectiveTime: widget.eventTime ?? '',
                 isSelected: selectedTiming == NotificationTiming.atEventTime,
               ),
               _buildTimingOption(
                 timing: NotificationTiming.tenMinutesBefore,
-                title: NotificationTiming.tenMinutesBefore.displayName,
+                title: _notificationTimingLabel(l10n, NotificationTiming.tenMinutesBefore),
                 effectiveTime: _getEffectiveTime(
                   NotificationTiming.tenMinutesBefore,
                 ),
@@ -106,7 +123,7 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.thirtyMinutesBefore,
-                title: NotificationTiming.thirtyMinutesBefore.displayName,
+                title: _notificationTimingLabel(l10n, NotificationTiming.thirtyMinutesBefore),
                 effectiveTime: _getEffectiveTime(
                   NotificationTiming.thirtyMinutesBefore,
                 ),
@@ -115,7 +132,7 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.oneHourBefore,
-                title: NotificationTiming.oneHourBefore.displayName,
+                title: _notificationTimingLabel(l10n, NotificationTiming.oneHourBefore),
                 effectiveTime: _getEffectiveTime(
                   NotificationTiming.oneHourBefore,
                 ),
@@ -123,7 +140,7 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
               ),
               _buildTimingOption(
                 timing: NotificationTiming.custom,
-                title: NotificationTiming.custom.displayName,
+                title: _notificationTimingLabel(l10n, NotificationTiming.custom),
                 isSelected: selectedTiming == NotificationTiming.custom,
                 showCustomInput: true,
               ),
@@ -215,34 +232,39 @@ class _ReminderConfigDialogState extends ConsumerState<ReminderConfigDialog> {
                       ),
                     ),
                   if (showCustomInput && isSelected)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Row(
-                        children: [
-                          const Text('Seleccionar hora'),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final picked = await showTimePicker(
-                                  context: context,
-                                  initialTime: customTime ?? TimeOfDay.now(),
-                                );
-                                if (picked != null) {
-                                  setState(() {
-                                    customTime = picked;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                customTime != null
-                                    ? customTime!.format(context)
-                                    : 'Seleccionar hora',
+                    Builder(
+                      builder: (context) {
+                        final l10n = AppLocalizations.of(context)!;
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Row(
+                            children: [
+                              Text(l10n.selectTime),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final picked = await showTimePicker(
+                                      context: context,
+                                      initialTime: customTime ?? TimeOfDay.now(),
+                                    );
+                                    if (picked != null) {
+                                      setState(() {
+                                        customTime = picked;
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    customTime != null
+                                        ? customTime!.format(context)
+                                        : l10n.selectTime,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                 ],
               ),

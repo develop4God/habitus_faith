@@ -11,6 +11,7 @@
 ///
 /// FIX: Added assetStringLoaderOverride static field that, when set, replaces
 /// rootBundle.loadString calls during initialization.
+library;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitus_faith/core/services/ml/abandonment_predictor.dart';
 import 'package:habitus_faith/features/habits/domain/habit.dart';
@@ -85,7 +86,8 @@ void main() {
       await predictor.dispose();
     });
 
-    test('invalid scaler params cause schema validation to detect mismatch', () async {
+    test('invalid scaler params cause schema validation to detect mismatch',
+        () async {
       AbandonmentPredictor.assetLoaderOverride =
           (asset) async => FakeInterpreter(result: 0.3);
 
@@ -170,4 +172,3 @@ Habit _createHabitWithHistory() {
     createdAt: DateTime.now().subtract(const Duration(days: 30)),
   );
 }
-
