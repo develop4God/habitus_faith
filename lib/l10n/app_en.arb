@@ -1633,14 +1633,6 @@
   "@myGoals": {
     "description": "Goals page title"
   },
-  "yearly": "Yearly",
-  "@yearly": {
-    "description": "Yearly goal type tab"
-  },
-  "personal": "Personal",
-  "@personal": {
-    "description": "Personal/custom goal type tab"
-  },
   "activeGoals": "Active Goals",
   "@activeGoals": {
     "description": "Active goals section title"

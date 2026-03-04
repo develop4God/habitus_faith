@@ -426,7 +426,7 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
                           widget.habit.notificationSettings!.timing !=
                               NotificationTiming.none
                       ? Text(
-                          '${widget.habit.notificationSettings!.eventTime ?? ''} · ${widget.habit.notificationSettings!.timing.displayName}',
+                          '${widget.habit.notificationSettings!.eventTime ?? ''} · ${_notificationTimingLabel(l10n, widget.habit.notificationSettings!.timing)}',
                           style: const TextStyle(fontSize: 15),
                         )
                       : Text(
@@ -756,6 +756,24 @@ class _CompactHabitCardState extends ConsumerState<CompactHabitCard> {
         ],
       ),
     );
+  }
+
+  String _notificationTimingLabel(
+      AppLocalizations l10n, NotificationTiming timing) {
+    switch (timing) {
+      case NotificationTiming.none:
+        return l10n.notificationTimingNone;
+      case NotificationTiming.atEventTime:
+        return l10n.notificationTimingAtEvent;
+      case NotificationTiming.tenMinutesBefore:
+        return l10n.notificationTimingTenMin;
+      case NotificationTiming.thirtyMinutesBefore:
+        return l10n.notificationTimingThirtyMin;
+      case NotificationTiming.oneHourBefore:
+        return l10n.notificationTimingOneHour;
+      case NotificationTiming.custom:
+        return l10n.custom;
+    }
   }
 
   String _recurrenceFrequencyLabel(

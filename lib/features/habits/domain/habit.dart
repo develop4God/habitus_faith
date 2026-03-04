@@ -22,20 +22,21 @@ enum HabitCategory {
   household, // chores, cleaning, organizing, maintenance
   other; // user-defined or uncategorized
 
+  @Deprecated('Use _categoryLabel(l10n, value) in the UI layer instead.')
   String get displayName {
     switch (this) {
       case HabitCategory.spiritual:
-        return 'Espiritual';
+        return 'Spiritual';
       case HabitCategory.physical:
-        return 'Físico';
+        return 'Physical';
       case HabitCategory.mental:
         return 'Mental';
       case HabitCategory.relational:
-        return 'Relacional';
+        return 'Relational';
       case HabitCategory.household:
-        return 'Hogar';
+        return 'Household';
       case HabitCategory.other:
-        return 'Otros';
+        return 'Other';
     }
   }
 }

@@ -34,7 +34,7 @@ void main() {
     });
 
     test('is ready for predictions after initialisation', () async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
       final habit = MLPredictorTestUtils.createLowRiskHabit();
       final risk = await predictor.predictRisk(habit);
@@ -165,7 +165,7 @@ void main() {
 
   group('Telemetry accumulates correctly', () {
     test('telemetry map contains required keys', () async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
       final telemetry = predictor.telemetry;
       expect(
@@ -187,7 +187,7 @@ void main() {
       await predictor.dispose();
     });
     test('success_rate is 1.0 when all predictions succeed', () async {
-      final predictor = AbandonmentPredictor();
+      final predictor = AbandonmentPredictor(assetLoader: TestAssetLoader());
       await predictor.initialize();
       final habit = MLPredictorTestUtils.createLowRiskHabit();
       await predictor.predictRisk(habit);

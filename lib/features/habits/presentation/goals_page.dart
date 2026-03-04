@@ -93,13 +93,17 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       children: [
-                        _buildTabButton(GoalType.week, l10n.goalTypeWeek),
+                        _buildTabButton(
+                            GoalType.week, _goalTypeLabel(l10n, GoalType.week)),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.month, l10n.goalTypeMonth),
+                        _buildTabButton(GoalType.month,
+                            _goalTypeLabel(l10n, GoalType.month)),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.year, l10n.yearly),
+                        _buildTabButton(
+                            GoalType.year, _goalTypeLabel(l10n, GoalType.year)),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.custom, l10n.personal),
+                        _buildTabButton(GoalType.custom,
+                            _goalTypeLabel(l10n, GoalType.custom)),
                       ],
                     ),
                   ),
