@@ -93,7 +93,7 @@ class _DevotionalDiscoveryPageState
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
                 shadows: [
@@ -113,7 +113,8 @@ class _DevotionalDiscoveryPageState
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.menu_book, color: Colors.white),
+                icon: const Icon(Icons.auto_stories_outlined,
+                    color: Colors.white),
                 tooltip: l10n.bibleVersionTooltip(state.selectedVersion),
                 onPressed: () => _showVersionSelector(context),
               ),
@@ -135,7 +136,8 @@ class _DevotionalDiscoveryPageState
                 StretchMode.blurBackground,
               ],
               background: GestureDetector(
-                onTap: () => _openDevotionalReader(featuredDevotional, imageUrl),
+                onTap: () =>
+                    _openDevotionalReader(featuredDevotional, imageUrl),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -189,8 +191,10 @@ class _DevotionalDiscoveryPageState
                                   color: Colors.white.withValues(alpha: 0.1)),
                             ),
                             child: Text(
-                              DateFormat('EEEE, MMMM d',
-                                      Localizations.localeOf(context).toString())
+                              DateFormat(
+                                      'EEEE, MMMM d',
+                                      Localizations.localeOf(context)
+                                          .toString())
                                   .format(DateTime.now())
                                   .toUpperCase(),
                               style: const TextStyle(

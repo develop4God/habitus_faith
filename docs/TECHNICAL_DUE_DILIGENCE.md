@@ -12,7 +12,7 @@
 
 This technical due diligence consists of three documents:
 
-### 1. 📊 [Quick Reference Card](docs/DUE_DILIGENCE_QUICK_REF.md)
+### 1. 📊 [Quick Reference Card](DUE_DILIGENCE_QUICK_REF.md)
 **Time to read:** 2 minutes  
 **Best for:** Quick overview, one-pager summary
 
@@ -23,7 +23,7 @@ This technical due diligence consists of three documents:
 - Key metrics snapshot
 - Go/No-go decision criteria
 
-### 2. 📋 [Executive Summary](docs/EXECUTIVE_SUMMARY_DUE_DILIGENCE.md)
+### 2. 📋 [Executive Summary](EXECUTIVE_SUMMARY_DUE_DILIGENCE.md)
 **Time to read:** 10 minutes  
 **Best for:** Decision makers, stakeholders, management
 
@@ -36,7 +36,7 @@ This technical due diligence consists of three documents:
 - Immediate next steps
 - Questions for decision makers
 
-### 3. 📖 [Full Technical Report](docs/TECHNICAL_DUE_DILIGENCE_REPORT.md)
+### 3. 📖 [Full Technical Report](TECHNICAL_DUE_DILIGENCE_REPORT.md)
 **Time to read:** 45-60 minutes  
 **Best for:** Technical teams, architects, senior engineers
 
@@ -139,13 +139,13 @@ This technical due diligence consists of three documents:
 ## 📞 Next Steps
 
 ### For Decision Makers
-1. Review [Executive Summary](docs/EXECUTIVE_SUMMARY_DUE_DILIGENCE.md) (10 min)
+1. Review [Executive Summary](EXECUTIVE_SUMMARY_DUE_DILIGENCE.md) (10 min)
 2. Answer key questions (budget, timeline, risk tolerance)
 3. Schedule stakeholder meeting to discuss findings
 4. Make go/no-go decision
 
 ### For Technical Teams
-1. Review [Full Technical Report](docs/TECHNICAL_DUE_DILIGENCE_REPORT.md) (45 min)
+1. Review [Full Technical Report](TECHNICAL_DUE_DILIGENCE_REPORT.md) (45 min)
 2. Deep dive into critical issues (security, scalability)
 3. Validate findings with code review
 4. Develop detailed remediation plan
