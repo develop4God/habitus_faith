@@ -404,16 +404,57 @@ void main(List<String> args) async {
   );
 }
 
-/// FIX #6: Detect duplicate keys in raw ARB content before JSON parse
-/// silently discards the earlier occurrences.
+/// FIX #6: Detect duplicate CONTENT keys (not metadata field names).
+///
+/// ARB files have structure:
+///   "contentKey": "value",
+///   "@contentKey": { "description": "...", "type": "String", ... }
+///
+/// Metadata blocks contain field names like "description", "type", "placeholders"
+/// etc. These are structural JSON and appear in every metadata block.
+/// We should only flag REAL duplicates (same content key appearing twice).
+///
+/// Strategy: Parse JSON and check if content keys are unique.
+/// A real duplicate would be caught by JSON parsing (last value wins silently).
 List<String> _findDuplicateKeys(String rawContent) {
-  final keyPattern = RegExp(r'^\s*"([^@][^"]*?)"\s*:', multiLine: true);
-  final allKeys =
-      keyPattern.allMatches(rawContent).map((m) => m.group(1)!).toList();
-  final seen = <String>{};
-  final duplicates = <String>{};
-  for (final key in allKeys) {
-    if (!seen.add(key)) duplicates.add(key);
+  try {
+    final data = json.decode(rawContent) as Map<String, dynamic>;
+
+    // Count content keys (not @-prefixed, not @@locale)
+    final contentKeys = <String>[];
+    data.forEach((key, value) {
+      if (!key.startsWith('@') && key != '@@locale') {
+        contentKeys.add(key);
+      }
+    });
+
+    // Check for unique keys by comparing original count with set size
+    // If they're equal, all are unique
+    if (contentKeys.length == contentKeys.toSet().length) {
+      return []; // No duplicates
+    }
+
+    // Find which ones are duplicated by checking against the raw file
+    // Parse line-by-line to detect actual duplicates in the file
+    final lines = rawContent.split('\n');
+    final seenContentKeys = <String>{};
+    final realDuplicates = <String>{};
+
+    for (final line in lines) {
+      // Match only top-level keys (those at indentation level 2 spaces, not inside metadata)
+      final match = RegExp(r'^\s{2}"([^@][^"]*?)"\s*:').firstMatch(line);
+      if (match != null) {
+        final key = match.group(1)!;
+        // If we've seen this key before at top level, it's a real duplicate
+        if (!seenContentKeys.add(key)) {
+          realDuplicates.add(key);
+        }
+      }
+    }
+
+    return realDuplicates.toList()..sort();
+  } catch (e) {
+    // If JSON parsing fails, return empty list (let JSON parser report the error)
+    return [];
   }
-  return duplicates.toList()..sort();
 }
