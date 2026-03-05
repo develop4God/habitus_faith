@@ -397,18 +397,19 @@ void main(List<String> args) async {
   // ── Exit code ─────────────────────────────────────────────────────────────
   // Exit 1 if any language has actionable issues — ensures CI pipelines fail.
   final hasFailures = procesados.values.any((d) =>
-      (d['missing'] as int) > 0 ||
-      (d['pending'] as int) > 0 ||
-      (d['orphans'] as int) > 0 ||
-      (d['localeMismatch'] as bool) ||
-      (d['duplicates'] as List).isNotEmpty) ||
+          (d['missing'] as int) > 0 ||
+          (d['pending'] as int) > 0 ||
+          (d['orphans'] as int) > 0 ||
+          (d['localeMismatch'] as bool) ||
+          (d['duplicates'] as List).isNotEmpty) ||
       noEncontrados.isNotEmpty;
 
   stdout.writeln('');
   stdout.writeln(
     '═══════════════════════════════════════════════════════════════',
   );
-  stdout.writeln(hasFailures ? '❌ Validation failed.' : '✅ Validation complete.');
+  stdout
+      .writeln(hasFailures ? '❌ Validation failed.' : '✅ Validation complete.');
   stdout.writeln(
     '═══════════════════════════════════════════════════════════════',
   );
