@@ -1600,4 +1600,18 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myPets => 'Mis Mascotas';
+
+  @override
+  String get wordOfToday => 'PALABRA DE HOY';
+
+  @override
+  String get exploreBibleDescription =>
+      'Explora la Palabra de Dios con nuestro lector avanzado.';
+
+  @override
+  String get devotionalDailyDescription =>
+      'Fortalece tu fe con reflexiones diarias.';
+
+  @override
+  String get viewFullDevotional => 'Ver devocional completo';
 }

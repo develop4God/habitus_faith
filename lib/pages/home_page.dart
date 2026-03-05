@@ -545,29 +545,30 @@ class _HomePageState extends ConsumerState<HomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.faithJourney,
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.grey.shade900,
-                            letterSpacing: -0.5,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.faithJourney,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.grey.shade900,
+                              letterSpacing: -0.5,
+                            ),
                           ),
-                        ),
-                        Text(
-                          l10n.underConstruction,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
+                          Text(
+                            l10n.underConstruction,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
@@ -696,18 +697,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           Colors.white.withValues(alpha: 0.1)),
                                 ),
                                 child: Row(
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Icon(Icons.stars_rounded,
                                         color: Colors.amber, size: 16),
                                     const SizedBox(width: 8),
-                                    Text(
-                                      l10n.exclusiveMissionsComingSoon,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color:
-                                            Colors.white.withValues(alpha: 0.9),
-                                        fontWeight: FontWeight.w500,
+                                    Expanded(
+                                      child: Text(
+                                        l10n.exclusiveMissionsComingSoon,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white
+                                              .withValues(alpha: 0.9),
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -808,12 +810,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     size: 24,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    l10n.myPets,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade800,
+                  Expanded(
+                    child: Text(
+                      l10n.myPets,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
+                      ),
                     ),
                   ),
                 ],

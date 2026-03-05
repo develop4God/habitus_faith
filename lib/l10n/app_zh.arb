@@ -1580,7 +1580,7 @@
   "noSavedNotes": "没有保存的笔记",
   "thoughtsAppearHere": "你的想法将显示在这里。",
   "myGoals": "我的目标",
-  "activeGoals": "活跃目标",
+   "activeGoals": "活跃目标",
   "generalProgress": "总体进度",
   "completedLower": "已完成",
   "noGoalsYet": "还没有目标",
@@ -1773,5 +1773,21 @@
   "myPets": "我的宠物",
   "@myPets": {
     "description": "Section title for pets on home page"
+  },
+  "wordOfToday": "今日话语",
+  "@wordOfToday": {
+    "description": "Badge label for today's devotional on spiritual hub"
+  },
+  "exploreBibleDescription": "使用我们的高级阅读器探索上帝的话语。",
+  "@exploreBibleDescription": {
+    "description": "Description for Bible reader feature card"
+  },
+  "devotionalDailyDescription": "通过日常反思加强你的信仰。",
+  "@devotionalDailyDescription": {
+    "description": "Description for daily devotionals feature card"
+  },
+  "viewFullDevotional": "查看完整灵修",
+  "@viewFullDevotional": {
+    "description": "Call-to-action text to view the full devotional"
   }
 }

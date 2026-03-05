@@ -1749,5 +1749,23 @@
   "myPets": "Mis Mascotas",
   "@myPets": {
     "description": "Section title for pets on home page"
+  },
+  "wordOfToday": "PALABRA DE HOY",
+  "@wordOfToday": {
+    "description": "Badge label for today's devotional on spiritual hub"
+  },
+  "exploreBibleDescription": "Explora la Palabra de Dios con nuestro lector avanzado.",
+  "@exploreBibleDescription": {
+    "description": "Description for Bible reader feature card"
+  },
+  "devotionalDailyDescription": "Fortalece tu fe con reflexiones diarias.",
+  "@devotionalDailyDescription": {
+    "description": "Description for daily devotionals feature card"
+  },
+  "viewFullDevotional": "Ver devocional completo",
+  "@viewFullDevotional": {
+    "description": "Call-to-action text to view the full devotional"
   }
 }
+
+

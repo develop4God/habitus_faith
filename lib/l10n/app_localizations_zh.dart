@@ -1522,4 +1522,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPets => '我的宠物';
+
+  @override
+  String get wordOfToday => '今日话语';
+
+  @override
+  String get exploreBibleDescription => '使用我们的高级阅读器探索上帝的话语。';
+
+  @override
+  String get devotionalDailyDescription => '通过日常反思加强你的信仰。';
+
+  @override
+  String get viewFullDevotional => '查看完整灵修';
 }

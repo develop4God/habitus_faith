@@ -195,13 +195,30 @@ class DevotionalDetailContent extends ConsumerWidget {
           ),
           const SizedBox(width: 20),
           Expanded(
-            child: Text(
-              punto.texto,
-              style: TextStyle(
-                fontSize: fontSize,
-                height: 1.6,
-                color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Verse reference (cita)
+                Text(
+                  punto.cita,
+                  style: TextStyle(
+                    fontSize: fontSize * 0.9,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.grey.shade300 : Colors.grey.shade700,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                // Meditation text
+                Text(
+                  punto.texto,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    height: 1.6,
+                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

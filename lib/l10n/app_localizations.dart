@@ -2995,6 +2995,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Pets'**
   String get myPets;
+
+  /// Badge label for today's devotional on spiritual hub
+  ///
+  /// In en, this message translates to:
+  /// **'WORD OF TODAY'**
+  String get wordOfToday;
+
+  /// Description for Bible reader feature card
+  ///
+  /// In en, this message translates to:
+  /// **'Explore God\'s Word with our advanced reader.'**
+  String get exploreBibleDescription;
+
+  /// Description for daily devotionals feature card
+  ///
+  /// In en, this message translates to:
+  /// **'Strengthen your faith with daily reflections.'**
+  String get devotionalDailyDescription;
+
+  /// Call-to-action text to view the full devotional
+  ///
+  /// In en, this message translates to:
+  /// **'View full devotional'**
+  String get viewFullDevotional;
 }
 
 class _AppLocalizationsDelegate

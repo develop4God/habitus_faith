@@ -1961,5 +1961,21 @@
   "myPets": "My Pets",
   "@myPets": {
     "description": "Section title for pets on home page"
+  },
+  "wordOfToday": "WORD OF TODAY",
+  "@wordOfToday": {
+    "description": "Badge label for today's devotional on spiritual hub"
+  },
+  "exploreBibleDescription": "Explore God's Word with our advanced reader.",
+  "@exploreBibleDescription": {
+    "description": "Description for Bible reader feature card"
+  },
+  "devotionalDailyDescription": "Strengthen your faith with daily reflections.",
+  "@devotionalDailyDescription": {
+    "description": "Description for daily devotionals feature card"
+  },
+  "viewFullDevotional": "View full devotional",
+  "@viewFullDevotional": {
+    "description": "Call-to-action text to view the full devotional"
   }
 }
