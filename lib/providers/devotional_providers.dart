@@ -76,14 +76,15 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     http.Client? httpClient,
   })  : _httpClient = httpClient ?? http.Client(),
         _cacheService = cacheService ?? CacheMetadataService(),
-        _indexService = indexService ??
-            DevocionalIndexService(httpClient ?? http.Client()),
+        _indexService =
+            indexService ?? DevocionalIndexService(httpClient ?? http.Client()),
         super(_initialState());
 
   @override
   void dispose() {
     if (_disposed) return;
     _disposed = true;
+    _httpClient.close();
     super.dispose();
   }
 
@@ -342,16 +343,21 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       await File(filePath).writeAsString(content);
       debugPrint('✅ Saved to local storage: $filePath');
 
-      // Write sidecar atomically after JSON save
-      final String manifestDate = _indexService.getFileDate(
-            _cachedIndex ?? {},
-            language,
-            version ?? '',
-            year.toString(),
-          ) ??
-          DateTime.now().toIso8601String().split('T').first;
-
-      await _cacheService.writeMetadata(filePath, manifestDate);
+      // Write sidecar only when we have a real index date.
+      // When _cachedIndex is null (offline) we skip the sidecar so that the
+      // next online session detects staleness correctly instead of stamping
+      // today's date and masking a stale cache.
+      if (_cachedIndex != null) {
+        final String? manifestDate = _indexService.getFileDate(
+          _cachedIndex!,
+          language,
+          version ?? '',
+          year.toString(),
+        );
+        if (manifestDate != null) {
+          await _cacheService.writeMetadata(filePath, manifestDate);
+        }
+      }
     } catch (e) {
       debugPrint('❌ Error saving to local storage: $e');
     }
@@ -427,6 +433,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         return b.date.compareTo(a.date);
       });
 
+      if (_disposed) return;
       state = state.copyWith(
         all: loadedDevocionales,
         filtered: loadedDevocionales,
@@ -438,6 +445,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       );
     } catch (e) {
       debugPrint('Error processing devotional data: $e');
+      if (_disposed) return;
       state = state.copyWith(
         errorMessage: 'Error al procesar los devocionales: $e',
         isLoading: false,

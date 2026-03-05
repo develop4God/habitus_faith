@@ -111,8 +111,7 @@ void main() {
   // ── Path A — fresh cache ──────────────────────────────────────────────────
   group('Path A — index reachable + cache fresh → serve local', () {
     test('does NOT call http client when cache is fresh', () async {
-      when(() => mockIndex.fetchIndex())
-          .thenAnswer((_) async => _fakeIndex());
+      when(() => mockIndex.fetchIndex()).thenAnswer((_) async => _fakeIndex());
       when(() => mockIndex.getFileDate(any(), any(), any(), any()))
           .thenReturn('2026-03-01');
       when(() => mockCache.readManifestDate(any()))
@@ -138,16 +137,15 @@ void main() {
   group('Path B — index reachable + cache stale → re-fetch API', () {
     test('calls http client when sidecar date differs from index date',
         () async {
-      when(() => mockIndex.fetchIndex())
-          .thenAnswer((_) async => _fakeIndex());
+      when(() => mockIndex.fetchIndex()).thenAnswer((_) async => _fakeIndex());
       when(() => mockIndex.getFileDate(any(), any(), any(), any()))
           .thenReturn('2026-03-01');
       when(() => mockCache.readManifestDate(any()))
           .thenAnswer((_) async => '2026-01-01'); // stale sidecar
       when(() => mockCache.writeMetadata(any(), any()))
           .thenAnswer((_) async {});
-      when(() => mockHttp.get(any())).thenAnswer(
-          (_) async => http.Response(_fakeApiBody(), 200));
+      when(() => mockHttp.get(any()))
+          .thenAnswer((_) async => http.Response(_fakeApiBody(), 200));
 
       final notifier = buildNotifier();
       await notifier.initialize();
@@ -156,16 +154,15 @@ void main() {
     });
 
     test('writes sidecar after successful API fetch', () async {
-      when(() => mockIndex.fetchIndex())
-          .thenAnswer((_) async => _fakeIndex());
+      when(() => mockIndex.fetchIndex()).thenAnswer((_) async => _fakeIndex());
       when(() => mockIndex.getFileDate(any(), any(), any(), any()))
           .thenReturn('2026-03-01');
       when(() => mockCache.readManifestDate(any()))
           .thenAnswer((_) async => null); // no sidecar = stale
       when(() => mockCache.writeMetadata(any(), any()))
           .thenAnswer((_) async {});
-      when(() => mockHttp.get(any())).thenAnswer(
-          (_) async => http.Response(_fakeApiBody(), 200));
+      when(() => mockHttp.get(any()))
+          .thenAnswer((_) async => http.Response(_fakeApiBody(), 200));
 
       final notifier = buildNotifier();
       await notifier.initialize();
@@ -184,12 +181,38 @@ void main() {
           .thenAnswer((_) async => '2026-01-01');
       when(() => mockCache.writeMetadata(any(), any()))
           .thenAnswer((_) async {});
-      when(() => mockHttp.get(any())).thenAnswer(
-          (_) async => http.Response(_fakeApiBody(), 200));
+      when(() => mockHttp.get(any()))
+          .thenAnswer((_) async => http.Response(_fakeApiBody(), 200));
 
-      final notifier = buildNotifier();
-      // Should complete without throwing
-      await expectLater(notifier.initialize(), completes);
+      // Seed a local file so hasLocal = true and the notifier serves it
+      // instead of falling through to Path D (API fetch).
+      final year = DateTime.now().year;
+      final devDir = Directory('${tempDir.path}/devotionals');
+      await devDir.create(recursive: true);
+      await File('${devDir.path}/devocional_${year}_en_KJV.json')
+          .writeAsString(_fakeApiBody());
+
+      final container = ProviderContainer(
+        overrides: [
+          devotionalProvider.overrideWith(
+            (ref) => DevotionalNotifier(
+              indexService: mockIndex,
+              cacheService: mockCache,
+              httpClient: mockHttp,
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await container.read(devotionalProvider.notifier).initialize();
+
+      // Verify offline mode was set and no error occurred
+      final st = container.read(devotionalProvider);
+      expect(st.isOfflineMode, isTrue);
+      expect(st.errorMessage, isNull);
+      // HTTP client should NOT have been called — served from local file
+      verifyNever(() => mockHttp.get(any()));
     });
   });
 
@@ -202,8 +225,8 @@ void main() {
           .thenAnswer((_) async => null);
       when(() => mockCache.writeMetadata(any(), any()))
           .thenAnswer((_) async {});
-      when(() => mockHttp.get(any())).thenAnswer(
-          (_) async => http.Response(_fakeApiBody(), 200));
+      when(() => mockHttp.get(any()))
+          .thenAnswer((_) async => http.Response(_fakeApiBody(), 200));
 
       final notifier = buildNotifier();
       await notifier.initialize();
@@ -221,19 +244,27 @@ void main() {
       });
       when(() => mockCache.readManifestDate(any()))
           .thenAnswer((_) async => null);
-      when(() => mockHttp.get(any())).thenAnswer(
-          (_) async => http.Response(_fakeApiBody(), 200));
+      when(() => mockHttp.get(any()))
+          .thenAnswer((_) async => http.Response(_fakeApiBody(), 200));
       when(() => mockCache.writeMetadata(any(), any()))
           .thenAnswer((_) async {});
 
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
+      final container = ProviderContainer(
+        overrides: [
+          devotionalProvider.overrideWith(
+            (ref) => DevotionalNotifier(
+              indexService: mockIndex,
+              cacheService: mockCache,
+              httpClient: mockHttp,
+            ),
+          ),
+        ],
+      );
 
-      // Start initialize, then immediately dispose
-      final notifier =
-          container.read(devotionalProvider.notifier);
+      // Start initialize, then dispose the container (Riverpod-managed teardown)
+      final notifier = container.read(devotionalProvider.notifier);
       final future = notifier.initialize();
-      notifier.dispose();
+      container.dispose(); // ← correct: let Riverpod call notifier.dispose()
 
       await expectLater(future, completes);
     });
