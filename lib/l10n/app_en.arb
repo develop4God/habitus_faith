@@ -2001,5 +2001,33 @@
   "collectAllFriends": "Collect all your friends!",
   "@collectAllFriends": {
     "description": "Subtitle for pet collection section"
+  },
+  "pet_Perrito": "Puppy",
+  "@pet_Perrito": {
+    "description": "Pet name: Perrito (dog)"
+  },
+  "pet_Gatito": "Kitten",
+  "@pet_Gatito": {
+    "description": "Pet name: Gatito (cat)"
+  },
+  "pet_Tigre": "Tiger",
+  "@pet_Tigre": {
+    "description": "Pet name: Tigre (tiger)"
+  },
+  "pet_PezLeon": "Lion Fish",
+  "@pet_PezLeon": {
+    "description": "Pet name: Pez León (lion fish)"
+  },
+  "pet_Leoncito": "Little Lion",
+  "@pet_Leoncito": {
+    "description": "Pet name: Leoncito (little lion)"
+  },
+  "pet_Panda": "Panda",
+  "@pet_Panda": {
+    "description": "Pet name: Panda"
+  },
+  "pet_Unicornio": "Unicorn",
+  "@pet_Unicornio": {
+    "description": "Pet name: Unicornio (unicorn)"
   }
 }

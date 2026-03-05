@@ -1552,4 +1552,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get collectAllFriends => '收集你所有的朋友!';
+
+  @override
+  String get pet_Perrito => '小狗';
+
+  @override
+  String get pet_Gatito => '小猫';
+
+  @override
+  String get pet_Tigre => '老虎';
+
+  @override
+  String get pet_PezLeon => '狮子鱼';
+
+  @override
+  String get pet_Leoncito => '小狮子';
+
+  @override
+  String get pet_Panda => '熊猫';
+
+  @override
+  String get pet_Unicornio => '独角兽';
 }

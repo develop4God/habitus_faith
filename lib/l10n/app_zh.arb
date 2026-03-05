@@ -1813,5 +1813,33 @@
   "collectAllFriends": "收集你所有的朋友!",
   "@collectAllFriends": {
     "description": "Subtitle for pet collection section"
+  },
+  "pet_Perrito": "小狗",
+  "@pet_Perrito": {
+    "description": "Pet name: Perrito (dog)"
+  },
+  "pet_Gatito": "小猫",
+  "@pet_Gatito": {
+    "description": "Pet name: Gatito (cat)"
+  },
+  "pet_Tigre": "老虎",
+  "@pet_Tigre": {
+    "description": "Pet name: Tigre (tiger)"
+  },
+  "pet_PezLeon": "狮子鱼",
+  "@pet_PezLeon": {
+    "description": "Pet name: Pez León (lion fish)"
+  },
+  "pet_Leoncito": "小狮子",
+  "@pet_Leoncito": {
+    "description": "Pet name: Leoncito (little lion)"
+  },
+  "pet_Panda": "熊猫",
+  "@pet_Panda": {
+    "description": "Pet name: Panda"
+  },
+  "pet_Unicornio": "独角兽",
+  "@pet_Unicornio": {
+    "description": "Pet name: Unicornio (unicorn)"
   }
 }

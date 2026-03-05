@@ -3055,6 +3055,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Collect all your friends!'**
   String get collectAllFriends;
+
+  /// Pet name: Perrito (dog)
+  ///
+  /// In en, this message translates to:
+  /// **'Puppy'**
+  String get pet_Perrito;
+
+  /// Pet name: Gatito (cat)
+  ///
+  /// In en, this message translates to:
+  /// **'Kitten'**
+  String get pet_Gatito;
+
+  /// Pet name: Tigre (tiger)
+  ///
+  /// In en, this message translates to:
+  /// **'Tiger'**
+  String get pet_Tigre;
+
+  /// Pet name: Pez León (lion fish)
+  ///
+  /// In en, this message translates to:
+  /// **'Lion Fish'**
+  String get pet_PezLeon;
+
+  /// Pet name: Leoncito (little lion)
+  ///
+  /// In en, this message translates to:
+  /// **'Little Lion'**
+  String get pet_Leoncito;
+
+  /// Pet name: Panda
+  ///
+  /// In en, this message translates to:
+  /// **'Panda'**
+  String get pet_Panda;
+
+  /// Pet name: Unicornio (unicorn)
+  ///
+  /// In en, this message translates to:
+  /// **'Unicorn'**
+  String get pet_Unicornio;
 }
 
 class _AppLocalizationsDelegate

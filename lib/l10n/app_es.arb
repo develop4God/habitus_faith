@@ -1789,5 +1789,33 @@
   "collectAllFriends": "¡Colecciona todos tus amigos!",
   "@collectAllFriends": {
     "description": "Subtitle for pet collection section"
+  },
+  "pet_Perrito": "Perrito",
+  "@pet_Perrito": {
+    "description": "Pet name: Perrito (dog)"
+  },
+  "pet_Gatito": "Gatito",
+  "@pet_Gatito": {
+    "description": "Pet name: Gatito (cat)"
+  },
+  "pet_Tigre": "Tigre",
+  "@pet_Tigre": {
+    "description": "Pet name: Tigre (tiger)"
+  },
+  "pet_PezLeon": "Pez León",
+  "@pet_PezLeon": {
+    "description": "Pet name: Pez León (lion fish)"
+  },
+  "pet_Leoncito": "Leoncito",
+  "@pet_Leoncito": {
+    "description": "Pet name: Leoncito (little lion)"
+  },
+  "pet_Panda": "Panda",
+  "@pet_Panda": {
+    "description": "Pet name: Panda"
+  },
+  "pet_Unicornio": "Unicornio",
+  "@pet_Unicornio": {
+    "description": "Pet name: Unicornio (unicorn)"
   }
 }

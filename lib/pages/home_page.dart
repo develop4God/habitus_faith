@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../features/habits/domain/models/pet_model.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
@@ -852,7 +853,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            pet.name,
+                            pet.getLocalizedName(l10n),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

@@ -323,7 +323,7 @@ class PetSelectionPage extends ConsumerWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        pet.name,
+                                        pet.getLocalizedName(l10n),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: isCurrentlySelected

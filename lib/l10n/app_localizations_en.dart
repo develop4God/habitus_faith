@@ -1623,4 +1623,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get collectAllFriends => 'Collect all your friends!';
+
+  @override
+  String get pet_Perrito => 'Puppy';
+
+  @override
+  String get pet_Gatito => 'Kitten';
+
+  @override
+  String get pet_Tigre => 'Tiger';
+
+  @override
+  String get pet_PezLeon => 'Lion Fish';
+
+  @override
+  String get pet_Leoncito => 'Little Lion';
+
+  @override
+  String get pet_Panda => 'Panda';
+
+  @override
+  String get pet_Unicornio => 'Unicorn';
 }

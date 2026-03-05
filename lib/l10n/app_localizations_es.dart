@@ -1633,4 +1633,25 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get collectAllFriends => '¡Colecciona todos tus amigos!';
+
+  @override
+  String get pet_Perrito => 'Perrito';
+
+  @override
+  String get pet_Gatito => 'Gatito';
+
+  @override
+  String get pet_Tigre => 'Tigre';
+
+  @override
+  String get pet_PezLeon => 'Pez León';
+
+  @override
+  String get pet_Leoncito => 'Leoncito';
+
+  @override
+  String get pet_Panda => 'Panda';
+
+  @override
+  String get pet_Unicornio => 'Unicornio';
 }

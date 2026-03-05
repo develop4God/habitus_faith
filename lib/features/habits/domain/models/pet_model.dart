@@ -1,3 +1,5 @@
+import '../../../../l10n/app_localizations.dart';
+
 /// Pet model for companion feature
 class Pet {
   final String id;
@@ -48,5 +50,31 @@ class Pet {
       emoji: emoji ?? this.emoji,
       createdAt: createdAt ?? this.createdAt,
     );
+  }
+}
+
+/// Extension to localize pet names stored in Firebase
+extension FirebasePetLocalization on Pet {
+  /// Get the localized name for this pet
+  String getLocalizedName(AppLocalizations l10n) {
+    // Map i18n keys to translated strings
+    switch (name) {
+      case 'pet_Perrito':
+        return l10n.pet_Perrito;
+      case 'pet_Gatito':
+        return l10n.pet_Gatito;
+      case 'pet_Tigre':
+        return l10n.pet_Tigre;
+      case 'pet_PezLeon':
+        return l10n.pet_PezLeon;
+      case 'pet_Leoncito':
+        return l10n.pet_Leoncito;
+      case 'pet_Panda':
+        return l10n.pet_Panda;
+      case 'pet_Unicornio':
+        return l10n.pet_Unicornio;
+      default:
+        return name; // Fallback if not an i18n key
+    }
   }
 }
