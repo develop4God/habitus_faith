@@ -17,12 +17,12 @@ dependencies:
   firebase_auth: ^5.7.0
   cloud_firestore: ^5.6.12
   uuid: ^4.5.3
-  lottie: ^3.3.2
+  lottie: ^3.3.1
   sqflite: ^2.4.2
   path: ^1.9.1
   path_provider: ^2.1.5
   share_plus: ^7.2.2
-  shared_preferences: ^2.5.4
+  shared_preferences: ^2.5.3
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   intl: ^0.20.2
@@ -47,7 +47,7 @@ dependencies:
   firebase_analytics: ^11.6.0
   firebase_crashlytics: ^4.3.10
   firebase_remote_config: ^5.5.0
-  google_fonts: ^6.3.3
+  google_fonts: ^6.3.2
   upgrader: ^8.4.0
   package_info_plus: ^4.2.0
   url_launcher: ^6.3.2

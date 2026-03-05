@@ -1,12 +1,17 @@
 // lib/providers/devotional_providers.dart
 
 import 'dart:convert';
+import 'dart:developer' as developer;
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../core/models/devocional_model.dart';
 import '../core/config/devotional_constants.dart';
+import '../core/models/devocional_model.dart';
+import '../core/services/devotionals/cache_metadata_service.dart';
+import '../core/services/devotionals/devocional_index_service.dart';
 
 /// State class for devotional data
 class DevotionalState {
@@ -55,7 +60,24 @@ class DevotionalState {
 
 /// Devotional State Notifier
 class DevotionalNotifier extends StateNotifier<DevotionalState> {
-  DevotionalNotifier() : super(_initialState());
+  /// Injectable services — default to production implementations.
+  /// Pass custom instances in tests to avoid file I/O and network calls.
+  final DevocionalIndexService _indexService;
+  final CacheMetadataService _cacheService;
+  final http.Client _httpClient;
+
+  /// Full index map from last successful fetch — null when unreachable.
+  Map<String, dynamic>? _cachedIndex;
+
+  DevotionalNotifier({
+    DevocionalIndexService? indexService,
+    CacheMetadataService? cacheService,
+    http.Client? httpClient,
+  })  : _indexService =
+            indexService ?? DevocionalIndexService(http.Client()),
+        _cacheService = cacheService ?? CacheMetadataService(),
+        _httpClient = httpClient ?? http.Client(),
+        super(_initialState());
 
   static DevotionalState _initialState() {
     return const DevotionalState(
@@ -164,33 +186,175 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     }
   }
 
-  /// Fetch devotionals from API
+  /// Fetch devotionals — sidecar-aware: checks index.json for staleness,
+  /// loads from local file when fresh, re-fetches from API when stale.
   Future<void> _fetchDevocionalesForLanguage() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
       final int currentYear = DateTime.now().year;
-      final String url = DevotionalConstants.getDevocionalesApiUrlMultilingual(
+
+      // ── Step 1: Fetch the index — before any cache decisions ──────────────
+      // If unreachable, fall back to local file without staleness check.
+      _cachedIndex = await _indexService.fetchIndex();
+      final bool indexUnreachable = (_cachedIndex == null);
+
+      // ── Step 2: Decide whether to use cached file or re-fetch from API ───
+      final String filePath = await _getLocalFilePath(
         currentYear,
         state.selectedLanguage,
         state.selectedVersion,
       );
 
-      debugPrint('🔍 Fetching devotionals from: $url');
-      final response = await http.get(Uri.parse(url));
+      final String? indexDate = indexUnreachable
+          ? null
+          : _indexService.getFileDate(
+              _cachedIndex!,
+              state.selectedLanguage,
+              state.selectedVersion,
+              currentYear.toString(),
+            );
 
-      if (response.statusCode != 200) {
+      final String? sidecarDate =
+          await _cacheService.readManifestDate(filePath);
+
+      // Stale when index has a date AND sidecar is missing or different
+      final bool isStale = (indexDate != null) &&
+          (sidecarDate == null || sidecarDate != indexDate);
+
+      if (isStale) {
+        developer.log(
+          '🔄 [CACHE] Stale: ${currentYear}_${state.selectedLanguage}_${state.selectedVersion}'
+          ' — index: $indexDate, sidecar: $sidecarDate',
+          name: 'DevocionalCache',
+        );
+      }
+
+      final bool hasLocal = await File(filePath).exists();
+
+      if (!isStale && hasLocal) {
+        // ── Cache is fresh — load from local file ──────────────────────────
+        developer.log(
+          '✅ [CACHE] Fresh: using local file',
+          name: 'DevocionalCache',
+        );
+        final Map<String, dynamic>? localData = await _loadFromLocalStorage(
+            currentYear, state.selectedLanguage, state.selectedVersion);
+        if (localData != null) {
+          await _processDevocionalData(localData);
+          state = state.copyWith(isOfflineMode: indexUnreachable);
+          return;
+        }
+      }
+
+      // ── Stale or no local file — fetch from API ────────────────────────
+      final String url = DevotionalConstants.getDevocionalesApiUrlMultilingual(
+        currentYear,
+        state.selectedLanguage,
+        state.selectedVersion,
+      );
+      debugPrint('🔍 Fetching devotionals from: $url');
+      final response = await _httpClient.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        await _processDevocionalData(data);
+        // Persist to local file with sidecar
+        await _saveToLocalStorage(
+          currentYear,
+          state.selectedLanguage,
+          response.body,
+          state.selectedVersion,
+        );
+      } else if (hasLocal) {
+        // API failed but we have stale cache — use it gracefully
+        final Map<String, dynamic>? localData = await _loadFromLocalStorage(
+            currentYear, state.selectedLanguage, state.selectedVersion);
+        if (localData != null) {
+          await _processDevocionalData(localData);
+        } else {
+          throw Exception('Failed to load: ${response.statusCode}');
+        }
+      } else {
         throw Exception('Failed to load from API: ${response.statusCode}');
       }
 
-      final Map<String, dynamic> data = json.decode(response.body);
-      await _processDevocionalData(data);
+      state = state.copyWith(isOfflineMode: indexUnreachable);
     } catch (e) {
       debugPrint('Error fetching devotionals: $e');
       state = state.copyWith(
         errorMessage: 'Error al cargar los devocionales: $e',
         isLoading: false,
       );
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Local storage helpers
+  // ---------------------------------------------------------------------------
+
+  Future<Directory> _getLocalStorageDirectory() async {
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final Directory dir = Directory('${appDir.path}/devotionals');
+    if (!await dir.exists()) {
+      await dir.create(recursive: true);
+    }
+    return dir;
+  }
+
+  Future<String> _getLocalFilePath(
+    int year,
+    String language, [
+    String? version,
+  ]) async {
+    final Directory storageDir = await _getLocalStorageDirectory();
+    if (language == 'es' && (version == null || version == 'RVR1960')) {
+      return '${storageDir.path}/devocional_${year}_$language.json';
+    }
+    final versionSuffix = version != null ? '_$version' : '';
+    return '${storageDir.path}/devocional_${year}_$language$versionSuffix.json';
+  }
+
+  Future<void> _saveToLocalStorage(
+    int year,
+    String language,
+    String content, [
+    String? version,
+  ]) async {
+    try {
+      final String filePath = await _getLocalFilePath(year, language, version);
+      await File(filePath).writeAsString(content);
+      debugPrint('✅ Saved to local storage: $filePath');
+
+      // Write sidecar atomically after JSON save
+      final String manifestDate = _indexService.getFileDate(
+            _cachedIndex ?? {},
+            language,
+            version ?? '',
+            year.toString(),
+          ) ??
+          DateTime.now().toIso8601String().split('T').first;
+
+      await _cacheService.writeMetadata(filePath, manifestDate);
+    } catch (e) {
+      debugPrint('❌ Error saving to local storage: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>?> _loadFromLocalStorage(
+    int year,
+    String language, [
+    String? version,
+  ]) async {
+    try {
+      final String filePath = await _getLocalFilePath(year, language, version);
+      final File file = File(filePath);
+      if (!await file.exists()) return null;
+      final String content = await file.readAsString();
+      return json.decode(content) as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint('Error loading from local storage: $e');
+      return null;
     }
   }
 
