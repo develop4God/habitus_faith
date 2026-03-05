@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../features/habits/domain/models/pet_model.dart';
 import 'habits_page.dart';
 import '../features/habits/presentation/goals_page.dart';
 import '../features/habits/presentation/notes_page.dart';
@@ -545,29 +546,30 @@ class _HomePageState extends ConsumerState<HomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.faithJourney,
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.grey.shade900,
-                            letterSpacing: -0.5,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.faithJourney,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.grey.shade900,
+                              letterSpacing: -0.5,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'En construcción 🚧',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
+                          Text(
+                            l10n.underConstruction,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
@@ -587,9 +589,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                           )
                         ],
                       ),
-                      child: const Text(
-                        'PRÓXIMAMENTE',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.comingSoon,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 9,
                           fontWeight: FontWeight.w900,
@@ -668,7 +670,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                'Prepárate para el\nSiguiente Nivel',
+                                l10n.getReadyNextLevel,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w900,
@@ -696,18 +698,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           Colors.white.withValues(alpha: 0.1)),
                                 ),
                                 child: Row(
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Icon(Icons.stars_rounded,
                                         color: Colors.amber, size: 16),
                                     const SizedBox(width: 8),
-                                    Text(
-                                      'Misiones exclusivas y premios pronto...',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color:
-                                            Colors.white.withValues(alpha: 0.9),
-                                        fontWeight: FontWeight.w500,
+                                    Expanded(
+                                      child: Text(
+                                        l10n.exclusiveMissionsComingSoon,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white
+                                              .withValues(alpha: 0.9),
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -748,13 +751,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             icon: const Icon(Icons.playlist_add_check_circle_outlined),
             label: l10n.routine,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.flag_outlined),
-            label: 'Metas',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.flag_outlined),
+            label: l10n.goals,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.sticky_note_2_outlined),
-            label: 'Notas',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.sticky_note_2_outlined),
+            label: l10n.notes,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.auto_stories_outlined),
@@ -789,6 +792,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildPetsSection() {
     final petsAsync = ref.watch(petsNotifierProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return petsAsync.when(
       data: (pets) {
@@ -807,12 +811,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     size: 24,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'Mis Mascotas',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade800,
+                  Expanded(
+                    child: Text(
+                      l10n.myPets,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
+                      ),
                     ),
                   ),
                 ],
@@ -847,7 +853,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            pet.name,
+                            pet.getLocalizedName(l10n),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

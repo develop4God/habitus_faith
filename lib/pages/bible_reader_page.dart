@@ -6,6 +6,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/bible_providers.dart';
 import '../bible_reader_core/bible_reader_core.dart';
+import '../core/providers/language_provider.dart';
 import '../utils/copyright_utils.dart';
 import '../widgets/floating_font_control_buttons.dart';
 import '../widgets/bible_book_selector_dialog.dart';
@@ -28,9 +29,10 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize Bible reader with device language
+    // Initialize Bible reader with current app language
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(bibleReaderProvider.notifier).initialize('es');
+      final languageCode = ref.read(appLanguageProvider).languageCode;
+      ref.read(bibleReaderProvider.notifier).initialize(languageCode);
     });
   }
 
@@ -183,7 +185,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           if (state.availableVersions.isNotEmpty)
             PopupMenuButton<BibleVersion>(
               icon: const Icon(Icons.auto_stories),
-              tooltip: 'Select Version',
+              tooltip: l10n.selectVersion,
               onSelected: (version) {
                 notifier.changeVersion(version);
               },
@@ -199,7 +201,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
           // Font size controls
           IconButton(
             icon: const Icon(Icons.format_size),
-            tooltip: 'Font Size',
+            tooltip: l10n.fontSize,
             onPressed: () {
               notifier.toggleFontControls();
             },
@@ -468,7 +470,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Copy
                         IconButton(
                           icon: const Icon(Icons.copy),
-                          tooltip: 'Copy',
+                          tooltip: l10n.copy,
                           onPressed: () {
                             final text = _getSelectedVersesText(state);
                             final reference = _formatVerseReference(state);
@@ -484,7 +486,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Share
                         IconButton(
                           icon: const Icon(Icons.share),
-                          tooltip: 'Share',
+                          tooltip: l10n.share,
                           onPressed: () {
                             final text = _getSelectedVersesText(state);
                             final reference = _formatVerseReference(state);
@@ -495,7 +497,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Save
                         IconButton(
                           icon: const Icon(Icons.bookmark_add),
-                          tooltip: 'Save',
+                          tooltip: l10n.save,
                           onPressed: () async {
                             await notifier.saveSelectedVerses();
                             if (context.mounted) {
@@ -509,7 +511,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
                         // Cancel
                         IconButton(
                           icon: const Icon(Icons.close),
-                          tooltip: 'Cancel',
+                          tooltip: l10n.cancelAction,
                           onPressed: () {
                             notifier.clearSelection();
                           },

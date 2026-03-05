@@ -771,9 +771,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitsTip => '滑动查看习惯操作';
 
   @override
-  String get understood => '明白了';
-
-  @override
   String get bible => '圣经';
 
   @override
@@ -1214,4 +1211,366 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get timer => '计时器';
+
+  @override
+  String get statisticsTitle => '统计';
+
+  @override
+  String get noStatisticsData => '没有可用的统计数据。';
+
+  @override
+  String get activeHabits => '活跃习惯';
+
+  @override
+  String get successPercentage => '成功率';
+
+  @override
+  String lastCompletionDate(String date) {
+    return '最后完成：$date';
+  }
+
+  @override
+  String get habitDistribution => '习惯分布';
+
+  @override
+  String get pending => '待完成';
+
+  @override
+  String get excellentConsistency => '出色的坚持！继续保持。';
+
+  @override
+  String get goodProgress => '进展不错！保持节奏。';
+
+  @override
+  String get everyDayMatters => '每一天都很重要！你可以进步。';
+
+  @override
+  String get myNotes => '我的笔记';
+
+  @override
+  String get editNote => '编辑笔记';
+
+  @override
+  String get newNote => '新笔记';
+
+  @override
+  String get cancelEdit => '取消编辑';
+
+  @override
+  String get discardNote => '丢弃笔记';
+
+  @override
+  String get checkboxItem => '复选框';
+
+  @override
+  String get numberedItem => '编号';
+
+  @override
+  String get plainText => '文本';
+
+  @override
+  String get listItemHint => '列表项...';
+
+  @override
+  String get stepHint => '步骤...';
+
+  @override
+  String get writeNoteHint => '写一条笔记...';
+
+  @override
+  String get noSavedNotes => '没有保存的笔记';
+
+  @override
+  String get thoughtsAppearHere => '你的想法将显示在这里。';
+
+  @override
+  String get myGoals => '我的目标';
+
+  @override
+  String get activeGoals => '活跃目标';
+
+  @override
+  String get generalProgress => '总体进度';
+
+  @override
+  String get completedLower => '已完成';
+
+  @override
+  String get noGoalsYet => '还没有目标';
+
+  @override
+  String get defineYourGoals => '为今年、本月或本周定义你的灵性或个人目标。';
+
+  @override
+  String get createFirstGoal => '创建我的第一个目标';
+
+  @override
+  String get editGoal => '编辑目标';
+
+  @override
+  String get whatToAchieve => '你想实现什么？';
+
+  @override
+  String get exampleGoal => '例如：阅读整本圣经';
+
+  @override
+  String get deadline => '截止日期';
+
+  @override
+  String deadlineDate(String date) {
+    return '截止日期：$date';
+  }
+
+  @override
+  String get selectDeadline => '请选择截止日期';
+
+  @override
+  String get updateGoal => '更新目标';
+
+  @override
+  String get saveGoal => '保存目标';
+
+  @override
+  String get goalTypeYear => '年度';
+
+  @override
+  String get goalTypeMonth => '月度';
+
+  @override
+  String get goalTypeWeek => '每周';
+
+  @override
+  String get goalTypeCustom => '自定义';
+
+  @override
+  String get noScheduledNotifications => '没有计划的通知';
+
+  @override
+  String get notificationOn => '已开启';
+
+  @override
+  String get noTime => '无时间';
+
+  @override
+  String get configureReminder => '配置提醒';
+
+  @override
+  String get householdSpinnerTitle => '🏠 旋转家务任务';
+
+  @override
+  String get anotherMoment => '改天再说';
+
+  @override
+  String taskCompleteError(String error) {
+    return '完成任务时出错：$error';
+  }
+
+  @override
+  String get addTasks => '添加任务';
+
+  @override
+  String get completing => '正在完成...';
+
+  @override
+  String get complete => '完成';
+
+  @override
+  String get comingSoon => '即将推出';
+
+  @override
+  String get viewAll => '查看全部';
+
+  @override
+  String get selectVersion => '选择版本';
+
+  @override
+  String get fontSize => '字体大小';
+
+  @override
+  String get share => '分享';
+
+  @override
+  String get cancelAction => '取消';
+
+  @override
+  String get favorites => '收藏';
+
+  @override
+  String get noBibleVersions => '该语言没有可用的圣经版本。';
+
+  @override
+  String bibleVersionSet(String version) {
+    return '圣经版本设置为：$version';
+  }
+
+  @override
+  String get errorLoadingHabits => '加载习惯时出错';
+
+  @override
+  String get spinHouseholdTasks => '旋转家务任务';
+
+  @override
+  String get newGoal => '新目标';
+
+  @override
+  String get notificationTimingNone => '无提醒';
+
+  @override
+  String get notificationTimingAtEvent => '活动时间';
+
+  @override
+  String get notificationTimingTenMin => '提前10分钟';
+
+  @override
+  String get notificationTimingThirtyMin => '提前30分钟';
+
+  @override
+  String get notificationTimingOneHour => '提前1小时';
+
+  @override
+  String get difficultyEasy => '简单';
+
+  @override
+  String get difficultyMedium => '中等';
+
+  @override
+  String get difficultyHard => '困难';
+
+  @override
+  String get selectTime => '选择时间';
+
+  @override
+  String get hour => '时间';
+
+  @override
+  String get noHouseholdTasks => '没有家务任务';
+
+  @override
+  String get myFavorites => '我的收藏';
+
+  @override
+  String get noFavoritesYet => '暂无收藏';
+
+  @override
+  String get noFavoritesMessage => '点击任何灵修内容上的星形图标将其保存在这里';
+
+  @override
+  String get exploreDevotionals => '探索灵修内容';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return '每$interval$unit';
+  }
+
+  @override
+  String get frequencyUnitDay => '天';
+
+  @override
+  String get frequencyUnitWeek => '周';
+
+  @override
+  String get frequencyUnitMonth => '月';
+
+  @override
+  String get addTasksToUseSpinner => '添加家务任务以使用旋转器';
+
+  @override
+  String get goals => '目标';
+
+  @override
+  String get notes => '笔记';
+
+  @override
+  String get newSubtaskHint => '新子任务...';
+
+  @override
+  String get image => '图片';
+
+  @override
+  String get removeFromFavorites => '从收藏中移除';
+
+  @override
+  String get searchDevotionals => '搜索灵修内容...';
+
+  @override
+  String languageChangedTo(String language) {
+    return '语言已更改为$language';
+  }
+
+  @override
+  String get currentLabel => '当前';
+
+  @override
+  String get suggestedLabel => '建议';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return '圣经版本: $version';
+  }
+
+  @override
+  String get underConstruction => '建设中 🚧';
+
+  @override
+  String get getReadyNextLevel => '准备好迎接\n下一个级别';
+
+  @override
+  String get exclusiveMissionsComingSoon => '独家任务和奖励即将到来...';
+
+  @override
+  String get myPets => '我的宠物';
+
+  @override
+  String get wordOfToday => '今日话语';
+
+  @override
+  String get exploreBibleDescription => '使用我们的高级阅读器探索上帝的话语。';
+
+  @override
+  String get devotionalDailyDescription => '通过日常反思加强你的信仰。';
+
+  @override
+  String get viewFullDevotional => '查看完整灵修';
+
+  @override
+  String get petPreviewLocked => '预览 (已锁定)';
+
+  @override
+  String get unlockThisFriend => '解锁这个朋友!';
+
+  @override
+  String get petUnlockMessage => '这个特殊的伙伴很快就会推出。坚持你的习惯，成为第一个拥有它的人!';
+
+  @override
+  String get understood => '了解';
+
+  @override
+  String get backgroundTheme => '背景主题';
+
+  @override
+  String get selectYourPet => '选择您的宠物';
+
+  @override
+  String get collectAllFriends => '收集你所有的朋友!';
+
+  @override
+  String get pet_Perrito => '小狗';
+
+  @override
+  String get pet_Gatito => '小猫';
+
+  @override
+  String get pet_Tigre => '老虎';
+
+  @override
+  String get pet_PezLeon => '狮子鱼';
+
+  @override
+  String get pet_Leoncito => '小狮子';
+
+  @override
+  String get pet_Panda => '熊猫';
+
+  @override
+  String get pet_Unicornio => '独角兽';
 }

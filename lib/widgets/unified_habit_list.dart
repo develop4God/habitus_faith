@@ -260,26 +260,30 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
         : habits;
 
     // ── sort ──────────────────────────────────────────────────────────────
-    // Use createdAt as a stable tiebreaker so equal-order habits keep a
-    // consistent position across day boundaries (e.g. after midnight reset).
+    // Unified sorting logic considering pins, completion, and user order.
     int habitCompare(Habit a, Habit b) {
-      final orderCmp = a.order.compareTo(b.order);
-      if (orderCmp != 0) return orderCmp;
-      return a.createdAt.compareTo(b.createdAt);
-    }
+      // 1. Pinned status (pinned first)
+      if (a.isPinned != b.isPinned) return a.isPinned ? -1 : 1;
 
-    final sortedHabits = [...displayHabits]..sort(habitCompare);
-
-    if (isViewingToday) {
-      sortedHabits.sort((a, b) {
+      // 2. Completion status (only for unpinned habits if viewing today)
+      // Pinned habits stay at the top even if completed.
+      if (isViewingToday && !a.isPinned && !b.isPinned) {
         final aDone =
             a.dailyStatus != HabitDailyStatus.pending || a.completedToday;
         final bDone =
             b.dailyStatus != HabitDailyStatus.pending || b.completedToday;
         if (aDone != bDone) return aDone ? 1 : -1;
-        return habitCompare(a, b);
-      });
+      }
+
+      // 3. User-defined order
+      final orderCmp = a.order.compareTo(b.order);
+      if (orderCmp != 0) return orderCmp;
+
+      // 4. Stable tiebreaker
+      return a.createdAt.compareTo(b.createdAt);
     }
+
+    final sortedHabits = [...displayHabits]..sort(habitCompare);
 
     final hasPendingHabits = widget.selectedDate != null && !isViewingToday
         ? sortedHabits.any((h) => !h.completedToday)
@@ -297,8 +301,6 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
             onPointerCancel: _onPointerCancel,
             child: ReorderableListView.builder(
               scrollController: _scrollCtrl,
-              // Moderate built-in auto-scroll; our custom ticker handles the
-              // wider activation zone (180 px) and graduated speed floor.
               autoScrollerVelocityScalar: 30,
               header: hasPendingHabits
                   ? Padding(
@@ -431,16 +433,42 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
 
     if (newIndex > oldIndex) newIndex -= 1;
 
+    final moved = sortedHabits[oldIndex];
+
+    // If viewing today, we maintain strict sections: Pinned -> Pending -> Done.
     if (isViewingToday) {
-      final moved = sortedHabits[oldIndex];
-      final movedDone =
-          moved.dailyStatus != HabitDailyStatus.pending || moved.completedToday;
-      final doneStart = sortedHabits.indexWhere(
-        (h) => h.dailyStatus != HabitDailyStatus.pending || h.completedToday,
-      );
-      if (doneStart != -1) {
-        if (movedDone && newIndex < doneStart) return;
-        if (!movedDone && newIndex >= doneStart) return;
+      if (moved.isPinned) {
+        // Pinned habits can only be reordered among themselves at the top.
+        final pinnedCount = sortedHabits.where((h) => h.isPinned).length;
+        if (newIndex >= pinnedCount) {
+          newIndex = pinnedCount - 1;
+        }
+      } else {
+        // Unpinned habits can only be reordered within their respective pending/done sections.
+        final movedDone = moved.dailyStatus != HabitDailyStatus.pending ||
+            moved.completedToday;
+        final pinnedCount = sortedHabits.where((h) => h.isPinned).length;
+        final doneStart = sortedHabits.indexWhere(
+          (h) =>
+              !h.isPinned &&
+              (h.dailyStatus != HabitDailyStatus.pending || h.completedToday),
+        );
+
+        if (movedDone) {
+          // Done items stay in the done section.
+          if (doneStart != -1 && newIndex < doneStart) {
+            newIndex = doneStart;
+          }
+        } else {
+          // Pending items stay in the pending section.
+          if (doneStart != -1 && newIndex >= doneStart) {
+            newIndex = doneStart - 1;
+          }
+          // Also don't move pending unpinned into pinned section.
+          if (newIndex < pinnedCount) {
+            newIndex = pinnedCount;
+          }
+        }
       }
     }
 
@@ -448,17 +476,23 @@ class _UnifiedHabitListState extends ConsumerState<UnifiedHabitList>
     final item = reordered.removeAt(oldIndex);
     reordered.insert(newIndex, item);
 
+    // Final normalization to ensure order field is strictly strictly consistent
+    // across all habits (including those not in view).
     final List<Habit> base;
     if (isViewingToday) {
+      final pinned = reordered.where((h) => h.isPinned).toList();
       final pending = reordered
           .where((h) =>
-              h.dailyStatus == HabitDailyStatus.pending && !h.completedToday)
+              !h.isPinned &&
+              h.dailyStatus == HabitDailyStatus.pending &&
+              !h.completedToday)
           .toList();
       final done = reordered
           .where((h) =>
-              h.dailyStatus != HabitDailyStatus.pending || h.completedToday)
+              !h.isPinned &&
+              (h.dailyStatus != HabitDailyStatus.pending || h.completedToday))
           .toList();
-      base = [...pending, ...done];
+      base = [...pinned, ...pending, ...done];
     } else {
       base = reordered;
     }

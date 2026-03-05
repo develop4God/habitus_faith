@@ -362,7 +362,6 @@
   "swipeToComplete": "点击或左滑完成",
   "usefulTip": "实用提示",
   "habitsTip": "滑动查看习惯操作",
-  "understood": "明白了",
   "bible": "圣经",
   "home": "首页",
   "reminderConfig": "提醒设置",
@@ -1243,9 +1242,6 @@
   "@habitsTip": {
     "description": "Educational tip description"
   },
-  "@understood": {
-    "description": "Button to close the educational tip"
-  },
   "@bible": {
     "description": "Bible title for AppBar"
   },
@@ -1494,66 +1490,356 @@
     "description": "No description provided for @habitAlreadyCompletedStartAgain."
   },
   "@predefinedHabit_washDishes_name": {
-    "description": "PENDING"
+    "description": "Name of wash dishes habit"
   },
   "@predefinedHabit_washDishes_description": {
-    "description": "PENDING"
+    "description": "Description of wash dishes habit"
   },
   "@predefinedHabit_cleanRoom_name": {
-    "description": "PENDING"
+    "description": "Name of clean room habit"
   },
   "@predefinedHabit_cleanRoom_description": {
-    "description": "PENDING"
+    "description": "Description of clean room habit"
   },
   "@predefinedHabit_doLaundry_name": {
-    "description": "PENDING"
+    "description": "Name of do laundry habit"
   },
   "@predefinedHabit_doLaundry_description": {
-    "description": "PENDING"
+    "description": "Description of do laundry habit"
   },
   "@predefinedHabit_organizeSpace_name": {
-    "description": "PENDING"
+    "description": "Name of organize space habit"
   },
   "@predefinedHabit_organizeSpace_description": {
-    "description": "PENDING"
+    "description": "Description of organize space habit"
   },
   "@predefinedHabit_cleanBathroom_name": {
-    "description": "PENDING"
+    "description": "Name of clean bathroom habit"
   },
   "@predefinedHabit_cleanBathroom_description": {
-    "description": "PENDING"
+    "description": "Description of clean bathroom habit"
   },
   "@predefinedHabit_cookMeal_name": {
-    "description": "PENDING"
+    "description": "Name of cook meal habit"
   },
   "@predefinedHabit_cookMeal_description": {
-    "description": "PENDING"
+    "description": "Description of cook meal habit"
   },
   "@predefinedHabit_vacuumFloors_name": {
-    "description": "PENDING"
+    "description": "Name of vacuum floors habit"
   },
   "@predefinedHabit_vacuumFloors_description": {
-    "description": "PENDING"
+    "description": "Description of vacuum floors habit"
   },
   "@predefinedHabit_makeBreakfast_name": {
-    "description": "PENDING"
+    "description": "Name of make breakfast habit"
   },
   "@predefinedHabit_makeBreakfast_description": {
-    "description": "PENDING"
+    "description": "Description of make breakfast habit"
   },
   "@predefinedHabit_bedMaking_name": {
-    "description": "PENDING"
+    "description": "Name of bed making habit"
   },
   "@predefinedHabit_bedMaking_description": {
-    "description": "PENDING"
+    "description": "Description of bed making habit"
   },
   "@predefinedHabit_helpKidsHomework_name": {
-    "description": "PENDING"
+    "description": "Name of help kids homework habit"
   },
   "@predefinedHabit_helpKidsHomework_description": {
-    "description": "PENDING"
+    "description": "Description of help kids homework habit"
   },
   "@habitCreated": {
-    "description": "PENDING"
+    "description": "Success message after creating a habit"
+  },
+  "statisticsTitle": "统计",
+  "noStatisticsData": "没有可用的统计数据。",
+  "activeHabits": "活跃习惯",
+  "successPercentage": "成功率",
+  "lastCompletionDate": "最后完成：{date}",
+  "habitDistribution": "习惯分布",
+  "pending": "待完成",
+  "excellentConsistency": "出色的坚持！继续保持。",
+  "goodProgress": "进展不错！保持节奏。",
+  "everyDayMatters": "每一天都很重要！你可以进步。",
+  "myNotes": "我的笔记",
+  "editNote": "编辑笔记",
+  "newNote": "新笔记",
+  "cancelEdit": "取消编辑",
+  "discardNote": "丢弃笔记",
+  "checkboxItem": "复选框",
+  "numberedItem": "编号",
+  "plainText": "文本",
+  "listItemHint": "列表项...",
+  "stepHint": "步骤...",
+  "writeNoteHint": "写一条笔记...",
+  "noSavedNotes": "没有保存的笔记",
+  "thoughtsAppearHere": "你的想法将显示在这里。",
+  "myGoals": "我的目标",
+  "activeGoals": "活跃目标",
+  "generalProgress": "总体进度",
+  "completedLower": "已完成",
+  "noGoalsYet": "还没有目标",
+  "defineYourGoals": "为今年、本月或本周定义你的灵性或个人目标。",
+  "createFirstGoal": "创建我的第一个目标",
+  "editGoal": "编辑目标",
+  "whatToAchieve": "你想实现什么？",
+  "exampleGoal": "例如：阅读整本圣经",
+  "deadline": "截止日期",
+  "deadlineDate": "截止日期：{date}",
+  "selectDeadline": "请选择截止日期",
+  "updateGoal": "更新目标",
+  "saveGoal": "保存目标",
+  "goalTypeYear": "年度",
+  "goalTypeMonth": "月度",
+  "goalTypeWeek": "每周",
+  "goalTypeCustom": "自定义",
+  "noScheduledNotifications": "没有计划的通知",
+  "notificationOn": "已开启",
+  "noTime": "无时间",
+  "configureReminder": "配置提醒",
+  "householdSpinnerTitle": "🏠 旋转家务任务",
+  "anotherMoment": "改天再说",
+  "taskCompleteError": "完成任务时出错：{error}",
+  "addTasks": "添加任务",
+  "completing": "正在完成...",
+  "complete": "完成",
+  "comingSoon": "即将推出",
+  "viewAll": "查看全部",
+  "selectVersion": "选择版本",
+  "fontSize": "字体大小",
+  "share": "分享",
+  "cancelAction": "取消",
+  "favorites": "收藏",
+  "noBibleVersions": "该语言没有可用的圣经版本。",
+  "bibleVersionSet": "圣经版本设置为：{version}",
+  "errorLoadingHabits": "加载习惯时出错",
+  "spinHouseholdTasks": "旋转家务任务",
+  "newGoal": "新目标",
+  "notificationTimingNone": "无提醒",
+  "@notificationTimingNone": {
+    "description": "Notification timing: no reminder"
+  },
+  "notificationTimingAtEvent": "活动时间",
+  "@notificationTimingAtEvent": {
+    "description": "Notification timing: at event time"
+  },
+  "notificationTimingTenMin": "提前10分钟",
+  "@notificationTimingTenMin": {
+    "description": "Notification timing: 10 minutes before"
+  },
+  "notificationTimingThirtyMin": "提前30分钟",
+  "@notificationTimingThirtyMin": {
+    "description": "Notification timing: 30 minutes before"
+  },
+  "notificationTimingOneHour": "提前1小时",
+  "@notificationTimingOneHour": {
+    "description": "Notification timing: 1 hour before"
+  },
+  "difficultyEasy": "简单",
+  "@difficultyEasy": {
+    "description": "Easy difficulty label"
+  },
+  "difficultyMedium": "中等",
+  "@difficultyMedium": {
+    "description": "Medium difficulty label"
+  },
+  "difficultyHard": "困难",
+  "@difficultyHard": {
+    "description": "Hard difficulty label"
+  },
+  "selectTime": "选择时间",
+  "@selectTime": {
+    "description": "Button/label to select a time"
+  },
+  "hour": "时间",
+  "@hour": {
+    "description": "Hour label in time picker tile"
+  },
+  "noHouseholdTasks": "没有家务任务",
+  "@noHouseholdTasks": {
+    "description": "Empty state for household tasks"
+  },
+  "myFavorites": "我的收藏",
+  "@myFavorites": {
+    "description": "Title for favorites page"
+  },
+  "noFavoritesYet": "暂无收藏",
+  "@noFavoritesYet": {
+    "description": "Empty state title on favorites page"
+  },
+  "noFavoritesMessage": "点击任何灵修内容上的星形图标将其保存在这里",
+  "@noFavoritesMessage": {
+    "description": "Empty state hint on favorites page"
+  },
+  "exploreDevotionals": "探索灵修内容",
+  "@exploreDevotionals": {
+    "description": "Button to explore devotionals from favorites page"
+  },
+  "everyInterval": "每{interval}{unit}",
+  "@everyInterval": {
+    "description": "Recurrence interval display, e.g. Every 2 days",
+    "placeholders": {
+      "interval": {
+        "type": "int"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "frequencyUnitDay": "天",
+  "@frequencyUnitDay": {
+    "description": "Day unit for recurrence interval"
+  },
+  "frequencyUnitWeek": "周",
+  "@frequencyUnitWeek": {
+    "description": "Week unit for recurrence interval"
+  },
+  "frequencyUnitMonth": "月",
+  "@frequencyUnitMonth": {
+    "description": "Month unit for recurrence interval"
+  },
+  "addTasksToUseSpinner": "添加家务任务以使用旋转器",
+  "@addTasksToUseSpinner": {
+    "description": "Hint text on household spinner empty state"
+  },
+  "goals": "目标",
+  "@goals": {
+    "description": "Goals navigation tab label"
+  },
+  "notes": "笔记",
+  "@notes": {
+    "description": "Notes navigation tab label"
+  },
+  "newSubtaskHint": "新子任务...",
+  "@newSubtaskHint": {
+    "description": "Hint text for new subtask input field"
+  },
+  "image": "图片",
+  "@image": {
+    "description": "Image label (e.g. in bible reader action modal)"
+  },
+  "removeFromFavorites": "从收藏中移除",
+  "@removeFromFavorites": {
+    "description": "Tooltip to remove a devotional from favorites"
+  },
+  "searchDevotionals": "搜索灵修内容...",
+  "@searchDevotionals": {
+    "description": "Hint text for devotional search field"
+  },
+  "languageChangedTo": "语言已更改为{language}",
+  "@languageChangedTo": {
+    "description": "Snackbar when language is changed",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "currentLabel": "当前",
+  "@currentLabel": {
+    "description": "Current label (e.g. in nudge suggestion dialog)"
+  },
+  "suggestedLabel": "建议",
+  "@suggestedLabel": {
+    "description": "Suggested label (e.g. in nudge suggestion dialog)"
+  },
+  "bibleVersionTooltip": "圣经版本: {version}",
+  "@bibleVersionTooltip": {
+    "description": "Tooltip showing current Bible version",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "underConstruction": "建设中 🚧",
+  "@underConstruction": {
+    "description": "Under construction badge label"
+  },
+  "getReadyNextLevel": "准备好迎接\n下一个级别",
+  "@getReadyNextLevel": {
+    "description": "Gamification card headline"
+  },
+  "exclusiveMissionsComingSoon": "独家任务和奖励即将到来...",
+  "@exclusiveMissionsComingSoon": {
+    "description": "Gamification card teaser subtitle"
+  },
+  "myPets": "我的宠物",
+  "@myPets": {
+    "description": "Section title for pets on home page"
+  },
+  "wordOfToday": "今日话语",
+  "@wordOfToday": {
+    "description": "Badge label for today's devotional on spiritual hub"
+  },
+  "exploreBibleDescription": "使用我们的高级阅读器探索上帝的话语。",
+  "@exploreBibleDescription": {
+    "description": "Description for Bible reader feature card"
+  },
+  "devotionalDailyDescription": "通过日常反思加强你的信仰。",
+  "@devotionalDailyDescription": {
+    "description": "Description for daily devotionals feature card"
+  },
+  "viewFullDevotional": "查看完整灵修",
+  "@viewFullDevotional": {
+    "description": "Call-to-action text to view the full devotional"
+  },
+  "petPreviewLocked": "预览 (已锁定)",
+  "@petPreviewLocked": {
+    "description": "Label for locked pet preview in header"
+  },
+  "unlockThisFriend": "解锁这个朋友!",
+  "@unlockThisFriend": {
+    "description": "Title for locked pet dialog"
+  },
+  "petUnlockMessage": "这个特殊的伙伴很快就会推出。坚持你的习惯，成为第一个拥有它的人!",
+  "@petUnlockMessage": {
+    "description": "Description message in locked pet dialog"
+  },
+  "understood": "了解",
+  "@understood": {
+    "description": "Confirmation button in locked pet dialog"
+  },
+  "backgroundTheme": "背景主题",
+  "@backgroundTheme": {
+    "description": "Label for pet background theme selector"
+  },
+  "selectYourPet": "选择您的宠物",
+  "@selectYourPet": {
+    "description": "Heading for pet selection section"
+  },
+  "collectAllFriends": "收集你所有的朋友!",
+  "@collectAllFriends": {
+    "description": "Subtitle for pet collection section"
+  },
+  "pet_Perrito": "小狗",
+  "@pet_Perrito": {
+    "description": "Pet name: Perrito (dog)"
+  },
+  "pet_Gatito": "小猫",
+  "@pet_Gatito": {
+    "description": "Pet name: Gatito (cat)"
+  },
+  "pet_Tigre": "老虎",
+  "@pet_Tigre": {
+    "description": "Pet name: Tigre (tiger)"
+  },
+  "pet_PezLeon": "狮子鱼",
+  "@pet_PezLeon": {
+    "description": "Pet name: Pez León (lion fish)"
+  },
+  "pet_Leoncito": "小狮子",
+  "@pet_Leoncito": {
+    "description": "Pet name: Leoncito (little lion)"
+  },
+  "pet_Panda": "熊猫",
+  "@pet_Panda": {
+    "description": "Pet name: Panda"
+  },
+  "pet_Unicornio": "独角兽",
+  "@pet_Unicornio": {
+    "description": "Pet name: Unicornio (unicorn)"
   }
 }

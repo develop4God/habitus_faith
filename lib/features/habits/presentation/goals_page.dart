@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../domain/models/goal_model.dart';
 import 'goals_providers.dart';
 
@@ -14,8 +15,22 @@ class GoalsPage extends ConsumerStatefulWidget {
 class _GoalsPageState extends ConsumerState<GoalsPage> {
   GoalType _selectedTab = GoalType.week;
 
+  String _goalTypeLabel(AppLocalizations l10n, GoalType type) {
+    switch (type) {
+      case GoalType.year:
+        return l10n.goalTypeYear;
+      case GoalType.month:
+        return l10n.goalTypeMonth;
+      case GoalType.week:
+        return l10n.goalTypeWeek;
+      case GoalType.custom:
+        return l10n.goalTypeCustom;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final goalsAsync = ref.watch(goalsStreamProvider);
 
     return Scaffold(
@@ -30,7 +45,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Mis Metas',
+                l10n.myGoals,
                 style: TextStyle(
                   color: Colors.blue.shade900,
                   fontWeight: FontWeight.bold,
@@ -78,13 +93,17 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       children: [
-                        _buildTabButton(GoalType.week, 'Semanal'),
+                        _buildTabButton(
+                            GoalType.week, _goalTypeLabel(l10n, GoalType.week)),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.month, 'Mensual'),
+                        _buildTabButton(GoalType.month,
+                            _goalTypeLabel(l10n, GoalType.month)),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.year, 'Anual'),
+                        _buildTabButton(
+                            GoalType.year, _goalTypeLabel(l10n, GoalType.year)),
                         const SizedBox(width: 4),
-                        _buildTabButton(GoalType.custom, 'Personal'),
+                        _buildTabButton(GoalType.custom,
+                            _goalTypeLabel(l10n, GoalType.custom)),
                       ],
                     ),
                   ),
@@ -92,9 +111,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Objetivos Activos',
-                        style: TextStyle(
+                      Text(
+                        l10n.activeGoals,
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           letterSpacing: -0.5,
@@ -174,6 +193,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   }
 
   Widget _buildSummaryCard(List<Goal> goals) {
+    final l10n = AppLocalizations.of(context)!;
     final double avgProgress = goals.isEmpty
         ? 0.0
         : goals.map((g) => g.progress).reduce((a, b) => a + b) / goals.length;
@@ -214,9 +234,9 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Progreso General',
-                style: TextStyle(
+              Text(
+                l10n.generalProgress,
+                style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
@@ -237,11 +257,11 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                   letterSpacing: -1,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 8, left: 4),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8, left: 4),
                 child: Text(
-                  'completado',
-                  style: TextStyle(color: Colors.white60, fontSize: 16),
+                  l10n.completedLower,
+                  style: const TextStyle(color: Colors.white60, fontSize: 16),
                 ),
               ),
             ],
@@ -262,6 +282,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   }
 
   Widget _buildGoalCard(Goal goal) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -310,7 +331,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        goal.type.displayName,
+                        _goalTypeLabel(l10n, goal.type),
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.blue.shade700,
@@ -323,10 +344,10 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, color: Colors.grey),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
-                    const PopupMenuItem(
+                    PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
+                    PopupMenuItem(
                       value: 'delete',
-                      child: Text('Eliminar'),
+                      child: Text(l10n.delete),
                     ),
                   ],
                   onSelected: (val) {
@@ -389,6 +410,7 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -406,28 +428,29 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
-            'Aún no tienes metas',
-            style: TextStyle(
+          Text(
+            l10n.noGoalsYet,
+            style: const TextStyle(
               fontSize: 20,
               color: Color(0xFF1A1C1E),
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 12),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              'Define tus objetivos espirituales o personales para este año, mes o semana.',
+              l10n.defineYourGoals,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey, fontSize: 15, height: 1.5),
+              style: const TextStyle(
+                  color: Colors.grey, fontSize: 15, height: 1.5),
             ),
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () => _showAddGoalDialog(context),
             icon: const Icon(Icons.add),
-            label: const Text('Crear mi primera meta'),
+            label: Text(l10n.createFirstGoal),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue.shade700,
               foregroundColor: Colors.white,
@@ -452,178 +475,187 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: 32,
-            left: 24,
-            right: 24,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Nueva Meta',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: titleCtrl,
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: '¿Qué quieres lograr?',
-                  hintText: 'Ej: Leer toda la Biblia',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+        builder: (context, setDialogState) {
+          final l10n = AppLocalizations.of(context)!;
+          return Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              top: 32,
+              left: 24,
+              right: 24,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.newGoal,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Plazo',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: [
-                  GoalType.week,
-                  GoalType.month,
-                  GoalType.year,
-                  GoalType.custom,
-                ].map((type) {
-                  final isSelected = selectedType == type;
-                  return ChoiceChip(
-                    label: Text(type.displayName),
-                    selected: isSelected,
-                    onSelected: (val) {
-                      setDialogState(() => selectedType = type);
-                      if (type == GoalType.custom) {
-                        _selectCustomDeadline(context, customDeadline, (date) {
-                          setDialogState(() => customDeadline = date);
-                        });
-                      }
-                    },
-                    selectedColor: Colors.blue.shade700,
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (selectedType == GoalType.custom &&
-                  customDeadline != null) ...[
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        color: Colors.blue.shade700,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
-                        style: TextStyle(
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 18),
-                        onPressed: () {
-                          _selectCustomDeadline(context, customDeadline, (
-                            date,
-                          ) {
-                            setDialogState(() => customDeadline = date);
-                          });
-                        },
-                        color: Colors.blue.shade700,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (titleCtrl.text.isNotEmpty) {
-                      // Validate custom deadline
-                      if (selectedType == GoalType.custom &&
-                          customDeadline == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Por favor selecciona una fecha límite',
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-
-                      DateTime deadline;
-                      if (selectedType == GoalType.custom) {
-                        deadline = customDeadline!;
-                      } else if (selectedType == GoalType.week) {
-                        deadline = DateTime.now().add(const Duration(days: 7));
-                      } else if (selectedType == GoalType.month) {
-                        deadline = DateTime.now().add(const Duration(days: 30));
-                      } else if (selectedType == GoalType.year) {
-                        deadline =
-                            DateTime.now().add(const Duration(days: 365));
-                      } else {
-                        deadline = DateTime.now().add(
-                          const Duration(days: 365),
-                        );
-                      }
-
-                      final newGoal = Goal(
-                        id: const Uuid().v4(),
-                        userId: 'local_user',
-                        title: titleCtrl.text,
-                        description: '',
-                        type: selectedType,
-                        deadline: deadline,
-                        createdAt: DateTime.now(),
-                      );
-                      ref.read(jsonGoalsRepositoryProvider).addGoal(newGoal);
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade700,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                const SizedBox(height: 24),
+                TextField(
+                  controller: titleCtrl,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.whatToAchieve,
+                    hintText: l10n.exampleGoal,
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'Guardar Meta',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.deadline,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    GoalType.week,
+                    GoalType.month,
+                    GoalType.year,
+                    GoalType.custom,
+                  ].map((type) {
+                    final isSelected = selectedType == type;
+                    return ChoiceChip(
+                      label: Text(_goalTypeLabel(l10n, type)),
+                      selected: isSelected,
+                      onSelected: (val) {
+                        setDialogState(() => selectedType = type);
+                        if (type == GoalType.custom) {
+                          _selectCustomDeadline(context, customDeadline,
+                              (date) {
+                            setDialogState(() => customDeadline = date);
+                          });
+                        }
+                      },
+                      selectedColor: Colors.blue.shade700,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (selectedType == GoalType.custom &&
+                    customDeadline != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: Colors.blue.shade700,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.deadlineDate(
+                              '${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
+                          style: TextStyle(
+                            color: Colors.blue.shade700,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.edit, size: 18),
+                          onPressed: () {
+                            _selectCustomDeadline(context, customDeadline, (
+                              date,
+                            ) {
+                              setDialogState(() => customDeadline = date);
+                            });
+                          },
+                          color: Colors.blue.shade700,
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (titleCtrl.text.isNotEmpty) {
+                        // Validate custom deadline
+                        if (selectedType == GoalType.custom &&
+                            customDeadline == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                l10n.selectDeadline,
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        DateTime deadline;
+                        if (selectedType == GoalType.custom) {
+                          deadline = customDeadline!;
+                        } else if (selectedType == GoalType.week) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 7));
+                        } else if (selectedType == GoalType.month) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 30));
+                        } else if (selectedType == GoalType.year) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 365));
+                        } else {
+                          deadline = DateTime.now().add(
+                            const Duration(days: 365),
+                          );
+                        }
+
+                        final newGoal = Goal(
+                          id: const Uuid().v4(),
+                          userId: 'local_user',
+                          title: titleCtrl.text,
+                          description: '',
+                          type: selectedType,
+                          deadline: deadline,
+                          createdAt: DateTime.now(),
+                        );
+                        ref.read(jsonGoalsRepositoryProvider).addGoal(newGoal);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.saveGoal,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-            ],
-          ),
-        ),
+                const SizedBox(height: 32),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -639,176 +671,185 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: 32,
-            left: 24,
-            right: 24,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Editar Meta',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: titleCtrl,
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: '¿Qué quieres lograr?',
-                  hintText: 'Ej: Leer toda la Biblia',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+        builder: (context, setDialogState) {
+          final l10n = AppLocalizations.of(context)!;
+          return Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              top: 32,
+              left: 24,
+              right: 24,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.editGoal,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Plazo',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: [
-                  GoalType.week,
-                  GoalType.month,
-                  GoalType.year,
-                  GoalType.custom,
-                ].map((type) {
-                  final isSelected = selectedType == type;
-                  return ChoiceChip(
-                    label: Text(type.displayName),
-                    selected: isSelected,
-                    onSelected: (val) {
-                      setDialogState(() => selectedType = type);
-                      if (type == GoalType.custom) {
-                        _selectCustomDeadline(context, customDeadline, (date) {
-                          setDialogState(() => customDeadline = date);
-                        });
-                      }
-                    },
-                    selectedColor: Colors.blue.shade700,
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (selectedType == GoalType.custom &&
-                  customDeadline != null) ...[
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        color: Colors.blue.shade700,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Fecha límite: ${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}',
-                        style: TextStyle(
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 18),
-                        onPressed: () {
-                          _selectCustomDeadline(context, customDeadline, (
-                            date,
-                          ) {
-                            setDialogState(() => customDeadline = date);
-                          });
-                        },
-                        color: Colors.blue.shade700,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (titleCtrl.text.isNotEmpty) {
-                      // Validate custom deadline
-                      if (selectedType == GoalType.custom &&
-                          customDeadline == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Por favor selecciona una fecha límite',
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-
-                      DateTime deadline;
-                      if (selectedType == GoalType.custom) {
-                        deadline = customDeadline!;
-                      } else if (selectedType == GoalType.week) {
-                        deadline = DateTime.now().add(const Duration(days: 7));
-                      } else if (selectedType == GoalType.month) {
-                        deadline = DateTime.now().add(const Duration(days: 30));
-                      } else if (selectedType == GoalType.year) {
-                        deadline =
-                            DateTime.now().add(const Duration(days: 365));
-                      } else {
-                        deadline = DateTime.now().add(
-                          const Duration(days: 365),
-                        );
-                      }
-
-                      final updatedGoal = goal.copyWith(
-                        title: titleCtrl.text,
-                        type: selectedType,
-                        deadline: deadline,
-                      );
-                      ref
-                          .read(jsonGoalsRepositoryProvider)
-                          .updateGoal(updatedGoal);
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade700,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                const SizedBox(height: 24),
+                TextField(
+                  controller: titleCtrl,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.whatToAchieve,
+                    hintText: l10n.exampleGoal,
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'Actualizar Meta',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.deadline,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    GoalType.week,
+                    GoalType.month,
+                    GoalType.year,
+                    GoalType.custom,
+                  ].map((type) {
+                    final isSelected = selectedType == type;
+                    return ChoiceChip(
+                      label: Text(_goalTypeLabel(l10n, type)),
+                      selected: isSelected,
+                      onSelected: (val) {
+                        setDialogState(() => selectedType = type);
+                        if (type == GoalType.custom) {
+                          _selectCustomDeadline(context, customDeadline,
+                              (date) {
+                            setDialogState(() => customDeadline = date);
+                          });
+                        }
+                      },
+                      selectedColor: Colors.blue.shade700,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (selectedType == GoalType.custom &&
+                    customDeadline != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: Colors.blue.shade700,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.deadlineDate(
+                              '${customDeadline!.day}/${customDeadline!.month}/${customDeadline!.year}'),
+                          style: TextStyle(
+                            color: Colors.blue.shade700,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.edit, size: 18),
+                          onPressed: () {
+                            _selectCustomDeadline(context, customDeadline, (
+                              date,
+                            ) {
+                              setDialogState(() => customDeadline = date);
+                            });
+                          },
+                          color: Colors.blue.shade700,
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (titleCtrl.text.isNotEmpty) {
+                        // Validate custom deadline
+                        if (selectedType == GoalType.custom &&
+                            customDeadline == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                l10n.selectDeadline,
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        DateTime deadline;
+                        if (selectedType == GoalType.custom) {
+                          deadline = customDeadline!;
+                        } else if (selectedType == GoalType.week) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 7));
+                        } else if (selectedType == GoalType.month) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 30));
+                        } else if (selectedType == GoalType.year) {
+                          deadline =
+                              DateTime.now().add(const Duration(days: 365));
+                        } else {
+                          deadline = DateTime.now().add(
+                            const Duration(days: 365),
+                          );
+                        }
+
+                        final updatedGoal = goal.copyWith(
+                          title: titleCtrl.text,
+                          type: selectedType,
+                          deadline: deadline,
+                        );
+                        ref
+                            .read(jsonGoalsRepositoryProvider)
+                            .updateGoal(updatedGoal);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.updateGoal,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-            ],
-          ),
-        ),
+                const SizedBox(height: 32),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

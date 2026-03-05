@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 
 class HabitStateManager {
   static void updateCompleted({
@@ -214,7 +215,8 @@ class _HabitModalContentState extends State<HabitModalContent> {
                               controller: _subtaskController,
                               autofocus: true,
                               decoration: InputDecoration(
-                                hintText: 'Nueva subtarea...',
+                                hintText: AppLocalizations.of(context)!
+                                    .newSubtaskHint,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),

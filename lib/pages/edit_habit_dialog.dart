@@ -141,6 +141,47 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
     }
   }
 
+  String _notificationTimingLabel(
+      AppLocalizations l10n, NotificationTiming timing) {
+    switch (timing) {
+      case NotificationTiming.none:
+        return l10n.notificationTimingNone;
+      case NotificationTiming.atEventTime:
+        return l10n.notificationTimingAtEvent;
+      case NotificationTiming.tenMinutesBefore:
+        return l10n.notificationTimingTenMin;
+      case NotificationTiming.thirtyMinutesBefore:
+        return l10n.notificationTimingThirtyMin;
+      case NotificationTiming.oneHourBefore:
+        return l10n.notificationTimingOneHour;
+      case NotificationTiming.custom:
+        return l10n.custom;
+    }
+  }
+
+  String _difficultyLabel(AppLocalizations l10n, HabitDifficulty diff) {
+    switch (diff) {
+      case HabitDifficulty.easy:
+        return l10n.difficultyEasy;
+      case HabitDifficulty.medium:
+        return l10n.difficultyMedium;
+      case HabitDifficulty.hard:
+        return l10n.difficultyHard;
+    }
+  }
+
+  String _recurrenceFrequencyLabel(
+      AppLocalizations l10n, RecurrenceFrequency freq) {
+    switch (freq) {
+      case RecurrenceFrequency.daily:
+        return l10n.daily;
+      case RecurrenceFrequency.weekly:
+        return l10n.weekly;
+      case RecurrenceFrequency.monthly:
+        return l10n.monthly;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final canSave = _hasChanges();
@@ -321,9 +362,9 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                           _buildTile(
                             icon: Icons.access_time_rounded,
                             color: Colors.orange,
-                            title: "Hora",
-                            value: eventTime?.format(context) ??
-                                "Seleccionar hora",
+                            title: l10n.hour,
+                            value:
+                                eventTime?.format(context) ?? l10n.selectTime,
                             onTap: () async {
                               final picked = await showTimePicker(
                                   context: context,
@@ -348,8 +389,10 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             icon: Icons.notifications_active_outlined,
                             color: Colors.purple,
                             title: l10n.reminder,
-                            value: notificationSettings?.timing.displayName ??
-                                "Sin aviso",
+                            value: notificationSettings != null
+                                ? _notificationTimingLabel(
+                                    l10n, notificationSettings!.timing)
+                                : l10n.notificationTimingNone,
                             onTap: () async {
                               final result =
                                   await showDialog<HabitNotificationSettings>(
@@ -372,7 +415,8 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                             color: Colors.green,
                             title: l10n.repetition,
                             value: recurrence?.enabled == true
-                                ? recurrence!.frequency.displayName
+                                ? _recurrenceFrequencyLabel(
+                                    l10n, recurrence!.frequency)
                                 : l10n.noRepetition,
                             onTap: () async {
                               final result = await showDialog<HabitRecurrence>(
@@ -438,6 +482,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
   }
 
   Widget _buildDifficultySelector(Color themeColor) {
+    final l10n = widget.l10n;
     return Row(
       children: HabitDifficulty.values.map((diff) {
         final isSelected = selectedDifficulty == diff;
@@ -458,7 +503,7 @@ class _EditHabitDialogState extends ConsumerState<EditHabitDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    diff.displayName,
+                    _difficultyLabel(l10n, diff),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.grey.shade600,

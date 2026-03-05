@@ -10,15 +10,15 @@ void main() {
     late AbandonmentPredictor predictor;
 
     setUpAll(() async {
-      // Install a fake tflite interpreter for tests
-      await installFakeTflite(result: 0.3);
-      predictor = AbandonmentPredictor();
+      // Inject a fake asset loader via constructor (no static overrides)
+      predictor = AbandonmentPredictor(
+        assetLoader: TestAssetLoader(interpreterResult: 0.3),
+      );
       await predictor.initialize();
     });
 
     tearDownAll(() {
       predictor.dispose();
-      uninstallFakeTflite();
     });
 
     test('returns 0.5 for first-time habits with no history', () async {

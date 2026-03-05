@@ -47,11 +47,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'Sim';
 
   @override
   String get habitAlreadyCompletedStartAgain =>
-      'This habit is already completed. Do you want to start the timer again?';
+      'Este hábito já foi concluído. Deseja iniciar o cronômetro novamente?';
 
   @override
   String get delete => 'Excluir';
@@ -825,9 +825,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitsTip => 'Deslize para ver opções de hábitos';
 
   @override
-  String get understood => 'Entendi';
-
-  @override
   String get bible => 'Bíblia';
 
   @override
@@ -1261,27 +1258,397 @@ class AppLocalizationsPt extends AppLocalizations {
       'Feito com ❤️ por Develop4God\n \nPara a Glória de Deus';
 
   @override
-  String get faithJourney => 'Faith Journey';
+  String get faithJourney => 'Jornada de Fé';
 
   @override
   String get faithJourneyDescription =>
-      'Track your progress, earn faith points, and unlock badges!';
+      'Acompanhe seu progresso, ganhe pontos de fé e desbloqueie medalhas!';
 
   @override
-  String get startTimer => 'Start Timer';
+  String get startTimer => 'Iniciar Cronômetro';
 
   @override
-  String get timerRunning => 'Timer Running';
+  String get timerRunning => 'Cronômetro em Execução';
 
   @override
-  String get timeToFocus => 'Time to Focus';
+  String get timeToFocus => 'Hora de Focar';
 
   @override
-  String get focusComplete => 'Focus session complete!';
+  String get focusComplete => 'Sessão de foco concluída!';
 
   @override
-  String get goalReached => 'Goal Reached!';
+  String get goalReached => 'Meta Alcançada!';
 
   @override
-  String get timer => 'Timer';
+  String get timer => 'Cronômetro';
+
+  @override
+  String get statisticsTitle => 'Estatísticas';
+
+  @override
+  String get noStatisticsData => 'Nenhum dado estatístico disponível.';
+
+  @override
+  String get activeHabits => 'Hábitos ativos';
+
+  @override
+  String get successPercentage => 'Porcentagem de sucesso';
+
+  @override
+  String lastCompletionDate(String date) {
+    return 'Última conclusão: $date';
+  }
+
+  @override
+  String get habitDistribution => 'Distribuição de hábitos';
+
+  @override
+  String get pending => 'Pendentes';
+
+  @override
+  String get excellentConsistency => 'Excelente consistência! Continue assim.';
+
+  @override
+  String get goodProgress => 'Bom progresso! Mantenha o ritmo.';
+
+  @override
+  String get everyDayMatters => 'Cada dia conta! Você pode melhorar.';
+
+  @override
+  String get myNotes => 'Minhas Notas';
+
+  @override
+  String get editNote => 'Editar Nota';
+
+  @override
+  String get newNote => 'Nova Nota';
+
+  @override
+  String get cancelEdit => 'Cancelar edição';
+
+  @override
+  String get discardNote => 'Descartar nota';
+
+  @override
+  String get checkboxItem => 'Caixa de seleção';
+
+  @override
+  String get numberedItem => 'Numerada';
+
+  @override
+  String get plainText => 'Texto';
+
+  @override
+  String get listItemHint => 'Item da lista...';
+
+  @override
+  String get stepHint => 'Passo...';
+
+  @override
+  String get writeNoteHint => 'Escreva uma nota...';
+
+  @override
+  String get noSavedNotes => 'Nenhuma nota salva';
+
+  @override
+  String get thoughtsAppearHere => 'Seus pensamentos aparecerão aqui.';
+
+  @override
+  String get myGoals => 'Minhas Metas';
+
+  @override
+  String get activeGoals => 'Objetivos Ativos';
+
+  @override
+  String get generalProgress => 'Progresso Geral';
+
+  @override
+  String get completedLower => 'concluído';
+
+  @override
+  String get noGoalsYet => 'Ainda sem metas';
+
+  @override
+  String get defineYourGoals =>
+      'Defina seus objetivos espirituais ou pessoais para este ano, mês ou semana.';
+
+  @override
+  String get createFirstGoal => 'Criar minha primeira meta';
+
+  @override
+  String get editGoal => 'Editar Meta';
+
+  @override
+  String get whatToAchieve => 'O que você deseja alcançar?';
+
+  @override
+  String get exampleGoal => 'Ex: Ler toda a Bíblia';
+
+  @override
+  String get deadline => 'Prazo';
+
+  @override
+  String deadlineDate(String date) {
+    return 'Data limite: $date';
+  }
+
+  @override
+  String get selectDeadline => 'Por favor selecione um prazo';
+
+  @override
+  String get updateGoal => 'Atualizar Meta';
+
+  @override
+  String get saveGoal => 'Salvar Meta';
+
+  @override
+  String get goalTypeYear => 'Anual';
+
+  @override
+  String get goalTypeMonth => 'Mensal';
+
+  @override
+  String get goalTypeWeek => 'Semanal';
+
+  @override
+  String get goalTypeCustom => 'Personalizado';
+
+  @override
+  String get noScheduledNotifications => 'Nenhuma notificação agendada';
+
+  @override
+  String get notificationOn => 'Ativada';
+
+  @override
+  String get noTime => 'Sem horário';
+
+  @override
+  String get configureReminder => 'Configurar lembrete';
+
+  @override
+  String get householdSpinnerTitle => '🏠 Girar Tarefas Domésticas';
+
+  @override
+  String get anotherMoment => 'Outro momento';
+
+  @override
+  String taskCompleteError(String error) {
+    return 'Erro ao concluir a tarefa: $error';
+  }
+
+  @override
+  String get addTasks => 'Adicionar tarefas';
+
+  @override
+  String get completing => 'Concluindo...';
+
+  @override
+  String get complete => 'Concluir';
+
+  @override
+  String get comingSoon => 'EM BREVE';
+
+  @override
+  String get viewAll => 'Ver Tudo';
+
+  @override
+  String get selectVersion => 'Selecionar Versão';
+
+  @override
+  String get fontSize => 'Tamanho da Fonte';
+
+  @override
+  String get share => 'Compartilhar';
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String get favorites => 'Favoritos';
+
+  @override
+  String get noBibleVersions =>
+      'Nenhuma versão da Bíblia disponível para este idioma.';
+
+  @override
+  String bibleVersionSet(String version) {
+    return 'Versão da Bíblia definida: $version';
+  }
+
+  @override
+  String get errorLoadingHabits => 'Erro ao carregar hábitos';
+
+  @override
+  String get spinHouseholdTasks => 'Girar tarefas domésticas';
+
+  @override
+  String get newGoal => 'Nova Meta';
+
+  @override
+  String get notificationTimingNone => 'Sem lembrete';
+
+  @override
+  String get notificationTimingAtEvent => 'No momento do evento';
+
+  @override
+  String get notificationTimingTenMin => '10 minutos antes';
+
+  @override
+  String get notificationTimingThirtyMin => '30 minutos antes';
+
+  @override
+  String get notificationTimingOneHour => '1 hora antes';
+
+  @override
+  String get difficultyEasy => 'Fácil';
+
+  @override
+  String get difficultyMedium => 'Médio';
+
+  @override
+  String get difficultyHard => 'Difícil';
+
+  @override
+  String get selectTime => 'Selecionar hora';
+
+  @override
+  String get hour => 'Hora';
+
+  @override
+  String get noHouseholdTasks => 'Nenhuma tarefa doméstica';
+
+  @override
+  String get myFavorites => 'Meus Favoritos';
+
+  @override
+  String get noFavoritesYet => 'Nenhum favorito ainda';
+
+  @override
+  String get noFavoritesMessage =>
+      'Toque no ícone de estrela em qualquer devocional para salvá-lo aqui';
+
+  @override
+  String get exploreDevotionals => 'Explorar Devocionais';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return 'A cada $interval $unit';
+  }
+
+  @override
+  String get frequencyUnitDay => 'dia(s)';
+
+  @override
+  String get frequencyUnitWeek => 'semana(s)';
+
+  @override
+  String get frequencyUnitMonth => 'mês(es)';
+
+  @override
+  String get addTasksToUseSpinner =>
+      'Adicione tarefas domésticas para usar o spinner';
+
+  @override
+  String get goals => 'Metas';
+
+  @override
+  String get notes => 'Notas';
+
+  @override
+  String get newSubtaskHint => 'Nova subtarefa...';
+
+  @override
+  String get image => 'Imagem';
+
+  @override
+  String get removeFromFavorites => 'Remover dos favoritos';
+
+  @override
+  String get searchDevotionals => 'Pesquisar devocionais...';
+
+  @override
+  String languageChangedTo(String language) {
+    return 'Idioma alterado para $language';
+  }
+
+  @override
+  String get currentLabel => 'Atual';
+
+  @override
+  String get suggestedLabel => 'Sugerido';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return 'Versão da Bíblia: $version';
+  }
+
+  @override
+  String get underConstruction => 'Em construção 🚧';
+
+  @override
+  String get getReadyNextLevel => 'Prepare-se para o\nPróximo Nível';
+
+  @override
+  String get exclusiveMissionsComingSoon =>
+      'Missões exclusivas e recompensas em breve...';
+
+  @override
+  String get myPets => 'Meus Animais';
+
+  @override
+  String get wordOfToday => 'PALAVRA DE HOJE';
+
+  @override
+  String get exploreBibleDescription =>
+      'Explore a Palavra de Deus com nosso leitor avançado.';
+
+  @override
+  String get devotionalDailyDescription =>
+      'Fortaleça sua fé com reflexões diárias.';
+
+  @override
+  String get viewFullDevotional => 'Ver devocional completo';
+
+  @override
+  String get petPreviewLocked => 'VISUALIZAÇÃO (BLOQUEADO)';
+
+  @override
+  String get unlockThisFriend => 'Desbloqueie este Amigo!';
+
+  @override
+  String get petUnlockMessage =>
+      'Este companheiro especial estará disponível muito em breve. Continue com seus hábitos para ser o primeiro a tê-lo!';
+
+  @override
+  String get understood => 'Entendi';
+
+  @override
+  String get backgroundTheme => 'Tema de Fundo';
+
+  @override
+  String get selectYourPet => 'Selecione seu animal de estimação';
+
+  @override
+  String get collectAllFriends => 'Colete todos os seus amigos!';
+
+  @override
+  String get pet_Perrito => 'Filhote de Cachorro';
+
+  @override
+  String get pet_Gatito => 'Gatinho';
+
+  @override
+  String get pet_Tigre => 'Tigre';
+
+  @override
+  String get pet_PezLeon => 'Peixe-Leão';
+
+  @override
+  String get pet_Leoncito => 'Leãozinho';
+
+  @override
+  String get pet_Panda => 'Panda';
+
+  @override
+  String get pet_Unicornio => 'Unicórnio';
 }

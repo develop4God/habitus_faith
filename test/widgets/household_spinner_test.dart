@@ -5,11 +5,30 @@ import 'package:habitus_faith/features/habits/domain/habit.dart';
 import 'package:habitus_faith/features/habits/presentation/household_spinner/household_spinner_page.dart';
 import 'package:habitus_faith/features/habits/presentation/habits_providers.dart';
 import 'package:habitus_faith/core/providers/auth_provider.dart';
-// ignore: unused_import
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:habitus_faith/l10n/app_localizations.dart';
 import '../utils/pump_utils.dart';
 
 // Using pumpTestFrames from pump_utils to avoid pumpAndSettle timeouts with animations
+
+/// Helper that wraps a widget in a MaterialApp with all required
+/// localization delegates so AppLocalizations.of(context) is non-null.
+Widget _localizedApp(Widget home, {List<Override> overrides = const []}) {
+  return ProviderScope(
+    overrides: overrides,
+    child: MaterialApp(
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('es'), Locale('en')],
+      locale: const Locale('es'),
+      home: home,
+    ),
+  );
+}
 
 void main() {
   group('HouseholdSpinnerPage - User Behavior Tests', () {
@@ -60,16 +79,14 @@ void main() {
       'User can see household spinner page when household tasks exist',
       (WidgetTester tester) async {
         await tester.pumpWidget(
-          ProviderScope(
+          _localizedApp(
+            const HouseholdSpinnerPage(),
             overrides: [
               userIdProvider.overrideWithValue('test-user'),
               habitsStreamProvider.overrideWith(
                 (ref) => Stream.value(mockHouseholdHabits),
               ),
             ],
-            child: const MaterialApp(
-              home: HouseholdSpinnerPage(),
-            ),
           ),
         );
 
@@ -89,16 +106,14 @@ void main() {
       'User sees empty state when no household tasks exist',
       (WidgetTester tester) async {
         await tester.pumpWidget(
-          ProviderScope(
+          _localizedApp(
+            const HouseholdSpinnerPage(),
             overrides: [
               userIdProvider.overrideWithValue('test-user'),
               habitsStreamProvider.overrideWith(
                 (ref) => Stream.value([]),
               ),
             ],
-            child: const MaterialApp(
-              home: HouseholdSpinnerPage(),
-            ),
           ),
         );
 
@@ -154,16 +169,14 @@ void main() {
       'UI is responsive and modern with proper styling',
       (WidgetTester tester) async {
         await tester.pumpWidget(
-          ProviderScope(
+          _localizedApp(
+            const HouseholdSpinnerPage(),
             overrides: [
               userIdProvider.overrideWithValue('test-user'),
               habitsStreamProvider.overrideWith(
                 (ref) => Stream.value(mockHouseholdHabits),
               ),
             ],
-            child: const MaterialApp(
-              home: HouseholdSpinnerPage(),
-            ),
           ),
         );
 
@@ -187,16 +200,14 @@ void main() {
       'Empty add button navigates back to add tasks',
       (WidgetTester tester) async {
         await tester.pumpWidget(
-          ProviderScope(
+          _localizedApp(
+            const HouseholdSpinnerPage(),
             overrides: [
               userIdProvider.overrideWithValue('test-user'),
               habitsStreamProvider.overrideWith(
                 (ref) => Stream.value([]),
               ),
             ],
-            child: const MaterialApp(
-              home: HouseholdSpinnerPage(),
-            ),
           ),
         );
 

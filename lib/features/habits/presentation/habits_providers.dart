@@ -145,6 +145,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
     HabitNotificationSettings? notificationSettings,
     HabitRecurrence? recurrence,
     List<Subtask>? subtasks,
+    bool? isPinned,
   }) async {
     debugPrint('HabitsNotifier.updateHabit: start -> $habitId');
     state = const AsyncLoading();
@@ -160,6 +161,7 @@ class HabitsNotifier extends AsyncNotifier<void> {
       notificationSettings: notificationSettings,
       recurrence: recurrence,
       subtasks: subtasks,
+      isPinned: isPinned,
     );
 
     result.fold(
@@ -180,10 +182,34 @@ class HabitsNotifier extends AsyncNotifier<void> {
             habitName: habit.name,
             eventTime: notificationSettings.eventTime!,
           );
-        } else if (notificationSettings == null) {
-          final notificationService = ref.read(notificationServiceProvider);
-          await notificationService.cancelHabitNotification(habit.id);
+        } else if (notificationSettings == null &&
+            (name != null || emoji != null)) {
+          // If we updated name/emoji but not settings, we might need to reschedule
+          // but if notificationSettings is null in the method call it means it wasn't changed.
+          // In the current updateHabit logic, if notificationSettings is null it's not passed to copyWith.
         }
+      },
+    );
+  }
+
+  Future<void> togglePinHabit(String habitId, bool isPinned) async {
+    debugPrint(
+        'HabitsNotifier.togglePinHabit: habitId=$habitId, isPinned=$isPinned');
+    // Minimal state update to avoid full list reload if possible
+    final repository = ref.read(habitsRepositoryProvider);
+    final result = await repository.updateHabit(
+      habitId: habitId,
+      isPinned: isPinned,
+    );
+
+    result.fold(
+      (failure) {
+        debugPrint('HabitsNotifier.togglePinHabit: error: $failure');
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (_) {
+        debugPrint('HabitsNotifier.togglePinHabit: éxito');
+        state = const AsyncData(null);
       },
     );
   }

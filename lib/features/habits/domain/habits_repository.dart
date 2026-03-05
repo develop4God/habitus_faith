@@ -76,6 +76,7 @@ abstract class HabitsRepository {
     HabitNotificationSettings? notificationSettings,
     HabitRecurrence? recurrence,
     List<Subtask>? subtasks,
+    bool? isPinned,
   });
 
   /// Uncheck a habit (reset today's completion)

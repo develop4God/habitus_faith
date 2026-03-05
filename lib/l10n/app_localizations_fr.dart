@@ -47,11 +47,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'Oui';
 
   @override
   String get habitAlreadyCompletedStartAgain =>
-      'This habit is already completed. Do you want to start the timer again?';
+      'Cette habitude est déjà terminée. Voulez-vous relancer le minuteur ?';
 
   @override
   String get delete => 'Supprimer';
@@ -836,9 +836,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Faites glisser pour voir les actions sur vos habitudes';
 
   @override
-  String get understood => 'Compris';
-
-  @override
   String get bible => 'Bible';
 
   @override
@@ -1277,27 +1274,398 @@ class AppLocalizationsFr extends AppLocalizations {
       'Fait avec ❤️ par Develop4God\n \nPour la Gloire de Dieu';
 
   @override
-  String get faithJourney => 'Faith Journey';
+  String get faithJourney => 'Parcours de Foi';
 
   @override
   String get faithJourneyDescription =>
-      'Track your progress, earn faith points, and unlock badges!';
+      'Suivez vos progrès, gagnez des points de foi et débloquez des badges !';
 
   @override
-  String get startTimer => 'Start Timer';
+  String get startTimer => 'Démarrer le Minuteur';
 
   @override
-  String get timerRunning => 'Timer Running';
+  String get timerRunning => 'Minuteur en Cours';
 
   @override
-  String get timeToFocus => 'Time to Focus';
+  String get timeToFocus => 'Temps de Concentration';
 
   @override
-  String get focusComplete => 'Focus session complete!';
+  String get focusComplete => 'Session de concentration terminée !';
 
   @override
-  String get goalReached => 'Goal Reached!';
+  String get goalReached => 'Objectif Atteint !';
 
   @override
-  String get timer => 'Timer';
+  String get timer => 'Minuteur';
+
+  @override
+  String get statisticsTitle => 'Statistiques';
+
+  @override
+  String get noStatisticsData => 'Aucune donnée statistique disponible.';
+
+  @override
+  String get activeHabits => 'Habitudes actives';
+
+  @override
+  String get successPercentage => 'Pourcentage de réussite';
+
+  @override
+  String lastCompletionDate(String date) {
+    return 'Dernière réalisation : $date';
+  }
+
+  @override
+  String get habitDistribution => 'Répartition des habitudes';
+
+  @override
+  String get pending => 'En attente';
+
+  @override
+  String get excellentConsistency => 'Excellente régularité ! Continuez ainsi.';
+
+  @override
+  String get goodProgress => 'Bonne progression ! Gardez le rythme.';
+
+  @override
+  String get everyDayMatters =>
+      'Chaque jour compte ! Vous pouvez vous améliorer.';
+
+  @override
+  String get myNotes => 'Mes Notes';
+
+  @override
+  String get editNote => 'Modifier la Note';
+
+  @override
+  String get newNote => 'Nouvelle Note';
+
+  @override
+  String get cancelEdit => 'Annuler la modification';
+
+  @override
+  String get discardNote => 'Supprimer le brouillon';
+
+  @override
+  String get checkboxItem => 'Case à cocher';
+
+  @override
+  String get numberedItem => 'Numérotée';
+
+  @override
+  String get plainText => 'Texte';
+
+  @override
+  String get listItemHint => 'Élément de liste...';
+
+  @override
+  String get stepHint => 'Étape...';
+
+  @override
+  String get writeNoteHint => 'Écrire une note...';
+
+  @override
+  String get noSavedNotes => 'Aucune note sauvegardée';
+
+  @override
+  String get thoughtsAppearHere => 'Vos pensées apparaîtront ici.';
+
+  @override
+  String get myGoals => 'Mes Objectifs';
+
+  @override
+  String get activeGoals => 'Objectifs Actifs';
+
+  @override
+  String get generalProgress => 'Progrès Général';
+
+  @override
+  String get completedLower => 'terminé';
+
+  @override
+  String get noGoalsYet => 'Pas encore d\'objectifs';
+
+  @override
+  String get defineYourGoals =>
+      'Définissez vos objectifs spirituels ou personnels pour cette année, ce mois ou cette semaine.';
+
+  @override
+  String get createFirstGoal => 'Créer mon premier objectif';
+
+  @override
+  String get editGoal => 'Modifier l\'Objectif';
+
+  @override
+  String get whatToAchieve => 'Que voulez-vous accomplir ?';
+
+  @override
+  String get exampleGoal => 'Ex : Lire toute la Bible';
+
+  @override
+  String get deadline => 'Échéance';
+
+  @override
+  String deadlineDate(String date) {
+    return 'Date limite : $date';
+  }
+
+  @override
+  String get selectDeadline => 'Veuillez sélectionner une date limite';
+
+  @override
+  String get updateGoal => 'Mettre à Jour l\'Objectif';
+
+  @override
+  String get saveGoal => 'Enregistrer l\'Objectif';
+
+  @override
+  String get goalTypeYear => 'Annuel';
+
+  @override
+  String get goalTypeMonth => 'Mensuel';
+
+  @override
+  String get goalTypeWeek => 'Hebdomadaire';
+
+  @override
+  String get goalTypeCustom => 'Personnalisé';
+
+  @override
+  String get noScheduledNotifications => 'Aucune notification programmée';
+
+  @override
+  String get notificationOn => 'Activée';
+
+  @override
+  String get noTime => 'Pas d\'heure';
+
+  @override
+  String get configureReminder => 'Configurer le rappel';
+
+  @override
+  String get householdSpinnerTitle => '🏠 Tourner les Tâches Ménagères';
+
+  @override
+  String get anotherMoment => 'Un autre moment';
+
+  @override
+  String taskCompleteError(String error) {
+    return 'Erreur lors de l\'achèvement de la tâche : $error';
+  }
+
+  @override
+  String get addTasks => 'Ajouter des tâches';
+
+  @override
+  String get completing => 'En cours...';
+
+  @override
+  String get complete => 'Terminer';
+
+  @override
+  String get comingSoon => 'BIENTÔT DISPONIBLE';
+
+  @override
+  String get viewAll => 'Voir Tout';
+
+  @override
+  String get selectVersion => 'Sélectionner la Version';
+
+  @override
+  String get fontSize => 'Taille de Police';
+
+  @override
+  String get share => 'Partager';
+
+  @override
+  String get cancelAction => 'Annuler';
+
+  @override
+  String get favorites => 'Favoris';
+
+  @override
+  String get noBibleVersions =>
+      'Aucune version de la Bible disponible pour cette langue.';
+
+  @override
+  String bibleVersionSet(String version) {
+    return 'Version de la Bible définie : $version';
+  }
+
+  @override
+  String get errorLoadingHabits => 'Erreur de chargement des habitudes';
+
+  @override
+  String get spinHouseholdTasks => 'Tourner les tâches ménagères';
+
+  @override
+  String get newGoal => 'Nouvel Objectif';
+
+  @override
+  String get notificationTimingNone => 'Pas de rappel';
+
+  @override
+  String get notificationTimingAtEvent => 'Au moment de l\'événement';
+
+  @override
+  String get notificationTimingTenMin => '10 minutes avant';
+
+  @override
+  String get notificationTimingThirtyMin => '30 minutes avant';
+
+  @override
+  String get notificationTimingOneHour => '1 heure avant';
+
+  @override
+  String get difficultyEasy => 'Facile';
+
+  @override
+  String get difficultyMedium => 'Moyen';
+
+  @override
+  String get difficultyHard => 'Difficile';
+
+  @override
+  String get selectTime => 'Sélectionner l\'heure';
+
+  @override
+  String get hour => 'Heure';
+
+  @override
+  String get noHouseholdTasks => 'Aucune tâche ménagère';
+
+  @override
+  String get myFavorites => 'Mes Favoris';
+
+  @override
+  String get noFavoritesYet => 'Pas encore de favoris';
+
+  @override
+  String get noFavoritesMessage =>
+      'Appuyez sur l\'icône étoile d\'un dévotionnel pour le sauvegarder ici';
+
+  @override
+  String get exploreDevotionals => 'Explorer les Dévotionnels';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return 'Chaque $interval $unit';
+  }
+
+  @override
+  String get frequencyUnitDay => 'jour(s)';
+
+  @override
+  String get frequencyUnitWeek => 'semaine(s)';
+
+  @override
+  String get frequencyUnitMonth => 'mois';
+
+  @override
+  String get addTasksToUseSpinner =>
+      'Ajoutez des tâches ménagères pour utiliser le spinner';
+
+  @override
+  String get goals => 'Objectifs';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get newSubtaskHint => 'Nouvelle sous-tâche...';
+
+  @override
+  String get image => 'Image';
+
+  @override
+  String get removeFromFavorites => 'Retirer des favoris';
+
+  @override
+  String get searchDevotionals => 'Rechercher des dévotionnels...';
+
+  @override
+  String languageChangedTo(String language) {
+    return 'Langue changée en $language';
+  }
+
+  @override
+  String get currentLabel => 'Actuel';
+
+  @override
+  String get suggestedLabel => 'Suggéré';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return 'Version de la Bible: $version';
+  }
+
+  @override
+  String get underConstruction => 'En construction 🚧';
+
+  @override
+  String get getReadyNextLevel => 'Préparez-vous pour le\nNiveau Suivant';
+
+  @override
+  String get exclusiveMissionsComingSoon =>
+      'Missions exclusives et récompenses bientôt...';
+
+  @override
+  String get myPets => 'Mes Animaux';
+
+  @override
+  String get wordOfToday => 'PAROLE D\'AUJOURD\'HUI';
+
+  @override
+  String get exploreBibleDescription =>
+      'Explorez la Parole de Dieu avec notre lecteur avancé.';
+
+  @override
+  String get devotionalDailyDescription =>
+      'Renforcez votre foi par des réflexions quotidiennes.';
+
+  @override
+  String get viewFullDevotional => 'Voir le dévotionnel complet';
+
+  @override
+  String get petPreviewLocked => 'APERÇU (VERROUILLÉ)';
+
+  @override
+  String get unlockThisFriend => 'Déverrouillez cet Ami!';
+
+  @override
+  String get petUnlockMessage =>
+      'Ce compagnon spécial sera bientôt disponible. Continuez vos habitudes pour être le premier à l\'avoir!';
+
+  @override
+  String get understood => 'D\'accord';
+
+  @override
+  String get backgroundTheme => 'Thème de Fond';
+
+  @override
+  String get selectYourPet => 'Sélectionnez votre animal';
+
+  @override
+  String get collectAllFriends => 'Collectionnez tous vos amis!';
+
+  @override
+  String get pet_Perrito => 'Chiot';
+
+  @override
+  String get pet_Gatito => 'Chaton';
+
+  @override
+  String get pet_Tigre => 'Tigre';
+
+  @override
+  String get pet_PezLeon => 'Poisson-Lion';
+
+  @override
+  String get pet_Leoncito => 'Petit Lion';
+
+  @override
+  String get pet_Panda => 'Panda';
+
+  @override
+  String get pet_Unicornio => 'Licorne';
 }

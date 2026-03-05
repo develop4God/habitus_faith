@@ -142,10 +142,11 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(28, 80, 28, 32),
+                          padding: const EdgeInsets.fromLTRB(28, 80, 28, 24),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(
@@ -157,15 +158,15 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                                       color:
                                           Colors.white.withValues(alpha: 0.1)),
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.auto_awesome,
+                                    const Icon(Icons.auto_awesome,
                                         size: 12, color: Colors.amber),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     Text(
-                                      'PALABRA DE HOY',
-                                      style: TextStyle(
+                                      l10n.wordOfToday,
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w900,
@@ -185,36 +186,38 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                                           color: Colors.white)),
                                 )
                               else
-                                Hero(
-                                  tag:
-                                      'devotional_verse_${displayDevotional.id}',
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: AutoSizeText(
-                                      displayDevotional.versiculo,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w300,
-                                        fontStyle: FontStyle.italic,
-                                        height: 1.3,
-                                        fontFamily: 'Georgia',
+                                Flexible(
+                                  child: Hero(
+                                    tag:
+                                        'devotional_verse_${displayDevotional.id}',
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: AutoSizeText(
+                                        displayDevotional.versiculo,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w300,
+                                          fontStyle: FontStyle.italic,
+                                          height: 1.3,
+                                          fontFamily: 'Georgia',
+                                        ),
+                                        maxLines: 4,
+                                        minFontSize: 14,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 5,
-                                      minFontSize: 16,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
                               const SizedBox(height: 12),
-                              const Row(
+                              Row(
                                 children: [
-                                  Icon(Icons.menu_book_rounded,
+                                  const Icon(Icons.menu_book_rounded,
                                       size: 14, color: Colors.white70),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Text(
-                                    'Ver devocional completo',
-                                    style: TextStyle(
+                                    l10n.viewFullDevotional,
+                                    style: const TextStyle(
                                       color: Colors.white70,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
@@ -246,8 +249,7 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                     _buildFeatureCard(
                       context: context,
                       title: l10n.readBible,
-                      description:
-                          'Explora la Palabra de Dios con nuestro lector avanzado.',
+                      description: l10n.exploreBibleDescription,
                       icon: Icons.auto_stories_rounded,
                       color: const Color(0xFF007AFF),
                       onTap: () => _safeNavigate(const BibleReaderPage()),
@@ -255,9 +257,8 @@ class _SpiritualHubPageState extends ConsumerState<SpiritualHubPage> {
                     const SizedBox(height: 16),
                     _buildFeatureCard(
                       context: context,
-                      title: 'Devocionales',
-                      description:
-                          'Fortalece tu fe con reflexiones diarias personalizadas.',
+                      title: l10n.featureDailyDevotionals,
+                      description: l10n.devotionalDailyDescription,
                       icon: Icons.local_library_rounded,
                       color: const Color(0xFF5856D6),
                       onTap: () =>

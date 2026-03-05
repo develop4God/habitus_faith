@@ -821,9 +821,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get habitsTip => 'Swipe to see actions on your habits';
 
   @override
-  String get understood => 'Understood';
-
-  @override
   String get bible => 'Bible';
 
   @override
@@ -1278,4 +1275,373 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timer => 'Timer';
+
+  @override
+  String get statisticsTitle => 'Statistics';
+
+  @override
+  String get noStatisticsData => 'No statistics data available.';
+
+  @override
+  String get activeHabits => 'Active habits';
+
+  @override
+  String get successPercentage => 'Success percentage';
+
+  @override
+  String lastCompletionDate(String date) {
+    return 'Last completion: $date';
+  }
+
+  @override
+  String get habitDistribution => 'Habit distribution';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get excellentConsistency => 'Excellent consistency! Keep it up.';
+
+  @override
+  String get goodProgress => 'Good progress! Keep the rhythm.';
+
+  @override
+  String get everyDayMatters => 'Every day matters! You can improve.';
+
+  @override
+  String get myNotes => 'My Notes';
+
+  @override
+  String get editNote => 'Edit Note';
+
+  @override
+  String get newNote => 'New Note';
+
+  @override
+  String get cancelEdit => 'Cancel edit';
+
+  @override
+  String get discardNote => 'Discard note';
+
+  @override
+  String get checkboxItem => 'Checkbox';
+
+  @override
+  String get numberedItem => 'Numbered';
+
+  @override
+  String get plainText => 'Text';
+
+  @override
+  String get listItemHint => 'List item...';
+
+  @override
+  String get stepHint => 'Step...';
+
+  @override
+  String get writeNoteHint => 'Write a note...';
+
+  @override
+  String get noSavedNotes => 'No saved notes';
+
+  @override
+  String get thoughtsAppearHere => 'Your thoughts will appear here.';
+
+  @override
+  String get myGoals => 'My Goals';
+
+  @override
+  String get activeGoals => 'Active Goals';
+
+  @override
+  String get generalProgress => 'General Progress';
+
+  @override
+  String get completedLower => 'completed';
+
+  @override
+  String get noGoalsYet => 'No goals yet';
+
+  @override
+  String get defineYourGoals =>
+      'Define your spiritual or personal goals for this year, month, or week.';
+
+  @override
+  String get createFirstGoal => 'Create my first goal';
+
+  @override
+  String get editGoal => 'Edit Goal';
+
+  @override
+  String get whatToAchieve => 'What do you want to achieve?';
+
+  @override
+  String get exampleGoal => 'E.g.: Read the entire Bible';
+
+  @override
+  String get deadline => 'Deadline';
+
+  @override
+  String deadlineDate(String date) {
+    return 'Deadline: $date';
+  }
+
+  @override
+  String get selectDeadline => 'Please select a deadline';
+
+  @override
+  String get updateGoal => 'Update Goal';
+
+  @override
+  String get saveGoal => 'Save Goal';
+
+  @override
+  String get goalTypeYear => 'Yearly';
+
+  @override
+  String get goalTypeMonth => 'Monthly';
+
+  @override
+  String get goalTypeWeek => 'Weekly';
+
+  @override
+  String get goalTypeCustom => 'Custom';
+
+  @override
+  String get noScheduledNotifications => 'No scheduled notifications';
+
+  @override
+  String get notificationOn => 'On';
+
+  @override
+  String get noTime => 'No time';
+
+  @override
+  String get configureReminder => 'Configure reminder';
+
+  @override
+  String get householdSpinnerTitle => '🏠 Spin Household Tasks';
+
+  @override
+  String get anotherMoment => 'Another moment';
+
+  @override
+  String taskCompleteError(String error) {
+    return 'Error completing task: $error';
+  }
+
+  @override
+  String get addTasks => 'Add tasks';
+
+  @override
+  String get completing => 'Completing...';
+
+  @override
+  String get complete => 'Complete';
+
+  @override
+  String get comingSoon => 'COMING SOON';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get selectVersion => 'Select Version';
+
+  @override
+  String get fontSize => 'Font Size';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get cancelAction => 'Cancel';
+
+  @override
+  String get favorites => 'Favorites';
+
+  @override
+  String get noBibleVersions =>
+      'No Bible versions available for this language.';
+
+  @override
+  String bibleVersionSet(String version) {
+    return 'Bible version set to: $version';
+  }
+
+  @override
+  String get errorLoadingHabits => 'Error loading habits';
+
+  @override
+  String get spinHouseholdTasks => 'Spin household tasks';
+
+  @override
+  String get newGoal => 'New Goal';
+
+  @override
+  String get notificationTimingNone => 'No reminder';
+
+  @override
+  String get notificationTimingAtEvent => 'At event time';
+
+  @override
+  String get notificationTimingTenMin => '10 minutes before';
+
+  @override
+  String get notificationTimingThirtyMin => '30 minutes before';
+
+  @override
+  String get notificationTimingOneHour => '1 hour before';
+
+  @override
+  String get difficultyEasy => 'Easy';
+
+  @override
+  String get difficultyMedium => 'Medium';
+
+  @override
+  String get difficultyHard => 'Hard';
+
+  @override
+  String get selectTime => 'Select time';
+
+  @override
+  String get hour => 'Hour';
+
+  @override
+  String get noHouseholdTasks => 'No household tasks';
+
+  @override
+  String get myFavorites => 'My Favorites';
+
+  @override
+  String get noFavoritesYet => 'No favorites yet';
+
+  @override
+  String get noFavoritesMessage =>
+      'Tap the star icon on any devotional to save it here';
+
+  @override
+  String get exploreDevotionals => 'Explore Devotionals';
+
+  @override
+  String everyInterval(int interval, String unit) {
+    return 'Every $interval $unit';
+  }
+
+  @override
+  String get frequencyUnitDay => 'day(s)';
+
+  @override
+  String get frequencyUnitWeek => 'week(s)';
+
+  @override
+  String get frequencyUnitMonth => 'month(s)';
+
+  @override
+  String get addTasksToUseSpinner => 'Add household tasks to use the spinner';
+
+  @override
+  String get goals => 'Goals';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get newSubtaskHint => 'New subtask...';
+
+  @override
+  String get image => 'Image';
+
+  @override
+  String get removeFromFavorites => 'Remove from favorites';
+
+  @override
+  String get searchDevotionals => 'Search devotionals...';
+
+  @override
+  String languageChangedTo(String language) {
+    return 'Language changed to $language';
+  }
+
+  @override
+  String get currentLabel => 'Current';
+
+  @override
+  String get suggestedLabel => 'Suggested';
+
+  @override
+  String bibleVersionTooltip(String version) {
+    return 'Bible Version: $version';
+  }
+
+  @override
+  String get underConstruction => 'Under Construction 🚧';
+
+  @override
+  String get getReadyNextLevel => 'Get Ready for the\nNext Level';
+
+  @override
+  String get exclusiveMissionsComingSoon =>
+      'Exclusive missions and rewards coming soon...';
+
+  @override
+  String get myPets => 'My Pets';
+
+  @override
+  String get wordOfToday => 'WORD OF TODAY';
+
+  @override
+  String get exploreBibleDescription =>
+      'Explore God\'s Word with our advanced reader.';
+
+  @override
+  String get devotionalDailyDescription =>
+      'Strengthen your faith with daily reflections.';
+
+  @override
+  String get viewFullDevotional => 'View full devotional';
+
+  @override
+  String get petPreviewLocked => 'PREVIEW (LOCKED)';
+
+  @override
+  String get unlockThisFriend => 'Unlock this Friend!';
+
+  @override
+  String get petUnlockMessage =>
+      'This special companion will be available very soon. Keep up with your habits to be the first to have it!';
+
+  @override
+  String get understood => 'Got it';
+
+  @override
+  String get backgroundTheme => 'Background Theme';
+
+  @override
+  String get selectYourPet => 'Select your pet';
+
+  @override
+  String get collectAllFriends => 'Collect all your friends!';
+
+  @override
+  String get pet_Perrito => 'Puppy';
+
+  @override
+  String get pet_Gatito => 'Kitten';
+
+  @override
+  String get pet_Tigre => 'Tiger';
+
+  @override
+  String get pet_PezLeon => 'Lion Fish';
+
+  @override
+  String get pet_Leoncito => 'Little Lion';
+
+  @override
+  String get pet_Panda => 'Panda';
+
+  @override
+  String get pet_Unicornio => 'Unicorn';
 }

@@ -77,6 +77,9 @@ class DevotionalConstants {
   /// local format for favorites so migrations can be applied.
   static const int favoritesSchemaVersion = 1;
 
+  /// Timeout for fetching the devocional index — keep short to avoid blocking load
+  static const Duration indexFetchTimeout = Duration(seconds: 3);
+
   /// FEATURE FLAGS
   static const bool enableOnboardingFeature = false;
   static const bool enableBackupFeature = false;
@@ -88,6 +91,19 @@ class DevotionalConstants {
 
   static String getDiscoveryStudyFileUrl(String fileName) {
     return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/discovery/$fileName';
+  }
+
+  // ---------------------------------------------------------------------------
+  // Devocional Index (cache invalidation / sidecar versioning)
+  // ---------------------------------------------------------------------------
+
+  /// URL of the sidecar index.json used to detect stale cached devotional files.
+  ///
+  /// The index maps each `language/version/year` combination to the date the
+  /// remote JSON was last modified.  When the cached sidecar date no longer
+  /// matches the index date, the app re-fetches the JSON for that combination.
+  static String getDevocionalIndexUrl() {
+    return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/index.json';
   }
 }
 

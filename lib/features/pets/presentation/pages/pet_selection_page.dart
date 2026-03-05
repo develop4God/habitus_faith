@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../pets_provider.dart';
 
 class PetSelectionPage extends ConsumerWidget {
@@ -9,6 +10,7 @@ class PetSelectionPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final availablePets = ref.watch(availablePetsProvider);
     final selectedPet = ref.watch(selectedPetProvider);
     final previewPet = ref.watch(previewPetProvider);
@@ -84,13 +86,14 @@ class PetSelectionPage extends ConsumerWidget {
                               color: Colors.black.withValues(alpha: 0.4),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.lock, color: Colors.white, size: 16),
-                                SizedBox(width: 8),
+                                const Icon(Icons.lock,
+                                    color: Colors.white, size: 16),
+                                const SizedBox(width: 8),
                                 Text(
-                                  'VISTA PREVIA (BLOQUEADO)',
-                                  style: TextStyle(
+                                  l10n.petPreviewLocked,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -134,9 +137,9 @@ class PetSelectionPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Tema de Fondo',
-                  style: TextStyle(
+                Text(
+                  l10n.backgroundTheme,
+                  style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -197,29 +200,29 @@ class PetSelectionPage extends ConsumerWidget {
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                const SliverToBoxAdapter(
+                SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(24, 24, 24, 8),
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Selecciona tu mascota',
-                          style: TextStyle(
+                          l10n.selectYourPet,
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontSize: 26,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          '¡Colecciona todos tus amigos!',
-                          style: TextStyle(
+                          l10n.collectAllFriends,
+                          style: const TextStyle(
                             color: Colors.black54,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
@@ -320,7 +323,7 @@ class PetSelectionPage extends ConsumerWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        pet.name,
+                                        pet.getLocalizedName(l10n),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: isCurrentlySelected
@@ -387,6 +390,7 @@ class PetSelectionPage extends ConsumerWidget {
   }
 
   void _showLockedDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -436,7 +440,7 @@ class PetSelectionPage extends ConsumerWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            '¡Desbloquea este Amigo!',
+                            l10n.unlockThisFriend,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 22,
@@ -449,7 +453,7 @@ class PetSelectionPage extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Este compañero especial estará disponible muy pronto. ¡Sigue con tus hábitos para ser el primero en tenerlo!',
+                      l10n.petUnlockMessage,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
@@ -471,9 +475,9 @@ class PetSelectionPage extends ConsumerWidget {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Entendido',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.understood,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1,

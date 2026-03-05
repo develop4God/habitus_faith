@@ -187,7 +187,7 @@ Then in your CI/CD pipeline:
 
 - [Firebase Setup Guide](./FIREBASE_SETUP_GUIDE.md) - Detailed setup instructions
 - [Firebase Security Setup](./FIREBASE_SECURITY_SETUP.md) - Security configuration
-- [Technical Due Diligence](../TECHNICAL_DUE_DILIGENCE.md) - Full technical review
+- [Technical Due Diligence](TECHNICAL_DUE_DILIGENCE.md) - Full technical review
 
 ---
 

@@ -649,6 +649,30 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
     }
   }
 
+  String _difficultyLabel(HabitDifficulty diff) {
+    final l10n = widget.l10n;
+    switch (diff) {
+      case HabitDifficulty.easy:
+        return l10n.difficultyEasy;
+      case HabitDifficulty.medium:
+        return l10n.difficultyMedium;
+      case HabitDifficulty.hard:
+        return l10n.difficultyHard;
+    }
+  }
+
+  String _recurrenceFrequencyLabel(RecurrenceFrequency freq) {
+    final l10n = widget.l10n;
+    switch (freq) {
+      case RecurrenceFrequency.daily:
+        return l10n.daily;
+      case RecurrenceFrequency.weekly:
+        return l10n.weekly;
+      case RecurrenceFrequency.monthly:
+        return l10n.monthly;
+    }
+  }
+
   Widget _buildDifficultyOption(HabitDifficulty d) {
     final isSelected = selectedDifficulty == d;
     final color = HabitColors.categoryColors[selectedCategory]!;
@@ -680,7 +704,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
                 ),
               ),
             ),
-            Text(d.displayName, style: const TextStyle(fontSize: 10)),
+            Text(_difficultyLabel(d), style: const TextStyle(fontSize: 10)),
           ],
         ),
       ),
@@ -695,7 +719,7 @@ class _AddHabitDialogState extends ConsumerState<AddHabitDialog>
         title: Text(widget.l10n.repetition),
         subtitle: Text(
           recurrence?.enabled == true
-              ? recurrence!.frequency.displayName
+              ? _recurrenceFrequencyLabel(recurrence!.frequency)
               : widget.l10n.noRepetition,
         ),
         onTap: () async {

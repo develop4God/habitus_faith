@@ -78,6 +78,7 @@ class HabitModel {
               orElse: () => HabitDifficulty.medium,
             )
           : HabitDifficulty.medium,
+      isPinned: data['isPinned'] as bool? ?? false,
       // TCC/Nudge fields with backward-compatible defaults
       difficultyLevel: data['difficultyLevel'] as int? ?? 3,
       targetMinutes: data['targetMinutes'] as int? ?? 20, // Matches level 3
@@ -147,6 +148,7 @@ class HabitModel {
       'isArchived': habit.isArchived,
       'colorValue': habit.colorValue,
       'difficulty': habit.difficulty.name,
+      'isPinned': habit.isPinned,
       // TCC/Nudge fields
       'difficultyLevel': habit.difficultyLevel,
       'targetMinutes': habit.targetMinutes,
@@ -218,6 +220,7 @@ class HabitModel {
               orElse: () => HabitDifficulty.medium,
             )
           : HabitDifficulty.medium,
+      isPinned: data['isPinned'] as bool? ?? false,
       difficultyLevel: data['difficultyLevel'] as int? ?? 3,
       targetMinutes: data['targetMinutes'] as int? ?? 20,
       successRate7d: (data['successRate7d'] as num?)?.toDouble() ?? 0.0,
@@ -285,6 +288,7 @@ class HabitModel {
       'isArchived': habit.isArchived,
       'colorValue': habit.colorValue,
       'difficulty': habit.difficulty.name,
+      'isPinned': habit.isPinned,
       // TCC/Nudge fields
       'difficultyLevel': habit.difficultyLevel,
       'targetMinutes': habit.targetMinutes,

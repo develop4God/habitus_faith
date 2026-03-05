@@ -376,7 +376,7 @@ class JsonHabitsRepository implements HabitsRepository {
       // If the habit was skipped or failed, completing it overrides that state
       final updatedHabit = _loadHabitWithCompletions(habit);
       debugPrint(
-        'completeHabitWithNote: estado completedToday después: \\${updatedHabit.completedToday}',
+        'completeHabitWithNote: estado completedToday después: ${updatedHabit.completedToday}',
       );
       habits[index] = updatedHabit;
       debugPrint('✅ completeHabitWithNote: hábito actualizado en la lista');
@@ -521,6 +521,7 @@ class JsonHabitsRepository implements HabitsRepository {
     HabitNotificationSettings? notificationSettings,
     HabitRecurrence? recurrence,
     List<Subtask>? subtasks,
+    bool? isPinned,
   }) async {
     try {
       final habits = _loadHabits();
@@ -542,6 +543,7 @@ class JsonHabitsRepository implements HabitsRepository {
         notificationSettings: notificationSettings,
         recurrence: recurrence,
         subtasks: subtasks,
+        isPinned: isPinned,
       );
       habits[index] = updatedHabit;
       debugPrint('JsonHabitsRepository.updateHabit: Updated habit "$habitId"');
@@ -654,7 +656,7 @@ class JsonHabitsRepository implements HabitsRepository {
       }
 
       final habit = habits[index];
-      final updatedHabit = habit.skipToday();
+      final updatedHabit = habit.skipToday(clock: _clock);
 
       habits[index] = updatedHabit;
       await _saveHabits(habits);
@@ -705,7 +707,7 @@ class JsonHabitsRepository implements HabitsRepository {
       }
 
       final habit = habits[index];
-      final updatedHabit = habit.failToday();
+      final updatedHabit = habit.failToday(clock: _clock);
 
       habits[index] = updatedHabit;
       await _saveHabits(habits);

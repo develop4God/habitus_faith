@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/devotional_providers.dart';
 import '../core/models/devocional_model.dart';
+import '../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Favorites Page - Shows all favorited devotionals
@@ -15,15 +16,16 @@ class FavoritesPage extends ConsumerWidget {
     final state = ref.watch(devotionalProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.star, color: Colors.amber, size: 24),
-            SizedBox(width: 8),
-            Text('My Favorites'),
+            const Icon(Icons.star, color: Colors.amber, size: 24),
+            const SizedBox(width: 8),
+            Text(l10n.myFavorites),
           ],
         ),
         elevation: 0,
@@ -40,14 +42,14 @@ class FavoritesPage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'No favorites yet',
+                    l10n.noFavoritesYet,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: isDark ? Colors.grey[600] : Colors.grey[500],
                         ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Tap the star icon on any devotional to save it here',
+                    l10n.noFavoritesMessage,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: isDark ? Colors.grey[700] : Colors.grey[400],
@@ -57,7 +59,7 @@ class FavoritesPage extends ConsumerWidget {
                   ElevatedButton.icon(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.explore),
-                    label: const Text('Explore Devotionals'),
+                    label: Text(l10n.exploreDevotionals),
                   ),
                 ],
               ),
@@ -167,7 +169,8 @@ class _FavoriteCard extends ConsumerWidget {
                               .read(devotionalProvider.notifier)
                               .toggleFavorite(devocional);
                         },
-                        tooltip: 'Remove from favorites',
+                        tooltip:
+                            AppLocalizations.of(context)!.removeFromFavorites,
                       ),
                     ],
                   ),

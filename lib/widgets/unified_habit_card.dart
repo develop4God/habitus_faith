@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/services.dart';
 import '../features/habits/domain/habit.dart';
 import '../features/habits/domain/models/habit_notification.dart';
 import '../features/habits/presentation/constants/habit_colors.dart';
@@ -324,6 +325,11 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                             children: [
                               Row(
                                 children: [
+                                  if (habit.isPinned) ...[
+                                    Icon(Icons.push_pin_rounded,
+                                        size: 14, color: habitColor),
+                                    const SizedBox(width: 4),
+                                  ],
                                   Expanded(
                                     child: Text(
                                       widget.habit.name,
@@ -361,25 +367,28 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                                 children: [
                                   Icon(
                                     Icons.local_fire_department,
-                                    size: 14,
+                                    size: 16,
                                     color: widget.habit.currentStreak > 0
                                         ? Colors.orange.shade600
                                         : Colors.grey.shade400,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    l10n.dayStreak(widget.habit.currentStreak),
+                                    '${widget.habit.currentStreak}',
                                     style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey.shade600,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: widget.habit.currentStreak > 0
+                                          ? Colors.orange.shade700
+                                          : Colors.grey.shade600,
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: 12),
                                   AbandonmentRiskIndicator(
                                     risk: habit.abandonmentRisk,
                                   ),
                                   if (habit.subtasks.isNotEmpty) ...[
-                                    const SizedBox(width: 8),
+                                    const SizedBox(width: 12),
                                     InkWell(
                                       onTap: () {
                                         setState(
@@ -561,8 +570,29 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          constraints: const BoxConstraints(),
-          padding: const EdgeInsets.all(8),
+          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+          padding: const EdgeInsets.all(2),
+          icon: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, anim) =>
+                RotationTransition(turns: anim, child: child),
+            child: Icon(
+              habit.isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
+              key: ValueKey('pin_${habit.isPinned}'),
+              size: 20,
+              color: habit.isPinned ? habitColor : Colors.grey,
+            ),
+          ),
+          onPressed: () {
+            HapticFeedback.mediumImpact();
+            ref
+                .read(habitsNotifierProvider.notifier)
+                .togglePinHabit(habit.id, !habit.isPinned);
+          },
+        ),
+        IconButton(
+          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+          padding: const EdgeInsets.all(2),
           icon: Icon(
             habit.hasActiveNotification
                 ? Icons.notifications_active
@@ -576,14 +606,14 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
           onTap: _isCompleting ? null : _handleComplete,
           borderRadius: BorderRadius.circular(8),
           child: Container(
-            width: 36,
-            height: 36,
+            width: 32,
+            height: 32,
             padding: const EdgeInsets.all(2),
             child: _isCompleting
                 ? Center(
                     child: SizedBox(
-                      width: 20,
-                      height: 20,
+                      width: 18,
+                      height: 18,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(habitColor),
@@ -591,10 +621,12 @@ class _UnifiedHabitCardState extends ConsumerState<UnifiedHabitCard>
                     ),
                   )
                 : Transform.scale(
-                    scale: 1.1,
+                    scale: 1.0,
                     child: Checkbox(
                       value: isCompleted,
                       onChanged: (_) => _handleComplete(),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
