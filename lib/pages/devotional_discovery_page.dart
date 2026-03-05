@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../providers/devotional_providers.dart';
 import '../core/models/devocional_model.dart';
 import '../core/services/images/image_providers.dart';
@@ -38,21 +39,13 @@ class _DevotionalDiscoveryPageState
     super.dispose();
   }
 
-  void _openDevotionalReader(Devocional devocional) {
-    final imageAsync = ref.read(dailyDevotionalImageProvider);
-    final imageUrl = imageAsync.asData?.value;
-
-    final now = DateTime.now();
-    final isToday = devocional.date.year == now.year &&
-        devocional.date.month == now.month &&
-        devocional.date.day == now.day;
-
+  void _openDevotionalReader(Devocional devocional, [String? imageUrl]) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DevotionalReaderPage(
           devocional: devocional,
-          imageUrl: isToday ? imageUrl : null,
+          imageUrl: imageUrl,
         ),
       ),
     );
@@ -61,87 +54,185 @@ class _DevotionalDiscoveryPageState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(devotionalProvider);
+    final imageAsync = ref.watch(dailyDevotionalImageProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
+    final today = DateTime.now();
+    final featuredDevotional = state.all.firstWhere(
+      (d) =>
+          d.date.year == today.year &&
+          d.date.month == today.month &&
+          d.date.day == today.day,
+      orElse: () => state.all.isNotEmpty
+          ? state.all.first
+          : Devocional(
+              id: 'fallback',
+              versiculo:
+                  'Salmos 119:105 "Lámpara es a mis pies tu palabra, y lumbrera a mi camino."',
+              reflexion: '',
+              paraMeditar: [],
+              oracion: '',
+              date: today,
+            ),
+    );
+
+    final imageUrl = imageAsync.asData?.value;
+
     return Scaffold(
       backgroundColor: isDark ? Colors.black : Colors.grey[50],
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          l10n.devotional_reading,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: isDark ? Colors.white : Colors.black87,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.menu_book,
-              color: isDark ? Colors.white : Colors.black87,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 340,
+            pinned: true,
+            stretch: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                shadows: [
+                  Shadow(color: Colors.black45, blurRadius: 8),
+                ],
+              ),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            tooltip: l10n.bibleVersionTooltip(state.selectedVersion),
-            onPressed: () => _showVersionSelector(context),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.star_border,
-              color: isDark ? Colors.white : Colors.black87,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const FavoritesPage()),
-              );
-            },
-            tooltip: l10n.favorites,
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Hero header
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: isDark
-                    ? [Colors.deepPurple[900]!, Colors.purple[800]!]
-                    : [colorScheme.primary, colorScheme.secondary],
+            title: Text(
+              l10n.devotional_reading,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: 18,
+                shadows: [Shadow(color: Colors.black45, blurRadius: 10)],
               ),
             ),
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 60, 24, 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.menu_book, color: Colors.white),
+                tooltip: l10n.bibleVersionTooltip(state.selectedVersion),
+                onPressed: () => _showVersionSelector(context),
+              ),
+              IconButton(
+                icon: const Icon(Icons.star_border, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FavoritesPage()),
+                  );
+                },
+                tooltip: l10n.favorites,
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: const [
+                StretchMode.zoomBackground,
+                StretchMode.blurBackground,
+              ],
+              background: GestureDetector(
+                onTap: () => _openDevotionalReader(featuredDevotional, imageUrl),
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Text(
-                      l10n.todayLabel,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    if (imageUrl != null)
+                      Hero(
+                        tag: 'discovery_hero_image',
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              Container(color: Colors.blue.shade900),
+                        ),
+                      )
+                    else
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: isDark
+                                ? [Colors.deepPurple[900]!, Colors.purple[800]!]
+                                : [colorScheme.primary, colorScheme.secondary],
+                          ),
+                        ),
+                      ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.1),
+                            Colors.black.withValues(alpha: 0.7),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      DateFormat(
-                        'EEEE, MMMM d',
-                        Localizations.localeOf(context).toString(),
-                      ).format(DateTime.now()),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.1)),
+                            ),
+                            child: Text(
+                              DateFormat('EEEE, MMMM d',
+                                      Localizations.localeOf(context).toString())
+                                  .format(DateTime.now())
+                                  .toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          AutoSizeText(
+                            featuredDevotional.versiculo,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic,
+                              height: 1.3,
+                              fontFamily: 'Georgia',
+                            ),
+                            maxLines: 4,
+                            minFontSize: 16,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              const Icon(Icons.auto_awesome,
+                                  size: 14, color: Colors.amber),
+                              const SizedBox(width: 8),
+                              Text(
+                                l10n.readVerseFirst,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -151,62 +242,65 @@ class _DevotionalDiscoveryPageState
           ),
 
           // Search bar
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: isDark ? Colors.grey[900] : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: l10n.searchDevotionals,
-                  hintStyle: TextStyle(
-                    color: isDark ? Colors.grey[600] : Colors.grey[400],
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: isDark ? Colors.grey[600] : Colors.grey[400],
-                  ),
-                  suffixIcon: _searchTerm.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() => _searchTerm = '');
-                            ref
-                                .read(devotionalProvider.notifier)
-                                .filterBySearch('');
-                          },
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? Colors.grey[900] : Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                onChanged: (value) {
-                  setState(() => _searchTerm = value);
-                  ref.read(devotionalProvider.notifier).filterBySearch(value);
-                },
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: l10n.searchDevotionals,
+                    hintStyle: TextStyle(
+                      color: isDark ? Colors.grey[600] : Colors.grey[400],
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: isDark ? Colors.grey[600] : Colors.grey[400],
+                    ),
+                    suffixIcon: _searchTerm.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchTerm = '');
+                              ref
+                                  .read(devotionalProvider.notifier)
+                                  .filterBySearch('');
+                            },
+                          )
+                        : null,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() => _searchTerm = value);
+                    ref.read(devotionalProvider.notifier).filterBySearch(value);
+                  },
+                ),
               ),
             ),
           ),
 
           if (state.isLoading)
-            const Expanded(child: Center(child: CircularProgressIndicator())),
-
-          if (state.errorMessage != null && !state.isLoading)
-            Expanded(
+            const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (state.errorMessage != null)
+            SliverFillRemaining(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -232,41 +326,44 @@ class _DevotionalDiscoveryPageState
                   ],
                 ),
               ),
-            ),
-
-          if (!state.isLoading && state.errorMessage == null)
-            Expanded(
-              child: state.filtered.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.book_outlined,
-                            size: 64,
-                            color: colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No devotionals found',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: state.filtered.length,
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      itemBuilder: (context, index) {
-                        final devocional = state.filtered[index];
-                        return _buildDevocionalCard(
-                          context,
-                          devocional,
-                          colorScheme,
-                          l10n,
-                        );
-                      },
+            )
+          else if (state.filtered.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.book_outlined,
+                      size: 64,
+                      color: colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No devotionals found',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final devocional = state.filtered[index];
+                    return _buildDevocionalCard(
+                      context,
+                      devocional,
+                      colorScheme,
+                      l10n,
+                    );
+                  },
+                  childCount: state.filtered.length,
+                ),
+              ),
             ),
         ],
       ),
