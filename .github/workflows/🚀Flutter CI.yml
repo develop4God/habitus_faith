@@ -8,7 +8,7 @@ on:
         required: false
         default: ''
       auto_format:
-        description: 'Auto-format code if needed'
+        description: 'Auto-format code if needed (manual runs only)'
         required: false
         default: true
         type: boolean
@@ -16,7 +16,7 @@ on:
   push:
     branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "copilot/**" ]
 
 jobs:
   analyze:
@@ -40,32 +40,31 @@ jobs:
       - name: 🔧 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.38.5'   # pinned — update intentionally when upgrading SDK
           channel: stable
           cache: true
 
       - name: 📦 Get dependencies
-        run: flutter pub get --enforce-lockfile 
+        run: flutter pub get --enforce-lockfile
 
       - name: "🔑 Create .env file from secret"
         run: |
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
         shell: bash
 
-      - name: 🎨 Check and auto-format code
+      - name: 🎨 Check formatting
         run: |
           echo "🎨 Checking Dart code formatting..."
           if ! dart format --set-exit-if-changed . 2>/dev/null; then
             echo "📝 Formatting issues detected!"
-            # Auto-format logic: enabled for push/pull_request, or if manual run and input is true
-            if [ "${{ github.event.inputs.auto_format }}" = "true" ] || [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-              echo "🔧 Auto-formatting enabled. Applying fixes..."
+            if [ "${{ github.event_name }}" = "push" ] || \
+               ([ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.auto_format }}" = "true" ]); then
+              echo "🔧 Auto-formatting enabled on push. Applying fixes..."
               dart format .
               git config --local user.email "action@github.com"
               git config --local user.name "GitHub Action [bot]"
 
-              if [ "${{ github.event_name }}" = "pull_request" ]; then
-                BRANCH="${{ github.head_ref }}"
-              elif [ -n "${{ github.event.inputs.target_branch }}" ]; then
+              if [ -n "${{ github.event.inputs.target_branch }}" ]; then
                 BRANCH="${{ github.event.inputs.target_branch }}"
               else
                 BRANCH="${{ github.ref_name }}"
@@ -77,43 +76,53 @@ jobs:
                 git push origin "$BRANCH"
               fi
             else
-              echo "❌ Auto-formatting is disabled. Please format manually:"
+              echo "❌ Formatting errors — please run 'dart format .' locally before pushing."
               dart format --dry-run .
               exit 1
             fi
           else
-            echo "✅ All files are already properly formatted!"
+            echo "✅ All files are properly formatted."
           fi
 
-      - name: 🛠️ Remove unused imports (dart fix)
+      - name: 🛠️ Check dart fix (dry-run — no auto-commit)
         run: |
-          echo "🛠️ Eliminando imports no usados y aplicando fixes automáticos..."
-          dart fix --apply
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action [bot]"
-
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BRANCH="${{ github.head_ref }}"
-          elif [ -n "${{ github.event.inputs.target_branch }}" ]; then
-            BRANCH="${{ github.event.inputs.target_branch }}"
+          echo "🛠️ Checking for pending dart fixes..."
+          dart fix --dry-run
+          # Count pending fixes — fail if any exist so the author fixes locally
+          PENDING=$(dart fix --dry-run 2>&1 | grep -c "^  " || true)
+          if [ "$PENDING" -gt "0" ]; then
+            echo "❌ $PENDING pending dart fix(es) found. Run 'dart fix --apply' locally and commit."
+            exit 1
           else
-            BRANCH="${{ github.ref_name }}"
-          fi
-
-          if ! git diff --quiet; then
-            git add .
-            git commit -m "🛠️ Remove unused imports and auto-fix code [skip ci]"
-            git push origin "$BRANCH"
+            echo "✅ No pending dart fixes."
           fi
 
       - name: 🔍 Analyze code
         run: flutter analyze --fatal-infos
 
-      - name: 📚 Check Dartdoc
-        run: dart doc --validate-links
-
       - name: 📋 Check pub.dev score
         run: dart pub deps
+
+  docs:
+    name: 📚 Dartdoc (main only)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.5'
+          channel: stable
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: 📚 Validate Dartdoc links
+        run: dart doc --validate-links
 
   test:
     name: 🧪 Testing
@@ -131,20 +140,17 @@ jobs:
       - name: 🔧 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.38.5'   # pinned — matches analyze job
           channel: stable
-          cache: true
+          cache: true                  # flutter-action handles pub cache — no manual cache step needed
 
       - name: 📦 Get dependencies
         run: flutter pub get --enforce-lockfile
 
-      - name: 📦 Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            **/pubspec.lock
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: ${{ runner.os }}-pub-
+      - name: "🔑 Create .env file from secret"
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+        shell: bash
 
       - name: 🧪 Run unit tests (expanded)
         run: |
@@ -202,26 +208,15 @@ jobs:
                 default: return '🔄';
               }
             };
-            // For push/pull_request, auto-format is always enabled; for manual runs, use the input
-            const autoFormatEnabled = (
-              '${{ github.event.inputs.auto_format }}' === 'true' ||
-              '${{ github.event_name }}' === 'push' ||
-              '${{ github.event_name }}' === 'pull_request'
-            );
-            const formatNote = autoFormatEnabled ? '🎨 Auto-format: Enabled' : '⚠️ Auto-format: Disabled';
             const comment = `## 🎉 CI Results for PR #${{ github.event.number }}
 
             ${getStatusEmoji(analyzeStatus)} **Static Analysis**: ${analyzeStatus}
             ${getStatusEmoji(testStatus)} **Tests**: ${testStatus}
 
-            ${formatNote}
-
-            ### ${analyzeStatus === 'success' && testStatus === 'success' ? '🚀 Ready to merge!' : '⚠️ Issues found - check the logs'}
-
-            ${analyzeStatus === 'failure' && !autoFormatEnabled ? '\n💡 **Tip**: Enable auto-format when running the workflow to automatically fix formatting issues!' : ''}
+            ### ${analyzeStatus === 'success' && testStatus === 'success' ? '🚀 Ready to merge!' : '⚠️ Issues found — check the logs'}
 
             ---
-            *Generated by GitHub Actions*`;
+            *Generated by GitHub Actions • Flutter 3.38.5*`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -237,7 +232,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🔍 Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0   # pinned — do not use @master
         with:
           scan-type: 'fs'
           scan-ref: '.'
