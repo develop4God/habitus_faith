@@ -98,6 +98,32 @@ get_terminal_output(id)
 - [ ] Never pipe `|` inside grep patterns inside shell strings without escaping
 - [ ] Run `errors.sh` before and after any `lib/` change
 - [ ] Run `tests.sh <file>` on 1-2 targeted files, NOT the full suite
+- [ ] Read `SOLID_REVIEW_PRINCIPLES.md` before any architectural change
+
+---
+
+## 🔍 Mandatory SOLID Review Gate (before every delivery)
+
+Before presenting **any code change** to the user, Copilot must:
+
+1. Run `bash errors.sh` (background + poll) — must exit `EXIT=0`
+2. Invoke the `solid-reviewer` agent via `run_subagent` with the list of changed files
+3. Wait for `DELIVERY: ✅ APPROVED` in the review report
+4. Fix all 🔴 BLOCK issues if returned, then re-run the agent
+5. Only after approval: present the changes to the user
+
+### Invoking the SOLID reviewer
+
+```
+run_subagent(
+  agentName: "solid-reviewer",
+  task: "Review the following changed files for SOLID compliance and Flutter best
+         practices: [list of files]. Project root: /home/develop4god/projects/habitus_faith"
+)
+```
+
+> 📄 Full SOLID rulebook: `SOLID_REVIEW_PRINCIPLES.md`
+> 🤖 Agent definition:    `.github/agents/solid-reviewer.agent.md`
 
 ---
 
