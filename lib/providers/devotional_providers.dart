@@ -65,6 +65,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
   final DevocionalIndexService _indexService;
   final CacheMetadataService _cacheService;
   final http.Client _httpClient;
+  bool _disposed = false;
 
   /// Full index map from last successful fetch — null when unreachable.
   Map<String, dynamic>? _cachedIndex;
@@ -73,11 +74,18 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
     DevocionalIndexService? indexService,
     CacheMetadataService? cacheService,
     http.Client? httpClient,
-  })  : _indexService =
-            indexService ?? DevocionalIndexService(http.Client()),
+  })  : _httpClient = httpClient ?? http.Client(),
         _cacheService = cacheService ?? CacheMetadataService(),
-        _httpClient = httpClient ?? http.Client(),
+        _indexService = indexService ??
+            DevocionalIndexService(httpClient ?? http.Client()),
         super(_initialState());
+
+  @override
+  void dispose() {
+    if (_disposed) return;
+    _disposed = true;
+    super.dispose();
+  }
 
   static DevotionalState _initialState() {
     return const DevotionalState(
@@ -140,6 +148,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       }
 
       // Update state with language and version
+      if (_disposed) return;
       state = state.copyWith(
         selectedLanguage: selectedLanguage,
         selectedVersion: selectedVersion,
@@ -152,6 +161,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       await _fetchDevocionalesForLanguage();
     } catch (e) {
       debugPrint('Error in initialize: $e');
+      if (_disposed) return;
       state = state.copyWith(
         errorMessage: 'Error al inicializar los datos: $e',
         isLoading: false,
@@ -189,6 +199,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
   /// Fetch devotionals — sidecar-aware: checks index.json for staleness,
   /// loads from local file when fresh, re-fetches from API when stale.
   Future<void> _fetchDevocionalesForLanguage() async {
+    if (_disposed) return;
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
@@ -197,6 +208,7 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
       // ── Step 1: Fetch the index — before any cache decisions ──────────────
       // If unreachable, fall back to local file without staleness check.
       _cachedIndex = await _indexService.fetchIndex();
+      if (_disposed) return;
       final bool indexUnreachable = (_cachedIndex == null);
 
       // ── Step 2: Decide whether to use cached file or re-fetch from API ───
@@ -241,7 +253,9 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         final Map<String, dynamic>? localData = await _loadFromLocalStorage(
             currentYear, state.selectedLanguage, state.selectedVersion);
         if (localData != null) {
+          if (_disposed) return;
           await _processDevocionalData(localData);
+          if (_disposed) return;
           state = state.copyWith(isOfflineMode: indexUnreachable);
           return;
         }
@@ -279,9 +293,11 @@ class DevotionalNotifier extends StateNotifier<DevotionalState> {
         throw Exception('Failed to load from API: ${response.statusCode}');
       }
 
+      if (_disposed) return;
       state = state.copyWith(isOfflineMode: indexUnreachable);
     } catch (e) {
       debugPrint('Error fetching devotionals: $e');
+      if (_disposed) return;
       state = state.copyWith(
         errorMessage: 'Error al cargar los devocionales: $e',
         isLoading: false,
