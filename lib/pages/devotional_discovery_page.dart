@@ -178,15 +178,15 @@ class _DevotionalDiscoveryPageState
                   ),
                   suffixIcon: _searchTerm.isNotEmpty
                       ? IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _searchController.clear();
-                      setState(() => _searchTerm = '');
-                      ref
-                          .read(devotionalProvider.notifier)
-                          .filterBySearch('');
-                    },
-                  )
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() => _searchTerm = '');
+                            ref
+                                .read(devotionalProvider.notifier)
+                                .filterBySearch('');
+                          },
+                        )
                       : null,
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -238,35 +238,35 @@ class _DevotionalDiscoveryPageState
             Expanded(
               child: state.filtered.isEmpty
                   ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.book_outlined,
-                      size: 64,
-                      color: colorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No devotionals found',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                ),
-              )
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.book_outlined,
+                            size: 64,
+                            color: colorScheme.onSurface.withValues(alpha: 0.5),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No devotionals found',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                    )
                   : ListView.builder(
-                itemCount: state.filtered.length,
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                itemBuilder: (context, index) {
-                  final devocional = state.filtered[index];
-                  return _buildDevocionalCard(
-                    context,
-                    devocional,
-                    colorScheme,
-                    l10n,
-                  );
-                },
-              ),
+                      itemCount: state.filtered.length,
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      itemBuilder: (context, index) {
+                        final devocional = state.filtered[index];
+                        return _buildDevocionalCard(
+                          context,
+                          devocional,
+                          colorScheme,
+                          l10n,
+                        );
+                      },
+                    ),
             ),
         ],
       ),
@@ -274,13 +274,13 @@ class _DevotionalDiscoveryPageState
   }
 
   Widget _buildDevocionalCard(
-      BuildContext context,
-      Devocional devocional,
-      ColorScheme colorScheme,
-      AppLocalizations l10n,
-      ) {
+    BuildContext context,
+    Devocional devocional,
+    ColorScheme colorScheme,
+    AppLocalizations l10n,
+  ) {
     final isFavorite =
-    ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
+        ref.read(devotionalProvider.notifier).isFavorite(devocional.id);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final displayDate = _getDisplayDate(devocional);
 
@@ -426,8 +426,8 @@ class _DevotionalDiscoveryPageState
                                 color: isDark
                                     ? Colors.grey[800]
                                     : colorScheme.primaryContainer.withValues(
-                                  alpha: 0.3,
-                                ),
+                                        alpha: 0.3,
+                                      ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -523,13 +523,13 @@ class _DevotionalDiscoveryPageState
                   child: Text(
                     'Select Bible Version',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const Divider(),
                 ...available.map(
-                      (version) =>
+                  (version) =>
                       _buildVersionOption(context, version, version == current),
                 ),
                 const SizedBox(height: 12),
@@ -542,10 +542,10 @@ class _DevotionalDiscoveryPageState
   }
 
   Widget _buildVersionOption(
-      BuildContext context,
-      String versionCode,
-      bool selected,
-      ) {
+    BuildContext context,
+    String versionCode,
+    bool selected,
+  ) {
     return ListTile(
       title: Text(versionCode),
       trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,

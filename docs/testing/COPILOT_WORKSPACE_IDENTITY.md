@@ -145,7 +145,7 @@ test/unit/
   pages/                                  ← page widget tests
 
 .github/copilot-instructions.md          ← coding standards (read each session)
-docs/COPILOT_WORKSPACE_IDENTITY.md       ← THIS FILE (read each session)
+docs/testing/COPILOT_WORKSPACE_IDENTITY.md       ← THIS FILE (read each session)
 errors.sh                                ← analyze script (fixed pipe syntax)
 tests.sh                                 ← targeted test runner (accepts file arg)
 analyze_report.txt                       ← last analyze output (auto-updated)

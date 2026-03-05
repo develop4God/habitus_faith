@@ -31,8 +31,7 @@ class _BibleReaderPageState extends ConsumerState<BibleReaderPage> {
     super.initState();
     // Initialize Bible reader with current app language
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final languageCode =
-          ref.read(appLanguageProvider).languageCode;
+      final languageCode = ref.read(appLanguageProvider).languageCode;
       ref.read(bibleReaderProvider.notifier).initialize(languageCode);
     });
   }
