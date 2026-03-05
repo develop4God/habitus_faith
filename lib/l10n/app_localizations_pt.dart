@@ -825,9 +825,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get habitsTip => 'Deslize para ver opções de hábitos';
 
   @override
-  String get understood => 'Entendi';
-
-  @override
   String get bible => 'Bíblia';
 
   @override
@@ -1611,4 +1608,26 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get viewFullDevotional => 'Ver devocional completo';
+
+  @override
+  String get petPreviewLocked => 'VISUALIZAÇÃO (BLOQUEADO)';
+
+  @override
+  String get unlockThisFriend => 'Desbloqueie este Amigo!';
+
+  @override
+  String get petUnlockMessage =>
+      'Este companheiro especial estará disponível muito em breve. Continue com seus hábitos para ser o primeiro a tê-lo!';
+
+  @override
+  String get understood => 'Entendi';
+
+  @override
+  String get backgroundTheme => 'Tema de Fundo';
+
+  @override
+  String get selectYourPet => 'Selecione seu animal de estimação';
+
+  @override
+  String get collectAllFriends => 'Colete todos os seus amigos!';
 }

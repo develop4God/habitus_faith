@@ -771,9 +771,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get habitsTip => '滑动查看习惯操作';
 
   @override
-  String get understood => '明白了';
-
-  @override
   String get bible => '圣经';
 
   @override
@@ -1534,4 +1531,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get viewFullDevotional => '查看完整灵修';
+
+  @override
+  String get petPreviewLocked => '预览 (已锁定)';
+
+  @override
+  String get unlockThisFriend => '解锁这个朋友!';
+
+  @override
+  String get petUnlockMessage => '这个特殊的伙伴很快就会推出。坚持你的习惯，成为第一个拥有它的人!';
+
+  @override
+  String get understood => '了解';
+
+  @override
+  String get backgroundTheme => '背景主题';
+
+  @override
+  String get selectYourPet => '选择您的宠物';
+
+  @override
+  String get collectAllFriends => '收集你所有的朋友!';
 }

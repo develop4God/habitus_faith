@@ -13,8 +13,18 @@ const languageNames = {
   'zh': 'Chinese (中文)',
 };
 
-/// Utility to validate and complete translations between the reference file app_en.arb and any language file
-/// Usage: dart run lib/utils/arb_validator.dart [lang]
+/// Utility to validate and complete translations between the reference file
+/// app_en.arb and any language file.
+///
+/// Validates:
+///   ✅ Forward: keys in reference missing from target (auto-inserts as PENDING)
+///   ✅ Reverse: keys in target not in reference (orphan/ghost keys)
+///   ✅ @@locale value matches the language being processed
+///   ✅ Duplicate keys in the raw file (JSON parse silently drops them)
+///   ✅ Completion % calculated before PENDING insertion (accurate metric)
+///   ✅ File only written when changes exist (no spurious git diffs)
+///
+/// Usage: dart run lib/utils/arb_validator.dart [lang1 lang2 ...]
 void main(List<String> args) async {
   stdout.writeln(
     '╔═══════════════════════════════════════════════════════════════╗',
@@ -42,7 +52,8 @@ void main(List<String> args) async {
     exit(1);
   }
 
-  final referenceJson = json.decode(await referenceFile.readAsString());
+  final referenceJson =
+      json.decode(await referenceFile.readAsString()) as Map<String, dynamic>;
   final totalReferenceKeys = referenceJson.keys
       .where((key) => !key.startsWith('@') && key != '@@locale')
       .length;
@@ -63,29 +74,33 @@ void main(List<String> args) async {
       continue;
     }
 
-    final targetJson = json.decode(await targetFile.readAsString());
+    final rawContent = await targetFile.readAsString();
+
+    // ── FIX #6: Detect duplicate keys before JSON parse silently drops them ──
+    final duplicateKeys = _findDuplicateKeys(rawContent);
+
+    final targetJson = json.decode(rawContent) as Map<String, dynamic>;
 
     final missingContentKeys = <String>[];
     final missingMetadataKeys = <String>[];
     final pendingKeys = <String>[];
+    final orphanKeys = <String>[]; // FIX #2: reverse validation
     int addedContentKeys = 0;
 
-    /// Inserta claves faltantes en el JSON destino, usando el valor 'PENDING' por defecto
-    void insertMissingKeys(Map reference, Map target) {
-      reference.forEach((key, value) {
-        if (!target.containsKey(key)) {
-          target[key] = value is Map ? {'description': 'PENDING'} : 'PENDING';
+    // ── FIX #5: Validate @@locale matches the language being processed ────────
+    final declaredLocale = targetJson['@@locale'] as String?;
+    final localeMismatch = declaredLocale != null && declaredLocale != lang;
 
-          if (key != '@@locale' && !key.startsWith('@')) {
-            addedContentKeys++;
-          }
-        } else if (value is Map && target[key] is Map) {
-          insertMissingKeys(value, target[key]);
-        }
-      });
-    }
+    // ── FIX #1: Calculate real completion BEFORE inserting PENDING keys ───────
+    final originalContentKeys = targetJson.keys
+        .where((key) => !key.startsWith('@') && key != '@@locale')
+        .length;
+    final completionPercentage =
+        ((originalContentKeys / totalReferenceKeys) * 100).toStringAsFixed(1);
 
-    void compareKeys(Map reference, Map target) {
+    // ── Forward validation: reference → target ────────────────────────────────
+    void compareKeys(
+        Map<String, dynamic> reference, Map<String, dynamic> target) {
       reference.forEach((key, value) {
         if (!target.containsKey(key)) {
           if (key.startsWith('@')) {
@@ -94,7 +109,6 @@ void main(List<String> args) async {
             missingContentKeys.add(key);
           }
         } else {
-          // Check for PENDING values
           final targetValue = target[key];
           if (targetValue == 'PENDING' ||
               (targetValue is Map && targetValue['description'] == 'PENDING')) {
@@ -104,28 +118,54 @@ void main(List<String> args) async {
       });
     }
 
+    // ── FIX #2: Reverse validation: target → reference (orphan detection) ─────
+    void findOrphanKeys(
+        Map<String, dynamic> reference, Map<String, dynamic> target) {
+      target.forEach((key, value) {
+        if (key != '@@locale' && !key.startsWith('@')) {
+          if (!reference.containsKey(key)) {
+            orphanKeys.add(key);
+          }
+        }
+      });
+    }
+
+    // ── Auto-insert missing keys as PENDING ───────────────────────────────────
+    void insertMissingKeys(
+        Map<String, dynamic> reference, Map<String, dynamic> target) {
+      reference.forEach((key, value) {
+        if (!target.containsKey(key)) {
+          target[key] = value is Map ? {'description': 'PENDING'} : 'PENDING';
+          if (key != '@@locale' && !key.startsWith('@')) {
+            addedContentKeys++;
+          }
+        } else if (value is Map && target[key] is Map) {
+          insertMissingKeys(value as Map<String, dynamic>,
+              target[key] as Map<String, dynamic>);
+        }
+      });
+    }
+
     compareKeys(referenceJson, targetJson);
+    findOrphanKeys(referenceJson, targetJson); // FIX #2
     insertMissingKeys(referenceJson, targetJson);
 
-    // Calculate statistics
-    final currentContentKeys = targetJson.keys
-        .where((key) => !key.startsWith('@') && key != '@@locale')
-        .length;
-    final completionPercentage =
-        ((currentContentKeys / totalReferenceKeys) * 100).toStringAsFixed(1);
     final pendingCount = pendingKeys.where((k) => !k.startsWith('@')).length;
 
     // Store results for summary
     procesados[lang] = {
       'name': languageNames[lang] ?? lang.toUpperCase(),
-      'totalKeys': currentContentKeys,
+      'originalKeys': originalContentKeys,
       'missing': missingContentKeys.length,
+      'orphans': orphanKeys.length, // FIX #2
       'pending': pendingCount,
       'added': addedContentKeys,
       'completion': completionPercentage,
+      'localeMismatch': localeMismatch,
+      'duplicates': duplicateKeys,
     };
 
-    // Print report for this language
+    // ── Print report ──────────────────────────────────────────────────────────
     final langName = languageNames[lang] ?? lang.toUpperCase();
     stdout.writeln(
       '┌─────────────────────────────────────────────────────────────┐',
@@ -134,66 +174,103 @@ void main(List<String> args) async {
     stdout.writeln(
       '├─────────────────────────────────────────────────────────────┤',
     );
+    // FIX #1: completionPercentage is now calculated from originalContentKeys
     stdout.writeln(
-      '${'│ Content Keys: $currentContentKeys/$totalReferenceKeys ($completionPercentage% complete)'.padRight(61)}│',
+      '${'│ Content Keys: $originalContentKeys/$totalReferenceKeys ($completionPercentage% complete)'.padRight(61)}│',
     );
 
-    if (missingContentKeys.isEmpty && pendingCount == 0) {
+    final hasIssues = missingContentKeys.isNotEmpty ||
+        pendingCount > 0 ||
+        orphanKeys.isNotEmpty ||
+        localeMismatch ||
+        duplicateKeys.isNotEmpty;
+
+    if (!hasIssues) {
       stdout.writeln(
-        '${'│ Status: ✅ All keys present and translated'.padRight(61)}│',
+        '${'│ Status: ✅ All keys present, translated, no orphans'.padRight(61)}│',
       );
     } else {
+      final issues = <String>[];
       if (missingContentKeys.isNotEmpty) {
-        stdout.writeln(
-          '${'│ Status: ⚠️  ${missingContentKeys.length} missing, $pendingCount pending translation'.padRight(61)}│',
-        );
-      } else if (pendingCount > 0) {
-        stdout.writeln(
-          '${'│ Status: ⚠️  $pendingCount keys pending translation'.padRight(61)}│',
-        );
+        issues.add('${missingContentKeys.length} missing');
       }
+      if (pendingCount > 0) issues.add('$pendingCount pending');
+      if (orphanKeys.isNotEmpty) {
+        issues.add('${orphanKeys.length} orphan'); // FIX #2
+      }
+      if (localeMismatch) issues.add('@@locale mismatch'); // FIX #5
+      if (duplicateKeys.isNotEmpty) {
+        issues.add('${duplicateKeys.length} duplicate'); // FIX #6
+      }
+      stdout.writeln(
+        '${'│ Status: ⚠️  ${issues.join(', ')}  '.padRight(61)}│',
+      );
     }
     stdout.writeln(
       '└─────────────────────────────────────────────────────────────┘',
     );
 
-    // Show details if there are issues
-    if (missingContentKeys.isNotEmpty || pendingCount > 0) {
-      if (addedContentKeys > 0) {
-        stdout.writeln(
-          '  ✨ Added $addedContentKeys new content keys as "PENDING"',
-        );
-      }
+    // Detail blocks
+    if (addedContentKeys > 0) {
+      stdout.writeln(
+        '  ✨ Added $addedContentKeys new content keys as "PENDING"',
+      );
+    }
 
-      if (pendingCount > 0 && pendingCount <= 20) {
-        stdout.writeln(
-          '  📝 Pending translations (${pendingKeys.where((k) => !k.startsWith('@')).length}):',
-        );
-        for (final key
-            in pendingKeys.where((k) => !k.startsWith('@')).take(20)) {
-          stdout.writeln('     • $key');
-        }
-      } else if (pendingCount > 20) {
-        stdout.writeln(
-          '  📝 $pendingCount keys pending translation (showing first 10):',
-        );
-        for (final key
-            in pendingKeys.where((k) => !k.startsWith('@')).take(10)) {
-          stdout.writeln('     • $key');
-        }
-        stdout.writeln('     ... and ${pendingCount - 10} more');
+    if (pendingCount > 0) {
+      final display = pendingKeys.where((k) => !k.startsWith('@')).toList();
+      stdout.writeln('  📝 Pending translations (${display.length}):');
+      for (final key in display.take(20)) {
+        stdout.writeln('     • $key');
+      }
+      if (display.length > 20) {
+        stdout.writeln('     ... and ${display.length - 20} more');
+      }
+    }
+
+    // FIX #2: Orphan key report
+    if (orphanKeys.isNotEmpty) {
+      stdout.writeln(
+        '  🚨 Orphan keys (in target, NOT in reference — remove or add to en.arb):',
+      );
+      for (final key in orphanKeys.take(20)) {
+        stdout.writeln('     • $key');
+      }
+      if (orphanKeys.length > 20) {
+        stdout.writeln('     ... and ${orphanKeys.length - 20} more');
+      }
+    }
+
+    // FIX #5: @@locale mismatch report
+    if (localeMismatch) {
+      stdout.writeln(
+        '  ❌ @@locale mismatch: file declares "$declaredLocale", expected "$lang"',
+      );
+    }
+
+    // FIX #6: Duplicate key report
+    if (duplicateKeys.isNotEmpty) {
+      stdout.writeln(
+        '  ❌ Duplicate keys detected (JSON kept last value — fix manually):',
+      );
+      for (final key in duplicateKeys) {
+        stdout.writeln('     • $key');
       }
     }
 
     stdout.writeln('');
 
-    // Save the updated target file with missing keys
-    await targetFile.writeAsString(
-      const JsonEncoder.withIndent('  ').convert(targetJson),
-    );
+    // FIX #3 + #4: Only write when changes exist — preserves ordering, avoids
+    // spurious git diffs. insertMissingKeys appends to existing map so key
+    // order from the original file is preserved for unchanged keys.
+    if (addedContentKeys > 0) {
+      await targetFile.writeAsString(
+        const JsonEncoder.withIndent('  ').convert(targetJson),
+      );
+    }
   }
 
-  // Print comprehensive summary
+  // ── Summary report ────────────────────────────────────────────────────────
   stdout.writeln(
     '╔═══════════════════════════════════════════════════════════════╗',
   );
@@ -209,22 +286,26 @@ void main(List<String> args) async {
     stdout.writeln('📊 Translation Coverage:');
     stdout.writeln('');
 
-    // Sort by completion percentage
     final sortedLanguages = procesados.entries.toList()
       ..sort(
-        (a, b) => double.parse(
-          b.value['completion'],
-        ).compareTo(double.parse(a.value['completion'])),
+        (a, b) => double.parse(b.value['completion'] as String)
+            .compareTo(double.parse(a.value['completion'] as String)),
       );
 
     for (final entry in sortedLanguages) {
       final data = entry.value;
-      final completion = double.parse(data['completion']);
-      final barLength = (completion / 5).round();
+      final completion = double.parse(data['completion'] as String);
+      final orphans = data['orphans'] as int;
+      final localeMismatch = data['localeMismatch'] as bool;
+      final duplicates = data['duplicates'] as List<String>;
+      final barLength = (completion / 5).round().clamp(0, 20);
       final bar = '█' * barLength + '░' * (20 - barLength);
 
       String statusIcon;
-      if (completion >= 100) {
+      if (completion >= 100 &&
+          orphans == 0 &&
+          !localeMismatch &&
+          duplicates.isEmpty) {
         statusIcon = '✅';
       } else if (completion >= 90) {
         statusIcon = '🟡';
@@ -236,64 +317,103 @@ void main(List<String> args) async {
         '  $statusIcon ${data['name'].toString().padRight(25)} $bar ${data['completion']}%',
       );
 
-      if (data['pending'] > 0 || data['missing'] > 0) {
-        final issues = <String>[];
-        if (data['missing'] > 0) issues.add('${data['missing']} missing');
-        if (data['pending'] > 0) issues.add('${data['pending']} pending');
+      final issues = <String>[];
+      if ((data['missing'] as int) > 0) {
+        issues.add('${data['missing']} missing');
+      }
+      if ((data['pending'] as int) > 0) {
+        issues.add('${data['pending']} pending');
+      }
+      if (orphans > 0) issues.add('$orphans orphan');
+      if (localeMismatch) issues.add('@@locale mismatch');
+      if (duplicates.isNotEmpty) issues.add('${duplicates.length} duplicate');
+
+      if (issues.isNotEmpty) {
         stdout.writeln('     └─ Action needed: ${issues.join(', ')}');
       }
     }
 
     stdout.writeln('');
     stdout.writeln('📈 Statistics:');
-    final totalPending = procesados.values.fold<int>(
-      0,
-      (sum, data) => sum + (data['pending'] as int),
-    );
-    final totalAdded = procesados.values.fold<int>(
-      0,
-      (sum, data) => sum + (data['added'] as int),
-    );
+    final totalPending =
+        procesados.values.fold<int>(0, (sum, d) => sum + (d['pending'] as int));
+    final totalOrphans =
+        procesados.values.fold<int>(0, (sum, d) => sum + (d['orphans'] as int));
+    final totalAdded =
+        procesados.values.fold<int>(0, (sum, d) => sum + (d['added'] as int));
     final fullyTranslated = procesados.values
-        .where((data) => data['missing'] == 0 && data['pending'] == 0)
+        .where((d) =>
+            d['missing'] == 0 &&
+            d['pending'] == 0 &&
+            d['orphans'] == 0 &&
+            !(d['localeMismatch'] as bool) &&
+            (d['duplicates'] as List).isEmpty)
         .length;
 
     stdout.writeln('  • Languages processed: ${procesados.length}');
-    stdout.writeln(
-      '  • Fully translated: $fullyTranslated/${procesados.length}',
-    );
+    stdout.writeln('  • Fully clean: $fullyTranslated/${procesados.length}');
     stdout.writeln('  • Keys added this run: $totalAdded');
     stdout.writeln('  • Total pending translations: $totalPending');
+    stdout.writeln('  • Total orphan keys: $totalOrphans');
 
-    if (totalPending > 0) {
+    final hasActionItems = totalPending > 0 || totalOrphans > 0;
+
+    if (hasActionItems) {
       stdout.writeln('');
       stdout.writeln('⚠️  ACTION REQUIRED:');
-      stdout.writeln('  Replace "PENDING" values in the following files:');
-      for (final entry in sortedLanguages) {
-        final data = entry.value;
-        if (data['pending'] > 0) {
-          stdout.writeln(
-            '  • lib/l10n/app_${entry.key}.arb (${data['pending']} keys)',
-          );
+      if (totalPending > 0) {
+        stdout.writeln('  📝 Replace "PENDING" values in:');
+        for (final entry in sortedLanguages) {
+          final data = entry.value;
+          if ((data['pending'] as int) > 0) {
+            stdout.writeln(
+              '     • lib/l10n/app_${entry.key}.arb (${data['pending']} keys)',
+            );
+          }
+        }
+      }
+      if (totalOrphans > 0) {
+        stdout.writeln('  🚨 Remove or promote orphan keys in:');
+        for (final entry in sortedLanguages) {
+          final data = entry.value;
+          if ((data['orphans'] as int) > 0) {
+            stdout.writeln(
+              '     • lib/l10n/app_${entry.key}.arb (${data['orphans']} orphan keys)',
+            );
+          }
         }
       }
     } else {
       stdout.writeln('');
-      stdout.writeln('🎉 Excellent! All translations are complete!');
+      stdout.writeln('🎉 Excellent! All translations are complete and clean!');
     }
   }
 
   if (noEncontrados.isNotEmpty) {
     stdout.writeln('');
-    stdout.writeln('❌ Files not found: ${noEncontrados.join(", ")}');
+    stdout.writeln('❌ Files not found: ${noEncontrados.join(', ')}');
   }
 
   stdout.writeln('');
   stdout.writeln(
     '═══════════════════════════════════════════════════════════════',
   );
-  stdout.writeln('✅ Validation complete. All ARB files have been updated.');
+  stdout.writeln('✅ Validation complete.');
   stdout.writeln(
     '═══════════════════════════════════════════════════════════════',
   );
+}
+
+/// FIX #6: Detect duplicate keys in raw ARB content before JSON parse
+/// silently discards the earlier occurrences.
+List<String> _findDuplicateKeys(String rawContent) {
+  final keyPattern = RegExp(r'^\s*"([^@][^"]*?)"\s*:', multiLine: true);
+  final allKeys =
+      keyPattern.allMatches(rawContent).map((m) => m.group(1)!).toList();
+  final seen = <String>{};
+  final duplicates = <String>{};
+  for (final key in allKeys) {
+    if (!seen.add(key)) duplicates.add(key);
+  }
+  return duplicates.toList()..sort();
 }

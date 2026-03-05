@@ -1532,12 +1532,6 @@ abstract class AppLocalizations {
   /// **'Swipe to see actions on your habits'**
   String get habitsTip;
 
-  /// Button to close the educational tip
-  ///
-  /// In en, this message translates to:
-  /// **'Understood'**
-  String get understood;
-
   /// Bible title for AppBar
   ///
   /// In en, this message translates to:
@@ -3019,6 +3013,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View full devotional'**
   String get viewFullDevotional;
+
+  /// Label for locked pet preview in header
+  ///
+  /// In en, this message translates to:
+  /// **'PREVIEW (LOCKED)'**
+  String get petPreviewLocked;
+
+  /// Title for locked pet dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock this Friend!'**
+  String get unlockThisFriend;
+
+  /// Description message in locked pet dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This special companion will be available very soon. Keep up with your habits to be the first to have it!'**
+  String get petUnlockMessage;
+
+  /// Confirmation button in locked pet dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get understood;
+
+  /// Label for pet background theme selector
+  ///
+  /// In en, this message translates to:
+  /// **'Background Theme'**
+  String get backgroundTheme;
+
+  /// Heading for pet selection section
+  ///
+  /// In en, this message translates to:
+  /// **'Select your pet'**
+  String get selectYourPet;
+
+  /// Subtitle for pet collection section
+  ///
+  /// In en, this message translates to:
+  /// **'Collect all your friends!'**
+  String get collectAllFriends;
 }
 
 class _AppLocalizationsDelegate

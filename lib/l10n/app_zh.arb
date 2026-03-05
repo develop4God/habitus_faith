@@ -362,7 +362,6 @@
   "swipeToComplete": "点击或左滑完成",
   "usefulTip": "实用提示",
   "habitsTip": "滑动查看习惯操作",
-  "understood": "明白了",
   "bible": "圣经",
   "home": "首页",
   "reminderConfig": "提醒设置",
@@ -1243,9 +1242,6 @@
   "@habitsTip": {
     "description": "Educational tip description"
   },
-  "@understood": {
-    "description": "Button to close the educational tip"
-  },
   "@bible": {
     "description": "Bible title for AppBar"
   },
@@ -1789,5 +1785,33 @@
   "viewFullDevotional": "查看完整灵修",
   "@viewFullDevotional": {
     "description": "Call-to-action text to view the full devotional"
+  },
+  "petPreviewLocked": "预览 (已锁定)",
+  "@petPreviewLocked": {
+    "description": "Label for locked pet preview in header"
+  },
+  "unlockThisFriend": "解锁这个朋友!",
+  "@unlockThisFriend": {
+    "description": "Title for locked pet dialog"
+  },
+  "petUnlockMessage": "这个特殊的伙伴很快就会推出。坚持你的习惯，成为第一个拥有它的人!",
+  "@petUnlockMessage": {
+    "description": "Description message in locked pet dialog"
+  },
+  "understood": "了解",
+  "@understood": {
+    "description": "Confirmation button in locked pet dialog"
+  },
+  "backgroundTheme": "背景主题",
+  "@backgroundTheme": {
+    "description": "Label for pet background theme selector"
+  },
+  "selectYourPet": "选择您的宠物",
+  "@selectYourPet": {
+    "description": "Heading for pet selection section"
+  },
+  "collectAllFriends": "收集你所有的朋友!",
+  "@collectAllFriends": {
+    "description": "Subtitle for pet collection section"
   }
 }

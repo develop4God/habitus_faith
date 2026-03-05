@@ -1132,10 +1132,6 @@
   "@habitsTip": {
     "description": "Descrição para dicas educativas sobre hábitos."
   },
-  "understood": "Entendi",
-  "@understood": {
-    "description": "Botão para fechar dicas educativas."
-  },
   "bible": "Bíblia",
   "@bible": {
     "description": "Título da barra de navegação da página da Bíblia."
@@ -1789,5 +1785,33 @@
   "viewFullDevotional": "Ver devocional completo",
   "@viewFullDevotional": {
     "description": "Call-to-action text to view the full devotional"
+  },
+  "petPreviewLocked": "VISUALIZAÇÃO (BLOQUEADO)",
+  "@petPreviewLocked": {
+    "description": "Label for locked pet preview in header"
+  },
+  "unlockThisFriend": "Desbloqueie este Amigo!",
+  "@unlockThisFriend": {
+    "description": "Title for locked pet dialog"
+  },
+  "petUnlockMessage": "Este companheiro especial estará disponível muito em breve. Continue com seus hábitos para ser o primeiro a tê-lo!",
+  "@petUnlockMessage": {
+    "description": "Description message in locked pet dialog"
+  },
+  "understood": "Entendi",
+  "@understood": {
+    "description": "Confirmation button in locked pet dialog"
+  },
+  "backgroundTheme": "Tema de Fundo",
+  "@backgroundTheme": {
+    "description": "Label for pet background theme selector"
+  },
+  "selectYourPet": "Selecione seu animal de estimação",
+  "@selectYourPet": {
+    "description": "Heading for pet selection section"
+  },
+  "collectAllFriends": "Colete todos os seus amigos!",
+  "@collectAllFriends": {
+    "description": "Subtitle for pet collection section"
   }
 }
