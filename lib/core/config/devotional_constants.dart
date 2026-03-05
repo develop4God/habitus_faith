@@ -85,9 +85,6 @@ class DevotionalConstants {
   static const bool enableBackupFeature = false;
   static const bool enableDiscoveryFeature = true;
 
-  /// Feature flag for Encounters feature
-  static const bool enableEncountersFeature = true;
-
   /// DISCOVERY STUDIES URLS
   static const String discoveryIndexUrl =
       'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/discovery/index.json';
@@ -100,33 +97,13 @@ class DevotionalConstants {
   // Devocional Index (cache invalidation / sidecar versioning)
   // ---------------------------------------------------------------------------
 
-  /// Fetches index.json used for sidecar cache invalidation.
+  /// URL of the sidecar index.json used to detect stale cached devotional files.
+  ///
+  /// The index maps each `language/version/year` combination to the date the
+  /// remote JSON was last modified.  When the cached sidecar date no longer
+  /// matches the index date, the app re-fetches the JSON for that combination.
   static String getDevocionalIndexUrl() {
     return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/index.json';
-  }
-
-  // ---------------------------------------------------------------------------
-  // Encounters URLs
-  // ---------------------------------------------------------------------------
-
-  /// URL of the encounters index.json
-  static String getEncounterIndexUrl() {
-    return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/encounters/index.json';
-  }
-
-  /// URL of an individual encounter study file.
-  ///
-  /// [filename] — exact filename from the index `files` map
-  ///   (e.g. `peter_water_001_es.json`). When omitted uses `{id}_{lang}.json`.
-  static String getEncounterStudyUrl(String id, String lang,
-      {String? filename}) {
-    final file = filename ?? '${id}_$lang.json';
-    return 'https://raw.githubusercontent.com/develop4God/Devocionales-json/refs/heads/main/encounters/$lang/$file';
-  }
-
-  /// URL of an encounter image asset hosted on the assets CDN.
-  static String getEncounterImageUrl(String filename) {
-    return 'https://raw.githubusercontent.com/develop4God/Devocionales-assets/main/images/encounters/$filename';
   }
 }
 
