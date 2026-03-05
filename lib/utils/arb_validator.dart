@@ -394,14 +394,26 @@ void main(List<String> args) async {
     stdout.writeln('❌ Files not found: ${noEncontrados.join(', ')}');
   }
 
+  // ── Exit code ─────────────────────────────────────────────────────────────
+  // Exit 1 if any language has actionable issues — ensures CI pipelines fail.
+  final hasFailures = procesados.values.any((d) =>
+      (d['missing'] as int) > 0 ||
+      (d['pending'] as int) > 0 ||
+      (d['orphans'] as int) > 0 ||
+      (d['localeMismatch'] as bool) ||
+      (d['duplicates'] as List).isNotEmpty) ||
+      noEncontrados.isNotEmpty;
+
   stdout.writeln('');
   stdout.writeln(
     '═══════════════════════════════════════════════════════════════',
   );
-  stdout.writeln('✅ Validation complete.');
+  stdout.writeln(hasFailures ? '❌ Validation failed.' : '✅ Validation complete.');
   stdout.writeln(
     '═══════════════════════════════════════════════════════════════',
   );
+
+  if (hasFailures) exit(1);
 }
 
 /// FIX #6: Detect duplicate CONTENT keys (not metadata field names).
@@ -414,25 +426,13 @@ void main(List<String> args) async {
 /// etc. These are structural JSON and appear in every metadata block.
 /// We should only flag REAL duplicates (same content key appearing twice).
 ///
-/// Strategy: Parse JSON and check if content keys are unique.
-/// A real duplicate would be caught by JSON parsing (last value wins silently).
+/// Strategy: json.decode silently drops duplicate keys (last value wins), so
+/// we cannot rely on the parsed map to detect them. Go straight to line-by-line
+/// raw parsing — only top-level content keys (2-space indent, no @ prefix).
 List<String> _findDuplicateKeys(String rawContent) {
   try {
-    final data = json.decode(rawContent) as Map<String, dynamic>;
-
-    // Count content keys (not @-prefixed, not @@locale)
-    final contentKeys = <String>[];
-    data.forEach((key, value) {
-      if (!key.startsWith('@') && key != '@@locale') {
-        contentKeys.add(key);
-      }
-    });
-
-    // Check for unique keys by comparing original count with set size
-    // If they're equal, all are unique
-    if (contentKeys.length == contentKeys.toSet().length) {
-      return []; // No duplicates
-    }
+    // Validate JSON is parseable at all — if not, bail early
+    json.decode(rawContent);
 
     // Find which ones are duplicated by checking against the raw file
     // Parse line-by-line to detect actual duplicates in the file
